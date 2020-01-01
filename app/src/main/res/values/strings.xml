@@ -1,0 +1,54 @@
+<resources>
+    <string name="app_name">evaConnect</string>
+    <string name="network_error">Please check your internet connection and try again.</string>
+    <string name="errorString">Something went wrong, Please try again.</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="login">Log In</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="signup">Sign Up</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="next">Next</string>
+    <string name="which_of_these_describes_you_best">Which of these describes you best?</string>
+    <string name="company">Company</string>
+    <string name="individual">Individual</string>
+    <string name="reset">Reset</string>
+    <string name="email">Email</string>
+    <string name="upload_an_image_of_you">Upload an image of you</string>
+    <string name="desc_forgot_password">Once you have submitted the detials of the desired account, please check your email to reset your password</string>
+    <string name="home">Home</string>
+    <string name="messages">Message</string>
+    <string name="connections">Connections</string>
+    <string name="likes">Likes</string>
+    <string name="comments">Comments</string>
+    <string name="comment">Comment</string>
+    <string name="connect">Connect</string>
+    <string name="go_back">Go Back</string>
+    <string name="view_comments">View Comments</string>
+    <string name="tap_here_to_comment">Tap Here To Comment</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="openDrawer">openDrawer</string>
+    <string name="closeDrawer">closeDrawer</string>
+    <string name="my_likes">My Likes</string>
+    <string name="calendar">Calender</string>
+    <string name="job_listings">Job Listings</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="settings">Settings</string>
+    <string name="logout">Logout</string>
+    <string name="hint_search">Search Here</string>
+    <string name="hint_set_your_display_name">Set your display name</string>
+    <string name="hint_write_a_brief_bio_here">Write a brief bio/introduction here(200 char limit)</string>
+    <string name="everyone">Everyone</string>
+    <string name="people">People</string>
+    <string name="companies">Companies</string>
+    <string name="err_password">Your password cannot be empty and should be minimum 4 characters long.</string>
+    <string name="err_unknown">Something went wrong</string>
+    <string name="err_image_size_large">Image size is too large. Maximum image size is %1$s KB.</string>
+    <string name="success">Success</string>
+    <string name="error">Error</string>
+    <string name="ok">OK</string>
+    <string name="msg_signup">Your account has been successfully created.</string>
+    <string name="err_signup">This email already exist.</string>
+</resources>
+

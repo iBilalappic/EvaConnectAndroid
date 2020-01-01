@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group>
+        <item android:id="@+id/nav_like"
+            app:actionLayout="@layout/nav_menu_item"
+            android:title="@null" />
+
+        <item android:id="@+id/nav_calendar"
+            app:actionLayout="@layout/nav_menu_item"
+            android:title="@null" />
+
+        <item android:id="@+id/nav_joblisting"
+            app:actionLayout="@layout/nav_menu_item"
+            android:title="@null" />
+
+        <item android:id="@+id/nav_editprofile"
+            app:actionLayout="@layout/nav_menu_item"
+            android:title="@null" />
+
+        <item android:id="@+id/nav_settings"
+            app:actionLayout="@layout/nav_menu_item"
+            android:title="@null" />
+
+        <item android:id="@+id/nav_logout"
+            app:actionLayout="@layout/nav_menu_item"
+            android:title="@null" />
+    </group>
+
+</menu>

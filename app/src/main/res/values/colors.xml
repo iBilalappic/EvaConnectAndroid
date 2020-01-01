@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#fff</color>
+    <color name="colorPrimaryDark">#000</color>
+    <color name="colorAccent">#EA5454</color>
+    <color name="light_black">#2D2D28</color>
+    <color name="darker_gray">#606060</color>
+    <color name="light_gray">#EBE9E9</color>
+    <color name="lighter_gray">#F0F0F0</color>
+    <color name="title_bg">#EAEAE8</color>
+    <color name="page_title">#66697E</color>
+    <color name="page_bg">#EAEAE8</color>
+    <color name="dark_gray">#707070</color>
+    <!--Simple Dialog-->
+    <color name="colorSimpleDialogTitleText">#ffffff</color>
+    <color name="colorSimpleDialogText">#002256</color>
+
+
+
+
+</resources>
