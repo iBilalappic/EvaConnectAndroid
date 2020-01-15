@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
+import com.onesignal.OneSignal;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -17,6 +19,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         init();
+        initOneSignal();
     }
 
     private void init() {
@@ -38,5 +41,19 @@ public class SplashActivity extends AppCompatActivity {
 
             }
         },3000);
+    }
+    public void initOneSignal() {
+
+        OneSignal.startInit(this)
+                .init();
+
+        OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
+            @Override
+            public void idsAvailable(String userId, String registrationId) {
+                Log.e("debug", "User:" + userId);
+                if (registrationId != null)
+                    Log.e("debug", "registrationId:" + registrationId);
+            }
+        });
     }
 }
