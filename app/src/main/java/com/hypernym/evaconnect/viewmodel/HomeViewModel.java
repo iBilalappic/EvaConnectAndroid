@@ -23,9 +23,9 @@ public class HomeViewModel extends AndroidViewModel {
         super(application);
     }
 
-    public LiveData<BaseModel<List<Post>>> getDashboard(User user)
+    public LiveData<BaseModel<List<Post>>> getDashboard(User user,int totalpages,int currentPage)
     {
-        return iHomeRepository.getDashboard(user);
+        return iHomeRepository.getDashboard(user,totalpages,currentPage);
     }
 
 }

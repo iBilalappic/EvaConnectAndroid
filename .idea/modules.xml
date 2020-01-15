@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/eva-android.iml" filepath="$PROJECT_DIR$/eva-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/evaConnect.iml" filepath="$PROJECT_DIR$/evaConnect.iml" />
     </modules>
   </component>
 </project>

@@ -22,6 +22,7 @@ public class Post implements Serializable {
     private Integer is_post_like;
     private Integer total_connection;
     private String action;
+    private String type;
 
 
     public String getContent() {
@@ -143,5 +144,13 @@ public class Post implements Serializable {
 
     public void setAction(String action) {
         this.action = action;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

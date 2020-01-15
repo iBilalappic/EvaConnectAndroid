@@ -17,6 +17,8 @@ import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface AppApi {
 
@@ -45,7 +47,7 @@ public interface AppApi {
     Call<BaseModel<List<User>>> isEmailExist(@Body User user);
 
     @POST(APIConstants.DASHBOARD)
-    Call<BaseModel<List<Post>>> getDashboard(@Body User user);
+    Call<BaseModel<List<Post>>> getDashboard(@Body User user, @Query("limit") int limit, @Query("offset") int offset);
 
     @POST(APIConstants.ADD_COMMENT)
     Call<BaseModel<List<Comment>>> addComment(@Body Comment comment);

@@ -16,7 +16,6 @@ public class EvaconnectApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-
         CalligraphyConfig.initDefault(mCalligraphyConfig);
 
         AppUtils.setApplicationContext(getApplicationContext());

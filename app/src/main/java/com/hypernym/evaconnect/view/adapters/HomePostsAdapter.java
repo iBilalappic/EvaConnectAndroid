@@ -41,6 +41,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
     private boolean fabStateVolume = false;
     private  HomePostsAdapter.ItemClickListener mClickListener;
     private  SliderImageAdapter sliderImageAdapter;
+    // flag for footer ProgressBar (i.e. last item of list)
+    private boolean isLoadingAdded = false;
+    private boolean isLoaderVisible = false;
 
     public class TextTypeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.tv_viewcomments)
@@ -237,6 +240,20 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         }
     }
 
+    public class LoadingTypeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+
+        public LoadingTypeViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this,itemView);
+        }
+
+        @Override
+        public void onClick(View v) {
+
+        }
+    }
+
     public class ImageTypeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         @BindView(R.id.tv_viewcomments)
         TextView tv_viewcomments;
@@ -338,6 +355,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             case AppConstants.JOB_TYPE:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.job_type, parent, false);
                 return new JobTypeViewHolder(view);
+            case AppConstants.LOADING_TYPE:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_loading, parent, false);
+                return new LoadingTypeViewHolder(view);
         }
         return null;
     }
@@ -347,18 +367,34 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
         switch (posts.get(position).getPost_type()) {
             case AppConstants.TEXT_TYPE:
-                return AppConstants.TEXT_TYPE;
+                return (position == posts.size() - 1 && isLoadingAdded) ? AppConstants.LOADING_TYPE : AppConstants.TEXT_TYPE;
             case AppConstants.IMAGE_TYPE:
-                return AppConstants.IMAGE_TYPE;
+                return (position == posts.size() - 1 && isLoadingAdded) ? AppConstants.LOADING_TYPE: AppConstants.IMAGE_TYPE;
             case AppConstants.EVENT_TYPE:
-                return AppConstants.EVENT_TYPE;
+                return (position == posts.size() - 1 && isLoadingAdded) ? AppConstants.LOADING_TYPE: AppConstants.EVENT_TYPE;
             case AppConstants.JOB_TYPE:
-                return AppConstants.JOB_TYPE;
+                return (position == posts.size() - 1 && isLoadingAdded) ? AppConstants.LOADING_TYPE: AppConstants.JOB_TYPE;
             default:
                 return -1;
         }
     }
-
+    public void addLoading() {
+        isLoaderVisible = true;
+        posts.add(new Post());
+        notifyItemInserted(posts.size() - 1);
+    }
+    public void removeLoading() {
+        isLoaderVisible = false;
+        int position = posts.size() - 1;
+        Post item = getItem(position);
+        if (item != null) {
+            posts.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+    Post getItem(int position) {
+        return posts.get(position);
+    }
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
 

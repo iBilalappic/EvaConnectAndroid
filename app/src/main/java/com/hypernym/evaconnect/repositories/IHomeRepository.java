@@ -10,5 +10,5 @@ import com.hypernym.evaconnect.models.User;
 import java.util.List;
 
 public interface IHomeRepository {
-    LiveData<BaseModel<List<Post>>> getDashboard(User user);
+    LiveData<BaseModel<List<Post>>> getDashboard(User user,int total,int current);
 }
