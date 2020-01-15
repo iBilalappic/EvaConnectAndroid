@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
+import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Dashboard;
 import com.hypernym.evaconnect.models.Post;
@@ -39,21 +41,29 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
+
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemClickListener {
+public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemClickListener,SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.rc_home)
     RecyclerView rc_home;
 
     @BindView(R.id.newpost)
     TextView newpost;
 
+    @BindView(R.id.swipeRefresh)
+    SwipeRefreshLayout swipeRefresh;
+
     private List<Post> posts=new ArrayList<>();
     private HomePostsAdapter homePostsAdapter;
     private LinearLayoutManager linearLayoutManager;
     private HomeViewModel homeViewModel;
     private PostViewModel postViewModel;
+    private int currentPage = PAGE_START;
+    private boolean isLastPage = false;
+    private boolean isLoading = false;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -83,7 +93,30 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         linearLayoutManager=new LinearLayoutManager(getContext());
         rc_home.setLayoutManager(linearLayoutManager);
         rc_home.setAdapter(homePostsAdapter);
-    }
+        swipeRefresh.setOnRefreshListener(this);
+        /**
+         * add scroll listener while user reach in bottom load more will call
+         */
+        rc_home.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
+            @Override
+            protected void loadMoreItems() {
+                isLoading = true;
+                currentPage++;
+                callPostsApi();
+            }
+
+            @Override
+            public boolean isLastPage() {
+                return isLastPage;
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
+            }
+        });
+
+        }
 
     @Override
     public void onResume() {
@@ -93,7 +126,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     private void callPostsApi() {
         showDialog();
         User user=LoginUtils.getLoggedinUser();
-        homeViewModel.getDashboard(user).observe(this, new Observer<BaseModel<List<Post>>>() {
+        homeViewModel.getDashboard(user,AppConstants.TOTAL_PAGES,currentPage).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> dashboardBaseModel) {
                 if(dashboardBaseModel !=null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().get(0)!=null)
@@ -101,13 +134,17 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
                     posts.clear();
                     for(Post post:dashboardBaseModel.getData())
                     {
-                        if(post.getPost_image().size()>0)
+                        if(post.getType().equalsIgnoreCase("post") && post.getPost_image().size()>0)
                         {
                             post.setPost_type(AppConstants.IMAGE_TYPE);
                         }
-                        else
+                        else if(post.getType().equalsIgnoreCase("post") && post.getPost_image().size()==0)
                         {
                             post.setPost_type(AppConstants.TEXT_TYPE);
+                        }
+                        else if(post.getType().equalsIgnoreCase("event"))
+                        {
+                            post.setPost_type(AppConstants.EVENT_TYPE);
                         }
                     }
                     posts.addAll(dashboardBaseModel.getData());
@@ -193,5 +230,10 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     public void onShareClick(View view, int position) {
        Intent intent=new Intent(getContext(), SharePostActivity.class);
        startActivity(intent);
+    }
+
+    @Override
+    public void onRefresh() {
+
     }
 }

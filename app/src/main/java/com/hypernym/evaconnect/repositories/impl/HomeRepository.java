@@ -21,10 +21,10 @@ public class HomeRepository implements IHomeRepository {
     private MutableLiveData<BaseModel<List<Post>>> dashboardMutableLiveData = new MutableLiveData<>();
 
     @Override
-    public LiveData<BaseModel<List<Post>>> getDashboard(User user) {
+    public LiveData<BaseModel<List<Post>>> getDashboard(User user,int total,int current) {
         dashboardMutableLiveData=new MutableLiveData<>();
         user.setUser_id(user.getId());
-        RestClient.get().appApi().getDashboard(user).enqueue(new Callback<BaseModel<List<Post>>>() {
+        RestClient.get().appApi().getDashboard(user,total,current).enqueue(new Callback<BaseModel<List<Post>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
                 dashboardMutableLiveData.setValue(response.body());
