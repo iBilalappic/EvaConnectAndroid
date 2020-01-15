@@ -2,23 +2,21 @@
 <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:contentInsetLeft="0dp"
     app:contentInsetStart="0dp">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/imageView5"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:src="@mipmap/logo"
-            app:layout_constraintBottom_toTopOf="@+id/tv_pagetitle"
+            android:src="@drawable/logo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -27,17 +25,16 @@
         <ImageView
             android:id="@+id/img_menu"
             android:layout_width="wrap_content"
-            android:layout_height="24dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            app:layout_constraintBottom_toTopOf="@+id/tv_pagetitle"
+            android:src="@drawable/menu"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@drawable/ic_menu"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            style="@style/TextStyle.Bold"
             android:id="@+id/tv_pagetitle"
+            style="@style/TextStyle.Bold"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -46,19 +43,43 @@
             android:padding="5dp"
             android:text="Home"
             android:textColor="@color/page_title"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+
+
+        <ImageView
+            android:id="@+id/img_uparrow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@color/lighter_gray"
+            android:gravity="center"
+            android:padding="10dp"
+            android:src="@drawable/up_arrow"
+            android:textColor="@color/page_title"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_pagetitle" />
 
         <TextView
             android:id="@+id/imageView7"
             android:layout_width="0dp"
             android:layout_height="2dp"
-            android:background="@drawable/line_black_red50"
+            android:background="@drawable/line_redblack50"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_pagetitle" />
+            app:layout_constraintTop_toBottomOf="@+id/rc_notifications" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rc_notifications"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/img_uparrow" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.appcompat.widget.Toolbar>

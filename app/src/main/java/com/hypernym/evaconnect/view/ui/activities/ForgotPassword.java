@@ -17,6 +17,8 @@ import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
+import com.hypernym.evaconnect.utils.NetworkUtils;
+import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
@@ -41,6 +43,7 @@ public class ForgotPassword extends BaseActivity implements Validator.Validation
 
     private Validator validator;
     private UserViewModel userViewModel;
+    private SimpleDialog simpleDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,21 +56,30 @@ public class ForgotPassword extends BaseActivity implements Validator.Validation
 
     @Override
     public void onValidationSucceeded() {
+        if(NetworkUtils.isNetworkConnected(this))
+        {
+            showDialog();
+            callForgotPassApi();
+        }
+        else
+        {
+            networkErrorDialog();
+        }
+
+    }
+
+    private void callForgotPassApi() {
         showDialog();
         userViewModel.forgotPassword(edt_email.getText().toString()).observe(this, new Observer<BaseModel<List<User>>>() {
             @Override
             public void onChanged(BaseModel<List<User>> user) {
-                if(!user.isError())
+                if(user !=null && !user.isError())
                 {
-
+                  networkResponseDialog(getString(R.string.success),getString(R.string.msg_forgotpass));
                 }
-                else if(user.isError())
+                 else if(user.isError())
                 {
-                    Toast.makeText(ForgotPassword.this,user.getMessage(),Toast.LENGTH_LONG).show();
-                }
-                else if(user==null)
-                {
-                    Toast.makeText(ForgotPassword.this,getString(R.string.err_unknown),Toast.LENGTH_LONG).show();
+                    networkResponseDialog(getString(R.string.error),user.getMessage());
                 }
                 hideDialog();
             }

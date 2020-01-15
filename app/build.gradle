@@ -11,6 +11,9 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -21,6 +24,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
 }
 
 dependencies {
@@ -69,6 +73,15 @@ dependencies {
 
     /*Glide*/
     implementation 'com.github.bumptech.glide:glide:4.10.0'
+    implementation 'jp.wasabeef:glide-transformations:3.3.0'
 
+    /*Side Menu*/
+    implementation "com.github.skydoves:powermenu:2.1.2"
 
+    /*Signal R*/
+//    compile files('libs/gson-2.3.1.jar')
+//    compile files('libs/signalr-client-sdk-android.jar')
+//    compile files('libs/signalr-client-sdk.jar')
+
+    implementation 'com.github.smarteist:autoimageslider:1.3.2'
 }

@@ -34,12 +34,14 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
+import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
+import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.bottomsheets.BottomSheetPictureSelection;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
@@ -113,9 +115,8 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
     }
 
     private void init() {
-        tv_company.setTextColor(getResources().getColor(R.color.dark_gray));
-        tv_individual.setTextColor(getResources().getColor(R.color.light_black));
-        tv_individual.setElevation(2);
+        tv_company.setBackground(getDrawable(R.drawable.rounded_button_unselected));
+        tv_individual.setBackground(getDrawable(R.drawable.rounded_button));
         validator = new Validator(this);
         validator.setValidationListener(this);
         userViewModel = ViewModelProviders.of(this,new CustomViewModelFactory(getApplication(),this)).get(UserViewModel.class);
@@ -123,36 +124,45 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
         password=getIntent().getStringExtra("Password");
         user.setEmail(email);
         user.setPassword(password);
+        btn_signup.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                validator.validate();
+            }
+        });
+        tv_individual.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                tv_company.setBackground(getDrawable(R.drawable.rounded_button_unselected));
+                tv_individual.setBackground(getDrawable(R.drawable.rounded_button));
+                userType="user";
+            }
+        });
+        img_profile.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                if (Checkpermission()) {
+                    BottomSheetPictureSelection bottomSheetPictureSelection = new BottomSheetPictureSelection(new YourDialogFragmentDismissHandler());
+                    bottomSheetPictureSelection.show(getSupportFragmentManager(), bottomSheetPictureSelection.getTag());
+                }
+                else
+                {
+                    requestpermission();
+                }
+            }
+        });
+
+        tv_company.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                tv_company.setBackground(getDrawable(R.drawable.rounded_button));
+                tv_individual.setBackground(getDrawable(R.drawable.rounded_button_unselected));
+                userType="company";
+            }
+        });
+
     }
 
-    @OnClick(R.id.btn_signup)
-    public void signup()
-    {
-        validator.validate();
-    }
-
-    @OnClick(R.id.tv_individual)
-    public void setUserIndividual()
-    {
-      tv_company.setTextColor(getResources().getColor(R.color.dark_gray));
-      tv_individual.setTextColor(getResources().getColor(R.color.light_black));
-      tv_individual.setElevation(2);
-      tv_company.setElevation(0);
-      userType="user";
-    }
-
-    @OnClick(R.id.img_profile)
-    public void setImageProfile()
-    {
-        if (Checkpermission()) {
-            BottomSheetPictureSelection bottomSheetPictureSelection = new BottomSheetPictureSelection(new YourDialogFragmentDismissHandler());
-            bottomSheetPictureSelection.show(getSupportFragmentManager(), bottomSheetPictureSelection.getTag());
-        }
-        else
-        {
-            requestpermission();
-        }
-    }
 
     public boolean Checkpermission() {
 
@@ -201,7 +211,7 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
 
 
                     if (tempFile.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.FILE_SIZE_LIMIT_IN_KB) {
-                       // AppUtils.showSnackBar(getView(), "File Size too large");
+                         networkResponseDialog(getString(R.string.error),getString(R.string.err_image_size_large));
                         return;
                     } else {
                         if (photoVar == null) {
@@ -214,10 +224,10 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
                                 Glide.with(this).load(currentPhotoPath).into(img_profile);
 
                             } else {
-                                //AppUtils.showSnackBar(getView(), "Sorry! Files from internal storage are supported only");
+                                networkResponseDialog(getString(R.string.error),getString(R.string.err_internal_supported));
                             }
                         } else {
-                            //AppUtils.showSnackBar(getView(), "Only one image file can be selected at a time");
+                            networkResponseDialog(getString(R.string.error),getString(R.string.err_one_file_at_a_time));
                             return;
                         }
                     }
@@ -237,7 +247,7 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
                 // imgName = file_name.getName();
                 globalImagePath = file_name.getAbsolutePath();
                 if (file_name.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.IMAGE_SIZE_IN_KB) {
-                //   AppUtils.showSnackBar(getView(), getString(R.string.err_image_size_large, AppConstants.IMAGE_SIZE_IN_KB));
+                    networkResponseDialog(getString(R.string.error),getString(R.string.err_image_size_large));
                     return;
                 }
                 if (!TextUtils.isEmpty(globalImagePath) || globalImagePath != null) {
@@ -330,16 +340,6 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
 
 
 
-    @OnClick(R.id.tv_company)
-    public void setUserCompany()
-    {
-       tv_company.setTextColor(getResources().getColor(R.color.light_black));
-       tv_individual.setTextColor(getResources().getColor(R.color.dark_gray));
-       tv_company.setElevation(2);
-        tv_individual.setElevation(0);
-       userType="company";
-    }
-
 
 
     @Override
@@ -355,13 +355,26 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
         }
         user.setStatus(AppConstants.USER_STATUS);
         user.setType(userType);
-        showDialog();
+
+        if(NetworkUtils.isNetworkConnected(this))
+        {
+            showDialog();
+            callSignupApi();
+        }
+        else
+        {
+         networkErrorDialog();
+        }
+
+    }
+    public void callSignupApi()
+    {
         userViewModel.signUp(user,partImage).observe(this, new Observer<BaseModel<List<User>>>() {
             @Override
             public void onChanged(BaseModel<List<User>> logins) {
-                if(!logins.isError())
+                if(logins!=null && !logins.isError())
                 {
-                    LoginUtils.saveUser(AppUtils.getApplicationContext(),user);
+                    LoginUtils.saveUser(user);
                     simpleDialog=new SimpleDialog(SignupDetailsActivity.this,getString(R.string.success),getString(R.string.msg_signup),null,getString(R.string.ok), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -372,34 +385,17 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
                             simpleDialog.dismiss();
                         }
                     });
-
                 }
-                else if(logins.isError())
+                else
                 {
-                    simpleDialog=new SimpleDialog(SignupDetailsActivity.this,getString(R.string.error),getString(R.string.err_signup),null,getString(R.string.ok), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                        simpleDialog.dismiss();
-                        }
-                    });
-
-                }
-                else if(logins==null)
-                {
-                    simpleDialog=new SimpleDialog(SignupDetailsActivity.this,getString(R.string.error),getString(R.string.err_unknown),null,getString(R.string.ok), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            simpleDialog.dismiss();
-                        }
-                    });
+                    simpleDialog=networkResponseDialog(getString(R.string.error),logins.getMessage());
                 }
                 hideDialog();
                 if(!simpleDialog.isShowing())
-                      simpleDialog.show();
+                    simpleDialog.show();
             }
         });
     }
-
     @Override
     public void onValidationFailed(List<ValidationError> errors) {
         for (ValidationError error : errors) {

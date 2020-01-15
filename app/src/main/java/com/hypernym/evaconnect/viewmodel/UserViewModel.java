@@ -37,4 +37,9 @@ public class UserViewModel extends AndroidViewModel {
     {
         return iUserRespository.forgotPassword(email);
     }
+
+    public LiveData<BaseModel<List<User>>> isEmailExist(String email)
+    {
+        return iUserRespository.isEmailExist(email);
+    }
 }

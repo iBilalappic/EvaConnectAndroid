@@ -23,7 +23,7 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(LoginUtils.isUserLogin(AppUtils.getApplicationContext()))
+                if(LoginUtils.isUserLogin())
                 {
                     Intent intent=new Intent(SplashActivity.this, HomeActivity.class);
                     startActivity(intent);

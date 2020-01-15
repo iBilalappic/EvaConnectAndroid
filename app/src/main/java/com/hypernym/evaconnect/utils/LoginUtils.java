@@ -9,30 +9,30 @@ import butterknife.internal.Constants;
 
 public class LoginUtils {
 
-    public static boolean isUserLogin(Context context) {
-        return PrefUtils.getBoolean(context, AppConstants.USER_AVAILABLE, false);
+    public static boolean isUserLogin() {
+        return PrefUtils.getBoolean(AppUtils.getApplicationContext(), AppConstants.USER_AVAILABLE, false);
     }
 
-    public static void saveUser(Context context, User user) {
+    public static void saveUser( User user) {
         if (user == null)
             return;
-        PrefUtils.persistString(context, AppConstants.USER, GsonUtils.toJson(user));
+        PrefUtils.persistString(AppUtils.getApplicationContext(), AppConstants.USER, GsonUtils.toJson(user));
     }
-    public static void saveUserToken(Context context, String token) {
+    public static void saveUserToken(String token) {
         if (token == null)
             return;
 
-        PrefUtils.persistString(context, AppConstants.USER_TOKEN, token);
+        PrefUtils.persistString(AppUtils.getApplicationContext(), AppConstants.USER_TOKEN, token);
     }
 
-    public static User getLoggedinUser(Context context) {
-        return GsonUtils.fromJson(PrefUtils.getString(context, AppConstants.USER), User.class);
+    public static User getLoggedinUser() {
+        return GsonUtils.fromJson(PrefUtils.getString(AppUtils.getApplicationContext(), AppConstants.USER), User.class);
     }
-    public static User getUser(Context context) {
-        return GsonUtils.fromJson(PrefUtils.getString(context, AppConstants.USER), User.class);
+    public static User getUser() {
+        return GsonUtils.fromJson(PrefUtils.getString(AppUtils.getApplicationContext(), AppConstants.USER), User.class);
     }
-    public static void userLoggedIn(Context context) {
-        PrefUtils.persistBoolean(context, AppConstants.USER_AVAILABLE, true);
+    public static void userLoggedIn() {
+        PrefUtils.persistBoolean(AppUtils.getApplicationContext(), AppConstants.USER_AVAILABLE, true);
     }
 
     public static void clearUser(Context context) {

@@ -8,6 +8,7 @@ public class BaseModel<T> implements Serializable {
     private Throwable exception;
     private T data;
     private String status;
+    private String detail;
 
     public T getData() {
         return data;
@@ -44,5 +45,13 @@ public class BaseModel<T> implements Serializable {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 }

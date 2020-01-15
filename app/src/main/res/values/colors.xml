@@ -6,16 +6,17 @@
     <color name="light_black">#2D2D28</color>
     <color name="darker_gray">#606060</color>
     <color name="light_gray">#EBE9E9</color>
+    <color name="gray">#BDBABA</color>
     <color name="lighter_gray">#F0F0F0</color>
     <color name="title_bg">#EAEAE8</color>
     <color name="page_title">#66697E</color>
     <color name="page_bg">#EAEAE8</color>
-    <color name="dark_gray">#707070</color>
+    <color name="dark_gray">#4B4B4B</color>
+    <color name="unselected_option">#808080</color>
     <!--Simple Dialog-->
     <color name="colorSimpleDialogTitleText">#ffffff</color>
     <color name="colorSimpleDialogText">#002256</color>
-
-
+    <color name="btn_border">#3C3F5C</color>
 
 
 </resources>

@@ -1,6 +1,9 @@
 package com.hypernym.evaconnect.models;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
+    private Integer id;
     private String email;
     private String password;
     private String first_name;
@@ -8,6 +11,11 @@ public class User {
     private String type;
     private String status;
     private String username;
+    private String token;
+    private Integer user_id;
+    private String user_image;
+    private Integer total_connection;
+
 
 
     public String getEmail() {
@@ -64,5 +72,46 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+
+    public String getUser_image() {
+        return user_image;
+    }
+
+    public void setUser_image(String user_image) {
+        this.user_image = user_image;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Integer user_id) {
+        this.user_id = user_id;
+    }
+
+    public Integer getTotal_connection() {
+        return total_connection;
+    }
+
+    public void setTotal_connection(Integer total_connection) {
+        this.total_connection = total_connection;
     }
 }

@@ -5,6 +5,7 @@
     android:id="@+id/linearLayout5"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context=".view.ui.fragments.ConnectionsFragment">
 
     <EditText
@@ -13,14 +14,21 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="9dp"
-        android:layout_marginLeft="9dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="9dp"
-        android:layout_marginRight="9dp"
         android:hint="@string/hint_search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rc_maincategories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/tv_everyone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText2" />
 
     <TextView
         android:id="@+id/tv_everyone"
@@ -30,7 +38,6 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/rounded_button_nobackground"
-        android:enabled="false"
         android:gravity="center"
         android:paddingLeft="15dp"
         android:paddingTop="5dp"
@@ -40,7 +47,7 @@
         android:textColor="@color/darker_gray"
         app:layout_constraintEnd_toStartOf="@+id/tv_people"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        app:layout_constraintTop_toBottomOf="@+id/rc_maincategories" />
 
     <TextView
         android:id="@+id/tv_people"
@@ -50,16 +57,15 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/rounded_button_nobackground"
-        android:enabled="false"
-        android:paddingLeft="15dp"
         android:gravity="center"
+        android:paddingLeft="15dp"
         android:paddingTop="5dp"
         android:paddingRight="15dp"
         android:paddingBottom="5dp"
         android:text="@string/people"
         app:layout_constraintEnd_toStartOf="@+id/tv_companies"
         app:layout_constraintStart_toEndOf="@+id/tv_everyone"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        app:layout_constraintTop_toBottomOf="@+id/rc_maincategories" />
 
     <TextView
         android:id="@+id/tv_companies"
@@ -69,22 +75,23 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/rounded_button_nobackground"
-        android:enabled="false"
-        android:paddingLeft="15dp"
         android:gravity="center"
+        android:paddingLeft="15dp"
         android:paddingTop="5dp"
         android:paddingRight="15dp"
         android:paddingBottom="5dp"
         android:text="@string/companies"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tv_people"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        app:layout_constraintTop_toBottomOf="@+id/rc_maincategories" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rc_connections"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_everyone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

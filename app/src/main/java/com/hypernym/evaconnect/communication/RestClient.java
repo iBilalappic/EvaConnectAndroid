@@ -2,6 +2,7 @@ package com.hypernym.evaconnect.communication;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -122,15 +123,15 @@ public class RestClient {
                     Request.Builder _builder = chain.request().newBuilder();
                     //todo: fill auth header
 
-                    if(LoginUtils.isUserLogin(AppUtils.getApplicationContext())){
-                        _builder.header("Authorization", LoginUtils.getAuthToken(AppUtils.getApplicationContext()));
+                    if(LoginUtils.isUserLogin()){
+                        _builder.header("Authorization", "token "+LoginUtils.getAuthToken(AppUtils.getApplicationContext()));
+                    Log.d("Token","token "+LoginUtils.getAuthToken(AppUtils.getApplicationContext()));
                     }
-                    _builder.header("Os", AppConstants.OS);
+                    _builder.header("OS", AppConstants.OS);
                     Request request = _builder.build();
                     return chain.proceed(request);
                 }
             });
-
 
             OkHttpClient okHttpClient = builder.build();
             return okHttpClient;

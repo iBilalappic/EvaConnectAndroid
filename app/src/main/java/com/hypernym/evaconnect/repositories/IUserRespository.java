@@ -19,4 +19,6 @@ public interface IUserRespository {
     LiveData<BaseModel<List<User>>> login(User user);
 
     LiveData<BaseModel<List<User>>> forgotPassword(String email);
+
+    LiveData<BaseModel<List<User>>> isEmailExist(String email);
 }

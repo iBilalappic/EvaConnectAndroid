@@ -9,25 +9,25 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
-import com.hypernym.evaconnect.models.Connections;
+import com.hypernym.evaconnect.models.Connection;
 
 import java.util.List;
 
 public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.ViewHolder> {
     private Context context;
-    private List<Connections> connections;
+    private List<Connection> connections;
 
-    public ConnectionsAdapter(Context context, List<Connections> connectionsList)
+    public ConnectionsAdapter(Context context, List<Connection> connectionList)
     {
         this.context=context;
-        this.connections=connectionsList;
+        this.connections= connectionList;
     }
 
 
     @NonNull
     @Override
     public ConnectionsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(context).inflate(R.layout.item_post,parent,false);
+        View view= LayoutInflater.from(context).inflate(R.layout.item_connection,parent,false);
         return new ViewHolder(view);
     }
 

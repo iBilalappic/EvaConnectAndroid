@@ -1,4 +1,4 @@
 package com.hypernym.evaconnect.models;
 
-public class Connections {
+public class Connection {
 }

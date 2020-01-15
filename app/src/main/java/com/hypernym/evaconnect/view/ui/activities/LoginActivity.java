@@ -19,12 +19,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
+import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.utils.PrefUtils;
+import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
@@ -54,13 +57,14 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     EditText edt_email;
 
     @NotEmpty
-    @Password(min=4)
+    @Password(min=8)
     @BindView(R.id.edt_password)
     EditText edt_password;
 
     private Validator validator;
     private UserViewModel userViewModel;
     private User user=new User();
+    private SimpleDialog simpleDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,53 +74,75 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
         userViewModel = ViewModelProviders.of(this,new CustomViewModelFactory(getApplication(),this)).get(UserViewModel.class);
         validator = new Validator(this);
         validator.setValidationListener(this);
-    }
+        btn_login.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                validator.validate();
+            }
+        });
 
-    @OnClick(R.id.tv_signup)
-    public void signUp()
-    {
-        startActivity(new Intent(LoginActivity.this,SignupActivity.class));
-    }
+        tv_signup.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                startActivity(new Intent(LoginActivity.this,SignupActivity.class));
+            }
+        });
 
-    @OnClick(R.id.tv_forgotpass)
-    public void forgotpassword()
-    {
-
-        startActivity(new Intent(LoginActivity.this,ForgotPassword.class));
-    }
-
-    @OnClick(R.id.btn_login)
-    public void btn_login()
-    {
-        validator.validate();
-
+        tv_forgotpass.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                startActivity(new Intent(LoginActivity.this,ForgotPassword.class));
+            }
+        });
     }
 
     @Override
     public void onValidationSucceeded() {
         user.setUsername(edt_email.getText().toString());
         user.setPassword(edt_password.getText().toString());
+        if(NetworkUtils.isNetworkConnected(this))
+        {
+            showDialog();
+            callLoginApi();
+        }
+        else
+        {
+            networkErrorDialog();
+        }
+
+    }
+
+    private void callLoginApi() {
         showDialog();
         userViewModel.login(user).observe(this, new Observer<BaseModel<List<User>>>() {
             @Override
             public void onChanged(BaseModel<List<User>> user) {
-                if(!user.isError())
+                if(user!=null && !user.isError() && user.getData().get(0)!=null)
                 {
-                   LoginUtils.userLoggedIn(AppUtils.getApplicationContext());
-                   startActivity(new Intent(LoginActivity.this,HomeActivity.class));
+                    LoginUtils.userLoggedIn();
+                    User userData=user.getData().get(0);
+                    userData.setUser_id(userData.getId());
+                    LoginUtils.saveUser(user.getData().get(0));
+                    if(user.getData().get(0) !=null)
+                    {
+                        LoginUtils.saveUserToken(user.getData().get(0).getToken());
+                    }
+                    Intent intent=new Intent(LoginActivity.this, HomeActivity.class);
+                    // set the new task and clear flags
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
                 }
                 else if(user.isError())
                 {
-                    Toast.makeText(LoginActivity.this,user.getMessage(),Toast.LENGTH_LONG).show();
+                    networkResponseDialog(getString(R.string.error),getString(R.string.err_login));
                 }
                 else if(user==null)
                 {
-                    Toast.makeText(LoginActivity.this,getString(R.string.err_unknown),Toast.LENGTH_LONG).show();
-                }
+                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                 }
                 hideDialog();
             }
         });
-
     }
 
     @Override

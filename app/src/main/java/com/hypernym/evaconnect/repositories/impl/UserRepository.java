@@ -25,6 +25,7 @@ public class UserRepository implements IUserRespository {
     @Override
     public LiveData<BaseModel<List<User>>> signup(User user, MultipartBody.Part partImage) {
         userMutableLiveData = new MutableLiveData<>();
+
         RestClient.get().appApi().signup(RequestBody.create(MediaType.parse("text/plain"),user.getStatus()), RequestBody.create(MediaType.parse("text/plain"),user.getFirst_name()), RequestBody.create(MediaType.parse("text/plain"),user.getEmail()),
                 RequestBody.create(MediaType.parse("text/plain"),user.getPassword()), RequestBody.create(MediaType.parse("text/plain"),user.getType()), RequestBody.create(MediaType.parse("text/plain"),user.getBio_data()),partImage).enqueue(new Callback<BaseModel<List<User>>>() {
             @Override
@@ -64,13 +65,36 @@ public class UserRepository implements IUserRespository {
     @Override
     public LiveData<BaseModel<List<User>>> forgotPassword(String email) {
         userMutableLiveData = new MutableLiveData<>();
-        RestClient.get().appApi().forgotPassword(email).enqueue(new Callback<BaseModel<List<User>>>() {
+        User user=new User();
+        user.setUsername(email);
+        RestClient.get().appApi().forgotPassword(user).enqueue(new Callback<BaseModel<List<User>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
                 if (response.body() != null) {
                     userMutableLiveData.setValue(response.body());
                 }
             }
+            @Override
+            public void onFailure(Call<BaseModel<List<User>>> call, Throwable t) {
+                userMutableLiveData.setValue(null);
+            }
+        });
+        return userMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<User>>> isEmailExist(String email) {
+        userMutableLiveData = new MutableLiveData<>();
+        User user=new User();
+        user.setEmail(email);
+        RestClient.get().appApi().isEmailExist(user).enqueue(new Callback<BaseModel<List<User>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
+                if (response.body() != null) {
+                    userMutableLiveData.setValue(response.body());
+                }
+            }
+
             @Override
             public void onFailure(Call<BaseModel<List<User>>> call, Throwable t) {
                 userMutableLiveData.setValue(null);

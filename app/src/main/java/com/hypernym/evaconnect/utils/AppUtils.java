@@ -10,6 +10,7 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +19,9 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.snackbar.Snackbar;
 import com.hypernym.evaconnect.R;
 
@@ -41,14 +45,6 @@ public final class AppUtils {
         AppUtils.applicationContext = applicationContext;
     }
 
-    public static void loadFragment(int id, Fragment fragment, Context context)
-    {
-        FragmentTransaction transaction =((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
-        transaction.replace(id, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
-
     public static void showSnackBar(View v, String message) {
         if (v != null && !TextUtils.isEmpty(message)) {
             Snackbar snackbar = Snackbar.make(v, message, Snackbar.LENGTH_SHORT);
@@ -64,5 +60,25 @@ public final class AppUtils {
         }
     }
 
+    public static void setGlideImage(Context context, ImageView imageView,String url)
+    {
+        Glide.with(context) //1
+                .load(url)
+                .placeholder(R.mipmap.ic_launcher)
+                .error(R.mipmap.ic_launcher)
+                .skipMemoryCache(true) //2
+                .apply(RequestOptions.circleCropTransform())
+                .diskCacheStrategy(DiskCacheStrategy.NONE) //3
+                .into(imageView);
+    }
+    public static String getConnectionsCount(Integer connections)
+    {
+        String totalConnections="0 connections";
+        if(connections!=null)
+        {
+        return  connections+" connections";
+        }
+        return totalConnections;
+    }
 
 }

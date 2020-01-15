@@ -10,7 +10,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
+import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.User;
+import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
+import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.Email;
@@ -36,11 +44,12 @@ public class SignupActivity extends BaseActivity implements Validator.Validation
     EditText edt_email;
 
     @NotEmpty
-    @Password(min=4)
+    @Password(min=8)
     @BindView(R.id.edt_password)
     EditText edt_password;
 
     private Validator validator;
+    private UserViewModel userViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,20 +62,42 @@ public class SignupActivity extends BaseActivity implements Validator.Validation
     private void init() {
         validator = new Validator(this);
         validator.setValidationListener(this);
+        userViewModel = ViewModelProviders.of(this,new CustomViewModelFactory(getApplication(),this)).get(UserViewModel.class);
+
+        btn_next.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                validator.validate();
+            }
+        });
     }
 
-    @OnClick(R.id.btn_signup)
-    public void next()
-    {
-        validator.validate();
-    }
 
     @Override
     public void onValidationSucceeded() {
-        Intent intent=new Intent(SignupActivity.this,SignupDetailsActivity.class);
-        intent.putExtra("Email",edt_email.getText().toString());
-        intent.putExtra("Password",edt_password.getText().toString());
-        startActivity(intent);
+        showDialog();
+        userViewModel.isEmailExist(edt_email.getText().toString()).observe(this, new Observer<BaseModel<List<User>>>() {
+            @Override
+            public void onChanged(BaseModel<List<User>> listBaseModel) {
+                if(listBaseModel!=null && listBaseModel.isError())
+                {
+                    Intent intent=new Intent(SignupActivity.this,SignupDetailsActivity.class);
+                    intent.putExtra("Email",edt_email.getText().toString());
+                    intent.putExtra("Password",edt_password.getText().toString());
+                    startActivity(intent);
+                }
+                else if(!listBaseModel.isError())
+                {
+                    networkResponseDialog(getString(R.string.error),getString(R.string.err_email_already_exist));
+                }
+                else
+                {
+                    networkErrorDialog();
+                }
+                hideDialog();
+            }
+        });
+
     }
 
     @Override
