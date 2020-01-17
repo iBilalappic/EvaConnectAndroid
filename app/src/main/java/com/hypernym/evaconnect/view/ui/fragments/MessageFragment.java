@@ -20,9 +20,12 @@ import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.NetworkConnection;
 import com.hypernym.evaconnect.models.Post;
+import com.hypernym.evaconnect.models.Receiver;
 import com.hypernym.evaconnect.models.User;
+import com.hypernym.evaconnect.models.UserDetails;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.toolbar.OnItemClickListener;
+import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.view.adapters.HomePostsAdapter;
@@ -51,7 +54,9 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     private MessageAdapter messageAdapter;
     private LinearLayoutManager linearLayoutManager;
     private MessageViewModel messageViewModel;
-    public List<NetworkConnection> networkConnectionList = new ArrayList<>();
+    private List<NetworkConnection> networkConnectionList = new ArrayList<>();
+    public Receiver receiver;
+    NetworkConnection networkConnection;
 
     public MessageFragment() {
         // Required empty public constructor
@@ -94,12 +99,12 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
         messageViewModel.SetUser(user).observe(this, new Observer<BaseModel<List<NetworkConnection>>>() {
             @Override
             public void onChanged(BaseModel<List<NetworkConnection>> getnetworkconnection) {
-                if (getnetworkconnection != null && !getnetworkconnection.isError() && getnetworkconnection.getData().get(0) != null) {
+                if (getnetworkconnection != null && !getnetworkconnection.isError()) {
+                    networkConnectionList.clear();
                     for (int i = 0; i < getnetworkconnection.getData().size(); i++) {
                         networkConnectionList.addAll(i, getnetworkconnection.getData());
                     }
                     setupRecyclerview();
-                    Log.d("TAAAG", "" + GsonUtils.toJson(networkConnectionList));
 
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
@@ -110,9 +115,13 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
         });
     }
 
-
     @Override
     public void onItemClick(View view, Object data, int position) {
-
+        ChatFragment chatFragment = new ChatFragment();
+        Bundle bundle=new Bundle();
+        bundle.putSerializable(Constants.DATA,networkConnectionList.get(position));
+        chatFragment.setArguments(bundle);
+      //  Log.d("TAAAG", "" + GsonUtils.toJson(networkConnection));
+        loadFragment(R.id.framelayout, chatFragment, getContext(), true);
     }
 }
