@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -48,7 +49,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     EditText messageArea;
 
     @BindView(R.id.sendButton)
-    ImageView sendButton;
+    TextView sendButton;
 
 
     ChatMessage mMessage;
@@ -87,8 +88,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             Toast.makeText(getContext(), "sendername" + networkConnection.getSender().getFirstName(), Toast.LENGTH_SHORT).show();
         }
         init();
-
-
         return view;
 
     }

@@ -2,26 +2,69 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/unselected_option"
+    android:background="@color/colorPrimary"
     android:gravity="bottom"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textColorHint="#CFD8DC"
-        android:textColor="#CFD8DC"
-        android:hint="Write a message..."
+        android:hint="Tap here to Write a message"
         android:id="@+id/messageArea"
-        android:maxHeight="80dp"
-        />
+        android:textSize="14sp"
+        android:maxHeight="80dp"/>
 
-    <ImageView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="4"
-        android:padding="4dp"
-        android:src="@android:drawable/ic_menu_send"
-        android:id="@+id/sendButton"/>
+        android:layout_marginBottom="@dimen/spacing_medium"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/browsefiles"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_medium"
+            android:layout_marginEnd="50dp"
+            android:drawablePadding="5dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:background="@drawable/rounded_button_nobackground"
+            android:drawableRight="@drawable/attach_small"
+            android:text="Browse Files"
+            android:textColor="@color/light_black"
+            android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/sendButton"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="@dimen/spacing_medium"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:background="@drawable/rounded_button_border"
+            android:text="Send"
+            android:textColor="@color/light_black"
+            android:textSize="12sp" />
+
+
+<!--        <ImageView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="4"-->
+<!--            android:padding="4dp"-->
+<!--            android:src="@android:drawable/ic_menu_send"-->
+<!--            android:id="@+id/sendButton"/>-->
+
+    </LinearLayout>
+
+
 </LinearLayout>
