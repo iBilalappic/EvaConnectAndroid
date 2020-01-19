@@ -1,5 +1,7 @@
 package com.hypernym.evaconnect.models;
 
+import java.io.Serializable;
+
 public class ChatMessage {
     private String Message;
     private int type;

@@ -16,6 +16,7 @@ import com.hypernym.evaconnect.models.NetworkConnection;
 import com.hypernym.evaconnect.models.Notification;
 import com.hypernym.evaconnect.toolbar.OnItemClickListener;
 import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 
 import java.util.ArrayList;
@@ -45,21 +46,23 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public void onBindViewHolder(@NonNull MessageAdapter.ViewHolder holder, int position) {
         if (networkConnectionList.get(position).getSenderId().equals(LoginUtils.getUser().getId())) {
             holder.mtextview20.setText(networkConnectionList.get(position).getReceiver().getFirstName());
+            holder.mtextview21.setText(networkConnectionList.get(position).getReceiver().getBioData());
             AppUtils.setGlideImage(context, (holder).mImageview6, networkConnectionList.get(position).getReceiver().getUserImage());
         }
-        if (networkConnectionList.get(position).getReceiver().equals(LoginUtils.getUser().getId())) {
+        if (networkConnectionList.get(position).getReceiverId().equals(LoginUtils.getUser().getId())) {
             holder.mtextview20.setText(networkConnectionList.get(position).getSender().getFirstName());
+            holder.mtextview21.setText(networkConnectionList.get(position).getSender().getBioData());
             AppUtils.setGlideImage(context, (holder).mImageview6, networkConnectionList.get(position).getSender().getUserImage());
         }
         holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onItemClickListener.onItemClick(view, networkConnectionList.get(position), position);
-
-
             }
         });
-
+        if (networkConnectionList.get(position).getCreatedDatetime() != null) {
+            holder.mtextview22.setText(DateUtils.getTimeAgo(networkConnectionList.get(position).getCreatedDatetime()));
+        }
     }
 
     @Override

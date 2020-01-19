@@ -3,7 +3,9 @@ package com.hypernym.evaconnect.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Sender {
+import java.io.Serializable;
+
+public class Sender implements Serializable {
 
     @SerializedName("id")
     @Expose

@@ -55,8 +55,6 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     private LinearLayoutManager linearLayoutManager;
     private MessageViewModel messageViewModel;
     private List<NetworkConnection> networkConnectionList = new ArrayList<>();
-    public Receiver receiver;
-    NetworkConnection networkConnection;
 
     public MessageFragment() {
         // Required empty public constructor

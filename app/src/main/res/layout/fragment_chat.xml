@@ -5,15 +5,21 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rc_chat"
+    <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="10"
-        android:layout_marginTop="@dimen/spacing_large">
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/spacing_large"
+        android:layout_weight="10">
 
-    </androidx.recyclerview.widget.RecyclerView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rc_chat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </androidx.recyclerview.widget.RecyclerView>
+    </ScrollView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rc_attachments"
@@ -21,6 +27,7 @@
         android:layout_height="wrap_content"
         android:background="@color/lighter_gray"
         android:visibility="visible" />
+
     <include
         layout="@layout/message_area"
         android:layout_width="match_parent"
