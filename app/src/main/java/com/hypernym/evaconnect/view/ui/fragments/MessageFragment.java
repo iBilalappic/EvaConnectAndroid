@@ -1,12 +1,15 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -29,6 +32,7 @@ import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.view.adapters.HomePostsAdapter;
+import com.hypernym.evaconnect.view.adapters.HorizontalMessageAdapter;
 import com.hypernym.evaconnect.view.adapters.MessageAdapter;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
 import com.hypernym.evaconnect.viewmodel.MessageViewModel;
@@ -40,7 +44,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MessageFragment extends BaseFragment implements OnItemClickListener {
+public class MessageFragment extends BaseFragment implements OnItemClickListener, View.OnClickListener {
 
     @BindView(R.id.rc_message)
     RecyclerView re_message;
@@ -52,10 +56,13 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     SwipeRefreshLayout swipeRefresh;
 
     private MessageAdapter messageAdapter;
+    private HorizontalMessageAdapter messageAdapter_horizontal;
     private LinearLayoutManager linearLayoutManager;
     private MessageViewModel messageViewModel;
     private List<NetworkConnection> networkConnectionList = new ArrayList<>();
-
+    Dialog mDialogMessage;
+    EditText editTextSearch,editTextMessage;
+    RecyclerView mrecyclerviewFriends;
     public MessageFragment() {
         // Required empty public constructor
     }
@@ -73,6 +80,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_message, container, false);
         ButterKnife.bind(this, view);
+        newmessage.setOnClickListener(this);
         init();
         GetFriendDetails();
         return view;
@@ -85,6 +93,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     }
 
     private void setupRecyclerview() {
+        networkConnectionList = removeDuplicates(networkConnectionList);
         messageAdapter = new MessageAdapter(getContext(), networkConnectionList, this);
         linearLayoutManager = new LinearLayoutManager(getContext());
         re_message.setLayoutManager(linearLayoutManager);
@@ -100,7 +109,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                 if (getnetworkconnection != null && !getnetworkconnection.isError()) {
                     networkConnectionList.clear();
                     for (int i = 0; i < getnetworkconnection.getData().size(); i++) {
-                        networkConnectionList.addAll(i, getnetworkconnection.getData());
+                        networkConnectionList.addAll(getnetworkconnection.getData());
                     }
                     setupRecyclerview();
 
@@ -116,10 +125,57 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     @Override
     public void onItemClick(View view, Object data, int position) {
         ChatFragment chatFragment = new ChatFragment();
-        Bundle bundle=new Bundle();
-        bundle.putSerializable(Constants.DATA,networkConnectionList.get(position));
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Constants.DATA, networkConnectionList.get(position));
         chatFragment.setArguments(bundle);
-      //  Log.d("TAAAG", "" + GsonUtils.toJson(networkConnection));
+        //  Log.d("TAAAG", "" + GsonUtils.toJson(networkConnection));
         loadFragment(R.id.framelayout, chatFragment, getContext(), true);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+
+
+            case R.id.newmessage:
+                showMesssageDialog();
+                break;
+        }
+    }
+
+    private void showMesssageDialog() {
+
+        mDialogMessage = new Dialog(getContext());
+        mDialogMessage.setContentView(R.layout.dialog_message);
+        editTextSearch=mDialogMessage.findViewById(R.id.edittextSearchUser);
+        mrecyclerviewFriends=mDialogMessage.findViewById(R.id.recyclerViewNetworkConnection);
+        setupNetworkConnectionRecycler();
+        mDialogMessage.setCanceledOnTouchOutside(true);
+        mDialogMessage.show();
+        mDialogMessage.setCancelable(true);
+    }
+
+    private void setupNetworkConnectionRecycler() {
+        networkConnectionList = removeDuplicates(networkConnectionList);
+        messageAdapter_horizontal = new HorizontalMessageAdapter(getContext(), networkConnectionList, this);
+        linearLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
+        mrecyclerviewFriends.setLayoutManager(linearLayoutManager);
+        mrecyclerviewFriends.setAdapter(messageAdapter_horizontal);
+    }
+
+    private List<NetworkConnection> removeDuplicates(List<NetworkConnection> mCollectedBin) {
+        List<NetworkConnection> newList = new ArrayList<NetworkConnection>();
+        // Traverse through the first list
+        for (NetworkConnection element : mCollectedBin) {
+            // If this element is not present in newList
+            // then add it
+            if (!newList.contains(element)) {
+                //  if (!newList.contains(element.location)) {
+                newList.add(element);
+                //   }
+            }
+        }
+
+        return newList;
     }
 }

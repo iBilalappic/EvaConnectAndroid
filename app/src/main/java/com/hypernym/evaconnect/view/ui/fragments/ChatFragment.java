@@ -1,5 +1,6 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -79,13 +81,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     ScrollView scrollView;
 
 
-
     ChatMessage mMessage;
     List<ChatMessage> chatMessageList = new ArrayList<>();
     private NetworkConnection networkConnection = new NetworkConnection();
     Firebase reference1, reference2;
     LinearLayoutManager layoutManager;
     ChatAdapter chatAdapter;
+
+
 
     int PICK_IMAGE_REQUEST = 111;
     Uri filePath;
@@ -98,8 +101,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReferenceFromUrl("gs://evaconnect-df08d.appspot.com");    //change the url according to your firebase app
-
-
 
 
     @Override
@@ -121,10 +122,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 //        Log.d("TAAAG", "" + GsonUtils.toJson(networkConnection));
         if (networkConnection.getSenderId().equals(LoginUtils.getUser().getId())) {
             UserDetails.chatWith = networkConnection.getReceiver().getFirstName();
-          //  Toast.makeText(getContext(), "receivername" + networkConnection.getReceiver().getFirstName(), Toast.LENGTH_SHORT).show();
+            //  Toast.makeText(getContext(), "receivername" + networkConnection.getReceiver().getFirstName(), Toast.LENGTH_SHORT).show();
         } else {
             UserDetails.chatWith = networkConnection.getSender().getFirstName();
-          //  Toast.makeText(getContext(), "sendername" + networkConnection.getSender().getFirstName(), Toast.LENGTH_SHORT).show();
+            //  Toast.makeText(getContext(), "sendername" + networkConnection.getSender().getFirstName(), Toast.LENGTH_SHORT).show();
         }
         init();
         return view;
@@ -188,7 +189,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     private void setupRecycler(List<ChatMessage> chatMessageList) {
         layoutManager = new LinearLayoutManager(getActivity());
         rc_chat.setLayoutManager(layoutManager);
-        chatAdapter = new ChatAdapter(getActivity(), chatMessageList,networkConnection);
+        chatAdapter = new ChatAdapter(getActivity(), chatMessageList, networkConnection);
         rc_chat.setAdapter(chatAdapter);
         scrollView.fullScroll(View.FOCUS_DOWN);
     }
@@ -197,9 +198,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.sendButton:
-              //  Toast.makeText(getActivity(), "sss", Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(getActivity(), "sss", Toast.LENGTH_SHORT).show();
                 String messageText = messageArea.getText().toString();
 
                 if (!messageText.equals("")) {
@@ -208,14 +209,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     map.put("user", UserDetails.username);
                     reference1.push().setValue(map);
                     reference2.push().setValue(map);
-                }else{
-                  //  UploadImageToFirebase();
+                    messageArea.setText("");
+                } else {
+                    //  UploadImageToFirebase();
                 }
                 break;
 
             case R.id.browsefiles:
                 //  Toast.makeText(getActivity(), "sss", Toast.LENGTH_SHORT).show();
-              //  openPictureDialog();
+                //  openPictureDialog();
 //                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 //                intent.addCategory(Intent.CATEGORY_OPENABLE);
 //                intent.setType("*/*");
@@ -226,9 +228,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     }
 
+
     private void UploadImageToFirebase() {
-        if(filePath != null) {
-           // pd.show();
+        if (filePath != null) {
+            // pd.show();
 
             StorageReference childRef = storageRef.child("image.jpg");
 
@@ -238,21 +241,21 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                   // pd.dismiss();
+                    // pd.dismiss();
                     Toast.makeText(getContext(), "Upload successful", Toast.LENGTH_SHORT).show();
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                   // pd.dismiss();
+                    // pd.dismiss();
                     Toast.makeText(getContext(), "Upload Failed -> " + e, Toast.LENGTH_SHORT).show();
                 }
             });
-        }
-        else {
+        } else {
             Toast.makeText(getContext(), "Select an image", Toast.LENGTH_SHORT).show();
         }
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -260,7 +263,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         if (requestCode == REQUEST_PHOTO_GALLERY && resultCode == RESULT_OK) {
             try {
                 if (data != null && data.getData() != null) {
-                    filePath=data.getData();
+                    filePath = data.getData();
 //                    Uri SelectedImageUri = data.getData();
 //                    GalleryImage = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
 //                    mProfileImageDecodableString = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
