@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#fff</color>
-    <color name="colorPrimaryDark">#000</color>
+    <color name="colorPrimaryDark">@color/black</color>
     <color name="colorAccent">#EA5454</color>
     <color name="light_black">#2D2D28</color>
     <color name="darker_gray">#606060</color>
+    <color name="dark_black">#000</color>
     <color name="light_gray">#EBE9E9</color>
     <color name="gray">#BDBABA</color>
     <color name="lighter_gray">#F0F0F0</color>
@@ -15,6 +16,7 @@
     <color name="unselected_option">#808080</color>
     <!--Simple Dialog-->
     <color name="colorSimpleDialogTitleText">#ffffff</color>
+    <color name="colorSimpleDialogBackground">#EA5454</color>
     <color name="colorSimpleDialogText">#002256</color>
     <color name="btn_border">#3C3F5C</color>
 

@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/tv_close"
             style="@style/TextStyle.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -161,7 +161,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_minago" />
 
         <TextView
-            android:id="@+id/button"
+            android:id="@+id/tv_connect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -187,12 +187,15 @@
             android:text="“Things you’d never hear in a ticket office” … Let’s play a game of mock the week, or the LinkedIn version of Mock the Week. I’ll Start: https://lnkd.in… see more"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_connect" />
 
         <com.smarteist.autoimageslider.SliderView
             android:id="@+id/slider_images"
             android:layout_width="0dp"
             android:layout_height="200dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_content"

@@ -57,13 +57,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="$23,000"
-        app:layout_constraintBottom_toBottomOf="@+id/button"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_connect"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toBottomOf="@+id/tv_location" />
 
 
     <TextView
-        android:id="@+id/button"
+        android:id="@+id/tv_connect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
@@ -117,9 +117,9 @@
     <View
         android:id="@+id/view"
         android:layout_width="0dp"
-        android:layout_height="70dp"
+        android:layout_height="50dp"
         android:background="@color/colorPrimary"
-        android:elevation="2dp"
+        android:elevation="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView" />
@@ -130,7 +130,7 @@
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:background="@drawable/rounded_button_whitebg"
-        android:elevation="2dp"
+        android:elevation="1dp"
         android:gravity="center"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"

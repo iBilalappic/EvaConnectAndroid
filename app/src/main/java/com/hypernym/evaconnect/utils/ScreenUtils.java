@@ -3,7 +3,10 @@ package com.hypernym.evaconnect.utils;
 
 import android.content.Context;
 import android.util.DisplayMetrics;
+import android.view.View;
 import android.view.WindowManager;
+
+import com.google.android.material.snackbar.Snackbar;
 
 /**
  * Created by hina saeed on 17/12/19.
@@ -37,4 +40,10 @@ public final class ScreenUtils {
         }
         return result;
     }
+    public static void showSnackbar(View view)
+    {
+        Snackbar.make(view, "FloatingActionButton is clicked", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+    }
+
 }

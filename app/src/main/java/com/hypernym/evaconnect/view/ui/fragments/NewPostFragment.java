@@ -3,6 +3,7 @@ package com.hypernym.evaconnect.view.ui.fragments;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -24,8 +25,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -40,11 +43,16 @@ import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
+import com.hypernym.evaconnect.utils.NetworkUtils;
+import com.hypernym.evaconnect.utils.URLTextWatcher;
 import com.hypernym.evaconnect.view.adapters.AttachmentsAdapter;
+import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.nguyencse.URLEmbeddedData;
+import com.nguyencse.URLEmbeddedView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -56,6 +64,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -65,7 +74,7 @@ import static android.app.Activity.RESULT_OK;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NewPostFragment extends BaseFragment implements Validator.ValidationListener  {
+public class NewPostFragment extends BaseFragment implements Validator.ValidationListener,AttachmentsAdapter.ItemClickListener {
 
     @BindView(R.id.rc_attachments)
     RecyclerView rc_attachments;
@@ -89,9 +98,20 @@ public class NewPostFragment extends BaseFragment implements Validator.Validatio
     @BindView(R.id.tv_connections)
     TextView tv_connections;
 
+    @BindView(R.id.img_video)
+    ImageView img_video;
+
+    @BindView(R.id.img_play)
+    ImageView img_play;
+
+    @BindView(R.id.uev)
+    URLEmbeddedView urlEmbeddedView;
+
+
     private AttachmentsAdapter attachmentsAdapter;
     private List<String> attachments=new ArrayList<>();
     private List<MultipartBody.Part> part_images=new ArrayList<>();
+    private MultipartBody.Part video=null;
     private static final int REQUEST_PHOTO_GALLERY = 4;
     private static final int CAMERAA = 1;
 
@@ -103,6 +123,7 @@ public class NewPostFragment extends BaseFragment implements Validator.Validatio
     private PostViewModel postViewModel;
     private Post postModel=new Post();
     private Validator validator;
+    private SimpleDialog simpleDialog;
 
     public NewPostFragment() {
         // Required empty public constructor
@@ -143,13 +164,15 @@ public class NewPostFragment extends BaseFragment implements Validator.Validatio
         AppUtils.setGlideImage(getContext(),profile_image,user.getUser_image());
         tv_name.setText(user.getFirst_name());
         tv_connections.setText(AppUtils.getConnectionsCount(user.getTotal_connection()));
-
+        showBackButton();
+        edt_content.addTextChangedListener(new URLTextWatcher(getActivity(),edt_content,urlEmbeddedView));
     }
 
     private void createPost() {
             showDialog();
             postModel.setAttachments(part_images);
             postModel.setContent(edt_content.getText().toString());
+            postModel.setVideo(video);
             postViewModel.createPost(postModel).observe(this, new Observer<BaseModel<List<Post>>>() {
                 @Override
                 public void onChanged(BaseModel<List<Post>> listBaseModel) {
@@ -189,7 +212,6 @@ public class NewPostFragment extends BaseFragment implements Validator.Validatio
                     Log.e(getClass().getName(), "image file path: " + GalleryImage);
 
                     tempFile = new File(GalleryImage);
-
                     Log.e(getClass().getName(), "file path details: " + tempFile.getName() + " " + tempFile.getAbsolutePath() + "length" + tempFile.length());
 
 
@@ -204,11 +226,23 @@ public class NewPostFragment extends BaseFragment implements Validator.Validatio
                             RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file_name);
 
                            // partImage = MultipartBody.Part.createFormData("user_image", file_name.getName(), reqFile);
-                            part_images.add(MultipartBody.Part.createFormData("post_image", file_name.getName(), reqFile));
+
                             if (!TextUtils.isEmpty(currentPhotoPath) || currentPhotoPath != null) {
-                                attachments.add(currentPhotoPath);
-                                attachmentsAdapter.notifyDataSetChanged();
-                                rc_attachments.setVisibility(View.VISIBLE);
+                                if (currentPhotoPath.toString().endsWith(".mp4")) {
+                                    img_video.setVisibility(View.VISIBLE);
+                                    img_play.setVisibility(View.VISIBLE);
+                                    AppUtils.setGlideVideoThumbnail(getContext(),img_video,currentPhotoPath);
+                                    video=MultipartBody.Part.createFormData("post_video", file_name.getName(), reqFile);
+                                }
+                                else
+                                {
+                                    attachments.add(currentPhotoPath);
+                                    attachmentsAdapter.notifyDataSetChanged();
+                                    rc_attachments.setVisibility(View.VISIBLE);
+                                    img_video.setVisibility(View.GONE);
+                                    img_play.setVisibility(View.GONE);
+                                    part_images.add(MultipartBody.Part.createFormData("post_image", file_name.getName(), reqFile));
+                                }
 
                             } else {
                                 networkResponseDialog(getString(R.string.error),getString(R.string.err_internal_supported));
@@ -238,26 +272,33 @@ public class NewPostFragment extends BaseFragment implements Validator.Validatio
                     //   AppUtils.showSnackBar(getView(), getString(R.string.err_image_size_large, AppConstants.IMAGE_SIZE_IN_KB));
                     return;
                 }
+                Bitmap orignal = loadFromFile(globalImagePath);
+                File filenew = new File(globalImagePath);
+                try {
+                    FileOutputStream out = new FileOutputStream(filenew);
+                    orignal.compress(Bitmap.CompressFormat.JPEG, 50, out);
+                    out.flush();
+                    out.close();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 if (!TextUtils.isEmpty(globalImagePath) || globalImagePath != null) {
-
-                    attachments.add(globalImagePath);
-                    attachmentsAdapter.notifyDataSetChanged();
-                    rc_attachments.setVisibility(View.VISIBLE);
-
-                    Bitmap orignal = loadFromFile(globalImagePath);
-                    File filenew = new File(globalImagePath);
-                    try {
-                        FileOutputStream out = new FileOutputStream(filenew);
-                        orignal.compress(Bitmap.CompressFormat.JPEG, 50, out);
-                        out.flush();
-                        out.close();
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    if (globalImagePath.toString().endsWith(".mp4")) {
+                        img_video.setVisibility(View.VISIBLE);
+                        img_play.setVisibility(View.VISIBLE);
+                        AppUtils.setGlideVideoThumbnail(getContext(),img_video,globalImagePath);
+                        video=MultipartBody.Part.createFormData("post_video", file_name.getName(), reqFile);
                     }
-                    part_images.add(MultipartBody.Part.createFormData("post_image", file.getName(), reqFile));
-                //   partImage = MultipartBody.Part.createFormData("user_image", file_name.getName(), reqFile);
-                    //AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 8));
+                    else
+                    {
+                        attachments.add(globalImagePath);
+                        attachmentsAdapter.notifyDataSetChanged();
+                        rc_attachments.setVisibility(View.VISIBLE);
+                        img_video.setVisibility(View.GONE);
+                        img_play.setVisibility(View.GONE);
+                        part_images.add(MultipartBody.Part.createFormData("post_image", file.getName(), reqFile));
+                    }
 
                 }
             }
@@ -266,7 +307,13 @@ public class NewPostFragment extends BaseFragment implements Validator.Validatio
 
     @Override
     public void onValidationSucceeded() {
-        createPost();
+        if(NetworkUtils.isNetworkConnected(getContext())) {
+            createPost();
+        }
+        else
+        {
+            networkErrorDialog();
+        }
     }
 
     @Override
@@ -282,5 +329,34 @@ public class NewPostFragment extends BaseFragment implements Validator.Validatio
             }
         }
     }
+    @OnClick(R.id.img_video)
+    public void playVideo()
+    {
+        AppUtils.playVideo(getActivity(),currentPhotoPath);
+
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        simpleDialog=new SimpleDialog(getContext(), getString(R.string.confirmation), getString(R.string.msg_remove_attachment), getString(R.string.button_no), getString(R.string.button_yes), new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    switch (v.getId())
+                    {
+                        case R.id.button_positive:
+                            attachments.remove(position);
+                            attachmentsAdapter.notifyDataSetChanged();
+                            part_images.remove(position);
+                            break;
+                        case R.id.button_negative:
+                            break;
+                    }
+
+                    simpleDialog.dismiss();
+                }
+            });
+                simpleDialog.show();
+    }
+
 
 }

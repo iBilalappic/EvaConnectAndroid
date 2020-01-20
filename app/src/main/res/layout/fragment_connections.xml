@@ -9,7 +9,7 @@
     tools:context=".view.ui.fragments.ConnectionsFragment">
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/edt_search"
         style="@style/EditText.Search"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -22,76 +22,31 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rc_subcategories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rc_maincategories" />
+
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rc_maincategories"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/tv_everyone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
-
-    <TextView
-        android:id="@+id/tv_everyone"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/rounded_button_nobackground"
-        android:gravity="center"
-        android:paddingLeft="15dp"
-        android:paddingTop="5dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="5dp"
-        android:text="@string/everyone"
-        android:textColor="@color/darker_gray"
-        app:layout_constraintEnd_toStartOf="@+id/tv_people"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rc_maincategories" />
-
-    <TextView
-        android:id="@+id/tv_people"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/rounded_button_nobackground"
-        android:gravity="center"
-        android:paddingLeft="15dp"
-        android:paddingTop="5dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="5dp"
-        android:text="@string/people"
-        app:layout_constraintEnd_toStartOf="@+id/tv_companies"
-        app:layout_constraintStart_toEndOf="@+id/tv_everyone"
-        app:layout_constraintTop_toBottomOf="@+id/rc_maincategories" />
-
-    <TextView
-        android:id="@+id/tv_companies"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/rounded_button_nobackground"
-        android:gravity="center"
-        android:paddingLeft="15dp"
-        android:paddingTop="5dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="5dp"
-        android:text="@string/companies"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tv_people"
-        app:layout_constraintTop_toBottomOf="@+id/rc_maincategories" />
+        app:layout_constraintTop_toBottomOf="@+id/edt_search" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rc_connections"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_everyone" />
+        app:layout_constraintTop_toBottomOf="@+id/rc_subcategories" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -73,24 +73,8 @@ public class AttachmentsAdapter extends RecyclerView.Adapter<AttachmentsAdapter.
 
         @Override
         public void onClick(View v) {
-            simpleDialog=new SimpleDialog(context, context.getString(R.string.confirmation), context.getString(R.string.msg_remove_attachment), context.getString(R.string.button_no), context.getString(R.string.button_yes), new OnOneOffClickListener() {
-                @Override
-                public void onSingleClick(View v) {
-                    switch (v.getId())
-                    {
-                        case R.id.button_positive:
-                            images.remove(getAdapterPosition());
-                            notifyDataSetChanged();
-                            break;
-                        case R.id.button_negative:
-                            break;
-                    }
 
-                    simpleDialog.dismiss();
-                }
-            });
-                simpleDialog.show();
-           // if (mClickListener != null) mClickListener.onItemClick(v, getAdapterPosition());
+           if (mClickListener != null) mClickListener.onItemClick(v, getAdapterPosition());
         }
     }
     // parent activity will implement this method to respond to click events

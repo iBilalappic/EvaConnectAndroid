@@ -4,14 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hypernym.evaconnect.constants.AppConstants;
+
 public abstract class PaginationScrollListener extends RecyclerView.OnScrollListener {
-    public static final int PAGE_START = 1;
+    public static final int PAGE_START = 0;
     @NonNull
     private LinearLayoutManager layoutManager;
-    /**
-     * Set scrolling threshold here (for now i'm assuming 10 item in one page)
-     */
-    private static final int PAGE_SIZE = 10;
+
     /**
      * Supporting only LinearLayoutManager for now.
      */
@@ -26,8 +25,7 @@ public abstract class PaginationScrollListener extends RecyclerView.OnScrollList
         int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
         if (!isLoading() && !isLastPage()) {
             if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
-                    && firstVisibleItemPosition >= 0
-                    && totalItemCount >= PAGE_SIZE) {
+                    && firstVisibleItemPosition >= 0) {
                 loadMoreItems();
             }
         }

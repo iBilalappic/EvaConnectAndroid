@@ -5,14 +5,24 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -22,8 +32,21 @@ import androidx.fragment.app.FragmentTransaction;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.snackbar.Snackbar;
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.constants.AppConstants;
+import com.hypernym.evaconnect.view.dialogs.VideoViewDialog;
+import com.hypernym.evaconnect.view.ui.fragments.BaseFragment;
+import com.nguyencse.URLEmbeddedData;
+import com.nguyencse.URLEmbeddedTask;
+import com.nguyencse.URLEmbeddedView;
+
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -33,6 +56,8 @@ import com.hypernym.evaconnect.R;
 public final class AppUtils {
 
     public static Context applicationContext;
+    public static String URL_REGEX="\\(?\\b(https?://|www[.]|ftp://)[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]";
+
 
     private AppUtils() {
         // This class is not publicly instantiable
@@ -64,12 +89,27 @@ public final class AppUtils {
     {
         Glide.with(context) //1
                 .load(url)
-                .placeholder(R.mipmap.ic_launcher)
-                .error(R.mipmap.ic_launcher)
+                .placeholder(R.mipmap.ic_default)
+                .error(R.mipmap.ic_default)
                 .skipMemoryCache(true) //2
                 .apply(RequestOptions.circleCropTransform())
                 .diskCacheStrategy(DiskCacheStrategy.NONE) //3
                 .into(imageView);
+    }
+    public static void setGlideVideoThumbnail(Context context, ImageView imageView,String url)
+    {
+          Glide.with(context)
+                .load(url)
+                .into(new CustomTarget<Drawable>() {
+                    @Override
+                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                        imageView.setBackground(resource);
+                    }
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                    }
+                });
     }
     public static String getConnectionsCount(Integer connections)
     {
@@ -79,6 +119,143 @@ public final class AppUtils {
         return  connections+" connections";
         }
         return totalConnections;
+    }
+
+    public static String getConnectionStatus(Context context,String status)
+    {
+        String connectionStatus=context.getString(R.string.connect);;
+        switch (status)
+        {
+            case AppConstants.NOT_CONNECTED:
+                connectionStatus=context.getString(R.string.connect);
+                break;
+            case AppConstants.ACTIVE:
+                connectionStatus=AppConstants.CONNECTED;
+            break;
+            case AppConstants.PENDING:
+                connectionStatus=AppConstants.REQUEST_SENT;
+                break;
+        }
+        return connectionStatus;
+    }
+    public static void setLikeCount(Context context,TextView likeCount,String type,ImageView img_like)
+    {
+        if(type.equalsIgnoreCase(AppConstants.UNLIKE))
+        {
+           img_like.setBackground(context.getDrawable(R.mipmap.ic_like));
+           int likes=Integer.parseInt(likeCount.getText().toString());
+           if(likes>0)
+             likeCount.setText(String.valueOf(likes-1));
+        }
+        else
+        {
+            img_like.setBackground(context.getDrawable(R.mipmap.ic_like_selected));
+            int likes=Integer.parseInt(likeCount.getText().toString());
+            likeCount.setText(String.valueOf(likes+1));
+        }
+    }
+    public static Bitmap decodeUri(Context c, Uri uri, final int requiredSize)
+            throws FileNotFoundException {
+        BitmapFactory.Options o = new BitmapFactory.Options();
+        o.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(c.getContentResolver().openInputStream(uri), null, o);
+
+        int width_tmp = o.outWidth
+                , height_tmp = o.outHeight;
+        int scale = 1;
+
+        while(true) {
+            if(width_tmp / 2 < requiredSize || height_tmp / 2 < requiredSize)
+                break;
+            width_tmp /= 2;
+            height_tmp /= 2;
+            scale *= 2;
+        }
+
+        BitmapFactory.Options o2 = new BitmapFactory.Options();
+        o2.inSampleSize = scale;
+        return BitmapFactory.decodeStream(c.getContentResolver().openInputStream(uri), null, o2);
+    }
+
+    public static void playVideo(Context context,String url)
+    {
+        VideoViewDialog videoViewDialog=new VideoViewDialog(context,url);
+
+        videoViewDialog.show();
+    }
+
+    public static ArrayList<String> containsURL(String content)
+    {
+        ArrayList<String> links = new ArrayList<String>();
+        Pattern p = Pattern.compile(URL_REGEX);
+        Matcher m = p.matcher(content);//replace with string to compare
+        if(m.find()) {
+            String urlStr = m.group();
+            if (urlStr.startsWith("(") && urlStr.endsWith(")"))
+            {
+                urlStr = urlStr.substring(1, urlStr.length() - 1);
+            }
+
+            links.add(urlStr);
+
+            return links;
+
+        }
+      return links;
+    }
+    public static void showUrlEmbeddedView(String url, URLEmbeddedView urlEmbeddedView)
+    {
+        urlEmbeddedView.setURL(url, new URLEmbeddedView.OnLoadURLListener() {
+            @Override
+            public void onLoadURLCompleted(URLEmbeddedData data) {
+                urlEmbeddedView.title(data.getTitle());
+                urlEmbeddedView.description(data.getDescription());
+                urlEmbeddedView.host(data.getHost());
+                urlEmbeddedView.thumbnail(data.getThumbnailURL());
+                urlEmbeddedView.favor(data.getFavorURL());
+            }
+        });
+    }
+    public static void customUrlEmbeddedView(Context context,String url, ImageView imageView)
+    {
+
+        URLEmbeddedTask urlTask = new URLEmbeddedTask(new URLEmbeddedTask.OnLoadURLListener() {
+            @Override
+            public void onLoadURLCompleted(URLEmbeddedData data) {
+                // handle your code here
+                setGlideVideoThumbnail(context,imageView,data.getThumbnailURL());
+            }
+        });
+        urlTask.execute(url);
+
+    }
+
+    public static void makeTextViewResizable(final TextView tv, final int maxLine) {
+        String expandText="see more";
+        if (tv.getTag() == null) {
+            tv.setTag(tv.getText());
+        }
+        ViewTreeObserver vto = tv.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @SuppressWarnings("deprecation")
+            @Override
+            public void onGlobalLayout() {
+
+                ViewTreeObserver obs = tv.getViewTreeObserver();
+                obs.removeGlobalOnLayoutListener(this);
+                if (maxLine <= 0) {
+                    int lineEndIndex = tv.getLayout().getLineEnd(0);
+                    String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + "..." + expandText;
+                    tv.setText(text);
+                } else if (tv.getLineCount() >= maxLine) {
+                    int lineEndIndex = tv.getLayout().getLineEnd(maxLine - 1);
+                    String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + "..." + expandText;
+                    tv.setText(text);
+                }
+            }
+        });
+
     }
 
 }

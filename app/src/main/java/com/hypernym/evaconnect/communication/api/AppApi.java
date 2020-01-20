@@ -3,6 +3,7 @@ package com.hypernym.evaconnect.communication.api;
 import com.hypernym.evaconnect.constants.APIConstants;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Comment;
+import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.Dashboard;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
@@ -41,7 +42,7 @@ public interface AppApi {
     @Multipart
     @POST(APIConstants.GET_POSTS)
     Call<BaseModel<List<Post>>> createPost(@Part("user_id") int user_id,@Part("content") RequestBody content,
-                                           @Part("created_by_id") int created_by_id,@Part("status") RequestBody status,@Part List<MultipartBody.Part> post_image);
+                                           @Part("created_by_id") int created_by_id,@Part("status") RequestBody status,@Part List<MultipartBody.Part> post_image,@Part MultipartBody.Part post_video);
 
     @POST(APIConstants.CHECK_EMAIL_EXIST)
     Call<BaseModel<List<User>>> isEmailExist(@Body User user);
@@ -57,4 +58,13 @@ public interface AppApi {
 
     @POST(APIConstants.GET_POST_COMMENTS)
     Call<BaseModel<List<Comment>>> getPostComments(@Body Post post);
+
+    @POST(APIConstants.CONNECT)
+    Call<BaseModel<List<Connection>>> connect(@Body Connection connection);
+
+    @POST(APIConstants.GET_ALL_CONNECTIONS)
+    Call<BaseModel<List<User>>> getAllConnections(@Body User user);
+
+    @POST(APIConstants.GET_CONNECTION_BY_FILTER)
+    Call<BaseModel<List<User>>> getConnectionByFilter(@Body User user);
 }

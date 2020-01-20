@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">evaConnect</string>
-    <string name="network_error">Please check your internet connection and try again.</string>
     <string name="errorString">Something went wrong, Please try again.</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="login">Log In</string>
@@ -42,33 +41,39 @@
     <string name="everyone">Everyone</string>
     <string name="people">People</string>
     <string name="companies">Companies</string>
-    <string name="err_password">Your password cannot be empty and should be between 8 to 30 characters.</string>
     <string name="err_unknown">Something went wrong</string>
-    <string name="err_image_size_large">Image size is too large. Maximum image size is 1 MB.</string>
     <string name="success">Success</string>
     <string name="error">Error</string>
     <string name="ok">OK</string>
-    <string name="msg_signup">Your account has been successfully created.</string>
-    <string name="err_signup">This email already exist.</string>
-    <string name="msg_forgotpass">An email has been sent to your email address. Follow the instruction in the email to reset your password. </string>
-    <string name="err_login">You have entered invalid username or password.</string>
-    <string name="msg_exit">Are you sure you want to exit?</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_ok">OK</string>
-    <string name="msg_logout">Are you sure you want to logout?</string>
     <string name="confirmation">Confirmation</string>
-    <string name="err_one_file_at_a_time">Only one image file can be selected at a time</string>
-    <string name="err_internal_supported">Sorry! Files from internal storage are supported only</string>
-    <string name="err_email_already_exist">An account already exists with that email. Please try another one.</string>
-    <string name="msg_remove_attachment">Are you sure you want to remove?</string>
     <string name="button_yes">YES</string>
     <string name="button_no">NO</string>
-    <string name="msg_post_created">Post has been created successfully.</string>
-    <string name="msg_comment_created">Comment has been created successfully.</string>
     <string name="attending">Attending?</string>
     <string name="apply">Apply</string>
     <string name="share_post">Share</string>
     <string name="post">Post</string>
+
+
     <string name="hint_share_post">Write Something or add a hashtag</string>
+    <!--Messages-->
+    <string name="msg_connect_request">Connection request has been sent to this user.</string>
+    <string name="msg_post_created">Post has been created successfully.</string>
+    <string name="msg_comment_created">Comment has been created successfully.</string>
+    <string name="msg_remove_attachment">Are you sure you want to remove?</string>
+    <string name="msg_forgotpass">An email has been sent to your email address. Follow the instruction in the email to reset your password. </string>
+    <string name="msg_signup">Your account has been successfully created.</string>
+    <string name="msg_exit">Are you sure you want to exit?</string>
+    <string name="msg_logout">Are you sure you want to logout?</string>
+    <!--Error Messages-->
+    <string name="err_one_file_at_a_time">Only one image file can be selected at a time</string>
+    <string name="err_internal_supported">Sorry! Files from internal storage are supported only</string>
+    <string name="err_email_already_exist">An account already exists with that email. Please try another one.</string>
+    <string name="err_password">Your password cannot be empty and should be between 8 to 30 characters.</string>
+    <string name="err_image_size_large">Image size is too large. Maximum image size is 1 MB.</string>
+    <string name="err_signup">This email already exist.</string>
+    <string name="err_login">You have entered invalid username or password.</string>
+    <string name="network_error">Please check your internet connection and try again.</string>
 </resources>
 

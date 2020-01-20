@@ -15,6 +15,7 @@ public class User implements Serializable {
     private Integer user_id;
     private String user_image;
     private Integer total_connection;
+    private String is_connected;
 
 
 
@@ -113,5 +114,13 @@ public class User implements Serializable {
 
     public void setTotal_connection(Integer total_connection) {
         this.total_connection = total_connection;
+    }
+
+    public String getIs_connected() {
+        return is_connected;
+    }
+
+    public void setIs_connected(String is_connected) {
+        this.is_connected = is_connected;
     }
 }

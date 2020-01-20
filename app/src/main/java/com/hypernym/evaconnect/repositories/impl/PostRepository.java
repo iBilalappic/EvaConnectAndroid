@@ -29,7 +29,7 @@ public class PostRepository implements IPostRepository {
         postMutableLiveData=new MutableLiveData<>();
         User user=LoginUtils.getLoggedinUser();
         RestClient.get().appApi().createPost(user.getUser_id(),RequestBody.create(MediaType.parse("text/plain"),
-                post.getContent()),user.getUser_id(),RequestBody.create(MediaType.parse("text/plain"), AppConstants.STATUS_PENDING),post.getAttachments()).enqueue(new Callback<BaseModel<List<Post>>>() {
+                post.getContent()),user.getUser_id(),RequestBody.create(MediaType.parse("text/plain"), AppConstants.STATUS_PENDING),post.getAttachments(),post.getVideo()).enqueue(new Callback<BaseModel<List<Post>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
                 postMutableLiveData.setValue(response.body());

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.Dashboard;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
@@ -19,6 +20,7 @@ import retrofit2.Response;
 public class HomeRepository implements IHomeRepository {
 
     private MutableLiveData<BaseModel<List<Post>>> dashboardMutableLiveData = new MutableLiveData<>();
+
 
     @Override
     public LiveData<BaseModel<List<Post>>> getDashboard(User user,int total,int current) {
@@ -36,4 +38,5 @@ public class HomeRepository implements IHomeRepository {
         });
         return dashboardMutableLiveData;
     }
+
 }
