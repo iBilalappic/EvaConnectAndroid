@@ -4,17 +4,13 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,25 +18,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.hypernym.evaconnect.R;
-import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.NetworkConnection;
-import com.hypernym.evaconnect.models.Post;
-import com.hypernym.evaconnect.models.Receiver;
 import com.hypernym.evaconnect.models.User;
-import com.hypernym.evaconnect.models.UserDetails;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.toolbar.OnItemClickListener;
-import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.Constants;
-import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
-import com.hypernym.evaconnect.view.adapters.HomePostsAdapter;
 import com.hypernym.evaconnect.view.adapters.HorizontalMessageAdapter;
 import com.hypernym.evaconnect.view.adapters.MessageAdapter;
-import com.hypernym.evaconnect.viewmodel.HomeViewModel;
 import com.hypernym.evaconnect.viewmodel.MessageViewModel;
-import com.hypernym.evaconnect.viewmodel.PostViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,8 +53,9 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     private List<NetworkConnection> networkConnectionList = new ArrayList<>();
     Dialog mDialogMessage;
     EditText editTextSearch, editTextMessage;
-    Button mbuttonSend;
+    TextView mTextviewSend;
     RecyclerView mrecyclerviewFriends;
+    private int Itempostion;
 
     public MessageFragment() {
         // Required empty public constructor
@@ -133,6 +121,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     public void onItemClick(View view, Object data, int position ,String adaptertype) {
         if(adaptertype.equals("SimpleAdapter")){
             ChatFragment chatFragment = new ChatFragment();
+            Itempostion=position;
             Bundle bundle = new Bundle();
             bundle.putSerializable(Constants.DATA, networkConnectionList.get(position));
             chatFragment.setArguments(bundle);
@@ -140,6 +129,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
             loadFragment(R.id.framelayout, chatFragment, getContext(), true);
         }else{
             Toast.makeText(getContext(), ""+position, Toast.LENGTH_SHORT).show();
+
         }
 
     }
@@ -159,14 +149,25 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
         mDialogMessage.setContentView(R.layout.dialog_message);
         editTextSearch = mDialogMessage.findViewById(R.id.edittextSearchUser);
         editTextMessage = mDialogMessage.findViewById(R.id.edittextMessageArea);
-        mbuttonSend = mDialogMessage.findViewById(R.id.sendButton);
+        mTextviewSend = mDialogMessage.findViewById(R.id.sendButton);
         editTextSearch.addTextChangedListener(this);
         mrecyclerviewFriends = mDialogMessage.findViewById(R.id.recyclerViewNetworkConnection);
         setupNetworkConnectionRecycler();
 
-        mbuttonSend.setOnClickListener(new View.OnClickListener() {
+        mTextviewSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String messageArea=editTextMessage.getText().toString();
+                if(!messageArea.equals("")){
+                    ChatFragment chatFragment = new ChatFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(Constants.DATA, networkConnectionList.get(Itempostion));
+                    bundle.putString("MESSAGE",messageArea);
+                    chatFragment.setArguments(bundle);
+                    //  Log.d("TAAAG", "" + GsonUtils.toJson(networkConnection));
+                    loadFragment(R.id.framelayout, chatFragment, getContext(), true);
+                    mDialogMessage.dismiss();
+                }
 
             }
         });
