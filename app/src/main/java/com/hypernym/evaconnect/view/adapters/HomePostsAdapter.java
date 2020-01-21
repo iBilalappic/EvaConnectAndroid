@@ -19,6 +19,7 @@ import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
+import com.nguyencse.URLEmbeddedData;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -35,12 +36,12 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class HomePostsAdapter extends RecyclerView.Adapter {
 
-    private List<Post> posts=new ArrayList<>();
-    private  Context mContext;
+    private List<Post> posts = new ArrayList<>();
+    private Context mContext;
     int total_types;
     private boolean fabStateVolume = false;
-    private  HomePostsAdapter.ItemClickListener mClickListener;
-    private  SliderImageAdapter sliderImageAdapter;
+    private HomePostsAdapter.ItemClickListener mClickListener;
+    private SliderImageAdapter sliderImageAdapter;
     // flag for footer ProgressBar (i.e. last item of list)
     private boolean isLoadingAdded = false;
     private boolean isLoaderVisible = false;
@@ -82,9 +83,12 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.tv_connections)
         TextView tv_connections;
 
+        @BindView(R.id.view6)
+        View top_image;
+
         public TextTypeViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
             tv_viewcomments.setOnClickListener(this);
             img_like.setOnClickListener(this);
             img_comment.setOnClickListener(this);
@@ -95,22 +99,24 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @Override
         public void onClick(View v) {
             if (mClickListener != null)
-                switch (v.getId())
-                {
+                switch (v.getId()) {
                     case R.id.img_like:
-                        mClickListener.onLikeClick(v,getAdapterPosition(),tv_likecount);
+                        mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
                         break;
                     case R.id.tv_comcount:
-                        mClickListener.onItemClick(v,getAdapterPosition());
+                        mClickListener.onItemClick(v, getAdapterPosition());
                         break;
                     case R.id.img_comment:
-                        mClickListener.onItemClick(v,getAdapterPosition());
+                        mClickListener.onItemClick(v, getAdapterPosition());
                         break;
                     case R.id.tv_viewcomments:
-                        mClickListener.onItemClick(v,getAdapterPosition());
+                        mClickListener.onItemClick(v, getAdapterPosition());
                         break;
                     case R.id.img_share:
-                        mClickListener.onShareClick(v,getAdapterPosition());
+                        mClickListener.onShareClick(v, getAdapterPosition());
+                        break;
+                    case R.id.tv_connect:
+                        mClickListener.onConnectClick(v, getAdapterPosition());
                         break;
                 }
         }
@@ -147,7 +153,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
         public EventTypeViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
             tv_viewcomments.setOnClickListener(this);
             img_like.setOnClickListener(this);
             img_comment.setOnClickListener(this);
@@ -158,26 +164,26 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @Override
         public void onClick(View v) {
             if (mClickListener != null)
-                switch (v.getId())
-                {
+                switch (v.getId()) {
                     case R.id.img_like:
-                        mClickListener.onLikeClick(v,getAdapterPosition(),tv_likecount);
+                        mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
                         break;
                     case R.id.img_comment:
-                        mClickListener.onItemClick(v,getAdapterPosition());
+                        mClickListener.onItemClick(v, getAdapterPosition());
                         break;
                     case R.id.tv_viewcomments:
-                        mClickListener.onItemClick(v,getAdapterPosition());
+                        mClickListener.onItemClick(v, getAdapterPosition());
                         break;
                     case R.id.img_share:
-                        mClickListener.onShareClick(v,getAdapterPosition());
+                        mClickListener.onShareClick(v, getAdapterPosition());
                         break;
                     case R.id.tv_comcount:
-                        mClickListener.onItemClick(v,getAdapterPosition());
+                        mClickListener.onItemClick(v, getAdapterPosition());
                         break;
                 }
         }
     }
+
     public class JobTypeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.tv_viewcomments)
         TextView tv_viewcomments;
@@ -208,7 +214,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
         public JobTypeViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
             tv_viewcomments.setOnClickListener(this);
             img_like.setOnClickListener(this);
             img_comment.setOnClickListener(this);
@@ -219,22 +225,21 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @Override
         public void onClick(View v) {
             if (mClickListener != null)
-                switch (v.getId())
-                {
+                switch (v.getId()) {
                     case R.id.img_like:
-                        mClickListener.onLikeClick(v,getAdapterPosition(),tv_likecount);
+                        mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
                         break;
                     case R.id.img_comment:
-                        mClickListener.onItemClick(v,getAdapterPosition());
+                        mClickListener.onItemClick(v, getAdapterPosition());
                         break;
                     case R.id.tv_viewcomments:
-                        mClickListener.onItemClick(v,getAdapterPosition());
+                        mClickListener.onItemClick(v, getAdapterPosition());
                         break;
                     case R.id.img_share:
-                        mClickListener.onShareClick(v,getAdapterPosition());
+                        mClickListener.onShareClick(v, getAdapterPosition());
                         break;
                     case R.id.tv_comcount:
-                        mClickListener.onItemClick(v,getAdapterPosition());
+                        mClickListener.onItemClick(v, getAdapterPosition());
                         break;
                 }
         }
@@ -245,7 +250,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
         public LoadingTypeViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
         }
 
         @Override
@@ -254,7 +259,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public class ImageTypeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ImageTypeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.tv_viewcomments)
         TextView tv_viewcomments;
 
@@ -294,10 +299,13 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.img_share)
         ImageView img_share;
 
+        @BindView(R.id.view6)
+        View top_image;
+
 
         public ImageTypeViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
             tv_viewcomments.setOnClickListener(this);
             img_like.setOnClickListener(this);
             img_comment.setOnClickListener(this);
@@ -308,34 +316,203 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @Override
         public void onClick(View v) {
             if (mClickListener != null)
-                switch (v.getId())
-                {
+                switch (v.getId()) {
                     case R.id.img_like:
-                        mClickListener.onLikeClick(v,getAdapterPosition(),tv_likecount);
+                        mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
                         break;
                     case R.id.img_comment:
-                        mClickListener.onItemClick(v,getAdapterPosition());
+                        mClickListener.onItemClick(v, getAdapterPosition());
                         break;
                     case R.id.tv_viewcomments:
-                        mClickListener.onItemClick(v,getAdapterPosition());
+                        mClickListener.onItemClick(v, getAdapterPosition());
                         break;
                     case R.id.img_share:
-                        mClickListener.onShareClick(v,getAdapterPosition());
+                        mClickListener.onShareClick(v, getAdapterPosition());
                         break;
                     case R.id.tv_comcount:
-                        mClickListener.onItemClick(v,getAdapterPosition());
+                        mClickListener.onItemClick(v, getAdapterPosition());
                         break;
+                    case R.id.tv_connect:
+                        mClickListener.onConnectClick(v, getAdapterPosition());
+                        break;
+
                 }
         }
 
     }
 
+    public class VideoTypeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        @BindView(R.id.tv_viewcomments)
+        TextView tv_viewcomments;
 
-    public HomePostsAdapter(Context context,List<Post> data,HomePostsAdapter.ItemClickListener mClickListener) {
+        @BindView(R.id.tv_likecount)
+        TextView tv_likecount;
+
+        @BindView(R.id.tv_comcount)
+        TextView tv_comcount;
+
+        @BindView(R.id.tv_createddateTime)
+        TextView tv_createdDateTime;
+
+        @BindView(R.id.tv_minago)
+        TextView tv_minago;
+
+        @BindView(R.id.img_video)
+        ImageView img_video;
+
+        @BindView(R.id.tv_content)
+        TextView tv_content;
+
+        @BindView(R.id.profile_image)
+        ImageView profile_image;
+
+        @BindView(R.id.tv_name)
+        TextView tv_name;
+
+        @BindView(R.id.tv_connections)
+        TextView tv_connections;
+
+        @BindView(R.id.img_like)
+        ImageView img_like;
+
+        @BindView(R.id.img_comment)
+        ImageView img_comment;
+
+        @BindView(R.id.img_share)
+        ImageView img_share;
+
+        @BindView(R.id.view6)
+        View top_image;
+
+
+        public VideoTypeViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+            tv_viewcomments.setOnClickListener(this);
+            img_like.setOnClickListener(this);
+            img_comment.setOnClickListener(this);
+            img_share.setOnClickListener(this);
+            tv_comcount.setOnClickListener(this);
+            img_video.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (mClickListener != null)
+                switch (v.getId()) {
+                    case R.id.img_like:
+                        mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
+                        break;
+                    case R.id.img_comment:
+                        mClickListener.onItemClick(v, getAdapterPosition());
+                        break;
+                    case R.id.tv_viewcomments:
+                        mClickListener.onItemClick(v, getAdapterPosition());
+                        break;
+                    case R.id.img_share:
+                        mClickListener.onShareClick(v, getAdapterPosition());
+                        break;
+                    case R.id.tv_comcount:
+                        mClickListener.onItemClick(v, getAdapterPosition());
+                        break;
+                    case R.id.tv_connect:
+                        mClickListener.onConnectClick(v, getAdapterPosition());
+                        break;
+                    case R.id.img_video:
+                        mClickListener.onVideoClick(v,getAdapterPosition());
+                        break;
+
+                }
+        }
+
+    }
+
+    public class LinkTypeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        @BindView(R.id.tv_viewcomments)
+        TextView tv_viewcomments;
+
+        @BindView(R.id.tv_likecount)
+        TextView tv_likecount;
+
+        @BindView(R.id.tv_comcount)
+        TextView tv_comcount;
+
+        @BindView(R.id.img_like)
+        ImageView img_like;
+
+        @BindView(R.id.img_comment)
+        ImageView img_comment;
+
+        @BindView(R.id.img_share)
+        ImageView img_share;
+
+        @BindView(R.id.tv_name)
+        TextView tv_name;
+
+        @BindView(R.id.profile_image)
+        ImageView profile_image;
+
+        @BindView(R.id.tv_createddateTime)
+        TextView tv_createdDateTime;
+
+        @BindView(R.id.tv_minago)
+        TextView tv_minago;
+
+        @BindView(R.id.tv_content)
+        TextView tv_content;
+
+        @BindView(R.id.tv_connections)
+        TextView tv_connections;
+
+        @BindView(R.id.view6)
+        View top_image;
+
+        @BindView(R.id.img_video)
+        ImageView img_video;
+
+        @BindView(R.id.link)
+        TextView link;
+
+        public LinkTypeViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+            tv_viewcomments.setOnClickListener(this);
+            img_like.setOnClickListener(this);
+            img_comment.setOnClickListener(this);
+            img_share.setOnClickListener(this);
+            tv_comcount.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (mClickListener != null)
+                switch (v.getId()) {
+                    case R.id.img_like:
+                        mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
+                        break;
+                    case R.id.tv_comcount:
+                        mClickListener.onItemClick(v, getAdapterPosition());
+                        break;
+                    case R.id.img_comment:
+                        mClickListener.onItemClick(v, getAdapterPosition());
+                        break;
+                    case R.id.tv_viewcomments:
+                        mClickListener.onItemClick(v, getAdapterPosition());
+                        break;
+                    case R.id.img_share:
+                        mClickListener.onShareClick(v, getAdapterPosition());
+                        break;
+                    case R.id.tv_connect:
+                        mClickListener.onConnectClick(v, getAdapterPosition());
+                        break;
+                }
+        }
+    }
+    public HomePostsAdapter(Context context, List<Post> data, HomePostsAdapter.ItemClickListener mClickListener) {
         this.posts = data;
         this.mContext = context;
         total_types = posts.size();
-        this.mClickListener=mClickListener;
+        this.mClickListener = mClickListener;
     }
 
     @Override
@@ -358,6 +535,12 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             case AppConstants.LOADING_TYPE:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_loading, parent, false);
                 return new LoadingTypeViewHolder(view);
+            case AppConstants.VIDEO_TYPE:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_video, parent, false);
+                return new VideoTypeViewHolder(view);
+            case AppConstants.LINK_POST:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_link, parent, false);
+                return new LinkTypeViewHolder(view);
         }
         return null;
     }
@@ -365,84 +548,97 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
 
-        switch (posts.get(position).getPost_type()) {
-            case AppConstants.TEXT_TYPE:
-                return (position == posts.size() - 1 && isLoadingAdded) ? AppConstants.LOADING_TYPE : AppConstants.TEXT_TYPE;
-            case AppConstants.IMAGE_TYPE:
-                return (position == posts.size() - 1 && isLoadingAdded) ? AppConstants.LOADING_TYPE: AppConstants.IMAGE_TYPE;
-            case AppConstants.EVENT_TYPE:
-                return (position == posts.size() - 1 && isLoadingAdded) ? AppConstants.LOADING_TYPE: AppConstants.EVENT_TYPE;
-            case AppConstants.JOB_TYPE:
-                return (position == posts.size() - 1 && isLoadingAdded) ? AppConstants.LOADING_TYPE: AppConstants.JOB_TYPE;
-            default:
-                return -1;
+        if(posts.get(position).getType()==null)
+        {
+            return AppConstants.LOADING_TYPE;
         }
-    }
-    public void addLoading() {
-        isLoaderVisible = true;
-        posts.add(new Post());
-        notifyItemInserted(posts.size() - 1);
-    }
-    public void removeLoading() {
-        isLoaderVisible = false;
-        int position = posts.size() - 1;
-        Post item = getItem(position);
-        if (item != null) {
-            posts.remove(position);
-            notifyItemRemoved(position);
+        else
+        {
+            switch (posts.get(position).getPost_type()) {
+                case AppConstants.TEXT_TYPE:
+                    return (position == posts.size() - 1 && isLoadingAdded) ? AppConstants.LOADING_TYPE : AppConstants.TEXT_TYPE;
+                case AppConstants.IMAGE_TYPE:
+                    return (position == posts.size() - 1 && isLoadingAdded) ? AppConstants.LOADING_TYPE : AppConstants.IMAGE_TYPE;
+                case AppConstants.EVENT_TYPE:
+                    return (position == posts.size() - 1 && isLoadingAdded) ? AppConstants.LOADING_TYPE : AppConstants.EVENT_TYPE;
+                case AppConstants.JOB_TYPE:
+                    return (position == posts.size() - 1 && isLoadingAdded) ? AppConstants.LOADING_TYPE : AppConstants.JOB_TYPE;
+                case AppConstants.VIDEO_TYPE:
+                    return (position == posts.size() - 1 && isLoadingAdded) ? AppConstants.LOADING_TYPE : AppConstants.VIDEO_TYPE;
+                case AppConstants.LINK_POST:
+                    return (position == posts.size() - 1 && isLoadingAdded) ? AppConstants.LOADING_TYPE : AppConstants.LINK_POST;
+                default:
+                    return -1;
+            }
         }
+
     }
     Post getItem(int position) {
-        return posts.get(position);
+        if(posts.size()>0)
+            return posts.get(position);
+        else
+            return null;
     }
+
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
 
         Post object = posts.get(position);
-        if (object != null) {
+        if (object != null && object.getType()!=null) {
             switch (object.getPost_type()) {
                 case AppConstants.TEXT_TYPE:
                     ((TextTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((TextTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
                     ((TextTypeViewHolder) holder).tv_createdDateTime.setText(DateUtils.getFormattedDateTime(posts.get(position).getCreated_datetime()));
+
                     ((TextTypeViewHolder) holder).tv_content.setText(posts.get(position).getContent());
+                    AppUtils.makeTextViewResizable(((TextTypeViewHolder) holder).tv_content,3);
                     ((TextTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
-                    if(posts.get(position).getIs_post_like()!=null && posts.get(position).getIs_post_like()>0)
-                    {
+                    if (posts.get(position).getIs_post_like() != null && posts.get(position).getIs_post_like() > 0) {
                         ((TextTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like_selected));
-                    }
-                    else
-                    {
+                    } else {
                         ((TextTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like));
                     }
 
-                    AppUtils.setGlideImage(mContext,((TextTypeViewHolder) holder).profile_image,posts.get(position).getUser().getUser_image());
+                    AppUtils.setGlideImage(mContext, ((TextTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
                     ((TextTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
                     ((TextTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getTotal_connection()));
-
+                    if(position==0)
+                    {
+                        ((TextTypeViewHolder) holder).top_image.setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                        ((TextTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
+                    }
 
                     break;
                 case AppConstants.IMAGE_TYPE:
-                    initializeSlider(((ImageTypeViewHolder) holder).imageSlider,position);
+                    initializeSlider(((ImageTypeViewHolder) holder).imageSlider, position);
                     ((ImageTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((ImageTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
                     ((ImageTypeViewHolder) holder).tv_createdDateTime.setText(DateUtils.getFormattedDateTime(posts.get(position).getCreated_datetime()));
                     ((ImageTypeViewHolder) holder).tv_content.setText(posts.get(position).getContent());
+                    AppUtils.makeTextViewResizable(((ImageTypeViewHolder) holder).tv_content,3);
                     ((ImageTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
-                    if(posts.get(position).getIs_post_like()!=null && posts.get(position).getIs_post_like()>0)
-                    {
+                    if (posts.get(position).getIs_post_like() != null && posts.get(position).getIs_post_like() > 0) {
                         ((ImageTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like_selected));
-                    }
-                    else
-                    {
+                    } else {
                         ((ImageTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like));
                     }
 
-                    AppUtils.setGlideImage(mContext,((ImageTypeViewHolder) holder).profile_image,posts.get(position).getUser().getUser_image());
+                    AppUtils.setGlideImage(mContext, ((ImageTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
                     ((ImageTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
                     ((ImageTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getTotal_connection()));
-//                    ((ImageTypeViewHolder) holder).txtType.setText(object.text);
-//                    ((ImageTypeViewHolder) holder).image.setImageResource(object.data);
+
+                    if(position==0)
+                    {
+                        ((ImageTypeViewHolder) holder).top_image.setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                        ((ImageTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
+                    }
                     break;
                 case AppConstants.EVENT_TYPE:
 //                    if(posts.get(position).getIs_post_like()==1)
@@ -476,6 +672,74 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 //                    ((JobTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
 
                     break;
+                case AppConstants.VIDEO_TYPE:
+                    ((VideoTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
+                    ((VideoTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
+                    ((VideoTypeViewHolder) holder).tv_createdDateTime.setText(DateUtils.getFormattedDateTime(posts.get(position).getCreated_datetime()));
+                    ((VideoTypeViewHolder) holder).tv_content.setText(posts.get(position).getContent());
+                    AppUtils.makeTextViewResizable(((VideoTypeViewHolder) holder).tv_content,3);
+                    ((VideoTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
+                    if (posts.get(position).getIs_post_like() != null && posts.get(position).getIs_post_like() > 0) {
+                        ((VideoTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like_selected));
+                    } else {
+                        ((VideoTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like));
+                    }
+
+                    AppUtils.setGlideImage(mContext, ((VideoTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
+                    ((VideoTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
+                    ((VideoTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getTotal_connection()));
+
+                    if(position==0)
+                    {
+                        ((VideoTypeViewHolder) holder).top_image.setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                        ((VideoTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
+                    }
+                    AppUtils.setGlideVideoThumbnail(mContext,((VideoTypeViewHolder) holder).img_video,posts.get(position).getPost_video());
+                    break;
+                case AppConstants.LINK_POST:
+                    ((LinkTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
+                    ((LinkTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
+                    ((LinkTypeViewHolder) holder).tv_createdDateTime.setText(DateUtils.getFormattedDateTime(posts.get(position).getCreated_datetime()));
+
+                    ArrayList<String> urls= AppUtils.containsURL(posts.get(position).getContent());
+                    if(urls.size()>0)
+                    {
+                      AppUtils.customUrlEmbeddedView(mContext,urls.get(0),((LinkTypeViewHolder) holder).img_video);
+
+                        ((LinkTypeViewHolder) holder).link.setText(urls.get(0));
+                        AppUtils.makeTextViewResizable(((LinkTypeViewHolder) holder).link,1);
+
+                    }
+                    else
+                    {
+                        ((LinkTypeViewHolder) holder).tv_content.setText(posts.get(position).getContent());
+                    }
+                    AppUtils.makeTextViewResizable(((LinkTypeViewHolder) holder).tv_content,3);
+                    ((LinkTypeViewHolder) holder).tv_content.setText(posts.get(position).getContent());
+                    ((LinkTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
+                    if (posts.get(position).getIs_post_like() != null && posts.get(position).getIs_post_like() > 0) {
+                        ((LinkTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like_selected));
+                    } else {
+                        ((LinkTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like));
+                    }
+
+                    AppUtils.setGlideImage(mContext, ((LinkTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
+                    ((LinkTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
+                    ((LinkTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getTotal_connection()));
+
+                    if(position==0)
+                    {
+                        ((LinkTypeViewHolder) holder).top_image.setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                        ((LinkTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
+                    }
+
+                    break;
 
             }
         }
@@ -489,11 +753,18 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
         void onItemClick(View view, int position);
-        void onLikeClick(View view,int position,TextView likeCount);
-        void onShareClick(View view,int position);
+
+        void onLikeClick(View view, int position, TextView likeCount);
+
+        void onShareClick(View view, int position);
+
+        void onConnectClick(View view, int position);
+
+        void onVideoClick(View view,int position);
     }
-    private void initializeSlider(SliderView imageSlider,int position) {
-        sliderImageAdapter = new SliderImageAdapter(mContext,posts.get(position).getPost_image());
+
+    private void initializeSlider(SliderView imageSlider, int position) {
+        sliderImageAdapter = new SliderImageAdapter(mContext, posts.get(position).getPost_image());
         imageSlider.setSliderAdapter(sliderImageAdapter);
         imageSlider.setIndicatorAnimation(IndicatorAnimations.WORM); //set indicator animation by using SliderLayout.IndicatorAnimations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
         imageSlider.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
@@ -501,4 +772,30 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         imageSlider.setScrollTimeInSec(4); //set scroll delay in seconds :
         imageSlider.startAutoCycle();
     }
+
+    public void clear() {
+        posts.clear();
+        notifyDataSetChanged();
+    }
+
+    public void addLoading() {
+        isLoaderVisible = true;
+        posts.add(new Post());
+        notifyItemInserted(posts.size() - 1);
+    }
+
+    public void removeLoading() {
+        isLoaderVisible = false;
+        int position = posts.size() - 1;
+        Post item = getItem(position);
+        if (item != null) {
+            posts.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+    public void addItems(List<Post> postItems) {
+        posts.addAll(postItems);
+        notifyDataSetChanged();
+    }
+
 }

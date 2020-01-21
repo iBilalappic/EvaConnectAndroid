@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,14 +24,17 @@ import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.Dashboard;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
+import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.HomePostsAdapter;
 import com.hypernym.evaconnect.view.ui.activities.SharePostActivity;
+import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
 
@@ -61,10 +65,11 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     private LinearLayoutManager linearLayoutManager;
     private HomeViewModel homeViewModel;
     private PostViewModel postViewModel;
+    private ConnectionViewModel connectionViewModel;
     private int currentPage = PAGE_START;
     private boolean isLastPage = false;
     private boolean isLoading = false;
-
+    int itemCount = 0;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -75,19 +80,14 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this,view);
-        init();
-        newpost.setOnClickListener(new OnOneOffClickListener() {
-            @Override
-            public void onSingleClick(View v) {
-                loadFragment(R.id.framelayout,new NewPostFragment(),getContext(),true);
-            }
-        });
+
         return view;
     }
 
     private void init() {
         homeViewModel = ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(HomeViewModel.class);
         postViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(PostViewModel.class);
+        connectionViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
         callPostsApi();
         homePostsAdapter=new HomePostsAdapter(getContext(),posts,this);
         linearLayoutManager=new LinearLayoutManager(getContext());
@@ -101,8 +101,14 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
             @Override
             protected void loadMoreItems() {
                 isLoading = true;
-                currentPage++;
-                callPostsApi();
+                currentPage=AppConstants.TOTAL_PAGES+currentPage;
+                if(NetworkUtils.isNetworkConnected(getContext())) {
+                    callPostsApi();
+                }
+                else
+                {
+                    networkErrorDialog();
+                }
             }
 
             @Override
@@ -121,24 +127,34 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     @Override
     public void onResume() {
         super.onResume();
+        init();
+        newpost.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                loadFragment(R.id.framelayout,new NewPostFragment(),getContext(),true);
+            }
+        });
     }
 
     private void callPostsApi() {
-        showDialog();
         User user=LoginUtils.getLoggedinUser();
         homeViewModel.getDashboard(user,AppConstants.TOTAL_PAGES,currentPage).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> dashboardBaseModel) {
-                if(dashboardBaseModel !=null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().get(0)!=null)
+                if(dashboardBaseModel !=null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size()>0 && dashboardBaseModel.getData().get(0)!=null)
                 {
-                    posts.clear();
+                   // posts.clear();
                     for(Post post:dashboardBaseModel.getData())
                     {
                         if(post.getType().equalsIgnoreCase("post") && post.getPost_image().size()>0)
                         {
                             post.setPost_type(AppConstants.IMAGE_TYPE);
                         }
-                        else if(post.getType().equalsIgnoreCase("post") && post.getPost_image().size()==0)
+                        else if(post.getType().equalsIgnoreCase("post") && post.getPost_video()!=null)
+                        {
+                            post.setPost_type(AppConstants.VIDEO_TYPE);
+                        }
+                        else if(post.getType().equalsIgnoreCase("post") && post.getPost_image().size()==0 && AppUtils.containsURL(post.getContent()).size()==0)
                         {
                             post.setPost_type(AppConstants.TEXT_TYPE);
                         }
@@ -146,16 +162,38 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
                         {
                             post.setPost_type(AppConstants.EVENT_TYPE);
                         }
+                        else if(post.getType().equalsIgnoreCase("post") && AppUtils.containsURL(post.getContent()).size()>0)
+                        {
+                            post.setPost_type(AppConstants.LINK_POST);
+                        }
                     }
-                    posts.addAll(dashboardBaseModel.getData());
+                   // posts.addAll(dashboardBaseModel.getData());
                    // Collections.reverse(posts);
-                    homePostsAdapter.notifyDataSetChanged();
+                    //homePostsAdapter.notifyDataSetChanged();
+                    if (currentPage != PAGE_START) homePostsAdapter.removeLoading();
+                    homePostsAdapter.addItems(dashboardBaseModel.getData());
+                    swipeRefresh.setRefreshing(false);
+                    // check weather is last page or not
+//                    if (currentPage < AppConstants.TOTAL_PAGES) {
+//                        homePostsAdapter.addLoading();
+//                    } else {
+//                        isLastPage = true;
+//                    }
+                    homePostsAdapter.removeLoading();
+                    isLoading = false;
+
+                }
+                else if(dashboardBaseModel !=null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size()==0)
+                {
+                    isLastPage = true;
+                    homePostsAdapter.removeLoading();
+                    isLoading = false;
                 }
                 else
                 {
                     networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
                 }
-                hideDialog();
+
             }
         });
 
@@ -179,49 +217,61 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
 
     @Override
     public void onLikeClick(View view, int position,TextView likeCount) {
-        showDialog();
+        //showDialog();
         Post post=posts.get(position);
         User user=LoginUtils.getLoggedinUser();
         post.setPost_id(post.getId());
         post.setCreated_by_id(user.getId());
-        if(posts.get(position).getIs_post_like()!=null && posts.get(position).getIs_post_like()>0)
+        if(post.getIs_post_like()==null ||post.getIs_post_like()<1)
+        {
+            post.setAction(AppConstants.LIKE);
+            if(post.getIs_post_like()==null)
+            {
+                post.setIs_post_like(1);
+                if(post.getLike_count()==null)
+                    post.setLike_count(0);
+                else
+                    post.setLike_count(post.getLike_count()+1);
+            }
+            else
+            {
+                post.setIs_post_like(post.getIs_post_like()+1);
+                if(post.getLike_count()==null)
+                    post.setLike_count(0);
+                else
+                    post.setLike_count(post.getLike_count()+1);
+            }
+        }
+        else
         {
             post.setAction(AppConstants.UNLIKE);
+            post.setIs_post_like(post.getIs_post_like()-1);
+            post.setLike_count(post.getLike_count()-1);
         }
-        else {
-            post.setAction(AppConstants.LIKE);
+        Log.d("Listing status",post.getAction()+" count"+post.getIs_post_like());
+        if(NetworkUtils.isNetworkConnected(getContext())) {
+            likePost(post,position);
+        }
+        else
+        {
+            networkErrorDialog();
         }
 
+    }
+
+    private void likePost(Post post,int position) {
         postViewModel.likePost(post).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> listBaseModel) {
                 if(listBaseModel!=null && !listBaseModel.isError())
                 {
-                    int likecount=0;
-                    if(posts.get(position).getIs_post_like()==null)
-                    {
-                        posts.get(position).setIs_post_like(0);
-                    }
-                    if(posts.get(position).getIs_post_like()!=null && posts.get(position).getIs_post_like()>0)
-                    {
-                        posts.get(position).setLike_count(posts.get(position).getLike_count()-1);
-                        posts.get(position).setIs_post_like(posts.get(position).getIs_post_like()-1);
-                       // view.setBackground(getContext().getDrawable(R.mipmap.ic_like));
-                    }
-                    else
-                    {
-                        posts.get(position).setLike_count(posts.get(position).getLike_count()+1);
-                        posts.get(position).setIs_post_like(posts.get(position).getIs_post_like()+1);
-                      //  view.setBackground(getContext().getDrawable(R.mipmap.ic_like_selected));
-                    }
-                   // likeCount.setText(String.valueOf(likecount));
                     homePostsAdapter.notifyDataSetChanged();
                 }
                 else
                 {
-                networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
                 }
-            hideDialog();
+                hideDialog();
             }
         });
     }
@@ -229,11 +279,68 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     @Override
     public void onShareClick(View view, int position) {
        Intent intent=new Intent(getContext(), SharePostActivity.class);
+       intent.putExtra("post",posts.get(position));
        startActivity(intent);
     }
 
     @Override
-    public void onRefresh() {
+    public void onConnectClick(View view, int position) {
 
+        TextView text=(TextView)view;
+        if(NetworkUtils.isNetworkConnected(getContext())) {
+            callConnectApi(text,position);
+        }
+        else
+        {
+            networkErrorDialog();
+        }
+
+    }
+
+    @Override
+    public void onVideoClick(View view, int position) {
+        AppUtils.playVideo(getContext(),posts.get(position).getPost_video());
+    }
+
+    private void callConnectApi(TextView text,int position) {
+        if(text.getText().toString().equalsIgnoreCase(getString(R.string.connect)))
+        {
+            showDialog();
+            User user=LoginUtils.getLoggedinUser();
+            Connection connection=new Connection();
+            connection.setReceiver_id(posts.get(position).getUser().getId());
+            connection.setSender_id(user.getId());
+            connection.setStatus(AppConstants.STATUS_PENDING);
+            connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
+                @Override
+                public void onChanged(BaseModel<List<Connection>> listBaseModel) {
+                    if(listBaseModel!=null && !listBaseModel.isError())
+                    {
+
+                        text.setText("Request Sent");
+                    }
+                    else
+                    {
+                        networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                    }
+                    hideDialog();
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        itemCount = 0;
+        currentPage = PAGE_START;
+        isLastPage = false;
+       // homePostsAdapter.clear();
+        if(NetworkUtils.isNetworkConnected(getContext())) {
+            callPostsApi();
+        }
+        else
+        {
+            networkErrorDialog();
+        }
     }
 }

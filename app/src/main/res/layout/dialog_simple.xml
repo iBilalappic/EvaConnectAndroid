@@ -16,16 +16,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+<View
+    android:layout_width="match_parent"
+    android:layout_height="5dp"
+    android:background="@drawable/line_redblack50"/>
 
             <TextView
                 android:id="@+id/text_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorAccent"
-                android:gravity="center"
+                android:background="@color/colorPrimary"
+                android:gravity="left"
                 android:padding="16dp"
                 android:text=""
-                android:textColor="@color/colorSimpleDialogTitleText"
+                android:drawableLeft="@drawable/logo"
+                android:textColor="@color/dark_gray"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:visibility="gone" />
@@ -68,6 +73,7 @@
                         style="@style/simpleButton"
                         android:layout_width="0dp"
                         android:layout_weight="0.5"
+                        android:textColor="@color/colorAccent"
                         android:visibility="gone" />
                 </LinearLayout>
             </LinearLayout>

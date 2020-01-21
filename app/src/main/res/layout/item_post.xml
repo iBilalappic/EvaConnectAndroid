@@ -3,19 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout2"
-     android:paddingBottom="20dp"
-    android:background="@color/page_bg"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingBottom="10dp"
+    android:clipToPadding="false"
+    android:background="@color/page_bg">
+
+    <View
+        android:id="@+id/view6"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:background="@drawable/line_redblack50"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/view3"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="@+id/view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:background="@color/colorPrimary"
         app:layout_constraintTop_toTopOf="parent" />
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -38,7 +49,6 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="Ed Hunter"
-        android:textSize="18dp"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -67,31 +77,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        style="@style/TextStyle"
         android:id="@+id/tv_createddateTime"
+        style="@style/TextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:text="12:04pm | 12 jan"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_minago" />
-
-    <TextView
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/rounded_button_nobackground"
-        android:text="@string/connect"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:textColor="@color/darker_gray"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_createddateTime" />
-
 
 
     <ImageView
@@ -100,43 +93,43 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
+        android:background="@mipmap/ic_like"
         android:elevation="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/cardView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView"
-        android:background="@mipmap/ic_like"/>
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
     <ImageView
         android:id="@+id/img_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@mipmap/ic_comment"
         android:elevation="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/cardView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView"
-        app:layout_constraintVertical_bias="0.354"
-        android:background="@mipmap/ic_comment"/>
+        app:layout_constraintVertical_bias="0.354" />
 
     <ImageView
         android:id="@+id/img_share"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
+        android:background="@mipmap/ic_share"
         android:elevation="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/cardView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView"
-        android:background="@mipmap/ic_share" />
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
     <View
         android:id="@+id/view"
         android:layout_width="0dp"
-        android:layout_height="70dp"
+        android:layout_height="50dp"
         android:background="@color/colorPrimary"
+        android:elevation="1dp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:elevation="2dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
@@ -146,7 +139,7 @@
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:background="@drawable/rounded_button_whitebg"
-        android:elevation="2dp"
+        android:elevation="1dp"
         android:gravity="center"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
@@ -177,6 +170,9 @@
                 android:id="@+id/slider_images"
                 android:layout_width="0dp"
                 android:layout_height="200dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:sliderAnimationDuration="600"
                 app:sliderAutoCycleDirection="back_and_forth"
                 app:sliderAutoCycleEnabled="true"
@@ -190,10 +186,8 @@
                 app:sliderIndicatorSelectedColor="@color/btn_border"
                 app:sliderIndicatorUnselectedColor="@color/colorPrimary"
                 app:sliderScrollTimeInSec="1"
-                app:sliderStartAutoCycle="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:sliderStartAutoCycle="true" />
+
             <View
                 android:id="@+id/view2"
                 android:layout_width="0dp"
@@ -205,8 +199,8 @@
                 app:layout_constraintTop_toBottomOf="@+id/slider_images" />
 
             <TextView
-                style="@style/TextStyle"
                 android:id="@+id/tv_likecount"
+                style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -218,8 +212,8 @@
                 app:layout_constraintTop_toBottomOf="@+id/slider_images" />
 
             <TextView
-                style="@style/TextStyle"
                 android:id="@+id/textView10"
+                style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -243,8 +237,8 @@
                 app:layout_constraintTop_toBottomOf="@+id/slider_images" />
 
             <TextView
-                style="@style/TextStyle"
                 android:id="@+id/tv_comcount"
+                style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -257,8 +251,8 @@
                 app:layout_constraintTop_toBottomOf="@+id/slider_images" />
 
             <TextView
-                style="@style/TextStyle"
                 android:id="@+id/textView14"
+                style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -285,6 +279,6 @@
         android:text="“Things you’d never hear in a ticket office” … Let’s play a game of mock the week, or the LinkedIn version of Mock the Week. I’ll Start: https://lnkd.in… see more"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_image" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

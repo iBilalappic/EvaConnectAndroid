@@ -56,11 +56,8 @@ import butterknife.OnClick;
 
 public class HomeActivity extends BaseActivity {
 
-    @BindView(R.id.tv_pagetitle)
+    @BindView(R.id.tv_title)
     TextView tv_pagetitle;
-
-    @BindView(R.id.drawer_layout)
-    DrawerLayout drawer_layout;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -86,6 +83,9 @@ public class HomeActivity extends BaseActivity {
     @BindView(R.id.img_uparrow)
     ImageView img_uparrow;
 
+    @BindView(R.id.tv_back)
+    TextView tv_back;
+
 private boolean notificationflag=false;
 
     CustomPowerMenu customPowerMenu;
@@ -98,12 +98,12 @@ private boolean notificationflag=false;
         ButterKnife.bind(this);
         init();
 
-        tv_pagetitle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showNotificationPanel();
-            }
-        });
+//        tv_pagetitle.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//               // showNotificationPanel();
+//            }
+//        });
         img_uparrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,7 +116,6 @@ private boolean notificationflag=false;
     private void init()
     {
         loadFragment(R.id.framelayout,new HomeFragment(),this,false);
-
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -131,12 +130,12 @@ private boolean notificationflag=false;
         }
 
     }
-private void showNotificationPanel()
-{
-    rc_notifications.setVisibility(View.VISIBLE);
-    tv_pagetitle.setVisibility(View.GONE);
-    img_uparrow.setVisibility(View.VISIBLE);
-}
+    private void showNotificationPanel()
+    {
+        rc_notifications.setVisibility(View.VISIBLE);
+        tv_pagetitle.setVisibility(View.GONE);
+        img_uparrow.setVisibility(View.VISIBLE);
+    }
     private void hideNotificationPanel()
     {
         rc_notifications.setVisibility(View.GONE);
@@ -178,17 +177,27 @@ private void showNotificationPanel()
         {
             tv_pagetitle.setText(getString(R.string.home));
         }
-
-        HomeFragment fragment = new HomeFragment();
-        loadFragment(R.id.framelayout,fragment,this,false);
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.framelayout);
+        if(f instanceof HomeFragment){}
+        else
+        {
+            loadFragment(R.id.framelayout,new HomeFragment(),this,false);
+        }
+        tv_back.setVisibility(View.GONE);
     }
 
     @OnClick(R.id.img_connections)
     public void connections()
     {
-        tv_pagetitle.setText(getString(R.string.connections));
-        ConnectionsFragment fragment = new ConnectionsFragment();
-        loadFragment(R.id.framelayout,fragment,this,false);
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.framelayout);
+        if(f instanceof ConnectionsFragment){}
+        else
+        {
+            tv_pagetitle.setText(getString(R.string.connections));
+            ConnectionsFragment fragment = new ConnectionsFragment();
+            loadFragment(R.id.framelayout,fragment,this,false);
+        }
+        tv_back.setVisibility(View.GONE);
     }
 
     @OnClick(R.id.img_messages)
@@ -209,6 +218,12 @@ private void showNotificationPanel()
     public void openDrawer(View view)
     {
        //customPowerMenu.showAsDropDown(view);
+    }
+    @OnClick(R.id.tv_back)
+    public void back()
+    {
+        super.onBackPressed();
+
     }
 
 

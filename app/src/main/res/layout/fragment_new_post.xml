@@ -3,12 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@color/colorPrimary"
         tools:context=".view.ui.fragments.NewPostFragment">
 
@@ -47,13 +48,15 @@
             android:id="@+id/edt_content"
             style="@style/TextStyle"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="150dp"
             android:layout_marginTop="8dp"
             android:background="@color/lighter_gray"
             android:elevation="2dp"
             android:gravity="top|left"
             android:inputType="textMultiLine"
             android:padding="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profile_image" />
 
         <TextView
@@ -61,8 +64,7 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/rounded_button_border"
             android:drawableLeft="@drawable/attach_small"
             android:drawablePadding="5dp"
@@ -73,18 +75,17 @@
             android:text="Browse Files"
             android:textColor="@color/light_black"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rc_attachments" />
+            app:layout_constraintTop_toBottomOf="@+id/attachment_layout" />
+
 
         <TextView
             android:id="@+id/post"
             style="@style/Button"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="24dp"
             android:gravity="center|center_vertical"
             android:paddingLeft="30dp"
             android:paddingTop="15dp"
@@ -93,20 +94,66 @@
             android:text="Post"
             android:textColor="@color/colorPrimary"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@+id/browsefiles"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/browsefiles" />
+            app:layout_constraintTop_toBottomOf="@+id/attachment_layout" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rc_attachments"
-            android:layout_width="0dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/attachment_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/lighter_gray"
             app:layout_constraintEnd_toEndOf="parent"
-            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/browsefiles"
-            app:layout_constraintTop_toBottomOf="@+id/edt_content" />
+            app:layout_constraintTop_toBottomOf="@+id/edt_content">
+
+            <com.nguyencse.URLEmbeddedView
+                android:id="@+id/uev"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:description="Description"
+                app:favor="@drawable/ic_url"
+                app:host="abc.com"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:thumbnail="@drawable/ic_url"
+                app:title="Title" />
+
+            <ImageView
+                android:id="@+id/img_video"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:elevation="2dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/img_play"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:elevation="4dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/img_video"
+                app:srcCompat="@drawable/play" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rc_attachments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/lighter_gray"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -254,4 +255,15 @@ public class BaseFragment extends Fragment {
     {
         return mCurrentPhotoPath;
     }
+
+    public void showBackButton()
+    {
+        getActivity().findViewById(R.id.tv_back).setVisibility(View.VISIBLE);
+    }
+    public void hideBackButton()
+    {
+        getActivity().findViewById(R.id.tv_back).setVisibility(View.GONE);
+    }
+
+
 }

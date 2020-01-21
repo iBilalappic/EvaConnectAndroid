@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,15 +27,18 @@ import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Comment;
+import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
+import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.CommentsAdapter;
 import com.hypernym.evaconnect.view.adapters.HomePostsAdapter;
 import com.hypernym.evaconnect.view.adapters.SliderImageAdapter;
+import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
@@ -101,12 +105,16 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     @BindView(R.id.profile_image)
     ImageView profile_image;
 
+    @BindView(R.id.tv_connect)
+    TextView tv_connect;
+
     private CommentsAdapter commentsAdapter;
     private SliderImageAdapter sliderImageAdapter;
     private List<Comment> comments=new ArrayList<>();
     private PostViewModel postViewModel;
     Post post=new Post();
     private Validator validator;
+    private ConnectionViewModel connectionViewModel;
 
     public PostDetailsFragment() {
         // Required empty public constructor
@@ -137,10 +145,14 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     private void init() {
         validator = new Validator(this);
         validator.setValidationListener(this);
+        showBackButton();
     }
+
+
 
     private void setPostData() {
         initializeSlider();
+        connectionViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
         tv_comcount.setText(String.valueOf(post.getComment_count()));
         tv_likecount.setText(String.valueOf(post.getLike_count()));
         tv_connections.setText(AppUtils.getConnectionsCount(post.getUser().getTotal_connection()));
@@ -148,6 +160,17 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         tv_minago.setText(DateUtils.getTimeAgo(post.getCreated_datetime()));
         tv_name.setText(post.getUser().getFirst_name());
         tv_content.setText(post.getContent());
+        //Hide connect option if post is from logged in user
+        User user=LoginUtils.getLoggedinUser();
+        if(post.getUser().getId()==user.getId())
+        {
+            tv_connect.setVisibility(View.GONE);
+        }
+        else
+        {
+            tv_connect.setVisibility(View.VISIBLE);
+            tv_connect.setText(AppUtils.getConnectionStatus(getContext(),post.getIs_connected()));
+        }
 
         AppUtils.setGlideImage(getContext(),profile_image,post.getUser().getUser_image());
         AppUtils.setGlideImage(getContext(),img_user,post.getUser().getUser_image());
@@ -257,16 +280,39 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     @OnClick(R.id.img_like)
     public void likePost(View view)
     {
-        showDialog();
+     //   showDialog();
         post.setPost_id(post.getId());
+        User user=LoginUtils.getLoggedinUser();
+        post.setCreated_by_id(user.getId());
+        if(post.getIs_post_like()==null || post.getIs_post_like()<1)
+        {
+            post.setAction(AppConstants.LIKE);
+            if(post.getIs_post_like()==null)
+            {
+                post.setIs_post_like(1);
+
+            }
+            else
+            {
+                post.setIs_post_like(post.getIs_post_like()+1);
+
+            }
+        }
+        else
+        {
+            post.setAction(AppConstants.UNLIKE);
+            post.setIs_post_like(post.getIs_post_like()-1);
+          //  post.setLike_count(post.getLike_count()-1);
+        }
+        Log.d("Detail status",post.getAction()+" count"+post.getIs_post_like());
         postViewModel.likePost(post).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                if(!listBaseModel.isError())
+                if(listBaseModel!=null && !listBaseModel.isError())
                 {
-                    view.setBackground(getContext().getDrawable(R.mipmap.ic_like_selected));
-                    int likecount=post.getLike_count()+1;
-                    tv_likecount.setText(String.valueOf(likecount));
+
+                 AppUtils.setLikeCount(getContext(),tv_likecount,post.getAction(),img_like);
+
                 }
                 else
                 {
@@ -275,5 +321,45 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
                 hideDialog();
             }
         });
+    }
+
+    @OnClick(R.id.tv_connect)
+    public void onConnectClick() {
+        if(NetworkUtils.isNetworkConnected(getContext())) {
+            callConnectApi();
+        }
+        else
+        {
+            networkErrorDialog();
+        }
+
+    }
+
+    private void callConnectApi() {
+        if(tv_connect.getText().toString().equalsIgnoreCase(getString(R.string.connect)))
+        {
+            showDialog();
+            User user=LoginUtils.getLoggedinUser();
+            Connection connection=new Connection();
+            connection.setReceiver_id(post.getUser().getId());
+            connection.setSender_id(user.getId());
+            connection.setStatus(AppConstants.STATUS_PENDING);
+            connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
+                @Override
+                public void onChanged(BaseModel<List<Connection>> listBaseModel) {
+                    if(listBaseModel!=null && !listBaseModel.isError())
+                    {
+
+                        tv_connect.setText(AppConstants.REQUEST_SENT);
+                        post.setIs_connected(AppConstants.ACTIVE);
+                    }
+                    else
+                    {
+                        networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                    }
+                    hideDialog();
+                }
+            });
+        }
     }
 }

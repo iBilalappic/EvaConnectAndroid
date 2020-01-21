@@ -21,6 +21,7 @@ import com.hypernym.evaconnect.view.adapters.NotificationsAdapter;
 import com.hypernym.evaconnect.view.dialogs.CustomProgressBar;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.view.ui.fragments.BaseFragment;
+import com.hypernym.evaconnect.view.ui.fragments.ConnectionsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.HomeFragment;
 
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class BaseActivity extends AppCompatActivity  {
     public void onBackPressed() {
 
           Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.framelayout);
-            if (fragment instanceof HomeFragment) {
+            if (fragment instanceof HomeFragment || fragment instanceof ConnectionsFragment) {
                 simpleDialog = new SimpleDialog(this, null, getString(R.string.msg_exit),
                         getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
                     @Override
@@ -52,7 +53,10 @@ public class BaseActivity extends AppCompatActivity  {
                     }
                 });
                 simpleDialog.show();
+
             } else {
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                findViewById(R.id.tv_back).setVisibility(View.GONE);
                 super.onBackPressed();
             }
     }
@@ -102,9 +106,8 @@ public class BaseActivity extends AppCompatActivity  {
     public void loadFragment(int id, Fragment fragment, Context context,boolean isBack)
     {
         FragmentTransaction transaction =((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+   //     transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
         transaction.replace(id, fragment);
-
         if(isBack)
         {
             transaction.addToBackStack(null);
@@ -132,6 +135,7 @@ public class BaseActivity extends AppCompatActivity  {
             }
         });
         simpleDialog.show();
+
     }
 
     public void getNotifications(RecyclerView rc_notifications,List<Notification> notifications)

@@ -18,6 +18,7 @@ import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
+import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
@@ -75,28 +76,31 @@ public class SignupActivity extends BaseActivity implements Validator.Validation
 
     @Override
     public void onValidationSucceeded() {
-        showDialog();
-        userViewModel.isEmailExist(edt_email.getText().toString()).observe(this, new Observer<BaseModel<List<User>>>() {
-            @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel) {
-                if(listBaseModel!=null && listBaseModel.isError())
-                {
-                    Intent intent=new Intent(SignupActivity.this,SignupDetailsActivity.class);
-                    intent.putExtra("Email",edt_email.getText().toString());
-                    intent.putExtra("Password",edt_password.getText().toString());
-                    startActivity(intent);
+
+        if(NetworkUtils.isNetworkConnected(this)) {
+            showDialog();
+            userViewModel.isEmailExist(edt_email.getText().toString()).observe(this, new Observer<BaseModel<List<User>>>() {
+                @Override
+                public void onChanged(BaseModel<List<User>> listBaseModel) {
+                    if (listBaseModel != null && listBaseModel.isError()) {
+                        Intent intent = new Intent(SignupActivity.this, SignupDetailsActivity.class);
+                        intent.putExtra("Email", edt_email.getText().toString());
+                        intent.putExtra("Password", edt_password.getText().toString());
+                        startActivity(intent);
+                    } else if (!listBaseModel.isError()) {
+                        networkResponseDialog(getString(R.string.error), getString(R.string.err_email_already_exist));
+                    } else {
+                       networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                    }
+                    hideDialog();
                 }
-                else if(!listBaseModel.isError())
-                {
-                    networkResponseDialog(getString(R.string.error),getString(R.string.err_email_already_exist));
-                }
-                else
-                {
-                    networkErrorDialog();
-                }
-                hideDialog();
-            }
-        });
+            });
+        }
+        else
+        {
+            networkErrorDialog();
+        }
+
 
     }
 

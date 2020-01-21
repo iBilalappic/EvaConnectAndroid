@@ -23,6 +23,9 @@ public class Post implements Serializable {
     private Integer total_connection;
     private String action;
     private String type;
+    private String is_connected;
+    private MultipartBody.Part video;
+    private String post_video;
 
 
     public String getContent() {
@@ -152,5 +155,29 @@ public class Post implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getIs_connected() {
+        return is_connected;
+    }
+
+    public void setIs_connected(String is_connected) {
+        this.is_connected = is_connected;
+    }
+
+    public MultipartBody.Part getVideo() {
+        return video;
+    }
+
+    public void setVideo(MultipartBody.Part video) {
+        this.video = video;
+    }
+
+    public String getPost_video() {
+        return post_video;
+    }
+
+    public void setPost_video(String post_video) {
+        this.post_video = post_video;
     }
 }

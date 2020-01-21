@@ -16,8 +16,15 @@ public class AppConstants {
     public static final int VIDEO_TYPE=2;
     public static final int EVENT_TYPE=3;
     public static final int LOADING_TYPE=5;
+    public static final int LINK_POST=6;
     public static final int JOB_TYPE=4;
     public static final String LIKE= "like";
     public static final String UNLIKE= "unlike";
     public static final int TOTAL_PAGES = 5;
+    public static final String NOT_CONNECTED = "not_connected";
+    public static final String PENDING = "pending";
+    public static final String ACTIVE = "active";
+    public static final String CONNECTED = "Connected";
+    public static final String REQUEST_SENT = "Pending";
+
 }

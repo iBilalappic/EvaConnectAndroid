@@ -1,20 +1,30 @@
 package com.hypernym.evaconnect.view.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.hypernym.evaconnect.R;
 import com.smarteist.autoimageslider.SliderViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class SliderImageAdapter extends SliderViewAdapter<SliderImageAdapter.SliderAdapterVH> {
 
@@ -34,9 +44,26 @@ public class SliderImageAdapter extends SliderViewAdapter<SliderImageAdapter.Sli
 
     @Override
     public void onBindViewHolder(SliderAdapterVH viewHolder, int position) {
+
+//        Glide
+//                .with(context)
+//                .load(attachments.get(position))
+//                .apply(new RequestOptions().override(600, 200).downsample(DownsampleStrategy.AT_LEAST))
+//                .into(viewHolder.imageViewBackground);
+
         Glide.with(context)
                 .load(attachments.get(position))
-                .into(viewHolder.imageViewBackground);
+                .into(new CustomTarget<Drawable>() {
+                    @Override
+                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                        viewHolder.imageViewBackground.setBackground(resource);
+                    }
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                    }
+                });
+
     }
 
     @Override
