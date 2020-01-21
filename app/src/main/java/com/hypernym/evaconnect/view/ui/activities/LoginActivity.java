@@ -22,6 +22,7 @@ import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.User;
+import com.hypernym.evaconnect.models.UserDetails;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
@@ -57,13 +58,13 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     EditText edt_email;
 
     @NotEmpty
-    @Password(min=8)
+    @Password(min = 8)
     @BindView(R.id.edt_password)
     EditText edt_password;
 
     private Validator validator;
     private UserViewModel userViewModel;
-    private User user=new User();
+    private User user = new User();
     private SimpleDialog simpleDialog;
 
     @Override
@@ -71,7 +72,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        userViewModel = ViewModelProviders.of(this,new CustomViewModelFactory(getApplication(),this)).get(UserViewModel.class);
+        userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getApplication(), this)).get(UserViewModel.class);
         validator = new Validator(this);
         validator.setValidationListener(this);
         btn_login.setOnClickListener(new OnOneOffClickListener() {
@@ -84,14 +85,14 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
         tv_signup.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
-                startActivity(new Intent(LoginActivity.this,SignupActivity.class));
+                startActivity(new Intent(LoginActivity.this, SignupActivity.class));
             }
         });
 
         tv_forgotpass.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
-                startActivity(new Intent(LoginActivity.this,ForgotPassword.class));
+                startActivity(new Intent(LoginActivity.this, ForgotPassword.class));
             }
         });
     }
@@ -100,13 +101,10 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     public void onValidationSucceeded() {
         user.setUsername(edt_email.getText().toString());
         user.setPassword(edt_password.getText().toString());
-        if(NetworkUtils.isNetworkConnected(this))
-        {
+        if (NetworkUtils.isNetworkConnected(this)) {
             showDialog();
             callLoginApi();
-        }
-        else
-        {
+        } else {
             networkErrorDialog();
         }
 
@@ -117,29 +115,24 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
         userViewModel.login(user).observe(this, new Observer<BaseModel<List<User>>>() {
             @Override
             public void onChanged(BaseModel<List<User>> user) {
-                if(user!=null && !user.isError() && user.getData().get(0)!=null)
-                {
+                if (user != null && !user.isError() && user.getData().get(0) != null) {
                     LoginUtils.userLoggedIn();
-                    User userData=user.getData().get(0);
+                    User userData = user.getData().get(0);
                     userData.setUser_id(userData.getId());
                     LoginUtils.saveUser(user.getData().get(0));
-                    if(user.getData().get(0) !=null)
-                    {
+                    UserDetails.username = userData.getFirst_name();
+                    if (user.getData().get(0) != null) {
                         LoginUtils.saveUserToken(user.getData().get(0).getToken());
                     }
-                    Intent intent=new Intent(LoginActivity.this, HomeActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     // set the new task and clear flags
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
+                } else if (user.isError()) {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_login));
+                } else if (user == null) {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
-                else if(user.isError())
-                {
-                    networkResponseDialog(getString(R.string.error),getString(R.string.err_login));
-                }
-                else if(user==null)
-                {
-                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
-                 }
                 hideDialog();
             }
         });
@@ -150,9 +143,8 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
         for (ValidationError error : errors) {
             View view = error.getView();
             String message = error.getCollatedErrorMessage(this);
-            if(view.getId()==R.id.edt_password)
-            {
-                message=getString(R.string.err_password);
+            if (view.getId() == R.id.edt_password) {
+                message = getString(R.string.err_password);
             }
             // Display error messages
             if (view instanceof EditText) {

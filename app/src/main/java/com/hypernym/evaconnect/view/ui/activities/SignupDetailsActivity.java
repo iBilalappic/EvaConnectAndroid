@@ -30,8 +30,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.firebase.client.Firebase;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
@@ -48,6 +55,9 @@ import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -90,17 +100,17 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
     @BindView(R.id.img_profile)
     ImageView img_profile;
 
-    String email,password;
-    private User user=new User();
+    String email, password;
+    private User user = new User();
     private UserViewModel userViewModel;
     private Validator validator;
-    private String userType="user";
+    private String userType = "user";
     private static final int REQUEST_PHOTO_GALLERY = 4;
     private static final int CAMERAA = 1;
     public static final int RequestPermissionCode = 1;
     private String GalleryImage, mCurrentPhotoPath, globalImagePath;
     private String mProfileImageDecodableString;
-    private File tempFile,file_name;
+    private File tempFile, file_name;
     private String currentPhotoPath = "";
     private String photoVar = null;
     MultipartBody.Part partImage;
@@ -111,6 +121,7 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup_details);
         ButterKnife.bind(this);
+        Firebase.setAndroidContext(this);
         init();
     }
 
@@ -119,9 +130,9 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
         tv_individual.setBackground(getDrawable(R.drawable.rounded_button));
         validator = new Validator(this);
         validator.setValidationListener(this);
-        userViewModel = ViewModelProviders.of(this,new CustomViewModelFactory(getApplication(),this)).get(UserViewModel.class);
-        email=getIntent().getStringExtra("Email");
-        password=getIntent().getStringExtra("Password");
+        userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getApplication(), this)).get(UserViewModel.class);
+        email = getIntent().getStringExtra("Email");
+        password = getIntent().getStringExtra("Password");
         user.setEmail(email);
         user.setPassword(password);
         btn_signup.setOnClickListener(new OnOneOffClickListener() {
@@ -135,7 +146,7 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
             public void onSingleClick(View v) {
                 tv_company.setBackground(getDrawable(R.drawable.rounded_button_unselected));
                 tv_individual.setBackground(getDrawable(R.drawable.rounded_button));
-                userType="user";
+                userType = "user";
             }
         });
         img_profile.setOnClickListener(new OnOneOffClickListener() {
@@ -144,9 +155,7 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
                 if (Checkpermission()) {
                     BottomSheetPictureSelection bottomSheetPictureSelection = new BottomSheetPictureSelection(new YourDialogFragmentDismissHandler());
                     bottomSheetPictureSelection.show(getSupportFragmentManager(), bottomSheetPictureSelection.getTag());
-                }
-                else
-                {
+                } else {
                     requestpermission();
                 }
             }
@@ -157,7 +166,7 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
             public void onSingleClick(View v) {
                 tv_company.setBackground(getDrawable(R.drawable.rounded_button));
                 tv_individual.setBackground(getDrawable(R.drawable.rounded_button_unselected));
-                userType="company";
+                userType = "company";
             }
         });
 
@@ -166,10 +175,10 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
 
     public boolean Checkpermission() {
 
-       int ExternalReadResult = ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE);
+        int ExternalReadResult = ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE);
         int CameraResult = ContextCompat.checkSelfPermission(this, CAMERA);
-        return          ExternalReadResult == PackageManager.PERMISSION_GRANTED &&
-                        CameraResult == PackageManager.PERMISSION_GRANTED;
+        return ExternalReadResult == PackageManager.PERMISSION_GRANTED &&
+                CameraResult == PackageManager.PERMISSION_GRANTED;
     }
 
 
@@ -185,6 +194,7 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
 
         }
     }
+
     private void LaunchGallery() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -211,7 +221,7 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
 
 
                     if (tempFile.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.FILE_SIZE_LIMIT_IN_KB) {
-                         networkResponseDialog(getString(R.string.error),getString(R.string.err_image_size_large));
+                        networkResponseDialog(getString(R.string.error), getString(R.string.err_image_size_large));
                         return;
                     } else {
                         if (photoVar == null) {
@@ -224,10 +234,10 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
                                 Glide.with(this).load(currentPhotoPath).into(img_profile);
 
                             } else {
-                                networkResponseDialog(getString(R.string.error),getString(R.string.err_internal_supported));
+                                networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
                             }
                         } else {
-                            networkResponseDialog(getString(R.string.error),getString(R.string.err_one_file_at_a_time));
+                            networkResponseDialog(getString(R.string.error), getString(R.string.err_one_file_at_a_time));
                             return;
                         }
                     }
@@ -247,7 +257,7 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
                 // imgName = file_name.getName();
                 globalImagePath = file_name.getAbsolutePath();
                 if (file_name.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.IMAGE_SIZE_IN_KB) {
-                    networkResponseDialog(getString(R.string.error),getString(R.string.err_image_size_large));
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_image_size_large));
                     return;
                 }
                 if (!TextUtils.isEmpty(globalImagePath) || globalImagePath != null) {
@@ -274,6 +284,7 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
             }
         }
     }
+
     private void galleryAddPic() {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File f = new File(mCurrentPhotoPath);
@@ -318,11 +329,12 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
 
             }
         } else {
-           // AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 11));
+            // AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 11));
             requestpermission();
         }
 
     }
+
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -339,63 +351,96 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
     }
 
 
-
-
-
     @Override
     public void onValidationSucceeded() {
         user.setFirst_name(edt_username.getText().toString());
-        if(!edt_description.getText().toString().isEmpty() || edt_description.getText().toString().length()>0)
-        {
+        if (!edt_description.getText().toString().isEmpty() || edt_description.getText().toString().length() > 0) {
             user.setBio_data(edt_description.getText().toString());
-        }
-        else
-        {
+        } else {
             user.setBio_data("");
         }
         user.setStatus(AppConstants.USER_STATUS);
         user.setType(userType);
 
-        if(NetworkUtils.isNetworkConnected(this))
-        {
+        if (NetworkUtils.isNetworkConnected(this)) {
             showDialog();
             callSignupApi();
-        }
-        else
-        {
-         networkErrorDialog();
+        } else {
+            networkErrorDialog();
         }
 
     }
-    public void callSignupApi()
-    {
-        userViewModel.signUp(user,partImage).observe(this, new Observer<BaseModel<List<User>>>() {
+
+    public void callSignupApi() {
+        userViewModel.signUp(user, partImage).observe(this, new Observer<BaseModel<List<User>>>() {
             @Override
             public void onChanged(BaseModel<List<User>> logins) {
-                if(logins!=null && !logins.isError())
-                {
+                if (logins != null && !logins.isError()) {
                     LoginUtils.saveUser(user);
-                    simpleDialog=new SimpleDialog(SignupDetailsActivity.this,getString(R.string.success),getString(R.string.msg_signup),null,getString(R.string.ok), new View.OnClickListener() {
+                    simpleDialog = new SimpleDialog(SignupDetailsActivity.this, getString(R.string.success), getString(R.string.msg_signup), null, getString(R.string.ok), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent=new Intent(SignupDetailsActivity.this, LoginActivity.class);
+                            Intent intent = new Intent(SignupDetailsActivity.this, LoginActivity.class);
                             // set the new task and clear flags
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
+                            setupFireBaseUser();
                             simpleDialog.dismiss();
                         }
                     });
-                }
-                else
-                {
-                    simpleDialog=networkResponseDialog(getString(R.string.error),logins.getMessage());
+                } else {
+                    simpleDialog = networkResponseDialog(getString(R.string.error), logins.getMessage());
                 }
                 hideDialog();
-                if(!simpleDialog.isShowing())
+                if (!simpleDialog.isShowing())
                     simpleDialog.show();
             }
         });
     }
+
+    private void setupFireBaseUser() {
+
+        String url = "https://evaconnect-df08d.firebaseio.com/users.json";
+
+        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                Firebase reference = new Firebase("https://evaconnect-df08d.firebaseio.com/users");
+
+                if (s.equals("null")) {
+                    reference.child(user.getFirst_name()).child("password").setValue(password);
+                    // Toast.makeText(Register.this, "registration successful", Toast.LENGTH_LONG).show();
+                } else {
+                    try {
+                        JSONObject obj = new JSONObject(s);
+
+                        if (!obj.has(user.getFirst_name())) {
+                            reference.child(user.getFirst_name()).child("password").setValue(password);
+                            // Toast.makeText(Register.this, "registration successful", Toast.LENGTH_LONG).show();
+                        } else {
+                            // Toast.makeText(Register.this, "username already exists", Toast.LENGTH_LONG).show();
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                // pd.dismiss();
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                System.out.println("" + volleyError);
+                //  pd.dismiss();
+            }
+        });
+
+        RequestQueue rQueue = Volley.newRequestQueue(getApplication());
+        rQueue.add(request);
+    }
+
     @Override
     public void onValidationFailed(List<ValidationError> errors) {
         for (ValidationError error : errors) {
@@ -409,6 +454,7 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
             }
         }
     }
+
     private void requestpermission() {
         ActivityCompat.requestPermissions(this, new String[]
                 {
@@ -416,6 +462,7 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
                         CAMERA
                 }, RequestPermissionCode);
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {

@@ -37,6 +37,7 @@ import com.hypernym.evaconnect.models.Notification;
 import com.hypernym.evaconnect.view.adapters.IconPowerMenuAdapter;
 import com.hypernym.evaconnect.view.ui.fragments.ConnectionsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.HomeFragment;
+import com.hypernym.evaconnect.view.ui.fragments.MessageFragment;
 import com.skydoves.powermenu.CustomPowerMenu;
 import com.skydoves.powermenu.MenuAnimation;
 import com.skydoves.powermenu.OnMenuItemClickListener;
@@ -202,7 +203,9 @@ private boolean notificationflag=false;
     @OnClick(R.id.img_messages)
     public void messages()
     {
-
+        tv_pagetitle.setText(getString(R.string.messages));
+        MessageFragment fragment = new MessageFragment();
+        loadFragment(R.id.framelayout,fragment,this,false);
     }
 
     @OnClick(R.id.img_logout)

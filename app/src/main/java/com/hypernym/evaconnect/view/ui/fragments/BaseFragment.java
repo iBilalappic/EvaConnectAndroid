@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -118,6 +119,17 @@ public class BaseFragment extends Fragment {
         simpleDialog.show();
     }
     public void loadFragment(int id, Fragment fragment, Context context, boolean isBack)
+    {
+        FragmentTransaction transaction =((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+        transaction.replace(id, fragment);
+        if(isBack)
+        {
+            transaction.addToBackStack(null);
+        }
+        transaction.commit();
+    }
+    public void loadFragment_bundle(int id, Fragment fragment, Context context, boolean isBack, Bundle bundle)
     {
         FragmentTransaction transaction =((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);

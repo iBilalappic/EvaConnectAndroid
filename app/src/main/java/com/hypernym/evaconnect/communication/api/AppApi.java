@@ -5,6 +5,7 @@ import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.Dashboard;
+import com.hypernym.evaconnect.models.NetworkConnection;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 
@@ -49,6 +50,9 @@ public interface AppApi {
 
     @POST(APIConstants.DASHBOARD)
     Call<BaseModel<List<Post>>> getDashboard(@Body User user, @Query("limit") int limit, @Query("offset") int offset);
+
+    @GET(APIConstants.FRIENDCONNECTION)
+    Call<BaseModel<List<NetworkConnection>>> getFriendDetails(@Path("id") int id);
 
     @POST(APIConstants.ADD_COMMENT)
     Call<BaseModel<List<Comment>>> addComment(@Body Comment comment);
