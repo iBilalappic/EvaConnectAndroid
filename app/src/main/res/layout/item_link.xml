@@ -240,7 +240,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
-
     <TextView
         android:id="@+id/tv_content"
         style="@style/TextStyle.Title"
@@ -257,10 +256,24 @@
         android:id="@+id/img_video"
         android:layout_width="0dp"
         android:layout_height="200dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/no_thumbnail"
         android:elevation="2dp"
+        android:foregroundGravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_content" />
+
+    <ProgressBar
+        android:id="@+id/progressBar2"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/link"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/img_video" />
 
     <TextView
         style="@style/TextStyle"

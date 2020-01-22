@@ -108,6 +108,18 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     @BindView(R.id.tv_connect)
     TextView tv_connect;
 
+    @BindView(R.id.img_video)
+    ImageView img_video;
+
+    @BindView(R.id.img_play)
+    ImageView img_play;
+
+    @BindView(R.id.link)
+    TextView link;
+
+    @BindView(R.id.tv_goback)
+    TextView tv_goback;
+
     private CommentsAdapter commentsAdapter;
     private SliderImageAdapter sliderImageAdapter;
     private List<Comment> comments=new ArrayList<>();
@@ -182,13 +194,31 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         {
             img_like.setBackground(getContext().getDrawable(R.mipmap.ic_like));
         }
+        imageSlider.setVisibility(View.GONE);
+        img_video.setVisibility(View.GONE);
+        img_play.setVisibility(View.GONE);
+        link.setVisibility(View.GONE);
         if(post.getPost_type()==AppConstants.IMAGE_TYPE)
         {
             imageSlider.setVisibility(View.VISIBLE);
         }
-        else
+        else if(post.getPost_type()==AppConstants.VIDEO_TYPE)
         {
-            imageSlider.setVisibility(View.GONE);
+            img_video.setVisibility(View.VISIBLE);
+            img_play.setVisibility(View.VISIBLE);
+            AppUtils.setGlideVideoThumbnail(getContext(),img_video,post.getPost_video());
+        }
+        else if(post.getPost_type()==AppConstants.LINK_POST)
+        {
+            img_video.setVisibility(View.VISIBLE);
+            ArrayList<String> URLs=AppUtils.containsURL(post.getContent().toString());
+            if(URLs.size()>0)
+            {
+                AppUtils.customUrlEmbeddedView(getContext(),URLs.get(0),img_video);
+                link.setText(URLs.get(0));
+                link.setVisibility(View.VISIBLE);
+            }
+
         }
     }
 
@@ -362,4 +392,17 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
             });
         }
     }
+
+    @OnClick(R.id.img_video)
+    public void playVideo()
+    {
+        AppUtils.playVideo(getContext(),post.getPost_video());
+    }
+
+    @OnClick(R.id.tv_goback)
+    public void goBack()
+    {
+        getActivity().onBackPressed();
+    }
+
 }

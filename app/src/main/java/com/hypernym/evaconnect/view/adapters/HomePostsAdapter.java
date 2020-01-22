@@ -20,6 +20,7 @@ import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.nguyencse.URLEmbeddedData;
+import com.nguyencse.URLEmbeddedView;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -94,6 +95,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             img_comment.setOnClickListener(this);
             img_share.setOnClickListener(this);
             tv_comcount.setOnClickListener(this);
+            tv_content.setOnClickListener(this);
         }
 
         @Override
@@ -117,6 +119,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         break;
                     case R.id.tv_connect:
                         mClickListener.onConnectClick(v, getAdapterPosition());
+                        break;
+                    case R.id.tv_content:
+                        mClickListener.onItemClick(v, getAdapterPosition());
                         break;
                 }
         }
@@ -159,6 +164,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             img_comment.setOnClickListener(this);
             img_share.setOnClickListener(this);
             tv_comcount.setOnClickListener(this);
+
         }
 
         @Override
@@ -311,6 +317,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             img_comment.setOnClickListener(this);
             img_share.setOnClickListener(this);
             tv_comcount.setOnClickListener(this);
+            tv_content.setOnClickListener(this);
         }
 
         @Override
@@ -334,6 +341,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         break;
                     case R.id.tv_connect:
                         mClickListener.onConnectClick(v, getAdapterPosition());
+                        break;
+                    case R.id.tv_content:
+                        mClickListener.onItemClick(v, getAdapterPosition());
                         break;
 
                 }
@@ -394,6 +404,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             img_share.setOnClickListener(this);
             tv_comcount.setOnClickListener(this);
             img_video.setOnClickListener(this);
+            tv_content.setOnClickListener(this);
         }
 
         @Override
@@ -420,6 +431,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         break;
                     case R.id.img_video:
                         mClickListener.onVideoClick(v,getAdapterPosition());
+                        break;
+                    case R.id.tv_content:
+                        mClickListener.onItemClick(v,getAdapterPosition());
                         break;
 
                 }
@@ -468,7 +482,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         View top_image;
 
         @BindView(R.id.img_video)
-        ImageView img_video;
+        ImageView img_link;
 
         @BindView(R.id.link)
         TextView link;
@@ -481,6 +495,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             img_comment.setOnClickListener(this);
             img_share.setOnClickListener(this);
             tv_comcount.setOnClickListener(this);
+            tv_content.setOnClickListener(this);
         }
 
         @Override
@@ -504,6 +519,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         break;
                     case R.id.tv_connect:
                         mClickListener.onConnectClick(v, getAdapterPosition());
+                        break;
+                    case R.id.tv_content:
+                        mClickListener.onItemClick(v, getAdapterPosition());
                         break;
                 }
         }
@@ -582,7 +600,6 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-
         Post object = posts.get(position);
         if (object != null && object.getType()!=null) {
             switch (object.getPost_type()) {
@@ -602,7 +619,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
                     AppUtils.setGlideImage(mContext, ((TextTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
                     ((TextTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
-                    ((TextTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getTotal_connection()));
+                    ((TextTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getUser().getTotal_connection()));
                     if(position==0)
                     {
                         ((TextTypeViewHolder) holder).top_image.setVisibility(View.GONE);
@@ -629,7 +646,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
                     AppUtils.setGlideImage(mContext, ((ImageTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
                     ((ImageTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
-                    ((ImageTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getTotal_connection()));
+                    ((ImageTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getUser().getTotal_connection()));
 
                     if(position==0)
                     {
@@ -687,7 +704,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
                     AppUtils.setGlideImage(mContext, ((VideoTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
                     ((VideoTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
-                    ((VideoTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getTotal_connection()));
+                    ((VideoTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getUser().getTotal_connection()));
 
                     if(position==0)
                     {
@@ -700,6 +717,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     AppUtils.setGlideVideoThumbnail(mContext,((VideoTypeViewHolder) holder).img_video,posts.get(position).getPost_video());
                     break;
                 case AppConstants.LINK_POST:
+                  //  ((LinkTypeViewHolder) holder).img_link.setBackground(null);
                     ((LinkTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((LinkTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
                     ((LinkTypeViewHolder) holder).tv_createdDateTime.setText(DateUtils.getFormattedDateTime(posts.get(position).getCreated_datetime()));
@@ -707,18 +725,23 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     ArrayList<String> urls= AppUtils.containsURL(posts.get(position).getContent());
                     if(urls.size()>0)
                     {
-                      AppUtils.customUrlEmbeddedView(mContext,urls.get(0),((LinkTypeViewHolder) holder).img_video);
+                       // AppUtils.showUrlEmbeddedView(urls.get(0),((LinkTypeViewHolder) holder).img_link);
+                         AppUtils.customUrlEmbeddedView(((LinkTypeViewHolder) holder).img_link.getContext(),urls.get(0),((LinkTypeViewHolder) holder).img_link);
 
                         ((LinkTypeViewHolder) holder).link.setText(urls.get(0));
                         AppUtils.makeTextViewResizable(((LinkTypeViewHolder) holder).link,1);
+                        AppUtils.setGlideVideoThumbnail(((LinkTypeViewHolder) holder).img_link.getContext(),((LinkTypeViewHolder) holder).img_link,posts.get(position).getLink_thumbnail());
 
                     }
                     else
                     {
-                        ((LinkTypeViewHolder) holder).tv_content.setText(posts.get(position).getContent());
+                      // ((LinkTypeViewHolder) holder).img_link.setBackground(null);
+                       // ((LinkTypeViewHolder) holder).img_link.setVisibility(View.GONE);
+                       // Glide.with(((LinkTypeViewHolder) holder).img_link.getContext()).clear(((LinkTypeViewHolder) holder).img_link);
+                       // ((LinkTypeViewHolder) holder).tv_content.setText(posts.get(position).getContent());
                     }
                     AppUtils.makeTextViewResizable(((LinkTypeViewHolder) holder).tv_content,3);
-                    ((LinkTypeViewHolder) holder).tv_content.setText(posts.get(position).getContent());
+                   ((LinkTypeViewHolder) holder).tv_content.setText(posts.get(position).getContent());
                     ((LinkTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
                     if (posts.get(position).getIs_post_like() != null && posts.get(position).getIs_post_like() > 0) {
                         ((LinkTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like_selected));
@@ -728,7 +751,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
                     AppUtils.setGlideImage(mContext, ((LinkTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
                     ((LinkTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
-                    ((LinkTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getTotal_connection()));
+                    ((LinkTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getUser().getTotal_connection()));
 
                     if(position==0)
                     {

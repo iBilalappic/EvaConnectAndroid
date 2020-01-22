@@ -12,6 +12,8 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.Log;
+import android.util.Patterns;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -30,13 +32,19 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.snackbar.Snackbar;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
+import com.hypernym.evaconnect.models.Post;
+import com.hypernym.evaconnect.view.adapters.HomePostsAdapter;
 import com.hypernym.evaconnect.view.dialogs.VideoViewDialog;
 import com.hypernym.evaconnect.view.ui.fragments.BaseFragment;
 import com.nguyencse.URLEmbeddedData;
@@ -56,8 +64,7 @@ import java.util.regex.Pattern;
 public final class AppUtils {
 
     public static Context applicationContext;
-    public static String URL_REGEX="\\(?\\b(https?://|www[.]|ftp://)[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]";
-
+    public static String URL_REGEX="([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?";
 
     private AppUtils() {
         // This class is not publicly instantiable
@@ -96,9 +103,15 @@ public final class AppUtils {
                 .diskCacheStrategy(DiskCacheStrategy.NONE) //3
                 .into(imageView);
     }
+    public static void setGlideUrlThumbnail(Context context, ImageView imageView,String url)
+    {
+            Glide.with(context)
+            .load(getImg(url))
+            .diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(imageView);
+    }
     public static void setGlideVideoThumbnail(Context context, ImageView imageView,String url)
     {
-          Glide.with(context)
+        Glide.with(context)
                 .load(url)
                 .into(new CustomTarget<Drawable>() {
                     @Override
@@ -111,6 +124,12 @@ public final class AppUtils {
                     }
                 });
     }
+    public static String getImg(String mItem) {
+        if (mItem == null) return null;
+        String url = mItem;
+        return url;
+    }
+
     public static String getConnectionsCount(Integer connections)
     {
         String totalConnections="0 connections";
@@ -188,14 +207,15 @@ public final class AppUtils {
     {
         ArrayList<String> links = new ArrayList<String>();
         Pattern p = Pattern.compile(URL_REGEX);
-        Matcher m = p.matcher(content);//replace with string to compare
+
+        Matcher m = Patterns.WEB_URL.matcher(content);//replace with string to compare
         if(m.find()) {
             String urlStr = m.group();
             if (urlStr.startsWith("(") && urlStr.endsWith(")"))
             {
                 urlStr = urlStr.substring(1, urlStr.length() - 1);
             }
-
+            Log.d("url is",urlStr);
             links.add(urlStr);
 
             return links;
@@ -216,18 +236,18 @@ public final class AppUtils {
             }
         });
     }
-    public static void customUrlEmbeddedView(Context context,String url, ImageView imageView)
+    public static void customUrlEmbeddedView(Context context,String url, final ImageView imageView)
     {
-
-        URLEmbeddedTask urlTask = new URLEmbeddedTask(new URLEmbeddedTask.OnLoadURLListener() {
-            @Override
-            public void onLoadURLCompleted(URLEmbeddedData data) {
-                // handle your code here
-                setGlideVideoThumbnail(context,imageView,data.getThumbnailURL());
-            }
-        });
-        urlTask.execute(url);
-
+   //    Glide.with(context).clear(imageView);
+            URLEmbeddedTask urlTask = new URLEmbeddedTask(new URLEmbeddedTask.OnLoadURLListener() {
+                @Override
+                public void onLoadURLCompleted(URLEmbeddedData data) {
+                    Log.d("THUMBNAIL",""+ data.getThumbnailURL());
+                    Log.d("HOST",""+ data.getHost());
+                    setGlideUrlThumbnail(context,imageView,data.getThumbnailURL());
+                }
+            });
+            urlTask.execute(url);
     }
 
     public static void makeTextViewResizable(final TextView tv, final int maxLine) {
@@ -248,7 +268,7 @@ public final class AppUtils {
                     int lineEndIndex = tv.getLayout().getLineEnd(0);
                     String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + "..." + expandText;
                     tv.setText(text);
-                } else if (tv.getLineCount() >= maxLine) {
+                } else if (tv.getLineCount() > maxLine) {
                     int lineEndIndex = tv.getLayout().getLineEnd(maxLine - 1);
                     String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + "..." + expandText;
                     tv.setText(text);

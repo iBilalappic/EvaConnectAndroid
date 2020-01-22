@@ -3,13 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/lighter_gray">
 <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/linearLayout2"
-    android:paddingBottom="20dp"
     android:background="@color/colorPrimary"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingBottom="10dp"
+    android:clipToPadding="false">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
@@ -31,7 +33,6 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="Ed Hunter"
-        android:textSize="18dp"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -139,36 +140,91 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.smarteist.autoimageslider.SliderView
-                android:id="@+id/slider_images"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/linearlayout"
                 android:layout_width="0dp"
-                android:layout_height="200dp"
-                app:sliderAnimationDuration="600"
-                app:sliderAutoCycleDirection="back_and_forth"
-                app:sliderAutoCycleEnabled="true"
-                app:sliderCircularHandlerEnabled="true"
-                app:sliderIndicatorAnimationDuration="600"
-                app:sliderIndicatorGravity="right|bottom"
-                app:sliderIndicatorMargin="15dp"
-                app:sliderIndicatorOrientation="horizontal"
-                app:sliderIndicatorPadding="3dp"
-                app:sliderIndicatorRadius="2dp"
-                app:sliderIndicatorSelectedColor="@color/btn_border"
-                app:sliderIndicatorUnselectedColor="@color/colorPrimary"
-                app:sliderScrollTimeInSec="1"
-                app:sliderStartAutoCycle="true"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.smarteist.autoimageslider.SliderView
+                    android:id="@+id/slider_images"
+                    android:layout_width="0dp"
+                    android:layout_height="200dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:sliderAnimationDuration="600"
+                    app:sliderAutoCycleDirection="back_and_forth"
+                    app:sliderAutoCycleEnabled="true"
+                    app:sliderCircularHandlerEnabled="true"
+                    app:sliderIndicatorAnimationDuration="600"
+                    app:sliderIndicatorGravity="right|bottom"
+                    app:sliderIndicatorMargin="15dp"
+                    app:sliderIndicatorOrientation="horizontal"
+                    app:sliderIndicatorPadding="3dp"
+                    app:sliderIndicatorRadius="2dp"
+                    app:sliderIndicatorSelectedColor="@color/btn_border"
+                    app:sliderIndicatorUnselectedColor="@color/colorPrimary"
+                    app:sliderScrollTimeInSec="1"
+                    app:sliderStartAutoCycle="true"
+
+                    tools:layout_conversion_absoluteHeight="0dp"
+                    tools:layout_conversion_absoluteWidth="0dp" />
+
+                <ImageView
+                    android:id="@+id/img_video"
+                    android:layout_width="0dp"
+                    android:layout_height="200dp"
+                    android:elevation="2dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_conversion_absoluteHeight="200dp"
+                    tools:layout_conversion_absoluteWidth="411dp" />
+
+                <ImageView
+                    android:id="@+id/img_play"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:elevation="4dp"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="@+id/img_video"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/play"
+                    tools:layout_conversion_absoluteHeight="50dp"
+                    tools:layout_conversion_absoluteWidth="50dp"
+                    tools:layout_editor_absoluteX="0dp"
+                    tools:layout_editor_absoluteY="361dp" />
+                <TextView
+                    style="@style/TextStyle"
+                    android:id="@+id/link"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="TextView"
+                    android:padding="10dp"
+                    android:background="@color/lighter_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/img_video" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
             <View
                 android:id="@+id/view2"
                 android:layout_width="0dp"
                 android:layout_height="35dp"
+                android:layout_marginTop="1dp"
                 android:background="@color/lighter_gray"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/slider_images" />
+                app:layout_constraintTop_toBottomOf="@+id/linearlayout" />
 
             <TextView
                 style="@style/TextStyle"
@@ -181,7 +237,7 @@
                 android:text="58"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/slider_images" />
+                app:layout_constraintTop_toBottomOf="@+id/linearlayout" />
 
             <TextView
                 style="@style/TextStyle"
@@ -194,7 +250,7 @@
                 android:text="@string/likes"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tv_likecount"
-                app:layout_constraintTop_toBottomOf="@+id/slider_images" />
+                app:layout_constraintTop_toBottomOf="@+id/linearlayout" />
 
             <TextView
                 android:id="@+id/textView11"
@@ -206,7 +262,7 @@
                 android:text="|"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView10"
-                app:layout_constraintTop_toBottomOf="@+id/slider_images" />
+                app:layout_constraintTop_toBottomOf="@+id/linearlayout" />
 
             <TextView
                 style="@style/TextStyle"
@@ -220,7 +276,7 @@
                 android:text="03"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView11"
-                app:layout_constraintTop_toBottomOf="@+id/slider_images" />
+                app:layout_constraintTop_toBottomOf="@+id/linearlayout" />
 
             <TextView
                 style="@style/TextStyle"
@@ -233,7 +289,7 @@
                 android:text="@string/comments"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tv_comcount"
-                app:layout_constraintTop_toBottomOf="@+id/slider_images" />
+                app:layout_constraintTop_toBottomOf="@+id/linearlayout" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -314,7 +370,8 @@
         app:layout_constraintTop_toBottomOf="@+id/rc_comments" />
 
     <TextView
-         style="@style/TextStyle"
+        android:id="@+id/tv_goback"
+        style="@style/TextStyle"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:background="@drawable/rounded_button_whitebg"

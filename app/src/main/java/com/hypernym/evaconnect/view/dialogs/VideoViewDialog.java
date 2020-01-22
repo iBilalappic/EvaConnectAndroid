@@ -2,9 +2,12 @@ package com.hypernym.evaconnect.view.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.PixelFormat;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.MediaController;
@@ -39,10 +42,22 @@ public class VideoViewDialog extends Dialog {
         videoView=findViewById(R.id.videoView);
         img_close=findViewById(R.id.img_close);
         videoView.setVideoPath(url);
+        WindowManager.LayoutParams a = getWindow().getAttributes();
+        a.dimAmount = 0;
+        getWindow().setAttributes(a);
         MediaController mediaController=new MediaController(context);
         mediaController.setAnchorView(videoView);
         videoView.setMediaController(mediaController);
-        videoView.start();
+
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+            public void onPrepared(MediaPlayer arg0) {
+                videoView.requestFocus();
+                videoView.start();
+                mediaController.show();
+            }
+        });
+
 
         img_close.setOnClickListener(new View.OnClickListener() {
             @Override

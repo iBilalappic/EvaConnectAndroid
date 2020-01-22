@@ -3,6 +3,7 @@ package com.hypernym.evaconnect.models;
 import java.io.Serializable;
 
 public class User implements Serializable {
+
     private Integer id;
     private String email;
     private String password;
@@ -16,7 +17,6 @@ public class User implements Serializable {
     private String user_image;
     private Integer total_connection;
     private String is_connected;
-
 
 
     public String getEmail() {

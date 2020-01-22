@@ -32,21 +32,21 @@ public class URLTextWatcher implements android.text.TextWatcher {
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+        ArrayList<String> urlList=AppUtils.containsURL(s.toString());
+        if(urlList.size()>0)
+        {
+            AppUtils.showUrlEmbeddedView(urlList.get(0).toString(),urlEmbeddedView);
+            urlEmbeddedView.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            urlEmbeddedView.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public void afterTextChanged(Editable s) {
-        ArrayList<String> urlList=AppUtils.containsURL(s.toString());
-           if(urlList.size()>0)
-           {
-               AppUtils.showUrlEmbeddedView(urlList.get(0).toString(),urlEmbeddedView);
-               urlEmbeddedView.setVisibility(View.VISIBLE);
-           }
-           else
-           {
-               urlEmbeddedView.setVisibility(View.GONE);
-           }
+
 
     }
 

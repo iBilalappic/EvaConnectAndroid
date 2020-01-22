@@ -5,13 +5,14 @@
     android:id="@+id/linearLayout12"
     android:layout_width="@dimen/dialog_width"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
+  android:layout_gravity="center"
     android:orientation="vertical">
 
     <VideoView
         android:id="@+id/videoView"
         android:layout_width="0dp"
         android:layout_height="200dp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

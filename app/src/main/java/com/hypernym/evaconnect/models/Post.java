@@ -26,6 +26,7 @@ public class Post implements Serializable {
     private String is_connected;
     private MultipartBody.Part video;
     private String post_video;
+    private String link_thumbnail;
 
 
     public String getContent() {
@@ -179,5 +180,13 @@ public class Post implements Serializable {
 
     public void setPost_video(String post_video) {
         this.post_video = post_video;
+    }
+
+    public String getLink_thumbnail() {
+        return link_thumbnail;
+    }
+
+    public void setLink_thumbnail(String link_thumbnail) {
+        this.link_thumbnail = link_thumbnail;
     }
 }

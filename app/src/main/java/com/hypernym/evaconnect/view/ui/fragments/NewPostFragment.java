@@ -170,6 +170,7 @@ public class NewPostFragment extends BaseFragment implements Validator.Validatio
 
     private void createPost() {
             showDialog();
+
             postModel.setAttachments(part_images);
             postModel.setContent(edt_content.getText().toString());
             postModel.setVideo(video);

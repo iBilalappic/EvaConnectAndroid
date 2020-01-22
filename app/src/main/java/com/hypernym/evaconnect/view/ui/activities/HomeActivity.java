@@ -120,9 +120,7 @@ private boolean notificationflag=false;
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
         initPowerMenu();
-        notifications.add(new Notification());
-        notifications.add(new Notification());
-        notifications.add(new Notification());
+
         if(notifications.size()>0)
         {
             tv_pagetitle.setText(notifications.size()+" New Notifications");

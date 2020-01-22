@@ -88,6 +88,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         homeViewModel = ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(HomeViewModel.class);
         postViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(PostViewModel.class);
         connectionViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
+        currentPage = PAGE_START;
         callPostsApi();
         homePostsAdapter=new HomePostsAdapter(getContext(),posts,this);
         linearLayoutManager=new LinearLayoutManager(getContext());
@@ -245,8 +246,17 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         else
         {
             post.setAction(AppConstants.UNLIKE);
-            post.setIs_post_like(post.getIs_post_like()-1);
-            post.setLike_count(post.getLike_count()-1);
+            if(post.getIs_post_like()>0)
+            {
+                post.setIs_post_like(post.getIs_post_like()-1);
+                post.setLike_count(post.getLike_count()-1);
+            }
+            else
+            {
+                post.setIs_post_like(0);
+                post.setLike_count(0);
+            }
+
         }
         Log.d("Listing status",post.getAction()+" count"+post.getIs_post_like());
         if(NetworkUtils.isNetworkConnected(getContext())) {
@@ -334,7 +344,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         itemCount = 0;
         currentPage = PAGE_START;
         isLastPage = false;
-       // homePostsAdapter.clear();
+        homePostsAdapter.clear();
         if(NetworkUtils.isNetworkConnected(getContext())) {
             callPostsApi();
         }
