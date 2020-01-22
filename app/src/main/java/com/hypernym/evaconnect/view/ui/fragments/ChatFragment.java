@@ -87,6 +87,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     Firebase reference1, reference2;
     LinearLayoutManager layoutManager;
     ChatAdapter chatAdapter;
+    String messageText;
 
 
 
@@ -118,13 +119,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         browsefiles.setOnClickListener(this);
         assert getArguments() != null;
         networkConnection = (NetworkConnection) getArguments().getSerializable(Constants.DATA);
+
+        messageText=getArguments().getString("MESSAGE");
         UserDetails.username = LoginUtils.getUser().getFirst_name();
 //        Log.d("TAAAG", "" + GsonUtils.toJson(networkConnection));
         if (networkConnection.getSenderId().equals(LoginUtils.getUser().getId())) {
             UserDetails.chatWith = networkConnection.getReceiver().getFirstName();
+            setPageTitle(networkConnection.getReceiver().getFirstName());
             //  Toast.makeText(getContext(), "receivername" + networkConnection.getReceiver().getFirstName(), Toast.LENGTH_SHORT).show();
         } else {
             UserDetails.chatWith = networkConnection.getSender().getFirstName();
+            setPageTitle(networkConnection.getSender().getFirstName());
             //  Toast.makeText(getContext(), "sendername" + networkConnection.getSender().getFirstName(), Toast.LENGTH_SHORT).show();
         }
         init();
@@ -137,6 +142,22 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         reference1 = new Firebase("https://evaconnect-df08d.firebaseio.com/messages/" + UserDetails.username + "_" + UserDetails.chatWith);
         reference2 = new Firebase("https://evaconnect-df08d.firebaseio.com/messages/" + UserDetails.chatWith + "_" + UserDetails.username);
         SettingFireBaseChat();
+        if(getArguments()!=null){
+            CheckMessageText();
+        }
+
+    }
+
+    private void CheckMessageText() {
+        if (messageText!=null&&!messageText.equals("")) {
+            Toast.makeText(getContext(), ""+messageText, Toast.LENGTH_SHORT).show();
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("Message", messageText);
+            map.put("user", UserDetails.username);
+            reference1.push().setValue(map);
+            reference2.push().setValue(map);
+            messageArea.setText("");
+    }
     }
 
     private void SettingFireBaseChat() {
@@ -201,7 +222,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.sendButton:
                 //  Toast.makeText(getActivity(), "sss", Toast.LENGTH_SHORT).show();
-                String messageText = messageArea.getText().toString();
+                messageText = messageArea.getText().toString();
 
                 if (!messageText.equals("")) {
                     Map<String, String> map = new HashMap<String, String>();
@@ -211,7 +232,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     reference2.push().setValue(map);
                     messageArea.setText("");
                 } else {
-                    //  UploadImageToFirebase();
+                   // UploadImageToFirebase();
+//                    Map<String, String> map = new HashMap<String, String>();
+//                    map.put("Message", String.valueOf(filePath));
+//                    map.put("user", UserDetails.username);
+//                    reference1.push().setValue(map);
+//                    reference2.push().setValue(map);
                 }
                 break;
 
@@ -264,6 +290,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             try {
                 if (data != null && data.getData() != null) {
                     filePath = data.getData();
+                    Toast.makeText(getContext(), ""+filePath, Toast.LENGTH_SHORT).show();
 //                    Uri SelectedImageUri = data.getData();
 //                    GalleryImage = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
 //                    mProfileImageDecodableString = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);

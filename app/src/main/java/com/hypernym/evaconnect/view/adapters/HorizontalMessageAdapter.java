@@ -26,6 +26,7 @@ public class HorizontalMessageAdapter extends RecyclerView.Adapter<HorizontalMes
     private Context context;
     private List<NetworkConnection> networkConnectionList = new ArrayList<>();
     private OnItemClickListener onItemClickListener;
+    private int row_index = 0;
 
     public HorizontalMessageAdapter(Context context, List<NetworkConnection> networkConnections, OnItemClickListener onItemClickListener) {
         this.context = context;
@@ -53,11 +54,28 @@ public class HorizontalMessageAdapter extends RecyclerView.Adapter<HorizontalMes
         holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onItemClickListener.onItemClick(view, networkConnectionList.get(position), position);
-                holder.constraintLayout.setBackgroundResource(R.color.browser_actions_title_color);
+                row_index = position;
+                notifyDataSetChanged();
+                onItemClickListener.onItemClick(view, networkConnectionList.get(position), position, "horizontalAdapter");
+
             }
         });
+        if (row_index == position) {
+            holder.view5.setBackgroundResource(R.color.colorAccent);
 
+            /*holder.selected_view.setVisibility(View.GONE);*/
+            /*holder.selected_view2.setVisibility(View.VISIBLE);*/
+        } else {
+            holder.view5.setBackgroundResource(R.color.gray);
+            /*            holder.selected_view.setVisibility(View.GONE);*/
+            /*holder.selected_view2.setVisibility(View.GONE);*/
+        }
+
+    }
+
+    public void filterList(List<NetworkConnection> filteredList) {
+        networkConnectionList = filteredList;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -69,6 +87,7 @@ public class HorizontalMessageAdapter extends RecyclerView.Adapter<HorizontalMes
         TextView mtextview20;
         CircleImageView mImageview6;
         ConstraintLayout constraintLayout;
+        View view5;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -76,6 +95,7 @@ public class HorizontalMessageAdapter extends RecyclerView.Adapter<HorizontalMes
 
             mImageview6 = (CircleImageView) itemView.findViewById(R.id.imageView6);
             constraintLayout = (ConstraintLayout) itemView.findViewById(R.id.linearLayout6);
+            view5 = (View) itemView.findViewById(R.id.view5);
         }
     }
 }

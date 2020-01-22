@@ -2,16 +2,15 @@ package com.hypernym.evaconnect.view.ui.fragments;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,24 +18,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.hypernym.evaconnect.R;
-import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.NetworkConnection;
-import com.hypernym.evaconnect.models.Post;
-import com.hypernym.evaconnect.models.Receiver;
 import com.hypernym.evaconnect.models.User;
-import com.hypernym.evaconnect.models.UserDetails;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.toolbar.OnItemClickListener;
 import com.hypernym.evaconnect.utils.Constants;
-import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
-import com.hypernym.evaconnect.view.adapters.HomePostsAdapter;
 import com.hypernym.evaconnect.view.adapters.HorizontalMessageAdapter;
 import com.hypernym.evaconnect.view.adapters.MessageAdapter;
-import com.hypernym.evaconnect.viewmodel.HomeViewModel;
 import com.hypernym.evaconnect.viewmodel.MessageViewModel;
-import com.hypernym.evaconnect.viewmodel.PostViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +35,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MessageFragment extends BaseFragment implements OnItemClickListener, View.OnClickListener {
+public class MessageFragment extends BaseFragment implements OnItemClickListener, View.OnClickListener, TextWatcher {
 
     @BindView(R.id.rc_message)
     RecyclerView re_message;
@@ -61,8 +52,11 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     private MessageViewModel messageViewModel;
     private List<NetworkConnection> networkConnectionList = new ArrayList<>();
     Dialog mDialogMessage;
-    EditText editTextSearch,editTextMessage;
+    EditText editTextSearch, editTextMessage;
+    TextView mTextviewSend;
     RecyclerView mrecyclerviewFriends;
+    private int Itempostion;
+
     public MessageFragment() {
         // Required empty public constructor
     }
@@ -122,21 +116,27 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
         });
     }
 
+
     @Override
-    public void onItemClick(View view, Object data, int position) {
-        ChatFragment chatFragment = new ChatFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(Constants.DATA, networkConnectionList.get(position));
-        chatFragment.setArguments(bundle);
-        //  Log.d("TAAAG", "" + GsonUtils.toJson(networkConnection));
-        loadFragment(R.id.framelayout, chatFragment, getContext(), true);
+    public void onItemClick(View view, Object data, int position ,String adaptertype) {
+        if(adaptertype.equals("SimpleAdapter")){
+            ChatFragment chatFragment = new ChatFragment();
+            Itempostion=position;
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(Constants.DATA, networkConnectionList.get(position));
+            chatFragment.setArguments(bundle);
+            //  Log.d("TAAAG", "" + GsonUtils.toJson(networkConnection));
+            loadFragment(R.id.framelayout, chatFragment, getContext(), true);
+        }else{
+            Toast.makeText(getContext(), ""+position, Toast.LENGTH_SHORT).show();
+            Itempostion=position;
+        }
+
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
-
             case R.id.newmessage:
                 showMesssageDialog();
                 break;
@@ -147,9 +147,30 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
 
         mDialogMessage = new Dialog(getContext());
         mDialogMessage.setContentView(R.layout.dialog_message);
-        editTextSearch=mDialogMessage.findViewById(R.id.edittextSearchUser);
-        mrecyclerviewFriends=mDialogMessage.findViewById(R.id.recyclerViewNetworkConnection);
+        editTextSearch = mDialogMessage.findViewById(R.id.edittextSearchUser);
+        editTextMessage = mDialogMessage.findViewById(R.id.edittextMessageArea);
+        mTextviewSend = mDialogMessage.findViewById(R.id.sendButton);
+        editTextSearch.addTextChangedListener(this);
+        mrecyclerviewFriends = mDialogMessage.findViewById(R.id.recyclerViewNetworkConnection);
         setupNetworkConnectionRecycler();
+
+        mTextviewSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String messageArea=editTextMessage.getText().toString();
+                if(!messageArea.equals("")){
+                    ChatFragment chatFragment = new ChatFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(Constants.DATA, networkConnectionList.get(Itempostion));
+                    bundle.putString("MESSAGE",messageArea);
+                    chatFragment.setArguments(bundle);
+                    //  Log.d("TAAAG", "" + GsonUtils.toJson(networkConnection));
+                    loadFragment(R.id.framelayout, chatFragment, getContext(), true);
+                    mDialogMessage.dismiss();
+                }
+
+            }
+        });
         mDialogMessage.setCanceledOnTouchOutside(true);
         mDialogMessage.show();
         mDialogMessage.setCancelable(true);
@@ -158,7 +179,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     private void setupNetworkConnectionRecycler() {
         networkConnectionList = removeDuplicates(networkConnectionList);
         messageAdapter_horizontal = new HorizontalMessageAdapter(getContext(), networkConnectionList, this);
-        linearLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
+        linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         mrecyclerviewFriends.setLayoutManager(linearLayoutManager);
         mrecyclerviewFriends.setAdapter(messageAdapter_horizontal);
     }
@@ -177,5 +198,47 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
         }
 
         return newList;
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        filter(s.toString());
+    }
+
+    private void filter(String text) {
+        //new array list that will hold the filtered data
+        List<NetworkConnection> filterdNames = new ArrayList<>();
+
+        //looping through existing elements
+        for (NetworkConnection s : networkConnectionList) {
+
+
+            if (s.getReceiver().getFirstName().toLowerCase().contains(text.toLowerCase())) {
+                filterdNames.add(s);
+            }
+
+            if (s.getSender().getFirstName().toLowerCase().contains(text.toLowerCase())) {
+                filterdNames.add(s);
+            }
+        }
+
+        //calling a method of the adapter class and passing the filtered list
+        messageAdapter_horizontal.filterList(removeDuplicates(filterdNames));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setPageTitle("Message");
     }
 }
