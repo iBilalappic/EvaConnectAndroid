@@ -125,9 +125,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 //        Log.d("TAAAG", "" + GsonUtils.toJson(networkConnection));
         if (networkConnection.getSenderId().equals(LoginUtils.getUser().getId())) {
             UserDetails.chatWith = networkConnection.getReceiver().getFirstName();
+            setPageTitle(networkConnection.getReceiver().getFirstName());
             //  Toast.makeText(getContext(), "receivername" + networkConnection.getReceiver().getFirstName(), Toast.LENGTH_SHORT).show();
         } else {
             UserDetails.chatWith = networkConnection.getSender().getFirstName();
+            setPageTitle(networkConnection.getSender().getFirstName());
             //  Toast.makeText(getContext(), "sendername" + networkConnection.getSender().getFirstName(), Toast.LENGTH_SHORT).show();
         }
         init();
@@ -230,7 +232,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     reference2.push().setValue(map);
                     messageArea.setText("");
                 } else {
-                    //  UploadImageToFirebase();
+                   // UploadImageToFirebase();
+//                    Map<String, String> map = new HashMap<String, String>();
+//                    map.put("Message", String.valueOf(filePath));
+//                    map.put("user", UserDetails.username);
+//                    reference1.push().setValue(map);
+//                    reference2.push().setValue(map);
                 }
                 break;
 
@@ -283,6 +290,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             try {
                 if (data != null && data.getData() != null) {
                     filePath = data.getData();
+                    Toast.makeText(getContext(), ""+filePath, Toast.LENGTH_SHORT).show();
 //                    Uri SelectedImageUri = data.getData();
 //                    GalleryImage = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
 //                    mProfileImageDecodableString = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);

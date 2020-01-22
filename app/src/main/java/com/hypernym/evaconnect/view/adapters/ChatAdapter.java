@@ -30,7 +30,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public ChatAdapter(Context context, List<ChatMessage> chatMessages, NetworkConnection networkConnection) {
         this.context = context;
         this.chatMessageList = chatMessages;
-        this.networkConnection=networkConnection;
+        this.networkConnection = networkConnection;
     }
 
     @NonNull
@@ -78,7 +78,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView mtextview20, mtextview21;
         LinearLayout mlayout1, mlayout2;
-        CircleImageView imageView6,imageView7;
+        CircleImageView imageView6, imageView7;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

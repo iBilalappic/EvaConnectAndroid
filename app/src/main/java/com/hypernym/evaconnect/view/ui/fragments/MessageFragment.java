@@ -129,7 +129,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
             loadFragment(R.id.framelayout, chatFragment, getContext(), true);
         }else{
             Toast.makeText(getContext(), ""+position, Toast.LENGTH_SHORT).show();
-
+            Itempostion=position;
         }
 
     }
@@ -234,5 +234,11 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
 
         //calling a method of the adapter class and passing the filtered list
         messageAdapter_horizontal.filterList(removeDuplicates(filterdNames));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setPageTitle("Message");
     }
 }

@@ -3,7 +3,6 @@ package com.hypernym.evaconnect.repositories.impl;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.hypernym.evaconnect.communication.APICallBack;
 import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.User;
