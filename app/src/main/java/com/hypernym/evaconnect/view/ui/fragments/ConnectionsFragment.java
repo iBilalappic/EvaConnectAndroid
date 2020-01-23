@@ -31,7 +31,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.ItemClickListener {
+public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.ItemClickListener,ConnectionsAdapter.OnItemClickListener {
     @BindView(R.id.rc_connections)
     RecyclerView rc_connections;
 
@@ -162,7 +162,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
     }
 
     private void initRecyclerView() {
-        connectionsAdapter=new ConnectionsAdapter(getContext(), connectionList);
+        connectionsAdapter=new ConnectionsAdapter(getContext(), connectionList,this);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
         rc_connections.setLayoutManager(linearLayoutManager);
         rc_connections.setAdapter(connectionsAdapter);
@@ -252,5 +252,16 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
                 hideDialog();
             }
         });
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+//        if(NetworkUtils.isNetworkConnected(getContext())) {
+//            callConnectApi(view,connectionViewModel,connectionList.get(position).getId(),null);
+//        }
+//        else
+//        {
+//            networkErrorDialog();
+//        }
     }
 }

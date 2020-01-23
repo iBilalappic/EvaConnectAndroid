@@ -356,7 +356,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     @OnClick(R.id.tv_connect)
     public void onConnectClick() {
         if(NetworkUtils.isNetworkConnected(getContext())) {
-            callConnectApi();
+            callConnectApi(tv_connect,connectionViewModel,post.getUser().getId(),post);
         }
         else
         {
@@ -365,33 +365,6 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
 
     }
 
-    private void callConnectApi() {
-        if(tv_connect.getText().toString().equalsIgnoreCase(getString(R.string.connect)))
-        {
-            showDialog();
-            User user=LoginUtils.getLoggedinUser();
-            Connection connection=new Connection();
-            connection.setReceiver_id(post.getUser().getId());
-            connection.setSender_id(user.getId());
-            connection.setStatus(AppConstants.STATUS_PENDING);
-            connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
-                @Override
-                public void onChanged(BaseModel<List<Connection>> listBaseModel) {
-                    if(listBaseModel!=null && !listBaseModel.isError())
-                    {
-
-                        tv_connect.setText(AppConstants.REQUEST_SENT);
-                        post.setIs_connected(AppConstants.ACTIVE);
-                    }
-                    else
-                    {
-                        networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
-                    }
-                    hideDialog();
-                }
-            });
-        }
-    }
 
     @OnClick(R.id.img_video)
     public void playVideo()
