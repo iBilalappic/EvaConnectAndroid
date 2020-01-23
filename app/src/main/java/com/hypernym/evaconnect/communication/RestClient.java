@@ -3,6 +3,7 @@ package com.hypernym.evaconnect.communication;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -35,9 +36,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RestClient {
     private static RestClient clientInstance = null;
     private static Retrofit retrofit;
+    private static Retrofit retrofit_onesignal;
     private AtomicBoolean reset = new AtomicBoolean(false);
     private static final long TIMEOUT = 2;
-    private AppApi appApi;
+    private AppApi appApi, appApi_onesignal;
 
     private RestClient() {
     }
@@ -67,16 +69,36 @@ public class RestClient {
             Retrofit.Builder retrofitBuilder =
                     new Retrofit.Builder()
                             .baseUrl(APIConstants.BASE_SERVER_URL)
-                            .client(getUnsafeOkHttpClient(AppUtils.getApplicationContext()))
+                            .client(getUnsafeOkHttpClient(AppUtils.getApplicationContext(), "simple"))
                             .addConverterFactory(GsonConverterFactory.create(gson));
 
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-            retrofit = retrofitBuilder.client(getUnsafeOkHttpClient(AppUtils.getApplicationContext())).build();
+            retrofit = retrofitBuilder.client(getUnsafeOkHttpClient(AppUtils.getApplicationContext(), "simple")).build();
         }
         return retrofit;
     }
 
-    private static OkHttpClient getUnsafeOkHttpClient(final Context context) {
+    private synchronized Retrofit retrofit_onesignal() {
+        if (retrofit_onesignal == null || reset.get()) {
+//            OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
+            Gson gson = new GsonBuilder()
+                    .setPrettyPrinting()
+                    .setVersion(1.0)
+                    .create();
+
+            Retrofit.Builder retrofitBuilder =
+                    new Retrofit.Builder()
+                            .baseUrl(APIConstants.BASE_URL)
+                            .client(getUnsafeOkHttpClient(AppUtils.getApplicationContext(), "OneSignal"))
+                            .addConverterFactory(GsonConverterFactory.create(gson));
+
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+            retrofit_onesignal = retrofitBuilder.client(getUnsafeOkHttpClient(AppUtils.getApplicationContext(), "OneSignal")).build();
+        }
+        return retrofit_onesignal;
+    }
+
+    private static OkHttpClient getUnsafeOkHttpClient(final Context context, String name) {
         try {
             // Create a trust manager that does not validate certificate chains
             final TrustManager[] trustAllCerts = new TrustManager[]{
@@ -121,12 +143,23 @@ public class RestClient {
                 @Override
                 public Response intercept(Chain chain) throws IOException {
                     Request.Builder _builder = chain.request().newBuilder();
+                    Request original = chain.request();
                     //todo: fill auth header
+                    _builder.header("Cache-Control", "no-cache");
+                    _builder.header("Content-Type", "application/json")
+                     .method(original.method(), original.body());
 
-                    if(LoginUtils.isUserLogin()){
-                        _builder.header("Authorization", "token "+LoginUtils.getAuthToken(AppUtils.getApplicationContext()));
-                    Log.d("Token","token "+LoginUtils.getAuthToken(AppUtils.getApplicationContext()));
+                    if (LoginUtils.isUserLogin()) {
+                        if (name.equals("simple")) {
+                            _builder.header("Authorization", "token " + LoginUtils.getAuthToken(AppUtils.getApplicationContext()));
+
+                        } else {
+                            _builder.header("Authorization", "Basic OGY1MDlkNzItMzljNS00ZGY2LTg5MmItMmEwOGQ2YzMwZWU4");
+                        }
+                        Log.d("Token", "token " + LoginUtils.getAuthToken(AppUtils.getApplicationContext()));
+                        Log.d("name", name);
                     }
+
                     _builder.header("OS", AppConstants.OS);
                     Request request = _builder.build();
                     return chain.proceed(request);
@@ -139,10 +172,18 @@ public class RestClient {
             throw new RuntimeException(e);
         }
     }
+
     public AppApi appApi() {
         if (appApi == null) {
             appApi = retrofit().create(AppApi.class);
         }
         return appApi;
+    }
+
+    public AppApi appApi_onesignal() {
+        if (appApi_onesignal == null) {
+            appApi_onesignal = retrofit_onesignal().create(AppApi.class);
+        }
+        return appApi_onesignal;
     }
 }

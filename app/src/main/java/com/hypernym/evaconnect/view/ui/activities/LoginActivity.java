@@ -35,6 +35,7 @@ import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Password;
+import com.onesignal.OneSignal;
 
 import java.util.List;
 
@@ -120,6 +121,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
                     User userData = user.getData().get(0);
                     userData.setUser_id(userData.getId());
                     LoginUtils.saveUser(user.getData().get(0));
+                    OneSignal.sendTag("email",userData.getEmail());
                     UserDetails.username = userData.getFirst_name();
                     if (user.getData().get(0) != null) {
                         LoginUtils.saveUserToken(user.getData().get(0).getToken());

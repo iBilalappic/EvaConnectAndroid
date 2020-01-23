@@ -3,8 +3,12 @@ package com.hypernym.evaconnect.service;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.NotifyEvent;
 import com.hypernym.evaconnect.models.PayloadNotification;
+import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.view.ui.activities.HomeActivity;
+import com.hypernym.evaconnect.view.ui.fragments.ChatFragment;
 import com.onesignal.NotificationExtenderService;
 import com.onesignal.OSNotificationReceivedResult;
 
