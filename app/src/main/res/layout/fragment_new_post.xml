@@ -99,7 +99,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/attachment_layout"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -109,10 +109,10 @@
                 android:id="@+id/uev"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 app:description="Description"
                 app:favor="@drawable/ic_url"
                 app:host="abc.com"
-                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -144,12 +144,12 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_attachments"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@color/lighter_gray"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>

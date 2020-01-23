@@ -25,17 +25,35 @@ public class ConnectionRepository implements IConnectionRespository {
     @Override
     public LiveData<BaseModel<List<Connection>>> connect(Connection connection) {
         connectionMutableLiveData=new MutableLiveData<>();
-        RestClient.get().appApi().connect(connection).enqueue(new Callback<BaseModel<List<Connection>>>() {
-            @Override
-            public void onResponse(Call<BaseModel<List<Connection>>> call, Response<BaseModel<List<Connection>>> response) {
-                connectionMutableLiveData.setValue(response.body());
-            }
+        if(connection.getId()==0)
+        {
+            RestClient.get().appApi().connect(connection).enqueue(new Callback<BaseModel<List<Connection>>>() {
+                @Override
+                public void onResponse(Call<BaseModel<List<Connection>>> call, Response<BaseModel<List<Connection>>> response) {
+                    connectionMutableLiveData.setValue(response.body());
+                }
 
-            @Override
-            public void onFailure(Call<BaseModel<List<Connection>>> call, Throwable t) {
-                connectionMutableLiveData.setValue(null);
-            }
-        });
+                @Override
+                public void onFailure(Call<BaseModel<List<Connection>>> call, Throwable t) {
+                    connectionMutableLiveData.setValue(null);
+                }
+            });
+        }
+        else
+        {
+            RestClient.get().appApi().updateConnection(connection,connection.getId()).enqueue(new Callback<BaseModel<List<Connection>>>() {
+                @Override
+                public void onResponse(Call<BaseModel<List<Connection>>> call, Response<BaseModel<List<Connection>>> response) {
+                    connectionMutableLiveData.setValue(response.body());
+                }
+
+                @Override
+                public void onFailure(Call<BaseModel<List<Connection>>> call, Throwable t) {
+                    connectionMutableLiveData.setValue(null);
+                }
+            });
+        }
+
         return connectionMutableLiveData;
     }
 
@@ -70,7 +88,6 @@ public class ConnectionRepository implements IConnectionRespository {
             public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
                 userMutableLiveData.setValue(response.body());
             }
-
             @Override
             public void onFailure(Call<BaseModel<List<User>>> call, Throwable t) {
                 userMutableLiveData.setValue(null);

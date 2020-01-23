@@ -18,6 +18,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
@@ -66,6 +67,9 @@ public interface AppApi {
 
     @POST(APIConstants.CONNECT)
     Call<BaseModel<List<Connection>>> connect(@Body Connection connection);
+
+    @PATCH(APIConstants.UPDATE_CONNECTION)
+    Call<BaseModel<List<Connection>>> updateConnection(@Body Connection connection,@Path("id") int id);
 
     @POST(APIConstants.GET_ALL_CONNECTIONS)
     Call<BaseModel<List<User>>> getAllConnections(@Body User user);

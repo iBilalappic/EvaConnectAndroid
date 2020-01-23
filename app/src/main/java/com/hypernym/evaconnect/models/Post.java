@@ -29,6 +29,7 @@ public class Post implements Serializable {
     private String link_thumbnail;
 
 
+
     public String getContent() {
         return content;
     }

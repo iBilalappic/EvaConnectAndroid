@@ -22,9 +22,9 @@ import butterknife.OnClick;
 
 public class VideoViewDialog extends Dialog {
     private String url;
-
     VideoView videoView;
     ImageView img_close;
+
     private Context context;
 
     public VideoViewDialog(Context context, String url) {
@@ -41,6 +41,7 @@ public class VideoViewDialog extends Dialog {
         setCancelable(false);
         videoView=findViewById(R.id.videoView);
         img_close=findViewById(R.id.img_close);
+
         videoView.setVideoPath(url);
         WindowManager.LayoutParams a = getWindow().getAttributes();
         a.dimAmount = 0;
@@ -48,11 +49,11 @@ public class VideoViewDialog extends Dialog {
         MediaController mediaController=new MediaController(context);
         mediaController.setAnchorView(videoView);
         videoView.setMediaController(mediaController);
-
+        videoView.requestFocus();
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
 
             public void onPrepared(MediaPlayer arg0) {
-                videoView.requestFocus();
+
                 videoView.start();
                 mediaController.show();
             }

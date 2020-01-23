@@ -195,7 +195,7 @@ public class NewPostFragment extends BaseFragment implements Validator.Validatio
     }
 
     private void initRecyclerView() {
-        attachmentsAdapter=new AttachmentsAdapter(getContext(),attachments);
+        attachmentsAdapter=new AttachmentsAdapter(getContext(),attachments,this);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
         rc_attachments.setLayoutManager(linearLayoutManager);
         rc_attachments.setAdapter(attachmentsAdapter);

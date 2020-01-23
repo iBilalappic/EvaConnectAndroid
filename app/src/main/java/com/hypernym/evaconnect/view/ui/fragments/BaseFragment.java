@@ -26,24 +26,17 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
-import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.Connection;
-import com.hypernym.evaconnect.models.Post;
-import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
-import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.view.bottomsheets.BottomSheetPictureSelection;
 import com.hypernym.evaconnect.view.dialogs.CustomProgressBar;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.view.ui.activities.BaseActivity;
 import com.hypernym.evaconnect.view.ui.activities.SignupDetailsActivity;
-import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 
 import org.w3c.dom.Text;
 
@@ -52,7 +45,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -277,34 +269,6 @@ public class BaseFragment extends Fragment {
         TextView textView=getActivity().findViewById(R.id.tv_title);
 //        getActivity().findViewById(R.id.tv_pagetitle).setT.setVisibility(View.GONE);
         textView.setText(title);
-    }
-
-    public void callConnectApi(TextView tv_connect, ConnectionViewModel connectionViewModel, int userid, Post post) {
-        if(tv_connect.getText().toString().equalsIgnoreCase(getString(R.string.connect)))
-        {
-            showDialog();
-            User user= LoginUtils.getLoggedinUser();
-            Connection connection=new Connection();
-            connection.setReceiver_id(userid);
-            connection.setSender_id(user.getId());
-            connection.setStatus(AppConstants.STATUS_PENDING);
-            connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
-                @Override
-                public void onChanged(BaseModel<List<Connection>> listBaseModel) {
-                    if(listBaseModel!=null && !listBaseModel.isError())
-                    {
-
-                        tv_connect.setText(AppConstants.REQUEST_SENT);
-                        post.setIs_connected(AppConstants.ACTIVE);
-                    }
-                    else
-                    {
-                        networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
-                    }
-                    hideDialog();
-                }
-            });
-        }
     }
 
 

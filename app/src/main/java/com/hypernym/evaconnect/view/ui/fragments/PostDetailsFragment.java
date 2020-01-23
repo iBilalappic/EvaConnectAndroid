@@ -181,7 +181,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         else
         {
             tv_connect.setVisibility(View.VISIBLE);
-            tv_connect.setText(AppUtils.getConnectionStatus(getContext(),post.getIs_connected()));
+            tv_connect.setText(AppUtils.getConnectionStatus(getContext(),post.getIs_connected(),post.getUser().isIs_receiver()));
         }
 
         AppUtils.setGlideImage(getContext(),profile_image,post.getUser().getUser_image());
@@ -356,7 +356,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     @OnClick(R.id.tv_connect)
     public void onConnectClick() {
         if(NetworkUtils.isNetworkConnected(getContext())) {
-            callConnectApi(tv_connect,connectionViewModel,post.getUser().getId(),post);
+            callConnectApi(tv_connect,post.getUser());
         }
         else
         {
@@ -364,7 +364,81 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         }
 
     }
+    private void callConnectApi(TextView tv_connect,User connectionItem) {
+        Connection connection=new Connection();
+        User user= LoginUtils.getLoggedinUser();
+        connection.setReceiver_id(connectionItem.getId());
+        connection.setSender_id(user.getId());
 
+        if(connectionItem.getConnection_id()==null)
+        {
+            connection.setStatus(AppConstants.STATUS_PENDING);
+            showDialog();
+            callApi(tv_connect,connection,connectionItem);
+        }
+        else if (!tv_connect.getText().toString().equalsIgnoreCase(AppConstants.CONNECTED) && connectionItem.getConnection_id()!=null)
+        {
+            connection.setStatus(AppConstants.ACTIVE);
+            connection.setId(connectionItem.getConnection_id());
+            connection.setModified_by_id(user.getId());
+            connection.setModified_datetime(DateUtils.GetCurrentdatetime());
+            callApi(tv_connect,connection,connectionItem);
+        }
+    }
+    private void callApi(TextView tv_connect,Connection connection,User connectionItem )
+    {
+        connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Connection>> listBaseModel) {
+                if(listBaseModel!=null && !listBaseModel.isError())
+                {
+                    if(tv_connect.getText().toString().equalsIgnoreCase(getString(R.string.connect)))
+                    {
+                        tv_connect.setText(AppConstants.REQUEST_SENT);
+                    }
+                    else
+                    {
+                        tv_connect.setText(AppConstants.CONNECTED);
+                    }
+                    connectionItem.setIs_connected(AppConstants.ACTIVE);
+                }
+                else
+                {
+                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                }
+                hideDialog();
+            }
+        });
+    }
+
+//    private void callConnectApi() {
+//        if(tv_connect.getText().toString().equalsIgnoreCase(getString(R.string.connect)) ||tv_connect.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_ACCEPT) )
+//        {
+//            showDialog();
+//            User user=LoginUtils.getLoggedinUser();
+//            Connection connection=new Connection();
+//            connection.setReceiver_id(post.getUser().getId());
+//            connection.setSender_id(user.getId());
+//            connection.setStatus(AppConstants.STATUS_PENDING);
+//
+//            connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
+//                @Override
+//                public void onChanged(BaseModel<List<Connection>> listBaseModel) {
+//                    if(listBaseModel!=null && !listBaseModel.isError())
+//                    {
+//
+//                        tv_connect.setText(AppConstants.REQUEST_SENT);
+//                        post.setIs_connected(AppConstants.ACTIVE);
+//                    }
+//                    else
+//                    {
+//                        networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+//                    }
+//                    hideDialog();
+//                }
+//            });
+//        }
+//    }
 
     @OnClick(R.id.img_video)
     public void playVideo()
@@ -376,6 +450,16 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     public void goBack()
     {
         getActivity().onBackPressed();
+    }
+
+    @OnClick(R.id.link)
+    public void openUrl()
+    {
+        LoadUrlFragment loadUrlFragment =new LoadUrlFragment();
+        Bundle bundle=new Bundle();
+        bundle.putString("url",post.getContent());
+        loadUrlFragment.setArguments(bundle);
+        loadFragment(R.id.framelayout,loadUrlFragment,getContext(),true);
     }
 
 }

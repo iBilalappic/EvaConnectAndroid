@@ -33,10 +33,11 @@ public class AttachmentsAdapter extends RecyclerView.Adapter<AttachmentsAdapter.
     private SimpleDialog simpleDialog;
 
 
-    public AttachmentsAdapter(Context context, List<String> images)
+    public AttachmentsAdapter(Context context, List<String> images,AttachmentsAdapter.ItemClickListener itemClickListener)
     {
         this.context=context;
         this.images=images;
+        this.mClickListener=itemClickListener;
     }
 
     @NonNull
@@ -73,8 +74,8 @@ public class AttachmentsAdapter extends RecyclerView.Adapter<AttachmentsAdapter.
 
         @Override
         public void onClick(View v) {
-
-           if (mClickListener != null) mClickListener.onItemClick(v, getAdapterPosition());
+           if (mClickListener != null)
+               mClickListener.onItemClick(v, getAdapterPosition());
         }
     }
     // parent activity will implement this method to respond to click events

@@ -12,13 +12,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.Options;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
+import com.hypernym.evaconnect.utils.DateUtils;
+import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.utils.TextWatcher;
 import com.hypernym.evaconnect.view.adapters.ConnectionsAdapter;
@@ -256,12 +260,61 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
 
     @Override
     public void onItemClick(View view, int position) {
-//        if(NetworkUtils.isNetworkConnected(getContext())) {
-//            callConnectApi(view,connectionViewModel,connectionList.get(position).getId(),null);
-//        }
-//        else
-//        {
-//            networkErrorDialog();
-//        }
+        if(NetworkUtils.isNetworkConnected(getContext())) {
+            TextView textView=(TextView)view;
+            callConnectApi(textView,connectionList.get(position));
+        }
+        else
+        {
+            networkErrorDialog();
+        }
     }
+
+    private void callConnectApi(TextView tv_connect,User connectionItem) {
+        Connection connection=new Connection();
+        User user= LoginUtils.getLoggedinUser();
+        connection.setReceiver_id(connectionItem.getId());
+        connection.setSender_id(user.getId());
+
+        if(connectionItem.getConnection_id()==null)
+        {
+            connection.setStatus(AppConstants.STATUS_PENDING);
+            showDialog();
+            callApi(tv_connect,connection,connectionItem);
+        }
+        else if (!tv_connect.getText().toString().equalsIgnoreCase(AppConstants.CONNECTED) && connectionItem.getConnection_id()!=null)
+        {
+            connection.setStatus(AppConstants.ACTIVE);
+            connection.setId(connectionItem.getConnection_id());
+            connection.setModified_by_id(user.getId());
+            connection.setModified_datetime(DateUtils.GetCurrentdatetime());
+            callApi(tv_connect,connection,connectionItem);
+        }
+    }
+    private void callApi(TextView tv_connect,Connection connection,User connectionItem )
+    {
+        connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Connection>> listBaseModel) {
+                if(listBaseModel!=null && !listBaseModel.isError())
+                {
+                    if(tv_connect.getText().toString().equalsIgnoreCase(getString(R.string.connect)))
+                    {
+                        tv_connect.setText(AppConstants.REQUEST_SENT);
+                    }
+                    else
+                    {
+                        tv_connect.setText(AppConstants.CONNECTED);
+                    }
+                    connectionItem.setIs_connected(AppConstants.ACTIVE);
+                }
+                else
+                {
+                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                }
+                hideDialog();
+            }
+        });
+    }
+
 }

@@ -328,13 +328,11 @@
         style="@style/EditText.Comments"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="38dp"
         android:hint="@string/tap_here_to_comment"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/img_user"
-        app:layout_constraintStart_toStartOf="@+id/img_user"
         app:layout_constraintTop_toBottomOf="@+id/img_like" />
 
     <TextView
@@ -360,7 +358,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/btn_addcomment" />
     <View
-        android:id="@+id/view"
+        android:id="@+id/mediacontrol"
         android:layout_width="0dp"
         android:layout_height="70dp"
         android:background="@color/colorPrimary"
@@ -380,10 +378,10 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:text="@string/go_back"
-        app:layout_constraintBottom_toBottomOf="@+id/view"
+        app:layout_constraintBottom_toBottomOf="@+id/mediacontrol"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view" />
+        app:layout_constraintTop_toBottomOf="@+id/mediacontrol" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

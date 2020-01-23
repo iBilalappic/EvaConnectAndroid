@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
 
 public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.ViewHolder> {
     private Context context;
-    private List<User> connections;
+    private List<User> connections,filteredConnections;
     private ConnectionsAdapter.OnItemClickListener onItemClickListener;
 
     public ConnectionsAdapter(Context context, List<User> connectionList,ConnectionsAdapter.OnItemClickListener onItemClickListener)
@@ -57,7 +57,7 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
         else
         {
             holder.tv_connect.setVisibility(View.VISIBLE);
-            holder.tv_connect.setText(AppUtils.getConnectionStatus(context,connections.get(position).getIs_connected()));
+            holder.tv_connect.setText(AppUtils.getConnectionStatus(context,connections.get(position).getIs_connected(),connections.get(position).isIs_receiver()));
         }
     }
 
@@ -83,6 +83,7 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
+            tv_connect.setOnClickListener(this);
         }
 
         @Override
@@ -96,6 +97,7 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
     //and assigning it to the list with notifydatasetchanged method
     public void filterList(List<User> filterdNames) {
         this.connections = filterdNames;
+        //this.filteredConnections=connections;
         notifyDataSetChanged();
     }
 

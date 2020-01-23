@@ -168,21 +168,11 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
                             post.setPost_type(AppConstants.LINK_POST);
                         }
                     }
-                   // posts.addAll(dashboardBaseModel.getData());
-                   // Collections.reverse(posts);
-                    //homePostsAdapter.notifyDataSetChanged();
-                    if (currentPage != PAGE_START) homePostsAdapter.removeLoading();
-                    homePostsAdapter.addItems(dashboardBaseModel.getData());
+                   posts.addAll(dashboardBaseModel.getData());
+                    homePostsAdapter.notifyDataSetChanged();
                     swipeRefresh.setRefreshing(false);
-                    // check weather is last page or not
-//                    if (currentPage < AppConstants.TOTAL_PAGES) {
-//                        homePostsAdapter.addLoading();
-//                    } else {
-//                        isLastPage = true;
-//                    }
                     homePostsAdapter.removeLoading();
                     isLoading = false;
-
                 }
                 else if(dashboardBaseModel !=null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size()==0)
                 {

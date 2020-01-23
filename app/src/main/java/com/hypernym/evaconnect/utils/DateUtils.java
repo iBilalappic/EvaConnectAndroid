@@ -14,7 +14,7 @@ public final class DateUtils {
     public static final String DATE_FORMAT_1 = "hh:mm a";
     public static final String DATE_FORMAT_2 = "d MMM";
     public static final String DATE_INPUT_FORMAT = "yyyy-MM-dd HH:mm:ss";
-    public static final String SERVER_DATE_INPUT_FORMAT = "yyyy-MM-dd HH:mm:ss'UTC'";
+    public static final String SERVER_DATE_INPUT_FORMAT = "yyyy-MM-dd hh:mm:ss";
 
     private DateUtils() {
         // This utility class is not publicly instantiable
@@ -50,12 +50,18 @@ public final class DateUtils {
         try {
             String currentDate = DateFormat.format(DATE_INPUT_FORMAT, Calendar.getInstance().getTime()).toString();
             currentParsedDate = mInputDateFormat.parse(currentDate);
-            return convertServerDateToUserTimeZone(currentParsedDate.toString());
+            return currentParsedDate.toString();
         } catch (Exception ex) {
 
         }
 
         return "-";
+    }
+    public static String GetCurrentdatetime() {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        df.setTimeZone(TimeZone.getTimeZone("gmt"));
+        String completetime = df.format(Calendar.getInstance().getTime());
+        return completetime;
     }
 
     public static String getTimeAgo(String datetime) {

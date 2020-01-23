@@ -50,6 +50,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.Post;
+import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.view.adapters.HomePostsAdapter;
 import com.hypernym.evaconnect.view.dialogs.VideoViewDialog;
 import com.hypernym.evaconnect.view.ui.fragments.BaseFragment;
@@ -146,7 +147,7 @@ public final class AppUtils {
         return totalConnections;
     }
 
-    public static String getConnectionStatus(Context context,String status)
+    public static String getConnectionStatus(Context context,String status,boolean isreceiver)
     {
         String connectionStatus=context.getString(R.string.connect);;
         switch (status)
@@ -158,7 +159,14 @@ public final class AppUtils {
                 connectionStatus=AppConstants.CONNECTED;
             break;
             case AppConstants.PENDING:
-                connectionStatus=AppConstants.REQUEST_SENT;
+                if(isreceiver)
+                {
+                    connectionStatus=AppConstants.REQUEST_ACCEPT;
+                }
+                else
+                {
+                    connectionStatus=AppConstants.REQUEST_SENT;
+                }
                 break;
         }
         return connectionStatus;

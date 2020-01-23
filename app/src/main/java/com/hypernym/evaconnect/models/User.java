@@ -17,6 +17,9 @@ public class User implements Serializable {
     private String user_image;
     private Integer total_connection;
     private String is_connected;
+    private boolean is_receiver;
+    private Integer connection_id;
+
 
 
     public String getEmail() {
@@ -123,4 +126,22 @@ public class User implements Serializable {
     public void setIs_connected(String is_connected) {
         this.is_connected = is_connected;
     }
+
+    public boolean isIs_receiver() {
+        return is_receiver;
+    }
+
+    public void setIs_receiver(boolean is_receiver) {
+        this.is_receiver = is_receiver;
+    }
+
+    public Integer getConnection_id() {
+        return connection_id;
+    }
+
+    public void setConnection_id(Integer connection_id) {
+        this.connection_id = connection_id;
+    }
+
+
 }

@@ -65,7 +65,6 @@ public class LoadUrlFragment extends BaseFragment {
 
     private void init() {
         showBackButton();
-
         String url=getArguments().getString("url");
         ArrayList<String> urls=AppUtils.containsURL(url);
         webView.setWebViewClient(new WebViewClient());

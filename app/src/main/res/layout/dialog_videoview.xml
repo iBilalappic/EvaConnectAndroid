@@ -12,7 +12,6 @@
         android:id="@+id/videoView"
         android:layout_width="0dp"
         android:layout_height="200dp"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,4 +26,5 @@
         android:src="@drawable/ic_white_close"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/videoView" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
