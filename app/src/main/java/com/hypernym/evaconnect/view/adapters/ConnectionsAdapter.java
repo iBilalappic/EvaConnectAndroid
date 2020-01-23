@@ -14,7 +14,9 @@ import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.User;
+import com.hypernym.evaconnect.toolbar.OnItemClickListener;
 import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.utils.LoginUtils;
 
 import org.w3c.dom.Text;
 
@@ -26,11 +28,13 @@ import butterknife.ButterKnife;
 public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.ViewHolder> {
     private Context context;
     private List<User> connections;
+    private ConnectionsAdapter.OnItemClickListener onItemClickListener;
 
-    public ConnectionsAdapter(Context context, List<User> connectionList)
+    public ConnectionsAdapter(Context context, List<User> connectionList,ConnectionsAdapter.OnItemClickListener onItemClickListener)
     {
         this.context=context;
         this.connections= connectionList;
+        this.onItemClickListener=onItemClickListener;
     }
     @NonNull
     @Override
@@ -43,7 +47,18 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
     public void onBindViewHolder(@NonNull ConnectionsAdapter.ViewHolder holder, int position) {
         AppUtils.setGlideImage(context,holder.profile_image,connections.get(position).getUser_image());
         holder.tv_name.setText(connections.get(position).getFirst_name());
-        holder.tv_connect.setText(AppUtils.getConnectionStatus(context,connections.get(position).getIs_connected()));
+
+        //Hide connect option if post is from logged in user
+        User user= LoginUtils.getLoggedinUser();
+        if(connections.get(position).getId()==user.getId())
+        {
+            holder.tv_connect.setVisibility(View.GONE);
+        }
+        else
+        {
+            holder.tv_connect.setVisibility(View.VISIBLE);
+            holder.tv_connect.setText(AppUtils.getConnectionStatus(context,connections.get(position).getIs_connected()));
+        }
     }
 
     @Override
@@ -72,7 +87,8 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
 
         @Override
         public void onClick(View v) {
-
+            if(onItemClickListener!=null)
+                  onItemClickListener.onItemClick(v,getAdapterPosition());
         }
     }
     //This method will filter the list
@@ -81,5 +97,9 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
     public void filterList(List<User> filterdNames) {
         this.connections = filterdNames;
         notifyDataSetChanged();
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
     }
 }

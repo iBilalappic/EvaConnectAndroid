@@ -496,6 +496,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             img_share.setOnClickListener(this);
             tv_comcount.setOnClickListener(this);
             tv_content.setOnClickListener(this);
+            link.setOnClickListener(this);
         }
 
         @Override
@@ -522,6 +523,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         break;
                     case R.id.tv_content:
                         mClickListener.onItemClick(v, getAdapterPosition());
+                        break;
+                    case R.id.link:
+                        mClickListener.onURLClick(v, getAdapterPosition());
                         break;
                 }
         }
@@ -784,6 +788,8 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         void onConnectClick(View view, int position);
 
         void onVideoClick(View view,int position);
+
+        void onURLClick(View view,int position);
     }
 
     private void initializeSlider(SliderView imageSlider, int position) {
