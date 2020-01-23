@@ -172,7 +172,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             Map<String, String> map = new HashMap<String, String>();
             map.put("Message", messageText);
             map.put("user", UserDetails.username);
-            map.put("time", DateUtils.Getdatetime());
+            map.put("time", DateUtils.GetCurrentdatetime());
             reference1.push().setValue(map);
             reference2.push().setValue(map);
             messageArea.setText("");
@@ -253,7 +253,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("Message", messageText);
                     map.put("user", UserDetails.username);
-                    map.put("time", DateUtils.Getdatetime());
+                    map.put("time", DateUtils.GetCurrentdatetime());
                     reference1.push().setValue(map);
                     reference2.push().setValue(map);
                     messageArea.setText("");
@@ -285,7 +285,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         Notification_onesignal request = new Notification_onesignal();
         request.app_id = "44bb428a-54f5-4155-bea3-c0ac2d0b3c1a";
         request.contents = new Contents();
-        request.contents.en = "Testing";
+        request.contents.en = messageText;
         request.data = new Data();
         request.data.data = "data";
         Filter filter = new Filter();
