@@ -15,6 +15,7 @@ import com.hypernym.evaconnect.models.ChatMessage;
 import com.hypernym.evaconnect.models.NetworkConnection;
 import com.hypernym.evaconnect.models.UserDetails;
 import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         if (chatMessageList.get(position).getType() == 1) {
             holder.mlayout1.setVisibility(View.VISIBLE);
             holder.mlayout2.setVisibility(View.GONE);
-            holder.mtextview20.setText("You:-\n" + chatMessageList.get(position).getMessage());
+            holder.mtextview20.setText(chatMessageList.get(position).getMessage());
             if (networkConnection.getSenderId().equals(LoginUtils.getUser().getId())) {
                 AppUtils.setGlideImage(context, (holder).imageView6, networkConnection.getSender().getUserImage());
                 //  Toast.makeText(getContext(), "receivername" + networkConnection.getReceiver().getFirstName(), Toast.LENGTH_SHORT).show();
@@ -53,11 +54,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 AppUtils.setGlideImage(context, (holder).imageView6, networkConnection.getReceiver().getUserImage());
                 //  Toast.makeText(getContext(), "sendername" + networkConnection.getSender().getFirstName(), Toast.LENGTH_SHORT).show();
             }
+         //   holder.tv_sendertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).get));
 
         } else {
             holder.mlayout1.setVisibility(View.GONE);
             holder.mlayout2.setVisibility(View.VISIBLE);
-            holder.mtextview21.setText(UserDetails.chatWith + ":-\n" + chatMessageList.get(position).getMessage());
+            holder.mtextview21.setText(chatMessageList.get(position).getMessage());
             if (UserDetails.chatWith.contains(networkConnection.getReceiver().getFirstName())) {
                 AppUtils.setGlideImage(context, (holder).imageView7, networkConnection.getReceiver().getUserImage());
                 //  Toast.makeText(getContext(), "receivername" + networkConnection.getReceiver().getFirstName(), Toast.LENGTH_SHORT).show();
@@ -76,7 +78,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView mtextview20, mtextview21;
+        TextView mtextview20, mtextview21,tv_sendertime,tv_receivertime;
         LinearLayout mlayout1, mlayout2;
         CircleImageView imageView6, imageView7;
 
@@ -88,6 +90,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             mlayout2 = itemView.findViewById(R.id.layout2);
             imageView6 = itemView.findViewById(R.id.imageView6);
             imageView7 = itemView.findViewById(R.id.imageView7);
+            tv_sendertime=itemView.findViewById(R.id.tv_sendtime);
+            tv_receivertime=itemView.findViewById(R.id.tv_receivetime);
         }
     }
 }

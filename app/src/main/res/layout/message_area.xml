@@ -12,7 +12,10 @@
         android:layout_weight="1"
         android:hint="Tap here to Write a message"
         android:id="@+id/messageArea"
+        android:background="@drawable/editextbg"
         android:textSize="14sp"
+        android:padding="5dp"
+        android:layout_marginBottom="10dp"
         android:maxHeight="80dp"/>
 
     <LinearLayout

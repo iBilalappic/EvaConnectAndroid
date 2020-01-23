@@ -312,6 +312,15 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         AppUtils.playVideo(getContext(),posts.get(position).getPost_video());
     }
 
+    @Override
+    public void onURLClick(View view, int position) {
+        LoadUrlFragment loadUrlFragment =new LoadUrlFragment();
+        Bundle bundle=new Bundle();
+        bundle.putString("url",posts.get(position).getContent());
+        loadUrlFragment.setArguments(bundle);
+        loadFragment(R.id.framelayout,loadUrlFragment,getContext(),true);
+    }
+
     private void callConnectApi(TextView text,int position) {
         if(text.getText().toString().equalsIgnoreCase(getString(R.string.connect)))
         {
