@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +51,7 @@ import com.hypernym.evaconnect.models.UserDetails;
 import com.hypernym.evaconnect.toolbar.OnItemClickListener;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.Constants;
+import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
@@ -57,10 +59,14 @@ import com.hypernym.evaconnect.view.adapters.ChatAdapter;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -98,8 +104,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     Firebase reference1, reference2;
     LinearLayoutManager layoutManager;
     ChatAdapter chatAdapter;
-    String messageText;
-
+    String messageText, ChatTime;
+    public static final String DATE_INPUT_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     int PICK_IMAGE_REQUEST = 111;
     Uri filePath;
@@ -162,15 +168,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     private void CheckMessageText() {
         if (messageText != null && !messageText.equals("")) {
-            Toast.makeText(getContext(), "" + messageText, Toast.LENGTH_SHORT).show();
+
             Map<String, String> map = new HashMap<String, String>();
             map.put("Message", messageText);
             map.put("user", UserDetails.username);
+            map.put("time", DateUtils.Getdatetime());
             reference1.push().setValue(map);
             reference2.push().setValue(map);
             messageArea.setText("");
         }
     }
+
 
     private void SettingFireBaseChat() {
         reference1.addChildEventListener(new ChildEventListener() {
@@ -179,11 +187,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 Map map = dataSnapshot.getValue(Map.class);
                 String message = map.get("Message").toString();
                 String userName = map.get("user").toString();
+                String chatTime = map.get("time").toString();
 
                 if (userName.equals(UserDetails.username)) {
                     mMessage = new ChatMessage();
                     mMessage.setMessage(message);
                     mMessage.setType(1);
+                    mMessage.setChattime(chatTime);
                     chatMessageList.add(mMessage);
                     Log.d("Taag", "" + chatMessageList.size());
                     setupRecycler(chatMessageList);
@@ -192,6 +202,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     mMessage.setMessage(message);
                     mMessage.setType(2);
                     chatMessageList.add(mMessage);
+                    mMessage.setChattime(chatTime);
                     Log.d("Taag", "" + chatMessageList.size());
                     setupRecycler(chatMessageList);
                 }
@@ -242,6 +253,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("Message", messageText);
                     map.put("user", UserDetails.username);
+                    map.put("time", DateUtils.Getdatetime());
                     reference1.push().setValue(map);
                     reference2.push().setValue(map);
                     messageArea.setText("");

@@ -6,6 +6,16 @@ public class ChatMessage {
     private String Message;
     private int type;
 
+    public String getChattime() {
+        return chattime;
+    }
+
+    public void setChattime(String chattime) {
+        this.chattime = chattime;
+    }
+
+    private String chattime;
+
     public String getMessage() {
         return Message;
     }

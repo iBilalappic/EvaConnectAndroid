@@ -46,12 +46,20 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         if (chatMessageList.get(position).getType() == 1) {
             holder.mlayout1.setVisibility(View.VISIBLE);
             holder.mlayout2.setVisibility(View.GONE);
+            holder.tv_sendertime.setVisibility(View.VISIBLE);
+            holder.tv_receivertime.setVisibility(View.GONE);
+
             holder.mtextview20.setText(chatMessageList.get(position).getMessage());
             if (networkConnection.getSenderId().equals(LoginUtils.getUser().getId())) {
                 AppUtils.setGlideImage(context, (holder).imageView6, networkConnection.getSender().getUserImage());
+                holder.tv_receivertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
+                holder.tv_sendertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
+
                 //  Toast.makeText(getContext(), "receivername" + networkConnection.getReceiver().getFirstName(), Toast.LENGTH_SHORT).show();
             } else {
                 AppUtils.setGlideImage(context, (holder).imageView6, networkConnection.getReceiver().getUserImage());
+                holder.tv_receivertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
+                holder.tv_sendertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
                 //  Toast.makeText(getContext(), "sendername" + networkConnection.getSender().getFirstName(), Toast.LENGTH_SHORT).show();
             }
          //   holder.tv_sendertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).get));
@@ -59,13 +67,17 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         } else {
             holder.mlayout1.setVisibility(View.GONE);
             holder.mlayout2.setVisibility(View.VISIBLE);
+            holder.tv_sendertime.setVisibility(View.GONE);
+            holder.tv_receivertime.setVisibility(View.VISIBLE);
             holder.mtextview21.setText(chatMessageList.get(position).getMessage());
             if (UserDetails.chatWith.contains(networkConnection.getReceiver().getFirstName())) {
                 AppUtils.setGlideImage(context, (holder).imageView7, networkConnection.getReceiver().getUserImage());
-                //  Toast.makeText(getContext(), "receivername" + networkConnection.getReceiver().getFirstName(), Toast.LENGTH_SHORT).show();
+                holder.tv_receivertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
+                holder.tv_sendertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));                //  Toast.makeText(getContext(), "receivername" + networkConnection.getReceiver().getFirstName(), Toast.LENGTH_SHORT).show();
             } else {
                 AppUtils.setGlideImage(context, (holder).imageView7, networkConnection.getSender().getUserImage());
-                //  Toast.makeText(getContext(), "sendername" + networkConnection.getSender().getFirstName(), Toast.LENGTH_SHORT).show();
+                holder.tv_receivertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
+                holder.tv_sendertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));                //  Toast.makeText(getContext(), "sendername" + networkConnection.getSender().getFirstName(), Toast.LENGTH_SHORT).show();
             }
         }
 
