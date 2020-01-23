@@ -23,6 +23,7 @@ import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.view.ui.fragments.BaseFragment;
 import com.hypernym.evaconnect.view.ui.fragments.ConnectionsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.HomeFragment;
+import com.onesignal.OneSignal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -127,6 +128,7 @@ public class BaseActivity extends AppCompatActivity  {
                         startActivity(intent);
                         LoginUtils.clearUser(getApplicationContext());
                         LoginUtils.removeAuthToken(getApplicationContext());
+                        OneSignal.sendTag("email","null");
                         break;
                     case R.id.button_negative:
                         simpleDialog.dismiss();

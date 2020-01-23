@@ -34,10 +34,18 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.communication.RestClient;
+import com.hypernym.evaconnect.communication.api.AppApi;
 import com.hypernym.evaconnect.constants.AppConstants;
+import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.ChatMessage;
+import com.hypernym.evaconnect.models.Contents;
+import com.hypernym.evaconnect.models.Data;
+import com.hypernym.evaconnect.models.Filter;
 import com.hypernym.evaconnect.models.NetworkConnection;
+import com.hypernym.evaconnect.models.Notification_onesignal;
 import com.hypernym.evaconnect.models.Post;
+import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.models.UserDetails;
 import com.hypernym.evaconnect.toolbar.OnItemClickListener;
 import com.hypernym.evaconnect.utils.AppUtils;
@@ -60,6 +68,9 @@ import butterknife.OnClick;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -88,7 +99,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     LinearLayoutManager layoutManager;
     ChatAdapter chatAdapter;
     String messageText;
-
 
 
     int PICK_IMAGE_REQUEST = 111;
@@ -120,15 +130,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         assert getArguments() != null;
         networkConnection = (NetworkConnection) getArguments().getSerializable(Constants.DATA);
 
-        messageText=getArguments().getString("MESSAGE");
+        messageText = getArguments().getString("MESSAGE");
         UserDetails.username = LoginUtils.getUser().getFirst_name();
 //        Log.d("TAAAG", "" + GsonUtils.toJson(networkConnection));
         if (networkConnection.getSenderId().equals(LoginUtils.getUser().getId())) {
             UserDetails.chatWith = networkConnection.getReceiver().getFirstName();
+            UserDetails.email = networkConnection.getReceiver().getEmail();
             setPageTitle(networkConnection.getReceiver().getFirstName());
             //  Toast.makeText(getContext(), "receivername" + networkConnection.getReceiver().getFirstName(), Toast.LENGTH_SHORT).show();
         } else {
             UserDetails.chatWith = networkConnection.getSender().getFirstName();
+            UserDetails.email = networkConnection.getSender().getEmail();
             setPageTitle(networkConnection.getSender().getFirstName());
             //  Toast.makeText(getContext(), "sendername" + networkConnection.getSender().getFirstName(), Toast.LENGTH_SHORT).show();
         }
@@ -142,22 +154,22 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         reference1 = new Firebase("https://evaconnect-df08d.firebaseio.com/messages/" + UserDetails.username + "_" + UserDetails.chatWith);
         reference2 = new Firebase("https://evaconnect-df08d.firebaseio.com/messages/" + UserDetails.chatWith + "_" + UserDetails.username);
         SettingFireBaseChat();
-        if(getArguments()!=null){
+        if (getArguments() != null) {
             CheckMessageText();
         }
 
     }
 
     private void CheckMessageText() {
-        if (messageText!=null&&!messageText.equals("")) {
-            Toast.makeText(getContext(), ""+messageText, Toast.LENGTH_SHORT).show();
+        if (messageText != null && !messageText.equals("")) {
+            Toast.makeText(getContext(), "" + messageText, Toast.LENGTH_SHORT).show();
             Map<String, String> map = new HashMap<String, String>();
             map.put("Message", messageText);
             map.put("user", UserDetails.username);
             reference1.push().setValue(map);
             reference2.push().setValue(map);
             messageArea.setText("");
-    }
+        }
     }
 
     private void SettingFireBaseChat() {
@@ -209,7 +221,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     private void setupRecycler(List<ChatMessage> chatMessageList) {
         layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setStackFromEnd(true);
         rc_chat.setLayoutManager(layoutManager);
+
         chatAdapter = new ChatAdapter(getActivity(), chatMessageList, networkConnection);
         rc_chat.setAdapter(chatAdapter);
         scrollView.fullScroll(View.FOCUS_DOWN);
@@ -231,8 +245,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     reference1.push().setValue(map);
                     reference2.push().setValue(map);
                     messageArea.setText("");
+                    sendNotification();
                 } else {
-                   // UploadImageToFirebase();
+                    // UploadImageToFirebase();
 //                    Map<String, String> map = new HashMap<String, String>();
 //                    map.put("Message", String.valueOf(filePath));
 //                    map.put("user", UserDetails.username);
@@ -251,6 +266,36 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 break;
 
         }
+
+    }
+
+    public void sendNotification() {
+        Notification_onesignal request = new Notification_onesignal();
+        request.app_id = "44bb428a-54f5-4155-bea3-c0ac2d0b3c1a";
+        request.contents = new Contents();
+        request.contents.en = "Testing";
+        request.data = new Data();
+        request.data.data = "data";
+        Filter filter = new Filter();
+        filter.field = "tag";
+        filter.key = "email";
+        filter.relation = "=";
+        filter.value = UserDetails.email;
+        request.filters = new ArrayList<>();
+        request.filters.add(filter);
+        RestClient.get().appApi_onesignal().postPackets(request).enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                if (response.body() != null) {
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+
+            }
+        });
 
     }
 
@@ -290,7 +335,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             try {
                 if (data != null && data.getData() != null) {
                     filePath = data.getData();
-                    Toast.makeText(getContext(), ""+filePath, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "" + filePath, Toast.LENGTH_SHORT).show();
 //                    Uri SelectedImageUri = data.getData();
 //                    GalleryImage = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
 //                    mProfileImageDecodableString = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);

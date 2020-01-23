@@ -55,15 +55,19 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_list" />
         </provider>
+        <meta-data
+            android:name="com.onesignal.NotificationOpened.DEFAULT"
+            android:value="DISABLE" />
 
-        <service
-            android:name=".service.OneSignalReceiver"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE">
-            <intent-filter>
-                <action android:name="com.onesignal.NotificationExtender" />
-            </intent-filter>
-        </service>
+
+        <!--        <service-->
+        <!--            android:name=".service.OneSignalReceiver"-->
+        <!--            android:exported="true"-->
+        <!--            android:permission="android.permission.BIND_JOB_SERVICE">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="com.onesignal.NotificationExtender" />-->
+        <!--            </intent-filter>-->
+        <!--        </service>-->
 
     </application>
 

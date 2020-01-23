@@ -26,25 +26,25 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(LoginUtils.isUserLogin())
-                {
-                    Intent intent=new Intent(SplashActivity.this, HomeActivity.class);
+                if (LoginUtils.isUserLogin()) {
+                    Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
                     startActivity(intent);
                     finish();
-                }
-                else
-                {
-                    Intent intent=new Intent(SplashActivity.this, LoginActivity.class);
+                } else {
+                    Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
                     startActivity(intent);
                     finish();
                 }
 
             }
-        },3000);
+        }, 3000);
     }
+
     public void initOneSignal() {
 
         OneSignal.startInit(this)
+                //.inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+                .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.None)
                 .init();
 
         OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {

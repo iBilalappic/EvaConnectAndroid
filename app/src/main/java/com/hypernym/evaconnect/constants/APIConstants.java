@@ -15,4 +15,5 @@ public interface APIConstants {
     public static String CONNECT="user/connection/";
     public static String GET_ALL_CONNECTIONS="user/network/connection/";
     public static String GET_CONNECTION_BY_FILTER="user/network/connection/filter/";
+    public static String BASE_URL="https://onesignal.com/";
 }
