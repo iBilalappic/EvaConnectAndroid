@@ -25,7 +25,7 @@ public class ConnectionRepository implements IConnectionRespository {
     @Override
     public LiveData<BaseModel<List<Connection>>> connect(Connection connection) {
         connectionMutableLiveData=new MutableLiveData<>();
-        if(connection.getId()==0)
+        if(connection.getId()==null)
         {
             RestClient.get().appApi().connect(connection).enqueue(new Callback<BaseModel<List<Connection>>>() {
                 @Override

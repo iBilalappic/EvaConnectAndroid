@@ -123,7 +123,7 @@
         app:srcCompat="@mipmap/ic_share" />
 
     <View
-        android:id="@+id/mediacontrol"
+        android:id="@+id/view"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:background="@color/colorPrimary"
@@ -143,10 +143,10 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:text="@string/view_comments"
-        app:layout_constraintBottom_toBottomOf="@+id/mediacontrol"
+        app:layout_constraintBottom_toBottomOf="@+id/view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mediacontrol" />
+        app:layout_constraintTop_toBottomOf="@+id/view" />
 
 
     <androidx.cardview.widget.CardView

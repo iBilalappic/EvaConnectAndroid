@@ -27,14 +27,16 @@ import butterknife.ButterKnife;
 
 public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.ViewHolder> {
     private Context context;
-    private List<User> connections,filteredConnections;
+    private List<User> connections,originalConnections;
     private ConnectionsAdapter.OnItemClickListener onItemClickListener;
+    int count=0;
 
     public ConnectionsAdapter(Context context, List<User> connectionList,ConnectionsAdapter.OnItemClickListener onItemClickListener)
     {
         this.context=context;
         this.connections= connectionList;
         this.onItemClickListener=onItemClickListener;
+        this.originalConnections=connectionList;
     }
     @NonNull
     @Override
@@ -58,7 +60,9 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
         {
             holder.tv_connect.setVisibility(View.VISIBLE);
             holder.tv_connect.setText(AppUtils.getConnectionStatus(context,connections.get(position).getIs_connected(),connections.get(position).isIs_receiver()));
+
         }
+
     }
 
     @Override
@@ -84,12 +88,13 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
             super(itemView);
             ButterKnife.bind(this,itemView);
             tv_connect.setOnClickListener(this);
+
         }
 
         @Override
         public void onClick(View v) {
             if(onItemClickListener!=null)
-                  onItemClickListener.onItemClick(v,getAdapterPosition());
+                  onItemClickListener.onItemClick(v,originalConnections.indexOf(connections.get(getAdapterPosition())));
         }
     }
     //This method will filter the list

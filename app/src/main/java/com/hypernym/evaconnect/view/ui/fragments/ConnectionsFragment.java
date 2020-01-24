@@ -276,13 +276,13 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         connection.setReceiver_id(connectionItem.getId());
         connection.setSender_id(user.getId());
 
-        if(connectionItem.getConnection_id()==null)
+        if(connectionItem.getConnection_id()==null && !tv_connect.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_SENT))
         {
             connection.setStatus(AppConstants.STATUS_PENDING);
             showDialog();
             callApi(tv_connect,connection,connectionItem);
         }
-        else if (!tv_connect.getText().toString().equalsIgnoreCase(AppConstants.CONNECTED) && connectionItem.getConnection_id()!=null)
+        else if (!tv_connect.getText().toString().equalsIgnoreCase(AppConstants.CONNECTED) && connectionItem.getConnection_id()!=null && !tv_connect.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_SENT))
         {
             connection.setStatus(AppConstants.ACTIVE);
             connection.setId(connectionItem.getConnection_id());
