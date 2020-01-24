@@ -37,6 +37,7 @@ import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.view.adapters.AttachmentsAdapter;
+import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.HorizontalMessageAdapter;
 import com.hypernym.evaconnect.view.adapters.MessageAdapter;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
@@ -173,7 +174,11 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.newmessage:
-                showMesssageDialog();
+                if(networkConnectionList.size()>0&& NetworkUtils.isNetworkConnected(getContext())){
+                    showMesssageDialog();
+                }else{
+                    Toast.makeText(getContext(), "You haven't any friends to chat", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }
