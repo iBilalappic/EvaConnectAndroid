@@ -1,9 +1,7 @@
 package com.hypernym.evaconnect.communication;
 
-import android.app.Application;
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -69,11 +67,11 @@ public class RestClient {
             Retrofit.Builder retrofitBuilder =
                     new Retrofit.Builder()
                             .baseUrl(APIConstants.BASE_SERVER_URL)
-                            .client(getUnsafeOkHttpClient(AppUtils.getApplicationContext(), "simple"))
+                            .client(getUnsafeOkHttpClient(AppUtils.getApplicationContext(),AppConstants.SIMPLE_BASEURL))
                             .addConverterFactory(GsonConverterFactory.create(gson));
 
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-            retrofit = retrofitBuilder.client(getUnsafeOkHttpClient(AppUtils.getApplicationContext(), "simple")).build();
+            retrofit = retrofitBuilder.client(getUnsafeOkHttpClient(AppUtils.getApplicationContext(),AppConstants.SIMPLE_BASEURL)).build();
         }
         return retrofit;
     }
@@ -88,12 +86,12 @@ public class RestClient {
 
             Retrofit.Builder retrofitBuilder =
                     new Retrofit.Builder()
-                            .baseUrl(APIConstants.BASE_URL)
-                            .client(getUnsafeOkHttpClient(AppUtils.getApplicationContext(), "OneSignal"))
+                            .baseUrl(APIConstants.ONESINGAL_BASE_URL)
+                            .client(getUnsafeOkHttpClient(AppUtils.getApplicationContext(), AppConstants.ONESIGNAL_BASEURL))
                             .addConverterFactory(GsonConverterFactory.create(gson));
 
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-            retrofit_onesignal = retrofitBuilder.client(getUnsafeOkHttpClient(AppUtils.getApplicationContext(), "OneSignal")).build();
+            retrofit_onesignal = retrofitBuilder.client(getUnsafeOkHttpClient(AppUtils.getApplicationContext(), AppConstants.ONESIGNAL_BASEURL)).build();
         }
         return retrofit_onesignal;
     }
@@ -150,7 +148,7 @@ public class RestClient {
                      .method(original.method(), original.body());
 
                     if (LoginUtils.isUserLogin()) {
-                        if (name.equals("simple")) {
+                        if (name.equals(AppConstants.SIMPLE_BASEURL)) {
                             _builder.header("Authorization", "token " + LoginUtils.getAuthToken(AppUtils.getApplicationContext()));
 
                         } else {
