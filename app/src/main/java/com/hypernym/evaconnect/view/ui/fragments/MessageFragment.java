@@ -23,8 +23,10 @@ import com.hypernym.evaconnect.models.NetworkConnection;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.toolbar.OnItemClickListener;
+import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.LoginUtils;
+import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.HorizontalMessageAdapter;
 import com.hypernym.evaconnect.view.adapters.MessageAdapter;
 import com.hypernym.evaconnect.viewmodel.MessageViewModel;
@@ -138,7 +140,11 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.newmessage:
-                showMesssageDialog();
+                if(networkConnectionList.size()>0&& NetworkUtils.isNetworkConnected(getContext())){
+                    showMesssageDialog();
+                }else{
+                    Toast.makeText(getContext(), "You haven't any friends to chat", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }
