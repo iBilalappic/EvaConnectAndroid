@@ -4,10 +4,12 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
@@ -54,15 +56,25 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 AppUtils.setGlideImage(context, (holder).imageView6, networkConnection.getSender().getUserImage());
                 holder.tv_receivertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
                 holder.tv_sendertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
+                if(chatMessageList.get(position).getImage()!=null)
+                {
+                    AppUtils.setGlideUrlThumbnail(context,holder.senderImage,chatMessageList.get(position).getImage());
+                    holder.senderImage.setVisibility(View.VISIBLE);
+                }
 
                 //  Toast.makeText(getContext(), "receivername" + networkConnection.getReceiver().getFirstName(), Toast.LENGTH_SHORT).show();
             } else {
                 AppUtils.setGlideImage(context, (holder).imageView6, networkConnection.getReceiver().getUserImage());
                 holder.tv_receivertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
                 holder.tv_sendertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
-                //  Toast.makeText(getContext(), "sendername" + networkConnection.getSender().getFirstName(), Toast.LENGTH_SHORT).show();
+                if(chatMessageList.get(position).getImage()!=null)
+                {
+                    AppUtils.setGlideUrlThumbnail(context,holder.senderImage,chatMessageList.get(position).getImage());
+                    holder.senderImage.setVisibility(View.VISIBLE);
+                }
+
             }
-         //   holder.tv_sendertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).get));
+
 
         } else {
             holder.mlayout1.setVisibility(View.GONE);
@@ -73,11 +85,23 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             if (UserDetails.chatWith.contains(networkConnection.getReceiver().getFirstName())) {
                 AppUtils.setGlideImage(context, (holder).imageView7, networkConnection.getReceiver().getUserImage());
                 holder.tv_receivertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
-                holder.tv_sendertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));                //  Toast.makeText(getContext(), "receivername" + networkConnection.getReceiver().getFirstName(), Toast.LENGTH_SHORT).show();
+                holder.tv_sendertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
+                if(chatMessageList.get(position).getImage()!=null)
+                {
+                    AppUtils.setGlideUrlThumbnail(context,holder.receiveImage,chatMessageList.get(position).getImage());
+                    holder.receiveImage.setVisibility(View.VISIBLE);
+                }
+
             } else {
                 AppUtils.setGlideImage(context, (holder).imageView7, networkConnection.getSender().getUserImage());
                 holder.tv_receivertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
-                holder.tv_sendertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));                //  Toast.makeText(getContext(), "sendername" + networkConnection.getSender().getFirstName(), Toast.LENGTH_SHORT).show();
+                holder.tv_sendertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
+                if(chatMessageList.get(position).getImage()!=null)
+                {
+                    AppUtils.setGlideUrlThumbnail(context,holder.receiveImage,chatMessageList.get(position).getImage());
+                    holder.receiveImage.setVisibility(View.VISIBLE);
+                }
+
             }
         }
 
@@ -91,8 +115,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView mtextview20, mtextview21,tv_sendertime,tv_receivertime;
-        LinearLayout mlayout1, mlayout2;
+        CardView mlayout1, mlayout2;
         CircleImageView imageView6, imageView7;
+        ImageView senderImage,receiveImage;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -104,6 +129,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             imageView7 = itemView.findViewById(R.id.imageView7);
             tv_sendertime=itemView.findViewById(R.id.tv_sendtime);
             tv_receivertime=itemView.findViewById(R.id.tv_receivetime);
+            senderImage=itemView.findViewById(R.id.senderimage);
+            receiveImage=itemView.findViewById(R.id.receiveimage);
         }
     }
 }

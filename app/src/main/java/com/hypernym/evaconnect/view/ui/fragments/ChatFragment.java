@@ -29,15 +29,19 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.communication.api.AppApi;
 import com.hypernym.evaconnect.constants.AppConstants;
+import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.ChatMessage;
 import com.hypernym.evaconnect.models.Contents;
@@ -55,7 +59,9 @@ import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
+import com.hypernym.evaconnect.view.adapters.AttachmentsAdapter;
 import com.hypernym.evaconnect.view.adapters.ChatAdapter;
+import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -80,7 +86,7 @@ import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
 
-public class ChatFragment extends BaseFragment implements View.OnClickListener {
+public class ChatFragment extends BaseFragment implements View.OnClickListener,AttachmentsAdapter.ItemClickListener {
 
 
     @BindView(R.id.rc_chat)
@@ -97,6 +103,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     @BindView(R.id.scrollView)
     ScrollView scrollView;
 
+    @BindView(R.id.rc_attachments)
+    RecyclerView rc_attachments;
+
+    List<String> attachments=new ArrayList<>();
+    private AttachmentsAdapter attachmentsAdapter;
+
 
     ChatMessage mMessage;
     List<ChatMessage> chatMessageList = new ArrayList<>();
@@ -106,10 +118,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     ChatAdapter chatAdapter;
     String messageText, ChatTime;
     public static final String DATE_INPUT_FORMAT = "yyyy-MM-dd HH:mm:ss";
-
-    int PICK_IMAGE_REQUEST = 111;
-    Uri filePath;
     private static final int REQUEST_PHOTO_GALLERY = 4;
+    private static final int CAMERAA = 1;
+    private String GalleryImage, mCurrentPhotoPath, globalImagePath;
+    private String mProfileImageDecodableString;
+    private File tempFile,file_name;
+    private String currentPhotoPath = "";
+    private String photoVar = null;
+    private Uri SelectedImageUri;
+    private SimpleDialog simpleDialog;
+
+
 
 
     public ChatFragment() {
@@ -163,7 +182,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         if (getArguments() != null) {
             CheckMessageText();
         }
-
+        attachmentsAdapter=new AttachmentsAdapter(getContext(),attachments,this);
+        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
+        rc_attachments.setLayoutManager(linearLayoutManager);
+        rc_attachments.setAdapter(attachmentsAdapter);
     }
 
     private void CheckMessageText() {
@@ -173,6 +195,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             map.put("Message", messageText);
             map.put("user", UserDetails.username);
             map.put("time", DateUtils.GetCurrentdatetime());
+
             reference1.push().setValue(map);
             reference2.push().setValue(map);
             messageArea.setText("");
@@ -188,12 +211,19 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                 String message = map.get("Message").toString();
                 String userName = map.get("user").toString();
                 String chatTime = map.get("time").toString();
+                String image=null;
+                if(map.get("image")!=null)
+                {
+                    image = map.get("image").toString();
+                }
+
 
                 if (userName.equals(UserDetails.username)) {
                     mMessage = new ChatMessage();
                     mMessage.setMessage(message);
                     mMessage.setType(1);
                     mMessage.setChattime(chatTime);
+                    mMessage.setImage(image);
                     chatMessageList.add(mMessage);
                     Log.d("Taag", "" + chatMessageList.size());
                     setupRecycler(chatMessageList);
@@ -201,6 +231,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
                     mMessage = new ChatMessage();
                     mMessage.setMessage(message);
                     mMessage.setType(2);
+                    mMessage.setImage(image);
                     chatMessageList.add(mMessage);
                     mMessage.setChattime(chatTime);
                     Log.d("Taag", "" + chatMessageList.size());
@@ -248,24 +279,21 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             case R.id.sendButton:
                 //  Toast.makeText(getActivity(), "sss", Toast.LENGTH_SHORT).show();
                 messageText = messageArea.getText().toString();
+                Map<String, String> map = new HashMap<String, String>();
 
-                if (!messageText.equals("")) {
-                    Map<String, String> map = new HashMap<String, String>();
+                if (SelectedImageUri==null && messageText.length()>0) {
                     map.put("Message", messageText);
                     map.put("user", UserDetails.username);
                     map.put("time", DateUtils.GetCurrentdatetime());
                     reference1.push().setValue(map);
                     reference2.push().setValue(map);
-                    messageArea.setText("");
-                    sendNotification();
+
                 } else {
-                    // UploadImageToFirebase();
-//                    Map<String, String> map = new HashMap<String, String>();
-//                    map.put("Message", String.valueOf(filePath));
-//                    map.put("user", UserDetails.username);
-//                    reference1.push().setValue(map);
-//                    reference2.push().setValue(map);
+                    UploadImageToFirebase();
+                    map.put("image",String.valueOf(SelectedImageUri));
                 }
+                reference1.push().setValue(map);
+                reference2.push().setValue(map);
                 break;
 
             case R.id.browsefiles:
@@ -275,6 +303,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 //                intent.addCategory(Intent.CATEGORY_OPENABLE);
 //                intent.setType("*/*");
 //                startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_PHOTO_GALLERY);
+                openPictureDialog();
                 break;
 
         }
@@ -311,21 +340,51 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
 
     }
 
-
     private void UploadImageToFirebase() {
-        if (filePath != null) {
+        if (SelectedImageUri != null) {
             // pd.show();
 
-            StorageReference childRef = storageRef.child("image.jpg");
+            StorageReference childRef = storageRef.child("image2.jpg");
 
             //uploading the image
-            UploadTask uploadTask = childRef.putFile(filePath);
+            UploadTask uploadTask = childRef.putFile(SelectedImageUri);
 
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     // pd.dismiss();
+                    childRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                        Map<String, String> map = new HashMap<String, String>();
+                        map.put("Message", messageText);
+                        map.put("user", UserDetails.username);
+                        map.put("time", DateUtils.GetCurrentdatetime());
+                        map.put("image",uri.toString());
+                        reference1.push().setValue(map);
+                        reference2.push().setValue(map);
+                        messageArea.setText("");
+                        sendNotification();
+                            Toast.makeText(getContext(), "onSuccess: uri= "+ uri.toString(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     Toast.makeText(getContext(), "Upload successful", Toast.LENGTH_SHORT).show();
+                }
+
+            }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    if (task.isSuccessful()) {
+//                        Map<String, String> map = new HashMap<String, String>();
+//                        map.put("Message", messageText);
+//                        map.put("user", UserDetails.username);
+//                        map.put("time", DateUtils.GetCurrentdatetime());
+//                        map.put("image",task.getResult().toString());
+//                        reference1.push().setValue(map);
+//                        reference2.push().setValue(map);
+//                        messageArea.setText("");
+//                        sendNotification();
+                    }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -338,6 +397,47 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
             Toast.makeText(getContext(), "Select an image", Toast.LENGTH_SHORT).show();
         }
     }
+    private void uploadMethod() {
+       // progressDialog();
+        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+        StorageReference storageReferenceProfilePic = firebaseStorage.getReference();
+        StorageReference imageRef = storageReferenceProfilePic.child(storageRef+ "/" + "image" + ".jpg");
+        Uri uri=Uri.parse(currentPhotoPath);
+        imageRef.putFile(uri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        //if the upload is successful
+                        //hiding the progress dialog
+                        //and displaying a success toast
+                       // dismissDialog();
+                      // String profilePicUrl = taskSnapshot.getDownloadUrl().toString();
+                        Toast.makeText(getActivity(), "success", Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        //if the upload is not successful
+                        //hiding the progress dialog
+                       // dismissDialog();
+                        //and displaying error message
+                        Toast.makeText(getActivity(), exception.getCause().getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                        //calculating progress percentage
+                       double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+//                        //displaying percentage in progress dialog
+//                        progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
+                        Toast.makeText(getActivity(), "Uploaded " + ((int) progress) + "%...", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -346,52 +446,99 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
         if (requestCode == REQUEST_PHOTO_GALLERY && resultCode == RESULT_OK) {
             try {
                 if (data != null && data.getData() != null) {
-                    filePath = data.getData();
-                    Toast.makeText(getContext(), "" + filePath, Toast.LENGTH_SHORT).show();
-//                    Uri SelectedImageUri = data.getData();
-//                    GalleryImage = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
-//                    mProfileImageDecodableString = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
-//                    Log.e(getClass().getName(), "image file path: " + GalleryImage);
-//
-//                    tempFile = new File(GalleryImage);
-//
-//                    Log.e(getClass().getName(), "file path details: " + tempFile.getName() + " " + tempFile.getAbsolutePath() + "length" + tempFile.length());
-//
-//
-//                    if (tempFile.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.FILE_SIZE_LIMIT_IN_KB) {
-//                        networkResponseDialog(getString(R.string.error),getString(R.string.err_image_size_large));
-//                        return;
-//                    } else {
-//                        if (photoVar == null) {
-//                            currentPhotoPath = GalleryImage;
-//                            // photoVar = GalleryImage;
-//                            file_name = new File(ImageFilePathUtil.getPath(getActivity(), SelectedImageUri));
-//                            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file_name);
-//
-//                            // partImage = MultipartBody.Part.createFormData("user_image", file_name.getName(), reqFile);
-//                            part_images.add(MultipartBody.Part.createFormData("post_image", file_name.getName(), reqFile));
-//                            if (!TextUtils.isEmpty(currentPhotoPath) || currentPhotoPath != null) {
-//                                attachments.add(currentPhotoPath);
-//                                attachmentsAdapter.notifyDataSetChanged();
-//                                rc_attachments.setVisibility(View.VISIBLE);
-//
-//                            } else {
-//                                networkResponseDialog(getString(R.string.error),getString(R.string.err_internal_supported));
-//                            }
-//                        } else {
-//                            networkResponseDialog(getString(R.string.error),getString(R.string.err_one_file_at_a_time));
-//                            return;
-//                        }
-//                    }
-//                } else {
-//                    Toast.makeText(getActivity(), "Something went wrong while retrieving image", Toast.LENGTH_SHORT).show();
+                    SelectedImageUri = data.getData();
+                    GalleryImage = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
+                    mProfileImageDecodableString = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
+                    Log.e(getClass().getName(), "image file path: " + GalleryImage);
+
+                    tempFile = new File(GalleryImage);
+                    Log.e(getClass().getName(), "file path details: " + tempFile.getName() + " " + tempFile.getAbsolutePath() + "length" + tempFile.length());
+
+
+                    if (tempFile.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.FILE_SIZE_LIMIT_IN_KB) {
+                        networkResponseDialog(getString(R.string.error),getString(R.string.err_image_size_large));
+                        return;
+                    } else {
+                        if (photoVar == null) {
+                            currentPhotoPath = GalleryImage;
+                            // photoVar = GalleryImage;
+                            file_name = new File(ImageFilePathUtil.getPath(getActivity(), SelectedImageUri));
+                            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file_name);
+
+                            // partImage = MultipartBody.Part.createFormData("user_image", file_name.getName(), reqFile);
+
+                            if (!TextUtils.isEmpty(currentPhotoPath) || currentPhotoPath != null) {
+                                attachments.add(currentPhotoPath);
+                                attachmentsAdapter.notifyDataSetChanged();
+                                rc_attachments.setVisibility(View.VISIBLE);
+                            } else {
+                                networkResponseDialog(getString(R.string.error),getString(R.string.err_internal_supported));
+                            }
+                        } else {
+                            networkResponseDialog(getString(R.string.error),getString(R.string.err_one_file_at_a_time));
+                            return;
+                        }
+                    }
+                } else {
+                    Toast.makeText(getActivity(), "Something went wrong while retrieving image", Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception exc) {
                 exc.printStackTrace();
                 Log.e(getClass().getName(), "exc: " + exc.getMessage());
             }
+        } else {
+            if (requestCode == CAMERAA) {
+
+                //mIsProfileImageAdded = true;
+                File file=galleryAddPic();
+                RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+                // imgName = file_name.getName();
+                globalImagePath = file.getAbsolutePath();
+                if (file.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.IMAGE_SIZE_IN_KB) {
+                    networkResponseDialog(getString(R.string.error),getString(R.string.err_image_size_large));
+                    //   AppUtils.showSnackBar(getView(), getString(R.string.err_image_size_large, AppConstants.IMAGE_SIZE_IN_KB));
+                    return;
+                }
+                Bitmap orignal = loadFromFile(globalImagePath);
+                File filenew = new File(globalImagePath);
+                try {
+                    FileOutputStream out = new FileOutputStream(filenew);
+                    orignal.compress(Bitmap.CompressFormat.JPEG, 50, out);
+                    out.flush();
+                    out.close();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (!TextUtils.isEmpty(globalImagePath) || globalImagePath != null) {
+
+                    attachments.add(globalImagePath);
+                    attachmentsAdapter.notifyDataSetChanged();
+                    rc_attachments.setVisibility(View.VISIBLE);
+                }
+            }
         }
     }
 
 
+    @Override
+    public void onItemClick(View view, int position) {
+        simpleDialog=new SimpleDialog(getContext(), getString(R.string.confirmation), getString(R.string.msg_remove_attachment), getString(R.string.button_no), getString(R.string.button_yes), new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                switch (v.getId())
+                {
+                    case R.id.button_positive:
+                        attachments.remove(position);
+                        attachmentsAdapter.notifyDataSetChanged();
+                        SelectedImageUri=null;
+                        break;
+                    case R.id.button_negative:
+                        break;
+                }
+                simpleDialog.dismiss();
+            }
+        });
+        simpleDialog.show();
+    }
 }

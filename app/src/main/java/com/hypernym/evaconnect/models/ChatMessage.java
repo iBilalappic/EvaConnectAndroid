@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class ChatMessage {
     private String Message;
     private int type;
+    private String image;
 
     public String getChattime() {
         return chattime;
@@ -30,5 +31,13 @@ public class ChatMessage {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
