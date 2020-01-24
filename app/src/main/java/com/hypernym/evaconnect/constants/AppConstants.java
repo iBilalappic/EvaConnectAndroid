@@ -27,6 +27,8 @@ public class AppConstants {
     public static final String CONNECTED = "Connected";
     public static final String REQUEST_SENT = "Pending";
     public static final String REQUEST_ACCEPT = "Accept";
+    public static final String SIMPLE_BASEURL = "simple base url";
+    public static final String ONESIGNAL_BASEURL = "one signal url";
 
 
 }
