@@ -56,10 +56,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 AppUtils.setGlideImage(context, (holder).imageView6, networkConnection.getSender().getUserImage());
                 holder.tv_receivertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
                 holder.tv_sendertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
-                if(chatMessageList.get(position).getImage()!=null)
+                if(!chatMessageList.get(position).getImage().equals("null"))
                 {
                     AppUtils.setGlideUrlThumbnail(context,holder.senderImage,chatMessageList.get(position).getImage());
                     holder.senderImage.setVisibility(View.VISIBLE);
+                    holder.receiveImage.setVisibility(View.VISIBLE);
                 }
 
                 //  Toast.makeText(getContext(), "receivername" + networkConnection.getReceiver().getFirstName(), Toast.LENGTH_SHORT).show();
@@ -67,9 +68,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 AppUtils.setGlideImage(context, (holder).imageView6, networkConnection.getReceiver().getUserImage());
                 holder.tv_receivertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
                 holder.tv_sendertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
-                if(chatMessageList.get(position).getImage()!=null)
+                if(!chatMessageList.get(position).getImage().equals("null"))
                 {
                     AppUtils.setGlideUrlThumbnail(context,holder.senderImage,chatMessageList.get(position).getImage());
+                    holder.receiveImage.setVisibility(View.VISIBLE);
                     holder.senderImage.setVisibility(View.VISIBLE);
                 }
 
@@ -86,19 +88,21 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 AppUtils.setGlideImage(context, (holder).imageView7, networkConnection.getReceiver().getUserImage());
                 holder.tv_receivertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
                 holder.tv_sendertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
-                if(chatMessageList.get(position).getImage()!=null)
+                if(!chatMessageList.get(position).getImage().equals("null"))
                 {
                     AppUtils.setGlideUrlThumbnail(context,holder.receiveImage,chatMessageList.get(position).getImage());
                     holder.receiveImage.setVisibility(View.VISIBLE);
+                    holder.senderImage.setVisibility(View.VISIBLE);
                 }
 
             } else {
                 AppUtils.setGlideImage(context, (holder).imageView7, networkConnection.getSender().getUserImage());
                 holder.tv_receivertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
                 holder.tv_sendertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
-                if(chatMessageList.get(position).getImage()!=null)
+                if(!chatMessageList.get(position).getImage().equals("null"))
                 {
                     AppUtils.setGlideUrlThumbnail(context,holder.receiveImage,chatMessageList.get(position).getImage());
+                    holder.senderImage.setVisibility(View.VISIBLE);
                     holder.receiveImage.setVisibility(View.VISIBLE);
                 }
 

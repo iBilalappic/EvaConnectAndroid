@@ -86,7 +86,7 @@ import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
 
-public class ChatFragment extends BaseFragment implements View.OnClickListener,AttachmentsAdapter.ItemClickListener {
+public class ChatFragment extends BaseFragment implements View.OnClickListener, AttachmentsAdapter.ItemClickListener {
 
 
     @BindView(R.id.rc_chat)
@@ -106,7 +106,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,A
     @BindView(R.id.rc_attachments)
     RecyclerView rc_attachments;
 
-    List<String> attachments=new ArrayList<>();
+    List<String> attachments = new ArrayList<>();
     private AttachmentsAdapter attachmentsAdapter;
 
 
@@ -122,13 +122,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,A
     private static final int CAMERAA = 1;
     private String GalleryImage, mCurrentPhotoPath, globalImagePath;
     private String mProfileImageDecodableString;
-    private File tempFile,file_name;
+    private File tempFile, file_name;
     private String currentPhotoPath = "";
     private String photoVar = null;
     private Uri SelectedImageUri;
     private SimpleDialog simpleDialog;
-
-
 
 
     public ChatFragment() {
@@ -182,8 +180,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,A
         if (getArguments() != null) {
             CheckMessageText();
         }
-        attachmentsAdapter=new AttachmentsAdapter(getContext(),attachments,this);
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
+        attachmentsAdapter = new AttachmentsAdapter(getContext(), attachments, this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         rc_attachments.setLayoutManager(linearLayoutManager);
         rc_attachments.setAdapter(attachmentsAdapter);
     }
@@ -194,6 +192,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,A
             Map<String, String> map = new HashMap<String, String>();
             map.put("Message", messageText);
             map.put("user", UserDetails.username);
+            map.put("email", UserDetails.email);
             map.put("time", DateUtils.GetCurrentdatetime());
 
             reference1.push().setValue(map);
@@ -210,10 +209,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,A
                 Map map = dataSnapshot.getValue(Map.class);
                 String message = map.get("Message").toString();
                 String userName = map.get("user").toString();
+                String email = map.get("email").toString();
                 String chatTime = map.get("time").toString();
-                String image=null;
-                if(map.get("image")!=null)
-                {
+                String image = null;
+                if (map.get("image") != null) {
                     image = map.get("image").toString();
                 }
 
@@ -224,6 +223,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,A
                     mMessage.setType(1);
                     mMessage.setChattime(chatTime);
                     mMessage.setImage(image);
+                    mMessage.setEmail(email);
                     chatMessageList.add(mMessage);
                     Log.d("Taag", "" + chatMessageList.size());
                     setupRecycler(chatMessageList);
@@ -232,6 +232,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,A
                     mMessage.setMessage(message);
                     mMessage.setType(2);
                     mMessage.setImage(image);
+                    mMessage.setEmail(email);
                     chatMessageList.add(mMessage);
                     mMessage.setChattime(chatTime);
                     Log.d("Taag", "" + chatMessageList.size());
@@ -265,7 +266,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,A
         layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setStackFromEnd(true);
         rc_chat.setLayoutManager(layoutManager);
-
         chatAdapter = new ChatAdapter(getActivity(), chatMessageList, networkConnection);
         rc_chat.setAdapter(chatAdapter);
         scrollView.fullScroll(View.FOCUS_DOWN);
@@ -281,28 +281,23 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,A
                 messageText = messageArea.getText().toString();
                 Map<String, String> map = new HashMap<String, String>();
 
-                if (SelectedImageUri==null && messageText.length()>0) {
+                if (SelectedImageUri == null && messageText.length() > 0) {
                     map.put("Message", messageText);
                     map.put("user", UserDetails.username);
+                    map.put("email", UserDetails.email);
                     map.put("time", DateUtils.GetCurrentdatetime());
+                    map.put("image", "null");
                     reference1.push().setValue(map);
                     reference2.push().setValue(map);
+                    sendNotification();
+                    messageArea.setText("");
 
                 } else {
                     UploadImageToFirebase();
-                    map.put("image",String.valueOf(SelectedImageUri));
                 }
-                reference1.push().setValue(map);
-                reference2.push().setValue(map);
                 break;
 
             case R.id.browsefiles:
-                //  Toast.makeText(getActivity(), "sss", Toast.LENGTH_SHORT).show();
-                //  openPictureDialog();
-//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//                intent.addCategory(Intent.CATEGORY_OPENABLE);
-//                intent.setType("*/*");
-//                startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_PHOTO_GALLERY);
                 openPictureDialog();
                 break;
 
@@ -314,7 +309,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,A
         Notification_onesignal request = new Notification_onesignal();
         request.app_id = "44bb428a-54f5-4155-bea3-c0ac2d0b3c1a";
         request.contents = new Contents();
-        request.contents.en = messageText;
+        if (!messageText.equals("")) {
+            request.contents.en = UserDetails.username + "\n" + "\n" + "\n" + messageText;
+        } else {
+            request.contents.en = UserDetails.username + "\n" + "\n" + "\n" + "Photo";
+        }
         request.data = new Data();
         request.data.data = "data";
         Filter filter = new Filter();
@@ -344,11 +343,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,A
         if (SelectedImageUri != null) {
             // pd.show();
 
-            StorageReference childRef = storageRef.child("image2.jpg");
+            rc_attachments.setVisibility(View.GONE);
+            StorageReference childRef = storageRef.child(tempFile.getName().toString());
 
             //uploading the image
             UploadTask uploadTask = childRef.putFile(SelectedImageUri);
-
+            showDialog();
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -356,86 +356,41 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,A
                     childRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                        Map<String, String> map = new HashMap<String, String>();
-                        map.put("Message", messageText);
-                        map.put("user", UserDetails.username);
-                        map.put("time", DateUtils.GetCurrentdatetime());
-                        map.put("image",uri.toString());
-                        reference1.push().setValue(map);
-                        reference2.push().setValue(map);
-                        messageArea.setText("");
-                        sendNotification();
-                            Toast.makeText(getContext(), "onSuccess: uri= "+ uri.toString(), Toast.LENGTH_SHORT).show();
+                            Map<String, String> map = new HashMap<String, String>();
+                            map.put("Message", messageText);
+                            map.put("user", UserDetails.username);
+                            map.put("email", UserDetails.email);
+                            map.put("time", DateUtils.GetCurrentdatetime());
+                            map.put("image", uri.toString());
+                            reference1.push().setValue(map);
+                            reference2.push().setValue(map);
+
+                            sendNotification();
+                            attachments.clear();
+                            messageArea.setText("");
+                            //  Toast.makeText(getContext(), "onSuccess: uri= " + uri.toString(), Toast.LENGTH_SHORT).show();
                         }
                     });
+                    hideDialog();
                     Toast.makeText(getContext(), "Upload successful", Toast.LENGTH_SHORT).show();
                 }
 
             }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                    if (task.isSuccessful()) {
-//                        Map<String, String> map = new HashMap<String, String>();
-//                        map.put("Message", messageText);
-//                        map.put("user", UserDetails.username);
-//                        map.put("time", DateUtils.GetCurrentdatetime());
-//                        map.put("image",task.getResult().toString());
-//                        reference1.push().setValue(map);
-//                        reference2.push().setValue(map);
-//                        messageArea.setText("");
-//                        sendNotification();
-                    }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     // pd.dismiss();
+                    hideDialog();
                     Toast.makeText(getContext(), "Upload Failed -> " + e, Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
+            hideDialog();
             Toast.makeText(getContext(), "Select an image", Toast.LENGTH_SHORT).show();
         }
-    }
-    private void uploadMethod() {
-       // progressDialog();
-        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-        StorageReference storageReferenceProfilePic = firebaseStorage.getReference();
-        StorageReference imageRef = storageReferenceProfilePic.child(storageRef+ "/" + "image" + ".jpg");
-        Uri uri=Uri.parse(currentPhotoPath);
-        imageRef.putFile(uri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        //if the upload is successful
-                        //hiding the progress dialog
-                        //and displaying a success toast
-                       // dismissDialog();
-                      // String profilePicUrl = taskSnapshot.getDownloadUrl().toString();
-                        Toast.makeText(getActivity(), "success", Toast.LENGTH_LONG).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        //if the upload is not successful
-                        //hiding the progress dialog
-                       // dismissDialog();
-                        //and displaying error message
-                        Toast.makeText(getActivity(), exception.getCause().getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                    }
-                })
-                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                        //calculating progress percentage
-                       double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-//                        //displaying percentage in progress dialog
-//                        progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
-                        Toast.makeText(getActivity(), "Uploaded " + ((int) progress) + "%...", Toast.LENGTH_LONG).show();
-                    }
-                });
-
     }
 
 
@@ -456,7 +411,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,A
 
 
                     if (tempFile.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.FILE_SIZE_LIMIT_IN_KB) {
-                        networkResponseDialog(getString(R.string.error),getString(R.string.err_image_size_large));
+                        networkResponseDialog(getString(R.string.error), getString(R.string.err_image_size_large));
                         return;
                     } else {
                         if (photoVar == null) {
@@ -472,10 +427,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,A
                                 attachmentsAdapter.notifyDataSetChanged();
                                 rc_attachments.setVisibility(View.VISIBLE);
                             } else {
-                                networkResponseDialog(getString(R.string.error),getString(R.string.err_internal_supported));
+                                networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
                             }
                         } else {
-                            networkResponseDialog(getString(R.string.error),getString(R.string.err_one_file_at_a_time));
+                            networkResponseDialog(getString(R.string.error), getString(R.string.err_one_file_at_a_time));
                             return;
                         }
                     }
@@ -490,12 +445,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,A
             if (requestCode == CAMERAA) {
 
                 //mIsProfileImageAdded = true;
-                File file=galleryAddPic();
+                File file = galleryAddPic();
                 RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
                 // imgName = file_name.getName();
                 globalImagePath = file.getAbsolutePath();
                 if (file.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.IMAGE_SIZE_IN_KB) {
-                    networkResponseDialog(getString(R.string.error),getString(R.string.err_image_size_large));
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_image_size_large));
                     //   AppUtils.showSnackBar(getView(), getString(R.string.err_image_size_large, AppConstants.IMAGE_SIZE_IN_KB));
                     return;
                 }
@@ -523,15 +478,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,A
 
     @Override
     public void onItemClick(View view, int position) {
-        simpleDialog=new SimpleDialog(getContext(), getString(R.string.confirmation), getString(R.string.msg_remove_attachment), getString(R.string.button_no), getString(R.string.button_yes), new OnOneOffClickListener() {
+        simpleDialog = new SimpleDialog(getContext(), getString(R.string.confirmation), getString(R.string.msg_remove_attachment), getString(R.string.button_no), getString(R.string.button_yes), new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
-                switch (v.getId())
-                {
+                switch (v.getId()) {
                     case R.id.button_positive:
                         attachments.remove(position);
                         attachmentsAdapter.notifyDataSetChanged();
-                        SelectedImageUri=null;
+                        SelectedImageUri = null;
                         break;
                     case R.id.button_negative:
                         break;

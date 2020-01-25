@@ -276,11 +276,13 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
         for (NetworkConnection s : networkConnectionList) {
 
 
-            if (s.getReceiver().getFirstName().toLowerCase().contains(text.toLowerCase())) {
+            if (s.getReceiver().getFirstName().toLowerCase().contains(text.toLowerCase())||
+                    s.getReceiver().getFirstName().toUpperCase().contains(text.toUpperCase())) {
                 filterdNames.add(s);
             }
 
-            if (s.getSender().getFirstName().toLowerCase().contains(text.toLowerCase())) {
+            if (s.getSender().getFirstName().toLowerCase().contains(text.toLowerCase())||
+                    s.getSender().getFirstName().toUpperCase().contains(text.toUpperCase())) {
                 filterdNames.add(s);
             }
         }
