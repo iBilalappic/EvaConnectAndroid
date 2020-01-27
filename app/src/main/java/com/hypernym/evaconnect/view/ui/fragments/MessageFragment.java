@@ -219,6 +219,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                     chatFragment.setArguments(bundle);
                     SelectedImageUri = null;
                     tempFile = null;
+                    attachments.clear();
                     //  Log.d("TAAAG", "" + GsonUtils.toJson(networkConnection));
                     loadFragment(R.id.framelayout, chatFragment, getContext(), true);
                     mDialogMessage.dismiss();

@@ -186,8 +186,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         SettingFireBaseChat();
         if (getArguments() != null) {
             CheckMessageText();
-
-            Toast.makeText(getContext(), "" + getArguments().getString("IMAGEURI"), Toast.LENGTH_SHORT).show();
         }
         attachmentsAdapter = new AttachmentsAdapter(getContext(), attachments, this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -384,7 +382,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         }
                     });
                     hideDialog();
-                    SelectedImageUri=null;
                     Toast.makeText(getContext(), "Upload successful", Toast.LENGTH_SHORT).show();
                 }
 
