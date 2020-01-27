@@ -120,7 +120,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public static final String DATE_INPUT_FORMAT = "yyyy-MM-dd HH:mm:ss";
     private static final int REQUEST_PHOTO_GALLERY = 4;
     private static final int CAMERAA = 1;
-    private String GalleryImage, mCurrentPhotoPath, globalImagePath;
+    private String GalleryImage, mCurrentPhotoPath, globalImagePath,FileName;
     private String mProfileImageDecodableString;
     private File tempFile, file_name;
     private String currentPhotoPath = "";
@@ -154,6 +154,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         networkConnection = (NetworkConnection) getArguments().getSerializable(Constants.DATA);
 
         messageText = getArguments().getString("MESSAGE");
+        currentPhotoPath = getArguments().getString("IMAGEURI");
+        FileName =getArguments().getString("FILENAME");
+
+        if (currentPhotoPath != null&&FileName!=null) {
+            SelectedImageUri = Uri.parse(currentPhotoPath);
+            tempFile= new File(FileName);
+        }
         UserDetails.username = LoginUtils.getUser().getFirst_name();
 //        Log.d("TAAAG", "" + GsonUtils.toJson(networkConnection));
         if (networkConnection.getSenderId().equals(LoginUtils.getUser().getId())) {
@@ -179,6 +186,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         SettingFireBaseChat();
         if (getArguments() != null) {
             CheckMessageText();
+
+            Toast.makeText(getContext(), "" + getArguments().getString("IMAGEURI"), Toast.LENGTH_SHORT).show();
         }
         attachmentsAdapter = new AttachmentsAdapter(getContext(), attachments, this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -188,7 +197,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     private void CheckMessageText() {
         if (messageText != null && !messageText.equals("")) {
-            if (SelectedImageUri == null && messageText.length() > 0) {
+            if (SelectedImageUri != null && messageText.length() > 0) {
+                UploadImageToFirebase();
+            } else {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("Message", messageText);
                 map.put("user", UserDetails.username);
@@ -311,7 +322,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         request.app_id = "44bb428a-54f5-4155-bea3-c0ac2d0b3c1a";
         request.contents = new Contents();
         if (!messageText.equals("")) {
-            request.contents.en = "New Message From "+UserDetails.username;
+            request.contents.en = "New Message From " + UserDetails.username;
         }
 //        else {
 //            request.contents.en = UserDetails.username + "\n" + "\n" + "\n" + "Photo";
@@ -366,7 +377,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                             map.put("image", uri.toString());
                             reference1.push().setValue(map);
                             reference2.push().setValue(map);
-
                             sendNotification();
                             attachments.clear();
                             messageArea.setText("");
@@ -374,6 +384,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         }
                     });
                     hideDialog();
+                    SelectedImageUri=null;
                     Toast.makeText(getContext(), "Upload successful", Toast.LENGTH_SHORT).show();
                 }
 
