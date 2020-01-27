@@ -188,16 +188,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     private void CheckMessageText() {
         if (messageText != null && !messageText.equals("")) {
-
-            Map<String, String> map = new HashMap<String, String>();
-            map.put("Message", messageText);
-            map.put("user", UserDetails.username);
-            map.put("email", UserDetails.email);
-            map.put("time", DateUtils.GetCurrentdatetime());
-
-            reference1.push().setValue(map);
-            reference2.push().setValue(map);
-            messageArea.setText("");
+            if (SelectedImageUri == null && messageText.length() > 0) {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("Message", messageText);
+                map.put("user", UserDetails.username);
+                map.put("email", UserDetails.email);
+                map.put("time", DateUtils.GetCurrentdatetime());
+                map.put("image", "null");
+                reference1.push().setValue(map);
+                reference2.push().setValue(map);
+                messageArea.setText("");
+            }
         }
     }
 
@@ -310,10 +311,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         request.app_id = "44bb428a-54f5-4155-bea3-c0ac2d0b3c1a";
         request.contents = new Contents();
         if (!messageText.equals("")) {
-            request.contents.en = UserDetails.username + "\n" + "\n" + "\n" + messageText;
-        } else {
-            request.contents.en = UserDetails.username + "\n" + "\n" + "\n" + "Photo";
+            request.contents.en = "New Message From "+UserDetails.username;
         }
+//        else {
+//            request.contents.en = UserDetails.username + "\n" + "\n" + "\n" + "Photo";
+//        }
         request.data = new Data();
         request.data.data = "data";
         Filter filter = new Filter();
