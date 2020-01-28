@@ -408,6 +408,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                                 attachments.clear();
                                 MultipleFile.clear();
                                 MultiplePhoto.clear();
+                                SelectedImageUri=null;
                                 messageArea.setText("");
                                 //  Toast.makeText(getContext(), "onSuccess: uri= " + uri.toString(), Toast.LENGTH_SHORT).show();
                             }
@@ -454,6 +455,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                             reference2.push().setValue(map);
                             sendNotification();
                             attachments.clear();
+                            MultipleFile.clear();
+                            MultiplePhoto.clear();
+                            SelectedImageUri=null;
                             messageArea.setText("");
                             //  Toast.makeText(getContext(), "onSuccess: uri= " + uri.toString(), Toast.LENGTH_SHORT).show();
                         }

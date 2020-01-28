@@ -62,6 +62,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                     holder.senderImage.setVisibility(View.VISIBLE);
                     holder.receiveImage.setVisibility(View.VISIBLE);
                 }
+                else{
+                    holder.senderImage.setVisibility(View.GONE);
+                    holder.receiveImage.setVisibility(View.GONE);
+                }
 
                 //  Toast.makeText(getContext(), "receivername" + networkConnection.getReceiver().getFirstName(), Toast.LENGTH_SHORT).show();
             } else {
@@ -74,6 +78,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                     holder.receiveImage.setVisibility(View.VISIBLE);
                     holder.senderImage.setVisibility(View.VISIBLE);
                 }
+                else{
+                    holder.senderImage.setVisibility(View.GONE);
+                    holder.receiveImage.setVisibility(View.GONE);
+                }
+
 
             }
 
@@ -94,6 +103,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                     holder.receiveImage.setVisibility(View.VISIBLE);
                     holder.senderImage.setVisibility(View.VISIBLE);
                 }
+                else{
+                    holder.senderImage.setVisibility(View.GONE);
+                    holder.receiveImage.setVisibility(View.GONE);
+                }
 
             } else {
                 AppUtils.setGlideImage(context, (holder).imageView7, networkConnection.getSender().getUserImage());
@@ -104,6 +117,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                     AppUtils.setGlideUrlThumbnail(context,holder.receiveImage,chatMessageList.get(position).getImage());
                     holder.senderImage.setVisibility(View.VISIBLE);
                     holder.receiveImage.setVisibility(View.VISIBLE);
+                }
+                else{
+                    holder.senderImage.setVisibility(View.GONE);
+                    holder.receiveImage.setVisibility(View.GONE);
                 }
 
             }
