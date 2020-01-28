@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -34,6 +35,7 @@ import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.toolbar.OnItemClickListener;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.Constants;
+import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.view.adapters.AttachmentsAdapter;
@@ -45,6 +47,7 @@ import com.hypernym.evaconnect.viewmodel.MessageViewModel;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,10 +91,15 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     private String photoVar = null;
     private AttachmentsAdapter attachmentsAdapter;
     private List<String> attachments = new ArrayList<>();
+    private List<String> MultiplePhotoString = new ArrayList<>();
+    private List<String> MultipleFileString = new ArrayList<>();
+
     private RecyclerView rc_attachments;
     SimpleDialog simpleDialog;
     private Uri SelectedImageUri;
 
+    private List<Uri> MultiplePhoto = new ArrayList<>();
+    private List<File> MultipleFile = new ArrayList<>();
 
     public MessageFragment() {
         // Required empty public constructor
@@ -212,13 +220,20 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                     Bundle bundle = new Bundle();
                     bundle.putSerializable(Constants.DATA, networkConnectionList.get(Itempostion));
                     bundle.putString("MESSAGE", messageArea);
-                    if (SelectedImageUri != null) {
+//                    if (MultiplePhotoString != null && MultiplePhotoString.size() > 1) {
+//                        bundle.putStringArrayList("IMAGEURILIST", (ArrayList<String>) MultiplePhotoString);
+//                        bundle.putStringArrayList("FILENAMELIST", (ArrayList<String>) MultipleFileString);
+//                    } else
+
+                        if (SelectedImageUri != null) {
                         bundle.putString("IMAGEURI", SelectedImageUri.toString());
                         bundle.putString("FILENAME", tempFile.toString());
                     }
                     chatFragment.setArguments(bundle);
                     SelectedImageUri = null;
                     tempFile = null;
+//                    MultiplePhoto.clear();
+//                    MultipleFile.clear();
                     attachments.clear();
                     //  Log.d("TAAAG", "" + GsonUtils.toJson(networkConnection));
                     loadFragment(R.id.framelayout, chatFragment, getContext(), true);
@@ -313,11 +328,16 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
             try {
                 if (data != null && data.getData() != null) {
                     SelectedImageUri = data.getData();
+//                    MultiplePhoto.add(SelectedImageUri);
+//                    MultiplePhotoString.add(MultiplePhoto.toString());
                     GalleryImage = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
                     mProfileImageDecodableString = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
                     Log.e(getClass().getName(), "image file path: " + GalleryImage);
 
                     tempFile = new File(GalleryImage);
+//                    MultipleFile.add(tempFile);
+//                    MultipleFileString.add(tempFile.toString());
+
                     Log.e(getClass().getName(), "file path details: " + tempFile.getName() + " " + tempFile.getAbsolutePath() + "length" + tempFile.length());
 
 

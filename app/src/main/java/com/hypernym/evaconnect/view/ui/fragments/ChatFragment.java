@@ -120,10 +120,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public static final String DATE_INPUT_FORMAT = "yyyy-MM-dd HH:mm:ss";
     private static final int REQUEST_PHOTO_GALLERY = 4;
     private static final int CAMERAA = 1;
-    private String GalleryImage, mCurrentPhotoPath, globalImagePath,FileName;
+    private String GalleryImage, mCurrentPhotoPath, globalImagePath, FileName;
     private String mProfileImageDecodableString;
     private File tempFile, file_name;
     private String currentPhotoPath = "";
+    private List<Uri> MultiplePhoto = new ArrayList<>();
+    private List<String> MultiplePhotoString = new ArrayList<>();
+    private List<String> MultipleFileString = new ArrayList<>();
+    private List<File> MultipleFile = new ArrayList<>();
     private String photoVar = null;
     private Uri SelectedImageUri;
     private SimpleDialog simpleDialog;
@@ -155,11 +159,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
         messageText = getArguments().getString("MESSAGE");
         currentPhotoPath = getArguments().getString("IMAGEURI");
-        FileName =getArguments().getString("FILENAME");
+//        FileName = getArguments().getString("FILENAME");
+//        MultiplePhotoString=  getArguments().getStringArrayList("IMAGEURILIST");
+//        MultipleFileString=  getArguments().getStringArrayList("FILENAMELIST");
+//        SettingMuilplePhotoString(MultiplePhotoString,MultipleFileString);
 
-        if (currentPhotoPath != null&&FileName!=null) {
+        if (currentPhotoPath != null && FileName != null) {
             SelectedImageUri = Uri.parse(currentPhotoPath);
-            tempFile= new File(FileName);
+            tempFile = new File(FileName);
         }
         UserDetails.username = LoginUtils.getUser().getFirst_name();
 //        Log.d("TAAAG", "" + GsonUtils.toJson(networkConnection));
@@ -179,6 +186,16 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     }
 
+    private void SettingMuilplePhotoString(List<String> multiplePhotoString, List<String> multipleFileString) {
+        for(int i =0; i<multiplePhotoString.size();i++){
+            MultiplePhoto.add(Uri.parse(multiplePhotoString.get(i)));
+        }
+        for(int i =0; i<multipleFileString.size();i++){
+            MultipleFile.add(new File(multipleFileString.get(i)));
+        }
+
+    }
+
     private void init() {
         Firebase.setAndroidContext(AppUtils.getApplicationContext());
         reference1 = new Firebase("https://evaconnect-df08d.firebaseio.com/messages/" + UserDetails.username + "_" + UserDetails.chatWith);
@@ -195,7 +212,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     private void CheckMessageText() {
         if (messageText != null && !messageText.equals("")) {
-            if (SelectedImageUri != null && messageText.length() > 0) {
+//            if(MultiplePhoto!=null&&MultiplePhoto.size()>0){
+//               UploadImageToFirebase();
+//            }
+//           else
+               if (SelectedImageUri != null && messageText.length() > 0) {
                 UploadImageToFirebase();
             } else {
                 Map<String, String> map = new HashMap<String, String>();
@@ -206,6 +227,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 map.put("image", "null");
                 reference1.push().setValue(map);
                 reference2.push().setValue(map);
+                sendNotification();
                 messageArea.setText("");
             }
         }
@@ -351,57 +373,113 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void UploadImageToFirebase() {
-        if (SelectedImageUri != null) {
+//        if (SelectedImageUri != null) {
+
             // pd.show();
+            if (MultiplePhoto.size() > 1) {
+                for (int i = 0; i < MultiplePhoto.size(); i++) {
+                    // MultiplePhoto.add(Uri.parse(String.valueOf(attachments)));
+                    Log.d("MULTIPLE", GsonUtils.toJson(MultiplePhoto.get(i)));
+                    rc_attachments.setVisibility(View.GONE);
+                    StorageReference childRef = storageRef.child(MultipleFile.get(i).getName().toString());
 
-            rc_attachments.setVisibility(View.GONE);
-            StorageReference childRef = storageRef.child(tempFile.getName().toString());
-
-            //uploading the image
-            UploadTask uploadTask = childRef.putFile(SelectedImageUri);
-            showDialog();
-            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    // pd.dismiss();
-                    childRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    //uploading the image
+                    UploadTask uploadTask = childRef.putFile(MultiplePhoto.get(i));
+                    showDialog();
+                    uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
-                        public void onSuccess(Uri uri) {
-                            Map<String, String> map = new HashMap<String, String>();
-                            map.put("Message", messageText);
-                            map.put("user", UserDetails.username);
-                            map.put("email", UserDetails.email);
-                            map.put("time", DateUtils.GetCurrentdatetime());
-                            map.put("image", uri.toString());
-                            reference1.push().setValue(map);
-                            reference2.push().setValue(map);
-                            sendNotification();
-                            attachments.clear();
-                            messageArea.setText("");
-                            //  Toast.makeText(getContext(), "onSuccess: uri= " + uri.toString(), Toast.LENGTH_SHORT).show();
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // pd.dismiss();
+                            childRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Map<String, String> map = new HashMap<String, String>();
+                                    map.put("Message", messageText);
+                                    map.put("user", UserDetails.username);
+                                    map.put("email", UserDetails.email);
+                                    map.put("time", DateUtils.GetCurrentdatetime());
+                                    map.put("image", uri.toString());
+                                    reference1.push().setValue(map);
+                                    reference2.push().setValue(map);
+                                    sendNotification();
+                                    attachments.clear();
+                                    MultipleFile.clear();
+                                    MultiplePhoto.clear();
+                                    messageArea.setText("");
+                                    //  Toast.makeText(getContext(), "onSuccess: uri= " + uri.toString(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            hideDialog();
+                            Toast.makeText(getContext(), "Upload successful", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // pd.dismiss();
+                            hideDialog();
+                            Toast.makeText(getContext(), "Upload Failed -> " + e, Toast.LENGTH_SHORT).show();
                         }
                     });
-                    hideDialog();
-                    Toast.makeText(getContext(), "Upload successful", Toast.LENGTH_SHORT).show();
                 }
 
-            }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    // pd.dismiss();
-                    hideDialog();
-                    Toast.makeText(getContext(), "Upload Failed -> " + e, Toast.LENGTH_SHORT).show();
-                }
-            });
-        } else {
-            hideDialog();
-            Toast.makeText(getContext(), "Select an image", Toast.LENGTH_SHORT).show();
+            } else {
+                rc_attachments.setVisibility(View.GONE);
+                StorageReference childRef = storageRef.child(tempFile.getName().toString());
+
+                //uploading the image
+                UploadTask uploadTask = childRef.putFile(SelectedImageUri);
+                showDialog();
+                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // pd.dismiss();
+                        childRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Map<String, String> map = new HashMap<String, String>();
+                                map.put("Message", messageText);
+                                map.put("user", UserDetails.username);
+                                map.put("email", UserDetails.email);
+                                map.put("time", DateUtils.GetCurrentdatetime());
+                                map.put("image", uri.toString());
+                                reference1.push().setValue(map);
+                                reference2.push().setValue(map);
+                                sendNotification();
+                                attachments.clear();
+                                messageArea.setText("");
+                              //  Toast.makeText(getContext(), "onSuccess: uri= " + uri.toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        hideDialog();
+                        Toast.makeText(getContext(), "Upload successful", Toast.LENGTH_SHORT).show();
+                    }
+
+                }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // pd.dismiss();
+                        hideDialog();
+                        Toast.makeText(getContext(), "Upload Failed -> " + e, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+
         }
-    }
+//        else {
+//            hideDialog();
+//            Toast.makeText(getContext(), "Select an image", Toast.LENGTH_SHORT).show();
+//        }
+
 
 
     @Override
@@ -412,11 +490,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             try {
                 if (data != null && data.getData() != null) {
                     SelectedImageUri = data.getData();
+                    MultiplePhoto.add(SelectedImageUri);
                     GalleryImage = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
                     mProfileImageDecodableString = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
                     Log.e(getClass().getName(), "image file path: " + GalleryImage);
 
                     tempFile = new File(GalleryImage);
+                    MultipleFile.add(tempFile);
                     Log.e(getClass().getName(), "file path details: " + tempFile.getName() + " " + tempFile.getAbsolutePath() + "length" + tempFile.length());
 
 
@@ -434,6 +514,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
                             if (!TextUtils.isEmpty(currentPhotoPath) || currentPhotoPath != null) {
                                 attachments.add(currentPhotoPath);
+                                Log.d("ATTACHMENT", GsonUtils.toJson(attachments));
                                 attachmentsAdapter.notifyDataSetChanged();
                                 rc_attachments.setVisibility(View.VISIBLE);
                             } else {
