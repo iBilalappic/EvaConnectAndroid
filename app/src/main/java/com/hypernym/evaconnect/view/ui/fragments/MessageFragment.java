@@ -174,7 +174,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
             //  Log.d("TAAAG", "" + GsonUtils.toJson(networkConnection));
             loadFragment(R.id.framelayout, chatFragment, getContext(), true);
         } else {
-            Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
             Itempostion = position;
         }
 
@@ -230,12 +230,14 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                     chatFragment.setArguments(bundle);
                     SelectedImageUri = null;
                     tempFile = null;
-//                    MultiplePhoto.clear();
-//                    MultipleFile.clear();
+                    MultiplePhoto.clear();
+                    MultipleFile.clear();
                     attachments.clear();
                     //  Log.d("TAAAG", "" + GsonUtils.toJson(networkConnection));
                     loadFragment(R.id.framelayout, chatFragment, getContext(), true);
                     mDialogMessage.dismiss();
+                }else{
+                    Toast.makeText(getContext(), "Please type message...", Toast.LENGTH_SHORT).show();
                 }
             }
         });
