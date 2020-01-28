@@ -291,5 +291,56 @@ public final class AppUtils {
         });
 
     }
+    public static void makeNotification(Context context, Class<?> class_, String fragmentName,
+                                        Bundle bundle, String message, boolean isUpdateCurrent,
+                                        int requestCode) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationHelper helper;
+            helper = new NotificationHelper(context);
+            Notification.Builder nb = helper.
+                    getAndroidChannelNotification(context, class_, fragmentName, bundle, message, isUpdateCurrent, requestCode);
+
+            helper.getManager().notify(101, nb.build());
+
+        } else {
+            makeNotification_default(context, class_, fragmentName, bundle, message, isUpdateCurrent, requestCode);
+        }
+
+    }
+
+    public static void makeNotification_default(Context context, Class<?> class_, String fragmentName,
+                                                Bundle bundle, String message, boolean isUpdateCurrent,
+                                                int requestCode) {
+        Intent intent = new Intent(context, class_);
+        if (isUpdateCurrent) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        } else {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        intent.putExtra(Constants.FRAGMENT_NAME, fragmentName);
+        intent.putExtra(Constants.DATA, bundle);
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT
+        );
+        Notification notification = new NotificationCompat.Builder(context)
+                .setSmallIcon(getNotificationIcon())
+                .setTicker(message)
+                // .setColor(ContextCompat.getColor(context, R.color.colorNotificationIcon))
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setContentTitle(context.getString(R.string.app_name))
+                .setContentText(message)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(message))
+                .build();
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.notify(requestCode, notification);
+    }
+    private static int getNotificationIcon() {
+        boolean useWhiteIcon = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP);
+        return useWhiteIcon ? R.drawable.logo : R.mipmap.logo;
+    }
+
 
 }

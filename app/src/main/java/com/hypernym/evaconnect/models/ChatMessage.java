@@ -7,6 +7,16 @@ public class ChatMessage {
     private int type;
     private String image;
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    private String email;
+
     public String getChattime() {
         return chattime;
     }

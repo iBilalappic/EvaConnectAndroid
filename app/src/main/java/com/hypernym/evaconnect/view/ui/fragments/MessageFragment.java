@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -34,6 +35,7 @@ import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.toolbar.OnItemClickListener;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.Constants;
+import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.view.adapters.AttachmentsAdapter;
@@ -45,6 +47,7 @@ import com.hypernym.evaconnect.viewmodel.MessageViewModel;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +59,7 @@ import okhttp3.RequestBody;
 
 import static android.app.Activity.RESULT_OK;
 
-public class MessageFragment extends BaseFragment implements OnItemClickListener, View.OnClickListener, TextWatcher,AttachmentsAdapter.ItemClickListener {
+public class MessageFragment extends BaseFragment implements OnItemClickListener, View.OnClickListener, TextWatcher, AttachmentsAdapter.ItemClickListener {
 
     @BindView(R.id.rc_message)
     RecyclerView re_message;
@@ -83,13 +86,20 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     private static final int CAMERAA = 1;
     private String GalleryImage, mCurrentPhotoPath, globalImagePath;
     private String mProfileImageDecodableString;
-    private File tempFile,file_name;
+    private File tempFile, file_name;
     private String currentPhotoPath = "";
     private String photoVar = null;
     private AttachmentsAdapter attachmentsAdapter;
-    private List<String> attachments=new ArrayList<>();
+    private List<String> attachments = new ArrayList<>();
+    private List<String> MultiplePhotoString = new ArrayList<>();
+    private List<String> MultipleFileString = new ArrayList<>();
+
     private RecyclerView rc_attachments;
     SimpleDialog simpleDialog;
+    private Uri SelectedImageUri;
+
+    private List<Uri> MultiplePhoto = new ArrayList<>();
+    private List<File> MultipleFile = new ArrayList<>();
 
     public MessageFragment() {
         // Required empty public constructor
@@ -154,18 +164,18 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
 
 
     @Override
-    public void onItemClick(View view, Object data, int position ,String adaptertype) {
-        if(adaptertype.equals("SimpleAdapter")){
+    public void onItemClick(View view, Object data, int position, String adaptertype) {
+        if (adaptertype.equals("SimpleAdapter")) {
             ChatFragment chatFragment = new ChatFragment();
-            Itempostion=position;
+            Itempostion = position;
             Bundle bundle = new Bundle();
             bundle.putSerializable(Constants.DATA, networkConnectionList.get(position));
             chatFragment.setArguments(bundle);
             //  Log.d("TAAAG", "" + GsonUtils.toJson(networkConnection));
             loadFragment(R.id.framelayout, chatFragment, getContext(), true);
-        }else{
-            Toast.makeText(getContext(), ""+position, Toast.LENGTH_SHORT).show();
-            Itempostion=position;
+        } else {
+          //  Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
+            Itempostion = position;
         }
 
     }
@@ -174,9 +184,9 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.newmessage:
-                if(networkConnectionList.size()>0&& NetworkUtils.isNetworkConnected(getContext())){
+                if (networkConnectionList.size() > 0 && NetworkUtils.isNetworkConnected(getContext())) {
                     showMesssageDialog();
-                }else{
+                } else {
                     Toast.makeText(getContext(), "You haven't any friends to chat", Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -190,11 +200,11 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
         editTextSearch = mDialogMessage.findViewById(R.id.edittextSearchUser);
         editTextMessage = mDialogMessage.findViewById(R.id.edittextMessageArea);
         mTextviewSend = mDialogMessage.findViewById(R.id.sendButton);
-        browsefiles=mDialogMessage.findViewById(R.id.browsefiles);
-        rc_attachments=mDialogMessage.findViewById(R.id.rc_attachments);
+        browsefiles = mDialogMessage.findViewById(R.id.browsefiles);
+        rc_attachments = mDialogMessage.findViewById(R.id.rc_attachments);
 
-        attachmentsAdapter=new AttachmentsAdapter(getContext(),attachments,this);
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
+        attachmentsAdapter = new AttachmentsAdapter(getContext(), attachments, this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         rc_attachments.setLayoutManager(linearLayoutManager);
         rc_attachments.setAdapter(attachmentsAdapter);
         editTextSearch.addTextChangedListener(this);
@@ -204,18 +214,31 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
         mTextviewSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String messageArea=editTextMessage.getText().toString();
-                if(!messageArea.equals("")){
+                String messageArea = editTextMessage.getText().toString();
+                if (!messageArea.equals("")) {
                     ChatFragment chatFragment = new ChatFragment();
                     Bundle bundle = new Bundle();
                     bundle.putSerializable(Constants.DATA, networkConnectionList.get(Itempostion));
-                    bundle.putString("MESSAGE",messageArea);
+                    bundle.putString("MESSAGE", messageArea);
+                    if (MultiplePhotoString != null && MultiplePhotoString.size() > 1) {
+                        bundle.putStringArrayList("IMAGEURILIST", (ArrayList<String>) MultiplePhotoString);
+                        bundle.putStringArrayList("FILENAMELIST", (ArrayList<String>) MultipleFileString);
+                    } else if (SelectedImageUri != null) {
+                        bundle.putString("IMAGEURI", SelectedImageUri.toString());
+                        bundle.putString("FILENAME", tempFile.toString());
+                    }
                     chatFragment.setArguments(bundle);
+                    SelectedImageUri = null;
+                    tempFile = null;
+                    MultiplePhoto.clear();
+                    MultipleFile.clear();
+                    attachments.clear();
                     //  Log.d("TAAAG", "" + GsonUtils.toJson(networkConnection));
                     loadFragment(R.id.framelayout, chatFragment, getContext(), true);
                     mDialogMessage.dismiss();
+                }else{
+                    Toast.makeText(getContext(), "Please type message...", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
         browsefiles.setOnClickListener(new View.OnClickListener() {
@@ -276,11 +299,13 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
         for (NetworkConnection s : networkConnectionList) {
 
 
-            if (s.getReceiver().getFirstName().toLowerCase().contains(text.toLowerCase())) {
+            if (s.getReceiver().getFirstName().toLowerCase().contains(text.toLowerCase()) ||
+                    s.getReceiver().getFirstName().toUpperCase().contains(text.toUpperCase())) {
                 filterdNames.add(s);
             }
 
-            if (s.getSender().getFirstName().toLowerCase().contains(text.toLowerCase())) {
+            if (s.getSender().getFirstName().toLowerCase().contains(text.toLowerCase()) ||
+                    s.getSender().getFirstName().toUpperCase().contains(text.toUpperCase())) {
                 filterdNames.add(s);
             }
         }
@@ -302,17 +327,22 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
         if (requestCode == REQUEST_PHOTO_GALLERY && resultCode == RESULT_OK) {
             try {
                 if (data != null && data.getData() != null) {
-                    Uri SelectedImageUri = data.getData();
+                    SelectedImageUri = data.getData();
+                    MultiplePhoto.add(SelectedImageUri);
+                    MultiplePhotoString.add(SelectedImageUri.toString());
                     GalleryImage = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
                     mProfileImageDecodableString = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
                     Log.e(getClass().getName(), "image file path: " + GalleryImage);
 
                     tempFile = new File(GalleryImage);
+                    MultipleFile.add(tempFile);
+                    MultipleFileString.add(tempFile.toString());
+
                     Log.e(getClass().getName(), "file path details: " + tempFile.getName() + " " + tempFile.getAbsolutePath() + "length" + tempFile.length());
 
 
                     if (tempFile.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.FILE_SIZE_LIMIT_IN_KB) {
-                        networkResponseDialog(getString(R.string.error),getString(R.string.err_image_size_large));
+                        networkResponseDialog(getString(R.string.error), getString(R.string.err_image_size_large));
                         return;
                     } else {
                         if (photoVar == null) {
@@ -324,14 +354,14 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                             // partImage = MultipartBody.Part.createFormData("user_image", file_name.getName(), reqFile);
 
                             if (!TextUtils.isEmpty(currentPhotoPath) || currentPhotoPath != null) {
-                                    attachments.add(currentPhotoPath);
-                                    attachmentsAdapter.notifyDataSetChanged();
-                                    rc_attachments.setVisibility(View.VISIBLE);
+                                attachments.add(currentPhotoPath);
+                                attachmentsAdapter.notifyDataSetChanged();
+                                rc_attachments.setVisibility(View.VISIBLE);
                             } else {
-                                networkResponseDialog(getString(R.string.error),getString(R.string.err_internal_supported));
+                                networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
                             }
                         } else {
-                            networkResponseDialog(getString(R.string.error),getString(R.string.err_one_file_at_a_time));
+                            networkResponseDialog(getString(R.string.error), getString(R.string.err_one_file_at_a_time));
                             return;
                         }
                     }
@@ -346,12 +376,12 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
             if (requestCode == CAMERAA) {
 
                 //mIsProfileImageAdded = true;
-                File file=galleryAddPic();
+                File file = galleryAddPic();
                 RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
                 // imgName = file_name.getName();
                 globalImagePath = file.getAbsolutePath();
                 if (file.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.IMAGE_SIZE_IN_KB) {
-                    networkResponseDialog(getString(R.string.error),getString(R.string.err_image_size_large));
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_image_size_large));
                     //   AppUtils.showSnackBar(getView(), getString(R.string.err_image_size_large, AppConstants.IMAGE_SIZE_IN_KB));
                     return;
                 }
@@ -368,9 +398,9 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                 }
                 if (!TextUtils.isEmpty(globalImagePath) || globalImagePath != null) {
 
-                        attachments.add(globalImagePath);
-                        attachmentsAdapter.notifyDataSetChanged();
-                        rc_attachments.setVisibility(View.VISIBLE);
+                    attachments.add(globalImagePath);
+                    attachmentsAdapter.notifyDataSetChanged();
+                    rc_attachments.setVisibility(View.VISIBLE);
                 }
             }
         }
@@ -378,11 +408,10 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
 
     @Override
     public void onItemClick(View view, int position) {
-        simpleDialog=new SimpleDialog(getContext(), getString(R.string.confirmation), getString(R.string.msg_remove_attachment), getString(R.string.button_no), getString(R.string.button_yes), new OnOneOffClickListener() {
+        simpleDialog = new SimpleDialog(getContext(), getString(R.string.confirmation), getString(R.string.msg_remove_attachment), getString(R.string.button_no), getString(R.string.button_yes), new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
-                switch (v.getId())
-                {
+                switch (v.getId()) {
                     case R.id.button_positive:
                         attachments.remove(position);
                         attachmentsAdapter.notifyDataSetChanged();
