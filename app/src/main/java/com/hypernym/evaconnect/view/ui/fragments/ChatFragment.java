@@ -159,10 +159,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
         messageText = getArguments().getString("MESSAGE");
         currentPhotoPath = getArguments().getString("IMAGEURI");
-//        FileName = getArguments().getString("FILENAME");
-//        MultiplePhotoString=  getArguments().getStringArrayList("IMAGEURILIST");
-//        MultipleFileString=  getArguments().getStringArrayList("FILENAMELIST");
-//        SettingMuilplePhotoString(MultiplePhotoString,MultipleFileString);
+        FileName = getArguments().getString("FILENAME");
+        MultiplePhotoString = getArguments().getStringArrayList("IMAGEURILIST");
+        MultipleFileString = getArguments().getStringArrayList("FILENAMELIST");
+        if ( MultipleFileString != null&&
+                MultipleFileString.size()>1&&
+                MultiplePhotoString!=null&&
+                MultiplePhotoString.size()>1) {
+            SettingMuilplePhotoString(MultiplePhotoString, MultipleFileString);
+        }
 
         if (currentPhotoPath != null && FileName != null) {
             SelectedImageUri = Uri.parse(currentPhotoPath);
@@ -187,10 +192,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void SettingMuilplePhotoString(List<String> multiplePhotoString, List<String> multipleFileString) {
-        for(int i =0; i<multiplePhotoString.size();i++){
+        for (int i = 0; i < multiplePhotoString.size(); i++) {
             MultiplePhoto.add(Uri.parse(multiplePhotoString.get(i)));
         }
-        for(int i =0; i<multipleFileString.size();i++){
+        for (int i = 0; i < multipleFileString.size(); i++) {
             MultipleFile.add(new File(multipleFileString.get(i)));
         }
 
@@ -212,11 +217,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     private void CheckMessageText() {
         if (messageText != null && !messageText.equals("")) {
-//            if(MultiplePhoto!=null&&MultiplePhoto.size()>0){
-//               UploadImageToFirebase();
-//            }
-//           else
-               if (SelectedImageUri != null && messageText.length() > 0) {
+            if (MultiplePhoto != null && MultiplePhoto.size() > 1) {
+                UploadImageToFirebase();
+            } else if (SelectedImageUri != null && messageText.length() > 0) {
                 UploadImageToFirebase();
             } else {
                 Map<String, String> map = new HashMap<String, String>();
@@ -375,64 +378,16 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private void UploadImageToFirebase() {
 //        if (SelectedImageUri != null) {
 
-            // pd.show();
-            if (MultiplePhoto.size() > 1) {
-                for (int i = 0; i < MultiplePhoto.size(); i++) {
-                    // MultiplePhoto.add(Uri.parse(String.valueOf(attachments)));
-                    Log.d("MULTIPLE", GsonUtils.toJson(MultiplePhoto.get(i)));
-                    rc_attachments.setVisibility(View.GONE);
-                    StorageReference childRef = storageRef.child(MultipleFile.get(i).getName().toString());
-
-                    //uploading the image
-                    UploadTask uploadTask = childRef.putFile(MultiplePhoto.get(i));
-                    showDialog();
-                    uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            // pd.dismiss();
-                            childRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    Map<String, String> map = new HashMap<String, String>();
-                                    map.put("Message", messageText);
-                                    map.put("user", UserDetails.username);
-                                    map.put("email", UserDetails.email);
-                                    map.put("time", DateUtils.GetCurrentdatetime());
-                                    map.put("image", uri.toString());
-                                    reference1.push().setValue(map);
-                                    reference2.push().setValue(map);
-                                    sendNotification();
-                                    attachments.clear();
-                                    MultipleFile.clear();
-                                    MultiplePhoto.clear();
-                                    messageArea.setText("");
-                                    //  Toast.makeText(getContext(), "onSuccess: uri= " + uri.toString(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                            hideDialog();
-                            Toast.makeText(getContext(), "Upload successful", Toast.LENGTH_SHORT).show();
-                        }
-
-                    }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            // pd.dismiss();
-                            hideDialog();
-                            Toast.makeText(getContext(), "Upload Failed -> " + e, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-
-            } else {
+        // pd.show();
+        if (MultiplePhoto.size() > 1) {
+            for (int i = 0; i < MultiplePhoto.size(); i++) {
+                // MultiplePhoto.add(Uri.parse(String.valueOf(attachments)));
+                Log.d("MULTIPLE", GsonUtils.toJson(MultiplePhoto.get(i)));
                 rc_attachments.setVisibility(View.GONE);
-                StorageReference childRef = storageRef.child(tempFile.getName().toString());
+                StorageReference childRef = storageRef.child(MultipleFile.get(i).getName().toString());
 
                 //uploading the image
-                UploadTask uploadTask = childRef.putFile(SelectedImageUri);
+                UploadTask uploadTask = childRef.putFile(MultiplePhoto.get(i));
                 showDialog();
                 uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -451,8 +406,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                                 reference2.push().setValue(map);
                                 sendNotification();
                                 attachments.clear();
+                                MultipleFile.clear();
+                                MultiplePhoto.clear();
                                 messageArea.setText("");
-                              //  Toast.makeText(getContext(), "onSuccess: uri= " + uri.toString(), Toast.LENGTH_SHORT).show();
+                                //  Toast.makeText(getContext(), "onSuccess: uri= " + uri.toString(), Toast.LENGTH_SHORT).show();
                             }
                         });
                         hideDialog();
@@ -473,13 +430,58 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 });
             }
 
+        } else {
+            rc_attachments.setVisibility(View.GONE);
+            StorageReference childRef = storageRef.child(tempFile.getName().toString());
 
+            //uploading the image
+            UploadTask uploadTask = childRef.putFile(SelectedImageUri);
+            showDialog();
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // pd.dismiss();
+                    childRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Map<String, String> map = new HashMap<String, String>();
+                            map.put("Message", messageText);
+                            map.put("user", UserDetails.username);
+                            map.put("email", UserDetails.email);
+                            map.put("time", DateUtils.GetCurrentdatetime());
+                            map.put("image", uri.toString());
+                            reference1.push().setValue(map);
+                            reference2.push().setValue(map);
+                            sendNotification();
+                            attachments.clear();
+                            messageArea.setText("");
+                            //  Toast.makeText(getContext(), "onSuccess: uri= " + uri.toString(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    hideDialog();
+                    Toast.makeText(getContext(), "Upload successful", Toast.LENGTH_SHORT).show();
+                }
+
+            }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    // pd.dismiss();
+                    hideDialog();
+                    Toast.makeText(getContext(), "Upload Failed -> " + e, Toast.LENGTH_SHORT).show();
+                }
+            });
         }
+
+
+    }
 //        else {
 //            hideDialog();
 //            Toast.makeText(getContext(), "Select an image", Toast.LENGTH_SHORT).show();
 //        }
-
 
 
     @Override

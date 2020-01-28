@@ -220,12 +220,10 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                     Bundle bundle = new Bundle();
                     bundle.putSerializable(Constants.DATA, networkConnectionList.get(Itempostion));
                     bundle.putString("MESSAGE", messageArea);
-//                    if (MultiplePhotoString != null && MultiplePhotoString.size() > 1) {
-//                        bundle.putStringArrayList("IMAGEURILIST", (ArrayList<String>) MultiplePhotoString);
-//                        bundle.putStringArrayList("FILENAMELIST", (ArrayList<String>) MultipleFileString);
-//                    } else
-
-                        if (SelectedImageUri != null) {
+                    if (MultiplePhotoString != null && MultiplePhotoString.size() > 1) {
+                        bundle.putStringArrayList("IMAGEURILIST", (ArrayList<String>) MultiplePhotoString);
+                        bundle.putStringArrayList("FILENAMELIST", (ArrayList<String>) MultipleFileString);
+                    } else if (SelectedImageUri != null) {
                         bundle.putString("IMAGEURI", SelectedImageUri.toString());
                         bundle.putString("FILENAME", tempFile.toString());
                     }
@@ -328,15 +326,15 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
             try {
                 if (data != null && data.getData() != null) {
                     SelectedImageUri = data.getData();
-//                    MultiplePhoto.add(SelectedImageUri);
-//                    MultiplePhotoString.add(MultiplePhoto.toString());
+                    MultiplePhoto.add(SelectedImageUri);
+                    MultiplePhotoString.add(SelectedImageUri.toString());
                     GalleryImage = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
                     mProfileImageDecodableString = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
                     Log.e(getClass().getName(), "image file path: " + GalleryImage);
 
                     tempFile = new File(GalleryImage);
-//                    MultipleFile.add(tempFile);
-//                    MultipleFileString.add(tempFile.toString());
+                    MultipleFile.add(tempFile);
+                    MultipleFileString.add(tempFile.toString());
 
                     Log.e(getClass().getName(), "file path details: " + tempFile.getName() + " " + tempFile.getAbsolutePath() + "length" + tempFile.length());
 
