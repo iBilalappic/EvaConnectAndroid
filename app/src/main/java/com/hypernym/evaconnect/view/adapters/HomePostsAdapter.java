@@ -16,6 +16,7 @@ import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.bumptech.glide.request.RequestOptions;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
+import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
@@ -47,7 +48,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
     private boolean isLoadingAdded = false;
     private boolean isLoaderVisible = false;
 
-    public class TextTypeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class TextTypeViewHolder extends RecyclerView.ViewHolder  {
         @BindView(R.id.tv_viewcomments)
         TextView tv_viewcomments;
 
@@ -90,44 +91,47 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         public TextTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            tv_viewcomments.setOnClickListener(this);
-            img_like.setOnClickListener(this);
-            img_comment.setOnClickListener(this);
-            img_share.setOnClickListener(this);
-            tv_comcount.setOnClickListener(this);
-            tv_content.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            if (mClickListener != null)
-                switch (v.getId()) {
-                    case R.id.img_like:
-                        mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
-                        break;
-                    case R.id.tv_comcount:
-                        mClickListener.onItemClick(v, getAdapterPosition());
-                        break;
-                    case R.id.img_comment:
-                        mClickListener.onItemClick(v, getAdapterPosition());
-                        break;
-                    case R.id.tv_viewcomments:
-                        mClickListener.onItemClick(v, getAdapterPosition());
-                        break;
-                    case R.id.img_share:
-                        mClickListener.onShareClick(v, getAdapterPosition());
-                        break;
-                    case R.id.tv_connect:
-                        mClickListener.onConnectClick(v, getAdapterPosition());
-                        break;
-                    case R.id.tv_content:
-                        mClickListener.onItemClick(v, getAdapterPosition());
-                        break;
+            tv_viewcomments.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
                 }
+            });
+            img_like.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
+                }
+            });
+            img_comment.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+            img_share.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onShareClick(v, getAdapterPosition());
+                }
+            });
+
+            tv_comcount.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+            tv_content.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onConnectClick(v, getAdapterPosition());
+                }
+            });
         }
     }
 
-    public class EventTypeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class EventTypeViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_viewcomments)
         TextView tv_viewcomments;
 
@@ -159,38 +163,43 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         public EventTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            tv_viewcomments.setOnClickListener(this);
-            img_like.setOnClickListener(this);
-            img_comment.setOnClickListener(this);
-            img_share.setOnClickListener(this);
-            tv_comcount.setOnClickListener(this);
-
-        }
-
-        @Override
-        public void onClick(View v) {
-            if (mClickListener != null)
-                switch (v.getId()) {
-                    case R.id.img_like:
-                        mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
-                        break;
-                    case R.id.img_comment:
-                        mClickListener.onItemClick(v, getAdapterPosition());
-                        break;
-                    case R.id.tv_viewcomments:
-                        mClickListener.onItemClick(v, getAdapterPosition());
-                        break;
-                    case R.id.img_share:
-                        mClickListener.onShareClick(v, getAdapterPosition());
-                        break;
-                    case R.id.tv_comcount:
-                        mClickListener.onItemClick(v, getAdapterPosition());
-                        break;
+            tv_viewcomments.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
                 }
+            });
+            img_like.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
+                }
+            });
+            img_comment.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+            img_share.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onShareClick(v, getAdapterPosition());
+                }
+            });
+            tv_comcount.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+
         }
+
+
     }
 
-    public class JobTypeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class JobTypeViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_viewcomments)
         TextView tv_viewcomments;
 
@@ -221,34 +230,38 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         public JobTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            tv_viewcomments.setOnClickListener(this);
-            img_like.setOnClickListener(this);
-            img_comment.setOnClickListener(this);
-            img_share.setOnClickListener(this);
-            tv_comcount.setOnClickListener(this);
+            tv_viewcomments.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+            img_like.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
+                }
+            });
+            img_comment.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+            img_share.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onShareClick(v, getAdapterPosition());
+                }
+            });
+            tv_comcount.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
         }
 
-        @Override
-        public void onClick(View v) {
-            if (mClickListener != null)
-                switch (v.getId()) {
-                    case R.id.img_like:
-                        mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
-                        break;
-                    case R.id.img_comment:
-                        mClickListener.onItemClick(v, getAdapterPosition());
-                        break;
-                    case R.id.tv_viewcomments:
-                        mClickListener.onItemClick(v, getAdapterPosition());
-                        break;
-                    case R.id.img_share:
-                        mClickListener.onShareClick(v, getAdapterPosition());
-                        break;
-                    case R.id.tv_comcount:
-                        mClickListener.onItemClick(v, getAdapterPosition());
-                        break;
-                }
-        }
     }
 
     public class LoadingTypeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -265,7 +278,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public class ImageTypeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ImageTypeViewHolder extends RecyclerView.ViewHolder  {
         @BindView(R.id.tv_viewcomments)
         TextView tv_viewcomments;
 
@@ -312,46 +325,48 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         public ImageTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            tv_viewcomments.setOnClickListener(this);
-            img_like.setOnClickListener(this);
-            img_comment.setOnClickListener(this);
-            img_share.setOnClickListener(this);
-            tv_comcount.setOnClickListener(this);
-            tv_content.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            if (mClickListener != null)
-                switch (v.getId()) {
-                    case R.id.img_like:
-                        mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
-                        break;
-                    case R.id.img_comment:
-                        mClickListener.onItemClick(v, getAdapterPosition());
-                        break;
-                    case R.id.tv_viewcomments:
-                        mClickListener.onItemClick(v, getAdapterPosition());
-                        break;
-                    case R.id.img_share:
-                        mClickListener.onShareClick(v, getAdapterPosition());
-                        break;
-                    case R.id.tv_comcount:
-                        mClickListener.onItemClick(v, getAdapterPosition());
-                        break;
-                    case R.id.tv_connect:
-                        mClickListener.onConnectClick(v, getAdapterPosition());
-                        break;
-                    case R.id.tv_content:
-                        mClickListener.onItemClick(v, getAdapterPosition());
-                        break;
-
+            tv_viewcomments.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
                 }
+            });
+            img_like.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
+                }
+            });
+            img_comment.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+            img_share.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onShareClick(v, getAdapterPosition());
+                }
+            });
+            tv_comcount.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+            tv_content.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
         }
+
 
     }
 
-    public class VideoTypeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class VideoTypeViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_viewcomments)
         TextView tv_viewcomments;
 
@@ -398,50 +413,52 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         public VideoTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            tv_viewcomments.setOnClickListener(this);
-            img_like.setOnClickListener(this);
-            img_comment.setOnClickListener(this);
-            img_share.setOnClickListener(this);
-            tv_comcount.setOnClickListener(this);
-            img_video.setOnClickListener(this);
-            tv_content.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            if (mClickListener != null)
-                switch (v.getId()) {
-                    case R.id.img_like:
-                        mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
-                        break;
-                    case R.id.img_comment:
-                        mClickListener.onItemClick(v, getAdapterPosition());
-                        break;
-                    case R.id.tv_viewcomments:
-                        mClickListener.onItemClick(v, getAdapterPosition());
-                        break;
-                    case R.id.img_share:
-                        mClickListener.onShareClick(v, getAdapterPosition());
-                        break;
-                    case R.id.tv_comcount:
-                        mClickListener.onItemClick(v, getAdapterPosition());
-                        break;
-                    case R.id.tv_connect:
-                        mClickListener.onConnectClick(v, getAdapterPosition());
-                        break;
-                    case R.id.img_video:
-                        mClickListener.onVideoClick(v,getAdapterPosition());
-                        break;
-                    case R.id.tv_content:
-                        mClickListener.onItemClick(v,getAdapterPosition());
-                        break;
-
+            tv_viewcomments.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
                 }
+            });
+            img_like.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
+                }
+            });
+            img_comment.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+            img_share.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onShareClick(v, getAdapterPosition());
+                }
+            });
+            tv_comcount.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+            img_video.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onVideoClick(v,getAdapterPosition());
+                }
+            });
+            tv_content.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v,getAdapterPosition());
+                }
+            });
         }
-
     }
 
-    public class LinkTypeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class LinkTypeViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_viewcomments)
         TextView tv_viewcomments;
 
@@ -490,45 +507,51 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         public LinkTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            tv_viewcomments.setOnClickListener(this);
-            img_like.setOnClickListener(this);
-            img_comment.setOnClickListener(this);
-            img_share.setOnClickListener(this);
-            tv_comcount.setOnClickListener(this);
-            tv_content.setOnClickListener(this);
-            link.setOnClickListener(this);
+            tv_viewcomments.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+            img_like.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
+                }
+            });
+            img_comment.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+            img_share.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onShareClick(v, getAdapterPosition());
+                }
+            });
+            tv_comcount.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+            tv_content.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+            link.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onURLClick(v, getAdapterPosition());
+                }
+            });
+
         }
 
-        @Override
-        public void onClick(View v) {
-            if (mClickListener != null)
-                switch (v.getId()) {
-                    case R.id.img_like:
-                        mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
-                        break;
-                    case R.id.tv_comcount:
-                        mClickListener.onItemClick(v, getAdapterPosition());
-                        break;
-                    case R.id.img_comment:
-                        mClickListener.onItemClick(v, getAdapterPosition());
-                        break;
-                    case R.id.tv_viewcomments:
-                        mClickListener.onItemClick(v, getAdapterPosition());
-                        break;
-                    case R.id.img_share:
-                        mClickListener.onShareClick(v, getAdapterPosition());
-                        break;
-                    case R.id.tv_connect:
-                        mClickListener.onConnectClick(v, getAdapterPosition());
-                        break;
-                    case R.id.tv_content:
-                        mClickListener.onItemClick(v, getAdapterPosition());
-                        break;
-                    case R.id.link:
-                        mClickListener.onURLClick(v, getAdapterPosition());
-                        break;
-                }
-        }
     }
     public HomePostsAdapter(Context context, List<Post> data, HomePostsAdapter.ItemClickListener mClickListener) {
         this.posts = data;

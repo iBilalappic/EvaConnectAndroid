@@ -35,9 +35,9 @@ public class ConnectionViewModel extends AndroidViewModel {
         return iConnectionRepository.getAllConnections();
     }
 
-    public LiveData<BaseModel<List<User>>> getConnectionByFilter(String type)
+    public LiveData<BaseModel<List<User>>> getConnectionByFilter(User user)
     {
-        return iConnectionRepository.getConnectionByFilter(type);
+        return iConnectionRepository.getConnectionByFilter(user);
     }
 
 }

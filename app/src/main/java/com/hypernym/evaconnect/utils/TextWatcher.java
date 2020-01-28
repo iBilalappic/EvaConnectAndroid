@@ -39,7 +39,6 @@ public class TextWatcher implements android.text.TextWatcher {
     @Override
     public void afterTextChanged(Editable s) {
         filter(s.toString());
-
     }
     private void filter(String text) {
         //new array list that will hold the filtered data

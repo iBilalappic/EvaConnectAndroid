@@ -265,7 +265,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
             public void onChanged(BaseModel<List<Post>> listBaseModel) {
                 if(listBaseModel!=null && !listBaseModel.isError())
                 {
-                    homePostsAdapter.notifyDataSetChanged();
+                    homePostsAdapter.notifyItemChanged(position);
                 }
                 else
                 {

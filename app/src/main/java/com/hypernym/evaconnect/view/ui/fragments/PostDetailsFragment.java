@@ -145,6 +145,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         getComments();
         initRecyclerView();
         setPostData();
+        setclickEvents();
         btn_addcomment.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
@@ -159,8 +160,6 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         validator.setValidationListener(this);
         showBackButton();
     }
-
-
 
     private void setPostData() {
         initializeSlider();
@@ -261,6 +260,8 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
                     comments.addAll(listBaseModel.getData());
                     Collections.reverse(comments);
                     commentsAdapter.notifyDataSetChanged();
+                    post.setComment_count(comments.size());
+                    tv_comcount.setText(String.valueOf(comments.size()));
                 }
                 else
                 {
@@ -288,6 +289,72 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         rc_comments.setAdapter(commentsAdapter);
     }
 
+    private void setclickEvents()
+    {
+        img_like.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                //   showDialog();
+                post.setPost_id(post.getId());
+                User user=LoginUtils.getLoggedinUser();
+                post.setCreated_by_id(user.getId());
+                if(post.getIs_post_like()==null || post.getIs_post_like()<1)
+                {
+                    post.setAction(AppConstants.LIKE);
+                    if(post.getIs_post_like()==null)
+                    {
+                        post.setIs_post_like(1);
+
+                    }
+                    else
+                    {
+                        post.setIs_post_like(post.getIs_post_like()+1);
+
+                    }
+                }
+                else
+                {
+                    post.setAction(AppConstants.UNLIKE);
+                    post.setIs_post_like(post.getIs_post_like()-1);
+                    //  post.setLike_count(post.getLike_count()-1);
+                }
+                Log.d("Detail status",post.getAction()+" count"+post.getIs_post_like());
+                postViewModel.likePost(post).observe(getActivity(), new Observer<BaseModel<List<Post>>>() {
+                    @Override
+                    public void onChanged(BaseModel<List<Post>> listBaseModel) {
+                        if(listBaseModel!=null && !listBaseModel.isError())
+                        {
+
+                            AppUtils.setLikeCount(getContext(),tv_likecount,post.getAction(),img_like);
+                            post.setLike_count(Integer.parseInt(tv_likecount.getText().toString()));
+
+                        }
+                        else
+                        {
+                            networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                        }
+                        hideDialog();
+                    }
+                });
+            }
+        });
+
+        tv_connect.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                if(NetworkUtils.isNetworkConnected(getContext())) {
+                    callConnectApi(tv_connect,post.getUser());
+                }
+                else
+                {
+                    networkErrorDialog();
+                }
+            }
+        });
+
+    }
+
+
     @Override
     public void onValidationSucceeded() {
         addComment(post.getId());
@@ -307,70 +374,13 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         }
     }
 
-    @OnClick(R.id.img_like)
-    public void likePost(View view)
-    {
-     //   showDialog();
-        post.setPost_id(post.getId());
-        User user=LoginUtils.getLoggedinUser();
-        post.setCreated_by_id(user.getId());
-        if(post.getIs_post_like()==null || post.getIs_post_like()<1)
-        {
-            post.setAction(AppConstants.LIKE);
-            if(post.getIs_post_like()==null)
-            {
-                post.setIs_post_like(1);
-
-            }
-            else
-            {
-                post.setIs_post_like(post.getIs_post_like()+1);
-
-            }
-        }
-        else
-        {
-            post.setAction(AppConstants.UNLIKE);
-            post.setIs_post_like(post.getIs_post_like()-1);
-          //  post.setLike_count(post.getLike_count()-1);
-        }
-        Log.d("Detail status",post.getAction()+" count"+post.getIs_post_like());
-        postViewModel.likePost(post).observe(this, new Observer<BaseModel<List<Post>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                if(listBaseModel!=null && !listBaseModel.isError())
-                {
-
-                 AppUtils.setLikeCount(getContext(),tv_likecount,post.getAction(),img_like);
-
-                }
-                else
-                {
-                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
-                }
-                hideDialog();
-            }
-        });
-    }
-
-    @OnClick(R.id.tv_connect)
-    public void onConnectClick() {
-        if(NetworkUtils.isNetworkConnected(getContext())) {
-            callConnectApi(tv_connect,post.getUser());
-        }
-        else
-        {
-            networkErrorDialog();
-        }
-
-    }
     private void callConnectApi(TextView tv_connect,User connectionItem) {
         Connection connection=new Connection();
         User user= LoginUtils.getLoggedinUser();
         connection.setReceiver_id(connectionItem.getId());
         connection.setSender_id(user.getId());
 
-        if(connectionItem.getConnection_id()==null && !tv_connect.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_SENT))
+        if(!tv_connect.getText().toString().equalsIgnoreCase(AppConstants.CONNECTED) && connectionItem.getConnection_id()==null && !tv_connect.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_SENT))
         {
             connection.setStatus(AppConstants.STATUS_PENDING);
             showDialog();
@@ -411,34 +421,6 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         });
     }
 
-//    private void callConnectApi() {
-//        if(tv_connect.getText().toString().equalsIgnoreCase(getString(R.string.connect)) ||tv_connect.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_ACCEPT) )
-//        {
-//            showDialog();
-//            User user=LoginUtils.getLoggedinUser();
-//            Connection connection=new Connection();
-//            connection.setReceiver_id(post.getUser().getId());
-//            connection.setSender_id(user.getId());
-//            connection.setStatus(AppConstants.STATUS_PENDING);
-//
-//            connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
-//                @Override
-//                public void onChanged(BaseModel<List<Connection>> listBaseModel) {
-//                    if(listBaseModel!=null && !listBaseModel.isError())
-//                    {
-//
-//                        tv_connect.setText(AppConstants.REQUEST_SENT);
-//                        post.setIs_connected(AppConstants.ACTIVE);
-//                    }
-//                    else
-//                    {
-//                        networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
-//                    }
-//                    hideDialog();
-//                }
-//            });
-//        }
-//    }
 
     @OnClick(R.id.img_video)
     public void playVideo()

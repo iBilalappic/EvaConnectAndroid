@@ -101,7 +101,17 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
     //here we are passing the filtered data
     //and assigning it to the list with notifydatasetchanged method
     public void filterList(List<User> filterdNames) {
-        this.connections = filterdNames;
+        connections.clear();
+        if(filterdNames.size()>0)
+        {
+
+            connections.addAll(filterdNames);
+        }
+        else
+        {
+            connections.addAll(originalConnections);
+        }
+
         //this.filteredConnections=connections;
         notifyDataSetChanged();
     }

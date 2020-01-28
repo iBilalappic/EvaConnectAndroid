@@ -34,7 +34,6 @@ public class PostRepository implements IPostRepository {
             public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
                 postMutableLiveData.setValue(response.body());
             }
-
             @Override
             public void onFailure(Call<BaseModel<List<Post>>> call, Throwable t) {
                 postMutableLiveData.setValue(null);

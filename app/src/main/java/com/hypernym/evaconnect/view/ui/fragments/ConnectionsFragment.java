@@ -53,6 +53,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
 
     private ConnectionsAdapter connectionsAdapter;
     private List<User> connectionList =new ArrayList<>();
+
     private OptionsAdapter optionsAdapter,subOptionsAdapter;
     private LinearLayoutManager linearLayoutManager;
     private ConnectionViewModel connectionViewModel;
@@ -224,13 +225,9 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         {
             subOptionsAdapter.notifyDataSetChanged();
         }
-        if(NetworkUtils.isNetworkConnected(getContext()) && !type.equalsIgnoreCase(getString(R.string.everyone)))
+        if(NetworkUtils.isNetworkConnected(getContext()))
         {
             getConnectionByFilter(type);
-        }
-        else if(NetworkUtils.isNetworkConnected(getContext()) && type.equalsIgnoreCase(getString(R.string.everyone)))
-        {
-            getUserConnections();
         }
         else
         {
@@ -240,7 +237,15 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
 
     private void getConnectionByFilter(String type) {
         showDialog();
-        connectionViewModel.getConnectionByFilter(type).observe(this, new Observer<BaseModel<List<User>>>() {
+        User userData=new User();
+        User user=LoginUtils.getLoggedinUser();
+        if(!type.equalsIgnoreCase(getString(R.string.everyone)))
+           userData.setType(type);
+        userData.setUser_id(user.getId());
+        if(edt_search.getText().toString().length()>0)
+             userData.setFirst_name(edt_search.getText().toString());
+
+        connectionViewModel.getConnectionByFilter(userData).observe(this, new Observer<BaseModel<List<User>>>() {
             @Override
             public void onChanged(BaseModel<List<User>> listBaseModel) {
                 if(listBaseModel!=null && !listBaseModel.isError())
@@ -276,7 +281,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         connection.setReceiver_id(connectionItem.getId());
         connection.setSender_id(user.getId());
 
-        if(connectionItem.getConnection_id()==null && !tv_connect.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_SENT))
+        if(!tv_connect.getText().toString().equalsIgnoreCase(AppConstants.CONNECTED) && connectionItem.getConnection_id()==null && !tv_connect.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_SENT))
         {
             connection.setStatus(AppConstants.STATUS_PENDING);
             showDialog();

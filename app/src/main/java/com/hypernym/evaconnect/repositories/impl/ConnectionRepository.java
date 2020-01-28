@@ -77,12 +77,9 @@ public class ConnectionRepository implements IConnectionRespository {
     }
 
     @Override
-    public LiveData<BaseModel<List<User>>> getConnectionByFilter(String type) {
+    public LiveData<BaseModel<List<User>>> getConnectionByFilter(User userData) {
         userMutableLiveData=new MutableLiveData<>();
-        User userData=new User();
-        User user=LoginUtils.getLoggedinUser();
-        userData.setType(type);
-        userData.setUser_id(user.getId());
+
         RestClient.get().appApi().getConnectionByFilter(userData).enqueue(new Callback<BaseModel<List<User>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
