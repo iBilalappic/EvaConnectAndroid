@@ -315,7 +315,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 //  Toast.makeText(getActivity(), "sss", Toast.LENGTH_SHORT).show();
                 messageText = messageArea.getText().toString();
                 Map<String, String> map = new HashMap<String, String>();
-
                 if (SelectedImageUri == null && messageText.length() > 0) {
                     map.put("Message", messageText);
                     map.put("user", UserDetails.username);
@@ -327,13 +326,19 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     sendNotification();
                     messageArea.setText("");
 
-                } else {
+                } else if(SelectedImageUri!=null) {
                     UploadImageToFirebase();
+                }else{
+                    Toast.makeText(getContext(), "Please type message...", Toast.LENGTH_SHORT).show();
                 }
                 break;
 
             case R.id.browsefiles:
-                openPictureDialog();
+             //   openPictureDialog();
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("*/*");
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_PHOTO_GALLERY);
                 break;
 
         }
@@ -408,6 +413,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                                 attachments.clear();
                                 MultipleFile.clear();
                                 MultiplePhoto.clear();
+                                SelectedImageUri=null;
                                 messageArea.setText("");
                                 //  Toast.makeText(getContext(), "onSuccess: uri= " + uri.toString(), Toast.LENGTH_SHORT).show();
                             }
@@ -454,6 +460,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                             reference2.push().setValue(map);
                             sendNotification();
                             attachments.clear();
+                            MultipleFile.clear();
+                            MultiplePhoto.clear();
+                            SelectedImageUri=null;
                             messageArea.setText("");
                             //  Toast.makeText(getContext(), "onSuccess: uri= " + uri.toString(), Toast.LENGTH_SHORT).show();
                         }
