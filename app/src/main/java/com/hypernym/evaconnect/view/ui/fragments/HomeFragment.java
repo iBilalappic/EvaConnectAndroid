@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -17,6 +18,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.hypernym.evaconnect.R;
@@ -60,6 +63,8 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
 
+
+
     private List<Post> posts=new ArrayList<>();
     private HomePostsAdapter homePostsAdapter;
     private LinearLayoutManager linearLayoutManager;
@@ -85,6 +90,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     }
 
     private void init() {
+        setPageTitle(getString(R.string.home));
         homeViewModel = ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(HomeViewModel.class);
         postViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(PostViewModel.class);
         connectionViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
@@ -144,7 +150,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
             public void onChanged(BaseModel<List<Post>> dashboardBaseModel) {
                 if(dashboardBaseModel !=null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size()>0 && dashboardBaseModel.getData().get(0)!=null)
                 {
-                   // posts.clear();
+                    posts.clear();
                     for(Post post:dashboardBaseModel.getData())
                     {
                         if(post.getType().equalsIgnoreCase("post") && post.getPost_image().size()>0)
@@ -309,6 +315,15 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         bundle.putString("url",posts.get(position).getContent());
         loadUrlFragment.setArguments(bundle);
         loadFragment(R.id.framelayout,loadUrlFragment,getContext(),true);
+    }
+
+    @Override
+    public void onProfileClick(View view, int position) {
+        PersonDetailFragment personDetailFragment=new PersonDetailFragment();
+        Bundle bundle=new Bundle();
+        bundle.putSerializable("PostData",posts.get(position));
+        personDetailFragment.setArguments(bundle);
+        loadFragment(R.id.framelayout,personDetailFragment,getContext(),true);
     }
 
     private void callConnectApi(TextView text,int position) {

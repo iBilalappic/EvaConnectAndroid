@@ -11,14 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
-import com.hypernym.evaconnect.constants.AppConstants;
-import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.User;
-import com.hypernym.evaconnect.toolbar.OnItemClickListener;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -78,7 +73,7 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
         @BindView(R.id.tv_name)
         TextView tv_name;
 
-        @BindView(R.id.tv_designation)
+        @BindView(R.id.tv_field)
         TextView tv_designation;
 
         @BindView(R.id.tv_connect)

@@ -27,6 +27,7 @@ public class Post implements Serializable {
     private MultipartBody.Part video;
     private String post_video;
     private String link_thumbnail;
+    private boolean is_receiver;
 
 
 
@@ -190,4 +191,13 @@ public class Post implements Serializable {
     public void setLink_thumbnail(String link_thumbnail) {
         this.link_thumbnail = link_thumbnail;
     }
+
+    public boolean isIs_receiver() {
+        return is_receiver;
+    }
+
+    public void setIs_receiver(boolean is_receiver) {
+        this.is_receiver = is_receiver;
+    }
 }
+

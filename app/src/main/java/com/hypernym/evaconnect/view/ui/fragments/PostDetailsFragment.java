@@ -163,7 +163,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
 
     private void setPostData() {
         initializeSlider();
-        connectionViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
+
         tv_comcount.setText(String.valueOf(post.getComment_count()));
         tv_likecount.setText(String.valueOf(post.getLike_count()));
         tv_connections.setText(AppUtils.getConnectionsCount(post.getUser().getTotal_connection()));
@@ -180,11 +180,11 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         else
         {
             tv_connect.setVisibility(View.VISIBLE);
-            tv_connect.setText(AppUtils.getConnectionStatus(getContext(),post.getIs_connected(),post.getUser().isIs_receiver()));
+            tv_connect.setText(AppUtils.getConnectionStatus(getContext(),post.getIs_connected(),post.isIs_receiver()));
         }
 
         AppUtils.setGlideImage(getContext(),profile_image,post.getUser().getUser_image());
-        AppUtils.setGlideImage(getContext(),img_user,post.getUser().getUser_image());
+        AppUtils.setGlideImage(getContext(),img_user,user.getUser_image());
         if(post.getIs_post_like()!=null && post.getIs_post_like()>0)
         {
             img_like.setBackground(getContext().getDrawable(R.mipmap.ic_like_selected));
@@ -374,52 +374,6 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         }
     }
 
-    private void callConnectApi(TextView tv_connect,User connectionItem) {
-        Connection connection=new Connection();
-        User user= LoginUtils.getLoggedinUser();
-        connection.setReceiver_id(connectionItem.getId());
-        connection.setSender_id(user.getId());
-
-        if(!tv_connect.getText().toString().equalsIgnoreCase(AppConstants.CONNECTED) && connectionItem.getConnection_id()==null && !tv_connect.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_SENT))
-        {
-            connection.setStatus(AppConstants.STATUS_PENDING);
-            showDialog();
-            callApi(tv_connect,connection,connectionItem);
-        }
-        else if (!tv_connect.getText().toString().equalsIgnoreCase(AppConstants.CONNECTED) && connectionItem.getConnection_id()!=null && !tv_connect.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_SENT))
-        {
-            connection.setStatus(AppConstants.ACTIVE);
-            connection.setId(connectionItem.getConnection_id());
-            connection.setModified_by_id(user.getId());
-            connection.setModified_datetime(DateUtils.GetCurrentdatetime());
-            callApi(tv_connect,connection,connectionItem);
-        }
-    }
-    private void callApi(TextView tv_connect,Connection connection,User connectionItem )
-    {
-        connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Connection>> listBaseModel) {
-                if(listBaseModel!=null && !listBaseModel.isError())
-                {
-                    if(tv_connect.getText().toString().equalsIgnoreCase(getString(R.string.connect)))
-                    {
-                        tv_connect.setText(AppConstants.REQUEST_SENT);
-                    }
-                    else
-                    {
-                        tv_connect.setText(AppConstants.CONNECTED);
-                    }
-                    connectionItem.setIs_connected(AppConstants.ACTIVE);
-                }
-                else
-                {
-                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
-                }
-                hideDialog();
-            }
-        });
-    }
 
 
     @OnClick(R.id.img_video)

@@ -149,25 +149,28 @@ public final class AppUtils {
 
     public static String getConnectionStatus(Context context,String status,boolean isreceiver)
     {
-        String connectionStatus=context.getString(R.string.connect);;
-        switch (status)
+        String connectionStatus=context.getString(R.string.connect);
+        if(status!=null)
         {
-            case AppConstants.NOT_CONNECTED:
-                connectionStatus=context.getString(R.string.connect);
-                break;
-            case AppConstants.ACTIVE:
-                connectionStatus=AppConstants.CONNECTED;
-            break;
-            case AppConstants.PENDING:
-                if(isreceiver)
-                {
-                    connectionStatus=AppConstants.REQUEST_ACCEPT;
-                }
-                else
-                {
-                    connectionStatus=AppConstants.REQUEST_SENT;
-                }
-                break;
+            switch (status)
+            {
+                case AppConstants.NOT_CONNECTED:
+                    connectionStatus=context.getString(R.string.connect);
+                    break;
+                case AppConstants.ACTIVE:
+                    connectionStatus=AppConstants.CONNECTED;
+                    break;
+                case AppConstants.PENDING:
+                    if(isreceiver)
+                    {
+                        connectionStatus=AppConstants.REQUEST_ACCEPT;
+                    }
+                    else
+                    {
+                        connectionStatus=AppConstants.REQUEST_SENT;
+                    }
+                    break;
+            }
         }
         return connectionStatus;
     }
@@ -264,28 +267,22 @@ public final class AppUtils {
             urlTask.execute(url);
     }
 
-    public static void makeTextViewResizable(final TextView tv, final int maxLine) {
-        String expandText="see more";
+    public static void makeTextViewResizable(final TextView tv, final int maxLine,String strtext) {
+        tv.setText(strtext);
         if (tv.getTag() == null) {
             tv.setTag(tv.getText());
         }
         ViewTreeObserver vto = tv.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-
-            @SuppressWarnings("deprecation")
             @Override
             public void onGlobalLayout() {
-
                 ViewTreeObserver obs = tv.getViewTreeObserver();
                 obs.removeGlobalOnLayoutListener(this);
-                if (maxLine <= 0) {
-                    int lineEndIndex = tv.getLayout().getLineEnd(0);
-                    String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + "..." + expandText;
+                if (tv.getLineCount() > maxLine) {
+                    int lineEndIndex = tv.getLayout().getLineEnd(maxLine);
+                    String text = tv.getText().subSequence(0, lineEndIndex - maxLine) + "...See More";
                     tv.setText(text);
-                } else if (tv.getLineCount() > maxLine) {
-                    int lineEndIndex = tv.getLayout().getLineEnd(maxLine - 1);
-                    String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + "..." + expandText;
-                    tv.setText(text);
+
                 }
             }
         });

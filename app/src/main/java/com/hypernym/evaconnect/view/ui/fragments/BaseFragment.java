@@ -26,17 +26,26 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
+import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.Connection;
+import com.hypernym.evaconnect.models.User;
+import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
+import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
+import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.view.bottomsheets.BottomSheetPictureSelection;
 import com.hypernym.evaconnect.view.dialogs.CustomProgressBar;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.view.ui.activities.BaseActivity;
 import com.hypernym.evaconnect.view.ui.activities.SignupDetailsActivity;
+import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 
 import org.w3c.dom.Text;
 
@@ -45,6 +54,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -62,6 +72,7 @@ public class BaseFragment extends Fragment {
     private static final int CAMERAA = 1;
     private String mCurrentPhotoPath;
     private File tempFile,file_name;
+    private ConnectionViewModel connectionViewModel;
     /**
      * Could handle back press.
      * @return true if back press was handled
@@ -73,6 +84,7 @@ public class BaseFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        connectionViewModel= ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
 
     }
 
@@ -267,9 +279,52 @@ public class BaseFragment extends Fragment {
     public void setPageTitle(String title)
     {
         TextView textView=getActivity().findViewById(R.id.tv_title);
-//        getActivity().findViewById(R.id.tv_pagetitle).setT.setVisibility(View.GONE);
         textView.setText(title);
     }
+    public void callConnectApi(TextView tv_connect, User connectionItem) {
+        Connection connection=new Connection();
+        User user= LoginUtils.getLoggedinUser();
+        connection.setReceiver_id(connectionItem.getId());
+        connection.setSender_id(user.getId());
 
-
+        if(!tv_connect.getText().toString().equalsIgnoreCase(AppConstants.CONNECTED) && connectionItem.getConnection_id()==null && !tv_connect.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_SENT))
+        {
+            connection.setStatus(AppConstants.STATUS_PENDING);
+            showDialog();
+            callApi(tv_connect,connection,connectionItem);
+        }
+        else if (!tv_connect.getText().toString().equalsIgnoreCase(AppConstants.CONNECTED) && connectionItem.getConnection_id()!=null && !tv_connect.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_SENT))
+        {
+            connection.setStatus(AppConstants.ACTIVE);
+            connection.setId(connectionItem.getConnection_id());
+            connection.setModified_by_id(user.getId());
+            connection.setModified_datetime(DateUtils.GetCurrentdatetime());
+            callApi(tv_connect,connection,connectionItem);
+        }
+    }
+    private void callApi(TextView tv_connect,Connection connection,User connectionItem )
+    {
+        connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Connection>> listBaseModel) {
+                if(listBaseModel!=null && !listBaseModel.isError())
+                {
+                    if(tv_connect.getText().toString().equalsIgnoreCase(getString(R.string.connect)))
+                    {
+                        tv_connect.setText(AppConstants.REQUEST_SENT);
+                    }
+                    else
+                    {
+                        tv_connect.setText(AppConstants.CONNECTED);
+                    }
+                    connectionItem.setIs_connected(AppConstants.ACTIVE);
+                }
+                else
+                {
+                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                }
+                hideDialog();
+            }
+        });
+    }
 }
