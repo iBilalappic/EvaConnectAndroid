@@ -244,7 +244,11 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
         browsefiles.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openPictureDialog();
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("*/*");
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_PHOTO_GALLERY);
+              //  openPictureDialog();
             }
         });
         mDialogMessage.setCanceledOnTouchOutside(true);
