@@ -123,7 +123,7 @@ public final class AppUtils {
                 .into(new CustomTarget<Drawable>() {
                     @Override
                     public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                        imageView.setBackground(resource);
+                        imageView.setImageDrawable(resource);
                     }
                     @Override
                     public void onLoadCleared(@Nullable Drawable placeholder) {

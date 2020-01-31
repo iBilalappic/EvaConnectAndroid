@@ -17,7 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,16 +67,18 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 import static android.app.Activity.RESULT_OK;
+import static butterknife.OnTextChanged.*;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NewPostFragment extends BaseFragment implements Validator.ValidationListener,AttachmentsAdapter.ItemClickListener {
+public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.ItemClickListener {
 
     @BindView(R.id.rc_attachments)
     RecyclerView rc_attachments;
@@ -85,7 +89,6 @@ public class NewPostFragment extends BaseFragment implements Validator.Validatio
     @BindView(R.id.post)
     TextView post;
 
-    @NotEmpty
     @BindView(R.id.edt_content)
     EditText edt_content;
 
@@ -150,7 +153,14 @@ public class NewPostFragment extends BaseFragment implements Validator.Validatio
         post.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
-                validator.validate();
+                if((edt_content.getText().length()>0 || part_images.size()>0 || video!=null) && NetworkUtils.isNetworkConnected(getContext())) {
+                    createPost();
+                }
+                else
+                {
+                    networkErrorDialog();
+                }
+
             }
         });
 
@@ -158,19 +168,33 @@ public class NewPostFragment extends BaseFragment implements Validator.Validatio
     }
 
     private void init() {
-        validator = new Validator(this);
-        validator.setValidationListener(this);
         User user=LoginUtils.getLoggedinUser();
         AppUtils.setGlideImage(getContext(),profile_image,user.getUser_image());
         tv_name.setText(user.getFirst_name());
         tv_connections.setText(AppUtils.getConnectionsCount(user.getTotal_connection()));
         showBackButton();
         edt_content.addTextChangedListener(new URLTextWatcher(getActivity(),edt_content,urlEmbeddedView));
+        edt_content.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+               setPostButton();
+            }
+        });
     }
+
 
     private void createPost() {
             showDialog();
-
             postModel.setAttachments(part_images);
             postModel.setContent(edt_content.getText().toString());
             postModel.setVideo(video);
@@ -234,6 +258,7 @@ public class NewPostFragment extends BaseFragment implements Validator.Validatio
                                     img_play.setVisibility(View.VISIBLE);
                                     AppUtils.setGlideVideoThumbnail(getContext(),img_video,currentPhotoPath);
                                     video=MultipartBody.Part.createFormData("post_video", file_name.getName(), reqFile);
+                                    setPostButton();
                                 }
                                 else
                                 {
@@ -243,6 +268,7 @@ public class NewPostFragment extends BaseFragment implements Validator.Validatio
                                     img_video.setVisibility(View.GONE);
                                     img_play.setVisibility(View.GONE);
                                     part_images.add(MultipartBody.Part.createFormData("post_image", file_name.getName(), reqFile));
+                               setPostButton();
                                 }
 
                             } else {
@@ -290,6 +316,7 @@ public class NewPostFragment extends BaseFragment implements Validator.Validatio
                         img_play.setVisibility(View.VISIBLE);
                         AppUtils.setGlideVideoThumbnail(getContext(),img_video,globalImagePath);
                         video=MultipartBody.Part.createFormData("post_video", file_name.getName(), reqFile);
+                        setPostButton();
                     }
                     else
                     {
@@ -299,6 +326,7 @@ public class NewPostFragment extends BaseFragment implements Validator.Validatio
                         img_video.setVisibility(View.GONE);
                         img_play.setVisibility(View.GONE);
                         part_images.add(MultipartBody.Part.createFormData("post_image", file.getName(), reqFile));
+                        setPostButton();
                     }
 
                 }
@@ -306,35 +334,11 @@ public class NewPostFragment extends BaseFragment implements Validator.Validatio
         }
     }
 
-    @Override
-    public void onValidationSucceeded() {
-        if(NetworkUtils.isNetworkConnected(getContext())) {
-            createPost();
-        }
-        else
-        {
-            networkErrorDialog();
-        }
-    }
 
-    @Override
-    public void onValidationFailed(List<ValidationError> errors) {
-        for (ValidationError error : errors) {
-            View view = error.getView();
-            String message = error.getCollatedErrorMessage(getContext());
-            // Display error messages
-            if (view instanceof EditText) {
-                ((EditText) view).setError(message);
-            } else {
-                Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
-            }
-        }
-    }
     @OnClick(R.id.img_video)
     public void playVideo()
     {
         AppUtils.playVideo(getActivity(),currentPhotoPath);
-
     }
 
     @Override
@@ -348,6 +352,7 @@ public class NewPostFragment extends BaseFragment implements Validator.Validatio
                             attachments.remove(position);
                             attachmentsAdapter.notifyDataSetChanged();
                             part_images.remove(position);
+                            setPostButton();
                             break;
                         case R.id.button_negative:
                             break;
@@ -358,6 +363,19 @@ public class NewPostFragment extends BaseFragment implements Validator.Validatio
             });
                 simpleDialog.show();
     }
+
+    public void setPostButton()
+    {
+       if(edt_content.getText().length()>0 || part_images.size()>0 || video!=null)
+       {
+           post.setBackground(getResources().getDrawable(R.drawable.rounded_button));
+       }
+       else
+       {
+           post.setBackground(getResources().getDrawable(R.drawable.button_unfocused));
+       }
+    }
+
 
 
 }

@@ -2,6 +2,7 @@ package com.hypernym.evaconnect.view.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -21,6 +22,8 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.utils.BitmapScaler;
 import com.smarteist.autoimageslider.SliderViewAdapter;
 
 import java.util.ArrayList;
@@ -56,7 +59,7 @@ public class SliderImageAdapter extends SliderViewAdapter<SliderImageAdapter.Sli
                 .into(new CustomTarget<Drawable>() {
                     @Override
                     public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                        viewHolder.imageViewBackground.setBackground(resource);
+                        viewHolder.imageViewBackground.setImageDrawable(resource);
                     }
                     @Override
                     public void onLoadCleared(@Nullable Drawable placeholder) {
