@@ -57,6 +57,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
     private OptionsAdapter optionsAdapter,subOptionsAdapter;
     private LinearLayoutManager linearLayoutManager;
     private ConnectionViewModel connectionViewModel;
+    String type="Everyone";
 
     public ConnectionsFragment() {
         // Required empty public constructor
@@ -79,6 +80,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         initMainOptionsRecView();
         initSubOptionsRecView();
         initRecyclerView();
+        setPageTitle(getString(R.string.connections));
         if(NetworkUtils.isNetworkConnected(getContext())) {
             getUserConnections();
         }
@@ -86,7 +88,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         {
             networkErrorDialog();
         }
-        edt_search.addTextChangedListener(new TextWatcher(getActivity(),edt_search,connectionList,connectionsAdapter));
+        edt_search.addTextChangedListener(new TextWatcher(this,edt_search,connectionList,connectionsAdapter,type));
         return view;
     }
 
@@ -186,7 +188,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
     @Override
     public void onItemClick(View view, int position,boolean isMainCatrgory) {
         List<Options> categories=new ArrayList<>();
-        String type=getString(R.string.everyone);
+
         if(isMainCatrgory)
         {
             categories.addAll(mainCategories);
@@ -235,8 +237,8 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         }
     }
 
-    private void getConnectionByFilter(String type) {
-        showDialog();
+    public void getConnectionByFilter(String type) {
+       // showDialog();
         User userData=new User();
         User user=LoginUtils.getLoggedinUser();
         if(!type.equalsIgnoreCase(getString(R.string.everyone)))
@@ -258,7 +260,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
                 {
                     networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
                 }
-                hideDialog();
+              //  hideDialog();
             }
         });
     }

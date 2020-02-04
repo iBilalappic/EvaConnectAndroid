@@ -85,7 +85,6 @@ public class BaseFragment extends Fragment {
     public void onResume() {
         super.onResume();
         connectionViewModel= ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
-
     }
 
     public void showDialog() {
@@ -278,8 +277,12 @@ public class BaseFragment extends Fragment {
     }
     public void setPageTitle(String title)
     {
-        TextView textView=getActivity().findViewById(R.id.tv_title);
-        textView.setText(title);
+        if(BaseActivity.getNotificationCount()==0)
+        {
+            TextView textView=getActivity().findViewById(R.id.tv_title);
+            textView.setText(title);
+        }
+
     }
     public void callConnectApi(TextView tv_connect, User connectionItem) {
         Connection connection=new Connection();
@@ -304,6 +307,7 @@ public class BaseFragment extends Fragment {
     }
     private void callApi(TextView tv_connect,Connection connection,User connectionItem )
     {
+
         connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
             @Override
             public void onChanged(BaseModel<List<Connection>> listBaseModel) {
@@ -327,4 +331,5 @@ public class BaseFragment extends Fragment {
             }
         });
     }
+
 }

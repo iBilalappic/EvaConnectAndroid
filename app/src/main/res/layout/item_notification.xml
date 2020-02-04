@@ -23,35 +23,38 @@
         style="@style/TextStyle.Bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="Ed Hunter"
         android:textSize="18dp"
-        app:layout_constraintBottom_toTopOf="@+id/tv_connections"
+        app:layout_constraintBottom_toTopOf="@+id/tv_status"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_connections"
+        android:id="@+id/tv_status"
         style="@style/TextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
         android:text="Liked your post (36 mins ago)"
-        app:layout_constraintBottom_toTopOf="@+id/textView23"
+        app:layout_constraintBottom_toTopOf="@+id/tv_content"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
     <ImageView
+        android:id="@+id/img_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:src="@drawable/like_selected"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_connections"
-        app:layout_constraintEnd_toEndOf="parent"></ImageView>
+        app:layout_constraintBottom_toBottomOf="@+id/tv_status"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         style="@style/TextStyle"
-        android:id="@+id/textView23"
+        android:id="@+id/tv_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -69,5 +72,5 @@
         android:background="@color/gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView23" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_content" />
 </androidx.constraintlayout.widget.ConstraintLayout>

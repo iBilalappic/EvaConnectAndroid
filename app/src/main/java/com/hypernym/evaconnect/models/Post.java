@@ -28,6 +28,8 @@ public class Post implements Serializable {
     private String post_video;
     private String link_thumbnail;
     private boolean is_receiver;
+    private String object_type;
+    private String details;
 
 
 
@@ -198,6 +200,22 @@ public class Post implements Serializable {
 
     public void setIs_receiver(boolean is_receiver) {
         this.is_receiver = is_receiver;
+    }
+
+    public String getObject_type() {
+        return object_type;
+    }
+
+    public void setObject_type(String object_type) {
+        this.object_type = object_type;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
     }
 }
 

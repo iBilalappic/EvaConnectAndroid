@@ -63,8 +63,6 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
 
-
-
     private List<Post> posts=new ArrayList<>();
     private HomePostsAdapter homePostsAdapter;
     private LinearLayoutManager linearLayoutManager;
@@ -75,6 +73,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     private boolean isLastPage = false;
     private boolean isLoading = false;
     int itemCount = 0;
+    private List<Post> notifications=new ArrayList<>();
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -85,7 +84,6 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this,view);
-
         return view;
     }
 
@@ -95,7 +93,10 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         postViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(PostViewModel.class);
         connectionViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
         currentPage = PAGE_START;
-        callPostsApi();
+        if(posts.size()==0)
+        {
+            callPostsApi();
+        }
         homePostsAdapter=new HomePostsAdapter(getContext(),posts,this);
         linearLayoutManager=new LinearLayoutManager(getContext());
         rc_home.setLayoutManager(linearLayoutManager);
@@ -135,6 +136,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     public void onResume() {
         super.onResume();
         init();
+
         newpost.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
@@ -143,14 +145,16 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         });
     }
 
+
+
     private void callPostsApi() {
         User user=LoginUtils.getLoggedinUser();
         homeViewModel.getDashboard(user,AppConstants.TOTAL_PAGES,currentPage).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> dashboardBaseModel) {
+             //   homePostsAdapter.clear();
                 if(dashboardBaseModel !=null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size()>0 && dashboardBaseModel.getData().get(0)!=null)
                 {
-                    posts.clear();
                     for(Post post:dashboardBaseModel.getData())
                     {
                         if(post.getType().equalsIgnoreCase("post") && post.getPost_image().size()>0)
@@ -174,7 +178,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
                             post.setPost_type(AppConstants.LINK_POST);
                         }
                     }
-                   posts.addAll(dashboardBaseModel.getData());
+                    posts.addAll(dashboardBaseModel.getData());
                     homePostsAdapter.notifyDataSetChanged();
                     swipeRefresh.setRefreshing(false);
                     homePostsAdapter.removeLoading();
@@ -193,8 +197,6 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
 
             }
         });
-
-
     }
 
     @Override
@@ -340,7 +342,6 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
                 public void onChanged(BaseModel<List<Connection>> listBaseModel) {
                     if(listBaseModel!=null && !listBaseModel.isError())
                     {
-
                         text.setText("Request Sent");
                     }
                     else

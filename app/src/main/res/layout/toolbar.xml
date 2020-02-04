@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
-            android:src="@drawable/menu"
+            android:background="@drawable/menu"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -59,7 +59,7 @@
             <TextView
                 android:id="@+id/tv_title"
                 style="@style/TextStyle.Black"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:text="Home"
@@ -74,12 +74,11 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
         <ImageView
             android:id="@+id/img_uparrow"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:background="@color/lighter_gray"
             android:gravity="center"
             android:padding="10dp"

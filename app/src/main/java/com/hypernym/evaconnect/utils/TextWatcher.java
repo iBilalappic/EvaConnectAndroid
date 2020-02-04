@@ -8,22 +8,25 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.view.adapters.ConnectionsAdapter;
+import com.hypernym.evaconnect.view.ui.fragments.ConnectionsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TextWatcher implements android.text.TextWatcher {
 
-    private Activity activity;
+    private ConnectionsFragment fragment;
     private EditText editText;
     private List<User> users=new ArrayList<>();
     private ConnectionsAdapter connectionsAdapter;
+    private String type;
 
-    public TextWatcher(Activity activity, EditText editText, List<User> arrayList, ConnectionsAdapter connectionsAdapter) {
-        this.activity=activity;
+    public TextWatcher(ConnectionsFragment fragment, EditText editText, List<User> arrayList, ConnectionsAdapter connectionsAdapter, String type) {
+        this.fragment=fragment;
         this.editText=editText;
         this.users=arrayList;
         this.connectionsAdapter=connectionsAdapter;
+        this.type=type;
     }
 
     @Override
@@ -33,27 +36,12 @@ public class TextWatcher implements android.text.TextWatcher {
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+        fragment.getConnectionByFilter(type);
     }
 
     @Override
     public void afterTextChanged(Editable s) {
-        filter(s.toString());
-    }
-    private void filter(String text) {
-        //new array list that will hold the filtered data
-        List<User> filterdData = new ArrayList<>();
 
-        //looping through existing elements
-        for (User s : users) {
-            //if the existing elements contains the search input
-            if (s.getFirst_name().toLowerCase().contains(text.toLowerCase())) {
-                //adding the element to filtered list
-                filterdData.add(s);
-            }
-        }
-
-        //calling a method of the adapter class and passing the filtered list
-         connectionsAdapter.filterList(filterdData);
     }
+
 }

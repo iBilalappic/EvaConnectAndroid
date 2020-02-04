@@ -17,4 +17,6 @@ public interface IPostRepository {
 
     LiveData<BaseModel<List<Comment>>> getComments(Post post);
 
+    LiveData<BaseModel<List<Post>>> getPostById(int id);
+
 }

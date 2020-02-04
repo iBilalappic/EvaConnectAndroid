@@ -45,8 +45,18 @@
         <item name="android:textAllCaps">false</item>
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:layout_height">wrap_content</item>
-         <item name="android:textAppearance">@style/TextAppearance.Text.Light</item>
+        <item name="android:textAppearance">@style/TextAppearance.Text.Light</item>
         <item name="android:background">@drawable/rounded_button</item>
+    </style>
+    <style name="PostButton">
+        <item name="android:textSize">14sp</item>
+        <item name="android:paddingLeft">30dp</item>
+        <item name="android:paddingRight">30dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">@style/TextAppearance.Text.Light</item>
+        <item name="android:background">@drawable/button_background</item>
     </style>
     <style name="Button.unselected">
         <item name="android:textSize">14sp</item>

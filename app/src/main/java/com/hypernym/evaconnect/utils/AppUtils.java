@@ -52,11 +52,15 @@ import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.view.adapters.HomePostsAdapter;
+import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.view.dialogs.VideoViewDialog;
+import com.hypernym.evaconnect.view.ui.activities.BaseActivity;
+import com.hypernym.evaconnect.view.ui.activities.LoginActivity;
 import com.hypernym.evaconnect.view.ui.fragments.BaseFragment;
 import com.nguyencse.URLEmbeddedData;
 import com.nguyencse.URLEmbeddedTask;
 import com.nguyencse.URLEmbeddedView;
+import com.onesignal.OneSignal;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -69,10 +73,9 @@ import java.util.regex.Pattern;
  */
 
 public final class AppUtils {
-
     public static Context applicationContext;
     public static String URL_REGEX="([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?";
-
+    public static SimpleDialog simpleDialog;
     private AppUtils() {
         // This class is not publicly instantiable
     }
@@ -123,7 +126,7 @@ public final class AppUtils {
                 .into(new CustomTarget<Drawable>() {
                     @Override
                     public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                        imageView.setBackground(resource);
+                        imageView.setImageDrawable(resource);
                     }
                     @Override
                     public void onLoadCleared(@Nullable Drawable placeholder) {
@@ -338,6 +341,30 @@ public final class AppUtils {
         boolean useWhiteIcon = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP);
         return useWhiteIcon ? R.drawable.logo : R.mipmap.logo;
     }
+    public static void logout(Context context)
+    {
+        Activity activity=(Activity)context;
+        simpleDialog=new SimpleDialog(context, context.getString(R.string.confirmation), context.getString(R.string.msg_logout), context.getString(R.string.button_cancel), context.getString(R.string.logout), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.button_positive:
+                        simpleDialog.dismiss();
+                        Intent intent = new Intent(context, LoginActivity.class);
+                        activity.finish();
+                        context.startActivity(intent);
+                        LoginUtils.clearUser(getApplicationContext());
+                        LoginUtils.removeAuthToken(getApplicationContext());
+                        OneSignal.sendTag("email","null");
+                        break;
+                    case R.id.button_negative:
+                        simpleDialog.dismiss();
+                        break;
+                }
+            }
+        });
+        simpleDialog.show();
 
+    }
 
 }

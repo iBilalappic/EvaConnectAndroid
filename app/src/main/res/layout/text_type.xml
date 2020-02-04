@@ -34,6 +34,7 @@
         android:id="@+id/profile_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:src="@drawable/profile"
         app:civ_border_color="@color/colorPrimary"
@@ -42,20 +43,24 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        style="@style/TextStyle.Bold"
         android:id="@+id/tv_name"
-        android:layout_width="wrap_content"
+        style="@style/TextStyle.Bold"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="Ed Hunter"
+        android:ellipsize="end"
+        android:maxLines="1"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        style="@style/TextStyle"
         android:id="@+id/tv_connections"
+        style="@style/TextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:text="465,345 connections"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />

@@ -670,6 +670,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
                     AppUtils.setGlideImage(mContext, ((TextTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
                     ((TextTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
+
                     ((TextTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getUser().getTotal_connection()));
                     if(position==0)
                     {
