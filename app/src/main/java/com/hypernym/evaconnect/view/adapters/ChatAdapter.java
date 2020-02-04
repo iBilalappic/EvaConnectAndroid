@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
@@ -56,13 +57,26 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 AppUtils.setGlideImage(context, (holder).imageView6, networkConnection.getSender().getUserImage());
                 holder.tv_receivertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
                 holder.tv_sendertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
-                if(!chatMessageList.get(position).getImage().equals("null"))
+                if(chatMessageList.get(position).getImage().size()>0)
                 {
-                    AppUtils.setGlideUrlThumbnail(context,holder.senderImage,chatMessageList.get(position).getImage());
-                    holder.senderImage.setVisibility(View.VISIBLE);
-                    holder.receiveImage.setVisibility(View.VISIBLE);
+                 //   AppUtils.setGlideUrlThumbnail(context,holder.senderImage,chatMessageList.get(position).getImage().get(0));
+                    ImageAdapter ServicesInnerAdapter = new ImageAdapter(context,chatMessageList.get(position).getImage());
+                    holder.recycler_viewSender.setHasFixedSize(true);
+                    holder.recycler_viewSender.setDrawingCacheEnabled(true);
+                    holder.recycler_viewSender.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+                    LinearLayoutManager linearLayout=new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false);
+                    holder.recycler_viewSender.setLayoutManager(linearLayout);
+                    holder.recycler_viewSender.setAdapter(ServicesInnerAdapter);
+
+//                    holder.senderImage.setVisibility(View.VISIBLE);
+//                    holder.receiveImage.setVisibility(View.VISIBLE);
+                    holder.recycler_viewReceiver.setVisibility(View.VISIBLE);
+                    holder.recycler_viewSender.setVisibility(View.VISIBLE);
+
                 }
                 else{
+                    holder.recycler_viewReceiver.setVisibility(View.GONE);
+                    holder.recycler_viewSender.setVisibility(View.GONE);
                     holder.senderImage.setVisibility(View.GONE);
                     holder.receiveImage.setVisibility(View.GONE);
                 }
@@ -72,15 +86,27 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 AppUtils.setGlideImage(context, (holder).imageView6, networkConnection.getReceiver().getUserImage());
                 holder.tv_receivertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
                 holder.tv_sendertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
-                if(!chatMessageList.get(position).getImage().equals("null"))
+                if(chatMessageList.get(position).getImage().size()>0)
                 {
-                    AppUtils.setGlideUrlThumbnail(context,holder.senderImage,chatMessageList.get(position).getImage());
-                    holder.receiveImage.setVisibility(View.VISIBLE);
-                    holder.senderImage.setVisibility(View.VISIBLE);
+                  //  AppUtils.setGlideUrlThumbnail(context,holder.senderImage,chatMessageList.get(position).getImage().get(0));
+                    ImageAdapter ServicesInnerAdapter = new ImageAdapter(context,chatMessageList.get(position).getImage());
+                    holder.recycler_viewSender.setHasFixedSize(true);
+                    holder.recycler_viewSender.setDrawingCacheEnabled(true);
+                    holder.recycler_viewSender.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+                    LinearLayoutManager linearLayout=new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false);
+                    holder.recycler_viewSender.setLayoutManager(linearLayout);
+                    holder.recycler_viewSender.setAdapter(ServicesInnerAdapter);
+
+//                    holder.receiveImage.setVisibility(View.VISIBLE);
+//                    holder.senderImage.setVisibility(View.VISIBLE);
+                    holder.recycler_viewReceiver.setVisibility(View.VISIBLE);
+                    holder.recycler_viewSender.setVisibility(View.VISIBLE);
                 }
                 else{
                     holder.senderImage.setVisibility(View.GONE);
                     holder.receiveImage.setVisibility(View.GONE);
+                    holder.recycler_viewReceiver.setVisibility(View.GONE);
+                    holder.recycler_viewSender.setVisibility(View.GONE);
                 }
 
 
@@ -97,30 +123,52 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 AppUtils.setGlideImage(context, (holder).imageView7, networkConnection.getReceiver().getUserImage());
                 holder.tv_receivertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
                 holder.tv_sendertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
-                if(!chatMessageList.get(position).getImage().equals("null"))
+                if(chatMessageList.get(position).getImage().size()>0)
                 {
-                    AppUtils.setGlideUrlThumbnail(context,holder.receiveImage,chatMessageList.get(position).getImage());
-                    holder.receiveImage.setVisibility(View.VISIBLE);
-                    holder.senderImage.setVisibility(View.VISIBLE);
+                 //   AppUtils.setGlideUrlThumbnail(context,holder.receiveImage,chatMessageList.get(position).getImage().get(0));
+                    ImageAdapter ServicesInnerAdapter = new ImageAdapter(context,chatMessageList.get(position).getImage());
+                    holder.recycler_viewReceiver.setHasFixedSize(true);
+                    holder.recycler_viewReceiver.setDrawingCacheEnabled(true);
+                    holder.recycler_viewReceiver.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+                    LinearLayoutManager linearLayout=new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false);
+                    holder.recycler_viewReceiver.setLayoutManager(linearLayout);
+                    holder.recycler_viewReceiver.setAdapter(ServicesInnerAdapter);
+//                    holder.receiveImage.setVisibility(View.VISIBLE);
+//                    holder.senderImage.setVisibility(View.VISIBLE);
+                    holder.recycler_viewReceiver.setVisibility(View.VISIBLE);
+                    holder.recycler_viewSender.setVisibility(View.VISIBLE);
                 }
                 else{
                     holder.senderImage.setVisibility(View.GONE);
                     holder.receiveImage.setVisibility(View.GONE);
+                    holder.recycler_viewReceiver.setVisibility(View.GONE);
+                    holder.recycler_viewSender.setVisibility(View.GONE);
                 }
 
             } else {
                 AppUtils.setGlideImage(context, (holder).imageView7, networkConnection.getSender().getUserImage());
                 holder.tv_receivertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
                 holder.tv_sendertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
-                if(!chatMessageList.get(position).getImage().equals("null"))
+                if(chatMessageList.get(position).getImage().size()>0)
                 {
-                    AppUtils.setGlideUrlThumbnail(context,holder.receiveImage,chatMessageList.get(position).getImage());
-                    holder.senderImage.setVisibility(View.VISIBLE);
-                    holder.receiveImage.setVisibility(View.VISIBLE);
+                //    AppUtils.setGlideUrlThumbnail(context,holder.receiveImage,chatMessageList.get(position).getImage().get(0));
+//                    holder.senderImage.setVisibility(View.VISIBLE);
+//                    holder.receiveImage.setVisibility(View.VISIBLE);
+                    ImageAdapter ServicesInnerAdapter = new ImageAdapter(context,chatMessageList.get(position).getImage());
+                    holder.recycler_viewReceiver.setHasFixedSize(true);
+                    holder.recycler_viewReceiver.setDrawingCacheEnabled(true);
+                    holder.recycler_viewReceiver.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+                    LinearLayoutManager linearLayout=new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false);
+                    holder.recycler_viewReceiver.setLayoutManager(linearLayout);
+                    holder.recycler_viewReceiver.setAdapter(ServicesInnerAdapter);
+                    holder.recycler_viewReceiver.setVisibility(View.VISIBLE);
+                    holder.recycler_viewSender.setVisibility(View.VISIBLE);
                 }
                 else{
                     holder.senderImage.setVisibility(View.GONE);
                     holder.receiveImage.setVisibility(View.GONE);
+                    holder.recycler_viewReceiver.setVisibility(View.GONE);
+                    holder.recycler_viewSender.setVisibility(View.GONE);
                 }
 
             }
@@ -139,7 +187,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         CardView mlayout1, mlayout2;
         CircleImageView imageView6, imageView7;
         ImageView senderImage,receiveImage;
-
+        RecyclerView recycler_viewSender,recycler_viewReceiver;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mtextview20 = itemView.findViewById(R.id.textView20);
@@ -152,6 +200,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             tv_receivertime=itemView.findViewById(R.id.tv_receivetime);
             senderImage=itemView.findViewById(R.id.senderimage);
             receiveImage=itemView.findViewById(R.id.receiveimage);
+            recycler_viewSender=itemView.findViewById(R.id.recycler_viewSender);
+            recycler_viewReceiver=itemView.findViewById(R.id.recycler_viewReceiver);
+
         }
     }
 }

@@ -1,11 +1,12 @@
 package com.hypernym.evaconnect.models;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class ChatMessage {
     private String Message;
     private int type;
-    private String image;
+    private List<String> image;
 
     public String getEmail() {
         return email;
@@ -43,11 +44,11 @@ public class ChatMessage {
         this.type = type;
     }
 
-    public String getImage() {
+    public List<String> getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(List<String> image) {
         this.image = image;
     }
 }

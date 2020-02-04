@@ -66,6 +66,13 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:visibility="gone" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:visibility="gone"
+                android:id="@+id/recycler_viewSender">
+
+            </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -123,6 +130,14 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:visibility="gone" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:visibility="gone"
+                android:id="@+id/recycler_viewReceiver">
+
+            </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

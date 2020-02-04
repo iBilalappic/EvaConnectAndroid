@@ -63,6 +63,8 @@ import com.hypernym.evaconnect.view.adapters.AttachmentsAdapter;
 import com.hypernym.evaconnect.view.adapters.ChatAdapter;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 
+import org.jsoup.helper.StringUtil;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
@@ -127,6 +129,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private List<Uri> MultiplePhoto = new ArrayList<>();
     private List<String> MultiplePhotoString = new ArrayList<>();
     private List<String> MultipleFileString = new ArrayList<>();
+    private List<String> ChatUrl = new ArrayList<>();
     private List<File> MultipleFile = new ArrayList<>();
     private String photoVar = null;
     private Uri SelectedImageUri;
@@ -162,10 +165,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         FileName = getArguments().getString("FILENAME");
         MultiplePhotoString = getArguments().getStringArrayList("IMAGEURILIST");
         MultipleFileString = getArguments().getStringArrayList("FILENAMELIST");
-        if ( MultipleFileString != null&&
-                MultipleFileString.size()>1&&
-                MultiplePhotoString!=null&&
-                MultiplePhotoString.size()>1) {
+        if (MultipleFileString != null &&
+                MultipleFileString.size() > 1 &&
+                MultiplePhotoString != null &&
+                MultiplePhotoString.size() > 1) {
             SettingMuilplePhotoString(MultiplePhotoString, MultipleFileString);
         }
 
@@ -223,12 +226,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             } else if (SelectedImageUri != null && messageText.length() > 0) {
                 UploadImageToFirebase();
             } else {
-                Map<String, String> map = new HashMap<String, String>();
+                Map<String, Object> map = new HashMap<String, Object>();
                 map.put("Message", messageText);
                 map.put("user", UserDetails.username);
                 map.put("email", UserDetails.email);
                 map.put("time", DateUtils.GetCurrentdatetime());
-                map.put("image", "null");
+                map.put("image", null);
                 reference1.push().setValue(map);
                 reference2.push().setValue(map);
                 sendNotification();
@@ -247,12 +250,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 String userName = map.get("user").toString();
                 String email = map.get("email").toString();
                 String chatTime = map.get("time").toString();
-                String image = null;
+                List<String> image = new ArrayList<>();
                 if (map.get("image") != null) {
-                    image = map.get("image").toString();
+                    image = (List<String>) map.get("image");
                 }
-
-
                 if (userName.equals(UserDetails.username)) {
                     mMessage = new ChatMessage();
                     mMessage.setMessage(message);
@@ -321,21 +322,21 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     map.put("user", UserDetails.username);
                     map.put("email", UserDetails.email);
                     map.put("time", DateUtils.GetCurrentdatetime());
-                    map.put("image", "null");
+                    map.put("image", null);
                     reference1.push().setValue(map);
                     reference2.push().setValue(map);
                     sendNotification();
                     messageArea.setText("");
 
-                } else if(SelectedImageUri!=null) {
+                } else if (SelectedImageUri != null) {
                     UploadImageToFirebase();
-                }else{
+                } else {
                     Toast.makeText(getContext(), "Please type message...", Toast.LENGTH_SHORT).show();
                 }
                 break;
 
             case R.id.browsefiles:
-             //   openPictureDialog();
+                //   openPictureDialog();
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 intent.setType("*/*");
@@ -381,6 +382,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     }
 
+    private int count = 0;
+
     private void UploadImageToFirebase() {
 //        if (SelectedImageUri != null) {
 
@@ -388,11 +391,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         if (MultiplePhoto.size() > 1) {
             for (int i = 0; i < MultiplePhoto.size(); i++) {
                 // MultiplePhoto.add(Uri.parse(String.valueOf(attachments)));
-                Log.d("MULTIPLE", GsonUtils.toJson(MultiplePhoto.get(i)));
                 rc_attachments.setVisibility(View.GONE);
                 StorageReference childRef = storageRef.child(MultipleFile.get(i).getName().toString());
 
-                //uploading the image
                 UploadTask uploadTask = childRef.putFile(MultiplePhoto.get(i));
                 showDialog();
                 uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -402,20 +403,26 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         childRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
-                                Map<String, String> map = new HashMap<String, String>();
-                                map.put("Message", messageText);
-                                map.put("user", UserDetails.username);
-                                map.put("email", UserDetails.email);
-                                map.put("time", DateUtils.GetCurrentdatetime());
-                                map.put("image", uri.toString());
-                                reference1.push().setValue(map);
-                                reference2.push().setValue(map);
-                                sendNotification();
-                                attachments.clear();
-                                MultipleFile.clear();
-                                MultiplePhoto.clear();
-                                SelectedImageUri=null;
-                                messageArea.setText("");
+                                ChatUrl.add(uri.toString());
+                                if (count == MultiplePhoto.size() - 1) {
+                                    Map<String, Object> map = new HashMap<String, Object>();
+                                    map.put("Message", messageText);
+                                    map.put("user", UserDetails.username);
+                                    map.put("email", UserDetails.email);
+                                    map.put("time", DateUtils.GetCurrentdatetime());
+                                    map.put("image", ChatUrl);
+                                    reference1.push().setValue(map);
+                                    reference2.push().setValue(map);
+                                    sendNotification();
+                                    attachments.clear();
+                                    MultipleFile.clear();
+                                    ChatUrl.clear();
+                                    MultiplePhoto.clear();
+                                    SelectedImageUri = null;
+                                    messageArea.setText("");
+                                    count = 0;
+                                }
+                                count++;
                                 //  Toast.makeText(getContext(), "onSuccess: uri= " + uri.toString(), Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -451,19 +458,21 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     childRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            Map<String, String> map = new HashMap<String, String>();
+                            ChatUrl.add(uri.toString());
+                            Map<String, Object> map = new HashMap<String, Object>();
                             map.put("Message", messageText);
                             map.put("user", UserDetails.username);
                             map.put("email", UserDetails.email);
                             map.put("time", DateUtils.GetCurrentdatetime());
-                            map.put("image", uri.toString());
+                            map.put("image", ChatUrl);
                             reference1.push().setValue(map);
                             reference2.push().setValue(map);
                             sendNotification();
                             attachments.clear();
                             MultipleFile.clear();
                             MultiplePhoto.clear();
-                            SelectedImageUri=null;
+                            ChatUrl.clear();
+                            SelectedImageUri = null;
                             messageArea.setText("");
                             //  Toast.makeText(getContext(), "onSuccess: uri= " + uri.toString(), Toast.LENGTH_SHORT).show();
                         }
