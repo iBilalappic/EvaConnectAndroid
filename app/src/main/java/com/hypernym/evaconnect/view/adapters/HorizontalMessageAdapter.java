@@ -25,13 +25,16 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class HorizontalMessageAdapter extends RecyclerView.Adapter<HorizontalMessageAdapter.ViewHolder> {
     private Context context;
     private List<NetworkConnection> networkConnectionList = new ArrayList<>();
+    private List<NetworkConnection> originalNetworkConnectionList = new ArrayList<>();
     private OnItemClickListener onItemClickListener;
+    private boolean issearchApplied=false;
     private int row_index = 0;
 
     public HorizontalMessageAdapter(Context context, List<NetworkConnection> networkConnections, OnItemClickListener onItemClickListener) {
         this.context = context;
         this.networkConnectionList = networkConnections;
         this.onItemClickListener = onItemClickListener;
+        this.originalNetworkConnectionList=networkConnectionList;
     }
 
     @NonNull
@@ -51,12 +54,17 @@ public class HorizontalMessageAdapter extends RecyclerView.Adapter<HorizontalMes
             holder.mtextview20.setText(networkConnectionList.get(position).getSender().getFirstName());
             AppUtils.setGlideImage(context, (holder).mImageview6, networkConnectionList.get(position).getSender().getUserImage());
         }
+        if(issearchApplied && networkConnectionList.size()>0)
+        {
+            onItemClickListener.onItemClick(holder.constraintLayout, networkConnectionList.get(0), originalNetworkConnectionList.indexOf(networkConnectionList.get(0)), "horizontalAdapter");
+        }
         holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 row_index = position;
                 notifyDataSetChanged();
-                onItemClickListener.onItemClick(view, networkConnectionList.get(position), position, "horizontalAdapter");
+                issearchApplied=false;
+                onItemClickListener.onItemClick(view, networkConnectionList.get(position), originalNetworkConnectionList.indexOf(networkConnectionList.get(position)), "horizontalAdapter");
 
             }
         });
@@ -75,6 +83,7 @@ public class HorizontalMessageAdapter extends RecyclerView.Adapter<HorizontalMes
 
     public void filterList(List<NetworkConnection> filteredList) {
         networkConnectionList = filteredList;
+        issearchApplied=true;
         notifyDataSetChanged();
     }
 

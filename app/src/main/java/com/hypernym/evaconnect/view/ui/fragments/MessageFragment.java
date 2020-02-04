@@ -76,12 +76,13 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     private LinearLayoutManager linearLayoutManager;
     private MessageViewModel messageViewModel;
     private List<NetworkConnection> networkConnectionList = new ArrayList<>();
+    private List<NetworkConnection> originalNetworkConnectionList = new ArrayList<>();
     Dialog mDialogMessage;
     EditText editTextSearch, editTextMessage;
     TextView mTextviewSend;
     RecyclerView mrecyclerviewFriends;
     TextView browsefiles;
-    private int Itempostion;
+    private int Itempostion,ItemPostionHorizontal;
     private static final int REQUEST_PHOTO_GALLERY = 4;
     private static final int CAMERAA = 1;
     private String GalleryImage, mCurrentPhotoPath, globalImagePath;
@@ -93,6 +94,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     private List<String> attachments = new ArrayList<>();
     private List<String> MultiplePhotoString = new ArrayList<>();
     private List<String> MultipleFileString = new ArrayList<>();
+    List<NetworkConnection> filterdNames = new ArrayList<>();
 
     private RecyclerView rc_attachments;
     SimpleDialog simpleDialog;
@@ -136,8 +138,6 @@ setPageTitle(getString(R.string.messages));
         linearLayoutManager = new LinearLayoutManager(getContext());
         re_message.setLayoutManager(linearLayoutManager);
         re_message.setAdapter(messageAdapter);
-
-
     }
 
     private void GetFriendDetails() {
@@ -150,6 +150,7 @@ setPageTitle(getString(R.string.messages));
                     networkConnectionList.clear();
                     for (int i = 0; i < getnetworkconnection.getData().size(); i++) {
                         networkConnectionList.addAll(getnetworkconnection.getData());
+                        originalNetworkConnectionList.addAll(getnetworkconnection.getData());
                     }
                     setupRecyclerview();
 
@@ -167,15 +168,14 @@ setPageTitle(getString(R.string.messages));
     public void onItemClick(View view, Object data, int position, String adaptertype) {
         if (adaptertype.equals("SimpleAdapter")) {
             ChatFragment chatFragment = new ChatFragment();
-            Itempostion = position;
             Bundle bundle = new Bundle();
             bundle.putSerializable(Constants.DATA, networkConnectionList.get(position));
             chatFragment.setArguments(bundle);
             //  Log.d("TAAAG", "" + GsonUtils.toJson(networkConnection));
             loadFragment(R.id.framelayout, chatFragment, getContext(), true);
         } else {
-          //  Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
-            Itempostion = position;
+            Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
+            ItemPostionHorizontal = position;
         }
 
     }
@@ -216,9 +216,12 @@ setPageTitle(getString(R.string.messages));
             public void onClick(View v) {
                 String messageArea = editTextMessage.getText().toString();
                 if (!messageArea.equals("")) {
+                    Log.d("TAAAAG",""+ItemPostionHorizontal);
                     ChatFragment chatFragment = new ChatFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable(Constants.DATA, networkConnectionList.get(Itempostion));
+
+                    int originalPosition=originalNetworkConnectionList.indexOf(networkConnectionList.get(ItemPostionHorizontal));
+                    bundle.putSerializable(Constants.DATA, originalNetworkConnectionList.get(originalPosition));
                     bundle.putString("MESSAGE", messageArea);
                     if (MultiplePhotoString != null && MultiplePhotoString.size() > 1) {
                         bundle.putStringArrayList("IMAGEURILIST", (ArrayList<String>) MultiplePhotoString);
@@ -236,7 +239,8 @@ setPageTitle(getString(R.string.messages));
                     //  Log.d("TAAAG", "" + GsonUtils.toJson(networkConnection));
                     loadFragment(R.id.framelayout, chatFragment, getContext(), true);
                     mDialogMessage.dismiss();
-                }else{
+                }
+                else{
                     Toast.makeText(getContext(), "Please type message...", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -292,12 +296,13 @@ setPageTitle(getString(R.string.messages));
 
     @Override
     public void afterTextChanged(Editable s) {
-        filter(s.toString());
-    }
+
+
+        filter(s.toString()); }
 
     private void filter(String text) {
         //new array list that will hold the filtered data
-        List<NetworkConnection> filterdNames = new ArrayList<>();
+        filterdNames = new ArrayList<>();
 
         //looping through existing elements
         for (NetworkConnection s : networkConnectionList) {
@@ -313,7 +318,7 @@ setPageTitle(getString(R.string.messages));
                 filterdNames.add(s);
             }
         }
-
+        ItemPostionHorizontal=0;
         //calling a method of the adapter class and passing the filtered list
         messageAdapter_horizontal.filterList(removeDuplicates(filterdNames));
     }

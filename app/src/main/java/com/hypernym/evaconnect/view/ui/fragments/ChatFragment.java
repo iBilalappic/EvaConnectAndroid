@@ -174,14 +174,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             tempFile = new File(FileName);
         }
         UserDetails.username = LoginUtils.getUser().getFirst_name();
+        UserDetails.userid = LoginUtils.getUser().getId();
 //        Log.d("TAAAG", "" + GsonUtils.toJson(networkConnection));
         if (networkConnection.getSenderId().equals(LoginUtils.getUser().getId())) {
-            UserDetails.chatWith = networkConnection.getReceiver().getFirstName();
+            UserDetails.chatWith = networkConnection.getReceiver().getId().toString();
             UserDetails.email = networkConnection.getReceiver().getEmail();
             setPageTitle(networkConnection.getReceiver().getFirstName());
             //  Toast.makeText(getContext(), "receivername" + networkConnection.getReceiver().getFirstName(), Toast.LENGTH_SHORT).show();
         } else {
-            UserDetails.chatWith = networkConnection.getSender().getFirstName();
+            UserDetails.chatWith = networkConnection.getSender().getId().toString();
             UserDetails.email = networkConnection.getSender().getEmail();
             setPageTitle(networkConnection.getSender().getFirstName());
             //  Toast.makeText(getContext(), "sendername" + networkConnection.getSender().getFirstName(), Toast.LENGTH_SHORT).show();
@@ -203,8 +204,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     private void init() {
         Firebase.setAndroidContext(AppUtils.getApplicationContext());
-        reference1 = new Firebase("https://evaconnect-df08d.firebaseio.com/messages/" + UserDetails.username + "_" + UserDetails.chatWith);
-        reference2 = new Firebase("https://evaconnect-df08d.firebaseio.com/messages/" + UserDetails.chatWith + "_" + UserDetails.username);
+        reference1 = new Firebase("https://evaconnect-df08d.firebaseio.com/messages/" + UserDetails.userid + "_" + UserDetails.chatWith);
+        reference2 = new Firebase("https://evaconnect-df08d.firebaseio.com/messages/" + UserDetails.chatWith + "_" + UserDetails.userid);
         SettingFireBaseChat();
         if (getArguments() != null) {
             CheckMessageText();
