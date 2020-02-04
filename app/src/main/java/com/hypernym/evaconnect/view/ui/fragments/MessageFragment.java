@@ -127,7 +127,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
 
     private void init() {
         messageViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(MessageViewModel.class);
-
+setPageTitle(getString(R.string.messages));
     }
 
     private void setupRecyclerview() {

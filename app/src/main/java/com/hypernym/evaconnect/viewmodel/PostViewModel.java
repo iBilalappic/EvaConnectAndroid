@@ -39,5 +39,8 @@ public class PostViewModel extends AndroidViewModel {
     {
         return iPostRepository.getComments(post);
     }
-
+    public LiveData<BaseModel<List<Post>>> getPostByID(int id)
+    {
+        return iPostRepository.getPostById(id);
+    }
 }

@@ -80,6 +80,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         initMainOptionsRecView();
         initSubOptionsRecView();
         initRecyclerView();
+        setPageTitle(getString(R.string.connections));
         if(NetworkUtils.isNetworkConnected(getContext())) {
             getUserConnections();
         }

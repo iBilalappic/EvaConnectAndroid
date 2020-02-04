@@ -63,8 +63,6 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
 
-
-
     private List<Post> posts=new ArrayList<>();
     private HomePostsAdapter homePostsAdapter;
     private LinearLayoutManager linearLayoutManager;
@@ -75,6 +73,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     private boolean isLastPage = false;
     private boolean isLoading = false;
     int itemCount = 0;
+    private List<Post> notifications=new ArrayList<>();
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -137,6 +136,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     public void onResume() {
         super.onResume();
         init();
+
         newpost.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
@@ -144,6 +144,8 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
             }
         });
     }
+
+
 
     private void callPostsApi() {
         User user=LoginUtils.getLoggedinUser();
@@ -195,8 +197,6 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
 
             }
         });
-
-
     }
 
     @Override
@@ -342,7 +342,6 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
                 public void onChanged(BaseModel<List<Connection>> listBaseModel) {
                     if(listBaseModel!=null && !listBaseModel.isError())
                     {
-
                         text.setText("Request Sent");
                     }
                     else

@@ -83,7 +83,6 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
             super(itemView);
             ButterKnife.bind(this,itemView);
             tv_connect.setOnClickListener(this);
-
         }
 
         @Override

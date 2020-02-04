@@ -277,8 +277,12 @@ public class BaseFragment extends Fragment {
     }
     public void setPageTitle(String title)
     {
-        TextView textView=getActivity().findViewById(R.id.tv_title);
-        textView.setText(title);
+        if(BaseActivity.getNotificationCount()==0)
+        {
+            TextView textView=getActivity().findViewById(R.id.tv_title);
+            textView.setText(title);
+        }
+
     }
     public void callConnectApi(TextView tv_connect, User connectionItem) {
         Connection connection=new Connection();

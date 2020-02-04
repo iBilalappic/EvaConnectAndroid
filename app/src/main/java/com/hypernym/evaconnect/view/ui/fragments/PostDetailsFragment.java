@@ -140,12 +140,17 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         View view=inflater.inflate(R.layout.fragment_post_details, container, false);
         ButterKnife.bind(this,view);
         init();
-        post=(Post) getArguments().getSerializable("post");
+
         postViewModel= ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication())).get(PostViewModel.class);
-        getComments();
+//        if(getArguments()!=null && getArguments().getInt("tv_connectid")!=0)
+//        {
+//            getPostDetails(getArguments().getInt("id"));
+//        }
+        post=(Post)getArguments().getSerializable("post");
+        setPostData(post);
         initRecyclerView();
-        setPostData();
         setclickEvents();
+        getComments();
         btn_addcomment.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
@@ -155,15 +160,30 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         return view;
     }
 
+    private void getPostDetails(int id) {
+        postViewModel.getPostByID(id).observe(this, new Observer<BaseModel<List<Post>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Post>> listBaseModel) {
+                if(listBaseModel!=null && !listBaseModel.isError())
+                {
+                    setPostData(listBaseModel.getData().get(0));
+                }
+                else
+                {
+                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                }
+            }
+        });
+    }
+
     private void init() {
         validator = new Validator(this);
         validator.setValidationListener(this);
         showBackButton();
     }
 
-    private void setPostData() {
+    private void setPostData(Post post) {
         initializeSlider();
-
         tv_comcount.setText(String.valueOf(post.getComment_count()));
         tv_likecount.setText(String.valueOf(post.getLike_count()));
         tv_connections.setText(AppUtils.getConnectionsCount(post.getUser().getTotal_connection()));
@@ -354,7 +374,6 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
 
     }
 
-
     @Override
     public void onValidationSucceeded() {
         addComment(post.getId());
@@ -373,8 +392,6 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
             }
         }
     }
-
-
 
     @OnClick(R.id.img_video)
     public void playVideo()

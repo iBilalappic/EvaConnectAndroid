@@ -64,8 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="No Data"
-        android:drawableRight="@drawable/edit"
+        android:text="No Designation Selected"
         android:drawablePadding="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_image" />
@@ -80,7 +79,6 @@
         android:layout_marginEnd="16dp"
         android:text="Sample Text Sample TextSample TextSample Text Sample Text Sample Text Sample Text Sample Text"
         app:layout_constraintEnd_toEndOf="parent"
-        android:drawableRight="@drawable/edit"
         android:drawablePadding="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_company" />
@@ -93,7 +91,6 @@
         android:layout_marginEnd="16dp"
         android:drawableLeft="@drawable/location"
         android:text="No Location"
-        android:drawableRight="@drawable/edit"
         android:drawablePadding="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_field"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -105,10 +102,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="center"
-        android:text="No Data"
-        android:drawableRight="@drawable/edit"
+        android:text="No Company Selected"
         android:drawablePadding="10dp"
-
         app:layout_constraintEnd_toEndOf="@+id/tv_field"
         app:layout_constraintStart_toStartOf="@+id/tv_field"
         app:layout_constraintTop_toBottomOf="@+id/tv_field" />
@@ -125,9 +120,8 @@
         android:paddingTop="5dp"
         android:paddingRight="15dp"
         android:paddingBottom="5dp"
-        android:text="No Data"
-        android:drawableRight="@drawable/edit"
         android:drawablePadding="10dp"
+        android:text="No field Selected"
         app:layout_constraintEnd_toEndOf="@+id/tv_designation"
         app:layout_constraintStart_toStartOf="@+id/tv_designation"
         app:layout_constraintTop_toBottomOf="@+id/tv_designation" />
@@ -146,6 +140,7 @@
         android:paddingRight="20dp"
         android:paddingBottom="10dp"
         android:text="Open Chat"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_biodata" />
 

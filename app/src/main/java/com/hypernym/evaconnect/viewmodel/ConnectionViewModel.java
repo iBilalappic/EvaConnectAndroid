@@ -39,5 +39,4 @@ public class ConnectionViewModel extends AndroidViewModel {
     {
         return iConnectionRepository.getConnectionByFilter(user);
     }
-
 }

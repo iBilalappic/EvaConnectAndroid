@@ -28,7 +28,12 @@ public class HomeViewModel extends AndroidViewModel {
     {
         return iHomeRepository.getDashboard(user,totalpages,currentPage);
     }
-
-
-
+    public LiveData<BaseModel<List<Post>>> getAllNotifications()
+    {
+        return iHomeRepository.getAllNotifications();
+    }
+    public LiveData<BaseModel<List<Post>>> notificationMarkAsRead(int id)
+    {
+        return iHomeRepository.notificationMarkAsRead(id);
+    }
 }

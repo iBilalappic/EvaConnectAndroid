@@ -16,12 +16,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.view.ui.fragments.PersonDetailFragment;
 
 public class NavigationDialog extends Dialog {
 
     private ImageView img_close;
-    private LinearLayout editProfile;
+    private LinearLayout editProfile,logout;
     private Context context;
 
     public NavigationDialog(Context context) {
@@ -37,6 +38,7 @@ public class NavigationDialog extends Dialog {
         setContentView(R.layout.navigation_menu);
         img_close=findViewById(R.id.img_close);
         editProfile=findViewById(R.id.editProfile);
+        logout=findViewById(R.id.logout);
         setCanceledOnTouchOutside(false);
         setCancelable(false);
         Window window = getWindow();
@@ -63,6 +65,13 @@ public class NavigationDialog extends Dialog {
                 transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
                 transaction.replace(R.id.framelayout, new PersonDetailFragment());
                 transaction.commit();
+            }
+        });
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+                AppUtils.logout(context);
             }
         });
     }

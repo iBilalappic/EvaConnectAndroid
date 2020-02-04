@@ -6,6 +6,7 @@ import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.Dashboard;
 import com.hypernym.evaconnect.models.NetworkConnection;
+import com.hypernym.evaconnect.models.Notification;
 import com.hypernym.evaconnect.models.Notification_onesignal;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
@@ -79,4 +80,13 @@ public interface AppApi {
 
     @POST("api/v1/notifications")
     Call<Object> postPackets(@Body Notification_onesignal data);
+
+    @POST(APIConstants.GET_ALL_NOTIFICATIONS)
+    Call<BaseModel<List<Post>>> getAllNotifications(@Body User user);
+
+    @PATCH(APIConstants.NOTIFICATION_MARKS_AS_READ)
+    Call<BaseModel<List<Post>>> notificationMarkAsRead(@Path("id") int id);
+
+    @GET(APIConstants.GET_POST_BY_ID)
+    Call<BaseModel<List<Post>>> getPostById(@Path("id") int id);
 }

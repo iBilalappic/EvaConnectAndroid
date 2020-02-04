@@ -153,12 +153,15 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
         post.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
-                if((edt_content.getText().length()>0 || part_images.size()>0 || video!=null) && NetworkUtils.isNetworkConnected(getContext())) {
-                    createPost();
-                }
-                else
-                {
-                    networkErrorDialog();
+                if(edt_content.getText().length()>0 || part_images.size()>0 || video!=null) {
+                   if(NetworkUtils.isNetworkConnected(getContext()))
+                   {
+                       createPost();
+                   }
+                   else
+                   {
+                       networkErrorDialog();
+                   }
                 }
 
             }
