@@ -6,4 +6,7 @@ public class UserDetails {
     public static String password = "";
     public static String chatWith = "";
     public static String email = "";
+    public static String senderName = "";
+    public static String receiverName = "";
+    public static String receiverImage = "";
 }

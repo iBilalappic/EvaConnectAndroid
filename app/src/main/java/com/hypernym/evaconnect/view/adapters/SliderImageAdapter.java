@@ -23,7 +23,6 @@ import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.utils.AppUtils;
-import com.hypernym.evaconnect.utils.BitmapScaler;
 import com.smarteist.autoimageslider.SliderViewAdapter;
 
 import java.util.ArrayList;
