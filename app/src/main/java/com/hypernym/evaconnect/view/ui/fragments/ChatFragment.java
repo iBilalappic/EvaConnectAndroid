@@ -182,11 +182,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         if (networkConnection.getSenderId().equals(LoginUtils.getUser().getId())) {
             UserDetails.chatWith = networkConnection.getReceiver().getId().toString();
             UserDetails.email = networkConnection.getReceiver().getEmail();
+            UserDetails.receiverName = networkConnection.getReceiver().getFirstName();
+            UserDetails.receiverImage = networkConnection.getReceiver().getUserImage();
             setPageTitle(networkConnection.getReceiver().getFirstName());
             //  Toast.makeText(getContext(), "receivername" + networkConnection.getReceiver().getFirstName(), Toast.LENGTH_SHORT).show();
         } else {
             UserDetails.chatWith = networkConnection.getSender().getId().toString();
             UserDetails.email = networkConnection.getSender().getEmail();
+            UserDetails.senderName = networkConnection.getSender().getFirstName();
             setPageTitle(networkConnection.getSender().getFirstName());
             //  Toast.makeText(getContext(), "sendername" + networkConnection.getSender().getFirstName(), Toast.LENGTH_SHORT).show();
         }
@@ -227,11 +230,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 UploadImageToFirebase();
             } else {
                 Map<String, Object> map = new HashMap<String, Object>();
-                map.put("Message", messageText);
-                map.put("user", UserDetails.username);
+                map.put("message", messageText);
                 map.put("email", UserDetails.email);
                 map.put("time", DateUtils.GetCurrentdatetime());
                 map.put("image", null);
+                map.put("sender_name",UserDetails.username);
+                map.put("receiver_name",UserDetails.receiverName);
+                map.put("receiver_image",UserDetails.receiverImage);
                 reference1.push().setValue(map);
                 reference2.push().setValue(map);
                 sendNotification();
@@ -246,7 +251,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Map map = dataSnapshot.getValue(Map.class);
-                String message = map.get("Message").toString();
+                String message = map.get("message").toString();
                 String userName = map.get("user").toString();
                 String email = map.get("email").toString();
                 String chatTime = map.get("time").toString();
@@ -318,11 +323,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 messageText = messageArea.getText().toString();
                 Map<String, String> map = new HashMap<String, String>();
                 if (SelectedImageUri == null && messageText.length() > 0) {
-                    map.put("Message", messageText);
+                    map.put("message", messageText);
                     map.put("user", UserDetails.username);
                     map.put("email", UserDetails.email);
                     map.put("time", DateUtils.GetCurrentdatetime());
                     map.put("image", null);
+                    map.put("sender_name",UserDetails.username);
+                    map.put("receiver_name",UserDetails.receiverName);
+                    map.put("receiver_image",UserDetails.receiverImage);
                     reference1.push().setValue(map);
                     reference2.push().setValue(map);
                     sendNotification();
@@ -406,11 +414,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                                 ChatUrl.add(uri.toString());
                                 if (count == MultiplePhoto.size() - 1) {
                                     Map<String, Object> map = new HashMap<String, Object>();
-                                    map.put("Message", messageText);
+                                    map.put("message", messageText);
                                     map.put("user", UserDetails.username);
                                     map.put("email", UserDetails.email);
                                     map.put("time", DateUtils.GetCurrentdatetime());
                                     map.put("image", ChatUrl);
+                                    map.put("sender_name",UserDetails.username);
+                                    map.put("receiver_name",UserDetails.receiverName);
+                                    map.put("receiver_image",UserDetails.receiverImage);
                                     reference1.push().setValue(map);
                                     reference2.push().setValue(map);
                                     sendNotification();
@@ -460,11 +471,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         public void onSuccess(Uri uri) {
                             ChatUrl.add(uri.toString());
                             Map<String, Object> map = new HashMap<String, Object>();
-                            map.put("Message", messageText);
+                            map.put("message", messageText);
                             map.put("user", UserDetails.username);
                             map.put("email", UserDetails.email);
                             map.put("time", DateUtils.GetCurrentdatetime());
                             map.put("image", ChatUrl);
+                            map.put("sender_name",UserDetails.username);
+                            map.put("receiver_name",UserDetails.receiverName);
+                            map.put("receiver_image",UserDetails.receiverImage);
                             reference1.push().setValue(map);
                             reference2.push().setValue(map);
                             sendNotification();
