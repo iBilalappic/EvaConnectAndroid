@@ -85,7 +85,7 @@ public interface AppApi {
     Call<BaseModel<List<Post>>> getAllNotifications(@Body User user);
 
     @PATCH(APIConstants.NOTIFICATION_MARKS_AS_READ)
-    Call<BaseModel<List<Post>>> notificationMarkAsRead(@Path("id") int id);
+    Call<BaseModel<List<Post>>> notificationMarkAsRead(@Body User user);
 
     @GET(APIConstants.GET_POST_BY_ID)
     Call<BaseModel<List<Post>>> getPostById(@Path("id") int id);

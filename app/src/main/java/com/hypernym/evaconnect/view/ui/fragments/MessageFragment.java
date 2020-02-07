@@ -61,6 +61,7 @@ import com.hypernym.evaconnect.viewmodel.MessageViewModel;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -144,7 +145,8 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     }
 
     private void GetFirebaseData() {
-        showDialog();
+       // showDialog();
+        networkConnectionList.clear();
         DatabaseReference rootRef= FirebaseDatabase.getInstance().getReference();
         rootRef.child("messages").addValueEventListener(new ValueEventListener() {
             @Override
@@ -167,18 +169,21 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
 
                             try {
                                 HashMap<String, Object> userData = (HashMap<String, Object>) data;
-                                for (String message : userData.keySet()) {
-                                    HashMap<String, Object>  dataMessage = (HashMap<String, Object>) userData.get(message);
+                                Object message=userData.keySet().toArray()[0];
+                                HashMap<String, Object>  dataMessage = (HashMap<String, Object>) userData.get(message);
                                     //dataMessage.get("message");
-                                    networkConnection.getReceiver().setUserImage(dataMessage.get("receiver_image").toString());
-                                    networkConnection.setMessage(dataMessage.get("message").toString());
-                                    networkConnection.getReceiver().setFirstName(dataMessage.get("sender_name").toString());
-                                    networkConnection.getSender().setFirstName(dataMessage.get("receiver_name").toString());
-                                    networkConnection.getReceiver().setEmail(dataMessage.get("email").toString());
-                                    networkConnection.getSender().setEmail(dataMessage.get("email").toString());
-                                    networkConnection.setCreatedDatetime(dataMessage.get("time").toString());
-                                }
+                                networkConnection.getReceiver().setUserImage(dataMessage.get("receiver_image").toString());
+                                networkConnection.setMessage(dataMessage.get("message").toString());
+                                if(dataMessage.get("image")!=null)
+                                    {
+                                        networkConnection.setMessage("image");
+                                    }
 
+                                 networkConnection.getReceiver().setFirstName(dataMessage.get("sender_name").toString());
+                                 networkConnection.getSender().setFirstName(dataMessage.get("receiver_name").toString());
+                                 networkConnection.getReceiver().setEmail(dataMessage.get("email").toString());
+                                 networkConnection.getSender().setEmail(dataMessage.get("email").toString());
+                                 networkConnection.setCreatedDatetime(dataMessage.get("time").toString());
                                 networkConnection.setSenderId(Integer.parseInt(conversationkey[0]));
                                 networkConnection.setReceiverId(Integer.parseInt(conversationkey[1]));
                                 networkConnectionList.add(networkConnection);
@@ -187,9 +192,9 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                             }
                             catch (Exception ex)
                             {
-Log.e("getting message error",ex.getMessage());
+                                Log.e("getting message error",ex.getMessage());
                             }
-hideDialog();
+                           // hideDialog();
                         }
 
 

@@ -61,8 +61,9 @@ public class HomeRepository implements IHomeRepository {
     @Override
     public LiveData<BaseModel<List<Post>>> notificationMarkAsRead(int id) {
         dashboardMutableLiveData=new MutableLiveData<>();
-
-        RestClient.get().appApi().notificationMarkAsRead(id).enqueue(new Callback<BaseModel<List<Post>>>() {
+User user=new User();
+user.setUser_id(id);
+        RestClient.get().appApi().notificationMarkAsRead(user).enqueue(new Callback<BaseModel<List<Post>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
                 dashboardMutableLiveData.setValue(response.body());

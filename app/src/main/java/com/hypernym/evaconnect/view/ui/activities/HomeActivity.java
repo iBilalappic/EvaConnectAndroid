@@ -47,6 +47,7 @@ import com.hypernym.evaconnect.models.Notification;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.IconPowerMenuAdapter;
 import com.hypernym.evaconnect.view.adapters.NotificationsAdapter;
@@ -191,6 +192,22 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     }
     public void hideNotificationPanel()
     {
+        if(NetworkUtils.isNetworkConnected(this))
+        {
+
+            homeViewModel.notificationMarkAsRead( LoginUtils.getLoggedinUser().getId()).observe(this, new Observer<BaseModel<List<Post>>>() {
+                @Override
+                public void onChanged(BaseModel<List<Post>> listBaseModel) {
+                    if(listBaseModel !=null && !listBaseModel.isError() && listBaseModel.getData().size() >0) {
+
+                    }
+                }
+            });
+        }
+        else
+        {
+            networkErrorDialog();
+        }
         rc_notifications.setVisibility(View.GONE);
         titleLayout.setVisibility(View.VISIBLE);
         img_uparrow.setVisibility(View.GONE);
@@ -238,7 +255,6 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         img_connections.setImageDrawable(getDrawable(R.drawable.connections));
         img_messages.setImageDrawable(getDrawable(R.drawable.message_selected));
         img_logout.setImageDrawable(getDrawable(R.drawable.logout));
-
         MessageFragment fragment = new MessageFragment();
         loadFragment(R.id.framelayout,fragment,this,false);
     }
@@ -264,21 +280,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     @Override
     public void onItemClick(View view, int position) {
 
-        if(NetworkUtils.isNetworkConnected(this))
-        {
-            homeViewModel.notificationMarkAsRead(notifications.get(position).getId()).observe(this, new Observer<BaseModel<List<Post>>>() {
-                @Override
-                public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                    if(listBaseModel !=null && !listBaseModel.isError() && listBaseModel.getData().size() >0) {
 
-                    }
-                }
-            });
-        }
-        else
-        {
-            networkErrorDialog();
-        }
 
     }
 
