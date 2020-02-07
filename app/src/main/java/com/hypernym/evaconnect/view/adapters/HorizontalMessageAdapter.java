@@ -14,7 +14,6 @@ import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.NetworkConnection;
 import com.hypernym.evaconnect.toolbar.OnItemClickListener;
 import com.hypernym.evaconnect.utils.AppUtils;
-import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 
 import java.util.ArrayList;
@@ -100,7 +99,7 @@ public class HorizontalMessageAdapter extends RecyclerView.Adapter<HorizontalMes
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            mtextview20 = (TextView) itemView.findViewById(R.id.textView20);
+            mtextview20 = (TextView) itemView.findViewById(R.id.tv_name);
 
             mImageview6 = (CircleImageView) itemView.findViewById(R.id.imageView6);
             constraintLayout = (ConstraintLayout) itemView.findViewById(R.id.linearLayout6);

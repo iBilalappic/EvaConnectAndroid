@@ -22,6 +22,8 @@ public class ConnectionRepository implements IConnectionRespository {
     private MutableLiveData<BaseModel<List<Connection>>> connectionMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<User>>> userMutableLiveData = new MutableLiveData<>();
 
+    private MutableLiveData<BaseModel<User>> connectionCountMutableLiveData = new MutableLiveData<>();
+
     @Override
     public LiveData<BaseModel<List<Connection>>> connect(Connection connection) {
         connectionMutableLiveData=new MutableLiveData<>();
@@ -91,5 +93,22 @@ public class ConnectionRepository implements IConnectionRespository {
             }
         });
         return userMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<User>> getConnectionCount(User userData) {
+        connectionCountMutableLiveData=new MutableLiveData<>();
+
+        RestClient.get().appApi().getConnectionCount(userData.getId()).enqueue(new Callback<BaseModel<User>>() {
+            @Override
+            public void onResponse(Call<BaseModel<User>> call, Response<BaseModel<User>> response) {
+                connectionCountMutableLiveData.setValue(response.body());
+            }
+            @Override
+            public void onFailure(Call<BaseModel<User>> call, Throwable t) {
+                connectionCountMutableLiveData.setValue(null);
+            }
+        });
+        return connectionCountMutableLiveData;
     }
 }

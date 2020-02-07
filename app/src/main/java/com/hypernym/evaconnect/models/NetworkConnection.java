@@ -38,6 +38,9 @@ public class NetworkConnection implements Serializable {
     @Expose
     private String status;
 
+    @SerializedName("message")
+    @Expose
+    private String message;
     public Integer getId() {
         return id;
     }
@@ -118,4 +121,11 @@ public class NetworkConnection implements Serializable {
         this.status = status;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }

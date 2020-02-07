@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -55,7 +56,7 @@ public class SliderImageAdapter extends SliderViewAdapter<SliderImageAdapter.Sli
 //                .into(viewHolder.imageViewBackground);
 
         Glide.with(context)
-                .load(attachments.get(position))
+                .load(attachments.get(position)).diskCacheStrategy(DiskCacheStrategy.ALL).override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL) //
                 .into(new CustomTarget<Drawable>() {
                     @Override
                     public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {

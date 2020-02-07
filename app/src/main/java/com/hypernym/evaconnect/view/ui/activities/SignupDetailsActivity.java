@@ -141,9 +141,9 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
                 validator.validate();
             }
         });
-        tv_individual.setOnClickListener(new OnOneOffClickListener() {
+        tv_individual.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSingleClick(View v) {
+            public void onClick(View v) {
                 tv_company.setBackground(getDrawable(R.drawable.rounded_button_unselected));
                 tv_individual.setBackground(getDrawable(R.drawable.rounded_button));
                 userType = "user";
@@ -161,9 +161,9 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
             }
         });
 
-        tv_company.setOnClickListener(new OnOneOffClickListener() {
+        tv_company.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSingleClick(View v) {
+            public void onClick(View v) {
                 tv_company.setBackground(getDrawable(R.drawable.rounded_button));
                 tv_individual.setBackground(getDrawable(R.drawable.rounded_button_unselected));
                 userType = "company";

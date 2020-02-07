@@ -20,7 +20,7 @@ public class AppConstants {
     public static final int JOB_TYPE=4;
     public static final String LIKE= "like";
     public static final String UNLIKE= "unlike";
-    public static final int TOTAL_PAGES = 5;
+    public static final int TOTAL_PAGES = 10;
     public static final String NOT_CONNECTED = "not_connected";
     public static final String PENDING = "pending";
     public static final String ACTIVE = "active";

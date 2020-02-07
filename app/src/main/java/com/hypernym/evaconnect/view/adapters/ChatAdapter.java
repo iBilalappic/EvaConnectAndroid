@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -190,8 +189,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         RecyclerView recycler_viewSender,recycler_viewReceiver;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            mtextview20 = itemView.findViewById(R.id.textView20);
-            mtextview21 = itemView.findViewById(R.id.textView21);
+            mtextview20 = itemView.findViewById(R.id.tv_name);
+            mtextview21 = itemView.findViewById(R.id.tv_lastmsg);
             mlayout1 = itemView.findViewById(R.id.layout1);
             mlayout2 = itemView.findViewById(R.id.layout2);
             imageView6 = itemView.findViewById(R.id.imageView6);

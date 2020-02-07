@@ -12,7 +12,7 @@
     <View
         android:id="@+id/view6"
         android:layout_width="0dp"
-        android:layout_height="2dp"
+        android:layout_height="3dp"
         android:background="@drawable/line_redblack50"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,7 +47,7 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:text="Ed Hunter"
@@ -171,7 +171,8 @@
             <com.smarteist.autoimageslider.SliderView
                 android:id="@+id/slider_images"
                 android:layout_width="0dp"
-                android:layout_height="200dp"
+                android:layout_height="250dp"
+                android:background="@color/gray"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -188,6 +189,7 @@
                 app:sliderIndicatorSelectedColor="@color/btn_border"
                 app:sliderIndicatorUnselectedColor="@color/colorPrimary"
                 app:sliderScrollTimeInSec="1"
+                app:layout_constraintBottom_toTopOf="@id/view2"
                 app:sliderStartAutoCycle="true" />
 
             <View

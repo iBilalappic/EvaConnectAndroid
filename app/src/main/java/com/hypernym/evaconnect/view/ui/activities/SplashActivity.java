@@ -1,8 +1,11 @@
 package com.hypernym.evaconnect.view.ui.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -12,16 +15,45 @@ import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.onesignal.OneSignal;
 
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static com.hypernym.evaconnect.view.ui.activities.SignupDetailsActivity.RequestPermissionCode;
+
 public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        init();
+        if(!Checkpermission())
+        {
+            requestpermission();
+        }
+        else
+        {
+            init();
+
+        }
         initOneSignal();
     }
+    public boolean Checkpermission() {
 
+        int ExternalReadResult = ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE);
+        int CameraResult = ContextCompat.checkSelfPermission(this, CAMERA);
+        return          ExternalReadResult == PackageManager.PERMISSION_GRANTED &&
+                CameraResult == PackageManager.PERMISSION_GRANTED;
+    }
+    private void requestpermission() {
+        ActivityCompat.requestPermissions(this, new String[]
+                {
+                        READ_EXTERNAL_STORAGE,
+                        CAMERA
+                }, RequestPermissionCode);
+    }
+    @Override
+    public void onRequestPermissionsResult(int permsRequestCode, String[] permissions, int[] grantResults){
+        init();
+    }
     private void init() {
         new Handler().postDelayed(new Runnable() {
             @Override

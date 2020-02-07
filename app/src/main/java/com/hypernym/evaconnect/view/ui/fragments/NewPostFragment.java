@@ -49,6 +49,7 @@ import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.utils.URLTextWatcher;
 import com.hypernym.evaconnect.view.adapters.AttachmentsAdapter;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
+import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
@@ -127,6 +128,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
     private Post postModel=new Post();
     private Validator validator;
     private SimpleDialog simpleDialog;
+    private ConnectionViewModel connectionViewModel;
 
     public NewPostFragment() {
         // Required empty public constructor
@@ -139,10 +141,10 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_new_post, container, false);
         ButterKnife.bind(this,view);
+        postViewModel= ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(PostViewModel.class);
+        connectionViewModel= ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
         init();
         initRecyclerView();
-        postViewModel= ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(PostViewModel.class);
-
         browsefiles.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
@@ -174,7 +176,8 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
         User user=LoginUtils.getLoggedinUser();
         AppUtils.setGlideImage(getContext(),profile_image,user.getUser_image());
         tv_name.setText(user.getFirst_name());
-        tv_connections.setText(AppUtils.getConnectionsCount(user.getTotal_connection()));
+        getConnectionCount();
+
         showBackButton();
         edt_content.addTextChangedListener(new URLTextWatcher(getActivity(),edt_content,urlEmbeddedView));
         edt_content.addTextChangedListener(new TextWatcher() {
@@ -191,6 +194,23 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
             @Override
             public void afterTextChanged(Editable s) {
                setPostButton();
+            }
+        });
+    }
+
+    private void getConnectionCount() {
+        User user=LoginUtils.getLoggedinUser();
+        connectionViewModel.getConnectionCount(user).observe(this, new Observer<BaseModel<User>>() {
+            @Override
+            public void onChanged(BaseModel<User> listBaseModel) {
+                if(listBaseModel!=null && !listBaseModel.isError())
+                {
+                    tv_connections.setText(AppUtils.getConnectionsCount(listBaseModel.getData().getTotal_connection()));
+                }
+                else
+                {
+                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                }
             }
         });
     }

@@ -39,4 +39,9 @@ public class ConnectionViewModel extends AndroidViewModel {
     {
         return iConnectionRepository.getConnectionByFilter(user);
     }
+
+    public LiveData<BaseModel<User>> getConnectionCount(User user)
+    {
+        return iConnectionRepository.getConnectionCount(user);
+    }
 }

@@ -4,17 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.NetworkConnection;
-import com.hypernym.evaconnect.models.Notification;
 import com.hypernym.evaconnect.toolbar.OnItemClickListener;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
@@ -46,14 +43,16 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull MessageAdapter.ViewHolder holder, int position) {
         if (networkConnectionList.get(position).getSenderId().equals(LoginUtils.getUser().getId())) {
-            holder.mtextview20.setText(networkConnectionList.get(position).getReceiver().getFirstName());
-            holder.mtextview21.setText(networkConnectionList.get(position).getReceiver().getBioData());
+            holder.tv_name.setText(networkConnectionList.get(position).getReceiver().getFirstName());
+            holder.tv_lastmsg.setText(networkConnectionList.get(position).getMessage());
             AppUtils.setGlideImage(context, (holder).mImageview6, networkConnectionList.get(position).getReceiver().getUserImage());
+            holder.tv_minago.setText(DateUtils.getTimeAgo(networkConnectionList.get(position).getCreatedDatetime()));
         }
         if (networkConnectionList.get(position).getReceiverId().equals(LoginUtils.getUser().getId())) {
-            holder.mtextview20.setText(networkConnectionList.get(position).getSender().getFirstName());
-            holder.mtextview21.setText(networkConnectionList.get(position).getSender().getBioData());
+            holder.tv_name.setText(networkConnectionList.get(position).getSender().getFirstName());
+            holder.tv_lastmsg.setText(networkConnectionList.get(position).getMessage());
             AppUtils.setGlideImage(context, (holder).mImageview6, networkConnectionList.get(position).getSender().getUserImage());
+            holder.tv_minago.setText(DateUtils.getTimeAgo(networkConnectionList.get(position).getCreatedDatetime()));
         }
         holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +63,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         if (networkConnectionList.get(position).getCreatedDatetime() != null) {
             holder.mtextview22.setText(DateUtils.getTimeAgo(networkConnectionList.get(position).getCreatedDatetime()));
         }
+       // holder.tv_name.setText(String.valueOf(networkConnectionList.get(position).getReceiverId()));
     }
 
     @Override
@@ -72,17 +72,18 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView mtextview20, mtextview21, mtextview22;
+        TextView tv_name, tv_lastmsg, mtextview22,tv_minago;
         CircleImageView mImageview6;
         ConstraintLayout constraintLayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            mtextview20 = (TextView) itemView.findViewById(R.id.textView20);
-            mtextview21 = (TextView) itemView.findViewById(R.id.textView21);
+            tv_name = (TextView) itemView.findViewById(R.id.tv_name);
+            tv_lastmsg = (TextView) itemView.findViewById(R.id.tv_lastmsg);
             mtextview22 = (TextView) itemView.findViewById(R.id.textView22);
             mImageview6 = (CircleImageView) itemView.findViewById(R.id.imageView6);
             constraintLayout = (ConstraintLayout) itemView.findViewById(R.id.linearLayout6);
+            tv_minago=itemView.findViewById(R.id.tv_minago);
         }
     }
 }

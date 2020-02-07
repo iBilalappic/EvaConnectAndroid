@@ -57,35 +57,66 @@ public class PersonDetailFragment extends BaseFragment {
 
     private void init() {
         setPageTitle("Profile");
+
         if((getArguments() !=null))
         {
             showBackButton();
             post=(Post)getArguments().getSerializable("PostData");
             AppUtils.setGlideImage(getContext(),profile_image,post.getUser().getUser_image());
             tv_name.setText(post.getUser().getFirst_name());
-            tv_connect.setText(AppUtils.getConnectionStatus(getContext(),post.getIs_connected(),post.isIs_receiver()));
+            if(post.getUser().getId()==user.getId())
+            {
+                tv_connect.setVisibility(View.GONE);
+            }
+            else
+            {
+                tv_connect.setVisibility(View.VISIBLE);
+                tv_connect.setText(AppUtils.getConnectionStatus(getContext(),post.getIs_connected(),post.isIs_receiver()));
+            }
+
             tv_biodata.setText(post.getUser().getBio_data());
+            tv_connect.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    if(NetworkUtils.isNetworkConnected(getContext())) {
+                        callConnectApi(tv_connect,post.getUser());
+                    }
+                    else
+                    {
+                        networkErrorDialog();
+                    }
+                }
+            });
         }
         else
         {
             user= LoginUtils.getLoggedinUser();
             AppUtils.setGlideImage(getContext(),profile_image,user.getUser_image());
             tv_name.setText(user.getFirst_name());
-            tv_connect.setText(AppUtils.getConnectionStatus(getContext(),user.getIs_connected(),user.isIs_receiver()));
+            if(post.getUser().getId()==user.getId())
+            {
+                tv_connect.setVisibility(View.GONE);
+            }
+            else
+            {
+                tv_connect.setVisibility(View.VISIBLE);
+                tv_connect.setText(AppUtils.getConnectionStatus(getContext(),post.getIs_connected(),post.isIs_receiver()));
+            }
             tv_biodata.setText(user.getBio_data());
+            tv_connect.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    if(NetworkUtils.isNetworkConnected(getContext())) {
+                        callConnectApi(tv_connect,user);
+                    }
+                    else
+                    {
+                        networkErrorDialog();
+                    }
+                }
+            });
         }
 
-        tv_connect.setOnClickListener(new OnOneOffClickListener() {
-            @Override
-            public void onSingleClick(View v) {
-                if(NetworkUtils.isNetworkConnected(getContext())) {
-                    callConnectApi(tv_connect,user);
-                }
-                else
-                {
-                    networkErrorDialog();
-                }
-            }
-        });
+
     }
 }

@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -25,11 +26,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.firebase.client.Firebase;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.NetworkConnection;
+import com.hypernym.evaconnect.models.Receiver;
+import com.hypernym.evaconnect.models.Sender;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.toolbar.OnItemClickListener;
@@ -49,6 +62,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -56,6 +70,7 @@ import butterknife.ButterKnife;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.http.Query;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -122,14 +137,79 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
         ButterKnife.bind(this, view);
         newmessage.setOnClickListener(this);
         init();
-        GetFriendDetails();
+      //  GetFriendDetails();
+        setupRecyclerview();
+        GetFirebaseData();
         return view;
+    }
+
+    private void GetFirebaseData() {
+        showDialog();
+        DatabaseReference rootRef= FirebaseDatabase.getInstance().getReference();
+        rootRef.child("messages").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.exists()){
+                    HashMap<String, Object> dataMap = (HashMap<String, Object>) dataSnapshot.getValue();
+
+                    for (String key : dataMap.keySet()){
+                        String[] conversationkey=key.split("_");
+                        User user=LoginUtils.getLoggedinUser();
+                        if(user.getId()==Integer.parseInt(conversationkey[0]))
+                        {
+                            Object data = dataMap.get(key);
+                            NetworkConnection networkConnection=new NetworkConnection();
+                            networkConnection.setReceiver(new Receiver());
+                            networkConnection.setSender(new Sender());
+                            networkConnection.getReceiver().setId(Integer.parseInt(conversationkey[1]));
+                            networkConnection.getSender().setId(Integer.parseInt(conversationkey[0]));
+
+                            try {
+                                HashMap<String, Object> userData = (HashMap<String, Object>) data;
+                                for (String message : userData.keySet()) {
+                                    HashMap<String, Object>  dataMessage = (HashMap<String, Object>) userData.get(message);
+                                    //dataMessage.get("message");
+                                    networkConnection.getReceiver().setUserImage(dataMessage.get("receiver_image").toString());
+                                    networkConnection.setMessage(dataMessage.get("message").toString());
+                                    networkConnection.getReceiver().setFirstName(dataMessage.get("sender_name").toString());
+                                    networkConnection.getSender().setFirstName(dataMessage.get("receiver_name").toString());
+                                    networkConnection.getReceiver().setEmail(dataMessage.get("email").toString());
+                                    networkConnection.getSender().setEmail(dataMessage.get("email").toString());
+                                    networkConnection.setCreatedDatetime(dataMessage.get("time").toString());
+                                }
+
+                                networkConnection.setSenderId(Integer.parseInt(conversationkey[0]));
+                                networkConnection.setReceiverId(Integer.parseInt(conversationkey[1]));
+                                networkConnectionList.add(networkConnection);
+                                messageAdapter.notifyDataSetChanged();
+
+                            }
+                            catch (Exception ex)
+                            {
+Log.e("getting message error",ex.getMessage());
+                            }
+hideDialog();
+                        }
+
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
 
 
     private void init() {
         messageViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(MessageViewModel.class);
-setPageTitle(getString(R.string.messages));
+        setPageTitle(getString(R.string.messages));
     }
 
     private void setupRecyclerview() {

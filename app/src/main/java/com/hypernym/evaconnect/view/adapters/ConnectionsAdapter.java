@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.models.Connection;
+import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
@@ -25,6 +27,7 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
     private List<User> connections,originalConnections;
     private ConnectionsAdapter.OnItemClickListener onItemClickListener;
     int count=0;
+    private boolean isLoaderVisible = false;
 
     public ConnectionsAdapter(Context context, List<User> connectionList,ConnectionsAdapter.OnItemClickListener onItemClickListener)
     {
@@ -113,4 +116,20 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
     }
+    public void removeLoading() {
+        isLoaderVisible = false;
+        int position = connections.size() - 1;
+        User item = getItem(position);
+        if (item != null) {
+            connections.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+    User getItem(int position) {
+        if(connections.size()>0)
+            return connections.get(position);
+        else
+            return null;
+    }
+
 }

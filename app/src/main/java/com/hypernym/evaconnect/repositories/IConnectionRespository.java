@@ -13,4 +13,6 @@ public interface IConnectionRespository {
     LiveData<BaseModel<List<Connection>>> connect(Connection connection);
     LiveData<BaseModel<List<User>>> getAllConnections();
     LiveData<BaseModel<List<User>>> getConnectionByFilter(User user);
+    LiveData<BaseModel<User>> getConnectionCount(User user);
+
 }

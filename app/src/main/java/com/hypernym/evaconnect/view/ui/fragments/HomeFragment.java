@@ -93,14 +93,15 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         postViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(PostViewModel.class);
         connectionViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
         currentPage = PAGE_START;
-        if(posts.size()==0)
-        {
-            callPostsApi();
-        }
         homePostsAdapter=new HomePostsAdapter(getContext(),posts,this);
         linearLayoutManager=new LinearLayoutManager(getContext());
         rc_home.setLayoutManager(linearLayoutManager);
         rc_home.setAdapter(homePostsAdapter);
+        if(posts.size()==0)
+        {
+            callPostsApi();
+        }
+
         swipeRefresh.setOnRefreshListener(this);
         /**
          * add scroll listener while user reach in bottom load more will call
@@ -149,6 +150,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
 
     private void callPostsApi() {
         User user=LoginUtils.getLoggedinUser();
+
         homeViewModel.getDashboard(user,AppConstants.TOTAL_PAGES,currentPage).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> dashboardBaseModel) {
@@ -157,6 +159,10 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
                 {
                     for(Post post:dashboardBaseModel.getData())
                     {
+                        if(post.getContent()==null)
+                        {
+                            post.setContent("");
+                        }
                         if(post.getType().equalsIgnoreCase("post") && post.getPost_image().size()>0)
                         {
                             post.setPost_type(AppConstants.IMAGE_TYPE);
@@ -165,7 +171,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
                         {
                             post.setPost_type(AppConstants.VIDEO_TYPE);
                         }
-                        else if(post.getType().equalsIgnoreCase("post") && post.getPost_image().size()==0 && AppUtils.containsURL(post.getContent()).size()==0)
+                        else if(post.getType().equalsIgnoreCase("post") && post.getPost_image().size()==0  && AppUtils.containsURL(post.getContent()).size()==0)
                         {
                             post.setPost_type(AppConstants.TEXT_TYPE);
                         }

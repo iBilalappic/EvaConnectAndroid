@@ -89,4 +89,7 @@ public interface AppApi {
 
     @GET(APIConstants.GET_POST_BY_ID)
     Call<BaseModel<List<Post>>> getPostById(@Path("id") int id);
+
+    @GET(APIConstants.GET_CONNECTION_COUNT)
+    Call<BaseModel<User>> getConnectionCount(@Path("id") int id);
 }

@@ -47,10 +47,10 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:text="Ed Hunter"
+        android:layout_marginTop="24dp"
         android:ellipsize="end"
         android:maxLines="1"
+        android:text="Ed Hunter"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -171,8 +171,9 @@
             <ImageView
                 android:id="@+id/img_video"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="200dp"
                 android:elevation="2dp"
+                android:background="@color/gray"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

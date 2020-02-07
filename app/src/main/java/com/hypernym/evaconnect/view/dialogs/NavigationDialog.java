@@ -17,12 +17,13 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.view.ui.fragments.NotificationsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.PersonDetailFragment;
 
 public class NavigationDialog extends Dialog {
 
     private ImageView img_close;
-    private LinearLayout editProfile,logout;
+    private LinearLayout editProfile,logout,notifications;
     private Context context;
 
     public NavigationDialog(Context context) {
@@ -39,6 +40,7 @@ public class NavigationDialog extends Dialog {
         img_close=findViewById(R.id.img_close);
         editProfile=findViewById(R.id.editProfile);
         logout=findViewById(R.id.logout);
+        notifications=findViewById(R.id.notifications);
         setCanceledOnTouchOutside(false);
         setCancelable(false);
         Window window = getWindow();
@@ -72,6 +74,16 @@ public class NavigationDialog extends Dialog {
             public void onClick(View v) {
                 dismiss();
                 AppUtils.logout(context);
+            }
+        });
+        notifications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+                FragmentTransaction transaction =((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+                transaction.replace(R.id.framelayout, new NotificationsFragment());
+                transaction.commit();
             }
         });
     }

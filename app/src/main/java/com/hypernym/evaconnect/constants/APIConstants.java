@@ -20,4 +20,5 @@ public interface APIConstants {
     public static String GET_ALL_NOTIFICATIONS="user/notifications/";
     public static String NOTIFICATION_MARKS_AS_READ="user/notifications/details/{id}/";
     public static String GET_POST_BY_ID="post/details/{id}/";
+    public static String GET_CONNECTION_COUNT="user/connection/count/{id}/";
 }

@@ -12,10 +12,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
+import android.media.MediaMetadataRetriever;
 import android.media.RingtoneManager;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
@@ -64,6 +67,7 @@ import com.onesignal.OneSignal;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -110,7 +114,6 @@ public final class AppUtils {
                 .error(R.mipmap.ic_default)
                 .skipMemoryCache(true) //2
                 .apply(RequestOptions.circleCropTransform())
-                .diskCacheStrategy(DiskCacheStrategy.NONE) //3
                 .into(imageView);
     }
     public static void setGlideUrlThumbnail(Context context, ImageView imageView,String url)
@@ -365,6 +368,10 @@ public final class AppUtils {
         });
         simpleDialog.show();
 
+    }
+
+    public static Bitmap getVideoThumbnail(String url)    {
+       return ThumbnailUtils.createVideoThumbnail(url,MediaStore.Video.Thumbnails.MINI_KIND);
     }
 
 }
