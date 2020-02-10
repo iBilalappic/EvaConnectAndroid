@@ -82,7 +82,7 @@ public interface AppApi {
     Call<Object> postPackets(@Body Notification_onesignal data);
 
     @POST(APIConstants.GET_ALL_NOTIFICATIONS)
-    Call<BaseModel<List<Post>>> getAllNotifications(@Body User user);
+    Call<BaseModel<List<Post>>> getAllNotifications(@Body Object user);
 
     @PATCH(APIConstants.NOTIFICATION_MARKS_AS_READ)
     Call<BaseModel<List<Post>>> notificationMarkAsRead(@Body User user);

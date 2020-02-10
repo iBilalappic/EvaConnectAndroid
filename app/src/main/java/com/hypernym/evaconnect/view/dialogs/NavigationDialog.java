@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.view.ui.fragments.JobListingFragment;
+import com.hypernym.evaconnect.view.ui.fragments.EditProfileFragment;
 import com.hypernym.evaconnect.view.ui.fragments.NotificationsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.PersonDetailFragment;
 
@@ -66,10 +67,10 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 dismiss();
-                FragmentTransaction transaction =((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
-                transaction.replace(R.id.framelayout, new PersonDetailFragment());
-                transaction.commit();
+//                FragmentTransaction transaction =((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
+//                transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+//                transaction.replace(R.id.framelayout, new EditProfileFragment());
+//                transaction.commit();
             }
         });
         logout.setOnClickListener(new View.OnClickListener() {

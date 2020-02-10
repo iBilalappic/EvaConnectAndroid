@@ -19,8 +19,7 @@ public class User implements Serializable {
     private String is_connected;
     private boolean is_receiver;
     private Integer connection_id;
-
-
+    private Integer receiver_id;
 
     public String getEmail() {
         return email;
@@ -143,5 +142,11 @@ public class User implements Serializable {
         this.connection_id = connection_id;
     }
 
+    public Integer getReceiver_id() {
+        return receiver_id;
+    }
 
+    public void setReceiver_id(Integer receiver_id) {
+        this.receiver_id = receiver_id;
+    }
 }
