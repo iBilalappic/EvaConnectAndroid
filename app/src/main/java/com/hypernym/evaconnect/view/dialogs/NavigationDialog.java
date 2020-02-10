@@ -17,14 +17,15 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.view.ui.fragments.JobListingFragment;
 import com.hypernym.evaconnect.view.ui.fragments.EditProfileFragment;
 import com.hypernym.evaconnect.view.ui.fragments.NotificationsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.PersonDetailFragment;
 
-public class NavigationDialog extends Dialog {
+public class NavigationDialog extends Dialog implements View.OnClickListener {
 
     private ImageView img_close;
-    private LinearLayout editProfile,logout,notifications;
+    private LinearLayout editProfile,logout,notifications,mJoblisting;
     private Context context;
 
     public NavigationDialog(Context context) {
@@ -42,6 +43,8 @@ public class NavigationDialog extends Dialog {
         editProfile=findViewById(R.id.editProfile);
         logout=findViewById(R.id.logout);
         notifications=findViewById(R.id.notifications);
+        mJoblisting=findViewById(R.id.joblisting);
+        mJoblisting.setOnClickListener(this);
         setCanceledOnTouchOutside(false);
         setCancelable(false);
         Window window = getWindow();
@@ -87,5 +90,18 @@ public class NavigationDialog extends Dialog {
                 transaction.commit();
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.joblisting:
+                dismiss();
+                FragmentTransaction transaction =((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+                transaction.replace(R.id.framelayout, new JobListingFragment());
+                transaction.commit();
+            break;
+        }
     }
 }
