@@ -13,6 +13,7 @@ import com.hypernym.evaconnect.repositories.IHomeRepository;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -45,7 +46,10 @@ public class HomeRepository implements IHomeRepository {
     public LiveData<BaseModel<List<Post>>> getAllNotifications() {
         dashboardMutableLiveData=new MutableLiveData<>();
         User user=LoginUtils.getLoggedinUser();
-        RestClient.get().appApi().getAllNotifications(user).enqueue(new Callback<BaseModel<List<Post>>>() {
+        HashMap<String,Object> data=new HashMap<String,Object>();
+        data.put("receiver_id",user.getId());
+
+        RestClient.get().appApi().getAllNotifications(data).enqueue(new Callback<BaseModel<List<Post>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
                 dashboardMutableLiveData.setValue(response.body());
@@ -61,8 +65,9 @@ public class HomeRepository implements IHomeRepository {
     @Override
     public LiveData<BaseModel<List<Post>>> notificationMarkAsRead(int id) {
         dashboardMutableLiveData=new MutableLiveData<>();
-User user=new User();
-user.setUser_id(id);
+        User user=new User();
+        user.setUser_id(id);
+
         RestClient.get().appApi().notificationMarkAsRead(user).enqueue(new Callback<BaseModel<List<Post>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {

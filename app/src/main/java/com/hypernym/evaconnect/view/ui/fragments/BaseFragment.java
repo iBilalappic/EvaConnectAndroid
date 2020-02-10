@@ -200,6 +200,7 @@ public class BaseFragment extends Fragment {
 
     public File galleryAddPic() {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+
         mCurrentPhotoPath=getCurrentPhotoPath();
         File f = new File(mCurrentPhotoPath);
         file_name = f;

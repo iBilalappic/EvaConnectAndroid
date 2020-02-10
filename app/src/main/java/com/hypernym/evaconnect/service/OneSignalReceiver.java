@@ -28,10 +28,6 @@ public class OneSignalReceiver extends NotificationExtenderService {
 
     @Override
     protected boolean onNotificationProcessing(OSNotificationReceivedResult receivedResult) {
-
-
-//
-
         // Read properties from result.
         //  JSONObject additionalData = receivedResult.payload.body;
         // Log.e("test", additionalData.toString());
@@ -51,6 +47,7 @@ public class OneSignalReceiver extends NotificationExtenderService {
 //            } catch (Exception e) {
 //                e.printStackTrace();
 //            }
+
         } else {
             payloadNotification = new PayloadNotification();
             try {

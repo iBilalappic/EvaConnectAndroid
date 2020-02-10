@@ -343,6 +343,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                     }
                     else
                     {
+
                         attachments.add(globalImagePath);
                         attachmentsAdapter.notifyDataSetChanged();
                         rc_attachments.setVisibility(View.VISIBLE);
