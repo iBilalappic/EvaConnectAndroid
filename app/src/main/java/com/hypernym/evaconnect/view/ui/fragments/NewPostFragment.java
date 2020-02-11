@@ -218,6 +218,15 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
 
     private void createPost() {
             showDialog();
+            ArrayList<String> urlList=AppUtils.containsURL(edt_content.getText().toString());
+            if(urlList.size()>0)
+            {
+                postModel.setIs_url(true);
+            }
+            else
+            {
+                postModel.setIs_url(false);
+            }
             postModel.setAttachments(part_images);
             postModel.setContent(edt_content.getText().toString());
             postModel.setVideo(video);

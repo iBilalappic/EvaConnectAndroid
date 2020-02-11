@@ -1,75 +1,41 @@
 package com.hypernym.evaconnect.view.ui.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PixelFormat;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
 import com.hypernym.evaconnect.R;
-import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.IconPowerMenuItem;
-import com.hypernym.evaconnect.models.Notification;
 import com.hypernym.evaconnect.models.NotifyEvent;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
-import com.hypernym.evaconnect.view.adapters.IconPowerMenuAdapter;
 import com.hypernym.evaconnect.view.adapters.NotificationsAdapter;
 import com.hypernym.evaconnect.view.dialogs.NavigationDialog;
 import com.hypernym.evaconnect.view.ui.fragments.ConnectionsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.HomeFragment;
 import com.hypernym.evaconnect.view.ui.fragments.MessageFragment;
-import com.hypernym.evaconnect.view.ui.fragments.PostDetailsFragment;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
-import com.skydoves.powermenu.CustomPowerMenu;
-import com.skydoves.powermenu.MenuAnimation;
-import com.skydoves.powermenu.OnMenuItemClickListener;
-import com.skydoves.powermenu.PowerMenu;
-import com.skydoves.powermenu.PowerMenuItem;
 
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.w3c.dom.Text;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,15 +78,12 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     @BindView(R.id.tv_pagetitle)
     ConstraintLayout titleLayout;
 
-    private EventBus mEventBus = EventBus.getDefault();
-
     NavigationDialog navigationDialog;
     private boolean notificationflag=false;
     private HomeViewModel homeViewModel;
     private NotificationsAdapter notificationsAdapter;
     private List<Post> notifications=new ArrayList<>();
-
-
+    String pageTitle="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,13 +100,13 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
-        mEventBus.register(this);
         setRecyclerView();
         getAllNotifications();
         img_home.setImageDrawable(getDrawable(R.drawable.home_selected));
         img_connections.setImageDrawable(getDrawable(R.drawable.connections));
         img_messages.setImageDrawable(getDrawable(R.drawable.messages));
         img_logout.setImageDrawable(getDrawable(R.drawable.logout));
+        pageTitle=tv_pagetitle.getText().toString();
         img_uparrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,7 +121,6 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
                 {
                     showNotificationPanel();
                 }
-
             }
         });
     }
@@ -172,6 +134,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     private void getAllNotifications() {
         if(NetworkUtils.isNetworkConnected(this))
         {
+            notifications.clear();
             homeViewModel.getAllNotifications().observe(this, new Observer<BaseModel<List<Post>>>() {
                 @Override
                 public void onChanged(BaseModel<List<Post>> listBaseModel) {
@@ -199,6 +162,9 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     }
     public void hideNotificationPanel()
     {
+        notifications.clear();
+        tv_pagetitle.setText(pageTitle);
+
         if(NetworkUtils.isNetworkConnected(this))
         {
 
@@ -287,8 +253,17 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     @Override
     public void onItemClick(View view, int position) {
 
+    }
 
-
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -299,20 +274,31 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
 
     @Override
     protected void onDestroy() {
-        mEventBus.unregister(this);
+
         super.onDestroy();
     }
 
     @Override
     protected void onPause() {
-        mEventBus.unregister(this);
+
         super.onPause();
     }
 
 
     @Subscribe
     public void onEvent(NotifyEvent event) {
-        Log.e("TAAAF", "notify");
-        getAllNotifications();
+
+        try {
+            Log.e("TAAAF", "notify");
+           // Toast.makeText(this, "Hey, my message", Toast.LENGTH_SHORT).show();
+            getAllNotifications();
+
+
+        } catch(Exception e){
+
+        }
+
     }
+
+
 }

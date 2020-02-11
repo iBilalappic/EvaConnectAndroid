@@ -48,10 +48,10 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     public void onBindViewHolder(@NonNull NotificationsAdapter.ViewHolder holder, int position) {
         AppUtils.setGlideImage(context, holder.profile_image, notificationsList.get(position).getUser().getUser_image());
         holder.tv_name.setText(notificationsList.get(position).getUser().getFirst_name());
-        if (notificationsList.get(position).getObject_type().equalsIgnoreCase("like")) {
+        if (notificationsList.get(position).getIs_like()!=0) {
             holder.tv_status.setText("Liked your post " + DateUtils.getTimeAgo(notificationsList.get(position).getCreated_datetime()));
             holder.img_type.setImageDrawable(context.getDrawable(R.drawable.like_selected));
-        } else if (notificationsList.get(position).getObject_type().equalsIgnoreCase("comment")) {
+        } else {
             holder.tv_status.setText("Commented your post " + DateUtils.getTimeAgo(notificationsList.get(position).getCreated_datetime()));
             holder.img_type.setImageDrawable(context.getDrawable(R.drawable.comment));
         }
