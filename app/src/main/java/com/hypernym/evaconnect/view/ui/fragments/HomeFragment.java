@@ -33,6 +33,7 @@ import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.HomePostsAdapter;
@@ -216,6 +217,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         PostDetailsFragment postDetailsFragment=new PostDetailsFragment();
         Bundle bundle=new Bundle();
         bundle.putSerializable("post",posts.get(position));
+        Log.d("TAAAGNOTIFY",""+ GsonUtils.toJson(posts.get(position)));
         postDetailsFragment.setArguments(bundle);
         loadFragment(R.id.framelayout,postDetailsFragment,getContext(),true);
     }

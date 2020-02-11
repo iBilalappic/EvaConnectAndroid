@@ -44,7 +44,7 @@ public class HomeRepository implements IHomeRepository {
 
     @Override
     public LiveData<BaseModel<List<Post>>> getAllNotifications() {
-        dashboardMutableLiveData=new MutableLiveData<>();
+       // dashboardMutableLiveData=new MutableLiveData<>();
         User user=LoginUtils.getLoggedinUser();
         HashMap<String,Object> data=new HashMap<String,Object>();
         data.put("receiver_id",user.getId());
@@ -52,7 +52,8 @@ public class HomeRepository implements IHomeRepository {
         RestClient.get().appApi().getAllNotifications(data).enqueue(new Callback<BaseModel<List<Post>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
-                dashboardMutableLiveData.setValue(response.body());
+               // dashboardMutableLiveData.setValue(response.body());
+                dashboardMutableLiveData.postValue(response.body());
             }
             @Override
             public void onFailure(Call<BaseModel<List<Post>>> call, Throwable t) {

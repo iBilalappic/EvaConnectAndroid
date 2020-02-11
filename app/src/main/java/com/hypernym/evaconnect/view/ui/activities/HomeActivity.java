@@ -21,6 +21,7 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,6 +45,7 @@ import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.IconPowerMenuItem;
 import com.hypernym.evaconnect.models.Notification;
+import com.hypernym.evaconnect.models.NotifyEvent;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
@@ -64,6 +66,8 @@ import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
 
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -108,6 +112,8 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     @BindView(R.id.tv_pagetitle)
     ConstraintLayout titleLayout;
 
+    private EventBus mEventBus = EventBus.getDefault();
+
     NavigationDialog navigationDialog;
     private boolean notificationflag=false;
     private HomeViewModel homeViewModel;
@@ -131,6 +137,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
+        mEventBus.register(this);
         setRecyclerView();
         getAllNotifications();
         img_home.setImageDrawable(getDrawable(R.drawable.home_selected));
@@ -287,7 +294,25 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     @Override
     protected void onResume() {
         super.onResume();
-        hideNotificationPanel();
+      //  hideNotificationPanel();
     }
 
+    @Override
+    protected void onDestroy() {
+        mEventBus.unregister(this);
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        mEventBus.unregister(this);
+        super.onPause();
+    }
+
+
+    @Subscribe
+    public void onEvent(NotifyEvent event) {
+        Log.e("TAAAF", "notify");
+        getAllNotifications();
+    }
 }

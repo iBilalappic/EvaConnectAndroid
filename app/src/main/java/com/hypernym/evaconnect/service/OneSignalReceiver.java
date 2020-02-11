@@ -17,6 +17,7 @@ import com.hypernym.evaconnect.view.ui.fragments.HomeFragment;
 import com.onesignal.NotificationExtenderService;
 import com.onesignal.OSNotificationReceivedResult;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,6 +25,7 @@ import org.json.JSONObject;
 public class OneSignalReceiver extends NotificationExtenderService {
     PayloadNotification payloadNotification;
     NotifyEvent event = new NotifyEvent("notifcation");
+    private EventBus bus = EventBus.getDefault();
 
 
     @Override
@@ -33,6 +35,8 @@ public class OneSignalReceiver extends NotificationExtenderService {
         // Log.e("test", additionalData.toString());
 //        if (additionalData != null) {
         if (receivedResult.isAppInFocus) {
+
+            bus.post(event);
 //            payloadNotification = new PayloadNotification();
 //            try {
 //                payloadNotification.contents = new Contents();

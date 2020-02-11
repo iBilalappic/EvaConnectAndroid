@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Notification;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
+import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.view.adapters.NotificationsAdapter;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
 
@@ -36,9 +38,9 @@ public class NotificationsFragment extends BaseFragment implements Notifications
     RecyclerView rc_notifications;
 
     NotificationsAdapter notificationsAdapter;
-    private List<Post> notifications=new ArrayList<>();
+    private List<Post> notifications = new ArrayList<>();
     private HomeViewModel homeViewModel;
-
+    private List<Post> posts=new ArrayList<>();
     public NotificationsFragment() {
         // Required empty public constructor
     }
@@ -48,10 +50,10 @@ public class NotificationsFragment extends BaseFragment implements Notifications
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_notifications, container, false);
-        ButterKnife.bind(this,view);
+        View view = inflater.inflate(R.layout.fragment_notifications, container, false);
+        ButterKnife.bind(this, view);
         setPageTitle(getString(R.string.home));
-        homeViewModel = ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(HomeViewModel.class);
+        homeViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(HomeViewModel.class);
         initRecyclerView();
         getAllNotifications();
         return view;
@@ -61,8 +63,7 @@ public class NotificationsFragment extends BaseFragment implements Notifications
         homeViewModel.getAllNotifications().observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                if(listBaseModel!=null && !listBaseModel.isError())
-                {
+                if (listBaseModel != null && !listBaseModel.isError()) {
                     notifications.addAll(listBaseModel.getData());
                     notificationsAdapter.notifyDataSetChanged();
                 }
@@ -71,14 +72,14 @@ public class NotificationsFragment extends BaseFragment implements Notifications
     }
 
     private void initRecyclerView() {
-        notificationsAdapter=new NotificationsAdapter(getContext(),notifications,this);
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
+        notificationsAdapter = new NotificationsAdapter(getContext(), notifications, this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rc_notifications.setLayoutManager(linearLayoutManager);
         rc_notifications.setAdapter(notificationsAdapter);
     }
 
     @Override
     public void onItemClick(View view, int position) {
-
+        Log.d("TAAAGNOTIFY",""+GsonUtils.toJson(notifications.get(position)));
     }
 }
