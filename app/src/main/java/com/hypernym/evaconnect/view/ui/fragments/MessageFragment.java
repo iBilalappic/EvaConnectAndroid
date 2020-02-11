@@ -81,7 +81,7 @@ import okhttp3.RequestBody;
 
 import static android.app.Activity.RESULT_OK;
 
-public class MessageFragment extends BaseFragment implements OnItemClickListener, View.OnClickListener, TextWatcher, AttachmentsAdapter.ItemClickListener {
+public class MessageFragment extends BaseFragment implements OnItemClickListener, View.OnClickListener,SwipeRefreshLayout.OnRefreshListener , TextWatcher, AttachmentsAdapter.ItemClickListener {
 
     @BindView(R.id.rc_message)
     RecyclerView re_message;
@@ -146,6 +146,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
         ButterKnife.bind(this, view);
         newmessage.setOnClickListener(this);
         init();
+        swipeRefresh.setOnRefreshListener(this);
         //
         setupRecyclerview();
         GetFriendDetails();
@@ -595,5 +596,10 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
             }
         });
         simpleDialog.show();
+    }
+
+    @Override
+    public void onRefresh() {
+
     }
 }

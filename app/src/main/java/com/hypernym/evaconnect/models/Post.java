@@ -41,6 +41,8 @@ public class Post implements Serializable {
     private boolean is_receiver;
     private String object_type;
     private String details;
+    private int is_like;
+    private boolean is_url;
 
 
 
@@ -227,6 +229,22 @@ public class Post implements Serializable {
 
     public void setDetails(String details) {
         this.details = details;
+    }
+
+    public int getIs_like() {
+        return is_like;
+    }
+
+    public void setIs_like(int is_like) {
+        this.is_like = is_like;
+    }
+
+    public boolean isIs_url() {
+        return is_url;
+    }
+
+    public void setIs_url(boolean is_url) {
+        this.is_url = is_url;
     }
 }
 

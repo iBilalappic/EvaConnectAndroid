@@ -180,8 +180,9 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
                         {
                             post.setPost_type(AppConstants.EVENT_TYPE);
                         }
-                        else if(post.getType().equalsIgnoreCase("post") && AppUtils.containsURL(post.getContent()).size()>0)
+                        else if(post.getType().equalsIgnoreCase("post") && post.isIs_url())
                         {
+
                             post.setPost_type(AppConstants.LINK_POST);
                         }
                     }

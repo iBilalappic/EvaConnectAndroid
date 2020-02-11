@@ -5,13 +5,13 @@ package com.hypernym.evaconnect.models;
  */
 
 public class NotifyEvent {
-    private String data;
+    public String mMessage;
 
-    public NotifyEvent(String data){
-        this.data = data;
+    public NotifyEvent(String message) {
+        mMessage = message;
     }
 
-    public String getData(){
-        return data;
+    public String getMessage() {
+        return mMessage;
     }
 }

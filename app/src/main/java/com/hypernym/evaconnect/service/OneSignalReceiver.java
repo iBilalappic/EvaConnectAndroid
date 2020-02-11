@@ -3,23 +3,18 @@ package com.hypernym.evaconnect.service;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.Contents;
 import com.hypernym.evaconnect.models.NotifyEvent;
 import com.hypernym.evaconnect.models.PayloadNotification;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.GsonUtils;
-import com.hypernym.evaconnect.view.ui.activities.BaseActivity;
 import com.hypernym.evaconnect.view.ui.activities.HomeActivity;
-import com.hypernym.evaconnect.view.ui.fragments.ChatFragment;
 import com.hypernym.evaconnect.view.ui.fragments.HomeFragment;
 import com.onesignal.NotificationExtenderService;
 import com.onesignal.OSNotificationReceivedResult;
 
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 
 public class OneSignalReceiver extends NotificationExtenderService {
@@ -27,15 +22,15 @@ public class OneSignalReceiver extends NotificationExtenderService {
     NotifyEvent event = new NotifyEvent("notifcation");
     private EventBus bus = EventBus.getDefault();
 
-
     @Override
     protected boolean onNotificationProcessing(OSNotificationReceivedResult receivedResult) {
         // Read properties from result.
         //  JSONObject additionalData = receivedResult.payload.body;
         // Log.e("test", additionalData.toString());
 //        if (additionalData != null) {
-        if (receivedResult.isAppInFocus) {
 
+        if (receivedResult.isAppInFocus) {
+            // listener.onNewNotification();
             bus.post(event);
 //            payloadNotification = new PayloadNotification();
 //            try {
@@ -73,4 +68,5 @@ public class OneSignalReceiver extends NotificationExtenderService {
         // Return true to stop the notification from displaying.
         return true;
     }
+
 }
