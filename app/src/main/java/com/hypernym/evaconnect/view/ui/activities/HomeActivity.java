@@ -135,7 +135,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         if(NetworkUtils.isNetworkConnected(this))
         {
             notifications.clear();
-            homeViewModel.getAllNotifications().observe(this, new Observer<BaseModel<List<Post>>>() {
+            homeViewModel.getAllUnReadNotifications().observe(this, new Observer<BaseModel<List<Post>>>() {
                 @Override
                 public void onChanged(BaseModel<List<Post>> listBaseModel) {
                     if(listBaseModel !=null && !listBaseModel.isError() && listBaseModel.getData().size() >0)
