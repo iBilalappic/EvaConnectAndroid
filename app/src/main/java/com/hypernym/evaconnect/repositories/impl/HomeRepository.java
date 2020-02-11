@@ -23,6 +23,7 @@ import retrofit2.Response;
 public class HomeRepository implements IHomeRepository {
 
     private MutableLiveData<BaseModel<List<Post>>> dashboardMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Post>>> notificationMutableLiveData = new MutableLiveData<>();
 
 
     @Override
@@ -44,7 +45,7 @@ public class HomeRepository implements IHomeRepository {
 
     @Override
     public LiveData<BaseModel<List<Post>>> getAllNotifications() {
-        dashboardMutableLiveData=new MutableLiveData<>();
+     //   notificationMutableLiveData=new MutableLiveData<>();
         User user=LoginUtils.getLoggedinUser();
         HashMap<String,Object> data=new HashMap<String,Object>();
         data.put("receiver_id",user.getId());
@@ -52,14 +53,14 @@ public class HomeRepository implements IHomeRepository {
         RestClient.get().appApi().getAllNotifications(data).enqueue(new Callback<BaseModel<List<Post>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
-                dashboardMutableLiveData.setValue(response.body());
+                notificationMutableLiveData.setValue(response.body());
             }
             @Override
             public void onFailure(Call<BaseModel<List<Post>>> call, Throwable t) {
-                dashboardMutableLiveData.setValue(null);
+                notificationMutableLiveData.setValue(null);
             }
         });
-        return dashboardMutableLiveData;
+        return notificationMutableLiveData;
     }
 
     @Override

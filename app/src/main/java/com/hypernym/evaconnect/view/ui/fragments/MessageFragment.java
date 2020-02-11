@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -25,11 +26,25 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.firebase.client.Firebase;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.Message;
 import com.hypernym.evaconnect.models.NetworkConnection;
+import com.hypernym.evaconnect.models.Receiver;
+import com.hypernym.evaconnect.models.Sender;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.toolbar.OnItemClickListener;
@@ -48,14 +63,21 @@ import com.hypernym.evaconnect.viewmodel.MessageViewModel;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+
 
 import static android.app.Activity.RESULT_OK;
 
@@ -71,12 +93,14 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     SwipeRefreshLayout swipeRefresh;
 
 
-    private MessageAdapter messageAdapter;
+    private MessageAdapter messageAdapter,newmessageAdapter;
     private HorizontalMessageAdapter messageAdapter_horizontal;
     private LinearLayoutManager linearLayoutManager;
     private MessageViewModel messageViewModel;
     private List<NetworkConnection> networkConnectionList = new ArrayList<>();
+    private List<NetworkConnection> newNetworkConnectionList = new ArrayList<>();
     private List<NetworkConnection> originalNetworkConnectionList = new ArrayList<>();
+    private List<NetworkConnection> neworiginalNetworkConnectionList = new ArrayList<>();
     Dialog mDialogMessage;
     EditText editTextSearch, editTextMessage;
     TextView mTextviewSend;
@@ -122,14 +146,155 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
         ButterKnife.bind(this, view);
         newmessage.setOnClickListener(this);
         init();
+        //
+        setupRecyclerview();
         GetFriendDetails();
+        // setupNetworkConnectionRecycler();
+        GetFirebaseData();
         return view;
+    }
+
+    private void GetFirebaseData() {
+        networkConnectionList.clear();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        Query lastQuery = databaseReference.child("messages");
+        lastQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot child: dataSnapshot.getChildren()) {
+
+                    Log.d("User key", child.getKey());
+                        String[] conversationkey=child.getKey().split("_");
+                        User user=LoginUtils.getLoggedinUser();
+                        if(user.getId()==Integer.parseInt(conversationkey[0])) {
+                            Query lastMessage = databaseReference.child("messages").child(child.getKey()).orderByKey().limitToLast(1);
+                            lastMessage.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    // Object message = dataSnapshot.getValue();
+                                    for (DataSnapshot child: dataSnapshot.getChildren()) {
+                                        Log.d("User key", child.getKey());
+                                        Log.d("User val", child.child("message").getValue().toString());
+                                           NetworkConnection networkConnection = new NetworkConnection();
+                                            networkConnection.setReceiver(new Receiver());
+                                            networkConnection.setSender(new Sender());
+                                            networkConnection.getReceiver().setId(Integer.parseInt(conversationkey[1]));
+                                            networkConnection.getSender().setId(Integer.parseInt(conversationkey[0]));
+
+                                            try {                                                //dataMessage.get("message");
+                                                networkConnection.getReceiver().setUserImage(child.child("receiver_image").getValue().toString());
+                                                networkConnection.setMessage(child.child("message").getValue().toString());
+                                                if (child.child("image").getValue() != null) {
+                                                    networkConnection.setMessage("image");
+                                                }
+                                                networkConnection.getReceiver().setFirstName(child.child("receiver_name").getValue().toString());
+                                                networkConnection.getSender().setFirstName(child.child("sender_name").getValue().toString());
+                                                networkConnection.getReceiver().setEmail(child.child("email").getValue().toString());
+                                                networkConnection.getSender().setEmail(child.child("email").getValue().toString());
+                                                networkConnection.setCreatedDatetime(child.child("time").getValue().toString());
+                                                networkConnection.setSenderId(Integer.parseInt(conversationkey[0]));
+                                                networkConnection.setReceiverId(Integer.parseInt(conversationkey[1]));
+                                                networkConnectionList.add(networkConnection);
+                                                messageAdapter.notifyDataSetChanged();
+                                            }
+                                            catch (Exception ex)
+                                            {
+
+                                            }
+
+                                    }
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+                   }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle possible errors.
+            }
+        });
+//        DatabaseReference rootRef= FirebaseDatabase.getInstance().getReference();
+//        rootRef.child("messages").addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                networkConnectionList.clear();
+//                if (dataSnapshot.exists()){
+//                    HashMap<String, Object> dataMap = (HashMap<String, Object>) dataSnapshot.getValue();
+//
+//                    for (String key : dataMap.keySet()){
+//
+//                        String[] conversationkey=key.split("_");
+//                        User user=LoginUtils.getLoggedinUser();
+//                        if(user.getId()==Integer.parseInt(conversationkey[0]))
+//                        {
+//                            Object data = dataMap.get(key);
+//                            NetworkConnection networkConnection=new NetworkConnection();
+//                            networkConnection.setReceiver(new Receiver());
+//                            networkConnection.setSender(new Sender());
+//                            networkConnection.getReceiver().setId(Integer.parseInt(conversationkey[1]));
+//                            networkConnection.getSender().setId(Integer.parseInt(conversationkey[0]));
+//
+//                            try {
+//                                HashMap<String, Object> userData = (HashMap<String, Object>) data;
+//
+//                                int count=userData.keySet().toArray().length;
+//                                Object message=userData.keySet().toArray()[count-1];
+//                                HashMap<String, Object>  dataMessage = (HashMap<String, Object>) userData.get(message);
+//                                //dataMessage.get("message");
+//                                networkConnection.getReceiver().setUserImage(dataMessage.get("receiver_image").toString());
+//                                networkConnection.setMessage(dataMessage.get("message").toString());
+//                                if(dataMessage.get("image")!=null)
+//                                {
+//                                    networkConnection.setMessage("image");
+//                                }
+//                                if(Integer.parseInt(conversationkey[0])==user.getUser_id())
+//                                {
+//
+//                                }
+//                                networkConnection.getReceiver().setFirstName(dataMessage.get("receiver_name").toString());
+//                                networkConnection.getSender().setFirstName(dataMessage.get("sender_name").toString());
+//                                networkConnection.getReceiver().setEmail(dataMessage.get("email").toString());
+//                                networkConnection.getSender().setEmail(dataMessage.get("email").toString());
+//                                networkConnection.setCreatedDatetime(dataMessage.get("time").toString());
+//                                networkConnection.setSenderId(Integer.parseInt(conversationkey[0]));
+//                                networkConnection.setReceiverId(Integer.parseInt(conversationkey[1]));
+//                                networkConnectionList.add(networkConnection);
+//                                messageAdapter.notifyDataSetChanged();
+//
+//                            }
+//                            catch (Exception ex)
+//                            {
+//                                Log.e("getting message error",ex.getMessage());
+//                            }
+//                            // hideDialog();
+//                        }
+//
+//
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+
+
     }
 
 
     private void init() {
         messageViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(MessageViewModel.class);
-
+        setPageTitle(getString(R.string.messages));
     }
 
     private void setupRecyclerview() {
@@ -140,6 +305,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
         re_message.setAdapter(messageAdapter);
     }
 
+
     private void GetFriendDetails() {
         showDialog();
         User user = LoginUtils.getLoggedinUser();
@@ -147,12 +313,9 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
             @Override
             public void onChanged(BaseModel<List<NetworkConnection>> getnetworkconnection) {
                 if (getnetworkconnection != null && !getnetworkconnection.isError()) {
-                    networkConnectionList.clear();
-                    for (int i = 0; i < getnetworkconnection.getData().size(); i++) {
-                        networkConnectionList.addAll(getnetworkconnection.getData());
-                        originalNetworkConnectionList.addAll(getnetworkconnection.getData());
-                    }
-                    setupRecyclerview();
+                    newNetworkConnectionList.clear();
+                    newNetworkConnectionList.addAll(getnetworkconnection.getData());
+                    neworiginalNetworkConnectionList.addAll(getnetworkconnection.getData());
 
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
@@ -174,7 +337,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
             //  Log.d("TAAAG", "" + GsonUtils.toJson(networkConnection));
             loadFragment(R.id.framelayout, chatFragment, getContext(), true);
         } else {
-            Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "" + newNetworkConnectionList.get(position).getSenderId(), Toast.LENGTH_SHORT).show();
             ItemPostionHorizontal = position;
         }
 
@@ -184,7 +347,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.newmessage:
-                if (networkConnectionList.size() > 0 && NetworkUtils.isNetworkConnected(getContext())) {
+                if (newNetworkConnectionList.size() > 0 && NetworkUtils.isNetworkConnected(getContext())) {
                     showMesssageDialog();
                 } else {
                     Toast.makeText(getContext(), "You haven't any friends to chat", Toast.LENGTH_SHORT).show();
@@ -211,6 +374,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
         mrecyclerviewFriends = mDialogMessage.findViewById(R.id.recyclerViewNetworkConnection);
         setupNetworkConnectionRecycler();
 
+
         mTextviewSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -219,9 +383,8 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                     Log.d("TAAAAG",""+ItemPostionHorizontal);
                     ChatFragment chatFragment = new ChatFragment();
                     Bundle bundle = new Bundle();
-
-                    int originalPosition=originalNetworkConnectionList.indexOf(networkConnectionList.get(ItemPostionHorizontal));
-                    bundle.putSerializable(Constants.DATA, originalNetworkConnectionList.get(originalPosition));
+                    int originalPosition=neworiginalNetworkConnectionList.indexOf(newNetworkConnectionList.get(ItemPostionHorizontal));
+                    bundle.putSerializable(Constants.DATA, neworiginalNetworkConnectionList.get(originalPosition));
                     bundle.putString("MESSAGE", messageArea);
                     if (MultiplePhotoString != null && MultiplePhotoString.size() > 1) {
                         bundle.putStringArrayList("IMAGEURILIST", (ArrayList<String>) MultiplePhotoString);
@@ -261,9 +424,9 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     }
 
     private void setupNetworkConnectionRecycler() {
-        networkConnectionList = removeDuplicates(networkConnectionList);
-        messageAdapter_horizontal = new HorizontalMessageAdapter(getContext(), networkConnectionList, this);
-        linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        newNetworkConnectionList = removeDuplicates(newNetworkConnectionList);
+        messageAdapter_horizontal = new HorizontalMessageAdapter(getContext(), newNetworkConnectionList, this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         mrecyclerviewFriends.setLayoutManager(linearLayoutManager);
         mrecyclerviewFriends.setAdapter(messageAdapter_horizontal);
     }

@@ -42,14 +42,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull MessageAdapter.ViewHolder holder, int position) {
-        if (networkConnectionList.get(position).getSenderId().equals(LoginUtils.getUser().getId())) {
-            holder.tv_name.setText(networkConnectionList.get(position).getReceiver().getFirstName());
+        if (networkConnectionList.get(position).getReceiver().getFirstName().equals(LoginUtils.getUser().getFirst_name())) {
+            holder.tv_name.setText(networkConnectionList.get(position).getSender().getFirstName());
             holder.tv_lastmsg.setText(networkConnectionList.get(position).getMessage());
             AppUtils.setGlideImage(context, (holder).mImageview6, networkConnectionList.get(position).getReceiver().getUserImage());
             holder.tv_minago.setText(DateUtils.getTimeAgo(networkConnectionList.get(position).getCreatedDatetime()));
         }
-        if (networkConnectionList.get(position).getReceiverId().equals(LoginUtils.getUser().getId())) {
-            holder.tv_name.setText(networkConnectionList.get(position).getSender().getFirstName());
+        if (networkConnectionList.get(position).getSender().getFirstName().equals(LoginUtils.getUser().getFirst_name())) {
+            holder.tv_name.setText(networkConnectionList.get(position).getReceiver().getFirstName());
             holder.tv_lastmsg.setText(networkConnectionList.get(position).getMessage());
             AppUtils.setGlideImage(context, (holder).mImageview6, networkConnectionList.get(position).getSender().getUserImage());
             holder.tv_minago.setText(DateUtils.getTimeAgo(networkConnectionList.get(position).getCreatedDatetime()));
