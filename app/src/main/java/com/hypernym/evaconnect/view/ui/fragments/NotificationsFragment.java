@@ -80,6 +80,11 @@ public class NotificationsFragment extends BaseFragment implements Notifications
 
     @Override
     public void onItemClick(View view, int position) {
+        PostDetailsFragment postDetailsFragment=new PostDetailsFragment();
+        Bundle bundle=new Bundle();
+        bundle.putInt("post",notifications.get(position).getObject_id());
         Log.d("TAAAGNOTIFY",""+GsonUtils.toJson(notifications.get(position)));
+        postDetailsFragment.setArguments(bundle);
+        loadFragment(R.id.framelayout,postDetailsFragment,getContext(),true);
     }
 }

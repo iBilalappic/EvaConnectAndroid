@@ -16,7 +16,18 @@ public class Post implements Serializable {
     private String created_datetime;
     private User user;
     private Integer id;
+    private Integer object_id;
+
+    public Integer getObject_id() {
+        return object_id;
+    }
+
+    public void setObject_id(Integer object_id) {
+        this.object_id = object_id;
+    }
+
     private String status;
+
     private Integer post_type;
     private Integer post_id;
     private Integer is_post_like;
