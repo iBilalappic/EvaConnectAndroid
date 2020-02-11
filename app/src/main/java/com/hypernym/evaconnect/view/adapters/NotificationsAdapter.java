@@ -56,12 +56,12 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
             holder.img_type.setImageDrawable(context.getDrawable(R.drawable.comment));
         }
         AppUtils.makeTextViewResizable(holder.tv_content, 3, notificationsList.get(position).getDetails());
-        holder.linearLayout10.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onItemClickListener.onItemClick(v, position);
-            }
-        });
+//        holder.linearLayout10.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onItemClickListener.onItemClick(v, position);
+//            }
+//        });
         //holder.tv_content.setText(notificationsList.get(position).getDetails());
     }
 
@@ -98,7 +98,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
         @Override
         public void onClick(View v) {
-
+            onItemClickListener.onItemClick(v, getAdapterPosition());
         }
     }
 

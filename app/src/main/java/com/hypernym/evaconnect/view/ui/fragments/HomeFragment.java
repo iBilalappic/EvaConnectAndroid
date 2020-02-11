@@ -217,8 +217,8 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     public void onItemClick(View view, int position) {
         PostDetailsFragment postDetailsFragment=new PostDetailsFragment();
         Bundle bundle=new Bundle();
-        bundle.putSerializable("post",posts.get(position));
-        Log.d("TAAAGNOTIFY",""+ GsonUtils.toJson(posts.get(position)));
+        bundle.putInt("post",posts.get(position).getId());
+        Log.d("TAAAGNOTIFY",""+posts.get(position).getId());
         postDetailsFragment.setArguments(bundle);
         loadFragment(R.id.framelayout,postDetailsFragment,getContext(),true);
     }
