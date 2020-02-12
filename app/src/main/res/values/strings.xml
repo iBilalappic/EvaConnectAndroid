@@ -16,6 +16,8 @@
     <string name="upload_an_image_of_you">Upload an image of you</string>
     <string name="desc_forgot_password">Once you have submitted the detials of the desired account, please check your email to reset your password</string>
     <string name="home">Home</string>
+    <string name="createJoblist">Create Job Listing</string>
+    <string name="joblist">Job Listing</string>
     <string name="messages">Message</string>
     <string name="connections">Connections</string>
     <string name="likes">Likes</string>
