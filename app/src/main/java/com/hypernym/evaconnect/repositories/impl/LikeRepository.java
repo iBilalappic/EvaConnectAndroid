@@ -26,7 +26,7 @@ public class LikeRepository implements ILikeRepository {
     public LiveData<BaseModel<List<MyLikesModel>>> getLikes(int user_id) {
         MessageMutableLiveData = new MutableLiveData<>();
         HashMap<String, Object> body = new HashMap<>();
-        body.put("user)id",user_id);
+        body.put("user_id",user_id);
         RestClient.get().appApi().getLikes(body).enqueue(new Callback<BaseModel<List<MyLikesModel>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<MyLikesModel>>> call, Response<BaseModel<List<MyLikesModel>>> response) {
