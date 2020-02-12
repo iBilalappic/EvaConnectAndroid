@@ -228,6 +228,7 @@ hideDialog();
                 swipeRefresh.setRefreshing(false);
             }
         });
+        hideDialog();
     }
 
 
@@ -312,7 +313,6 @@ hideDialog();
         editTextSearch.addTextChangedListener(this);
         mrecyclerviewFriends = mDialogMessage.findViewById(R.id.recyclerViewNetworkConnection);
         setupNetworkConnectionRecycler();
-
 
         mTextviewSend.setOnClickListener(new View.OnClickListener() {
             @Override

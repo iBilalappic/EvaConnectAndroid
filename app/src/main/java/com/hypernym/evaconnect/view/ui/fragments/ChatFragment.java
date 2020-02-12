@@ -184,7 +184,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             UserDetails.receiverName = networkConnection.getReceiver().getFirstName();
             UserDetails.receiverImage = networkConnection.getReceiver().getUserImage();
             UserDetails.senderName=networkConnection.getSender().getFirstName();
-          //  setPageTitle(networkConnection.getReceiver().getFirstName());
+            //  setPageTitle(networkConnection.getReceiver().getFirstName());
             //  Toast.makeText(getContext(), "receivername" + networkConnection.getReceiver().getFirstName(), Toast.LENGTH_SHORT).show();
         } else {
             UserDetails.chatWith = networkConnection.getSender().getId().toString();
@@ -192,7 +192,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             UserDetails.senderName = networkConnection.getReceiver().getFirstName();
             UserDetails.receiverName = networkConnection.getSender().getFirstName();
             UserDetails.receiverImage = networkConnection.getSender().getUserImage();
-           // setPageTitle(networkConnection.getSender().getFirstName());
+            // setPageTitle(networkConnection.getSender().getFirstName());
             //  Toast.makeText(getContext(), "sendername" + networkConnection.getSender().getFirstName(), Toast.LENGTH_SHORT).show();
         }
         if(networkConnection.getSender().getFirstName().equalsIgnoreCase(LoginUtils.getUser().getFirst_name()))
@@ -392,7 +392,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         filter.field = "tag";
         filter.key = "email";
         filter.relation = "=";
-        filter.value = UserDetails.email;
+        if(LoginUtils.getLoggedinUser().getEmail().equalsIgnoreCase(networkConnection.getReceiver().getEmail()))
+        {
+            filter.value = networkConnection.getSender().getEmail();
+        }
+        else
+        {
+            filter.value = networkConnection.getReceiver().getEmail();
+        }
+
         request.filters = new ArrayList<>();
         request.filters.add(filter);
         RestClient.get().appApi_onesignal().postPackets(request).enqueue(new Callback<Object>() {

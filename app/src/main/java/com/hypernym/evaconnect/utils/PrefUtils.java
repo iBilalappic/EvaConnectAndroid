@@ -68,5 +68,13 @@ public class PrefUtils {
         return GsonUtils.fromJson(PrefUtils.getString(context,Constants.CHAT_MESSAGE),new TypeToken<List<ChatMessage>>(){}.getType());
     }
 
+    public static void saveMessageCount(Context context, int count){
+        PrefUtils.persistInt(context,Constants.MESSAGE_NOTIFICATION,count);
+    }
+
+    public static Integer getMessageCount(Context context){
+        return PrefUtils.getInt(context,Constants.MESSAGE_NOTIFICATION,0);
+    }
+
 
 }

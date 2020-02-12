@@ -25,6 +25,7 @@ import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
+import com.hypernym.evaconnect.utils.PrefUtils;
 import com.hypernym.evaconnect.view.adapters.NotificationsAdapter;
 import com.hypernym.evaconnect.view.dialogs.NavigationDialog;
 import com.hypernym.evaconnect.view.ui.fragments.ConnectionsFragment;
@@ -81,6 +82,9 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     @BindView(R.id.tv_pagetitle)
     ConstraintLayout titleLayout;
 
+    @BindView(R.id.badge_notification)
+    TextView badge_notification;
+
     NavigationDialog navigationDialog;
     private boolean notificationflag=false;
     private HomeViewModel homeViewModel;
@@ -105,6 +109,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         getSupportActionBar().setHomeButtonEnabled(true);
         setRecyclerView();
         getAllNotifications();
+
         img_home.setImageDrawable(getDrawable(R.drawable.home_selected));
         img_connections.setImageDrawable(getDrawable(R.drawable.connections));
         img_messages.setImageDrawable(getDrawable(R.drawable.messages));
@@ -126,6 +131,12 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
                 }
             }
         });
+    }
+
+    private void setMessageNotificationCount() {
+        int count=PrefUtils.getMessageCount(getApplicationContext());
+        badge_notification.setText(String.valueOf(count));
+        badge_notification.setVisibility(View.VISIBLE);
     }
 
     private void setRecyclerView() {
@@ -232,6 +243,8 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         img_connections.setImageDrawable(getDrawable(R.drawable.connections));
         img_messages.setImageDrawable(getDrawable(R.drawable.message_selected));
         img_logout.setImageDrawable(getDrawable(R.drawable.logout));
+        PrefUtils.saveMessageCount(getApplicationContext(),0);
+        badge_notification.setVisibility(View.GONE);
         MessageFragment fragment = new MessageFragment();
         loadFragment(R.id.framelayout,fragment,this,false);
     }
@@ -299,13 +312,29 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     public void onEvent(NotifyEvent event) {
 
         try {
-            Log.e("TAAAF", "notify");
-           // Toast.makeText(this, "Hey, my message", Toast.LENGTH_SHORT).show();
-            getAllNotifications();
+            runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+
+                    // Stuff that updates the UI
+                    if(event.getMessage().equalsIgnoreCase("notifcation"))
+                    {
+                        Log.e("TAAAF", "notify");
+                        // Toast.makeText(this, "Hey, my message", Toast.LENGTH_SHORT).show();
+                        getAllNotifications();
+                    }
+                    else
+                    {
+                        Log.e("TAAAF", "message notification");
+                        setMessageNotificationCount();
+                    }
+                }
+            });
 
 
         } catch(Exception e){
-
+            Log.e("TAAAF", "exception"+e.getMessage());
         }
 
     }
