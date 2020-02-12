@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.BaseModel;
@@ -20,10 +21,14 @@ import com.hypernym.evaconnect.models.Notification;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.GsonUtils;
+import com.hypernym.evaconnect.utils.LoginUtils;
+import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.NotificationsAdapter;
+import com.hypernym.evaconnect.view.ui.activities.BaseActivity;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -56,16 +61,39 @@ public class NotificationsFragment extends BaseFragment implements Notifications
         homeViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(HomeViewModel.class);
         initRecyclerView();
         getAllNotifications();
+        readAllNotifications();
         return view;
+    }
+    private void readAllNotifications() {
+        BaseActivity.setNotificationCount(0);
+        setPageTitle("Notifications");
+        if(NetworkUtils.isNetworkConnected(getContext()))
+        {
+            homeViewModel.notificationMarkAsRead( LoginUtils.getLoggedinUser().getId()).observe(this, new Observer<BaseModel<List<Post>>>() {
+                @Override
+                public void onChanged(BaseModel<List<Post>> listBaseModel) {
+                    if(listBaseModel !=null && !listBaseModel.isError() && listBaseModel.getData().size() >0) {
+
+                    }
+                }
+            });
+        }
+        else
+        {
+            networkErrorDialog();
+        }
     }
 
     private void getAllNotifications() {
+        notifications.clear();
         homeViewModel.getAllNotifications().observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError()) {
                     notifications.addAll(listBaseModel.getData());
+                    Collections.reverse(notifications);
                     notificationsAdapter.notifyDataSetChanged();
+
                 }
             }
         });

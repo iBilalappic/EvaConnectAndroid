@@ -156,6 +156,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     }
 
     private void GetFirebaseData() {
+        showDialog();
         networkConnectionList.clear();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         Query lastQuery = databaseReference.child("messages");
@@ -197,19 +198,22 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                                                 networkConnection.setReceiverId(Integer.parseInt(conversationkey[1]));
                                                 networkConnectionList.add(networkConnection);
                                                 messageAdapter.notifyDataSetChanged();
+                                                swipeRefresh.setRefreshing(false);
                                             }
                                             catch (Exception ex)
                                             {
-
+                                                hideDialog();
+                                                swipeRefresh.setRefreshing(false);
                                             }
-
+hideDialog();
                                     }
 
                                 }
 
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
+hideDialog();
+                                    swipeRefresh.setRefreshing(false);
                                 }
                             });
                         }
@@ -220,76 +224,10 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 // Handle possible errors.
+                hideDialog();
+                swipeRefresh.setRefreshing(false);
             }
         });
-//        DatabaseReference rootRef= FirebaseDatabase.getInstance().getReference();
-//        rootRef.child("messages").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                networkConnectionList.clear();
-//                if (dataSnapshot.exists()){
-//                    HashMap<String, Object> dataMap = (HashMap<String, Object>) dataSnapshot.getValue();
-//
-//                    for (String key : dataMap.keySet()){
-//
-//                        String[] conversationkey=key.split("_");
-//                        User user=LoginUtils.getLoggedinUser();
-//                        if(user.getId()==Integer.parseInt(conversationkey[0]))
-//                        {
-//                            Object data = dataMap.get(key);
-//                            NetworkConnection networkConnection=new NetworkConnection();
-//                            networkConnection.setReceiver(new Receiver());
-//                            networkConnection.setSender(new Sender());
-//                            networkConnection.getReceiver().setId(Integer.parseInt(conversationkey[1]));
-//                            networkConnection.getSender().setId(Integer.parseInt(conversationkey[0]));
-//
-//                            try {
-//                                HashMap<String, Object> userData = (HashMap<String, Object>) data;
-//
-//                                int count=userData.keySet().toArray().length;
-//                                Object message=userData.keySet().toArray()[count-1];
-//                                HashMap<String, Object>  dataMessage = (HashMap<String, Object>) userData.get(message);
-//                                //dataMessage.get("message");
-//                                networkConnection.getReceiver().setUserImage(dataMessage.get("receiver_image").toString());
-//                                networkConnection.setMessage(dataMessage.get("message").toString());
-//                                if(dataMessage.get("image")!=null)
-//                                {
-//                                    networkConnection.setMessage("image");
-//                                }
-//                                if(Integer.parseInt(conversationkey[0])==user.getUser_id())
-//                                {
-//
-//                                }
-//                                networkConnection.getReceiver().setFirstName(dataMessage.get("receiver_name").toString());
-//                                networkConnection.getSender().setFirstName(dataMessage.get("sender_name").toString());
-//                                networkConnection.getReceiver().setEmail(dataMessage.get("email").toString());
-//                                networkConnection.getSender().setEmail(dataMessage.get("email").toString());
-//                                networkConnection.setCreatedDatetime(dataMessage.get("time").toString());
-//                                networkConnection.setSenderId(Integer.parseInt(conversationkey[0]));
-//                                networkConnection.setReceiverId(Integer.parseInt(conversationkey[1]));
-//                                networkConnectionList.add(networkConnection);
-//                                messageAdapter.notifyDataSetChanged();
-//
-//                            }
-//                            catch (Exception ex)
-//                            {
-//                                Log.e("getting message error",ex.getMessage());
-//                            }
-//                            // hideDialog();
-//                        }
-//
-//
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
-
     }
 
 
@@ -308,7 +246,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
 
 
     private void GetFriendDetails() {
-        showDialog();
+
         User user = LoginUtils.getLoggedinUser();
         messageViewModel.SetUser(user).observe(this, new Observer<BaseModel<List<NetworkConnection>>>() {
             @Override
@@ -321,7 +259,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
-                hideDialog();
+
 
             }
         });
@@ -601,5 +539,12 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     @Override
     public void onRefresh() {
 
+        if(NetworkUtils.isNetworkConnected(getContext())) {
+          GetFirebaseData();
+        }
+        else
+        {
+            networkErrorDialog();
+        }
     }
 }

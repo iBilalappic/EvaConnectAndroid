@@ -37,6 +37,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -141,6 +142,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
                     if(listBaseModel !=null && !listBaseModel.isError() && listBaseModel.getData().size() >0)
                     {
                         notifications.addAll(listBaseModel.getData());
+                        Collections.reverse(notifications);
                         notificationsAdapter.notifyDataSetChanged();
                         tv_pagetitle.setText(notifications.size()+" New Notifications");
                     }
