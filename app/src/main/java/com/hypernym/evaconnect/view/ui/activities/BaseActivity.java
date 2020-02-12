@@ -35,6 +35,7 @@ import com.hypernym.evaconnect.view.ui.fragments.EditProfileFragment;
 import com.hypernym.evaconnect.view.ui.fragments.HomeFragment;
 import com.hypernym.evaconnect.view.ui.fragments.MessageFragment;
 import com.hypernym.evaconnect.view.ui.fragments.NotificationsFragment;
+import com.hypernym.evaconnect.view.ui.fragments.MyLikesFragment;
 import com.hypernym.evaconnect.view.ui.fragments.PostDetailsFragment;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
 import com.onesignal.OneSignal;
@@ -55,7 +56,7 @@ public class BaseActivity extends AppCompatActivity  {
 
           Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.framelayout);
             if (fragment instanceof HomeFragment || fragment instanceof ConnectionsFragment || fragment instanceof MessageFragment
-            || fragment instanceof NotificationsFragment || fragment instanceof EditProfileFragment) {
+            || fragment instanceof NotificationsFragment || fragment instanceof EditProfileFragment || fragment instanceof MyLikesFragment) {
                 simpleDialog = new SimpleDialog(this, null, getString(R.string.msg_exit),
                         getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
                     @Override

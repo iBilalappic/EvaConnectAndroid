@@ -5,12 +5,14 @@ import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.Dashboard;
+import com.hypernym.evaconnect.models.MyLikesModel;
 import com.hypernym.evaconnect.models.NetworkConnection;
 import com.hypernym.evaconnect.models.Notification;
 import com.hypernym.evaconnect.models.Notification_onesignal;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 
+import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.MultipartBody;
@@ -56,6 +58,9 @@ public interface AppApi {
 
     @GET(APIConstants.FRIENDCONNECTION)
     Call<BaseModel<List<NetworkConnection>>> getFriendDetails(@Path("id") int id);
+
+    @POST(APIConstants.GET_MY_LIKES)
+    Call<BaseModel<List<MyLikesModel>>> getLikes(@Body HashMap<String, Object> body);
 
     @POST(APIConstants.ADD_COMMENT)
     Call<BaseModel<List<Comment>>> addComment(@Body Comment comment);
