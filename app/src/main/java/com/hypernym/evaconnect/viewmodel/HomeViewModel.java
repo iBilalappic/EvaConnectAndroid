@@ -32,6 +32,10 @@ public class HomeViewModel extends AndroidViewModel {
     {
         return iHomeRepository.getAllNotifications();
     }
+    public LiveData<BaseModel<List<Post>>> getAllUnReadNotifications()
+    {
+        return iHomeRepository.getAllUnReadNotifications();
+    }
     public LiveData<BaseModel<List<Post>>> notificationMarkAsRead(int id)
     {
         return iHomeRepository.notificationMarkAsRead(id);

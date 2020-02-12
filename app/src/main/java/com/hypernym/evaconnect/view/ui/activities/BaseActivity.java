@@ -31,7 +31,10 @@ import com.hypernym.evaconnect.view.dialogs.CustomProgressBar;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.view.ui.fragments.BaseFragment;
 import com.hypernym.evaconnect.view.ui.fragments.ConnectionsFragment;
+import com.hypernym.evaconnect.view.ui.fragments.EditProfileFragment;
 import com.hypernym.evaconnect.view.ui.fragments.HomeFragment;
+import com.hypernym.evaconnect.view.ui.fragments.MessageFragment;
+import com.hypernym.evaconnect.view.ui.fragments.NotificationsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.MyLikesFragment;
 import com.hypernym.evaconnect.view.ui.fragments.PostDetailsFragment;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
@@ -52,8 +55,8 @@ public class BaseActivity extends AppCompatActivity  {
     public void onBackPressed() {
 
           Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.framelayout);
-            if (fragment instanceof HomeFragment || fragment instanceof ConnectionsFragment||
-                    fragment instanceof MyLikesFragment) {
+            if (fragment instanceof HomeFragment || fragment instanceof ConnectionsFragment || fragment instanceof MessageFragment
+            || fragment instanceof NotificationsFragment || fragment instanceof EditProfileFragment || fragment instanceof MyLikesFragment) {
                 simpleDialog = new SimpleDialog(this, null, getString(R.string.msg_exit),
                         getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
                     @Override
@@ -141,7 +144,7 @@ public class BaseActivity extends AppCompatActivity  {
     return count;
     }
 
-    public void setNotificationCount(int mcount)
+    public static void setNotificationCount(int mcount)
     {
       count=mcount;
     }

@@ -45,11 +45,11 @@ public class HomeRepository implements IHomeRepository {
 
     @Override
     public LiveData<BaseModel<List<Post>>> getAllNotifications() {
-        notificationMutableLiveData=new MutableLiveData<>();
+       notificationMutableLiveData=new MutableLiveData<>();
         User user=LoginUtils.getLoggedinUser();
         HashMap<String,Object> data=new HashMap<String,Object>();
         data.put("receiver_id",user.getId());
-      //  data.put("is_read",0);
+       // data.put("is_read",0);
         RestClient.get().appApi().getAllNotifications(data).enqueue(new Callback<BaseModel<List<Post>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
@@ -80,6 +80,25 @@ public class HomeRepository implements IHomeRepository {
             }
         });
         return dashboardMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<Post>>> getAllUnReadNotifications() {
+        User user=LoginUtils.getLoggedinUser();
+        HashMap<String,Object> data=new HashMap<String,Object>();
+        data.put("receiver_id",user.getId());
+        data.put("is_read",0);
+        RestClient.get().appApi().getAllNotifications(data).enqueue(new Callback<BaseModel<List<Post>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
+                notificationMutableLiveData.setValue(response.body());
+            }
+            @Override
+            public void onFailure(Call<BaseModel<List<Post>>> call, Throwable t) {
+                notificationMutableLiveData.setValue(null);
+            }
+        });
+        return notificationMutableLiveData;
     }
 
 }

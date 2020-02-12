@@ -111,8 +111,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     List<String> attachments = new ArrayList<>();
     private AttachmentsAdapter attachmentsAdapter;
-
-
     ChatMessage mMessage;
     List<ChatMessage> chatMessageList = new ArrayList<>();
     private NetworkConnection networkConnection = new NetworkConnection();
@@ -221,6 +219,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void init() {
+        showBackButton();
         Firebase.setAndroidContext(AppUtils.getApplicationContext());
         reference1 = new Firebase("https://evaconnect-df08d.firebaseio.com/messages/" + UserDetails.userid + "_" + UserDetails.chatWith);
         reference2 = new Firebase("https://evaconnect-df08d.firebaseio.com/messages/" + UserDetails.chatWith + "_" + UserDetails.userid);

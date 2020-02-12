@@ -54,10 +54,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        style="@style/TextStyle"
         android:id="@+id/tv_connections"
+        style="@style/TextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:text="465,345 connections"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />

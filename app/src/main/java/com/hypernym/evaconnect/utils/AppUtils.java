@@ -240,7 +240,6 @@ public final class AppUtils {
             }
             Log.d("url is",urlStr);
             links.add(urlStr);
-
             return links;
 
         }
