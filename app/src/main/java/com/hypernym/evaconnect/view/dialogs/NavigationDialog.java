@@ -20,13 +20,14 @@ import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.view.ui.fragments.EditProfileFragment;
 import com.hypernym.evaconnect.view.ui.fragments.JobListingFragment;
 import com.hypernym.evaconnect.view.ui.fragments.EditProfileFragment;
+import com.hypernym.evaconnect.view.ui.fragments.MyLikesFragment;
 import com.hypernym.evaconnect.view.ui.fragments.NotificationsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.PersonDetailFragment;
 
 public class NavigationDialog extends Dialog implements View.OnClickListener {
 
     private ImageView img_close;
-    private LinearLayout editProfile,logout,notifications,mJoblisting;
+    private LinearLayout editProfile,logout,notifications,mJoblisting,mLike;
     private Context context;
 
     public NavigationDialog(Context context) {
@@ -44,7 +45,9 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
         logout=findViewById(R.id.logout);
         notifications=findViewById(R.id.notifications);
         mJoblisting=findViewById(R.id.joblisting);
+        mLike=findViewById(R.id.layoutLike);
         mJoblisting.setOnClickListener(this);
+        mLike.setOnClickListener(this);
         setCanceledOnTouchOutside(false);
         setCancelable(false);
         Window window = getWindow();
@@ -102,6 +105,13 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
                 transaction.replace(R.id.framelayout, new JobListingFragment());
                 transaction.commit();
             break;
+            case R.id.layoutLike:
+                dismiss();
+                FragmentTransaction transaction_1 =((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
+                transaction_1.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+                transaction_1.replace(R.id.framelayout, new MyLikesFragment());
+                transaction_1.commit();
+                break;
         }
     }
 }

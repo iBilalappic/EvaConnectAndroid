@@ -22,6 +22,7 @@ import com.hypernym.evaconnect.models.NotifyEvent;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.NotificationsAdapter;
@@ -29,6 +30,7 @@ import com.hypernym.evaconnect.view.dialogs.NavigationDialog;
 import com.hypernym.evaconnect.view.ui.fragments.ConnectionsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.HomeFragment;
 import com.hypernym.evaconnect.view.ui.fragments.MessageFragment;
+import com.hypernym.evaconnect.view.ui.fragments.PostDetailsFragment;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
 
 
@@ -252,7 +254,12 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     }
     @Override
     public void onItemClick(View view, int position) {
-
+        PostDetailsFragment postDetailsFragment=new PostDetailsFragment();
+        Bundle bundle=new Bundle();
+        bundle.putInt("post",notifications.get(position).getObject_id());
+        postDetailsFragment.setArguments(bundle);
+        loadFragment(R.id.framelayout,postDetailsFragment,this,true);
+        hideNotificationPanel();
     }
 
     @Override
@@ -269,6 +276,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     @Override
     protected void onResume() {
         super.onResume();
+        getAllNotifications();
       //  hideNotificationPanel();
     }
 

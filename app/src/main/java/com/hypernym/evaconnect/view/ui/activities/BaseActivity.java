@@ -32,6 +32,7 @@ import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.view.ui.fragments.BaseFragment;
 import com.hypernym.evaconnect.view.ui.fragments.ConnectionsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.HomeFragment;
+import com.hypernym.evaconnect.view.ui.fragments.MyLikesFragment;
 import com.hypernym.evaconnect.view.ui.fragments.PostDetailsFragment;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
 import com.onesignal.OneSignal;
@@ -51,7 +52,8 @@ public class BaseActivity extends AppCompatActivity  {
     public void onBackPressed() {
 
           Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.framelayout);
-            if (fragment instanceof HomeFragment || fragment instanceof ConnectionsFragment) {
+            if (fragment instanceof HomeFragment || fragment instanceof ConnectionsFragment||
+                    fragment instanceof MyLikesFragment) {
                 simpleDialog = new SimpleDialog(this, null, getString(R.string.msg_exit),
                         getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
                     @Override
