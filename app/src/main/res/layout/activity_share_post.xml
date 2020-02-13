@@ -10,7 +10,7 @@
         android:id="@+id/linearLayout11"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorwhite"
         android:elevation="2dp"
         android:orientation="horizontal"
         android:padding="10dp"
@@ -47,7 +47,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:src="@drawable/profile"
-        app:civ_border_color="@color/colorPrimary"
+        app:civ_border_color="@color/colorwhite"
         app:civ_border_width="2dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout11" />
@@ -109,7 +109,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:src="@drawable/profile"
-            app:civ_border_color="@color/colorPrimary"
+            app:civ_border_color="@color/colorwhite"
             app:civ_border_width="2dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -210,7 +210,7 @@
             app:sliderIndicatorPadding="3dp"
             app:sliderIndicatorRadius="2dp"
             app:sliderIndicatorSelectedColor="@color/btn_border"
-            app:sliderIndicatorUnselectedColor="@color/colorPrimary"
+            app:sliderIndicatorUnselectedColor="@color/colorwhite"
             app:sliderScrollTimeInSec="1"
             app:sliderStartAutoCycle="true" />
     </androidx.constraintlayout.widget.ConstraintLayout>

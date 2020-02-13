@@ -31,10 +31,10 @@ public interface AppApi {
 
     @Multipart
     @POST(APIConstants.SIGNUP)
-    Call<BaseModel<List<User>>> signup(@Part("status") RequestBody status, @Part("first_name")RequestBody firstname,
-                                   @Part("email") RequestBody email,
-                                   @Part("password") RequestBody password,@Part("type") RequestBody type,
-                                   @Part("bio_data") RequestBody biodata, @Part MultipartBody.Part user_image);
+    Call<BaseModel<List<User>>> signup(@Part("status") RequestBody status, @Part("first_name") RequestBody firstname,
+                                       @Part("email") RequestBody email,
+                                       @Part("password") RequestBody password, @Part("type") RequestBody type,
+                                       @Part("bio_data") RequestBody biodata, @Part MultipartBody.Part user_image);
 
     @POST(APIConstants.LOGIN)
     Call<BaseModel<List<User>>> login(@Body User user);
@@ -47,8 +47,23 @@ public interface AppApi {
 
     @Multipart
     @POST(APIConstants.GET_POSTS)
-    Call<BaseModel<List<Post>>> createPost(@Part("user_id") int user_id,@Part("content") RequestBody content,
-                                           @Part("created_by_id") int created_by_id,@Part("status") RequestBody status,@Part List<MultipartBody.Part> post_image,@Part MultipartBody.Part post_video);
+    Call<BaseModel<List<Post>>> createPost(@Part("user_id") int user_id, @Part("content") RequestBody content,
+                                           @Part("created_by_id") int created_by_id, @Part("status") RequestBody status, @Part List<MultipartBody.Part> post_image, @Part MultipartBody.Part post_video);
+    @Multipart
+    @POST(APIConstants.ADD_JOB_AD)
+    Call<BaseModel<List<Object>>> createJobAd(@Part("user_id") int user_id,
+                                              @Part("status") RequestBody status,
+                                              @Part("job_title") RequestBody job_title,
+                                              @Part("job_nature") RequestBody job_nature,
+                                              @Part("job_sector") RequestBody job_sector,
+                                              @Part("position") RequestBody position,
+                                              @Part("content") RequestBody content,
+                                              @Part("weekly_hours") RequestBody weekly_hours,
+                                              @Part("location") RequestBody location,
+                                              @Part("salary") int salary,
+                                              @Part("created_by_id") int created_by_id,
+                                              @Part("published_date") RequestBody published_date,
+                                              @Part MultipartBody.Part job_image);
 
     @POST(APIConstants.CHECK_EMAIL_EXIST)
     Call<BaseModel<List<User>>> isEmailExist(@Body User user);
@@ -75,7 +90,7 @@ public interface AppApi {
     Call<BaseModel<List<Connection>>> connect(@Body Connection connection);
 
     @PATCH(APIConstants.UPDATE_CONNECTION)
-    Call<BaseModel<List<Connection>>> updateConnection(@Body Connection connection,@Path("id") int id);
+    Call<BaseModel<List<Connection>>> updateConnection(@Body Connection connection, @Path("id") int id);
 
     @POST(APIConstants.GET_ALL_CONNECTIONS)
     Call<BaseModel<List<User>>> getAllConnections(@Body User user);

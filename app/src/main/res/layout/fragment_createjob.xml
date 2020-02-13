@@ -94,7 +94,7 @@
             android:layout_height="120dp"
             android:layout_marginTop="40dp"
             android:src="@drawable/profile"
-            app:civ_border_color="@color/colorPrimary"
+            app:civ_border_color="@color/colorwhite"
             app:civ_border_width="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_browsefiles"
@@ -127,12 +127,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_question1">
 
-            <Spinner
-                android:id="@+id/spinnerJobSector"
-                android:layout_width="200dp"
-                android:layout_height="30dp">
 
-            </Spinner>
+            <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+                android:id="@+id/spinner_jobsector"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@null"
+                android:gravity="center"
+                android:hint="Select Job Sector"
+                android:textColor="@color/dark_gray"
+                android:textColorHint="@color/lighter_gray"
+                android:textSize="14sp" />
 
 
         </LinearLayout>
@@ -161,15 +167,85 @@
             android:background="@color/lighter_gray"
             android:gravity="center"
             android:hint="Enter Company Name"
+            android:imeOptions="actionNext"
+            android:inputType="text"
             android:textColor="@color/dark_gray"
             android:textColorHint="@color/dark_gray"
             android:textSize="13sp"
-            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_question2">
 
         </EditText>
+
+        <TextView
+            android:id="@+id/tv_question7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:text="What will be Job Title?"
+            android:textColor="@color/gray"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edit_companyName">
+
+        </TextView>
+
+        <EditText
+            android:id="@+id/edit_jobtitle"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/lighter_gray"
+            android:gravity="center"
+            android:hint="Enter Job Title"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:textColor="@color/dark_gray"
+            android:textColorHint="@color/dark_gray"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_question7">
+
+        </EditText>
+
+        <TextView
+            android:id="@+id/tv_question8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:text="What will be Job Position?"
+            android:textColor="@color/gray"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edit_jobtitle">
+
+        </TextView>
+
+        <EditText
+            android:id="@+id/edit_jobpostion"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/lighter_gray"
+            android:gravity="center"
+            android:hint="Enter Job Position"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:textColor="@color/dark_gray"
+            android:textColorHint="@color/dark_gray"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_question8">
+
+        </EditText>
+
 
         <TextView
             android:id="@+id/tv_question3"
@@ -182,7 +258,7 @@
             android:textSize="12sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_companyName">
+            app:layout_constraintTop_toBottomOf="@+id/edit_jobpostion">
 
         </TextView>
 
@@ -194,10 +270,11 @@
             android:background="@color/lighter_gray"
             android:gravity="center"
             android:hint="Enter Location"
+            android:imeOptions="actionNext"
+            android:inputType="text"
             android:textColor="@color/dark_gray"
             android:textColorHint="@color/dark_gray"
             android:textSize="13sp"
-            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_question3">
@@ -227,11 +304,12 @@
             android:layout_marginTop="5dp"
             android:background="@color/lighter_gray"
             android:gravity="center"
+            android:imeOptions="actionDone"
+            android:inputType="number"
             android:hint="$97,000 (per annum)"
             android:textColor="@color/dark_gray"
             android:textColorHint="@color/dark_gray"
             android:textSize="13sp"
-            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_question4">
@@ -266,26 +344,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_question5">
 
-            <EditText
-                android:id="@+id/edit_weekhours"
-                android:layout_width="120dp"
+
+            <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+                android:id="@+id/spinner_week"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:background="@color/lighter_gray"
+                android:layout_gravity="center"
+                android:background="@null"
                 android:gravity="center"
-                android:hint="36 hours"
+                android:hint="Select Weekly Hour"
                 android:textColor="@color/dark_gray"
-                android:textColorHint="@color/dark_gray"
-                android:textSize="13sp"
-                android:textStyle="bold">
-
-            </EditText>
-
-            <Spinner
-                android:id="@+id/spinnerWeek"
-                android:layout_width="80dp"
-                android:layout_height="30dp">
-
-            </Spinner>
+                android:textColorHint="@color/lighter_gray"
+                android:textSize="14sp" />
 
 
         </LinearLayout>

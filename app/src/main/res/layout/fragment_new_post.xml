@@ -10,7 +10,7 @@
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorwhite"
         tools:context=".view.ui.fragments.NewPostFragment">
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -20,7 +20,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:src="@drawable/profile"
-            app:civ_border_color="@color/colorPrimary"
+            app:civ_border_color="@color/colorwhite"
             app:civ_border_width="2dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -95,7 +95,7 @@
             android:paddingRight="30dp"
             android:paddingBottom="15dp"
             android:text="Post"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/colorwhite"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/attachment_layout" />

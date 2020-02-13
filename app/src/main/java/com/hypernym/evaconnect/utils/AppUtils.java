@@ -94,7 +94,7 @@ public final class AppUtils {
     public static void showSnackBar(View v, String message) {
         if (v != null && !TextUtils.isEmpty(message)) {
             Snackbar snackbar = Snackbar.make(v, message, Snackbar.LENGTH_SHORT);
-            snackbar.getView().setBackgroundResource(R.color.colorPrimary);
+            snackbar.getView().setBackgroundResource(R.color.colorwhite);
             View view = snackbar.getView();
             TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)

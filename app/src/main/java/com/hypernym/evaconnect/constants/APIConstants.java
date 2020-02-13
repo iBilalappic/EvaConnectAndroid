@@ -22,4 +22,5 @@ public interface APIConstants {
     public static String GET_POST_BY_ID="post/details/{id}/";
     public static String GET_CONNECTION_COUNT="user/connection/count/{id}/";
     public static String GET_MY_LIKES="user/mylikes/";
+    public static String ADD_JOB_AD="job/";
 }
