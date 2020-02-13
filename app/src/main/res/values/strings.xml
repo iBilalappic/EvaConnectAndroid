@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">evaConnect</string>
+    <string name="app_name">Aviation Connect</string>
     <string name="errorString">Something went wrong, Please try again.</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="login">Log In</string>
