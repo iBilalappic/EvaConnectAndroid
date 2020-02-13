@@ -60,11 +60,11 @@ public class ConnectionRepository implements IConnectionRespository {
     }
 
     @Override
-    public LiveData<BaseModel<List<User>>> getAllConnections() {
+    public LiveData<BaseModel<List<User>>> getAllConnections(int total,int current) {
         userMutableLiveData=new MutableLiveData<>();
         User user=LoginUtils.getLoggedinUser();
 
-        RestClient.get().appApi().getAllConnections(user).enqueue(new Callback<BaseModel<List<User>>>() {
+        RestClient.get().appApi().getAllConnections(user,total,current).enqueue(new Callback<BaseModel<List<User>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
                 userMutableLiveData.setValue(response.body());
@@ -79,10 +79,10 @@ public class ConnectionRepository implements IConnectionRespository {
     }
 
     @Override
-    public LiveData<BaseModel<List<User>>> getConnectionByFilter(User userData) {
+    public LiveData<BaseModel<List<User>>> getConnectionByFilter(User userData,int total,int current) {
         userMutableLiveData=new MutableLiveData<>();
 
-        RestClient.get().appApi().getConnectionByFilter(userData).enqueue(new Callback<BaseModel<List<User>>>() {
+        RestClient.get().appApi().getConnectionByFilter(userData,total,current).enqueue(new Callback<BaseModel<List<User>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
                 userMutableLiveData.setValue(response.body());

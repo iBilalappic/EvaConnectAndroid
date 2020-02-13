@@ -15,8 +15,8 @@ public interface APIConstants {
     public static String GET_POST_COMMENTS="post/comment/filter/";
     public static String CONNECT="user/connection/";
     public static String UPDATE_CONNECTION="user/connection/details/{id}/";
-    public static String GET_ALL_CONNECTIONS="user/network/connection/";
-    public static String GET_CONNECTION_BY_FILTER="user/network/connection/filter/";
+    public static String GET_ALL_CONNECTIONS="user/network/connection/?";
+    public static String GET_CONNECTION_BY_FILTER="user/network/connection/filter/?";
     public static String GET_ALL_NOTIFICATIONS="user/notifications/filter/";
     public static String NOTIFICATION_MARKS_AS_READ="user/notifications/details/";
     public static String GET_POST_BY_ID="post/details/{id}/";

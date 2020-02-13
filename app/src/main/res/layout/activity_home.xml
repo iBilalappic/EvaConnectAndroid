@@ -54,13 +54,32 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:src="@drawable/connections" />
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:layout_weight="1">
+    <ImageView
+        android:id="@+id/img_messages"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/messages"/>
 
-        <ImageView
-            android:id="@+id/img_messages"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/messages" />
+    <TextView
+        android:id="@+id/badge_notification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_count"
+        android:layout_marginLeft="37dp"
+        android:text="0"
+        android:visibility="gone"
+        android:gravity="center"
+        android:textColor="#fff"
+        android:textSize="8sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="0dp" />
+</RelativeLayout>
 
         <ImageView
             android:id="@+id/img_logout"

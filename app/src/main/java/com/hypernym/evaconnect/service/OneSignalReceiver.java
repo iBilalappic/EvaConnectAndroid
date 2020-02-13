@@ -9,29 +9,48 @@ import com.hypernym.evaconnect.models.PayloadNotification;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.GsonUtils;
+import com.hypernym.evaconnect.utils.PrefUtils;
 import com.hypernym.evaconnect.view.ui.activities.HomeActivity;
 import com.hypernym.evaconnect.view.ui.fragments.HomeFragment;
 import com.onesignal.NotificationExtenderService;
 import com.onesignal.OSNotificationReceivedResult;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class OneSignalReceiver extends NotificationExtenderService {
     PayloadNotification payloadNotification;
-    NotifyEvent event = new NotifyEvent("notifcation");
+
     private EventBus bus = EventBus.getDefault();
 
     @Override
     protected boolean onNotificationProcessing(OSNotificationReceivedResult receivedResult) {
         // Read properties from result.
-        //  JSONObject additionalData = receivedResult.payload.body;
-        // Log.e("test", additionalData.toString());
-//        if (additionalData != null) {
+         JSONObject additionalData = receivedResult.payload.additionalData;
 
         if (receivedResult.isAppInFocus) {
             // listener.onNewNotification();
-            bus.post(event);
+            if (additionalData != null) {
+                try {
+                    if(additionalData.getString("data") !=null)
+                    {
+                       int count= PrefUtils.getMessageCount(getApplicationContext());
+                       count++;
+                       PrefUtils.saveMessageCount(getApplicationContext(),count);
+                        NotifyEvent event = new NotifyEvent("messageNotifcation");
+                        bus.post(event);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    NotifyEvent event = new NotifyEvent("notifcation");
+                    bus.post(event);
+                }
+
+            }
+
 //            payloadNotification = new PayloadNotification();
 //            try {
 //                payloadNotification.contents = new Contents();

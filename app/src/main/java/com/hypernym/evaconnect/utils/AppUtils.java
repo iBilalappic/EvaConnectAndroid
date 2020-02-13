@@ -111,8 +111,6 @@ public final class AppUtils {
         Glide.with(context) //1
                 .load(url)
                 .placeholder(R.mipmap.ic_default)
-                .error(R.mipmap.ic_default)
-                .skipMemoryCache(true) //2
                 .apply(RequestOptions.circleCropTransform())
                 .into(imageView);
     }

@@ -9,4 +9,5 @@ public class UserDetails {
     public static String senderName = "";
     public static String receiverName = "";
     public static String receiverImage = "";
+
 }

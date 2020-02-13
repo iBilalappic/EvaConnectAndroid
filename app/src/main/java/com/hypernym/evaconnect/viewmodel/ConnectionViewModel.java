@@ -30,14 +30,14 @@ public class ConnectionViewModel extends AndroidViewModel {
         return iConnectionRepository.connect(connection);
     }
 
-    public LiveData<BaseModel<List<User>>> getAllConnections()
+    public LiveData<BaseModel<List<User>>> getAllConnections(int total,int current)
     {
-        return iConnectionRepository.getAllConnections();
+        return iConnectionRepository.getAllConnections(total,current);
     }
 
-    public LiveData<BaseModel<List<User>>> getConnectionByFilter(User user)
+    public LiveData<BaseModel<List<User>>> getConnectionByFilter(User user,int total,int current)
     {
-        return iConnectionRepository.getConnectionByFilter(user);
+        return iConnectionRepository.getConnectionByFilter(user,total,current);
     }
 
     public LiveData<BaseModel<User>> getConnectionCount(User user)
