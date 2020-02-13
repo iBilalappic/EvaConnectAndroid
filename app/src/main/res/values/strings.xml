@@ -67,6 +67,7 @@
     <string name="msg_remove_attachment">Are you sure you want to remove this attachment?</string>
     <string name="msg_forgotpass">An email has been sent to your email address. Follow the instruction in the email to reset your password. </string>
     <string name="msg_signup">You have signed up successfully! Thank you for choosing Aviation Connect, please check your email to activate your account.</string>
+    <string name="msg_jobAd">You job ad has been created successfully.</string>
     <string name="msg_exit">Are you sure you want to exit?</string>
     <string name="msg_logout">Are you sure you want to logout? You will be returned to the login screen</string>
     <!--Error Messages-->
@@ -78,5 +79,11 @@
     <string name="err_signup">This email already exist.</string>
     <string name="err_login">Username or password combination was not recognised. Please try again or click the forgotten username/password link</string>
     <string name="network_error">Please check your internet connection and try again.</string>
+    <string name="err_salary">Please enter salary.</string>
+    <string name="err_companyname">Please enter company name.</string>
+    <string name="err_location">Please enter location.</string>
+    <string name="err_role">Please enter job description.</string>
+    <string name="err_title">Please enter job title.</string>
+    <string name="err_position">Please enter job position.</string>
 </resources>
 

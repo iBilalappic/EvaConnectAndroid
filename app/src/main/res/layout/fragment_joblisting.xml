@@ -41,6 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/new_post"
+            android:visibility="gone"
             android:background="@drawable/rounded_button_border"
             android:drawablePadding="10dp"
             android:paddingLeft="20dp"
