@@ -39,8 +39,8 @@ public class MyLikeAdapter extends RecyclerView.Adapter<MyLikeAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull MyLikeAdapter.ViewHolder holder, int position) {
-       // holder.mtextviewName.setText(myLikesModelList.get(position));
-
+//
+     //
         if (myLikesModelList.get(position).getIsLike()!=0) {
             holder.tv_status.setText("Liked your post " + DateUtils.getTimeAgo(myLikesModelList.get(position).getCreatedDatetime()));
             holder.img_type.setImageDrawable(context.getDrawable(R.drawable.like_selected));
@@ -48,6 +48,8 @@ public class MyLikeAdapter extends RecyclerView.Adapter<MyLikeAdapter.ViewHolder
             holder.tv_status.setText("Commented your post " + DateUtils.getTimeAgo(myLikesModelList.get(position).getCreatedDatetime()));
             holder.img_type.setImageDrawable(context.getDrawable(R.drawable.comment));
         }
+        holder.tv_Name.setText(myLikesModelList.get(position).getUser().get(0).getFirstName());
+        AppUtils.setGlideImage(context, holder.profile_image, myLikesModelList.get(position).getUser().get(0).getUserImage());
         AppUtils.makeTextViewResizable(holder.tv_content, 3, myLikesModelList.get(position).getDetails());
     }
 
@@ -58,7 +60,7 @@ public class MyLikeAdapter extends RecyclerView.Adapter<MyLikeAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tv_Name,tv_status,tv_content;
-        ImageView img_type;
+        ImageView img_type,profile_image;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -66,6 +68,7 @@ public class MyLikeAdapter extends RecyclerView.Adapter<MyLikeAdapter.ViewHolder
             tv_status=itemView.findViewById(R.id.tv_status);
             tv_content=itemView.findViewById(R.id.tv_content);
             img_type=itemView.findViewById(R.id.img_type);
+            profile_image=itemView.findViewById(R.id.profile_image);
             itemView.setOnClickListener(this);
         }
 

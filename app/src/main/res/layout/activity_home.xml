@@ -36,7 +36,7 @@
         android:id="@+id/linearLayout8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorwhite"
         android:elevation="4dp"
         android:padding="15dp"
         app:layout_constraintBottom_toBottomOf="parent">

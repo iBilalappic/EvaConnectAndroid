@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class MyLikesModel {
+public class MyLikesModel  {
 
     @SerializedName("object_id")
     @Expose
@@ -18,10 +18,10 @@ public class MyLikesModel {
     private String createdDatetime;
     @SerializedName("created_by_id")
     @Expose
-    private Object createdById;
-    @SerializedName("object_details")
+    private Integer createdById;
+    @SerializedName("user")
     @Expose
-    private List<ObjectDetail> objectDetails = null;
+    private List<UserModel> user = null;
     @SerializedName("details")
     @Expose
     private String details;
@@ -53,20 +53,20 @@ public class MyLikesModel {
         this.createdDatetime = createdDatetime;
     }
 
-    public Object getCreatedById() {
+    public Integer getCreatedById() {
         return createdById;
     }
 
-    public void setCreatedById(Object createdById) {
+    public void setCreatedById(Integer createdById) {
         this.createdById = createdById;
     }
 
-    public List<ObjectDetail> getObjectDetails() {
-        return objectDetails;
+    public List<UserModel> getUser() {
+        return user;
     }
 
-    public void setObjectDetails(List<ObjectDetail> objectDetails) {
-        this.objectDetails = objectDetails;
+    public void setUser(List<UserModel> user) {
+        this.user = user;
     }
 
     public String getDetails() {

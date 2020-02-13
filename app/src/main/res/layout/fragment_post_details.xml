@@ -7,7 +7,7 @@
     android:background="@color/lighter_gray">
 <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/linearLayout2"
-    android:background="@color/colorPrimary"
+    android:background="@color/colorwhite"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="10dp"
@@ -19,7 +19,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        app:civ_border_color="@color/colorPrimary"
+        app:civ_border_color="@color/colorwhite"
         app:civ_border_width="2dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -170,7 +170,7 @@
                     app:sliderIndicatorPadding="3dp"
                     app:sliderIndicatorRadius="2dp"
                     app:sliderIndicatorSelectedColor="@color/btn_border"
-                    app:sliderIndicatorUnselectedColor="@color/colorPrimary"
+                    app:sliderIndicatorUnselectedColor="@color/colorwhite"
                     app:sliderScrollTimeInSec="1"
                     app:sliderStartAutoCycle="true"
 
@@ -319,7 +319,7 @@
         android:layout_marginTop="32dp"
         android:elevation="2dp"
         android:src="@drawable/profile"
-        app:civ_border_color="@color/colorPrimary"
+        app:civ_border_color="@color/colorwhite"
         app:civ_border_width="2dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/img_like" />
@@ -362,7 +362,7 @@
         android:id="@+id/view"
         android:layout_width="0dp"
         android:layout_height="70dp"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorwhite"
         app:layout_constraintEnd_toEndOf="parent"
         android:elevation="2dp"
         app:layout_constraintStart_toStartOf="parent"

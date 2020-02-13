@@ -6,7 +6,7 @@
     android:layout_width="wrap_content"
     android:layout_marginStart="@dimen/spacing_medium"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimary">
+    android:background="@color/colorwhite">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageView6"
@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:src="@drawable/profile"
-        app:civ_border_color="@color/colorPrimary"
+        app:civ_border_color="@color/colorwhite"
         app:civ_border_width="2dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
