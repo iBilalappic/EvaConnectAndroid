@@ -57,13 +57,14 @@ public class PersonDetailFragment extends BaseFragment {
 
     private void init() {
         setPageTitle("Profile");
-
+        user=LoginUtils.getLoggedinUser();
         if((getArguments() !=null))
         {
             showBackButton();
             post=(Post)getArguments().getSerializable("PostData");
             AppUtils.setGlideImage(getContext(),profile_image,post.getUser().getUser_image());
             tv_name.setText(post.getUser().getFirst_name());
+
             if(post.getUser().getId()==user.getId())
             {
                 tv_connect.setVisibility(View.GONE);

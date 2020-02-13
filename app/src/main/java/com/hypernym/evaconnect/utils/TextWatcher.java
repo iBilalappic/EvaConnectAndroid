@@ -13,6 +13,8 @@ import com.hypernym.evaconnect.view.ui.fragments.ConnectionsFragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
+
 public class TextWatcher implements android.text.TextWatcher {
 
     private ConnectionsFragment fragment;
@@ -20,7 +22,7 @@ public class TextWatcher implements android.text.TextWatcher {
     private List<User> users=new ArrayList<>();
     private ConnectionsAdapter connectionsAdapter;
     private String type;
-
+    private int currentPage = PAGE_START;
     public TextWatcher(ConnectionsFragment fragment, EditText editText, List<User> arrayList, ConnectionsAdapter connectionsAdapter, String type) {
         this.fragment=fragment;
         this.editText=editText;
@@ -36,7 +38,9 @@ public class TextWatcher implements android.text.TextWatcher {
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        fragment.getConnectionByFilter(type);
+        users.clear();
+        connectionsAdapter.notifyDataSetChanged();
+        fragment.getConnectionByFilter(type,PAGE_START);
     }
 
     @Override

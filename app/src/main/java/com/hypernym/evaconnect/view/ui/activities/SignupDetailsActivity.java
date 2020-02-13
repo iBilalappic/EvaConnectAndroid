@@ -249,7 +249,7 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
                 Log.e(getClass().getName(), "exc: " + exc.getMessage());
             }
         } else {
-            if (requestCode == CAMERAA) {
+            if (requestCode == CAMERAA && resultCode == RESULT_OK) {
 
                 //mIsProfileImageAdded = true;
                 galleryAddPic();
@@ -309,7 +309,6 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
 
     private void takePhotoFromCamera() {
         Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-//
         // Ensure that there's a camera activity to handle the intent
         // Create the File where the photo should go
         File photoFile = null;

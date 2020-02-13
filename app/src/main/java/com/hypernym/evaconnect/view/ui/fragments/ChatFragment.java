@@ -158,7 +158,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         browsefiles.setOnClickListener(this);
         assert getArguments() != null;
         networkConnection = (NetworkConnection) getArguments().getSerializable(Constants.DATA);
-
         messageText = getArguments().getString("MESSAGE");
         currentPhotoPath = getArguments().getString("IMAGEURI");
         FileName = getArguments().getString("FILENAME");
@@ -615,7 +614,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 Log.e(getClass().getName(), "exc: " + exc.getMessage());
             }
         } else {
-            if (requestCode == CAMERAA) {
+            if (requestCode == CAMERAA && resultCode == RESULT_OK) {
 
                 //mIsProfileImageAdded = true;
                 File file = galleryAddPic();

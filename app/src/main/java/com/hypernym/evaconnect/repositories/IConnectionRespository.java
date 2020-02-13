@@ -11,8 +11,8 @@ import java.util.List;
 
 public interface IConnectionRespository {
     LiveData<BaseModel<List<Connection>>> connect(Connection connection);
-    LiveData<BaseModel<List<User>>> getAllConnections();
-    LiveData<BaseModel<List<User>>> getConnectionByFilter(User user);
+    LiveData<BaseModel<List<User>>> getAllConnections(int total,int current);
+    LiveData<BaseModel<List<User>>> getConnectionByFilter(User user,int total,int current);
     LiveData<BaseModel<User>> getConnectionCount(User user);
 
 }
