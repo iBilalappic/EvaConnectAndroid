@@ -14,6 +14,7 @@ public final class DateUtils {
     public static final String DATE_FORMAT_1 = "hh:mm a";
     public static final String DATE_FORMAT_2 = "d MMM";
     public static final String DATE_INPUT_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_INPUT_FORMAT_WITHOUTTIME = "yyyy-MM-dd";
     public static final String SERVER_DATE_INPUT_FORMAT = "yyyy-MM-dd hh:mm:ss";
 
     private DateUtils() {
@@ -63,6 +64,14 @@ public final class DateUtils {
         String completetime = df.format(Calendar.getInstance().getTime());
         return completetime;
     }
+    public static String GetCurrentdate() {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        df.setTimeZone(TimeZone.getTimeZone("gmt"));
+        String completetime = df.format(Calendar.getInstance().getTime());
+        return completetime;
+    }
+
+
 
     public static String getTimeAgo(String datetime) {
         Date mParsedDate, currentParsedDate;
