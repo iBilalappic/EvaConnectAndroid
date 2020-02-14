@@ -275,7 +275,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
             public void onChanged(BaseModel<List<Comment>> listBaseModel) {
                 if (!listBaseModel.isError()) {
 
-                    Toast.makeText(getContext(), getString(R.string.msg_comment_created), Toast.LENGTH_LONG).show();
+                   // Toast.makeText(getContext(), getString(R.string.msg_comment_created), Toast.LENGTH_LONG).show();
                     edt_comment.setText("");
                     //networkResponseDialog(getString(R.string.success),getString(R.string.msg_comment_created));
                     getComments();
