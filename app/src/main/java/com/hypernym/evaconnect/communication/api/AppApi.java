@@ -107,8 +107,8 @@ public interface AppApi {
     @PATCH(APIConstants.NOTIFICATION_MARKS_AS_READ)
     Call<BaseModel<List<Post>>> notificationMarkAsRead(@Body User user);
 
-    @GET(APIConstants.GET_POST_BY_ID)
-    Call<BaseModel<List<Post>>> getPostById(@Path("id") int id);
+    @POST(APIConstants.GET_POST_BY_ID)
+    Call<BaseModel<List<Post>>> getPostById(@Body Object user);
 
     @GET(APIConstants.GET_CONNECTION_COUNT)
     Call<BaseModel<User>> getConnectionCount(@Path("id") int id);

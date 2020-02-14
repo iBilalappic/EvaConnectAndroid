@@ -355,6 +355,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     reference2.push().setValue(map);
                     sendNotification();
                     messageArea.setText("");
+                    messageArea.requestFocus();
 
                 } else if (SelectedImageUri != null) {
                     UploadImageToFirebase();

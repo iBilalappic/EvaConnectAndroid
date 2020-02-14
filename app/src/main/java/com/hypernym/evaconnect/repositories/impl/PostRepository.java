@@ -12,6 +12,7 @@ import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IPostRepository;
 import com.hypernym.evaconnect.utils.LoginUtils;
 
+import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -98,8 +99,11 @@ public class PostRepository implements IPostRepository {
     @Override
     public LiveData<BaseModel<List<Post>>> getPostById(int id) {
         postMutableLiveData=new MutableLiveData<>();
+        HashMap<String ,Object> postObject=new HashMap<>();
+        postObject.put("user_id",LoginUtils.getLoggedinUser().getId());
+        postObject.put("post_id",id);
 
-        RestClient.get().appApi().getPostById(id).enqueue(new Callback<BaseModel<List<Post>>>() {
+        RestClient.get().appApi().getPostById(postObject).enqueue(new Callback<BaseModel<List<Post>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
                 postMutableLiveData.setValue(response.body());

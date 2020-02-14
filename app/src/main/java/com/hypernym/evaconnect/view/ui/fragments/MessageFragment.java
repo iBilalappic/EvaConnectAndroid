@@ -200,13 +200,14 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                                                 Collections.reverse(networkConnectionList);
                                                 messageAdapter.notifyDataSetChanged();
                                                 swipeRefresh.setRefreshing(false);
+                                                hideDialog();
                                             }
                                             catch (Exception ex)
                                             {
                                                 hideDialog();
                                                 swipeRefresh.setRefreshing(false);
                                             }
-hideDialog();
+
                                     }
 
                                 }
@@ -316,7 +317,7 @@ hideDialog();
             @Override
             public void onClick(View v) {
                 String messageArea = editTextMessage.getText().toString();
-                if (!messageArea.equals("")) {
+                if ((!messageArea.equals("") || SelectedImageUri != null ||( MultiplePhotoString != null && MultiplePhotoString.size() > 1))) {
                     Log.d("TAAAAG",""+ItemPostionHorizontal);
                     ChatFragment chatFragment = new ChatFragment();
                     Bundle bundle = new Bundle();
