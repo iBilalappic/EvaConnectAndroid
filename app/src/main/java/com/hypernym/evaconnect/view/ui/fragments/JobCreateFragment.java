@@ -110,7 +110,6 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
     SimpleDialog simpleDialog;
 
     private CreateJobAdViewModel createJobAdViewModel;
-
     private String[] mSpinnerJobSector = {"Piolots", "ITSystems", "Security"};
     private String[] mSpinnerWeek = {"36 hours(per week)", "48 hours(per week)"};
 

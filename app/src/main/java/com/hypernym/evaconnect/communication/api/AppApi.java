@@ -3,11 +3,11 @@ package com.hypernym.evaconnect.communication.api;
 import com.hypernym.evaconnect.constants.APIConstants;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Comment;
+import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.Connection;
-import com.hypernym.evaconnect.models.Dashboard;
+import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.MyLikesModel;
 import com.hypernym.evaconnect.models.NetworkConnection;
-import com.hypernym.evaconnect.models.Notification;
 import com.hypernym.evaconnect.models.Notification_onesignal;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
@@ -73,6 +73,12 @@ public interface AppApi {
 
     @GET(APIConstants.FRIENDCONNECTION)
     Call<BaseModel<List<NetworkConnection>>> getFriendDetails(@Path("id") int id);
+
+    @GET(APIConstants.JOB_LIST_AD)
+    Call<BaseModel<List<JobAd>>> getjobAd();
+
+    @POST(APIConstants.JOB_FILTER_AD)
+    Call<BaseModel<List<CompanyJobAdModel>>> getCompanyAd(@Body HashMap<String, Object> body);
 
     @POST(APIConstants.GET_MY_LIKES)
     Call<BaseModel<List<MyLikesModel>>> getLikes(@Body HashMap<String, Object> body);

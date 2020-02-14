@@ -6,15 +6,6 @@
     android:background="@color/page_bg"
     android:orientation="vertical">
 
-    <View
-        android:id="@+id/view6"
-        android:layout_width="0dp"
-        android:layout_height="3dp"
-        android:background="@drawable/line_redblack50"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -98,9 +89,10 @@
                 style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="70dp"
+                android:layout_marginStart="20dp"
                 android:text="AirLine pilot"
                 android:textColor="@color/dark_gray"
+                app:layout_constraintEnd_toEndOf="@+id/view0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_position">
 
@@ -110,10 +102,11 @@
                 android:id="@+id/view0"
                 android:layout_width="2dp"
                 android:layout_height="60dp"
-                android:layout_marginStart="45dp"
                 android:layout_marginTop="70dp"
                 android:background="@color/light_gray"
-                app:layout_constraintStart_toEndOf="@+id/tv_positionName"
+                app:layout_constraintBottom_toTopOf="@+id/tv_apply"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_name">
 
             </View>
@@ -140,7 +133,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="55dp"
-                android:text="$97,000"
+                android:text="$97,0000"
                 android:textColor="@color/dark_gray"
                 app:layout_constraintStart_toEndOf="@id/view0"
                 app:layout_constraintTop_toBottomOf="@+id/tv_salary">
@@ -168,9 +161,10 @@
                 style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="70dp"
+                android:layout_marginStart="20dp"
                 android:text="International"
                 android:textColor="@color/dark_gray"
+                app:layout_constraintEnd_toStartOf="@+id/tv_weeklyHoursNumber"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_location">
 
@@ -197,10 +191,11 @@
                 style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="70dp"
-                android:text="36"
+                android:layout_marginStart="40dp"
+                android:text="48 hours perannum"
                 android:textColor="@color/dark_gray"
-                app:layout_constraintStart_toEndOf="@id/view0"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tv_locationName"
                 app:layout_constraintTop_toBottomOf="@+id/tv_weeklyHours">
 
             </TextView>

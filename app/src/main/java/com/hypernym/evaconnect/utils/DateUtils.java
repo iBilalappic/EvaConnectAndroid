@@ -44,6 +44,29 @@ public final class DateUtils {
         return mOutputDateString + " | " + mOutputTimeString;
     }
 
+    public static String getFormattedDate(String datetime) {
+        Date mParsedDate;
+        String mOutputDateString = "";
+        String mOutputTimeString = "";
+        SimpleDateFormat mInputDateFormat =
+                new SimpleDateFormat(DATE_INPUT_FORMAT, java.util.Locale.getDefault());
+        SimpleDateFormat mOutputDateFormat =
+                new SimpleDateFormat(DATE_FORMAT_1, java.util.Locale.getDefault());
+        SimpleDateFormat mOutputDateFormat1 =
+                new SimpleDateFormat(DATE_FORMAT_2, java.util.Locale.getDefault());
+        try {
+            datetime = convertServerDateToUserTimeZone(datetime);
+            mParsedDate = mInputDateFormat.parse(datetime);
+            mOutputDateString = mOutputDateFormat.format(mParsedDate);
+            mOutputTimeString = mOutputDateFormat1.format(mParsedDate);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return mOutputDateString ;
+    }
+
     public static String Getdatetime() {
         Date currentParsedDate;
         SimpleDateFormat mInputDateFormat =

@@ -23,4 +23,6 @@ public interface APIConstants {
     public static String GET_CONNECTION_COUNT="user/connection/count/{id}/";
     public static String GET_MY_LIKES="user/mylikes/";
     public static String ADD_JOB_AD="job/";
+    public static String JOB_LIST_AD ="job/";
+    public static String JOB_FILTER_AD ="job/filter/";
 }

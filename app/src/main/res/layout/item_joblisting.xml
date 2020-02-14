@@ -32,9 +32,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
-        android:layout_width="wrap_content"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:src="@drawable/profile"
         app:civ_border_color="@color/colorwhite"
@@ -51,8 +50,6 @@
         android:ellipsize="end"
         android:text="AirLine pilots for Poppi Airlines "
         android:textColor="@color/dark_gray"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.131"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toTopOf="parent" />
@@ -62,12 +59,20 @@
         style="@style/TextStyle"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="Aviation international %97,000 pa"
+        android:text="Aviation international"
         android:textColor="@color/gray"
-        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+
+    <TextView
+        android:id="@+id/tv_salary"
+        style="@style/TextStyle"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="$97,000 pa"
+        android:textColor="@color/gray"
+        app:layout_constraintStart_toEndOf="@+id/profile_image"
+        app:layout_constraintTop_toBottomOf="@+id/tv_connections" />
 
 
     <TextView
@@ -82,8 +87,8 @@
         android:textColor="@color/gray"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="@dimen/spacing_medium"
         app:layout_constraintHorizontal_bias="0.363"
-        app:layout_constraintStart_toEndOf="@+id/tv_connections"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
 

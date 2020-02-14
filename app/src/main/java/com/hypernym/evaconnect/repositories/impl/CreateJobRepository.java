@@ -38,7 +38,7 @@ public class CreateJobRepository implements ICreateJobAdRepository {
         RestClient.get().appApi().createJobAd(
                 user.getId(),
                 RequestBody.create(MediaType.parse("text/plain"), user.getStatus()),
-                RequestBody.create(MediaType.parse("text/plain"), jobtitle),
+                RequestBody.create(MediaType.parse("text/plain"), companyName+" for "+jobtitle),
                 RequestBody.create(MediaType.parse("text/plain"), Constants.ANNUAL),
                 RequestBody.create(MediaType.parse("text/plain"), jobSector),
                 RequestBody.create(MediaType.parse("text/plain"), postion),

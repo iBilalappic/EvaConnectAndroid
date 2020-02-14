@@ -7,7 +7,7 @@
 
     <View
         android:id="@+id/view0"
-        android:layout_width="180dp"
+        android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="35dp"
         android:background="@color/page_bg"
@@ -19,7 +19,7 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
-        android:layout_width="90dp"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:src="@drawable/profile"
@@ -30,14 +30,11 @@
 
     <TextView
         android:id="@+id/tv_name"
-        style="@style/TextStyle.Bold"
+        style="@style/TextStyle"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:ellipsize="end"
-        android:maxLines="1"
         android:text="Guard for Healthrow"
-        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toBottomOf="@+id/view0" />
 
@@ -47,6 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Airport"
+        android:visibility="gone"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
@@ -79,8 +77,8 @@
         style="@style/TextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="12 Applicants"
+        android:layout_marginTop="10dp"
+        android:text="12"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toBottomOf="@+id/tv_connections">
@@ -89,7 +87,7 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_totalapplicant">
