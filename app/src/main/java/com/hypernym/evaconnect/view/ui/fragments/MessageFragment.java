@@ -50,6 +50,7 @@ import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.toolbar.OnItemClickListener;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.Constants;
+import com.hypernym.evaconnect.utils.DateTimeComparator;
 import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
@@ -164,7 +165,6 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot child: dataSnapshot.getChildren()) {
-
                     Log.d("User key", child.getKey());
                         String[] conversationkey=child.getKey().split("_");
                         User user=LoginUtils.getLoggedinUser();
@@ -182,8 +182,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                                             networkConnection.setSender(new Sender());
                                             networkConnection.getReceiver().setId(Integer.parseInt(conversationkey[1]));
                                             networkConnection.getSender().setId(Integer.parseInt(conversationkey[0]));
-
-                                            try {                                                //dataMessage.get("message");
+                                            try {
                                                 networkConnection.getReceiver().setUserImage(child.child("receiver_image").getValue().toString());
                                                 networkConnection.setMessage(child.child("message").getValue().toString());
                                                 if (child.child("image").getValue() != null) {
@@ -197,6 +196,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                                                 networkConnection.setSenderId(Integer.parseInt(conversationkey[0]));
                                                 networkConnection.setReceiverId(Integer.parseInt(conversationkey[1]));
                                                 networkConnectionList.add(networkConnection);
+                                                Collections.sort(networkConnectionList,new DateTimeComparator());
                                                 Collections.reverse(networkConnectionList);
                                                 messageAdapter.notifyDataSetChanged();
                                                 swipeRefresh.setRefreshing(false);
@@ -207,14 +207,12 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                                                 hideDialog();
                                                 swipeRefresh.setRefreshing(false);
                                             }
-
                                     }
 
                                 }
-
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError databaseError) {
-hideDialog();
+                                    hideDialog();
                                     swipeRefresh.setRefreshing(false);
                                 }
                             });
@@ -230,7 +228,7 @@ hideDialog();
                 swipeRefresh.setRefreshing(false);
             }
         });
-        hideDialog();
+
     }
 
 
