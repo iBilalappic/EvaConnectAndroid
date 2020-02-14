@@ -197,6 +197,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                                                 networkConnection.setSenderId(Integer.parseInt(conversationkey[0]));
                                                 networkConnection.setReceiverId(Integer.parseInt(conversationkey[1]));
                                                 networkConnectionList.add(networkConnection);
+                                                Collections.reverse(networkConnectionList);
                                                 messageAdapter.notifyDataSetChanged();
                                                 swipeRefresh.setRefreshing(false);
                                             }
@@ -405,7 +406,6 @@ hideDialog();
 
         //looping through existing elements
         for (NetworkConnection s : newNetworkConnectionList) {
-
 
             if (s.getReceiver().getFirstName().toLowerCase().contains(text.toLowerCase()) ||
                     s.getReceiver().getFirstName().toUpperCase().contains(text.toUpperCase())) {
