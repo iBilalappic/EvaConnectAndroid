@@ -38,6 +38,7 @@ import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.CommentsAdapter;
 import com.hypernym.evaconnect.view.adapters.HomePostsAdapter;
 import com.hypernym.evaconnect.view.adapters.SliderImageAdapter;
+import com.hypernym.evaconnect.view.dialogs.VideoViewDialog;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
@@ -47,6 +48,7 @@ import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -262,7 +264,9 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         showDialog();
         User user = LoginUtils.getUser();
         Comment comment = new Comment();
-        comment.setContent(edt_comment.getText().toString());
+        String toServerUnicodeEncoded = StringEscapeUtils.escapeJava(edt_comment.getText().toString());
+
+        comment.setContent(toServerUnicodeEncoded);
         comment.setCreated_by_id(user.getUser_id());
         comment.setStatus(AppConstants.STATUS_ACTIVE);
         comment.setPost_id(postID);
@@ -271,7 +275,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
             public void onChanged(BaseModel<List<Comment>> listBaseModel) {
                 if (!listBaseModel.isError()) {
 
-                    Toast.makeText(getContext(), getString(R.string.msg_comment_created), Toast.LENGTH_LONG).show();
+                   // Toast.makeText(getContext(), getString(R.string.msg_comment_created), Toast.LENGTH_LONG).show();
                     edt_comment.setText("");
                     //networkResponseDialog(getString(R.string.success),getString(R.string.msg_comment_created));
                     getComments();
@@ -394,7 +398,10 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
 
     @OnClick(R.id.img_video)
     public void playVideo() {
-        AppUtils.playVideo(getContext(), post.getPost_video());
+
+
+
+       AppUtils.playVideo(getContext(), post.getPost_video());
     }
 
     @OnClick(R.id.tv_goback)

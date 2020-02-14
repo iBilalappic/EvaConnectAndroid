@@ -68,7 +68,6 @@ public class HomeRepository implements IHomeRepository {
         dashboardMutableLiveData=new MutableLiveData<>();
         User user=new User();
         user.setUser_id(id);
-
         RestClient.get().appApi().notificationMarkAsRead(user).enqueue(new Callback<BaseModel<List<Post>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
@@ -84,6 +83,7 @@ public class HomeRepository implements IHomeRepository {
 
     @Override
     public LiveData<BaseModel<List<Post>>> getAllUnReadNotifications() {
+        notificationMutableLiveData=new MutableLiveData<>();
         User user=LoginUtils.getLoggedinUser();
         HashMap<String,Object> data=new HashMap<String,Object>();
         data.put("receiver_id",user.getId());
@@ -100,5 +100,4 @@ public class HomeRepository implements IHomeRepository {
         });
         return notificationMutableLiveData;
     }
-
 }

@@ -197,6 +197,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                                                 networkConnection.setSenderId(Integer.parseInt(conversationkey[0]));
                                                 networkConnection.setReceiverId(Integer.parseInt(conversationkey[1]));
                                                 networkConnectionList.add(networkConnection);
+                                                Collections.reverse(networkConnectionList);
                                                 messageAdapter.notifyDataSetChanged();
                                                 swipeRefresh.setRefreshing(false);
                                             }
@@ -228,6 +229,7 @@ hideDialog();
                 swipeRefresh.setRefreshing(false);
             }
         });
+        hideDialog();
     }
 
 
@@ -259,12 +261,9 @@ hideDialog();
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
-
-
             }
         });
     }
-
 
     @Override
     public void onItemClick(View view, Object data, int position, String adaptertype) {
@@ -276,10 +275,10 @@ hideDialog();
             //  Log.d("TAAAG", "" + GsonUtils.toJson(networkConnection));
             loadFragment(R.id.framelayout, chatFragment, getContext(), true);
         } else {
-            Toast.makeText(getContext(), "" + newNetworkConnectionList.get(position).getSenderId(), Toast.LENGTH_SHORT).show();
+
+           // Toast.makeText(getContext(), "" + newNetworkConnectionList.get(position).getSenderId(), Toast.LENGTH_SHORT).show();
             ItemPostionHorizontal = position;
         }
-
     }
 
     @Override
@@ -312,7 +311,6 @@ hideDialog();
         editTextSearch.addTextChangedListener(this);
         mrecyclerviewFriends = mDialogMessage.findViewById(R.id.recyclerViewNetworkConnection);
         setupNetworkConnectionRecycler();
-
 
         mTextviewSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -407,8 +405,7 @@ hideDialog();
         filterdNames = new ArrayList<>();
 
         //looping through existing elements
-        for (NetworkConnection s : networkConnectionList) {
-
+        for (NetworkConnection s : newNetworkConnectionList) {
 
             if (s.getReceiver().getFirstName().toLowerCase().contains(text.toLowerCase()) ||
                     s.getReceiver().getFirstName().toUpperCase().contains(text.toUpperCase())) {
@@ -484,7 +481,7 @@ hideDialog();
                 Log.e(getClass().getName(), "exc: " + exc.getMessage());
             }
         } else {
-            if (requestCode == CAMERAA) {
+            if (requestCode == CAMERAA && resultCode == RESULT_OK) {
 
                 //mIsProfileImageAdded = true;
                 File file = galleryAddPic();

@@ -99,10 +99,10 @@ public interface AppApi {
     Call<BaseModel<List<Connection>>> updateConnection(@Body Connection connection, @Path("id") int id);
 
     @POST(APIConstants.GET_ALL_CONNECTIONS)
-    Call<BaseModel<List<User>>> getAllConnections(@Body User user);
+    Call<BaseModel<List<User>>> getAllConnections(@Body User user,@Query("limit") int limit, @Query("offset") int offset);
 
     @POST(APIConstants.GET_CONNECTION_BY_FILTER)
-    Call<BaseModel<List<User>>> getConnectionByFilter(@Body User user);
+    Call<BaseModel<List<User>>> getConnectionByFilter(@Body User user,@Query("limit") int limit, @Query("offset") int offset);
 
     @POST("api/v1/notifications")
     Call<Object> postPackets(@Body Notification_onesignal data);

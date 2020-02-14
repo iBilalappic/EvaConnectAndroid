@@ -1,5 +1,7 @@
 package com.hypernym.evaconnect.models;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import java.io.Serializable;
 
 public class Comment implements Serializable {
@@ -13,7 +15,9 @@ public class Comment implements Serializable {
 
 
     public String getContent() {
-        return content;
+        String fromServerUnicodeDecoded = StringEscapeUtils.unescapeJava(content);
+
+        return fromServerUnicodeDecoded;
     }
 
     public void setContent(String content) {

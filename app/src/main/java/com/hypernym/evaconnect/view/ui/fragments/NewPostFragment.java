@@ -319,7 +319,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                 Log.e(getClass().getName(), "exc: " + exc.getMessage());
             }
         } else {
-            if (requestCode == CAMERAA) {
+            if (requestCode == CAMERAA && resultCode == RESULT_OK) {
 
                 //mIsProfileImageAdded = true;
                 File file=galleryAddPic();

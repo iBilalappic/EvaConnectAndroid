@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
+import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.Options;
@@ -34,6 +35,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
 
 public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.ItemClickListener,ConnectionsAdapter.OnItemClickListener {
     @BindView(R.id.rc_connections)
@@ -58,6 +61,9 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
     private LinearLayoutManager linearLayoutManager;
     private ConnectionViewModel connectionViewModel;
     String type="Everyone";
+    private int currentPage = PAGE_START;
+    private boolean isLastPage = false;
+    private boolean isLoading = false;
 
     public ConnectionsFragment() {
         // Required empty public constructor
@@ -77,24 +83,26 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         View view=inflater.inflate(R.layout.fragment_connections, container, false);
         ButterKnife.bind(this,view);
         connectionViewModel= ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
+        currentPage = PAGE_START;
         initMainOptionsRecView();
         initSubOptionsRecView();
         initRecyclerView();
         setPageTitle(getString(R.string.connections));
         if(NetworkUtils.isNetworkConnected(getContext())) {
-            getUserConnections();
+            getConnectionByFilter(type,currentPage);
         }
         else
         {
             networkErrorDialog();
         }
         edt_search.addTextChangedListener(new TextWatcher(this,edt_search,connectionList,connectionsAdapter,type));
+
         return view;
     }
 
     private void getUserConnections() {
         showDialog();
-        connectionViewModel.getAllConnections().observe(this, new Observer<BaseModel<List<User>>>() {
+        connectionViewModel.getAllConnections(AppConstants.TOTAL_PAGES,currentPage).observe(this, new Observer<BaseModel<List<User>>>() {
             @Override
             public void onChanged(BaseModel<List<User>> listBaseModel) {
                 if(listBaseModel!=null && !listBaseModel.isError())
@@ -102,6 +110,13 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
                     connectionList.clear();
                     connectionList.addAll(listBaseModel.getData());
                     connectionsAdapter.notifyDataSetChanged();
+                    isLoading = false;
+                }
+                else if(listBaseModel !=null && !listBaseModel.isError() && listBaseModel.getData().size()==0)
+                {
+                    isLastPage = true;
+                   // homePostsAdapter.removeLoading();
+                    isLoading = false;
                 }
                 else
                 {
@@ -173,6 +188,33 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
         rc_connections.setLayoutManager(linearLayoutManager);
         rc_connections.setAdapter(connectionsAdapter);
+        /**
+         * add scroll listener while user reach in bottom load more will call
+         */
+        rc_connections.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
+            @Override
+            protected void loadMoreItems() {
+                isLoading = true;
+                currentPage=AppConstants.TOTAL_PAGES+currentPage;
+                if(NetworkUtils.isNetworkConnected(getContext())) {
+                    getConnectionByFilter(type,currentPage);
+                }
+                else
+                {
+                    networkErrorDialog();
+                }
+            }
+
+            @Override
+            public boolean isLastPage() {
+                return isLastPage;
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
+            }
+        });
     }
 
     @Override
@@ -188,7 +230,6 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
     @Override
     public void onItemClick(View view, int position,boolean isMainCatrgory) {
         List<Options> categories=new ArrayList<>();
-
         if(isMainCatrgory)
         {
             categories.addAll(mainCategories);
@@ -229,7 +270,10 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         }
         if(NetworkUtils.isNetworkConnected(getContext()))
         {
-            getConnectionByFilter(type);
+            connectionList.clear();
+            connectionsAdapter.notifyDataSetChanged();
+            currentPage=PAGE_START;
+            getConnectionByFilter(type,currentPage);
         }
         else
         {
@@ -237,7 +281,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         }
     }
 
-    public void getConnectionByFilter(String type) {
+    public void getConnectionByFilter(String type,int currentPage) {
        // showDialog();
         User userData=new User();
         User user=LoginUtils.getLoggedinUser();
@@ -247,14 +291,21 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         if(edt_search.getText().toString().length()>0)
              userData.setFirst_name(edt_search.getText().toString());
 
-        connectionViewModel.getConnectionByFilter(userData).observe(this, new Observer<BaseModel<List<User>>>() {
+        connectionViewModel.getConnectionByFilter(userData,AppConstants.TOTAL_PAGES,currentPage).observe(this, new Observer<BaseModel<List<User>>>() {
             @Override
             public void onChanged(BaseModel<List<User>> listBaseModel) {
                 if(listBaseModel!=null && !listBaseModel.isError())
                 {
-                    connectionList.clear();
+                    //connectionList.clear();
                     connectionList.addAll(listBaseModel.getData());
                     connectionsAdapter.notifyDataSetChanged();
+                    isLoading = false;
+                }
+                else if(listBaseModel !=null && !listBaseModel.isError() && listBaseModel.getData().size()==0)
+                {
+                    isLastPage = true;
+                    // homePostsAdapter.removeLoading();
+                    isLoading = false;
                 }
                 else
                 {

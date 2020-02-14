@@ -9,4 +9,5 @@ public class Constants {
     public static final String ANNUAL = "annual";
     public static final String POSITION = "position";
     public static final String DATE = "2020-12-11";
+    public static final String MESSAGE_NOTIFICATION = "message notification";
 }
