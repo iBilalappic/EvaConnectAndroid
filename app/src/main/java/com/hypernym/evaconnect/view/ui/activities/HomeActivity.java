@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +58,9 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
 
     @BindView(R.id.img_menu)
     ImageView img_menu;
+
+    @BindView(R.id.toolbarlayout)
+    LinearLayout toolbarlayout;
 
     @BindView(R.id.img_home)
     ImageView img_home;
@@ -255,7 +259,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         AppUtils.logout(this);
     }
 
-    @OnClick(R.id.img_menu)
+    @OnClick(R.id.toolbarlayout)
     public void openDrawer(View view)
     {
         navigationDialog=new NavigationDialog(this);
