@@ -1,5 +1,6 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -24,25 +25,23 @@ import com.bumptech.glide.request.RequestOptions;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.MyLikesModel;
+import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
+import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
-import com.hypernym.evaconnect.view.ui.activities.LoginActivity;
-import com.hypernym.evaconnect.view.ui.activities.SignupDetailsActivity;
 import com.hypernym.evaconnect.viewmodel.CreateJobAdViewModel;
-import com.hypernym.evaconnect.viewmodel.MylikesViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
-import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -115,6 +114,8 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
 
     String JobSector, WeeklyHour;
 
+    private CompanyJobAdModel companyJobAdModel = new CompanyJobAdModel();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -132,8 +133,50 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
         return view;
     }
 
+    @SuppressLint("SetTextI18n")
     private void init() {
         createJobAdViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(CreateJobAdViewModel.class);
+
+        if ((getArguments() != null)) {
+            setPageTitle("");
+            showBackButton();
+            companyJobAdModel = (CompanyJobAdModel) getArguments().getSerializable("COMPANY_AD");
+            AppUtils.setGlideImage(getContext(), profile_image, companyJobAdModel.getJobImage());
+            String companyname = getsplitCompanyName(companyJobAdModel.getJobTitle());
+            String jobtitle = getsplitTitle(companyJobAdModel.getJobTitle());
+            edit_companyName.setText(companyname);
+            edit_jobtitle.setText(jobtitle);
+            edit_jobpostion.setText(companyJobAdModel.getPosition());
+            edit_Location.setText(companyJobAdModel.getLocation());
+            String SalaryInt = getsplitstring(String.valueOf(companyJobAdModel.getSalary()));
+            edit_amount.setText(SalaryInt);
+            edit_jobdescription.setText(companyJobAdModel.getContent());
+            for (int i = 0; i < mSpinnerWeek.length; i++) {
+                String element = mSpinnerWeek[i];
+                if (element.equals(companyJobAdModel.getWeeklyHours())) {
+                    spinner_week.setListSelection(i);
+
+                }
+            }
+        }
+    }
+
+    public String getsplitCompanyName(String value) {
+        String[] parts = value.split(Pattern.quote("for"));
+        value = parts[0]; // 004
+        return value;
+    }
+
+    public String getsplitTitle(String value) {
+        String[] parts = value.split(Pattern.quote("for"));
+        value = parts[1]; // 004
+        return value;
+    }
+
+    public String getsplitstring(String value) {
+        String[] parts = value.split(Pattern.quote("."));
+        value = parts[0]; // 004
+        return value;
     }
 
     private void SettingWeekSpinner() {
@@ -197,6 +240,7 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
                     simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_jobAd), null, getString(R.string.ok), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            getActivity().finish();
                             simpleDialog.dismiss();
                         }
                     });

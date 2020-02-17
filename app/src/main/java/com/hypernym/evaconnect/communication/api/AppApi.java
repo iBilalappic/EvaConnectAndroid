@@ -65,6 +65,17 @@ public interface AppApi {
                                               @Part("published_date") RequestBody published_date,
                                               @Part MultipartBody.Part job_image);
 
+    @Multipart
+    @POST(APIConstants.APPLICATION_SUBMITT)
+    Call<BaseModel<List<Object>>> SubmitAppicationForm(@Part("user_id") int user_id,
+                                              @Part("job_id") int job_id,
+                                              @Part("created_by_id") int created_by_id,
+                                              @Part("content") RequestBody content,
+                                              @Part("status") RequestBody status,
+                                              @Part MultipartBody.Part cv);
+
+
+
     @POST(APIConstants.CHECK_EMAIL_EXIST)
     Call<BaseModel<List<User>>> isEmailExist(@Body User user);
 

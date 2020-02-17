@@ -172,10 +172,17 @@ public class JobListingFragment extends BaseFragment implements View.OnClickList
                 bundle.putSerializable("JOB_AD", jobAdList.get(position));
                 specficJobFragment.setArguments(bundle);
                 loadFragment(R.id.framelayout, specficJobFragment, getContext(), true);
-                Toast.makeText(getContext(), "goto" + position, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "goto" + position, Toast.LENGTH_SHORT).show();
                 break;
             case R.id.img_like:
                 Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.contraintlayout:
+                CompanyApplicantFragment companyApplicantFragment = new CompanyApplicantFragment();
+                Bundle bundle_0 = new Bundle();
+                bundle_0.putSerializable("COMPANY_AD", companyJobAdModelList.get(position));
+                companyApplicantFragment.setArguments(bundle_0);
+                loadFragment(R.id.framelayout, companyApplicantFragment, getContext(), true);
                 break;
         }
     }
@@ -188,7 +195,6 @@ public class JobListingFragment extends BaseFragment implements View.OnClickList
             } else {
                 GetJobAd();
             }
-
         } else {
             networkErrorDialog();
         }

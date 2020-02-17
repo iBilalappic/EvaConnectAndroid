@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
@@ -59,6 +60,7 @@ public class CompanyJobAdAdapter extends RecyclerView.Adapter<CompanyJobAdAdapte
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tv_name, tv_postion, tv_date, tv_totalapplicant;
         CircleImageView profile_image;
+        ConstraintLayout contraintlayout;
 //        ImageView img_like, img_comment, img_share;
 
         public ViewHolder(@NonNull View itemView) {
@@ -67,31 +69,20 @@ public class CompanyJobAdAdapter extends RecyclerView.Adapter<CompanyJobAdAdapte
             tv_postion = itemView.findViewById(R.id.tv_connections);
             tv_date = itemView.findViewById(R.id.tv_date);
             tv_totalapplicant = itemView.findViewById(R.id.tv_totalapplicant);
-//            tv_salary = itemView.findViewById(R.id.tv_salary);
-//            tv_gotoadd = itemView.findViewById(R.id.tv_gotoadd);
             profile_image = itemView.findViewById(R.id.profile_image);
-//            img_like = itemView.findViewById(R.id.img_like);
-//            img_comment = itemView.findViewById(R.id.img_comment);
-//            img_share = itemView.findViewById(R.id.img_share);
-//            itemView.setOnClickListener(this);
-//            img_like.setOnClickListener(this);
+            contraintlayout = itemView.findViewById(R.id.contraintlayout);
+            itemView.setOnClickListener(this);
         }
-
-
         @Override
         public void onClick(View v) {
-//            switch (v.getId()) {
-//                case R.id.img_like:
-//                    onItemClickListener.onItemClick(v, getAdapterPosition());
-//                    break;
-//            }
 
+            onItemClickListener.onItemClick(v, getAdapterPosition());
         }
     }
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
     }
-    // parent activity will implement this method to respond to click events
+// parent activity will implement this method to respond to click events
 
 }

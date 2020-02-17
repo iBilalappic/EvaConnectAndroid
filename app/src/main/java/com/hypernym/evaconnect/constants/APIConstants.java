@@ -25,4 +25,5 @@ public interface APIConstants {
     public static String ADD_JOB_AD="job/";
     public static String JOB_LIST_AD ="job/";
     public static String JOB_FILTER_AD ="job/filter/";
+    public static String APPLICATION_SUBMITT ="job/application/";
 }

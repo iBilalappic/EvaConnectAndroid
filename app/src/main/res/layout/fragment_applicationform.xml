@@ -7,15 +7,6 @@
     android:orientation="vertical"
     android:paddingBottom="10dp">
 
-    <View
-        android:id="@+id/view6"
-        android:layout_width="0dp"
-        android:layout_height="3dp"
-        android:background="@drawable/line_redblack50"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 
     <ScrollView
         android:layout_width="0dp"
@@ -42,7 +33,7 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image"
-                android:layout_width="90dp"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:src="@drawable/profile"
@@ -53,19 +44,17 @@
 
             <TextView
                 android:id="@+id/tv_name"
-                style="@style/TextStyle.Bold"
+                style="@style/TextStyle"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:ellipsize="end"
-                android:maxLines="1"
                 android:text="American Airlines"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/profile_image"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/tv_connections"
+                android:id="@+id/tv_positionName"
                 style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -159,7 +148,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
-                android:text="john deo.cv"
+                android:text="file.cv"
                 android:textColor="@color/dark_gray"
                 app:layout_constraintEnd_toStartOf="@+id/browsefiles"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout"></TextView>

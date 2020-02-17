@@ -32,7 +32,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.OnItemClickListener {
+public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.OnItemClickListener, View.OnClickListener {
 
 
     @BindView(R.id.profile_image)
@@ -91,6 +91,8 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_specfic_job_ad, container, false);
         ButterKnife.bind(this, view);
+        tv_apply.setOnClickListener(this);
+        tv_goback.setOnClickListener(this);
         init();
         return view;
     }
@@ -116,5 +118,21 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
     @Override
     public void onItemClick(View view, int position) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_apply:
+                ApplicationFormFragment applicationFormFragment = new ApplicationFormFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("JOB_AD", jobAd);
+                applicationFormFragment.setArguments(bundle);
+                loadFragment(R.id.framelayout, applicationFormFragment, getContext(), true);
+                break;
+            case R.id.tv_goback:
+                getActivity().onBackPressed();
+                break;
+        }
     }
 }
