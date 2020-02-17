@@ -35,4 +35,8 @@ public class JobListViewModel extends AndroidViewModel {
         return iJobAdRepository.getCompanyAd(user);
     }
 
+    public LiveData<BaseModel<List<Object>>> setJobLike(User user,int application_id,String action) {
+        return iJobAdRepository.setLike(user,application_id,action);
+    }
+
 }

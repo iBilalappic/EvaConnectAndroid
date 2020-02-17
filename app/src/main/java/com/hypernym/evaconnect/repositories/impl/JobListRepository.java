@@ -9,15 +9,8 @@ import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IJobAdRepository;
-import com.hypernym.evaconnect.utils.Constants;
-import com.hypernym.evaconnect.utils.DateUtils;
-
 import java.util.HashMap;
 import java.util.List;
-
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -26,6 +19,7 @@ public class JobListRepository implements IJobAdRepository {
 
     private MutableLiveData<BaseModel<List<JobAd>>> MessageMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<CompanyJobAdModel>>> CompanyMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Object>>> LikeMutableLiveData = new MutableLiveData<>();
 
     @Override
     public LiveData<BaseModel<List<JobAd>>> getjobAd() {
@@ -52,7 +46,7 @@ public class JobListRepository implements IJobAdRepository {
     public LiveData<BaseModel<List<CompanyJobAdModel>>> getCompanyAd(User user) {
         CompanyMutableLiveData = new MutableLiveData<>();
         HashMap<String, Object> body = new HashMap<>();
-        body.put("user_id",user.getId());
+        body.put("user_id", user.getId());
         RestClient.get().appApi().getCompanyAd(body).enqueue(new Callback<BaseModel<List<CompanyJobAdModel>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<CompanyJobAdModel>>> call, Response<BaseModel<List<CompanyJobAdModel>>> response) {
@@ -69,5 +63,31 @@ public class JobListRepository implements IJobAdRepository {
             }
         });
         return CompanyMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<Object>>> setLike(User user, int application_id,String action) {
+        LikeMutableLiveData = new MutableLiveData<>();
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("job_id",application_id);
+        body.put("created_by_id",user.getId());
+        body.put("status",user.getStatus());
+        body.put("action",action);
+        RestClient.get().appApi().setLikeJob(body).enqueue(new Callback<BaseModel<List<Object>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+                if (response.isSuccessful() && !response.body().isError())
+                       LikeMutableLiveData.setValue(response.body());
+                    if (response.code() == 500) {
+                        LikeMutableLiveData.setValue(null);
+                    }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+                LikeMutableLiveData.setValue(null);
+            }
+        });
+        return LikeMutableLiveData;
     }
 }

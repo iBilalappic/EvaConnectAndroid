@@ -49,6 +49,7 @@ public interface AppApi {
     @POST(APIConstants.GET_POSTS)
     Call<BaseModel<List<Post>>> createPost(@Part("user_id") int user_id, @Part("content") RequestBody content,
                                            @Part("created_by_id") int created_by_id, @Part("status") RequestBody status, @Part List<MultipartBody.Part> post_image, @Part MultipartBody.Part post_video);
+
     @Multipart
     @POST(APIConstants.ADD_JOB_AD)
     Call<BaseModel<List<Object>>> createJobAd(@Part("user_id") int user_id,
@@ -68,12 +69,15 @@ public interface AppApi {
     @Multipart
     @POST(APIConstants.APPLICATION_SUBMITT)
     Call<BaseModel<List<Object>>> SubmitAppicationForm(@Part("user_id") int user_id,
-                                              @Part("job_id") int job_id,
-                                              @Part("created_by_id") int created_by_id,
-                                              @Part("content") RequestBody content,
-                                              @Part("status") RequestBody status,
-                                              @Part MultipartBody.Part cv);
+                                                       @Part("job_id") int job_id,
+                                                       @Part("created_by_id") int created_by_id,
+                                                       @Part("content") RequestBody content,
+                                                       @Part("status") RequestBody status,
+                                                       @Part MultipartBody.Part cv);
 
+    @POST(APIConstants.JOB_LIKE)
+        // Call<BaseModel<List<Object>>> setLikeJob();
+    Call<BaseModel<List<Object>>> setLikeJob(@Body HashMap<String, Object> body);
 
 
     @POST(APIConstants.CHECK_EMAIL_EXIST)
@@ -110,10 +114,10 @@ public interface AppApi {
     Call<BaseModel<List<Connection>>> updateConnection(@Body Connection connection, @Path("id") int id);
 
     @POST(APIConstants.GET_ALL_CONNECTIONS)
-    Call<BaseModel<List<User>>> getAllConnections(@Body User user,@Query("limit") int limit, @Query("offset") int offset);
+    Call<BaseModel<List<User>>> getAllConnections(@Body User user, @Query("limit") int limit, @Query("offset") int offset);
 
     @POST(APIConstants.GET_CONNECTION_BY_FILTER)
-    Call<BaseModel<List<User>>> getConnectionByFilter(@Body User user,@Query("limit") int limit, @Query("offset") int offset);
+    Call<BaseModel<List<User>>> getConnectionByFilter(@Body User user, @Query("limit") int limit, @Query("offset") int offset);
 
     @POST("api/v1/notifications")
     Call<Object> postPackets(@Body Notification_onesignal data);

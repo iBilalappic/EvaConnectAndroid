@@ -48,6 +48,12 @@ public class JobAdAdapter extends RecyclerView.Adapter<JobAdAdapter.ViewHolder> 
         holder.tv_salary.setText("$" + String.valueOf(jobAdList.get(position).getSalary()));
         AppUtils.setGlideImage(context, (holder).profile_image, jobAdList.get(position).getJobImage());
 
+        if (jobAdList.get(position).getLikeCount() != null && jobAdList.get(position).getLikeCount() > 0) {
+            holder.img_like.setBackground(context.getDrawable(R.mipmap.ic_like_selected));
+        } else {
+            holder.img_like.setBackground(context.getDrawable(R.mipmap.ic_like));
+        }
+
     }
 
     @Override

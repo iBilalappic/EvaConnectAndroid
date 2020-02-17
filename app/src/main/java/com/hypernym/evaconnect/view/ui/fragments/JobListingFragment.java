@@ -175,7 +175,12 @@ public class JobListingFragment extends BaseFragment implements View.OnClickList
 //                Toast.makeText(getContext(), "goto" + position, Toast.LENGTH_SHORT).show();
                 break;
             case R.id.img_like:
-                Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
+                if (jobAdList.get(position).getLikeCount() > 0) {
+                    SetJobUnLike(jobAdList.get(position).getId(), position);
+                } else {
+                    SetJobLike(jobAdList.get(position).getId(), position);
+                }
+
                 break;
             case R.id.contraintlayout:
                 CompanyApplicantFragment companyApplicantFragment = new CompanyApplicantFragment();
@@ -185,6 +190,31 @@ public class JobListingFragment extends BaseFragment implements View.OnClickList
                 loadFragment(R.id.framelayout, companyApplicantFragment, getContext(), true);
                 break;
         }
+    }
+
+    private void SetJobLike(Integer id, int position) {
+        jobListViewModel.setJobLike(user, id, "like").observe(this, new Observer<BaseModel<List<Object>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Object>> setlike) {
+//                if (setlike != null && !setlike.isError()) {
+                onRefresh();
+//                } else {
+//                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+//                }
+                hideDialog();
+
+            }
+        });
+    }
+
+    private void SetJobUnLike(Integer id, int position) {
+        jobListViewModel.setJobLike(user, id, "unlike").observe(this, new Observer<BaseModel<List<Object>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Object>> setlike) {
+                onRefresh();
+                hideDialog();
+            }
+        });
     }
 
     @Override
