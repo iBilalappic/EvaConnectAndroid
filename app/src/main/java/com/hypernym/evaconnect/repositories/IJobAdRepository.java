@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.JobAd;
+import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.User;
 
 import java.util.List;
@@ -16,4 +17,5 @@ public interface IJobAdRepository {
     LiveData<BaseModel<List<JobAd>>> getjobAd();
     LiveData<BaseModel<List<CompanyJobAdModel>>> getCompanyAd(User user);
     LiveData<BaseModel<List<Object>>> setLike(User user ,int application_id,String action);
+    LiveData<BaseModel<List<SpecficJobAd>>> getJobId(int job_id);
 }

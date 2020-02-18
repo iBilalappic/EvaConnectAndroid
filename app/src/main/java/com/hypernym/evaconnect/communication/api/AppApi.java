@@ -11,6 +11,7 @@ import com.hypernym.evaconnect.models.MyLikesModel;
 import com.hypernym.evaconnect.models.NetworkConnection;
 import com.hypernym.evaconnect.models.Notification_onesignal;
 import com.hypernym.evaconnect.models.Post;
+import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.viewmodel.AppliedApplicantViewModel;
 
@@ -71,19 +72,23 @@ public interface AppApi {
     @Multipart
     @PATCH(APIConstants.UPDATE_JOB_AD)
     Call<BaseModel<List<Object>>> UpdateJobAd(
-                                              @Path("job_id") int job_id,
-                                              @Part("status") RequestBody status,
-                                              @Part("job_title") RequestBody job_title,
-                                              @Part("job_nature") RequestBody job_nature,
-                                              @Part("job_sector") RequestBody job_sector,
-                                              @Part("position") RequestBody position,
-                                              @Part("content") RequestBody content,
-                                              @Part("weekly_hours") RequestBody weekly_hours,
-                                              @Part("location") RequestBody location,
-                                              @Part("salary") int salary,
-                                              @Part("modified_by_id") int modified_by_id,
-                                              @Part("modified_datetime") RequestBody modified_datetime,
-                                              @Part MultipartBody.Part job_image);
+            @Path("job_id") int job_id,
+            @Part("status") RequestBody status,
+            @Part("job_title") RequestBody job_title,
+            @Part("job_nature") RequestBody job_nature,
+            @Part("job_sector") RequestBody job_sector,
+            @Part("position") RequestBody position,
+            @Part("content") RequestBody content,
+            @Part("weekly_hours") RequestBody weekly_hours,
+            @Part("location") RequestBody location,
+            @Part("salary") int salary,
+            @Part("modified_by_id") int modified_by_id,
+            @Part("modified_datetime") RequestBody modified_datetime,
+            @Part MultipartBody.Part job_image);
+
+    @GET(APIConstants.GET_JOB_AD_BY_ID)
+    Call<BaseModel<List<SpecficJobAd>>> GetJobAd_ID(@Path("job_id") int job_id);
+
 
     @Multipart
     @POST(APIConstants.APPLICATION_SUBMITT)

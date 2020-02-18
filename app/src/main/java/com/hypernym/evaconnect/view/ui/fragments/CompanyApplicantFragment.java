@@ -20,6 +20,7 @@ import com.hypernym.evaconnect.models.MyLikesModel;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.view.adapters.AppliedApplicantAdapter;
@@ -147,9 +148,9 @@ public class CompanyApplicantFragment extends BaseFragment implements View.OnCli
     @Override
     public void onItemClick(View view, int position) {
         AppliedApplicantFragment appliedApplicantFragment = new AppliedApplicantFragment();
-//        Bundle bundle=new Bundle();
-//        bundle.putInt("post",myLikesModelList.get(position).getObjectId());
-//        postDetailsFragment.setArguments(bundle);
+        Bundle bundle=new Bundle();
+        bundle.putSerializable(Constants.DATA,appliedApplicantModel.get(position));
+        appliedApplicantFragment.setArguments(bundle);
         loadFragment(R.id.framelayout, appliedApplicantFragment, getContext(), true);
 
 

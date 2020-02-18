@@ -2,8 +2,9 @@ package com.hypernym.evaconnect.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import java.io.Serializable;
 
-public class AppliedApplicants {
+public class AppliedApplicants implements Serializable {
 
     @SerializedName("id")
     @Expose
@@ -20,9 +21,7 @@ public class AppliedApplicants {
     @SerializedName("content")
     @Expose
     private String content;
-    @SerializedName("application_attachment")
-    @Expose
-    private String applicationAttachment;
+    private String application_attachment;
     @SerializedName("created_by_id")
     @Expose
     private Integer createdById;
@@ -77,11 +76,11 @@ public class AppliedApplicants {
     }
 
     public String getApplicationAttachment() {
-        return applicationAttachment;
+        return application_attachment;
     }
 
     public void setApplicationAttachment(String applicationAttachment) {
-        this.applicationAttachment = applicationAttachment;
+        this.application_attachment = applicationAttachment;
     }
 
     public Integer getCreatedById() {

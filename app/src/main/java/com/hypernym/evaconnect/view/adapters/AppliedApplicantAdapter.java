@@ -45,6 +45,7 @@ public class AppliedApplicantAdapter extends RecyclerView.Adapter<AppliedApplica
     public void onBindViewHolder(@NonNull AppliedApplicantAdapter.ViewHolder holder, int position) {
         AppUtils.setGlideImage(context, (holder).mProfileImage, appliedApplicantModels.get(position).getUser().getUserImage());
         holder.tv_description.setText(appliedApplicantModels.get(position).getContent());
+        holder.tv_name.setText(appliedApplicantModels.get(position).getUser().getFirstName());
         holder.tv_activefor.setText(DateUtils.getTimeAgo(appliedApplicantModels.get(position).getCreatedDatetime()));
 
     }

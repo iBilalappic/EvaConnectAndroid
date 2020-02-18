@@ -10,6 +10,7 @@ import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.MyLikesModel;
+import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IJobAdRepository;
 import com.hypernym.evaconnect.repositories.ILikeRepository;
@@ -38,5 +39,10 @@ public class JobListViewModel extends AndroidViewModel {
     public LiveData<BaseModel<List<Object>>> setJobLike(User user,int application_id,String action) {
         return iJobAdRepository.setLike(user,application_id,action);
     }
+
+    public LiveData<BaseModel<List<SpecficJobAd>>> getJobId(int job_id) {
+        return iJobAdRepository.getJobId(job_id);
+    }
+
 
 }

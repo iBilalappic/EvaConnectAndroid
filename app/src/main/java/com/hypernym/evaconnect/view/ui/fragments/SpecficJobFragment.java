@@ -1,6 +1,7 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,18 +12,23 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.MyLikesModel;
 import com.hypernym.evaconnect.models.Post;
+import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
+import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
+import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.MyLikeAdapter;
+import com.hypernym.evaconnect.viewmodel.JobListViewModel;
 import com.hypernym.evaconnect.viewmodel.MylikesViewModel;
 
 import java.util.ArrayList;
@@ -32,9 +38,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.OnItemClickListener, View.OnClickListener {
+public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.OnItemClickListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
-
+    private JobListViewModel jobListViewModel;
     @BindView(R.id.profile_image)
     CircleImageView profile_image;
 
@@ -77,8 +83,12 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
     @BindView(R.id.img_share)
     ImageView img_share;
 
+    @BindView(R.id.swipeRefresh)
+    SwipeRefreshLayout swipeRefresh;
+
 
     private JobAd jobAd = new JobAd();
+    User user;
 
     public SpecficJobFragment() {
         // Required empty public constructor
@@ -86,22 +96,27 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_specfic_job_ad, container, false);
         ButterKnife.bind(this, view);
         tv_apply.setOnClickListener(this);
         tv_goback.setOnClickListener(this);
+        img_like.setOnClickListener(this);
+        swipeRefresh.setOnRefreshListener(this);
         init();
         return view;
     }
 
     private void init() {
+        jobListViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(JobListViewModel.class);
+        user = LoginUtils.getUser();
         if ((getArguments() != null)) {
             setPageTitle("");
             showBackButton();
             jobAd = (JobAd) getArguments().getSerializable("JOB_AD");
+            GetJob_id(jobAd.getId());
+            Log.d("TAAAG", "" + GsonUtils.toJson(jobAd));
             AppUtils.setGlideImage(getContext(), profile_image, jobAd.getJobImage());
             tv_name.setText(jobAd.getJobTitle());
             tv_positionName.setText(jobAd.getPosition());
@@ -111,9 +126,32 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
             tv_weeklyHoursNumber.setText(jobAd.getWeeklyHours());
             tv_createddateTime.setText(DateUtils.getFormattedDateTime(jobAd.getCreatedDatetime()));
             tv_minago.setText(DateUtils.getTimeAgo(jobAd.getCreatedDatetime()));
+            if (jobAd.getLikeCount() != null && jobAd.getLikeCount() > 0) {
+                img_like.setBackground(getActivity().getDrawable(R.mipmap.ic_like_selected));
+            } else {
+                img_like.setBackground(getActivity().getDrawable(R.mipmap.ic_like));
+            }
         }
     }
 
+    private void GetJob_id(Integer id) {
+        jobListViewModel.getJobId(id).observe(this, new Observer<BaseModel<List<SpecficJobAd>>>() {
+            @Override
+            public void onChanged(BaseModel<List<SpecficJobAd>> getjobAd) {
+                if (getjobAd != null && !getjobAd.isError()) {
+                    swipeRefresh.setRefreshing(false);
+                    if (getjobAd.getData().get(0).getLikeCount() != null && getjobAd.getData().get(0).getLikeCount() > 0) {
+                        img_like.setBackground(getActivity().getDrawable(R.mipmap.ic_like_selected));
+                    } else {
+                        img_like.setBackground(getActivity().getDrawable(R.mipmap.ic_like));
+                    }
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+                hideDialog();
+            }
+        });
+    }
 
     @Override
     public void onItemClick(View view, int position) {
@@ -133,6 +171,46 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
             case R.id.tv_goback:
                 getActivity().onBackPressed();
                 break;
+            case R.id.img_like:
+                if (jobAd.getLikeCount() > 0) {
+                    SetJobUnLike(jobAd.getId());
+                } else {
+                    SetJobLike(jobAd.getId());
+                }
+                break;
         }
+    }
+
+    private void SetJobLike(Integer id) {
+        jobListViewModel.setJobLike(user, id, "like").observe(this, new Observer<BaseModel<List<Object>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Object>> setlike) {
+                onRefresh();
+                hideDialog();
+            }
+        });
+    }
+
+    private void SetJobUnLike(Integer id) {
+        jobListViewModel.setJobLike(user, id, "unlike").observe(this, new Observer<BaseModel<List<Object>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Object>> setlike) {
+                onRefresh();
+                hideDialog();
+            }
+        });
+    }
+
+    @Override
+    public void onRefresh() {
+        if (NetworkUtils.isNetworkConnected(getContext())) {
+//            if (user != null && user.getType().equals("company")) {
+//            } else {
+                GetJob_id(jobAd.getId());
+          //  }
+        } else {
+            networkErrorDialog();
+        }
+
     }
 }

@@ -42,7 +42,6 @@
 
         <TextView
             android:id="@+id/tv_activefor"
-            style="@style/TextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -51,6 +50,7 @@
             android:drawablePadding="5dp"
             android:gravity="center_vertical"
             android:text="Submitted 3hr ago"
+            android:textSize="11sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/space0" />
 
@@ -158,15 +158,87 @@
 
 
         <DatePicker
-            android:id="@+id/datePicker1"
+            android:id="@+id/datePicker"
             android:layout_width="match_parent"
-            android:layout_height="65dp"
+            android:layout_height="82dp"
             android:background="@color/lighter_gray"
             android:calendarViewShown="false"
             android:datePickerMode="spinner"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_interview_slot" />
+
+        <Space
+            android:id="@+id/space3"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/datePicker">
+
+        </Space>
+
+        <TimePicker
+            android:id="@+id/timePicker"
+            android:layout_width="match_parent"
+            android:layout_height="82dp"
+            android:background="@color/lighter_gray"
+            android:timePickerMode="spinner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/space3" />
+
+
+        <TextView
+            android:id="@+id/tv_offerinterview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/rounded_button_border"
+            android:drawableLeft="@drawable/message"
+            android:drawablePadding="@dimen/spacing_medium"
+            android:paddingStart="10dp"
+            android:paddingTop="5dp"
+            android:gravity="center"
+            android:paddingEnd="10dp"
+            android:paddingBottom="5dp"
+            android:text="Offer Interview"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/timePicker" />
+
+
+        <TextView
+            android:id="@+id/tv_declineApplicant"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/rounded_edittext"
+            android:drawablePadding="@dimen/spacing_medium"
+            android:paddingStart="10dp"
+            android:paddingTop="5dp"
+            android:gravity="center"
+            android:paddingEnd="10dp"
+            android:paddingBottom="5dp"
+            android:text="Decline Application"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_offerinterview" />
+
+        <Space
+            android:id="@+id/space4"
+            android:layout_width="0dp"
+            android:layout_height="90dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_declineApplicant">
+
+        </Space>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
