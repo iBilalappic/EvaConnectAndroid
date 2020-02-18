@@ -105,7 +105,7 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
     private String currentPhotoPath = "";
     private String photoVar = null;
     MultipartBody.Part partImage;
-    private Validator validator;
+    private Validator validator, validator_update;
     SimpleDialog simpleDialog;
 
     private CreateJobAdViewModel createJobAdViewModel;
@@ -125,6 +125,8 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
         ButterKnife.bind(this, view);
         validator = new Validator(this);
         validator.setValidationListener(this);
+        validator_update = new Validator(this);
+        validator_update.setValidationListener(this);
         SettingJobSectorSpinner();
         SettingWeekSpinner();
         postAd.setOnClickListener(this);
@@ -139,6 +141,7 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
 
         if ((getArguments() != null)) {
             setPageTitle("");
+            postAd.setText("Update Job");
             showBackButton();
             companyJobAdModel = (CompanyJobAdModel) getArguments().getSerializable("COMPANY_AD");
             AppUtils.setGlideImage(getContext(), profile_image, companyJobAdModel.getJobImage());
@@ -158,6 +161,8 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
 
                 }
             }
+
+
         }
     }
 
@@ -208,20 +213,65 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.postAd:
-                if (JobSector == null) {
-                    Toast.makeText(getContext(), "Please select job sector", Toast.LENGTH_SHORT).show();
-                } else if (WeeklyHour == null) {
-                    Toast.makeText(getContext(), "Please select weekly hour", Toast.LENGTH_SHORT).show();
-                } else if (partImage == null) {
-                    Toast.makeText(getContext(), "Please add image for job post", Toast.LENGTH_SHORT).show();
+                if (postAd.getText().toString().equals("Update Job")) {
+                    if (JobSector == null) {
+                        Toast.makeText(getContext(), "Please select job sector", Toast.LENGTH_SHORT).show();
+                    } else if (WeeklyHour == null) {
+                        Toast.makeText(getContext(), "Please select weekly hour", Toast.LENGTH_SHORT).show();
+                    } else if (partImage == null) {
+                        Toast.makeText(getContext(), "Please add image for job post", Toast.LENGTH_SHORT).show();
+                    } else {
+                        validator.validate();
+                    }
                 } else {
-                    validator.validate();
+                    if (JobSector == null) {
+                        Toast.makeText(getContext(), "Please select job sector", Toast.LENGTH_SHORT).show();
+                    } else if (WeeklyHour == null) {
+                        Toast.makeText(getContext(), "Please select weekly hour", Toast.LENGTH_SHORT).show();
+                    } else if (partImage == null) {
+                        Toast.makeText(getContext(), "Please add image for job post", Toast.LENGTH_SHORT).show();
+                    } else {
+                        validator.validate();
+                    }
                 }
+
                 break;
             case R.id.tv_browsefiles:
                 openPictureDialog();
                 break;
         }
+    }
+
+    private void UpdateJobAd() {
+        showDialog();
+        User user = LoginUtils.getLoggedinUser();
+        createJobAdViewModel.UpdateJobAd(companyJobAdModel.getId(), user, partImage, JobSector, WeeklyHour,
+                Integer.parseInt(edit_amount.getText().toString()),
+                edit_companyName.getText().toString(),
+                edit_jobdescription.getText().toString(),
+                edit_Location.getText().toString(),
+                edit_jobtitle.getText().toString(),
+                edit_jobpostion.getText().toString()).observe(this, new Observer<BaseModel<List<Object>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Object>> getnetworkconnection) {
+                if (getnetworkconnection != null && !getnetworkconnection.isError()) {
+                    simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_jobAd_update), null, getString(R.string.ok), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            getActivity().onBackPressed();
+                            simpleDialog.dismiss();
+                        }
+                    });
+                    hideDialog();
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+                hideDialog();
+                if (!simpleDialog.isShowing())
+                    simpleDialog.show();
+            }
+
+        });
     }
 
     private void CreateJobAd() {
@@ -240,7 +290,7 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
                     simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_jobAd), null, getString(R.string.ok), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            getActivity().finish();
+                            getActivity().onBackPressed();
                             simpleDialog.dismiss();
                         }
                     });
@@ -346,7 +396,12 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
 
     @Override
     public void onValidationSucceeded() {
-        CreateJobAd();
+        if (postAd.getText().toString().equals("Update Job")) {
+            UpdateJobAd();
+        } else {
+            CreateJobAd();
+        }
+
     }
 
     @Override

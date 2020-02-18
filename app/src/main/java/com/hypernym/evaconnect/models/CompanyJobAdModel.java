@@ -68,6 +68,19 @@ public class CompanyJobAdModel implements Serializable {
     @Expose
     private String status;
 
+    public Integer getApplicant_count() {
+        return applicant_count;
+    }
+
+    public void setApplicant_count(Integer applicant_count) {
+        this.applicant_count = applicant_count;
+    }
+
+    @SerializedName("applicant_count")
+    @Expose
+    private Integer applicant_count;
+
+
     public Integer getId() {
         return id;
     }

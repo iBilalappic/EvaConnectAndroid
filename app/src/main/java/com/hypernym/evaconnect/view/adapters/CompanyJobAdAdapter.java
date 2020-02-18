@@ -47,9 +47,12 @@ public class CompanyJobAdAdapter extends RecyclerView.Adapter<CompanyJobAdAdapte
         holder.tv_name.setText(companyJobAdModelList.get(position).getJobTitle());
         holder.tv_postion.setText(companyJobAdModelList.get(position).getPosition());
         holder.tv_date.setText(DateUtils.getFormattedDate(companyJobAdModelList.get(position).getCreatedDatetime()));
-        holder.tv_totalapplicant.setText("12 Applicants");
+        if (companyJobAdModelList.get(position).getApplicant_count() != null) {
+            holder.tv_totalapplicant.setText(String.valueOf(companyJobAdModelList.get(position).getApplicant_count() + " applicants"));
+        } else {
+            holder.tv_totalapplicant.setText("0 applicants");
+        }
         AppUtils.setGlideImage(context, (holder).profile_image, companyJobAdModelList.get(position).getJobImage());
-
     }
 
     @Override
@@ -73,6 +76,7 @@ public class CompanyJobAdAdapter extends RecyclerView.Adapter<CompanyJobAdAdapte
             contraintlayout = itemView.findViewById(R.id.contraintlayout);
             itemView.setOnClickListener(this);
         }
+
         @Override
         public void onClick(View v) {
 

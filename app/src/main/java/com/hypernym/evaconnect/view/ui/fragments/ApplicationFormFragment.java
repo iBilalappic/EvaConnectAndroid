@@ -163,7 +163,7 @@ public class ApplicationFormFragment extends BaseFragment implements View.OnClic
             @Override
             public void onChanged(BaseModel<List<Object>> getnetworkconnection) {
                 if (getnetworkconnection != null && !getnetworkconnection.isError()) {
-                    simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_jobAd), null, getString(R.string.ok), new View.OnClickListener() {
+                    simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_application_form), null, getString(R.string.ok), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             // onBackPressed();

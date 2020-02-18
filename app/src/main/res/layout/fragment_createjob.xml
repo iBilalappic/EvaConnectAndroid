@@ -40,7 +40,7 @@
                 android:id="@+id/postAd"
                 style="@style/TextStyle.Title"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@drawable/rounded_button_border"
                 android:drawableLeft="@drawable/new_post"
                 android:drawablePadding="10dp"
