@@ -116,8 +116,8 @@ public interface AppApi {
     @GET(APIConstants.FRIENDCONNECTION)
     Call<BaseModel<List<NetworkConnection>>> getFriendDetails(@Path("id") int id);
 
-    @GET(APIConstants.JOB_LIST_AD)
-    Call<BaseModel<List<JobAd>>> getjobAd();
+    @POST(APIConstants.JOB_LIST_AD)
+    Call<BaseModel<List<JobAd>>> getjobAd(@Body HashMap<String, Object> body);
 
     @POST(APIConstants.JOB_FILTER_AD)
     Call<BaseModel<List<CompanyJobAdModel>>> getCompanyAd(@Body HashMap<String, Object> body);

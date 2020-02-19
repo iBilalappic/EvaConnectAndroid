@@ -28,8 +28,8 @@ public class JobListViewModel extends AndroidViewModel {
         super(application);
     }
 
-    public LiveData<BaseModel<List<JobAd>>> getjobAd() {
-        return iJobAdRepository.getjobAd();
+    public LiveData<BaseModel<List<JobAd>>> getjobAd(User user) {
+        return iJobAdRepository.getjobAd(user);
     }
 
     public LiveData<BaseModel<List<CompanyJobAdModel>>> getcompanyAd(User user) {

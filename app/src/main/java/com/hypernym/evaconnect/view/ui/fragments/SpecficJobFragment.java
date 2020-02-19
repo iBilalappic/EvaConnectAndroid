@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -164,11 +165,15 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_apply:
-                ApplicationFormFragment applicationFormFragment = new ApplicationFormFragment();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("JOB_AD", jobAd);
-                applicationFormFragment.setArguments(bundle);
-                loadFragment(R.id.framelayout, applicationFormFragment, getContext(), true);
+                if (jobAd.getIs_applied() == 0) {
+                    ApplicationFormFragment applicationFormFragment = new ApplicationFormFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("JOB_AD", jobAd);
+                    applicationFormFragment.setArguments(bundle);
+                    loadFragment(R.id.framelayout, applicationFormFragment, getContext(), true);
+                } else {
+                    Toast.makeText(getContext(), "You have already applied to this job", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.tv_goback:
                 getActivity().onBackPressed();

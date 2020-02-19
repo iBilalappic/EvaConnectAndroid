@@ -108,7 +108,7 @@ public class JobListingFragment extends BaseFragment implements View.OnClickList
     }
 
     private void GetJobAd() {
-        jobListViewModel.getjobAd().observe(this, new Observer<BaseModel<List<JobAd>>>() {
+        jobListViewModel.getjobAd(user).observe(this, new Observer<BaseModel<List<JobAd>>>() {
             @Override
             public void onChanged(BaseModel<List<JobAd>> getnetworkconnection) {
                 if (getnetworkconnection != null && !getnetworkconnection.isError()) {

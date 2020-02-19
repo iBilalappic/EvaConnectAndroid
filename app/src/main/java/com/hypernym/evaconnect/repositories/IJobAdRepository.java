@@ -14,7 +14,7 @@ import okhttp3.MultipartBody;
 import retrofit2.http.Part;
 
 public interface IJobAdRepository {
-    LiveData<BaseModel<List<JobAd>>> getjobAd();
+    LiveData<BaseModel<List<JobAd>>> getjobAd(User user);
     LiveData<BaseModel<List<CompanyJobAdModel>>> getCompanyAd(User user);
     LiveData<BaseModel<List<Object>>> setLike(User user ,int application_id,String action);
     LiveData<BaseModel<List<SpecficJobAd>>> getJobId(int job_id);

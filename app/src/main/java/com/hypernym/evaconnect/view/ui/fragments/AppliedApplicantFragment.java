@@ -3,6 +3,7 @@ package com.hypernym.evaconnect.view.ui.fragments;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,8 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.AppliedApplicants;
@@ -29,7 +32,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AppliedApplicantFragment extends BaseFragment implements View.OnClickListener,TimePicker.OnTimeChangedListener {
+public class AppliedApplicantFragment extends BaseFragment implements View.OnClickListener, TimePicker.OnTimeChangedListener, DatePicker.OnDateChangedListener {
     private AppliedApplicants appliedApplicants = new AppliedApplicants();
 
     @BindView(R.id.datePicker)
@@ -67,9 +70,11 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
     TextView tv_name;
 
 
-
     Uri uri;
     User user = new User();
+
+    int hour, minute;
+    String am_pm;
 
 
     public AppliedApplicantFragment() {
@@ -84,7 +89,9 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
         ButterKnife.bind(this, view);
         tv_view_cv.setOnClickListener(this);
         tv_download_cv.setOnClickListener(this);
+        tv_offerinterview.setOnClickListener(this);
         timePicker.setOnTimeChangedListener(this);
+        timePicker.setIs24HourView(true);
         user = LoginUtils.getUser();
         init();
         return view;
@@ -144,16 +151,40 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
                     }
                 } else {
                     Toast.makeText(getActivity(), "No File to Download", Toast.LENGTH_SHORT).show();
-
                 }
+                break;
+            case R.id.tv_offerinterview:
+                Toast.makeText(getActivity(), "" + "Selected Date: " +
+                                datePicker.getDayOfMonth() + "/" +
+                                (datePicker.getMonth() + 1) + "/" +
+                                datePicker.getYear(),
+                        Toast.LENGTH_SHORT).show();
+                SetTimePicker();
 
                 break;
+
 
         }
     }
 
+    private void SetTimePicker() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            hour = timePicker.getHour();
+            minute = timePicker.getMinute();
+        } else {
+            hour = timePicker.getCurrentHour();
+            minute = timePicker.getCurrentMinute();
+        }
+        Toast.makeText(getActivity(), "" + "Selected time: " + hour + ":" + minute, Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+
+    }
+
+    @Override
+    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
     }
 }

@@ -69,6 +69,19 @@ public class JobAd implements Serializable {
     @Expose
     private String status;
 
+    public Integer getIs_applied() {
+        return is_applied;
+    }
+
+    public void setIs_applied(Integer is_applied) {
+        this.is_applied = is_applied;
+    }
+
+    private Integer is_applied;
+
+    @SerializedName("is_applied")
+
+
     public Integer getId() {
         return id;
     }

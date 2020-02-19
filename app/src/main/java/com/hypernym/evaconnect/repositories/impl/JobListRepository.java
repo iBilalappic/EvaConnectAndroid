@@ -26,9 +26,11 @@ public class JobListRepository implements IJobAdRepository {
     private MutableLiveData<BaseModel<List<SpecficJobAd>>> JobMutableLiveData = new MutableLiveData<>();
 
     @Override
-    public LiveData<BaseModel<List<JobAd>>> getjobAd() {
+    public LiveData<BaseModel<List<JobAd>>> getjobAd(User user) {
         MessageMutableLiveData = new MutableLiveData<>();
-        RestClient.get().appApi().getjobAd().enqueue(new Callback<BaseModel<List<JobAd>>>() {
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("user_id", user.getId());
+        RestClient.get().appApi().getjobAd(body).enqueue(new Callback<BaseModel<List<JobAd>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<JobAd>>> call, Response<BaseModel<List<JobAd>>> response) {
                 if (response.isSuccessful() && !response.body().isError())
