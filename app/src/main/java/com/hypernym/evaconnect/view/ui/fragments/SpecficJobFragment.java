@@ -88,6 +88,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
 
 
     private JobAd jobAd = new JobAd();
+    private SpecficJobAd checkLikeCount = new SpecficJobAd();
     User user;
 
     public SpecficJobFragment() {
@@ -139,7 +140,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
             @Override
             public void onChanged(BaseModel<List<SpecficJobAd>> getjobAd) {
                 if (getjobAd != null && !getjobAd.isError()) {
-                    swipeRefresh.setRefreshing(false);
+                    checkLikeCount = getjobAd.getData().get(0);
                     if (getjobAd.getData().get(0).getLikeCount() != null && getjobAd.getData().get(0).getLikeCount() > 0) {
                         img_like.setBackground(getActivity().getDrawable(R.mipmap.ic_like_selected));
                     } else {
@@ -149,6 +150,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
                 hideDialog();
+                swipeRefresh.setRefreshing(false);
             }
         });
     }
@@ -172,10 +174,10 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
                 getActivity().onBackPressed();
                 break;
             case R.id.img_like:
-                if (jobAd.getLikeCount() > 0) {
-                    SetJobUnLike(jobAd.getId());
+                if (checkLikeCount.getLikeCount() > 0) {
+                    SetJobUnLike(checkLikeCount.getId());
                 } else {
-                    SetJobLike(jobAd.getId());
+                    SetJobLike(checkLikeCount.getId());
                 }
                 break;
         }
@@ -206,8 +208,8 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
         if (NetworkUtils.isNetworkConnected(getContext())) {
 //            if (user != null && user.getType().equals("company")) {
 //            } else {
-                GetJob_id(jobAd.getId());
-          //  }
+            GetJob_id(jobAd.getId());
+            //  }
         } else {
             networkErrorDialog();
         }
