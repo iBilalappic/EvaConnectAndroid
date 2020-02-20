@@ -46,7 +46,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
     public void onBindViewHolder(@NonNull CommentsAdapter.ViewHolder holder, int position) {
         Glide.with(context) //1
                 .load(comments.get(position).getUser().getUser_image())
-                .placeholder(R.mipmap.ic_launcher)
+                .placeholder(R.drawable.ic_default)
                 .error(R.mipmap.ic_launcher)
                 .skipMemoryCache(true) //2
                 .apply(RequestOptions.circleCropTransform())

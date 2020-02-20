@@ -84,7 +84,7 @@ public class BaseActivity extends AppCompatActivity  {
     public void showDialog() {
 
         if(customProgressBar != null && !customProgressBar.isShowing())
-            customProgressBar.showProgress(this,false);
+            customProgressBar.showProgress(this,true);
     }
 
     public void hideDialog() {

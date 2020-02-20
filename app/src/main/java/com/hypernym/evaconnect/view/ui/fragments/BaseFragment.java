@@ -73,6 +73,7 @@ public class BaseFragment extends Fragment {
     private String mCurrentPhotoPath;
     private File tempFile,file_name;
     private ConnectionViewModel connectionViewModel;
+    public static String pageTitle;
     /**
      * Could handle back press.
      * @return true if back press was handled
@@ -90,7 +91,7 @@ public class BaseFragment extends Fragment {
     public void showDialog() {
 
         if(customProgressBar != null && !customProgressBar.isShowing())
-            customProgressBar.showProgress(getContext(),false);
+            customProgressBar.showProgress(getContext(),true);
     }
 
     public void hideDialog() {
@@ -192,7 +193,7 @@ public class BaseFragment extends Fragment {
     private void LaunchGallery() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("*/*");
+        intent.setType("image/*");
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_PHOTO_GALLERY);
     }
 
@@ -200,7 +201,6 @@ public class BaseFragment extends Fragment {
 
     public File galleryAddPic() {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-
         mCurrentPhotoPath=getCurrentPhotoPath();
         File f = new File(mCurrentPhotoPath);
         file_name = f;
@@ -270,7 +270,10 @@ public class BaseFragment extends Fragment {
 
     public void showBackButton()
     {
-        getActivity().findViewById(R.id.tv_back).setVisibility(View.VISIBLE);
+        List<Fragment> f = getActivity().getSupportFragmentManager().getFragments();
+        if(f.size()>1) {
+            getActivity().findViewById(R.id.tv_back).setVisibility(View.VISIBLE);
+        }
     }
     public void hideBackButton()
     {
@@ -282,9 +285,15 @@ public class BaseFragment extends Fragment {
         {
             TextView textView=getActivity().findViewById(R.id.tv_title);
             textView.setText(title);
+            pageTitle=title;
         }
-
     }
+
+    public String getPageTitle()
+    {
+        return pageTitle;
+    }
+
     public void callConnectApi(TextView tv_connect, User connectionItem) {
         Connection connection=new Connection();
         User user= LoginUtils.getLoggedinUser();

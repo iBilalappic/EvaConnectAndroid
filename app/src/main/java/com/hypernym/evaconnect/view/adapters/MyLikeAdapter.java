@@ -42,10 +42,10 @@ public class MyLikeAdapter extends RecyclerView.Adapter<MyLikeAdapter.ViewHolder
 //
      //
         if (myLikesModelList.get(position).getIsLike()!=0) {
-            holder.tv_status.setText("Liked your post " + DateUtils.getTimeAgo(myLikesModelList.get(position).getCreatedDatetime()));
+            holder.tv_status.setText("You liked this " + DateUtils.getTimeAgo(myLikesModelList.get(position).getCreatedDatetime()));
             holder.img_type.setImageDrawable(context.getDrawable(R.drawable.like_selected));
         } else {
-            holder.tv_status.setText("Commented your post " + DateUtils.getTimeAgo(myLikesModelList.get(position).getCreatedDatetime()));
+            holder.tv_status.setText("You commented on this " + DateUtils.getTimeAgo(myLikesModelList.get(position).getCreatedDatetime()));
             holder.img_type.setImageDrawable(context.getDrawable(R.drawable.comment));
         }
         holder.tv_Name.setText(myLikesModelList.get(position).getUser().get(0).getFirstName());

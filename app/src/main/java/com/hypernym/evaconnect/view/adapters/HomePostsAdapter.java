@@ -5,9 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -840,13 +842,14 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
     }
 
     private void initializeSlider(SliderView imageSlider, int position) {
-        sliderImageAdapter = new SliderImageAdapter(mContext, posts.get(position).getPost_image());
+        sliderImageAdapter = new SliderImageAdapter(mContext, posts.get(position).getPost_image(),imageSlider);
         imageSlider.setSliderAdapter(sliderImageAdapter);
         imageSlider.setIndicatorAnimation(IndicatorAnimations.WORM); //set indicator animation by using SliderLayout.IndicatorAnimations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
         imageSlider.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
         imageSlider.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
         imageSlider.setScrollTimeInSec(4); //set scroll delay in seconds :
         imageSlider.startAutoCycle();
+
     }
 
     public void clear() {

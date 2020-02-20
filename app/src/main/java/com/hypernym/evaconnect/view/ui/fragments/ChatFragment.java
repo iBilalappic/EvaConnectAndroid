@@ -103,8 +103,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     @BindView(R.id.browsefiles)
     TextView browsefiles;
-    @BindView(R.id.scrollView)
-    ScrollView scrollView;
+
 
     @BindView(R.id.rc_attachments)
     RecyclerView rc_attachments;
@@ -233,10 +232,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void CheckMessageText() {
-        if (messageText != null && !messageText.equals("")) {
+
+            if ((messageText!=null && !messageText.equals("") || SelectedImageUri != null ||( MultiplePhoto != null && MultiplePhoto.size() > 1))) {
             if (MultiplePhoto != null && MultiplePhoto.size() > 1) {
                 UploadImageToFirebase();
-            } else if (SelectedImageUri != null && messageText.length() > 0) {
+            } else if (SelectedImageUri != null) {
                 UploadImageToFirebase();
             } else {
                 Map<String, Object> map = new HashMap<String, Object>();
@@ -322,7 +322,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         rc_chat.setLayoutManager(layoutManager);
         chatAdapter = new ChatAdapter(getActivity(), chatMessageList, networkConnection);
         rc_chat.setAdapter(chatAdapter);
-        scrollView.fullScroll(View.FOCUS_DOWN);
+        rc_chat.smoothScrollToPosition(chatMessageList.size()-1);
     }
 
 
@@ -334,7 +334,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 //  Toast.makeText(getActivity(), "sss", Toast.LENGTH_SHORT).show();
                 messageText = messageArea.getText().toString();
                 Map<String, Object> map = new HashMap<String, Object>();
-                if (SelectedImageUri == null && messageText.length() > 0) {
+                if (attachments.size()==0 && messageText.length() > 0) {
                     map.put("message", messageText);
                     map.put("user", UserDetails.username);
                     map.put("email", UserDetails.email);
@@ -355,9 +355,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     reference2.push().setValue(map);
                     sendNotification();
                     messageArea.setText("");
-                    messageArea.requestFocus();
+                  //  messageArea.requestFocus();
 
-                } else if (SelectedImageUri != null) {
+                } else if (attachments.size()>0) {
                     UploadImageToFirebase();
                 } else {
                     Toast.makeText(getContext(), "Please type message...", Toast.LENGTH_SHORT).show();
@@ -425,7 +425,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 //        if (SelectedImageUri != null) {
 
         // pd.show();
-        if (MultiplePhoto.size() > 1) {
+        if (MultiplePhoto.size() > 0) {
             for (int i = 0; i < MultiplePhoto.size(); i++) {
                 // MultiplePhoto.add(Uri.parse(String.valueOf(attachments)));
                 rc_attachments.setVisibility(View.GONE);
@@ -493,68 +493,69 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 });
             }
 
-        } else {
-            rc_attachments.setVisibility(View.GONE);
-            StorageReference childRef = storageRef.child(tempFile.getName().toString());
-
-            //uploading the image
-            UploadTask uploadTask = childRef.putFile(SelectedImageUri);
-            showDialog();
-            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    // pd.dismiss();
-                    childRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            ChatUrl.add(uri.toString());
-                            Map<String, Object> map = new HashMap<String, Object>();
-                            map.put("message", messageText);
-                            map.put("user", UserDetails.username);
-                            map.put("email", UserDetails.email);
-                            map.put("time", DateUtils.GetCurrentdatetime());
-                            map.put("image", ChatUrl);
-                            if (networkConnection.getSenderId().equals(LoginUtils.getUser().getId())) {
-                                map.put("sender_name",networkConnection.getSender().getFirstName());
-                                map.put("receiver_name",networkConnection.getReceiver().getFirstName());
-                            }
-                            else
-                            {
-                                map.put("sender_name",networkConnection.getReceiver().getFirstName());
-                                map.put("receiver_name",networkConnection.getSender().getFirstName());
-                            }
-
-                            map.put("receiver_image",UserDetails.receiverImage);
-                            map.put("timestamp", ServerValue.TIMESTAMP);
-                            reference1.push().setValue(map);
-                            reference2.push().setValue(map);
-                            sendNotification();
-                            attachments.clear();
-                            MultipleFile.clear();
-                            MultiplePhoto.clear();
-                            ChatUrl.clear();
-                            SelectedImageUri = null;
-                            messageArea.setText("");
-                            //  Toast.makeText(getContext(), "onSuccess: uri= " + uri.toString(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    hideDialog();
-                    Toast.makeText(getContext(), "Upload successful", Toast.LENGTH_SHORT).show();
-                }
-
-            }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    // pd.dismiss();
-                    hideDialog();
-                    Toast.makeText(getContext(), "Upload Failed -> " + e, Toast.LENGTH_SHORT).show();
-                }
-            });
         }
+//        else {
+//            rc_attachments.setVisibility(View.GONE);
+//            StorageReference childRef = storageRef.child(tempFile.getName().toString());
+//
+//            //uploading the image
+//            UploadTask uploadTask = childRef.putFile(SelectedImageUri);
+//            showDialog();
+//            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                @Override
+//                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                    // pd.dismiss();
+//                    childRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                        @Override
+//                        public void onSuccess(Uri uri) {
+//                            ChatUrl.add(uri.toString());
+//                            Map<String, Object> map = new HashMap<String, Object>();
+//                            map.put("message", messageText);
+//                            map.put("user", UserDetails.username);
+//                            map.put("email", UserDetails.email);
+//                            map.put("time", DateUtils.GetCurrentdatetime());
+//                            map.put("image", ChatUrl);
+//                            if (networkConnection.getSenderId().equals(LoginUtils.getUser().getId())) {
+//                                map.put("sender_name",networkConnection.getSender().getFirstName());
+//                                map.put("receiver_name",networkConnection.getReceiver().getFirstName());
+//                            }
+//                            else
+//                            {
+//                                map.put("sender_name",networkConnection.getReceiver().getFirstName());
+//                                map.put("receiver_name",networkConnection.getSender().getFirstName());
+//                            }
+//
+//                            map.put("receiver_image",UserDetails.receiverImage);
+//                            map.put("timestamp", ServerValue.TIMESTAMP);
+//                            reference1.push().setValue(map);
+//                            reference2.push().setValue(map);
+//                            sendNotification();
+//                            attachments.clear();
+//                            MultipleFile.clear();
+//                            MultiplePhoto.clear();
+//                            ChatUrl.clear();
+//                            SelectedImageUri = null;
+//                            messageArea.setText("");
+//                            //  Toast.makeText(getContext(), "onSuccess: uri= " + uri.toString(), Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
+//                    hideDialog();
+//                    Toast.makeText(getContext(), "Upload successful", Toast.LENGTH_SHORT).show();
+//                }
+
+//            }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+//                }
+//            }).addOnFailureListener(new OnFailureListener() {
+//                @Override
+//                public void onFailure(@NonNull Exception e) {
+//                    // pd.dismiss();
+//                    hideDialog();
+//                    Toast.makeText(getContext(), "Upload Failed -> " + e, Toast.LENGTH_SHORT).show();
+//                }
+//            });
+       // }
 
 
     }
@@ -572,14 +573,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             try {
                 if (data != null && data.getData() != null) {
                     SelectedImageUri = data.getData();
-                    MultiplePhoto.add(SelectedImageUri);
+
                     GalleryImage = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
                     mProfileImageDecodableString = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
                     Log.e(getClass().getName(), "image file path: " + GalleryImage);
 
                     tempFile = new File(GalleryImage);
-                    MultipleFile.add(tempFile);
-                    Log.e(getClass().getName(), "file path details: " + tempFile.getName() + " " + tempFile.getAbsolutePath() + "length" + tempFile.length());
+
+                    currentPhotoPath = GalleryImage;
 
 
                     if (tempFile.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.FILE_SIZE_LIMIT_IN_KB) {
@@ -587,7 +588,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         return;
                     } else {
                         if (photoVar == null) {
-                            currentPhotoPath = GalleryImage;
+                            MultipleFile.add(tempFile);
+                            Log.e(getClass().getName(), "file path details: " + tempFile.getName() + " " + tempFile.getAbsolutePath() + "length" + tempFile.length());
+                            MultiplePhoto.add(SelectedImageUri);
                             // photoVar = GalleryImage;
                             file_name = new File(ImageFilePathUtil.getPath(getActivity(), SelectedImageUri));
                             RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file_name);
@@ -657,8 +660,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 switch (v.getId()) {
                     case R.id.button_positive:
                         attachments.remove(position);
+                        MultiplePhoto.remove(position);
+//                        MultiplePhotoString.remove(position);
                         attachmentsAdapter.notifyDataSetChanged();
-                        SelectedImageUri = null;
+                      //  SelectedImageUri = null;
                         break;
                     case R.id.button_negative:
                         break;

@@ -150,9 +150,17 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
         swipeRefresh.setOnRefreshListener(this);
         //
         setupRecyclerview();
-        GetFriendDetails();
-        // setupNetworkConnectionRecycler();
-        GetFirebaseData();
+        if(NetworkUtils.isNetworkConnected(getContext()))
+        {
+            GetFriendDetails();
+            // setupNetworkConnectionRecycler();
+            GetFirebaseData();
+        }
+        else
+        {
+            networkErrorDialog();
+        }
+
         return view;
     }
 
@@ -315,7 +323,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
             @Override
             public void onClick(View v) {
                 String messageArea = editTextMessage.getText().toString();
-                if ((!messageArea.equals("") || SelectedImageUri != null ||( MultiplePhotoString != null && MultiplePhotoString.size() > 1))) {
+                if ((!messageArea.equals("") || attachments.size()>0)) {
                     Log.d("TAAAAG",""+ItemPostionHorizontal);
                     ChatFragment chatFragment = new ChatFragment();
                     Bundle bundle = new Bundle();
@@ -325,7 +333,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                     if (MultiplePhotoString != null && MultiplePhotoString.size() > 1) {
                         bundle.putStringArrayList("IMAGEURILIST", (ArrayList<String>) MultiplePhotoString);
                         bundle.putStringArrayList("FILENAMELIST", (ArrayList<String>) MultipleFileString);
-                    } else if (SelectedImageUri != null) {
+                    } else if (SelectedImageUri != null && attachments.size()>0) {
                         bundle.putString("IMAGEURI", SelectedImageUri.toString());
                         bundle.putString("FILENAME", tempFile.toString());
                     }
@@ -406,13 +414,13 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
         //looping through existing elements
         for (NetworkConnection s : newNetworkConnectionList) {
 
-            if (s.getReceiver().getFirstName().toLowerCase().contains(text.toLowerCase()) ||
-                    s.getReceiver().getFirstName().toUpperCase().contains(text.toUpperCase())) {
+            if (s.getSenderId().equals(LoginUtils.getUser().getId()) && (s.getReceiver().getFirstName().toLowerCase().contains(text.toLowerCase()) ||
+                    s.getReceiver().getFirstName().toUpperCase().contains(text.toUpperCase()))) {
                 filterdNames.add(s);
             }
 
-            if (s.getSender().getFirstName().toLowerCase().contains(text.toLowerCase()) ||
-                    s.getSender().getFirstName().toUpperCase().contains(text.toUpperCase())) {
+            if (s.getReceiverId().equals(LoginUtils.getUser().getId()) && (s.getSender().getFirstName().toLowerCase().contains(text.toLowerCase()) ||
+                    s.getSender().getFirstName().toUpperCase().contains(text.toUpperCase()))) {
                 filterdNames.add(s);
             }
         }
@@ -435,15 +443,13 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
             try {
                 if (data != null && data.getData() != null) {
                     SelectedImageUri = data.getData();
-                    MultiplePhoto.add(SelectedImageUri);
-                    MultiplePhotoString.add(SelectedImageUri.toString());
+
                     GalleryImage = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
                     mProfileImageDecodableString = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
                     Log.e(getClass().getName(), "image file path: " + GalleryImage);
 
                     tempFile = new File(GalleryImage);
-                    MultipleFile.add(tempFile);
-                    MultipleFileString.add(tempFile.toString());
+
 
                     Log.e(getClass().getName(), "file path details: " + tempFile.getName() + " " + tempFile.getAbsolutePath() + "length" + tempFile.length());
 
@@ -453,6 +459,10 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                         return;
                     } else {
                         if (photoVar == null) {
+                            MultiplePhoto.add(SelectedImageUri);
+                            MultiplePhotoString.add(SelectedImageUri.toString());
+                            MultipleFile.add(tempFile);
+                            MultipleFileString.add(tempFile.toString());
                             currentPhotoPath = GalleryImage;
                             // photoVar = GalleryImage;
                             file_name = new File(ImageFilePathUtil.getPath(getActivity(), SelectedImageUri));
@@ -521,6 +531,8 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                 switch (v.getId()) {
                     case R.id.button_positive:
                         attachments.remove(position);
+                        MultiplePhoto.remove(position);
+                        MultiplePhotoString.remove(position);
                         attachmentsAdapter.notifyDataSetChanged();
                         break;
                     case R.id.button_negative:

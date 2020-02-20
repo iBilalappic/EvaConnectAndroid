@@ -65,6 +65,7 @@ public class MyLikesFragment extends BaseFragment implements MyLikeAdapter.OnIte
         mylikeViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(MylikesViewModel.class);
         GetMyLikes();
         setupRecyclerview();
+        setPageTitle("My Likes");
     }
 
     private void setupRecyclerview() {

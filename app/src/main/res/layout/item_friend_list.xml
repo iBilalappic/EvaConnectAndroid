@@ -20,9 +20,10 @@
 
     <TextView
         android:id="@+id/tv_name"
-        style="@style/TextStyle.Bold"
+        style="@style/TextStyle.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="Derek J. Sine"
         app:layout_constraintStart_toEndOf="@+id/imageView6"
@@ -31,11 +32,16 @@
     <TextView
         android:id="@+id/tv_lastmsg"
         style="@style/TextStyle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Flight attendent London, UK "
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="Flight attendent London, UK Flight attendent London, UKFlight attendent London, UKFlight attendent London, UKFlight attendent London, UKFlight attendent London, UKFlight attendent London, UKFlight attendent London, UKFlight attendent London, UKFlight attendent London, UKFlight attendent London, UKFlight attendent London, UK"
+        app:layout_constraintBottom_toTopOf="@+id/view5"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.015"
         app:layout_constraintStart_toEndOf="@+id/imageView6"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
@@ -61,12 +67,13 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/tv_minago"
         style="@style/TextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:drawableLeft="@drawable/clock"
         android:drawablePadding="5dp"

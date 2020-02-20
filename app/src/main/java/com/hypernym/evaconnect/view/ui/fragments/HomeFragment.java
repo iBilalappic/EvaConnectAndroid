@@ -90,18 +90,19 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
 
     private void init() {
         setPageTitle(getString(R.string.home));
+
         homeViewModel = ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(HomeViewModel.class);
         postViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(PostViewModel.class);
         connectionViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
-        currentPage = PAGE_START;
+     //   currentPage = PAGE_START;
         homePostsAdapter=new HomePostsAdapter(getContext(),posts,this);
         linearLayoutManager=new LinearLayoutManager(getContext());
         rc_home.setLayoutManager(linearLayoutManager);
         rc_home.setAdapter(homePostsAdapter);
-        if(posts.size()==0)
-        {
-            callPostsApi();
-        }
+//        if(posts.size()==0)
+//        {
+//            callPostsApi();
+//        }
 
         swipeRefresh.setOnRefreshListener(this);
         /**
@@ -138,6 +139,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     public void onResume() {
         super.onResume();
         init();
+        onRefresh();
 
         newpost.setOnClickListener(new OnOneOffClickListener() {
             @Override
@@ -155,6 +157,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         homeViewModel.getDashboard(user,AppConstants.TOTAL_PAGES,currentPage).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> dashboardBaseModel) {
+
              //   homePostsAdapter.clear();
                 if(dashboardBaseModel !=null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size()>0 && dashboardBaseModel.getData().get(0)!=null)
                 {
@@ -172,7 +175,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
                         {
                             post.setPost_type(AppConstants.VIDEO_TYPE);
                         }
-                        else if(post.getType().equalsIgnoreCase("post") && post.getPost_image().size()==0  && AppUtils.containsURL(post.getContent()).size()==0)
+                        else if(post.getType().equalsIgnoreCase("post") && post.getPost_image().size()==0  && !post.isIs_url())
                         {
                             post.setPost_type(AppConstants.TEXT_TYPE);
                         }
