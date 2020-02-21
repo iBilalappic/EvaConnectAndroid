@@ -204,7 +204,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     }
     public void hideNotificationPanel()
     {
-        //notifications.clear();
+        notifications.clear();
         if(NetworkUtils.isNetworkConnected(this))
         {
 

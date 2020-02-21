@@ -101,7 +101,7 @@ public class OneSignalReceiver extends NotificationExtenderService {
                     }
                 }
                 Log.e("additionaldata", "bundle: " + bundle.toString());
-                    AppUtils.makeNotification(getApplication(), HomeActivity.class, PostDetailsFragment.class.getName(), bundle, payloadNotification.contents.en, false, m);
+                    AppUtils.makeNotification(getApplication(), HomeActivity.class, PostDetailsFragment.class.getName(), bundle, payloadNotification.contents.en, true, m);
 
             } catch (Exception e) {
                 Log.e("TAAG", "" + e);

@@ -94,6 +94,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     SwipeRefreshLayout swipeRefresh;
 
 
+
     private MessageAdapter messageAdapter,newmessageAdapter;
     private HorizontalMessageAdapter messageAdapter_horizontal;
     private LinearLayoutManager linearLayoutManager;
@@ -104,7 +105,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     private List<NetworkConnection> neworiginalNetworkConnectionList = new ArrayList<>();
     Dialog mDialogMessage;
     EditText editTextSearch, editTextMessage;
-    TextView mTextviewSend;
+    TextView mTextviewSend,empty;
     RecyclerView mrecyclerviewFriends;
     TextView browsefiles;
     private int Itempostion,ItemPostionHorizontal;
@@ -167,11 +168,14 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     private void GetFirebaseData() {
         showDialog();
         networkConnectionList.clear();
+        messageAdapter.notifyDataSetChanged();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         Query lastQuery = databaseReference.child("messages");
         lastQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
+              //  networkConnectionList.clear();
                 for (DataSnapshot child: dataSnapshot.getChildren()) {
                     Log.d("User key", child.getKey());
                         String[] conversationkey=child.getKey().split("_");
@@ -182,6 +186,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     // Object message = dataSnapshot.getValue();
+
                                     for (DataSnapshot child: dataSnapshot.getChildren()) {
                                         Log.d("User key", child.getKey());
                                         Log.d("User val", child.child("message").getValue().toString());
@@ -310,6 +315,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
         mTextviewSend = mDialogMessage.findViewById(R.id.sendButton);
         browsefiles = mDialogMessage.findViewById(R.id.browsefiles);
         rc_attachments = mDialogMessage.findViewById(R.id.rc_attachments);
+        empty=mDialogMessage.findViewById(R.id.empty);
 
         attachmentsAdapter = new AttachmentsAdapter(getContext(), attachments, this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -323,7 +329,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
             @Override
             public void onClick(View v) {
                 String messageArea = editTextMessage.getText().toString();
-                if ((!messageArea.equals("") || attachments.size()>0)) {
+                if ((!messageArea.equals("") || attachments.size()>0) && messageAdapter_horizontal.getItemCount()>0) {
                     Log.d("TAAAAG",""+ItemPostionHorizontal);
                     ChatFragment chatFragment = new ChatFragment();
                     Bundle bundle = new Bundle();
@@ -346,6 +352,10 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                     //  Log.d("TAAAG", "" + GsonUtils.toJson(networkConnection));
                     loadFragment(R.id.framelayout, chatFragment, getContext(), true);
                     mDialogMessage.dismiss();
+                }
+                else if(messageAdapter_horizontal.getItemCount()==0)
+                {
+                    Toast.makeText(getContext(), getString(R.string.msg_no_sender), Toast.LENGTH_SHORT).show();
                 }
                 else{
                     Toast.makeText(getContext(), "Please type message...", Toast.LENGTH_SHORT).show();
@@ -423,6 +433,15 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                     s.getSender().getFirstName().toUpperCase().contains(text.toUpperCase()))) {
                 filterdNames.add(s);
             }
+        }
+
+        if(filterdNames.size()>0)
+        {
+            empty.setVisibility(View.GONE);
+        }
+        else
+        {
+           empty.setVisibility(View.VISIBLE);
         }
         ItemPostionHorizontal=0;
         //calling a method of the adapter class and passing the filtered list

@@ -97,6 +97,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
      //   currentPage = PAGE_START;
         homePostsAdapter=new HomePostsAdapter(getContext(),posts,this);
         linearLayoutManager=new LinearLayoutManager(getContext());
+      
         rc_home.setLayoutManager(linearLayoutManager);
         rc_home.setAdapter(homePostsAdapter);
 //        if(posts.size()==0)

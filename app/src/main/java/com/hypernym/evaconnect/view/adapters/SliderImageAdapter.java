@@ -72,15 +72,11 @@ public class SliderImageAdapter extends SliderViewAdapter<SliderImageAdapter.Sli
                     public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                         int width = resource.getIntrinsicWidth();
                         int height = resource.getIntrinsicHeight();
-
-
                         DisplayMetrics displayMetrics = new DisplayMetrics();
                         Activity activity=(Activity)context;
                         activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
                         int tempWidth = (int) (width / Resources.getSystem().getDisplayMetrics()
                                 .density);
-
                         int sliderHeight = (int) (height / Resources.getSystem().getDisplayMetrics()
                                 .density) * displayMetrics.widthPixels / tempWidth;
                         if(attachments.size()>0 && sliderHeight > prevSliderHeight)
