@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.AppliedApplicants;
 import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.User;
@@ -32,7 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AppliedApplicantFragment extends BaseFragment implements View.OnClickListener, TimePicker.OnTimeChangedListener, DatePicker.OnDateChangedListener {
+public class AppliedApplicantFragment extends BaseFragment implements View.OnClickListener {
     private AppliedApplicants appliedApplicants = new AppliedApplicants();
 
     @BindView(R.id.datePicker)
@@ -74,7 +75,7 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
     User user = new User();
 
     int hour, minute;
-    String am_pm;
+    String Job_name;
 
 
     public AppliedApplicantFragment() {
@@ -90,7 +91,6 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
         tv_view_cv.setOnClickListener(this);
         tv_download_cv.setOnClickListener(this);
         tv_offerinterview.setOnClickListener(this);
-        timePicker.setOnTimeChangedListener(this);
         timePicker.setIs24HourView(true);
         user = LoginUtils.getUser();
         init();
@@ -102,6 +102,7 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
             setPageTitle("");
             showBackButton();
             appliedApplicants = (AppliedApplicants) getArguments().getSerializable(Constants.DATA);
+            Job_name=getArguments().getString("JOB_NAME");
             Log.d("TAAAG", "" + GsonUtils.toJson(appliedApplicants));
             AppUtils.setGlideImage(getContext(), cv_profile_image, appliedApplicants.getUser().getUserImage());
             tv_activefor.setText(Constants.SUBMITTED + DateUtils.getTimeAgo(appliedApplicants.getCreatedDatetime()));
@@ -126,12 +127,11 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
         switch (v.getId()) {
             case R.id.tv_view_cv:
                 if (appliedApplicants.getApplicationAttachment() != null) {
-                    try {
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(appliedApplicants.getApplicationAttachment()));
-                        startActivity(browserIntent);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
+                    WebviewCvFragment webviewCvFragment = new WebviewCvFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("applicant_cv", appliedApplicants.getApplicationAttachment());
+                    webviewCvFragment.setArguments(bundle);
+                    loadFragment(R.id.framelayout, webviewCvFragment, getContext(), true);
                 } else {
                     Toast.makeText(getActivity(), "No File to View", Toast.LENGTH_SHORT).show();
                 }
@@ -154,6 +154,13 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
                 }
                 break;
             case R.id.tv_offerinterview:
+                ChatFragment chatFragment=new ChatFragment();
+                Bundle bundle=new Bundle();
+                bundle.putString(Constants.FRAGMENT_NAME, AppConstants.APPLICANT_FRAGMENT);
+                bundle.putSerializable(Constants.DATA,appliedApplicants);
+                bundle.putString("JOB_NAME",Job_name);
+                chatFragment.setArguments(bundle);
+                loadFragment(R.id.framelayout,chatFragment,getContext(),true);
                 Toast.makeText(getActivity(), "" + "Selected Date: " +
                                 datePicker.getDayOfMonth() + "/" +
                                 (datePicker.getMonth() + 1) + "/" +
@@ -176,15 +183,5 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
             minute = timePicker.getCurrentMinute();
         }
         Toast.makeText(getActivity(), "" + "Selected time: " + hour + ":" + minute, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-
-    }
-
-    @Override
-    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-
     }
 }

@@ -150,6 +150,7 @@ public class CompanyApplicantFragment extends BaseFragment implements View.OnCli
         AppliedApplicantFragment appliedApplicantFragment = new AppliedApplicantFragment();
         Bundle bundle=new Bundle();
         bundle.putSerializable(Constants.DATA,appliedApplicantModel.get(position));
+        bundle.putString("JOB_NAME",companyJobAdModel.getJobTitle());
         appliedApplicantFragment.setArguments(bundle);
         loadFragment(R.id.framelayout, appliedApplicantFragment, getContext(), true);
 

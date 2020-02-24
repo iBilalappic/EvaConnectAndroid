@@ -43,6 +43,7 @@ import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.communication.api.AppApi;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
+import com.hypernym.evaconnect.models.AppliedApplicants;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.ChatMessage;
 import com.hypernym.evaconnect.models.Contents;
@@ -135,6 +136,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private SimpleDialog simpleDialog;
 
 
+    public String mFragmentname,Job_name;
+    public AppliedApplicants appliedApplicants=new AppliedApplicants();
+
+
+
     public ChatFragment() {
         // Required empty public constructor
     }
@@ -156,6 +162,99 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         ButterKnife.bind(this, view);
         sendButton.setOnClickListener(this);
         browsefiles.setOnClickListener(this);
+        manipulateBundle();
+        return view;
+
+    }
+
+    private void manipulateBundle() {
+        if (getArguments() != null) {
+            mFragmentname = getArguments().getString(Constants.FRAGMENT_NAME);
+
+            if (mFragmentname!=null&&mFragmentname.equals(AppConstants.APPLICANT_FRAGMENT)) {
+                Interviewcode();
+                Toast.makeText(getContext(), "applicant", Toast.LENGTH_SHORT).show();
+            } else {
+                ChatCode();
+            }
+
+        }
+    }
+
+
+//interview code
+
+
+
+    private void Interviewcode() {
+        UserDetails.username = LoginUtils.getUser().getFirst_name();
+        UserDetails.userid = LoginUtils.getUser().getId();
+        appliedApplicants=(AppliedApplicants)getArguments().getSerializable(Constants.DATA);
+        Job_name=getArguments().getString("JOB_NAME");
+        messageText="You Have been selected for postion"+Job_name;
+        if (LoginUtils.getUser().getUser_id().equals(LoginUtils.getUser().getId())) {
+            UserDetails.chatWith = appliedApplicants.getUser().getId().toString();
+            UserDetails.email = appliedApplicants.getUser().getEmail();
+            UserDetails.receiverName = appliedApplicants.getUser().getFirstName();
+            UserDetails.receiverImage = appliedApplicants.getUser().getUserImage();
+            UserDetails.senderName = LoginUtils.getUser().getFirst_name();
+            //  setPageTitle(networkConnection.getReceiver().getFirstName());
+            //  Toast.makeText(getContext(), "receivername" + networkConnection.getReceiver().getFirstName(), Toast.LENGTH_SHORT).show();
+        } else {
+            UserDetails.chatWith = LoginUtils.getUser().getId().toString();
+            UserDetails.email = LoginUtils.getUser().getEmail();
+            UserDetails.senderName = appliedApplicants.getUser().getFirstName();
+            UserDetails.receiverName = LoginUtils.getUser().getFirst_name();
+            UserDetails.receiverImage = LoginUtils.getUser().getUser_image();
+            // setPageTitle(networkConnection.getSender().getFirstName());
+            //  Toast.makeText(getContext(), "sendername" + networkConnection.getSender().getFirstName(), Toast.LENGTH_SHORT).show();
+        }
+//        if (networkConnection.getSender().getFirstName().equalsIgnoreCase(LoginUtils.getUser().getFirst_name())) {
+//            setPageTitle(networkConnection.getReceiver().getFirstName());
+//        } else {
+//            setPageTitle(networkConnection.getSender().getFirstName());
+//        }
+        initInterview();
+    }
+
+    private void initInterview() {
+        Firebase.setAndroidContext(AppUtils.getApplicationContext());
+        reference1 = new Firebase("https://evaconnect-df08d.firebaseio.com/development/" + UserDetails.userid + "_" + UserDetails.chatWith);
+        reference2 = new Firebase("https://evaconnect-df08d.firebaseio.com/development/" + UserDetails.chatWith + "_" + UserDetails.userid);
+        SendChatToFirbase(messageText);
+    }
+
+    private void SendChatToFirbase(String messgae) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (SelectedImageUri == null){
+            map.put("message",messageText);
+            map.put("user", UserDetails.username);
+            map.put("email", UserDetails.email);
+            map.put("time", DateUtils.GetCurrentdatetime());
+            map.put("image", null);
+            map.put("type","Interview");
+            if (LoginUtils.getUser().getUser_id().equals(LoginUtils.getUser().getId())) {
+                map.put("sender_name", LoginUtils.getUser().getFirst_name());
+                map.put("receiver_name", appliedApplicants.getUser().getFirstName());
+            } else {
+                map.put("sender_name", appliedApplicants.getUser().getFirstName());
+                map.put("receiver_name", LoginUtils.getUser().getFirst_name());
+            }
+            map.put("receiver_image", appliedApplicants.getUser().getUserImage());
+            map.put("sender_image", LoginUtils.getUser().getUser_image());
+            map.put("timestamp", ServerValue.TIMESTAMP);
+            map.put("sender_email", LoginUtils.getUser().getEmail());
+            map.put("receiver_email", appliedApplicants.getUser().getEmail());
+            reference1.push().setValue(map);
+            reference2.push().setValue(map);
+        } else if (SelectedImageUri != null) {
+            UploadImageToFirebase();
+        }
+
+        //sendNotification();
+    }
+
+    private void ChatCode() {
         assert getArguments() != null;
         networkConnection = (NetworkConnection) getArguments().getSerializable(Constants.DATA);
         messageText = getArguments().getString("MESSAGE");
@@ -182,7 +281,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             UserDetails.email = networkConnection.getReceiver().getEmail();
             UserDetails.receiverName = networkConnection.getReceiver().getFirstName();
             UserDetails.receiverImage = networkConnection.getReceiver().getUserImage();
-            UserDetails.senderName=networkConnection.getSender().getFirstName();
+            UserDetails.senderName = networkConnection.getSender().getFirstName();
             //  setPageTitle(networkConnection.getReceiver().getFirstName());
             //  Toast.makeText(getContext(), "receivername" + networkConnection.getReceiver().getFirstName(), Toast.LENGTH_SHORT).show();
         } else {
@@ -194,17 +293,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             // setPageTitle(networkConnection.getSender().getFirstName());
             //  Toast.makeText(getContext(), "sendername" + networkConnection.getSender().getFirstName(), Toast.LENGTH_SHORT).show();
         }
-        if(networkConnection.getSender().getFirstName().equalsIgnoreCase(LoginUtils.getUser().getFirst_name()))
-        {
+        if (networkConnection.getSender().getFirstName().equalsIgnoreCase(LoginUtils.getUser().getFirst_name())) {
             setPageTitle(networkConnection.getReceiver().getFirstName());
-        }
-        else
-        {
+        } else {
             setPageTitle(networkConnection.getSender().getFirstName());
         }
         init();
-        return view;
-
     }
 
     private void SettingMuilplePhotoString(List<String> multiplePhotoString, List<String> multipleFileString) {
@@ -220,8 +314,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private void init() {
         showBackButton();
         Firebase.setAndroidContext(AppUtils.getApplicationContext());
-        reference1 = new Firebase("https://evaconnect-df08d.firebaseio.com/messages/" + UserDetails.userid + "_" + UserDetails.chatWith);
-        reference2 = new Firebase("https://evaconnect-df08d.firebaseio.com/messages/" + UserDetails.chatWith + "_" + UserDetails.userid);
+        reference1 = new Firebase("https://evaconnect-df08d.firebaseio.com/development/" + UserDetails.userid + "_" + UserDetails.chatWith);
+        reference2 = new Firebase("https://evaconnect-df08d.firebaseio.com/development/" + UserDetails.chatWith + "_" + UserDetails.userid);
         SettingFireBaseChat();
         if (getArguments() != null) {
             CheckMessageText();
@@ -243,11 +337,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 map.put("message", messageText);
                 map.put("email", UserDetails.email);
                 map.put("time", DateUtils.GetCurrentdatetime());
-                map.put("user",UserDetails.username);
+                map.put("user", UserDetails.username);
                 map.put("image", null);
-                map.put("sender_name",UserDetails.username);
-                map.put("receiver_name",UserDetails.receiverName);
-                map.put("receiver_image",UserDetails.receiverImage);
+                map.put("sender_name", UserDetails.username);
+                map.put("receiver_name", UserDetails.receiverName);
+                map.put("receiver_image", UserDetails.receiverImage);
                 map.put("timestamp", ServerValue.TIMESTAMP);
                 reference1.push().setValue(map);
                 reference2.push().setValue(map);
@@ -331,36 +425,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
         switch (v.getId()) {
             case R.id.sendButton:
-                //  Toast.makeText(getActivity(), "sss", Toast.LENGTH_SHORT).show();
-                messageText = messageArea.getText().toString();
-                Map<String, Object> map = new HashMap<String, Object>();
-                if (SelectedImageUri == null && messageText.length() > 0) {
-                    map.put("message", messageText);
-                    map.put("user", UserDetails.username);
-                    map.put("email", UserDetails.email);
-                    map.put("time", DateUtils.GetCurrentdatetime());
-                    map.put("image", null);
-                    if (networkConnection.getSenderId().equals(LoginUtils.getUser().getId())) {
-                        map.put("sender_name",networkConnection.getSender().getFirstName());
-                        map.put("receiver_name",networkConnection.getReceiver().getFirstName());
-                    }
-                    else
-                    {
-                        map.put("sender_name",networkConnection.getReceiver().getFirstName());
-                        map.put("receiver_name",networkConnection.getSender().getFirstName());
-                    }
-                    map.put("receiver_image",UserDetails.receiverImage);
-                    map.put("timestamp", ServerValue.TIMESTAMP);
-                    reference1.push().setValue(map);
-                    reference2.push().setValue(map);
-                    sendNotification();
-                    messageArea.setText("");
-
-                } else if (SelectedImageUri != null) {
-                    UploadImageToFirebase();
+                if (mFragmentname!=null&&mFragmentname.equals(AppConstants.APPLICANT_FRAGMENT)) {
+                   sendtofirebase_interview();
                 } else {
-                    Toast.makeText(getContext(), "Please type message...", Toast.LENGTH_SHORT).show();
+                    sendtofirebase_chat();
                 }
+                //  Toast.makeText(getActivity(), "sss", Toast.LENGTH_SHORT).show();
+
                 break;
 
             case R.id.browsefiles:
@@ -373,6 +444,41 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
         }
 
+    }
+
+    private void sendtofirebase_chat() {
+        messageText = messageArea.getText().toString();
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (SelectedImageUri == null && messageText.length() > 0) {
+            map.put("message", messageText);
+            map.put("user", UserDetails.username);
+            map.put("email", UserDetails.email);
+            map.put("time", DateUtils.GetCurrentdatetime());
+            map.put("image", null);
+            if (networkConnection.getSenderId().equals(LoginUtils.getUser().getId())) {
+                map.put("sender_name", networkConnection.getSender().getFirstName());
+                map.put("receiver_name", networkConnection.getReceiver().getFirstName());
+            } else {
+                map.put("sender_name", networkConnection.getReceiver().getFirstName());
+                map.put("receiver_name", networkConnection.getSender().getFirstName());
+            }
+            map.put("receiver_image", UserDetails.receiverImage);
+            map.put("timestamp", ServerValue.TIMESTAMP);
+            reference1.push().setValue(map);
+            reference2.push().setValue(map);
+            sendNotification();
+            messageArea.setText("");
+
+        }
+        else if (SelectedImageUri != null) {
+            UploadImageToFirebase();
+        } else {
+            Toast.makeText(getContext(), "Please type message...", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void sendtofirebase_interview() {
+        SendChatToFirbase(messageText);
     }
 
     public void sendNotification() {
@@ -391,12 +497,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         filter.field = "tag";
         filter.key = "email";
         filter.relation = "=";
-        if(LoginUtils.getLoggedinUser().getEmail().equalsIgnoreCase(networkConnection.getReceiver().getEmail()))
-        {
+        if (LoginUtils.getLoggedinUser().getEmail().equalsIgnoreCase(networkConnection.getReceiver().getEmail())) {
             filter.value = networkConnection.getSender().getEmail();
-        }
-        else
-        {
+        } else {
             filter.value = networkConnection.getReceiver().getEmail();
         }
 
@@ -448,16 +551,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                                     map.put("time", DateUtils.GetCurrentdatetime());
                                     map.put("image", ChatUrl);
                                     if (networkConnection.getSenderId().equals(LoginUtils.getUser().getId())) {
-                                        map.put("sender_name",networkConnection.getSender().getFirstName());
-                                        map.put("receiver_name",networkConnection.getReceiver().getFirstName());
-                                    }
-                                    else
-                                    {
-                                        map.put("sender_name",networkConnection.getReceiver().getFirstName());
-                                        map.put("receiver_name",networkConnection.getSender().getFirstName());
+                                        map.put("sender_name", networkConnection.getSender().getFirstName());
+                                        map.put("receiver_name", networkConnection.getReceiver().getFirstName());
+                                    } else {
+                                        map.put("sender_name", networkConnection.getReceiver().getFirstName());
+                                        map.put("receiver_name", networkConnection.getSender().getFirstName());
                                     }
 
-                                    map.put("receiver_image",UserDetails.receiverImage);
+                                    map.put("receiver_image", UserDetails.receiverImage);
                                     map.put("timestamp", ServerValue.TIMESTAMP);
                                     reference1.push().setValue(map);
                                     reference2.push().setValue(map);
@@ -514,16 +615,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                             map.put("time", DateUtils.GetCurrentdatetime());
                             map.put("image", ChatUrl);
                             if (networkConnection.getSenderId().equals(LoginUtils.getUser().getId())) {
-                                map.put("sender_name",networkConnection.getSender().getFirstName());
-                                map.put("receiver_name",networkConnection.getReceiver().getFirstName());
-                            }
-                            else
-                            {
-                                map.put("sender_name",networkConnection.getReceiver().getFirstName());
-                                map.put("receiver_name",networkConnection.getSender().getFirstName());
+                                map.put("sender_name", networkConnection.getSender().getFirstName());
+                                map.put("receiver_name", networkConnection.getReceiver().getFirstName());
+                            } else {
+                                map.put("sender_name", networkConnection.getReceiver().getFirstName());
+                                map.put("receiver_name", networkConnection.getSender().getFirstName());
                             }
 
-                            map.put("receiver_image",UserDetails.receiverImage);
+                            map.put("receiver_image", UserDetails.receiverImage);
                             map.put("timestamp", ServerValue.TIMESTAMP);
                             reference1.push().setValue(map);
                             reference2.push().setValue(map);
