@@ -8,7 +8,7 @@ public interface APIConstants {
     public static String FORGOT_PASSWORD="user/forgotpassword/";
     public static String GET_POSTS="post/";
     public static String CHECK_EMAIL_EXIST="user/account/check/";
-    public static String DASHBOARD="dashboard/?";
+    public static String DASHBOARD="dashboard/android/?";
     public static String FRIENDCONNECTION="user/network/connection/details/{id}/";
     public static String ADD_COMMENT="post/comment/";
     public static String LIKE_POST="post/like/";

@@ -51,8 +51,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             holder.tv_sendertime.setVisibility(View.GONE);
             holder.tv_receivertime.setVisibility(View.VISIBLE);
             holder.mtextview21.setText(chatMessageList.get(position).getMessage());
-            if (UserDetails.chatWith.contains(networkConnection.getReceiver().getFirstName())) {
-                AppUtils.setGlideImage(context, (holder).imageView7, networkConnection.getReceiver().getUserImage());
+            if (UserDetails.receiverName.contains(networkConnection.getReceiver().getFirstName())) {
+                AppUtils.setGlideImage(context, (holder).imageView7, networkConnection.getSender().getUserImage());
                 holder.tv_receivertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
                 holder.tv_sendertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
                 if(chatMessageList.get(position).getImage().size()>0)
@@ -78,7 +78,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 }
 
             } else {
-                AppUtils.setGlideImage(context, (holder).imageView7, networkConnection.getSender().getUserImage());
+                AppUtils.setGlideImage(context, (holder).imageView7, networkConnection.getReceiver().getUserImage());
                 holder.tv_receivertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
                 holder.tv_sendertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
                 if(chatMessageList.get(position).getImage().size()>0)
@@ -114,7 +114,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
             holder.mtextview20.setText(chatMessageList.get(position).getMessage());
             if (networkConnection.getSenderId().equals(LoginUtils.getUser().getId())) {
-                AppUtils.setGlideImage(context, (holder).imageView6, networkConnection.getSender().getUserImage());
+                AppUtils.setGlideImage(context, (holder).imageView6, networkConnection.getReceiver().getUserImage());
                 holder.tv_receivertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
                 holder.tv_sendertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
                 if(chatMessageList.get(position).getImage().size()>0)
@@ -143,7 +143,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
                 //  Toast.makeText(getContext(), "receivername" + networkConnection.getReceiver().getFirstName(), Toast.LENGTH_SHORT).show();
             } else {
-                AppUtils.setGlideImage(context, (holder).imageView6, networkConnection.getReceiver().getUserImage());
+                AppUtils.setGlideImage(context, (holder).imageView6, networkConnection.getSender().getUserImage());
                 holder.tv_receivertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
                 holder.tv_sendertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
                 if(chatMessageList.get(position).getImage().size()>0)

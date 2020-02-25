@@ -182,6 +182,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             UserDetails.receiverName = networkConnection.getReceiver().getFirstName();
             UserDetails.receiverImage = networkConnection.getReceiver().getUserImage();
             UserDetails.senderName=networkConnection.getSender().getFirstName();
+            UserDetails.senderEmail=networkConnection.getReceiver().getEmail();
+            UserDetails.receiverEmail=networkConnection.getSender().getEmail();
+            UserDetails.senderImage=networkConnection.getReceiver().getUserImage();
             //  setPageTitle(networkConnection.getReceiver().getFirstName());
             //  Toast.makeText(getContext(), "receivername" + networkConnection.getReceiver().getFirstName(), Toast.LENGTH_SHORT).show();
         } else {
@@ -190,6 +193,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             UserDetails.senderName = networkConnection.getReceiver().getFirstName();
             UserDetails.receiverName = networkConnection.getSender().getFirstName();
             UserDetails.receiverImage = networkConnection.getSender().getUserImage();
+            UserDetails.senderEmail=networkConnection.getReceiver().getEmail();
+            UserDetails.receiverEmail=networkConnection.getSender().getEmail();
+            UserDetails.senderImage=networkConnection.getReceiver().getUserImage();
             // setPageTitle(networkConnection.getSender().getFirstName());
             //  Toast.makeText(getContext(), "sendername" + networkConnection.getSender().getFirstName(), Toast.LENGTH_SHORT).show();
         }
@@ -219,8 +225,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private void init() {
         showBackButton();
         Firebase.setAndroidContext(AppUtils.getApplicationContext());
-        reference1 = new Firebase("https://evaconnect-df08d.firebaseio.com/messages/" + UserDetails.userid + "_" + UserDetails.chatWith);
-        reference2 = new Firebase("https://evaconnect-df08d.firebaseio.com/messages/" + UserDetails.chatWith + "_" + UserDetails.userid);
+        reference1 = new Firebase("https://evaconnect-df08d.firebaseio.com/"+AppConstants.FIREASE_CHAT_ENDPOINT+"/" + UserDetails.userid + "_" + UserDetails.chatWith);
+        reference2 = new Firebase("https://evaconnect-df08d.firebaseio.com/"+AppConstants.FIREASE_CHAT_ENDPOINT+"/" + UserDetails.chatWith + "_" + UserDetails.userid);
+        setupRecycler(chatMessageList);
         SettingFireBaseChat();
         if (getArguments() != null) {
             CheckMessageText();
@@ -249,6 +256,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 map.put("receiver_name",UserDetails.receiverName);
                 map.put("receiver_image",UserDetails.receiverImage);
                 map.put("timestamp", ServerValue.TIMESTAMP);
+                map.put("sender_email",UserDetails.senderEmail);
+                map.put("receiver_email",UserDetails.receiverEmail);
+                map.put("sender_image",UserDetails.senderImage);
                 reference1.push().setValue(map);
                 reference2.push().setValue(map);
                 sendNotification();
@@ -267,6 +277,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 String userName = map.get("user").toString();
                 String email = map.get("email").toString();
                 String chatTime = map.get("time").toString();
+
+
                 List<String> image = new ArrayList<>();
                 if (map.get("image") != null) {
                     image = (List<String>) map.get("image");
@@ -280,7 +292,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     mMessage.setEmail(email);
                     chatMessageList.add(mMessage);
                     Log.d("Taag", "" + chatMessageList.size());
-                    setupRecycler(chatMessageList);
+                    chatAdapter.notifyDataSetChanged();
+                   // setupRecycler(chatMessageList);
                 } else {
                     mMessage = new ChatMessage();
                     mMessage.setMessage(message);
@@ -290,7 +303,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     chatMessageList.add(mMessage);
                     mMessage.setChattime(chatTime);
                     Log.d("Taag", "" + chatMessageList.size());
-                    setupRecycler(chatMessageList);
+                    chatAdapter.notifyDataSetChanged();
+                    //setupRecycler(chatMessageList);
+                }
+                if(chatMessageList.size()>0)
+                {
+                    rc_chat.smoothScrollToPosition(chatMessageList.size()-1);
                 }
             }
 
@@ -322,7 +340,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         rc_chat.setLayoutManager(layoutManager);
         chatAdapter = new ChatAdapter(getActivity(), chatMessageList, networkConnection);
         rc_chat.setAdapter(chatAdapter);
-        rc_chat.smoothScrollToPosition(chatMessageList.size()-1);
+        if(chatMessageList.size()>0)
+        {
+            rc_chat.smoothScrollToPosition(chatMessageList.size()-1);
+        }
+
     }
 
 
@@ -340,16 +362,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     map.put("email", UserDetails.email);
                     map.put("time", DateUtils.GetCurrentdatetime());
                     map.put("image", null);
-                    if (networkConnection.getSenderId().equals(LoginUtils.getUser().getId())) {
-                        map.put("sender_name",networkConnection.getSender().getFirstName());
-                        map.put("receiver_name",networkConnection.getReceiver().getFirstName());
-                    }
-                    else
-                    {
-                        map.put("sender_name",networkConnection.getReceiver().getFirstName());
-                        map.put("receiver_name",networkConnection.getSender().getFirstName());
-                    }
-                    map.put("receiver_image",UserDetails.receiverImage);
+                    map.put("sender_name",networkConnection.getSender().getFirstName());
+                    map.put("receiver_name",networkConnection.getReceiver().getFirstName());
+                    map.put("sender_email",networkConnection.getSender().getEmail());
+                    map.put("receiver_email",networkConnection.getReceiver().getEmail());
+                    map.put("sender_image",networkConnection.getSender().getUserImage());
+                    map.put("receiver_image",networkConnection.getReceiver().getUserImage());
                     map.put("timestamp", ServerValue.TIMESTAMP);
                     reference1.push().setValue(map);
                     reference2.push().setValue(map);
@@ -394,7 +412,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         filter.relation = "=";
         if(LoginUtils.getLoggedinUser().getEmail().equalsIgnoreCase(networkConnection.getReceiver().getEmail()))
         {
-            filter.value = networkConnection.getSender().getEmail();
+            filter.value = networkConnection.getReceiver().getEmail();
         }
         else
         {
@@ -451,14 +469,22 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                                     if (networkConnection.getSenderId().equals(LoginUtils.getUser().getId())) {
                                         map.put("sender_name",networkConnection.getSender().getFirstName());
                                         map.put("receiver_name",networkConnection.getReceiver().getFirstName());
+                                        map.put("sender_image",networkConnection.getSender().getUserImage());
+                                        map.put("receiver_image",networkConnection.getReceiver().getUserImage());
+                                        map.put("sender_email",networkConnection.getSender().getEmail());
+                                        map.put("receiver_email",networkConnection.getReceiver().getEmail());
                                     }
                                     else
                                     {
                                         map.put("sender_name",networkConnection.getReceiver().getFirstName());
                                         map.put("receiver_name",networkConnection.getSender().getFirstName());
+                                        map.put("sender_image",networkConnection.getReceiver().getUserImage());
+                                        map.put("receiver_image",networkConnection.getSender().getUserImage());
+                                        map.put("sender_email",networkConnection.getReceiver().getEmail());
+                                        map.put("receiver_email",networkConnection.getSender().getEmail());
                                     }
 
-                                    map.put("receiver_image",UserDetails.receiverImage);
+
                                     map.put("timestamp", ServerValue.TIMESTAMP);
                                     reference1.push().setValue(map);
                                     reference2.push().setValue(map);

@@ -43,6 +43,17 @@ public class Post implements Serializable {
     private String details;
     private int is_like;
     private boolean is_url;
+    private String job_title;
+    private String job_nature;
+    private String job_sector;
+    private String position;
+    private String weekly_hours;
+    private String location;
+    private Double salary;
+    private String job_image;
+    private Integer applicant_count;
+    private Integer is_job_like;
+
 
 
 
@@ -245,6 +256,86 @@ public class Post implements Serializable {
 
     public void setIs_url(boolean is_url) {
         this.is_url = is_url;
+    }
+
+    public String getJob_title() {
+        return job_title;
+    }
+
+    public void setJob_title(String job_title) {
+        this.job_title = job_title;
+    }
+
+    public String getJob_nature() {
+        return job_nature;
+    }
+
+    public void setJob_nature(String job_nature) {
+        this.job_nature = job_nature;
+    }
+
+    public String getJob_sector() {
+        return job_sector;
+    }
+
+    public void setJob_sector(String job_sector) {
+        this.job_sector = job_sector;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public String getWeekly_hours() {
+        return weekly_hours;
+    }
+
+    public void setWeekly_hours(String weekly_hours) {
+        this.weekly_hours = weekly_hours;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public Double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(Double salary) {
+        this.salary = salary;
+    }
+
+    public String getJob_image() {
+        return job_image;
+    }
+
+    public void setJob_image(String job_image) {
+        this.job_image = job_image;
+    }
+
+    public Integer getApplicant_count() {
+        return applicant_count;
+    }
+
+    public void setApplicant_count(Integer applicant_count) {
+        this.applicant_count = applicant_count;
+    }
+
+    public Integer getIs_job_like() {
+        return is_job_like;
+    }
+
+    public void setIs_job_like(Integer is_job_like) {
+        this.is_job_like = is_job_like;
     }
 }
 

@@ -232,8 +232,11 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.profile_image)
         ImageView profile_image;
 
-        @BindView(R.id.tv_connections)
-        TextView tv_connections;
+        @BindView(R.id.tv_salary)
+        TextView tv_salary;
+
+        @BindView(R.id.view6)
+        View top_image;
 
         public JobTypeViewHolder(View itemView) {
             super(itemView);
@@ -247,7 +250,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             img_like.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
+                    mClickListener.onJobLikeClick(v, getAdapterPosition(), tv_likecount);
                 }
             });
             img_comment.setOnClickListener(new OnOneOffClickListener() {
@@ -328,6 +331,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
         @BindView(R.id.view6)
         View top_image;
+
+        @BindView(R.id.post_image)
+        ImageView post_image;
 
 
         public ImageTypeViewHolder(View itemView) {
@@ -685,7 +691,19 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
                     break;
                 case AppConstants.IMAGE_TYPE:
-                    initializeSlider(((ImageTypeViewHolder) holder).imageSlider, position);
+                    if(posts.get(position).getPost_image().size()>1)
+                    {
+                        ((ImageTypeViewHolder) holder).imageSlider.setVisibility(View.VISIBLE);
+                        ((ImageTypeViewHolder) holder).post_image.setVisibility(View.GONE);
+                        initializeSlider(((ImageTypeViewHolder) holder).imageSlider, position);
+                    }
+                    else
+                    {
+                        ((ImageTypeViewHolder) holder).imageSlider.setVisibility(View.GONE);
+                        ((ImageTypeViewHolder) holder).post_image.setVisibility(View.VISIBLE);
+                       AppUtils.setGlideImageUrl(mContext,((ImageTypeViewHolder) holder).post_image,posts.get(position).getPost_image().get(0));
+                    }
+
                     ((ImageTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((ImageTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
                     ((ImageTypeViewHolder) holder).tv_createdDateTime.setText(DateUtils.getFormattedDateTime(posts.get(position).getCreated_datetime()));
@@ -727,19 +745,28 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
                     break;
                 case AppConstants.JOB_TYPE:
-//                    if(posts.get(position).getIs_post_like()==1)
-//                    {
-//                        ((JobTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like_selected));
-//                    }
-//                    else
-//                    {
-//                        ((JobTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like));
-//                    }
-//
-//                    Glide.with(mContext)
-//                            .load(posts.get(position).getUser().getUser_image())
-//                            .into(((JobTypeViewHolder) holder).profile_image);
-//                    ((JobTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
+                    ((JobTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
+                    ((JobTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
+
+                    if (posts.get(position).getIs_post_like() != null && posts.get(position).getIs_post_like() > 0) {
+                        ((JobTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like_selected));
+                    } else {
+                        ((JobTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like));
+                    }
+
+                    AppUtils.setGlideImage(mContext, ((JobTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
+                    ((JobTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
+
+                    ((JobTypeViewHolder) holder).tv_salary.setText("£ "+String.valueOf(posts.get(position).getSalary())+ " pa");
+                    if(position==0)
+                    {
+                        ((JobTypeViewHolder) holder).top_image.setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                        ((JobTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
+                    }
+
 
                     break;
                 case AppConstants.VIDEO_TYPE:
@@ -830,6 +857,8 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
         void onLikeClick(View view, int position, TextView likeCount);
 
+        void onJobLikeClick(View view, int position, TextView likeCount);
+
         void onShareClick(View view, int position);
 
         void onConnectClick(View view, int position);
@@ -842,6 +871,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
     }
 
     private void initializeSlider(SliderView imageSlider, int position) {
+
         sliderImageAdapter = new SliderImageAdapter(mContext, posts.get(position).getPost_image(),imageSlider);
         imageSlider.setSliderAdapter(sliderImageAdapter);
         imageSlider.setIndicatorAnimation(IndicatorAnimations.WORM); //set indicator animation by using SliderLayout.IndicatorAnimations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!

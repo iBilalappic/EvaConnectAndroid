@@ -97,7 +97,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
      //   currentPage = PAGE_START;
         homePostsAdapter=new HomePostsAdapter(getContext(),posts,this);
         linearLayoutManager=new LinearLayoutManager(getContext());
-      
+
         rc_home.setLayoutManager(linearLayoutManager);
         rc_home.setAdapter(homePostsAdapter);
 //        if(posts.size()==0)
@@ -184,9 +184,12 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
                         {
                             post.setPost_type(AppConstants.EVENT_TYPE);
                         }
+                        else if(post.getType().equalsIgnoreCase("job"))
+                        {
+                            post.setPost_type(AppConstants.JOB_TYPE);
+                        }
                         else if(post.getType().equalsIgnoreCase("post") && post.isIs_url())
                         {
-
                             post.setPost_type(AppConstants.LINK_POST);
                         }
                     }
@@ -270,6 +273,59 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
 
         }
         Log.d("Listing status",post.getAction()+" count"+post.getIs_post_like());
+        if(NetworkUtils.isNetworkConnected(getContext())) {
+            likePost(post,position);
+        }
+        else
+        {
+            networkErrorDialog();
+        }
+
+    }
+
+    @Override
+    public void onJobLikeClick(View view, int position,TextView likeCount) {
+        //showDialog();
+        Post post=posts.get(position);
+        User user=LoginUtils.getLoggedinUser();
+        post.setPost_id(post.getId());
+        post.setCreated_by_id(user.getId());
+        if(post.getIs_job_like()==null ||post.getIs_job_like()<1)
+        {
+            post.setAction(AppConstants.LIKE);
+            if(post.getIs_job_like()==null)
+            {
+                post.setIs_job_like(1);
+                if(post.getLike_count()==null)
+                    post.setLike_count(0);
+                else
+                    post.setLike_count(post.getLike_count()+1);
+            }
+            else
+            {
+                post.setIs_job_like(post.getIs_job_like()+1);
+                if(post.getLike_count()==null)
+                    post.setLike_count(0);
+                else
+                    post.setLike_count(post.getLike_count()+1);
+            }
+        }
+        else
+        {
+            post.setAction(AppConstants.UNLIKE);
+            if(post.getIs_job_like()>0)
+            {
+                post.setIs_job_like(post.getIs_job_like()-1);
+                post.setLike_count(post.getLike_count()-1);
+            }
+            else
+            {
+                post.setIs_job_like(0);
+                post.setLike_count(0);
+            }
+
+        }
+        Log.d("Listing status",post.getAction()+" count"+post.getIs_job_like());
         if(NetworkUtils.isNetworkConnected(getContext())) {
             likePost(post,position);
         }

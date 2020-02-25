@@ -120,6 +120,13 @@ public final class AppUtils {
             .load(getImg(url))
             .diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(imageView);
     }
+    public static void setGlideImageUrl(Context context, ImageView imageView,String url)
+    {
+        Glide
+                .with(imageView.getContext())
+                .load(getImg(url))
+                .into(imageView);
+    }
     public static void setGlideVideoThumbnail(Context context, ImageView imageView,String url)
     {
         Glide.with(context)

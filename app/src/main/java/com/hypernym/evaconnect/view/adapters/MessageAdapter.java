@@ -45,13 +45,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         if (networkConnectionList.get(position).getReceiver().getFirstName().equals(LoginUtils.getUser().getFirst_name())) {
             holder.tv_name.setText(networkConnectionList.get(position).getSender().getFirstName());
             holder.tv_lastmsg.setText(networkConnectionList.get(position).getMessage());
-            AppUtils.setGlideImage(context, (holder).mImageview6, networkConnectionList.get(position).getReceiver().getUserImage());
+            AppUtils.setGlideImage(context, (holder).mImageview6, networkConnectionList.get(position).getSender().getUserImage());
             holder.tv_minago.setText(DateUtils.getTimeAgo(networkConnectionList.get(position).getCreatedDatetime()));
         }
         if (networkConnectionList.get(position).getSender().getFirstName().equals(LoginUtils.getUser().getFirst_name())) {
             holder.tv_name.setText(networkConnectionList.get(position).getReceiver().getFirstName());
             holder.tv_lastmsg.setText(networkConnectionList.get(position).getMessage());
-            AppUtils.setGlideImage(context, (holder).mImageview6, networkConnectionList.get(position).getSender().getUserImage());
+            AppUtils.setGlideImage(context, (holder).mImageview6, networkConnectionList.get(position).getReceiver().getUserImage());
             holder.tv_minago.setText(DateUtils.getTimeAgo(networkConnectionList.get(position).getCreatedDatetime()));
         }
         holder.constraintLayout.setOnClickListener(new View.OnClickListener() {

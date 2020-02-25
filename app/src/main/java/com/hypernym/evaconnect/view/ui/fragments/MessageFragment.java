@@ -170,7 +170,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
         networkConnectionList.clear();
         messageAdapter.notifyDataSetChanged();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        Query lastQuery = databaseReference.child("messages");
+        Query lastQuery = databaseReference.child(AppConstants.FIREASE_CHAT_ENDPOINT);
         lastQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -181,7 +181,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                         String[] conversationkey=child.getKey().split("_");
                         User user=LoginUtils.getLoggedinUser();
                         if(user.getId()==Integer.parseInt(conversationkey[0])) {
-                            Query lastMessage = databaseReference.child("messages").child(child.getKey()).orderByKey().limitToLast(1);
+                            Query lastMessage = databaseReference.child(AppConstants.FIREASE_CHAT_ENDPOINT).child(child.getKey()).orderByKey().limitToLast(1);
                             lastMessage.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -190,25 +190,42 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                                     for (DataSnapshot child: dataSnapshot.getChildren()) {
                                         Log.d("User key", child.getKey());
                                         Log.d("User val", child.child("message").getValue().toString());
-                                           NetworkConnection networkConnection = new NetworkConnection();
-                                            networkConnection.setReceiver(new Receiver());
-                                            networkConnection.setSender(new Sender());
-                                            networkConnection.getReceiver().setId(Integer.parseInt(conversationkey[1]));
-                                            networkConnection.getSender().setId(Integer.parseInt(conversationkey[0]));
+
+//                                           NetworkConnection networkConnection = new NetworkConnection();
+//                                            networkConnection.setReceiver(new Receiver());
+//                                            networkConnection.setSender(new Sender());
+//                                            networkConnection.getReceiver().setId(Integer.parseInt(conversationkey[1]));
+//                                            networkConnection.getSender().setId(Integer.parseInt(conversationkey[0]));
                                             try {
-                                                networkConnection.getReceiver().setUserImage(child.child("receiver_image").getValue().toString());
-                                                networkConnection.setMessage(child.child("message").getValue().toString());
-                                                if (child.child("image").getValue() != null) {
-                                                    networkConnection.setMessage("image");
+//                                                networkConnection.getReceiver().setUserImage(child.child("receiver_image").getValue().toString());
+//                                                networkConnection.getSender().setUserImage(child.child("sender_image").getValue().toString());
+//                                                networkConnection.setMessage(child.child("message").getValue().toString());
+//                                                if (child.child("image").getValue() != null) {
+//                                                    networkConnection.setMessage("image");
+//                                                }
+//                                                networkConnection.getReceiver().setFirstName(child.child("receiver_name").getValue().toString());
+//                                                networkConnection.getSender().setFirstName(child.child("sender_name").getValue().toString());
+//                                                networkConnection.getReceiver().setEmail(child.child("email").getValue().toString());
+//                                                networkConnection.getSender().setEmail(child.child("email").getValue().toString());
+//                                                networkConnection.setCreatedDatetime(child.child("time").getValue().toString());
+//                                                networkConnection.setSenderId(Integer.parseInt(conversationkey[0]));
+//                                                networkConnection.setReceiverId(Integer.parseInt(conversationkey[1]));
+//                                                networkConnectionList.add(networkConnection);
+
+                                                for (NetworkConnection networkConnection : newNetworkConnectionList) {
+                                                    if (((conversationkey[0].equalsIgnoreCase(networkConnection.getSenderId().toString())) &&
+                                                            (conversationkey[1].equalsIgnoreCase(networkConnection.getReceiverId().toString()))) ||
+                                                            ((conversationkey[0].equalsIgnoreCase(networkConnection.getReceiverId().toString())) &&
+                                                                    (conversationkey[1].equalsIgnoreCase(networkConnection.getSenderId().toString())))) {
+
+                                                        networkConnection.setMessage(child.child("message").getValue().toString());
+                                                        if (child.child("image").getValue() != null) {
+                                                            networkConnection.setMessage("image");
+                                                        }
+                                                        networkConnection.setCreatedDatetime(child.child("time").getValue().toString());
+                                                        networkConnectionList.add(networkConnection);
+                                                    }
                                                 }
-                                                networkConnection.getReceiver().setFirstName(child.child("receiver_name").getValue().toString());
-                                                networkConnection.getSender().setFirstName(child.child("sender_name").getValue().toString());
-                                                networkConnection.getReceiver().setEmail(child.child("email").getValue().toString());
-                                                networkConnection.getSender().setEmail(child.child("email").getValue().toString());
-                                                networkConnection.setCreatedDatetime(child.child("time").getValue().toString());
-                                                networkConnection.setSenderId(Integer.parseInt(conversationkey[0]));
-                                                networkConnection.setReceiverId(Integer.parseInt(conversationkey[1]));
-                                                networkConnectionList.add(networkConnection);
                                                 Collections.sort(networkConnectionList,new DateTimeComparator());
                                                 Collections.reverse(networkConnectionList);
                                                 messageAdapter.notifyDataSetChanged();
@@ -229,6 +246,10 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                                     swipeRefresh.setRefreshing(false);
                                 }
                             });
+                        }
+                        else
+                        {
+                            hideDialog();
                         }
                    }
 
