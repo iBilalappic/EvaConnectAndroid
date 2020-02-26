@@ -14,6 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.models.MyLikesModel;
 import com.hypernym.evaconnect.models.Notification;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.toolbar.OnItemClickListener;
@@ -30,6 +31,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     private Context context;
     private List<Post> notificationsList = new ArrayList<>();
     private OnItemClickListener onItemClickListener;
+    private boolean isLoaderVisible = false;
 
     public NotificationsAdapter(Context context, List<Post> notifications, OnItemClickListener itemClickListener) {
         this.context = context;
@@ -105,4 +107,25 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
     }
+    public void removeLoading() {
+        isLoaderVisible = false;
+        int position = notificationsList.size() - 1;
+        Post item = getItem(position);
+        if (item != null) {
+            notificationsList.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+    Post getItem(int position) {
+        if(notificationsList.size()>0)
+            return notificationsList.get(position);
+        else
+            return null;
+    }
+    public void clear() {
+        notificationsList.clear();
+        notifyDataSetChanged();
+    }
+
+
 }

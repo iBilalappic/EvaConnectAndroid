@@ -217,6 +217,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.tv_comcount)
         TextView tv_comcount;
 
+        @BindView(R.id.tv_location)
+        TextView tv_location;
+
         @BindView(R.id.img_like)
         ImageView img_like;
 
@@ -235,6 +238,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.tv_salary)
         TextView tv_salary;
 
+        @BindView(R.id.tv_apply)
+        TextView tv_apply;
+
         @BindView(R.id.view6)
         View top_image;
 
@@ -244,7 +250,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             tv_viewcomments.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    mClickListener.onItemClick(v, getAdapterPosition());
+                  //  mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
             img_like.setOnClickListener(new OnOneOffClickListener() {
@@ -256,19 +262,25 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             img_comment.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    mClickListener.onItemClick(v, getAdapterPosition());
+                   // mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
             img_share.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    mClickListener.onShareClick(v, getAdapterPosition());
+                   // mClickListener.onShareClick(v, getAdapterPosition());
                 }
             });
             tv_comcount.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    mClickListener.onItemClick(v, getAdapterPosition());
+                    //mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+            tv_apply.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onApplyClick(v, getAdapterPosition());
                 }
             });
         }
@@ -748,15 +760,15 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     ((JobTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((JobTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
 
-                    if (posts.get(position).getIs_post_like() != null && posts.get(position).getIs_post_like() > 0) {
+                    if (posts.get(position).getIs_job_like() != null && posts.get(position).getIs_job_like() > 0) {
                         ((JobTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like_selected));
                     } else {
                         ((JobTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like));
                     }
 
-                    AppUtils.setGlideImage(mContext, ((JobTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
-                    ((JobTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
-
+                    AppUtils.setGlideImage(mContext, ((JobTypeViewHolder) holder).profile_image, posts.get(position).getJob_image());
+                    ((JobTypeViewHolder) holder).tv_name.setText(posts.get(position).getJob_title()+" For "+posts.get(position).getLocation());
+                    ((JobTypeViewHolder) holder).tv_location.setText(posts.get(position).getUser().getFirst_name());
                     ((JobTypeViewHolder) holder).tv_salary.setText("£ "+String.valueOf(posts.get(position).getSalary())+ " pa");
                     if(position==0)
                     {
@@ -868,6 +880,8 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         void onURLClick(View view,int position);
 
         void onProfileClick(View view,int position);
+
+        void onApplyClick(View view,int position);
     }
 
     private void initializeSlider(SliderView imageSlider, int position) {

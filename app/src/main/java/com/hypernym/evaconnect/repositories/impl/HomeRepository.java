@@ -44,13 +44,13 @@ public class HomeRepository implements IHomeRepository {
     }
 
     @Override
-    public LiveData<BaseModel<List<Post>>> getAllNotifications() {
+    public LiveData<BaseModel<List<Post>>> getAllNotifications(int totalpages,int currentPage) {
        notificationMutableLiveData=new MutableLiveData<>();
         User user=LoginUtils.getLoggedinUser();
         HashMap<String,Object> data=new HashMap<String,Object>();
         data.put("receiver_id",user.getId());
        // data.put("is_read",0);
-        RestClient.get().appApi().getAllNotifications(data).enqueue(new Callback<BaseModel<List<Post>>>() {
+        RestClient.get().appApi().getAllNotifications(data,totalpages,currentPage).enqueue(new Callback<BaseModel<List<Post>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
                 notificationMutableLiveData.setValue(response.body());
@@ -88,7 +88,7 @@ public class HomeRepository implements IHomeRepository {
         HashMap<String,Object> data=new HashMap<String,Object>();
         data.put("receiver_id",user.getId());
         data.put("is_read",0);
-        RestClient.get().appApi().getAllNotifications(data).enqueue(new Callback<BaseModel<List<Post>>>() {
+        RestClient.get().appApi().getAllUnreadNotifications(data).enqueue(new Callback<BaseModel<List<Post>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
                 notificationMutableLiveData.setValue(response.body());

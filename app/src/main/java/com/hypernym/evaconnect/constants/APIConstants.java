@@ -17,11 +17,11 @@ public interface APIConstants {
     public static String UPDATE_CONNECTION="user/connection/details/{id}/";
     public static String GET_ALL_CONNECTIONS="user/network/connection/?";
     public static String GET_CONNECTION_BY_FILTER="user/network/connection/filter/?";
-    public static String GET_ALL_NOTIFICATIONS="user/notifications/filter/";
-    public static String NOTIFICATION_MARKS_AS_READ="user/notifications/details/";
+    public static String GET_ALL_NOTIFICATIONS="user/notifications/filter/?";
+    public static String NOTIFICATION_MARKS_AS_READ="user/notifications/details/?";
     public static String GET_POST_BY_ID="post/details/";
     public static String GET_CONNECTION_COUNT="user/connection/count/{id}/";
-    public static String GET_MY_LIKES="user/mylikes/";
+    public static String GET_MY_LIKES="user/mylikes/?";
     public static String ADD_JOB_AD="job/";
     public static String JOB_LIST_AD ="job/show/";
     public static String JOB_FILTER_AD ="job/filter/";

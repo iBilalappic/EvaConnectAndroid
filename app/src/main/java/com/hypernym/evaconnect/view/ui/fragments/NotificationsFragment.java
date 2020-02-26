@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.constants.AppConstants;
+import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Notification;
 import com.hypernym.evaconnect.models.Post;
@@ -34,18 +37,27 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
+
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NotificationsFragment extends BaseFragment implements NotificationsAdapter.OnItemClickListener {
+public class NotificationsFragment extends BaseFragment implements NotificationsAdapter.OnItemClickListener,SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.rc_notifications)
     RecyclerView rc_notifications;
+
+    @BindView(R.id.swipeRefresh)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     NotificationsAdapter notificationsAdapter;
     private List<Post> notifications = new ArrayList<>();
     private HomeViewModel homeViewModel;
     private List<Post> posts=new ArrayList<>();
+    private int currentPage = PAGE_START;
+    private boolean isLastPage = false;
+    private boolean isLoading = false;
+    int itemCount = 0;
     public NotificationsFragment() {
         // Required empty public constructor
     }
@@ -59,6 +71,7 @@ public class NotificationsFragment extends BaseFragment implements Notifications
         ButterKnife.bind(this, view);
         setPageTitle(getString(R.string.home));
         homeViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(HomeViewModel.class);
+        swipeRefreshLayout.setOnRefreshListener(this);
         initRecyclerView();
         getAllNotifications();
         readAllNotifications();
@@ -85,15 +98,19 @@ public class NotificationsFragment extends BaseFragment implements Notifications
     }
 
     private void getAllNotifications() {
-        notifications.clear();
-        homeViewModel.getAllNotifications().observe(this, new Observer<BaseModel<List<Post>>>() {
+       // notifications.clear();
+        showDialog();
+        homeViewModel.getAllNotifications(AppConstants.TOTAL_PAGES,currentPage).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError()) {
                     notifications.addAll(listBaseModel.getData());
-                    Collections.reverse(notifications);
+                //    Collections.reverse(notifications);
                     notificationsAdapter.notifyDataSetChanged();
-
+                    swipeRefreshLayout.setRefreshing(false);
+                    notificationsAdapter.removeLoading();
+                    isLoading = false;
+                    hideDialog();
                 }
             }
         });
@@ -104,6 +121,33 @@ public class NotificationsFragment extends BaseFragment implements Notifications
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rc_notifications.setLayoutManager(linearLayoutManager);
         rc_notifications.setAdapter(notificationsAdapter);
+        /**
+         * add scroll listener while user reach in bottom load more will call
+         */
+        rc_notifications.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
+            @Override
+            protected void loadMoreItems() {
+                isLoading = true;
+                currentPage= AppConstants.TOTAL_PAGES+currentPage;
+                if(NetworkUtils.isNetworkConnected(getContext())) {
+                    getAllNotifications();
+                }
+                else
+                {
+                    networkErrorDialog();
+                }
+            }
+
+            @Override
+            public boolean isLastPage() {
+                return isLastPage;
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
+            }
+        });
     }
 
     @Override
@@ -115,4 +159,20 @@ public class NotificationsFragment extends BaseFragment implements Notifications
         postDetailsFragment.setArguments(bundle);
         loadFragment(R.id.framelayout,postDetailsFragment,getContext(),true);
     }
+
+    @Override
+    public void onRefresh() {
+        itemCount = 0;
+        currentPage = PAGE_START;
+        isLastPage = false;
+        notificationsAdapter.clear();
+        if(NetworkUtils.isNetworkConnected(getContext())) {
+            getAllNotifications();
+        }
+        else
+        {
+            networkErrorDialog();
+        }
+    }
+
 }

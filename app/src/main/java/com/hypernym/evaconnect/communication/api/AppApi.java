@@ -122,7 +122,7 @@ public interface AppApi {
     Call<BaseModel<List<CompanyJobAdModel>>> getCompanyAd(@Body HashMap<String, Object> body);
 
     @POST(APIConstants.GET_MY_LIKES)
-    Call<BaseModel<List<MyLikesModel>>> getLikes(@Body HashMap<String, Object> body);
+    Call<BaseModel<List<MyLikesModel>>> getLikes(@Body HashMap<String, Object> body, @Query("limit") int limit, @Query("offset") int offset);
 
     @POST(APIConstants.ADD_COMMENT)
     Call<BaseModel<List<Comment>>> addComment(@Body Comment comment);
@@ -140,16 +140,19 @@ public interface AppApi {
     Call<BaseModel<List<Connection>>> updateConnection(@Body Connection connection, @Path("id") int id);
 
     @POST(APIConstants.GET_ALL_CONNECTIONS)
-    Call<BaseModel<List<User>>> getAllConnections(@Body User user, @Query("limit") int limit, @Query("offset") int offset);
+    Call<BaseModel<List<User>>> getAllConnections(@Body User user,@Query("limit") int limit, @Query("offset") int offset);
 
     @POST(APIConstants.GET_CONNECTION_BY_FILTER)
-    Call<BaseModel<List<User>>> getConnectionByFilter(@Body User user, @Query("limit") int limit, @Query("offset") int offset);
+    Call<BaseModel<List<User>>> getConnectionByFilter(@Body User user,@Query("limit") int limit, @Query("offset") int offset);
 
     @POST("api/v1/notifications")
     Call<Object> postPackets(@Body Notification_onesignal data);
 
     @POST(APIConstants.GET_ALL_NOTIFICATIONS)
-    Call<BaseModel<List<Post>>> getAllNotifications(@Body Object user);
+    Call<BaseModel<List<Post>>> getAllNotifications(@Body Object user,@Query("limit") int limit, @Query("offset") int offset);
+
+    @POST(APIConstants.GET_ALL_NOTIFICATIONS)
+    Call<BaseModel<List<Post>>> getAllUnreadNotifications(@Body Object user);
 
     @PATCH(APIConstants.NOTIFICATION_MARKS_AS_READ)
     Call<BaseModel<List<Post>>> notificationMarkAsRead(@Body User user);
