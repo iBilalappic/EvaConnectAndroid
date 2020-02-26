@@ -175,7 +175,7 @@ public class JobListingFragment extends BaseFragment implements View.OnClickList
 //                Toast.makeText(getContext(), "goto" + position, Toast.LENGTH_SHORT).show();
                 break;
             case R.id.img_like:
-                if (jobAdList.get(position).getLikeCount() > 0) {
+                if (jobAdList.get(position).getIs_job_like() > 0) {
                     SetJobUnLike(jobAdList.get(position).getId(), position);
                 } else {
                     SetJobLike(jobAdList.get(position).getId(), position);
