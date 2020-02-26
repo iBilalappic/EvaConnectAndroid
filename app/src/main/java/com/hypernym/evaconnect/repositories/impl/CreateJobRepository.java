@@ -27,18 +27,20 @@ import retrofit2.Response;
 public class CreateJobRepository implements ICreateJobAdRepository {
 
     private MutableLiveData<BaseModel<List<Object>>> MessageMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Object>>> UpdateMutableLiveData = new MutableLiveData<>();
 
     @Override
     public LiveData<BaseModel<List<Object>>> createJobAd(User user, MultipartBody.Part partImage,
                                                          String jobSector, String WeeklyHour, int amount,
-                                                         String companyName, String jobDescription, String Location,String jobtitle,String postion) {
+                                                         String companyName, String jobDescription,
+                                                         String Location, String jobtitle, String postion) {
         MessageMutableLiveData = new MutableLiveData<>();
 //        HashMap<String, Object> body = new HashMap<>();
 //        body.put("user_id",user_id);
         RestClient.get().appApi().createJobAd(
                 user.getId(),
                 RequestBody.create(MediaType.parse("text/plain"), user.getStatus()),
-                RequestBody.create(MediaType.parse("text/plain"), jobtitle),
+                RequestBody.create(MediaType.parse("text/plain"), companyName + " for " + jobtitle),
                 RequestBody.create(MediaType.parse("text/plain"), Constants.ANNUAL),
                 RequestBody.create(MediaType.parse("text/plain"), jobSector),
                 RequestBody.create(MediaType.parse("text/plain"), postion),
@@ -50,10 +52,10 @@ public class CreateJobRepository implements ICreateJobAdRepository {
             @Override
             public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
                 if (response.isSuccessful() && !response.body().isError())
-                      MessageMutableLiveData.setValue(response.body());
-                    if (response.code() == 500) {
-                        MessageMutableLiveData.setValue(null);
-                    }
+                    MessageMutableLiveData.setValue(response.body());
+                if (response.code() == 500) {
+                    MessageMutableLiveData.setValue(null);
+                }
             }
 
             @Override
@@ -62,5 +64,41 @@ public class CreateJobRepository implements ICreateJobAdRepository {
             }
         });
         return MessageMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<Object>>> UpdateJobAd(int job_id, User user, MultipartBody.Part partImage,
+                                                         String jobSector, String WeeklyHour, int amount,
+                                                         String companyName, String jobDescription,
+                                                         String Location, String jobtitle, String postion) {
+        UpdateMutableLiveData = new MutableLiveData<>();
+//        HashMap<String, Object> body = new HashMap<>();
+//        body.put("user_id",user_id);
+        RestClient.get().appApi().UpdateJobAd(job_id,
+                RequestBody.create(MediaType.parse("text/plain"), user.getStatus()),
+                RequestBody.create(MediaType.parse("text/plain"), companyName + " for " + jobtitle),
+                RequestBody.create(MediaType.parse("text/plain"), Constants.ANNUAL),
+                RequestBody.create(MediaType.parse("text/plain"), jobSector),
+                RequestBody.create(MediaType.parse("text/plain"), postion),
+                RequestBody.create(MediaType.parse("text/plain"), jobDescription),
+                RequestBody.create(MediaType.parse("text/plain"), WeeklyHour),
+                RequestBody.create(MediaType.parse("text/plain"), Location), amount, user.getId(),
+                RequestBody.create(MediaType.parse("text/plain"), DateUtils.GetCurrentdatetime()),
+                partImage).enqueue(new Callback<BaseModel<List<Object>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+                if (response.isSuccessful() && !response.body().isError())
+                    UpdateMutableLiveData.setValue(response.body());
+                if (response.code() == 500) {
+                    UpdateMutableLiveData.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+                UpdateMutableLiveData.setValue(null);
+            }
+        });
+        return UpdateMutableLiveData;
     }
 }

@@ -19,6 +19,22 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/badge_notification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/item_count"
+        android:gravity="center"
+        android:text="12"
+        android:textColor="#fff"
+        android:textSize="8sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tv_lastmsg" />
+
+    <TextView
         android:id="@+id/tv_name"
         style="@style/TextStyle.Title"
         android:layout_width="wrap_content"

@@ -12,8 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.MyLikesModel;
+import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
+import com.hypernym.evaconnect.view.ui.fragments.MyLikesFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,7 @@ public class MyLikeAdapter extends RecyclerView.Adapter<MyLikeAdapter.ViewHolder
     private Context context;
     private List<MyLikesModel> myLikesModelList = new ArrayList<>();
     private OnItemClickListener onItemClickListener;
+    private boolean isLoaderVisible = false;
 
     public MyLikeAdapter(Context context, List<MyLikesModel> myLikesModelList, OnItemClickListener itemClickListener) {
         this.context = context;
@@ -84,5 +87,25 @@ public class MyLikeAdapter extends RecyclerView.Adapter<MyLikeAdapter.ViewHolder
         void onItemClick(View view, int position);
     }
     // parent activity will implement this method to respond to click events
+    public void clear() {
+        myLikesModelList.clear();
+        notifyDataSetChanged();
+    }
+
+    public void removeLoading() {
+        isLoaderVisible = false;
+        int position = myLikesModelList.size() - 1;
+        MyLikesModel item = getItem(position);
+        if (item != null) {
+            myLikesModelList.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+    MyLikesModel getItem(int position) {
+        if(myLikesModelList.size()>0)
+            return myLikesModelList.get(position);
+        else
+            return null;
+    }
 
 }

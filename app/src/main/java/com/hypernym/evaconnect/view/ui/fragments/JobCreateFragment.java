@@ -1,5 +1,6 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -24,25 +25,23 @@ import com.bumptech.glide.request.RequestOptions;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.MyLikesModel;
+import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
+import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
-import com.hypernym.evaconnect.view.ui.activities.LoginActivity;
-import com.hypernym.evaconnect.view.ui.activities.SignupDetailsActivity;
 import com.hypernym.evaconnect.viewmodel.CreateJobAdViewModel;
-import com.hypernym.evaconnect.viewmodel.MylikesViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
-import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -106,15 +105,16 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
     private String currentPhotoPath = "";
     private String photoVar = null;
     MultipartBody.Part partImage;
-    private Validator validator;
+    private Validator validator, validator_update;
     SimpleDialog simpleDialog;
 
     private CreateJobAdViewModel createJobAdViewModel;
-
     private String[] mSpinnerJobSector = {"Piolots", "ITSystems", "Security"};
     private String[] mSpinnerWeek = {"36 hours(per week)", "48 hours(per week)"};
 
     String JobSector, WeeklyHour;
+
+    private CompanyJobAdModel companyJobAdModel = new CompanyJobAdModel();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -125,6 +125,8 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
         ButterKnife.bind(this, view);
         validator = new Validator(this);
         validator.setValidationListener(this);
+        validator_update = new Validator(this);
+        validator_update.setValidationListener(this);
         SettingJobSectorSpinner();
         SettingWeekSpinner();
         postAd.setOnClickListener(this);
@@ -133,8 +135,53 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
         return view;
     }
 
+    @SuppressLint("SetTextI18n")
     private void init() {
         createJobAdViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(CreateJobAdViewModel.class);
+
+        if ((getArguments() != null)) {
+            setPageTitle("");
+            postAd.setText("Update Job");
+            showBackButton();
+            companyJobAdModel = (CompanyJobAdModel) getArguments().getSerializable("COMPANY_AD");
+            AppUtils.setGlideImage(getContext(), profile_image, companyJobAdModel.getJobImage());
+            String companyname = getsplitCompanyName(companyJobAdModel.getJobTitle());
+            String jobtitle = getsplitTitle(companyJobAdModel.getJobTitle());
+            edit_companyName.setText(companyname);
+            edit_jobtitle.setText(jobtitle);
+            edit_jobpostion.setText(companyJobAdModel.getPosition());
+            edit_Location.setText(companyJobAdModel.getLocation());
+            String SalaryInt = getsplitstring(String.valueOf(companyJobAdModel.getSalary()));
+            edit_amount.setText(SalaryInt);
+            edit_jobdescription.setText(companyJobAdModel.getContent());
+            for (int i = 0; i < mSpinnerWeek.length; i++) {
+                String element = mSpinnerWeek[i];
+                if (element.equals(companyJobAdModel.getWeeklyHours())) {
+                    spinner_week.setListSelection(i);
+
+                }
+            }
+
+
+        }
+    }
+
+    public String getsplitCompanyName(String value) {
+        String[] parts = value.split(Pattern.quote("for"));
+        value = parts[0]; // 004
+        return value;
+    }
+
+    public String getsplitTitle(String value) {
+        String[] parts = value.split(Pattern.quote("for"));
+        value = parts[1]; // 004
+        return value;
+    }
+
+    public String getsplitstring(String value) {
+        String[] parts = value.split(Pattern.quote("."));
+        value = parts[0]; // 004
+        return value;
     }
 
     private void SettingWeekSpinner() {
@@ -166,20 +213,65 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.postAd:
-                if (JobSector == null) {
-                    Toast.makeText(getContext(), "Please select job sector", Toast.LENGTH_SHORT).show();
-                } else if (WeeklyHour == null) {
-                    Toast.makeText(getContext(), "Please select weekly hour", Toast.LENGTH_SHORT).show();
-                } else if (partImage == null) {
-                    Toast.makeText(getContext(), "Please add image for job post", Toast.LENGTH_SHORT).show();
+                if (postAd.getText().toString().equals("Update Job")) {
+                    if (JobSector == null) {
+                        Toast.makeText(getContext(), "Please select job sector", Toast.LENGTH_SHORT).show();
+                    } else if (WeeklyHour == null) {
+                        Toast.makeText(getContext(), "Please select weekly hour", Toast.LENGTH_SHORT).show();
+                    } else if (partImage == null) {
+                        Toast.makeText(getContext(), "Please add image for job post", Toast.LENGTH_SHORT).show();
+                    } else {
+                        validator.validate();
+                    }
                 } else {
-                    validator.validate();
+                    if (JobSector == null) {
+                        Toast.makeText(getContext(), "Please select job sector", Toast.LENGTH_SHORT).show();
+                    } else if (WeeklyHour == null) {
+                        Toast.makeText(getContext(), "Please select weekly hour", Toast.LENGTH_SHORT).show();
+                    } else if (partImage == null) {
+                        Toast.makeText(getContext(), "Please add image for job post", Toast.LENGTH_SHORT).show();
+                    } else {
+                        validator.validate();
+                    }
                 }
+
                 break;
             case R.id.tv_browsefiles:
                 openPictureDialog();
                 break;
         }
+    }
+
+    private void UpdateJobAd() {
+        showDialog();
+        User user = LoginUtils.getLoggedinUser();
+        createJobAdViewModel.UpdateJobAd(companyJobAdModel.getId(), user, partImage, JobSector, WeeklyHour,
+                Integer.parseInt(edit_amount.getText().toString()),
+                edit_companyName.getText().toString(),
+                edit_jobdescription.getText().toString(),
+                edit_Location.getText().toString(),
+                edit_jobtitle.getText().toString(),
+                edit_jobpostion.getText().toString()).observe(this, new Observer<BaseModel<List<Object>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Object>> getnetworkconnection) {
+                if (getnetworkconnection != null && !getnetworkconnection.isError()) {
+                    simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_jobAd_update), null, getString(R.string.ok), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            getActivity().onBackPressed();
+                            simpleDialog.dismiss();
+                        }
+                    });
+                    hideDialog();
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+                hideDialog();
+                if (!simpleDialog.isShowing())
+                    simpleDialog.show();
+            }
+
+        });
     }
 
     private void CreateJobAd() {
@@ -198,6 +290,7 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
                     simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_jobAd), null, getString(R.string.ok), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            getActivity().onBackPressed();
                             simpleDialog.dismiss();
                         }
                     });
@@ -303,7 +396,12 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
 
     @Override
     public void onValidationSucceeded() {
-        CreateJobAd();
+        if (postAd.getText().toString().equals("Update Job")) {
+            UpdateJobAd();
+        } else {
+            CreateJobAd();
+        }
+
     }
 
     @Override

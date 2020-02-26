@@ -183,9 +183,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView mtextview20, mtextview21,tv_sendertime,tv_receivertime;
-        CardView mlayout1, mlayout2;
-        CircleImageView imageView6, imageView7;
+        TextView mtextview20, mtextview21,tv_sendertime,tv_receivertime,tv_interview;
+        CardView mlayout1, mlayout2,layout3;
+        CircleImageView imageView6, imageView7,imageView_interview;
         ImageView senderImage,receiveImage;
         RecyclerView recycler_viewSender,recycler_viewReceiver;
         public ViewHolder(@NonNull View itemView) {

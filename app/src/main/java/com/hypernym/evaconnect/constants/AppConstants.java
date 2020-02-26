@@ -30,6 +30,10 @@ public class AppConstants {
     public static final String SIMPLE_BASEURL = "simple base url";
     public static final String ONESIGNAL_BASEURL = "one signal url";
     public static final String FIREASE_CHAT_ENDPOINT = "development";
+    public static final String CHAT_FRAGMENT = "chat_fragment";
+    public static final String APPLICANT_FRAGMENT = "applicant_fragment";
+    public static final String READ = "read";
+    public static final String UN_READ = "unread";
 
 
 }

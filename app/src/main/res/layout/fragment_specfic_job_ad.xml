@@ -1,345 +1,347 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/page_bg"
+    android:id="@+id/swipeRefresh"
     android:orientation="vertical">
 
-    <View
-        android:id="@+id/view6"
-        android:layout_width="0dp"
-        android:layout_height="3dp"
-        android:background="@drawable/line_redblack50"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view6">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+        <ScrollView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/colorwhite">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view6">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profile_image"
-                android:layout_width="80dp"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:src="@drawable/profile"
-                app:civ_border_color="@color/colorwhite"
-                app:civ_border_width="2dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:background="@color/colorwhite">
 
-            <TextView
-                android:id="@+id/tv_name"
-                style="@style/TextStyle.Bold"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="American Airlines"
-                android:textStyle=""
-                app:layout_constraintStart_toEndOf="@+id/profile_image"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <TextView
-                android:id="@+id/tv_minago"
-                style="@style/TextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:drawableLeft="@drawable/clock"
-                android:drawablePadding="5dp"
-                android:gravity="center_vertical"
-                android:text="(33m ago)"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_createddateTime"
-                style="@style/TextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:text="12:04pm | 12 jan"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_minago" />
-
-
-            <TextView
-                android:id="@+id/tv_position"
-                style="@style/TextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="80dp"
-                android:layout_marginTop="30dp"
-                android:text="Position"
-                android:textColor="@color/dark_gray"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profile_image">
-
-
-            </TextView>
-
-            <TextView
-                android:id="@+id/tv_positionName"
-                style="@style/TextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="70dp"
-                android:text="AirLine pilot"
-                android:textColor="@color/dark_gray"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_position">
-
-            </TextView>
-
-            <View
-                android:id="@+id/view0"
-                android:layout_width="2dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="45dp"
-                android:layout_marginTop="70dp"
-                android:background="@color/light_gray"
-                app:layout_constraintStart_toEndOf="@+id/tv_positionName"
-                app:layout_constraintTop_toBottomOf="@+id/tv_name">
-
-            </View>
-
-            <TextView
-                android:id="@+id/tv_salary"
-                style="@style/TextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="60dp"
-                android:layout_marginTop="30dp"
-                android:text="Salary"
-                android:textColor="@color/dark_gray"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/view0"
-                app:layout_constraintTop_toBottomOf="@+id/profile_image">
-
-
-            </TextView>
-
-            <TextView
-                android:id="@+id/tv_salaryAmount"
-                style="@style/TextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="55dp"
-                android:text="$97,000"
-                android:textColor="@color/dark_gray"
-                app:layout_constraintStart_toEndOf="@id/view0"
-                app:layout_constraintTop_toBottomOf="@+id/tv_salary">
-
-            </TextView>
-
-            <TextView
-                android:id="@+id/tv_location"
-                style="@style/TextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="80dp"
-                android:layout_marginTop="20dp"
-                android:text="Location"
-                android:textColor="@color/dark_gray"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_positionName">
-
-
-            </TextView>
-
-            <TextView
-                android:id="@+id/tv_locationName"
-                style="@style/TextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="70dp"
-                android:text="International"
-                android:textColor="@color/dark_gray"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_location">
-
-            </TextView>
-
-            <TextView
-                android:id="@+id/tv_weeklyHours"
-                style="@style/TextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="20dp"
-                android:text="Weekly Hours"
-                android:textColor="@color/dark_gray"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/view0"
-                app:layout_constraintTop_toBottomOf="@+id/tv_salaryAmount">
-
-
-            </TextView>
-
-            <TextView
-                android:id="@+id/tv_weeklyHoursNumber"
-                style="@style/TextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="70dp"
-                android:text="36"
-                android:textColor="@color/dark_gray"
-                app:layout_constraintStart_toEndOf="@id/view0"
-                app:layout_constraintTop_toBottomOf="@+id/tv_weeklyHours">
-
-            </TextView>
-
-            <TextView
-                android:id="@+id/tv_apply"
-                style="@style/TextStyle.Title"
-                android:layout_width="120dp"
-                android:layout_height="25dp"
-                android:layout_marginTop="48dp"
-                android:background="@drawable/rounded_button_border"
-                android:drawableLeft="@drawable/new_post"
-                android:gravity="center"
-                android:paddingStart="30dp"
-                android:paddingEnd="30dp"
-                android:text="Apply"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.533"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view0" />
-
-            <ScrollView
-                android:id="@+id/sc_description"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_apply">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/profile"
+                    app:civ_border_color="@color/colorwhite"
+                    app:civ_border_width="2dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/tv_description"
-                    style="@style/TextStyle.Title"
-                    android:layout_width="match_parent"
+                    android:id="@+id/tv_name"
+                    style="@style/TextStyle.Bold"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:lineSpacingExtra="5dp"
-                    android:text="This advertisment is for pilot for our new airline. You will have the chance to work. This advertisment is for pilot for our new airline. You will have the chance to work. This advertisment is for pilot for our new airline. You will have the chance to work. This advertisment is for pilot for our new airline. You will have the chance to work."
-                    app:layout_constraintTop_toBottomOf="@+id/tv_apply">
+                    android:layout_marginTop="24dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="American Airlines"
+                    android:textStyle=""
+                    app:layout_constraintStart_toEndOf="@+id/profile_image"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <TextView
+                    android:id="@+id/tv_minago"
+                    style="@style/TextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:drawableLeft="@drawable/clock"
+                    android:drawablePadding="5dp"
+                    android:gravity="center_vertical"
+                    android:text="(33m ago)"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_createddateTime"
+                    style="@style/TextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:text="12:04pm | 12 jan"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_minago" />
+
+
+                <TextView
+                    android:id="@+id/tv_position"
+                    style="@style/TextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="80dp"
+                    android:layout_marginTop="30dp"
+                    android:text="Position"
+                    android:textColor="@color/dark_gray"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/profile_image">
+
 
                 </TextView>
 
-            </ScrollView>
+                <TextView
+                    android:id="@+id/tv_positionName"
+                    style="@style/TextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="AirLine pilot"
+                    android:textColor="@color/dark_gray"
+                    app:layout_constraintEnd_toEndOf="@+id/view0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_position">
+
+                </TextView>
+
+                <View
+                    android:id="@+id/view0"
+                    android:layout_width="2dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="70dp"
+                    android:background="@color/light_gray"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_apply"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_name">
+
+                </View>
+
+                <TextView
+                    android:id="@+id/tv_salary"
+                    style="@style/TextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginTop="30dp"
+                    android:text="Salary"
+                    android:textColor="@color/dark_gray"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/view0"
+                    app:layout_constraintTop_toBottomOf="@+id/profile_image">
 
 
-            <View
-                android:id="@+id/view1"
-                android:layout_width="0dp"
-                android:layout_height="3dp"
-                android:layout_marginTop="50dp"
-                android:background="@color/lighter_gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sc_description">
+                </TextView>
+
+                <TextView
+                    android:id="@+id/tv_salaryAmount"
+                    style="@style/TextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="55dp"
+                    android:text="$97,0000"
+                    android:textColor="@color/dark_gray"
+                    app:layout_constraintStart_toEndOf="@id/view0"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_salary">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/tv_location"
+                    style="@style/TextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="80dp"
+                    android:layout_marginTop="20dp"
+                    android:text="Location"
+                    android:textColor="@color/dark_gray"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_positionName">
 
 
-            </View>
+                </TextView>
+
+                <TextView
+                    android:id="@+id/tv_locationName"
+                    style="@style/TextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="International"
+                    android:textColor="@color/dark_gray"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_weeklyHoursNumber"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_location">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/tv_weeklyHours"
+                    style="@style/TextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginTop="20dp"
+                    android:text="Weekly Hours"
+                    android:textColor="@color/dark_gray"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/view0"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_salaryAmount">
 
 
-            <ImageView
-                android:id="@+id/img_like"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="52dp"
-                android:layout_marginTop="25dp"
-                android:background="@mipmap/ic_like"
-                android:elevation="8dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sc_description" />
+                </TextView>
 
-            <ImageView
-                android:id="@+id/img_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:background="@mipmap/ic_comment"
-                android:elevation="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sc_description"
-                app:layout_constraintVertical_bias="0.354" />
+                <TextView
+                    android:id="@+id/tv_weeklyHoursNumber"
+                    style="@style/TextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="40dp"
+                    android:text="48 hours perannum"
+                    android:textColor="@color/dark_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_locationName"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_weeklyHours">
 
+                </TextView>
 
-            <ImageView
-                android:id="@+id/img_share"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:layout_marginEnd="52dp"
-                android:background="@mipmap/ic_share"
-                android:elevation="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sc_description" />
+                <TextView
+                    android:id="@+id/tv_apply"
+                    style="@style/TextStyle.Title"
+                    android:layout_width="120dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="48dp"
+                    android:background="@drawable/rounded_button_border"
+                    android:drawableLeft="@drawable/new_post"
+                    android:gravity="center"
+                    android:paddingStart="30dp"
+                    android:paddingEnd="30dp"
+                    android:text="Apply"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.533"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view0" />
 
-            <View
-                android:id="@+id/view2"
-                android:layout_width="0dp"
-                android:layout_height="70dp"
-                android:background="@color/colorwhite"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view1">
+                <ScrollView
+                    android:id="@+id/sc_description"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_apply">
 
-            </View>
+                    <TextView
+                        android:id="@+id/tv_description"
+                        style="@style/TextStyle.Title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingExtra="5dp"
+                        android:text="This advertisment is for pilot for our new airline. You will have the chance to work. This advertisment is for pilot for our new airline. You will have the chance to work. This advertisment is for pilot for our new airline. You will have the chance to work. This advertisment is for pilot for our new airline. You will have the chance to work."
+                        app:layout_constraintTop_toBottomOf="@+id/tv_apply">
 
+                    </TextView>
 
-            <TextView
-                android:id="@+id/tv_goback"
-                style="@style/TextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/rounded_button_whitebg"
-                android:elevation="1dp"
-                android:gravity="center"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:text="Go Back"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_comment" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:background="@color/page_bg"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/view2">
-
-            </View>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                </ScrollView>
 
 
-    </ScrollView>
+                <View
+                    android:id="@+id/view1"
+                    android:layout_width="0dp"
+                    android:layout_height="3dp"
+                    android:layout_marginTop="50dp"
+                    android:background="@color/lighter_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/sc_description">
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                </View>
+
+
+                <ImageView
+                    android:id="@+id/img_like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="52dp"
+                    android:layout_marginTop="25dp"
+                    android:background="@mipmap/ic_like"
+                    android:elevation="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/sc_description" />
+
+                <ImageView
+                    android:id="@+id/img_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:background="@mipmap/ic_comment"
+                    android:elevation="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/sc_description"
+                    app:layout_constraintVertical_bias="0.354" />
+
+
+                <ImageView
+                    android:id="@+id/img_share"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginEnd="52dp"
+                    android:background="@mipmap/ic_share"
+                    android:elevation="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/sc_description" />
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="0dp"
+                    android:layout_height="70dp"
+                    android:background="@color/colorwhite"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view1">
+
+                </View>
+
+
+                <TextView
+                    android:id="@+id/tv_goback"
+                    style="@style/TextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/rounded_button_whitebg"
+                    android:elevation="1dp"
+                    android:gravity="center"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:text="Go Back"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img_comment" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:background="@color/page_bg"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/view2">
+
+                </View>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

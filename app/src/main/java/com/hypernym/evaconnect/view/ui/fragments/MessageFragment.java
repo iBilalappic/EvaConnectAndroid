@@ -175,83 +175,63 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-              //  networkConnectionList.clear();
+                //  networkConnectionList.clear();
                 for (DataSnapshot child: dataSnapshot.getChildren()) {
                     Log.d("User key", child.getKey());
-                        String[] conversationkey=child.getKey().split("_");
-                        User user=LoginUtils.getLoggedinUser();
-                        if(user.getId()==Integer.parseInt(conversationkey[0])) {
-                            Query lastMessage = databaseReference.child(AppConstants.FIREASE_CHAT_ENDPOINT).child(child.getKey()).orderByKey().limitToLast(1);
-                            lastMessage.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    // Object message = dataSnapshot.getValue();
+                    String[] conversationkey=child.getKey().split("_");
+                    User user=LoginUtils.getLoggedinUser();
+                    if(user.getId()==Integer.parseInt(conversationkey[0])) {
 
-                                    for (DataSnapshot child: dataSnapshot.getChildren()) {
-                                        Log.d("User key", child.getKey());
-                                        Log.d("User val", child.child("message").getValue().toString());
+                        Query lastMessage = databaseReference.child(AppConstants.FIREASE_CHAT_ENDPOINT).child(child.getKey()).orderByKey().limitToLast(1);
+                        lastMessage.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                               for (DataSnapshot child: dataSnapshot.getChildren()) {
+                                    Log.d("User key", child.getKey());
+                                    Log.d("User val", child.child("message").getValue().toString());
 
-//                                           NetworkConnection networkConnection = new NetworkConnection();
-//                                            networkConnection.setReceiver(new Receiver());
-//                                            networkConnection.setSender(new Sender());
-//                                            networkConnection.getReceiver().setId(Integer.parseInt(conversationkey[1]));
-//                                            networkConnection.getSender().setId(Integer.parseInt(conversationkey[0]));
-                                            try {
-//                                                networkConnection.getReceiver().setUserImage(child.child("receiver_image").getValue().toString());
-//                                                networkConnection.getSender().setUserImage(child.child("sender_image").getValue().toString());
-//                                                networkConnection.setMessage(child.child("message").getValue().toString());
-//                                                if (child.child("image").getValue() != null) {
-//                                                    networkConnection.setMessage("image");
-//                                                }
-//                                                networkConnection.getReceiver().setFirstName(child.child("receiver_name").getValue().toString());
-//                                                networkConnection.getSender().setFirstName(child.child("sender_name").getValue().toString());
-//                                                networkConnection.getReceiver().setEmail(child.child("email").getValue().toString());
-//                                                networkConnection.getSender().setEmail(child.child("email").getValue().toString());
-//                                                networkConnection.setCreatedDatetime(child.child("time").getValue().toString());
-//                                                networkConnection.setSenderId(Integer.parseInt(conversationkey[0]));
-//                                                networkConnection.setReceiverId(Integer.parseInt(conversationkey[1]));
-//                                                networkConnectionList.add(networkConnection);
+                                    try {
 
-                                                for (NetworkConnection networkConnection : newNetworkConnectionList) {
-                                                    if (((conversationkey[0].equalsIgnoreCase(networkConnection.getSenderId().toString())) &&
-                                                            (conversationkey[1].equalsIgnoreCase(networkConnection.getReceiverId().toString()))) ||
-                                                            ((conversationkey[0].equalsIgnoreCase(networkConnection.getReceiverId().toString())) &&
-                                                                    (conversationkey[1].equalsIgnoreCase(networkConnection.getSenderId().toString())))) {
+                                        for (NetworkConnection networkConnection : newNetworkConnectionList) {
+                                            if (((conversationkey[0].equalsIgnoreCase(networkConnection.getSenderId().toString())) &&
+                                                    (conversationkey[1].equalsIgnoreCase(networkConnection.getReceiverId().toString()))) ||
+                                                    ((conversationkey[0].equalsIgnoreCase(networkConnection.getReceiverId().toString())) &&
+                                                            (conversationkey[1].equalsIgnoreCase(networkConnection.getSenderId().toString())))) {
 
-                                                        networkConnection.setMessage(child.child("message").getValue().toString());
-                                                        if (child.child("image").getValue() != null) {
-                                                            networkConnection.setMessage("image");
-                                                        }
-                                                        networkConnection.setCreatedDatetime(child.child("time").getValue().toString());
-                                                        networkConnectionList.add(networkConnection);
-                                                    }
+                                                networkConnection.setMessage(child.child("message").getValue().toString());
+                                                if (child.child("image").getValue() != null) {
+                                                    networkConnection.setMessage("image");
                                                 }
-                                                Collections.sort(networkConnectionList,new DateTimeComparator());
-                                                Collections.reverse(networkConnectionList);
-                                                messageAdapter.notifyDataSetChanged();
-                                                swipeRefresh.setRefreshing(false);
-                                                hideDialog();
+                                                networkConnection.setCreatedDatetime(child.child("time").getValue().toString());
+                                                networkConnectionList.add(networkConnection);
                                             }
-                                            catch (Exception ex)
-                                            {
-                                                hideDialog();
-                                                swipeRefresh.setRefreshing(false);
-                                            }
+                                        }
+                                        Collections.sort(networkConnectionList,new DateTimeComparator());
+                                        Collections.reverse(networkConnectionList);
+                                        messageAdapter.notifyDataSetChanged();
+                                        swipeRefresh.setRefreshing(false);
+                                        hideDialog();
                                     }
+                                    catch (Exception ex)
+                                    {
+                                        hideDialog();
+                                        swipeRefresh.setRefreshing(false);
+                                    }
+                                }
 
-                                }
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-                                    hideDialog();
-                                    swipeRefresh.setRefreshing(false);
-                                }
-                            });
-                        }
-                        else
-                        {
-                            hideDialog();
-                        }
-                   }
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                hideDialog();
+                                swipeRefresh.setRefreshing(false);
+                            }
+                        });
+                    }
+                    else
+                    {
+                        hideDialog();
+                    }
+                }
 
             }
 
@@ -262,7 +242,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                 swipeRefresh.setRefreshing(false);
             }
         });
-
+        hideDialog();
     }
 
 
@@ -309,7 +289,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
             loadFragment(R.id.framelayout, chatFragment, getContext(), true);
         } else {
 
-           // Toast.makeText(getContext(), "" + newNetworkConnectionList.get(position).getSenderId(), Toast.LENGTH_SHORT).show();
+            // Toast.makeText(getContext(), "" + newNetworkConnectionList.get(position).getSenderId(), Toast.LENGTH_SHORT).show();
             ItemPostionHorizontal = position;
         }
     }
@@ -462,7 +442,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
         }
         else
         {
-           empty.setVisibility(View.VISIBLE);
+            empty.setVisibility(View.VISIBLE);
         }
         ItemPostionHorizontal=0;
         //calling a method of the adapter class and passing the filtered list
@@ -588,7 +568,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     public void onRefresh() {
 
         if(NetworkUtils.isNetworkConnected(getContext())) {
-          GetFirebaseData();
+            GetFirebaseData();
         }
         else
         {

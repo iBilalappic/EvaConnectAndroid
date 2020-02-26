@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.constants.AppConstants;
+import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.MyLikesModel;
 import com.hypernym.evaconnect.models.NetworkConnection;
@@ -22,6 +25,7 @@ import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
+import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.MessageAdapter;
 import com.hypernym.evaconnect.view.adapters.MyLikeAdapter;
 import com.hypernym.evaconnect.view.adapters.NotificationsAdapter;
@@ -34,18 +38,27 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
+
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyLikesFragment extends BaseFragment implements MyLikeAdapter.OnItemClickListener{
+public class MyLikesFragment extends BaseFragment implements MyLikeAdapter.OnItemClickListener,SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.rc_mylikes)
     RecyclerView rc_mylikes;
+
+    @BindView(R.id.swipeRefresh)
+    SwipeRefreshLayout swipeRefresh;
+
     private MylikesViewModel mylikeViewModel;
     private MyLikeAdapter myLikeAdapter;
     private LinearLayoutManager linearLayoutManager;
     private List<MyLikesModel> myLikesModelList = new ArrayList<>();
-
+    private int currentPage = PAGE_START;
+    private boolean isLastPage = false;
+    private boolean isLoading = false;
+    int itemCount = 0;
     public MyLikesFragment() {
         // Required empty public constructor
     }
@@ -63,9 +76,11 @@ public class MyLikesFragment extends BaseFragment implements MyLikeAdapter.OnIte
 
     private void init() {
         mylikeViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(MylikesViewModel.class);
-        GetMyLikes();
+       GetMyLikes();
         setupRecyclerview();
         setPageTitle("My Likes");
+        swipeRefresh.setOnRefreshListener(this);
+
     }
 
     private void setupRecyclerview() {
@@ -74,23 +89,53 @@ public class MyLikesFragment extends BaseFragment implements MyLikeAdapter.OnIte
         linearLayoutManager = new LinearLayoutManager(getContext());
         rc_mylikes.setLayoutManager(linearLayoutManager);
         rc_mylikes.setAdapter(myLikeAdapter);
+
+        /**
+         * add scroll listener while user reach in bottom load more will call
+         */
+        rc_mylikes.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
+            @Override
+            protected void loadMoreItems() {
+                isLoading = true;
+                currentPage= AppConstants.TOTAL_PAGES+currentPage;
+                if(NetworkUtils.isNetworkConnected(getContext())) {
+                    GetMyLikes();
+                }
+                else
+                {
+                    networkErrorDialog();
+                }
+            }
+
+            @Override
+            public boolean isLastPage() {
+                return isLastPage;
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
+            }
+        });
     }
 
     private void GetMyLikes() {
         showDialog();
         User user = LoginUtils.getLoggedinUser();
-        mylikeViewModel.SetLikes(user.getUser_id()).observe(this, new Observer<BaseModel<List<MyLikesModel>>>() {
+        mylikeViewModel.SetLikes(user.getUser_id(),AppConstants.TOTAL_PAGES,currentPage).observe(this, new Observer<BaseModel<List<MyLikesModel>>>() {
             @Override
             public void onChanged(BaseModel<List<MyLikesModel>> getnetworkconnection) {
                 if (getnetworkconnection != null && !getnetworkconnection.isError()) {
-                    myLikesModelList.clear();
+                  //  myLikesModelList.clear();
                     myLikesModelList.addAll(getnetworkconnection.getData());
-                   setupRecyclerview();
+                    myLikeAdapter.notifyDataSetChanged();
+                    swipeRefresh.setRefreshing(false);
+                    myLikeAdapter.removeLoading();
+                    isLoading = false;
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
                 hideDialog();
-
             }
         });
     }
@@ -102,5 +147,20 @@ public class MyLikesFragment extends BaseFragment implements MyLikeAdapter.OnIte
         bundle.putInt("post",myLikesModelList.get(position).getObjectId());
         postDetailsFragment.setArguments(bundle);
         loadFragment(R.id.framelayout,postDetailsFragment,getContext(),true);
+    }
+
+    @Override
+    public void onRefresh() {
+        itemCount = 0;
+        currentPage = PAGE_START;
+        isLastPage = false;
+        myLikeAdapter.clear();
+        if(NetworkUtils.isNetworkConnected(getContext())) {
+            GetMyLikes();
+        }
+        else
+        {
+            networkErrorDialog();
+        }
     }
 }

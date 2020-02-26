@@ -28,9 +28,9 @@ public class HomeViewModel extends AndroidViewModel {
     {
         return iHomeRepository.getDashboard(user,totalpages,currentPage);
     }
-    public LiveData<BaseModel<List<Post>>> getAllNotifications()
+    public LiveData<BaseModel<List<Post>>> getAllNotifications(int totalpages,int currentPage)
     {
-        return iHomeRepository.getAllNotifications();
+        return iHomeRepository.getAllNotifications(totalpages,currentPage);
     }
     public LiveData<BaseModel<List<Post>>> getAllUnReadNotifications()
     {

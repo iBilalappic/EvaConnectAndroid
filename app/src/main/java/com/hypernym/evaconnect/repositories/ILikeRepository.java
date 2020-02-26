@@ -10,5 +10,5 @@ import com.hypernym.evaconnect.models.User;
 import java.util.List;
 
 public interface ILikeRepository {
-    LiveData<BaseModel<List<MyLikesModel>>> getLikes(int user_id);
+    LiveData<BaseModel<List<MyLikesModel>>> getLikes(int user_id,int totalpages,int currentPage);
 }

@@ -1,16 +1,19 @@
 package com.hypernym.evaconnect.communication.api;
 
 import com.hypernym.evaconnect.constants.APIConstants;
+import com.hypernym.evaconnect.models.AppliedApplicants;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Comment;
+import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.Connection;
-import com.hypernym.evaconnect.models.Dashboard;
+import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.MyLikesModel;
 import com.hypernym.evaconnect.models.NetworkConnection;
-import com.hypernym.evaconnect.models.Notification;
 import com.hypernym.evaconnect.models.Notification_onesignal;
 import com.hypernym.evaconnect.models.Post;
+import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.User;
+import com.hypernym.evaconnect.viewmodel.AppliedApplicantViewModel;
 
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +52,7 @@ public interface AppApi {
     @POST(APIConstants.GET_POSTS)
     Call<BaseModel<List<Post>>> createPost(@Part("user_id") int user_id, @Part("content") RequestBody content,
                                            @Part("created_by_id") int created_by_id, @Part("status") RequestBody status,@Part("is_url") boolean is_url, @Part List<MultipartBody.Part> post_image, @Part MultipartBody.Part post_video);
+
     @Multipart
     @POST(APIConstants.ADD_JOB_AD)
     Call<BaseModel<List<Object>>> createJobAd(@Part("user_id") int user_id,
@@ -65,6 +69,44 @@ public interface AppApi {
                                               @Part("published_date") RequestBody published_date,
                                               @Part MultipartBody.Part job_image);
 
+    @Multipart
+    @PATCH(APIConstants.UPDATE_JOB_AD)
+    Call<BaseModel<List<Object>>> UpdateJobAd(
+            @Path("job_id") int job_id,
+            @Part("status") RequestBody status,
+            @Part("job_title") RequestBody job_title,
+            @Part("job_nature") RequestBody job_nature,
+            @Part("job_sector") RequestBody job_sector,
+            @Part("position") RequestBody position,
+            @Part("content") RequestBody content,
+            @Part("weekly_hours") RequestBody weekly_hours,
+            @Part("location") RequestBody location,
+            @Part("salary") int salary,
+            @Part("modified_by_id") int modified_by_id,
+            @Part("modified_datetime") RequestBody modified_datetime,
+            @Part MultipartBody.Part job_image);
+
+    @GET(APIConstants.GET_JOB_AD_BY_ID)
+    Call<BaseModel<List<SpecficJobAd>>> GetJobAd_ID(@Path("job_id") int job_id);
+
+
+    @Multipart
+    @POST(APIConstants.APPLICATION_SUBMITT)
+    Call<BaseModel<List<Object>>> SubmitAppicationForm(@Part("user_id") int user_id,
+                                                       @Part("job_id") int job_id,
+                                                       @Part("created_by_id") int created_by_id,
+                                                       @Part("content") RequestBody content,
+                                                       @Part("status") RequestBody status,
+                                                       @Part MultipartBody.Part cv);
+
+    @POST(APIConstants.GET_APPLICANTS)
+    Call<BaseModel<List<AppliedApplicants>>> getApplicants(@Body HashMap<String, Object> body);
+
+    @POST(APIConstants.JOB_LIKE)
+        // Call<BaseModel<List<Object>>> setLikeJob();
+    Call<BaseModel<List<Object>>> setLikeJob(@Body HashMap<String, Object> body);
+
+
     @POST(APIConstants.CHECK_EMAIL_EXIST)
     Call<BaseModel<List<User>>> isEmailExist(@Body User user);
 
@@ -74,8 +116,14 @@ public interface AppApi {
     @GET(APIConstants.FRIENDCONNECTION)
     Call<BaseModel<List<NetworkConnection>>> getFriendDetails(@Path("id") int id);
 
+    @POST(APIConstants.JOB_LIST_AD)
+    Call<BaseModel<List<JobAd>>> getjobAd(@Body HashMap<String, Object> body);
+
+    @POST(APIConstants.JOB_FILTER_AD)
+    Call<BaseModel<List<CompanyJobAdModel>>> getCompanyAd(@Body HashMap<String, Object> body);
+
     @POST(APIConstants.GET_MY_LIKES)
-    Call<BaseModel<List<MyLikesModel>>> getLikes(@Body HashMap<String, Object> body);
+    Call<BaseModel<List<MyLikesModel>>> getLikes(@Body HashMap<String, Object> body, @Query("limit") int limit, @Query("offset") int offset);
 
     @POST(APIConstants.ADD_COMMENT)
     Call<BaseModel<List<Comment>>> addComment(@Body Comment comment);
@@ -102,7 +150,10 @@ public interface AppApi {
     Call<Object> postPackets(@Body Notification_onesignal data);
 
     @POST(APIConstants.GET_ALL_NOTIFICATIONS)
-    Call<BaseModel<List<Post>>> getAllNotifications(@Body Object user);
+    Call<BaseModel<List<Post>>> getAllNotifications(@Body Object user,@Query("limit") int limit, @Query("offset") int offset);
+
+    @POST(APIConstants.GET_ALL_NOTIFICATIONS)
+    Call<BaseModel<List<Post>>> getAllUnreadNotifications(@Body Object user);
 
     @PATCH(APIConstants.NOTIFICATION_MARKS_AS_READ)
     Call<BaseModel<List<Post>>> notificationMarkAsRead(@Body User user);

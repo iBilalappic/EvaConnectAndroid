@@ -12,5 +12,6 @@ public class UserDetails {
     public static String senderImage = "";
     public static String senderEmail = "";
     public static String receiverEmail = "";
+    public static String status = "";
 
 }

@@ -1,5 +1,7 @@
 package com.hypernym.evaconnect.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.File;
 import java.io.Serializable;
 import java.util.List;
@@ -17,6 +19,8 @@ public class Post implements Serializable {
     private User user;
     private Integer id;
     private Integer object_id;
+    private Integer is_applied;
+
 
     public Integer getObject_id() {
         return object_id;
@@ -336,6 +340,14 @@ public class Post implements Serializable {
 
     public void setIs_job_like(Integer is_job_like) {
         this.is_job_like = is_job_like;
+    }
+
+    public Integer getIs_applied() {
+        return is_applied;
+    }
+
+    public void setIs_applied(Integer is_applied) {
+        this.is_applied = is_applied;
     }
 }
 

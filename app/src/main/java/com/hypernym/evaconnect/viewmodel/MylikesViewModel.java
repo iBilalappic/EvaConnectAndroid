@@ -25,7 +25,7 @@ public class MylikesViewModel extends AndroidViewModel {
         super(application);
     }
 
-    public LiveData<BaseModel<List<MyLikesModel>>> SetLikes(int user_id) {
-        return iLikeRepository.getLikes(user_id);
+    public LiveData<BaseModel<List<MyLikesModel>>> SetLikes(int user_id,int totalpages,int currentPage) {
+        return iLikeRepository.getLikes(user_id,totalpages,currentPage);
     }
 }
