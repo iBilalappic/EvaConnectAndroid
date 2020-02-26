@@ -15,6 +15,7 @@
         android:layout_weight="1"
         android:drawableLeft="@drawable/clock"
         android:text="TextView"
+        android:drawablePadding="5dp"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout1" />
@@ -25,9 +26,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/spacing_medium"
         android:layout_marginEnd="@dimen/spacing_medium"
+        app:cardBackgroundColor="@color/lighter_gray"
         android:gravity="center_vertical"
         android:orientation="vertical"
         android:visibility="visible"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -53,8 +56,8 @@
                 <TextView
                     android:id="@+id/tv_name"
                     android:layout_width="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="top|center"
                     android:text="--"
                     android:textColor="@color/light_black"
                     app:layout_constraintStart_toEndOf="@+id/imageView6"
@@ -66,12 +69,11 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:visibility="gone" />
-
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_viewSender"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:id="@+id/recycler_viewSender">
 
             </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
@@ -86,7 +88,7 @@
         android:gravity="center_vertical"
         android:orientation="vertical"
         android:visibility="visible"
-        app:cardBackgroundColor="@color/lighter_gray"
+
         app:cardCornerRadius="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -109,7 +111,8 @@
                     android:layout_marginStart="@dimen/spacing_large"
                     android:layout_marginEnd="@dimen/spacing_medium"
                     android:layout_weight="1"
-                    android:gravity="start"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="start|center_vertical"
                     android:text="--"
                     android:textColor="@color/light_black"
                     app:layout_constraintStart_toEndOf="@+id/imageView6"
@@ -133,10 +136,10 @@
                 android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_viewReceiver"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:id="@+id/recycler_viewReceiver">
 
             </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
@@ -151,74 +154,11 @@
         android:layout_marginTop="8dp"
         android:drawableLeft="@drawable/clock"
         android:text="TextView"
+        android:drawablePadding="5dp"
+        android:paddingBottom="10dp"
         android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout2" />
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/layout3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_medium"
-        android:layout_marginTop="@dimen/spacing_medium"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:visibility="visible"
-        app:cardBackgroundColor="@color/lighter_gray"
-        app:cardCornerRadius="5dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_receivetime">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/tv_interview"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/spacing_large"
-                    android:layout_marginEnd="@dimen/spacing_medium"
-                    android:layout_weight="1"
-                    android:gravity="start"
-                    android:text="--"
-                    android:textColor="@color/light_black"
-                    app:layout_constraintStart_toEndOf="@+id/imageView6"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/imageView_interview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/spacing_medium"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </LinearLayout>
-
-
-            <!--            <ImageView-->
-            <!--                android:id="@+id/"-->
-            <!--                android:layout_width="100dp"-->
-            <!--                android:layout_height="100dp"-->
-            <!--                android:visibility="gone" />-->
-
-            <!--            <androidx.recyclerview.widget.RecyclerView-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="100dp"-->
-            <!--                android:visibility="gone"-->
-            <!--                android:id="@+id/recycler_viewReceiver">-->
-
-            <!--            </androidx.recyclerview.widget.RecyclerView>-->
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

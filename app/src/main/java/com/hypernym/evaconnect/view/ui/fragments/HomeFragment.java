@@ -90,18 +90,20 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
 
     private void init() {
         setPageTitle(getString(R.string.home));
+
         homeViewModel = ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(HomeViewModel.class);
         postViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(PostViewModel.class);
         connectionViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
-        currentPage = PAGE_START;
+     //   currentPage = PAGE_START;
         homePostsAdapter=new HomePostsAdapter(getContext(),posts,this);
         linearLayoutManager=new LinearLayoutManager(getContext());
+
         rc_home.setLayoutManager(linearLayoutManager);
         rc_home.setAdapter(homePostsAdapter);
-        if(posts.size()==0)
-        {
-            callPostsApi();
-        }
+//        if(posts.size()==0)
+//        {
+//            callPostsApi();
+//        }
 
         swipeRefresh.setOnRefreshListener(this);
         /**
@@ -138,6 +140,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     public void onResume() {
         super.onResume();
         init();
+        onRefresh();
 
         newpost.setOnClickListener(new OnOneOffClickListener() {
             @Override
@@ -155,6 +158,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         homeViewModel.getDashboard(user,AppConstants.TOTAL_PAGES,currentPage).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> dashboardBaseModel) {
+
              //   homePostsAdapter.clear();
                 if(dashboardBaseModel !=null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size()>0 && dashboardBaseModel.getData().get(0)!=null)
                 {
@@ -172,7 +176,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
                         {
                             post.setPost_type(AppConstants.VIDEO_TYPE);
                         }
-                        else if(post.getType().equalsIgnoreCase("post") && post.getPost_image().size()==0  && AppUtils.containsURL(post.getContent()).size()==0)
+                        else if(post.getType().equalsIgnoreCase("post") && post.getPost_image().size()==0  && !post.isIs_url())
                         {
                             post.setPost_type(AppConstants.TEXT_TYPE);
                         }
@@ -180,9 +184,12 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
                         {
                             post.setPost_type(AppConstants.EVENT_TYPE);
                         }
+                        else if(post.getType().equalsIgnoreCase("job"))
+                        {
+                            post.setPost_type(AppConstants.JOB_TYPE);
+                        }
                         else if(post.getType().equalsIgnoreCase("post") && post.isIs_url())
                         {
-
                             post.setPost_type(AppConstants.LINK_POST);
                         }
                     }
@@ -266,6 +273,59 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
 
         }
         Log.d("Listing status",post.getAction()+" count"+post.getIs_post_like());
+        if(NetworkUtils.isNetworkConnected(getContext())) {
+            likePost(post,position);
+        }
+        else
+        {
+            networkErrorDialog();
+        }
+
+    }
+
+    @Override
+    public void onJobLikeClick(View view, int position,TextView likeCount) {
+        //showDialog();
+        Post post=posts.get(position);
+        User user=LoginUtils.getLoggedinUser();
+        post.setPost_id(post.getId());
+        post.setCreated_by_id(user.getId());
+        if(post.getIs_job_like()==null ||post.getIs_job_like()<1)
+        {
+            post.setAction(AppConstants.LIKE);
+            if(post.getIs_job_like()==null)
+            {
+                post.setIs_job_like(1);
+                if(post.getLike_count()==null)
+                    post.setLike_count(0);
+                else
+                    post.setLike_count(post.getLike_count()+1);
+            }
+            else
+            {
+                post.setIs_job_like(post.getIs_job_like()+1);
+                if(post.getLike_count()==null)
+                    post.setLike_count(0);
+                else
+                    post.setLike_count(post.getLike_count()+1);
+            }
+        }
+        else
+        {
+            post.setAction(AppConstants.UNLIKE);
+            if(post.getIs_job_like()>0)
+            {
+                post.setIs_job_like(post.getIs_job_like()-1);
+                post.setLike_count(post.getLike_count()-1);
+            }
+            else
+            {
+                post.setIs_job_like(0);
+                post.setLike_count(0);
+            }
+
+        }
+        Log.d("Listing status",post.getAction()+" count"+post.getIs_job_like());
         if(NetworkUtils.isNetworkConnected(getContext())) {
             likePost(post,position);
         }

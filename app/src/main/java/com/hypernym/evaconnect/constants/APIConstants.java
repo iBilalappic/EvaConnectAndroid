@@ -8,7 +8,7 @@ public interface APIConstants {
     public static String FORGOT_PASSWORD="user/forgotpassword/";
     public static String GET_POSTS="post/";
     public static String CHECK_EMAIL_EXIST="user/account/check/";
-    public static String DASHBOARD="dashboard/?";
+    public static String DASHBOARD="dashboard/android/?";
     public static String FRIENDCONNECTION="user/network/connection/details/{id}/";
     public static String ADD_COMMENT="post/comment/";
     public static String LIKE_POST="post/like/";
@@ -19,7 +19,7 @@ public interface APIConstants {
     public static String GET_CONNECTION_BY_FILTER="user/network/connection/filter/?";
     public static String GET_ALL_NOTIFICATIONS="user/notifications/filter/";
     public static String NOTIFICATION_MARKS_AS_READ="user/notifications/details/";
-    public static String GET_POST_BY_ID="post/details/{id}/";
+    public static String GET_POST_BY_ID="post/details/";
     public static String GET_CONNECTION_COUNT="user/connection/count/{id}/";
     public static String GET_MY_LIKES="user/mylikes/";
     public static String ADD_JOB_AD="job/";

@@ -53,16 +53,18 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
-        style="@style/TextStyle"
         android:id="@+id/tv_content"
-        android:layout_width="wrap_content"
+        style="@style/TextStyle"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
 
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:text="Things you’d never hear in a ticket office” … Let’s play a game of
         mock the week, or the LinkedIn version of Mock the Week. I’ll
         Start: https://lnkd.in… see more"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_image" />
 

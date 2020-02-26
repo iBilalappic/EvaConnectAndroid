@@ -8,11 +8,14 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
@@ -51,6 +54,9 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
     @BindView(R.id.edt_search)
     EditText edt_search;
 
+    @BindView(R.id.empty)
+    TextView empty;
+
     List<Options> mainCategories=new ArrayList<>();
     List<Options> subCategories=new ArrayList<>();
 
@@ -64,6 +70,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
     private int currentPage = PAGE_START;
     private boolean isLastPage = false;
     private boolean isLoading = false;
+    private boolean isSearchFlag=false;
 
     public ConnectionsFragment() {
         // Required empty public constructor
@@ -89,13 +96,13 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         initRecyclerView();
         setPageTitle(getString(R.string.connections));
         if(NetworkUtils.isNetworkConnected(getContext())) {
-            getConnectionByFilter(type,currentPage);
+            getConnectionByFilter(type,currentPage,false);
         }
         else
         {
             networkErrorDialog();
         }
-        edt_search.addTextChangedListener(new TextWatcher(this,edt_search,connectionList,connectionsAdapter,type));
+        edt_search.addTextChangedListener(new TextWatcher());
 
         return view;
     }
@@ -195,14 +202,19 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
             @Override
             protected void loadMoreItems() {
                 isLoading = true;
-                currentPage=AppConstants.TOTAL_PAGES+currentPage;
-                if(NetworkUtils.isNetworkConnected(getContext())) {
-                    getConnectionByFilter(type,currentPage);
-                }
-                else
+                if(!isSearchFlag)
                 {
-                    networkErrorDialog();
+                    currentPage=AppConstants.TOTAL_PAGES+currentPage;
+                    if(NetworkUtils.isNetworkConnected(getContext())) {
+                        getConnectionByFilter(type,currentPage,false);
+                    }
+                    else
+                    {
+                        networkErrorDialog();
+                    }
                 }
+
+
             }
 
             @Override
@@ -234,6 +246,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         {
             categories.addAll(mainCategories);
             rc_subcategories.setVisibility(View.GONE);
+            Log.e("type","pos "+position);
             if(position==1)
             {
                 rc_subcategories.setVisibility(View.VISIBLE);
@@ -273,7 +286,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
             connectionList.clear();
             connectionsAdapter.notifyDataSetChanged();
             currentPage=PAGE_START;
-            getConnectionByFilter(type,currentPage);
+            getConnectionByFilter(type,currentPage,false);
         }
         else
         {
@@ -281,24 +294,39 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         }
     }
 
-    public void getConnectionByFilter(String type,int currentPage) {
+    public void getConnectionByFilter(String mtype,int currentPage,boolean isSearch) {
+
        // showDialog();
         User userData=new User();
         User user=LoginUtils.getLoggedinUser();
-        if(!type.equalsIgnoreCase(getString(R.string.everyone)))
-           userData.setType(type);
+
+        if(!mtype.equalsIgnoreCase(getString(R.string.everyone)))
+           userData.setType(mtype);
         userData.setUser_id(user.getId());
         if(edt_search.getText().toString().length()>0)
              userData.setFirst_name(edt_search.getText().toString());
-
+        Log.e("type",mtype);
         connectionViewModel.getConnectionByFilter(userData,AppConstants.TOTAL_PAGES,currentPage).observe(this, new Observer<BaseModel<List<User>>>() {
             @Override
             public void onChanged(BaseModel<List<User>> listBaseModel) {
                 if(listBaseModel!=null && !listBaseModel.isError())
                 {
-                    //connectionList.clear();
+                    if((isSearchFlag  || currentPage==PAGE_START))
+                    {
+                        connectionList.clear();
+                        connectionsAdapter.notifyDataSetChanged();
+                    }
+                    //
                     connectionList.addAll(listBaseModel.getData());
                     connectionsAdapter.notifyDataSetChanged();
+                    if (connectionList.isEmpty()) {
+                        rc_connections.setVisibility(View.GONE);
+                        empty.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        rc_connections.setVisibility(View.VISIBLE);
+                        empty.setVisibility(View.GONE);
+                    }
                     isLoading = false;
                 }
                 else if(listBaseModel !=null && !listBaseModel.isError() && listBaseModel.getData().size()==0)
@@ -327,5 +355,37 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
             networkErrorDialog();
         }
     }
+    public class TextWatcher implements android.text.TextWatcher {
 
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            currentPage=PAGE_START;
+            if(s.length()>0)
+            {
+                isSearchFlag=true;
+            }
+            else
+            {
+                isSearchFlag=false;
+            }
+
+            connectionList.clear();
+            connectionsAdapter.notifyDataSetChanged();
+            getConnectionByFilter(type,PAGE_START,true);
+
+        }
+
+    }
 }

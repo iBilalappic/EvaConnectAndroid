@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -23,12 +24,14 @@ import com.hypernym.evaconnect.models.NotifyEvent;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.utils.PrefUtils;
 import com.hypernym.evaconnect.view.adapters.NotificationsAdapter;
 import com.hypernym.evaconnect.view.dialogs.NavigationDialog;
+import com.hypernym.evaconnect.view.ui.fragments.BaseFragment;
 import com.hypernym.evaconnect.view.ui.fragments.ConnectionsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.HomeFragment;
 import com.hypernym.evaconnect.view.ui.fragments.MessageFragment;
@@ -94,7 +97,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     private HomeViewModel homeViewModel;
     private NotificationsAdapter notificationsAdapter;
     private List<Post> notifications=new ArrayList<>();
-    String pageTitle="";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,18 +110,36 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     private void init()
     {
         homeViewModel = ViewModelProviders.of(this,new CustomViewModelFactory(getApplication(),this)).get(HomeViewModel.class);
-        loadFragment(R.id.framelayout,new HomeFragment(),this,false);
+         if(getIntent().getExtras()!=null)
+         {
+            String fragment_name= getIntent().getStringExtra(Constants.FRAGMENT_NAME);
+             String fragmentName = getIntent().getStringExtra(Constants.FRAGMENT_NAME);
+             Bundle bundle = getIntent().getBundleExtra(Constants.DATA);
+             if (!TextUtils.isEmpty(fragmentName)) {
+                 Fragment fragment = Fragment.instantiate(this, fragmentName);
+                 if (bundle != null)
+                     fragment.setArguments(bundle);
+                 loadFragment(R.id.framelayout,fragment,this,false);
+             }
+         }
+         else
+         {
+             loadFragment(R.id.framelayout,new HomeFragment(),this,false);
+           //  getAllNotifications();
+         }
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
         setRecyclerView();
-        getAllNotifications();
+
 
         img_home.setImageDrawable(getDrawable(R.drawable.home_selected));
         img_connections.setImageDrawable(getDrawable(R.drawable.connections));
         img_messages.setImageDrawable(getDrawable(R.drawable.messages));
         img_logout.setImageDrawable(getDrawable(R.drawable.logout));
-        pageTitle=tv_pagetitle.getText().toString();
+
+
         img_uparrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,12 +173,14 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     private void getAllNotifications() {
         if(NetworkUtils.isNetworkConnected(this))
         {
-            notifications.clear();
+
             homeViewModel.getAllUnReadNotifications().observe(this, new Observer<BaseModel<List<Post>>>() {
                 @Override
                 public void onChanged(BaseModel<List<Post>> listBaseModel) {
                     if(listBaseModel !=null && !listBaseModel.isError() && listBaseModel.getData().size() >0)
                     {
+                        notifications.clear();
+                        notificationsAdapter.notifyDataSetChanged();
                         notifications.addAll(listBaseModel.getData());
                         Collections.reverse(notifications);
                         notificationsAdapter.notifyDataSetChanged();
@@ -182,8 +205,6 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     public void hideNotificationPanel()
     {
         notifications.clear();
-        tv_pagetitle.setText(pageTitle);
-
         if(NetworkUtils.isNetworkConnected(this))
         {
 
@@ -191,7 +212,8 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
                 @Override
                 public void onChanged(BaseModel<List<Post>> listBaseModel) {
                     if(listBaseModel !=null && !listBaseModel.isError() && listBaseModel.getData().size() >0) {
-
+                        notifications.clear();
+                        notificationsAdapter.notifyDataSetChanged();
                     }
                 }
             });
@@ -203,6 +225,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         rc_notifications.setVisibility(View.GONE);
         titleLayout.setVisibility(View.VISIBLE);
         img_uparrow.setVisibility(View.GONE);
+        tv_pagetitle.setText(BaseFragment.pageTitle);
     }
 
 
@@ -221,6 +244,8 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
             loadFragment(R.id.framelayout,new HomeFragment(),this,false);
         }
         tv_back.setVisibility(View.GONE);
+        BaseFragment.pageTitle=getString(R.string.home);
+
     }
 
     @OnClick(R.id.img_connections)
@@ -238,6 +263,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
             loadFragment(R.id.framelayout,fragment,this,false);
         }
         tv_back.setVisibility(View.GONE);
+        BaseFragment.pageTitle=getString(R.string.connections);
     }
 
     @OnClick(R.id.img_messages)
@@ -251,6 +277,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         badge_notification.setVisibility(View.GONE);
         MessageFragment fragment = new MessageFragment();
         loadFragment(R.id.framelayout,fragment,this,false);
+        BaseFragment.pageTitle=getString(R.string.messages);
     }
 
     @OnClick(R.id.img_logout)
@@ -296,6 +323,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     protected void onResume() {
         super.onResume();
         getAllNotifications();
+
       //  hideNotificationPanel();
     }
 

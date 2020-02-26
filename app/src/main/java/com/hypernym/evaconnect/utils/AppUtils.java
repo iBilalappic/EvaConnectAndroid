@@ -120,14 +120,21 @@ public final class AppUtils {
             .load(getImg(url))
             .diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(imageView);
     }
+    public static void setGlideImageUrl(Context context, ImageView imageView,String url)
+    {
+        Glide
+                .with(imageView.getContext())
+                .load(getImg(url))
+                .into(imageView);
+    }
     public static void setGlideVideoThumbnail(Context context, ImageView imageView,String url)
     {
         Glide.with(context)
-                .load(url)
+                .load(getImg(url))
                 .into(new CustomTarget<Drawable>() {
                     @Override
                     public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                        imageView.setImageDrawable(resource);
+                        imageView.setBackground(resource);
                     }
                     @Override
                     public void onLoadCleared(@Nullable Drawable placeholder) {
@@ -300,7 +307,7 @@ public final class AppUtils {
             Notification.Builder nb = helper.
                     getAndroidChannelNotification(context, class_, fragmentName, bundle, message, isUpdateCurrent, requestCode);
 
-            helper.getManager().notify(101, nb.build());
+            helper.getManager().notify(requestCode, nb.build());
 
         } else {
             makeNotification_default(context, class_, fragmentName, bundle, message, isUpdateCurrent, requestCode);
@@ -319,6 +326,7 @@ public final class AppUtils {
         }
         intent.putExtra(Constants.FRAGMENT_NAME, fragmentName);
         intent.putExtra(Constants.DATA, bundle);
+
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT
         );
@@ -331,8 +339,7 @@ public final class AppUtils {
                 .setContentText(message)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(message))
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
                 .build();
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         manager.notify(requestCode, notification);

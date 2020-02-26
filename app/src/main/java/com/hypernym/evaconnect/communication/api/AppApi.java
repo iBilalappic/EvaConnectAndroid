@@ -52,7 +52,6 @@ public interface AppApi {
     @POST(APIConstants.GET_POSTS)
     Call<BaseModel<List<Post>>> createPost(@Part("user_id") int user_id, @Part("content") RequestBody content,
                                            @Part("created_by_id") int created_by_id, @Part("status") RequestBody status, @Part List<MultipartBody.Part> post_image, @Part MultipartBody.Part post_video);
-
     @Multipart
     @POST(APIConstants.ADD_JOB_AD)
     Call<BaseModel<List<Object>>> createJobAd(@Part("user_id") int user_id,
@@ -155,8 +154,8 @@ public interface AppApi {
     @PATCH(APIConstants.NOTIFICATION_MARKS_AS_READ)
     Call<BaseModel<List<Post>>> notificationMarkAsRead(@Body User user);
 
-    @GET(APIConstants.GET_POST_BY_ID)
-    Call<BaseModel<List<Post>>> getPostById(@Path("id") int id);
+    @POST(APIConstants.GET_POST_BY_ID)
+    Call<BaseModel<List<Post>>> getPostById(@Body Object user);
 
     @GET(APIConstants.GET_CONNECTION_COUNT)
     Call<BaseModel<User>> getConnectionCount(@Path("id") int id);

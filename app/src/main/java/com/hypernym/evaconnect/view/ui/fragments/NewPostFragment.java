@@ -1,7 +1,9 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 
+import android.content.ClipData;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
@@ -267,11 +269,8 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                     GalleryImage = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
                     mProfileImageDecodableString = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
                     Log.e(getClass().getName(), "image file path: " + GalleryImage);
-
                     tempFile = new File(GalleryImage);
                     Log.e(getClass().getName(), "file path details: " + tempFile.getName() + " " + tempFile.getAbsolutePath() + "length" + tempFile.length());
-
-
                     if (tempFile.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.FILE_SIZE_LIMIT_IN_KB) {
                         networkResponseDialog(getString(R.string.error),getString(R.string.err_image_size_large));
                         return;
@@ -300,7 +299,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                                     img_video.setVisibility(View.GONE);
                                     img_play.setVisibility(View.GONE);
                                     part_images.add(MultipartBody.Part.createFormData("post_image", file_name.getName(), reqFile));
-                               setPostButton();
+                                    setPostButton();
                                 }
 
                             } else {
@@ -311,9 +310,28 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                             return;
                         }
                     }
-                } else {
-                    Toast.makeText(getActivity(), "Something went wrong while retrieving image", Toast.LENGTH_SHORT).show();
                 }
+//                else if(data.getClipData() != null && data.getClipData().getItemCount()<3)
+//                {
+//                    ClipData mClipData = data.getClipData();
+//
+//                    for (int i = 0; i < mClipData.getItemCount(); i++) {
+//                        ClipData.Item item = mClipData.getItemAt(i);
+//                        Uri uri = item.getUri();
+//                        file_name = new File(ImageFilePathUtil.getPath(getActivity(), uri));
+//                        attachments.add( ImageFilePathUtil.getPath(getActivity(), uri));
+//                        RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file_name);
+//                        part_images.add(MultipartBody.Part.createFormData("post_image", file_name.getName(), reqFile));
+//                    }
+//                    attachmentsAdapter.notifyDataSetChanged();
+//                    rc_attachments.setVisibility(View.VISIBLE);
+//                    img_video.setVisibility(View.GONE);
+//                    img_play.setVisibility(View.GONE);
+//                    setPostButton();
+//                }
+//                else {
+//                    Toast.makeText(getActivity(), "You haven't picked image", Toast.LENGTH_SHORT).show();
+//                }
             } catch (Exception exc) {
                 exc.printStackTrace();
                 Log.e(getClass().getName(), "exc: " + exc.getMessage());

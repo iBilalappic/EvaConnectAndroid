@@ -12,12 +12,15 @@ import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.PrefUtils;
 import com.hypernym.evaconnect.view.ui.activities.HomeActivity;
 import com.hypernym.evaconnect.view.ui.fragments.HomeFragment;
+import com.hypernym.evaconnect.view.ui.fragments.PostDetailsFragment;
 import com.onesignal.NotificationExtenderService;
 import com.onesignal.OSNotificationReceivedResult;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Random;
 
 
 public class OneSignalReceiver extends NotificationExtenderService {
@@ -29,9 +32,10 @@ public class OneSignalReceiver extends NotificationExtenderService {
     protected boolean onNotificationProcessing(OSNotificationReceivedResult receivedResult) {
         // Read properties from result.
          JSONObject additionalData = receivedResult.payload.additionalData;
-
+        Log.e("additionaldata", "" + additionalData.toString());
         if (receivedResult.isAppInFocus) {
             // listener.onNewNotification();
+
             if (additionalData != null) {
                 try {
                     if(additionalData.getString("data") !=null)
@@ -76,7 +80,28 @@ public class OneSignalReceiver extends NotificationExtenderService {
                 //  payloadNotification.notification_type = additionalData.getInt("notification_type");
                 Bundle bundle = new Bundle();
                 bundle.putString(Constants.PAYLOAD, GsonUtils.toJson(payloadNotification));
-                AppUtils.makeNotification(getApplication(), HomeActivity.class, HomeFragment.class.getName(), bundle, payloadNotification.contents.en, false, 0);
+                Random random = new Random();
+                int m = random.nextInt(9999 - 1000) + 1000;
+                if (additionalData != null)
+                {
+                    try {
+                        Log.e("additionaldata", "object_id: " + additionalData.getString("object_id"));
+                        Log.e("additionaldata", "object_type: " + additionalData.getString("object_type"));
+                        if(additionalData.getString("object_id") !=null && additionalData.getString("object_type") !=null)
+                        {
+                        if(additionalData.getString("object_type").equalsIgnoreCase("post"))
+                        {
+                            bundle.putInt("post",Integer.parseInt(additionalData.getString("object_id")));
+                        }
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+
+                    }
+                }
+                Log.e("additionaldata", "bundle: " + bundle.toString());
+                    AppUtils.makeNotification(getApplication(), HomeActivity.class, PostDetailsFragment.class.getName(), bundle, payloadNotification.contents.en, true, m);
 
             } catch (Exception e) {
                 Log.e("TAAG", "" + e);

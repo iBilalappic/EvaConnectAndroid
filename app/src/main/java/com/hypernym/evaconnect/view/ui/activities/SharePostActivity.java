@@ -96,7 +96,7 @@ public class SharePostActivity extends AppCompatActivity {
         }
     }
     private void initializeSlider() {
-        sliderImageAdapter = new SliderImageAdapter(this, post.getPost_image());
+        sliderImageAdapter = new SliderImageAdapter(this, post.getPost_image(),slider_images);
         slider_images.setSliderAdapter(sliderImageAdapter);
         slider_images.setIndicatorAnimation(IndicatorAnimations.WORM); //set indicator animation by using SliderLayout.IndicatorAnimations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
         slider_images.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);

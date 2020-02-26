@@ -95,8 +95,8 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     @BindView(R.id.tv_comcount)
     TextView tv_comcount;
 
-    @BindView(R.id.slider_images)
-    SliderView imageSlider;
+    @BindView(R.id.slider_images_detail)
+    SliderView slider_images_detail;
 
     @BindView(R.id.img_user)
     ImageView img_user;
@@ -238,12 +238,12 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         } else {
             img_like.setBackground(getContext().getDrawable(R.mipmap.ic_like));
         }
-        imageSlider.setVisibility(View.GONE);
+        slider_images_detail.setVisibility(View.GONE);
         img_video.setVisibility(View.GONE);
         img_play.setVisibility(View.GONE);
         link.setVisibility(View.GONE);
         if (post.getPost_type() == AppConstants.IMAGE_TYPE) {
-            imageSlider.setVisibility(View.VISIBLE);
+            slider_images_detail.setVisibility(View.VISIBLE);
         } else if (post.getPost_type() == AppConstants.VIDEO_TYPE) {
             img_video.setVisibility(View.VISIBLE);
             img_play.setVisibility(View.VISIBLE);
@@ -308,13 +308,13 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     }
 
     private void initializeSlider(Post post) {
-        sliderImageAdapter = new SliderImageAdapter(getContext(), post.getPost_image());
-        imageSlider.setSliderAdapter(sliderImageAdapter);
-        imageSlider.setIndicatorAnimation(IndicatorAnimations.WORM); //set indicator animation by using SliderLayout.IndicatorAnimations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
-        imageSlider.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
-        imageSlider.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
-        imageSlider.setScrollTimeInSec(4); //set scroll delay in seconds :
-        imageSlider.startAutoCycle();
+        sliderImageAdapter = new SliderImageAdapter(getContext(), post.getPost_image(),slider_images_detail);
+        slider_images_detail.setSliderAdapter(sliderImageAdapter);
+        slider_images_detail.setIndicatorAnimation(IndicatorAnimations.WORM); //set indicator animation by using SliderLayout.IndicatorAnimations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
+        slider_images_detail.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
+        slider_images_detail.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
+        slider_images_detail.setScrollTimeInSec(4); //set scroll delay in seconds :
+        slider_images_detail.startAutoCycle();
     }
 
     private void initRecyclerView() {

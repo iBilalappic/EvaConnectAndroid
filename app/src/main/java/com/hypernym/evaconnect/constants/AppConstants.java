@@ -32,6 +32,7 @@ public class AppConstants {
     public static final String CHAT_FRAGMENT = "chat_fragment";
     public static final String APPLICANT_FRAGMENT = "applicant_fragment";
 
+    public static final String FIREASE_CHAT_ENDPOINT = "development";
 
 
 }

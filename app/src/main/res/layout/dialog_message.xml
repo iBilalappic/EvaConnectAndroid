@@ -18,7 +18,7 @@
         <EditText
             android:id="@+id/edittextSearchUser"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/rounded_edittext"
             android:hint="Find User here"
             android:padding="@dimen/spacing_medium"
@@ -27,13 +27,27 @@
         </EditText>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
             android:id="@+id/recyclerViewNetworkConnection"
-            android:layout_marginTop="@dimen/spacing_extra_extra_large">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
 
         </androidx.recyclerview.widget.RecyclerView>
-
+        <TextView
+            android:id="@+id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:text="No Result Found"
+            android:textColor="@android:color/black"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            />
 
         <EditText
             android:id="@+id/edittextMessageArea"
@@ -46,12 +60,14 @@
             android:textSize="13sp">
 
         </EditText>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rc_attachments"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

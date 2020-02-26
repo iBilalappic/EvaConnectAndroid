@@ -38,14 +38,14 @@ public class TextWatcher implements android.text.TextWatcher {
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        users.clear();
-        connectionsAdapter.notifyDataSetChanged();
-        fragment.getConnectionByFilter(type,PAGE_START);
+
     }
 
     @Override
     public void afterTextChanged(Editable s) {
-
+        users.clear();
+        connectionsAdapter.notifyDataSetChanged();
+        fragment.getConnectionByFilter(type,PAGE_START,true);
     }
 
 }
