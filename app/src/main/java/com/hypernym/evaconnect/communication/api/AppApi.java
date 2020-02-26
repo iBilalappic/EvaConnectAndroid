@@ -52,7 +52,6 @@ public interface AppApi {
     @POST(APIConstants.GET_POSTS)
     Call<BaseModel<List<Post>>> createPost(@Part("user_id") int user_id, @Part("content") RequestBody content,
                                            @Part("created_by_id") int created_by_id, @Part("status") RequestBody status,@Part("is_url") boolean is_url, @Part List<MultipartBody.Part> post_image, @Part MultipartBody.Part post_video);
-
     @Multipart
     @POST(APIConstants.ADD_JOB_AD)
     Call<BaseModel<List<Object>>> createJobAd(@Part("user_id") int user_id,
@@ -86,8 +85,8 @@ public interface AppApi {
             @Part("modified_datetime") RequestBody modified_datetime,
             @Part MultipartBody.Part job_image);
 
-    @GET(APIConstants.GET_JOB_AD_BY_ID)
-    Call<BaseModel<List<SpecficJobAd>>> GetJobAd_ID(@Path("job_id") int job_id);
+    @POST(APIConstants.GET_JOB_AD_BY_ID)
+    Call<BaseModel<List<SpecficJobAd>>> GetJobAd_ID(@Path("job_id") int job_id,@Body HashMap<String, Object> body);
 
 
     @Multipart

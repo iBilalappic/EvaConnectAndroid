@@ -38,15 +38,18 @@ public class SpecficJobAd {
     @SerializedName("job_image")
     @Expose
     private String jobImage;
-    @SerializedName("job_video")
-    @Expose
-    private Object jobVideo;
     @SerializedName("comment_count")
     @Expose
     private Integer commentCount;
+    @SerializedName("is_job_like")
+    @Expose
+    private Integer isJobLike;
     @SerializedName("applicant_count")
     @Expose
     private Integer applicantCount;
+    @SerializedName("is_applied")
+    @Expose
+    private Object isApplied;
     @SerializedName("like_count")
     @Expose
     private Integer likeCount;
@@ -58,10 +61,10 @@ public class SpecficJobAd {
     private String createdDatetime;
     @SerializedName("modified_by_id")
     @Expose
-    private Integer modifiedById;
+    private Object modifiedById;
     @SerializedName("modified_datetime")
     @Expose
-    private String modifiedDatetime;
+    private Object modifiedDatetime;
     @SerializedName("os")
     @Expose
     private String os;
@@ -157,14 +160,6 @@ public class SpecficJobAd {
         this.jobImage = jobImage;
     }
 
-    public Object getJobVideo() {
-        return jobVideo;
-    }
-
-    public void setJobVideo(Object jobVideo) {
-        this.jobVideo = jobVideo;
-    }
-
     public Integer getCommentCount() {
         return commentCount;
     }
@@ -173,12 +168,28 @@ public class SpecficJobAd {
         this.commentCount = commentCount;
     }
 
+    public Integer getIsJobLike() {
+        return isJobLike;
+    }
+
+    public void setIsJobLike(Integer isJobLike) {
+        this.isJobLike = isJobLike;
+    }
+
     public Integer getApplicantCount() {
         return applicantCount;
     }
 
     public void setApplicantCount(Integer applicantCount) {
         this.applicantCount = applicantCount;
+    }
+
+    public Object getIsApplied() {
+        return isApplied;
+    }
+
+    public void setIsApplied(Object isApplied) {
+        this.isApplied = isApplied;
     }
 
     public Integer getLikeCount() {
@@ -205,19 +216,19 @@ public class SpecficJobAd {
         this.createdDatetime = createdDatetime;
     }
 
-    public Integer getModifiedById() {
+    public Object getModifiedById() {
         return modifiedById;
     }
 
-    public void setModifiedById(Integer modifiedById) {
+    public void setModifiedById(Object modifiedById) {
         this.modifiedById = modifiedById;
     }
 
-    public String getModifiedDatetime() {
+    public Object getModifiedDatetime() {
         return modifiedDatetime;
     }
 
-    public void setModifiedDatetime(String modifiedDatetime) {
+    public void setModifiedDatetime(Object modifiedDatetime) {
         this.modifiedDatetime = modifiedDatetime;
     }
 

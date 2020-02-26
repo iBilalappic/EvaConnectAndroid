@@ -50,6 +50,18 @@ public class JobAd implements Serializable {
     @SerializedName("like_count")
     @Expose
     private Integer likeCount;
+    @SerializedName("is_job_like")
+    @Expose
+    private Integer is_job_like;
+
+    public Integer getIs_job_like() {
+        return is_job_like;
+    }
+
+    public void setIs_job_like(Integer is_job_like) {
+        this.is_job_like = is_job_like;
+    }
+
     @SerializedName("created_by_id")
     @Expose
     private Integer createdById;

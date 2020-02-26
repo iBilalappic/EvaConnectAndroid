@@ -128,7 +128,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
             tv_weeklyHoursNumber.setText(jobAd.getWeeklyHours());
             tv_createddateTime.setText(DateUtils.getFormattedDateTime(jobAd.getCreatedDatetime()));
             tv_minago.setText(DateUtils.getTimeAgo(jobAd.getCreatedDatetime()));
-            if (jobAd.getLikeCount() != null && jobAd.getLikeCount() > 0) {
+            if (jobAd.getIs_job_like() != null && jobAd.getIs_job_like() > 0) {
                 img_like.setBackground(getActivity().getDrawable(R.mipmap.ic_like_selected));
             } else {
                 img_like.setBackground(getActivity().getDrawable(R.mipmap.ic_like));
@@ -142,7 +142,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
             public void onChanged(BaseModel<List<SpecficJobAd>> getjobAd) {
                 if (getjobAd != null && !getjobAd.isError()) {
                     checkLikeCount = getjobAd.getData().get(0);
-                    if (getjobAd.getData().get(0).getLikeCount() != null && getjobAd.getData().get(0).getLikeCount() > 0) {
+                    if (getjobAd.getData().get(0).getIsJobLike() != null && getjobAd.getData().get(0).getIsJobLike() > 0) {
                         img_like.setBackground(getActivity().getDrawable(R.mipmap.ic_like_selected));
                     } else {
                         img_like.setBackground(getActivity().getDrawable(R.mipmap.ic_like));
@@ -179,7 +179,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
                 getActivity().onBackPressed();
                 break;
             case R.id.img_like:
-                if (checkLikeCount.getLikeCount() > 0) {
+                if (checkLikeCount!=null&&checkLikeCount.getIsJobLike()>0) {
                     SetJobUnLike(checkLikeCount.getId());
                 } else {
                     SetJobLike(checkLikeCount.getId());

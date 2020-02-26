@@ -10,6 +10,7 @@ import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IJobAdRepository;
+import com.hypernym.evaconnect.utils.LoginUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -74,11 +75,13 @@ public class JobListRepository implements IJobAdRepository {
     @Override
     public LiveData<BaseModel<List<SpecficJobAd>>> getJobId(int job_id) {
         JobMutableLiveData = new MutableLiveData<>();
-        RestClient.get().appApi().GetJobAd_ID(job_id).enqueue(new Callback<BaseModel<List<SpecficJobAd>>>() {
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("user_id", LoginUtils.getUser().getId());
+        RestClient.get().appApi().GetJobAd_ID(job_id,body).enqueue(new Callback<BaseModel<List<SpecficJobAd>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<SpecficJobAd>>> call, Response<BaseModel<List<SpecficJobAd>>> response) {
                 if (response.isSuccessful() && !response.body().isError())
-                    JobMutableLiveData.setValue(response.body());
+                   JobMutableLiveData.setValue(response.body());
                 if (response.code() == 500) {
                     JobMutableLiveData.setValue(null);
                 }
