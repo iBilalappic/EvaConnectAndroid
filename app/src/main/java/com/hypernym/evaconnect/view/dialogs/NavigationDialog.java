@@ -98,11 +98,11 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
         calendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dismiss();
-                FragmentTransaction transaction =((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
-                transaction.replace(R.id.framelayout, new CalendarFragment());
-                transaction.commit();
+//                dismiss();
+//                FragmentTransaction transaction =((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
+//                transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+//                transaction.replace(R.id.framelayout, new CalendarFragment());
+//                transaction.commit();
             }
         });
     }

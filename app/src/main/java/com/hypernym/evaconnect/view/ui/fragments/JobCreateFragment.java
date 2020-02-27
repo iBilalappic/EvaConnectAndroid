@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,10 +60,10 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
     }
 
     @BindView(R.id.spinner_jobsector)
-    MaterialBetterSpinner spinner_jobsector;
+    Spinner spinner_jobsector;
 
     @BindView(R.id.spinner_week)
-    MaterialBetterSpinner spinner_week;
+    Spinner spinner_week;
 
     @NotEmpty
     @BindView(R.id.edit_companyName)
@@ -72,7 +73,6 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
     @BindView(R.id.edit_jobpostion)
     EditText edit_jobpostion;
 
-    @NotEmpty
     @BindView(R.id.edit_jobtitle)
     EditText edit_jobtitle;
 
@@ -115,6 +115,7 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
     String JobSector, WeeklyHour;
 
     private CompanyJobAdModel companyJobAdModel = new CompanyJobAdModel();
+    ArrayAdapter<String> arraySectorAdapter,arrayWeekAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -144,6 +145,7 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
             postAd.setText("Update Job");
             showBackButton();
             companyJobAdModel = (CompanyJobAdModel) getArguments().getSerializable("COMPANY_AD");
+
             AppUtils.setGlideImage(getContext(), profile_image, companyJobAdModel.getJobImage());
             String companyname = getsplitCompanyName(companyJobAdModel.getJobTitle());
             String jobtitle = getsplitTitle(companyJobAdModel.getJobTitle());
@@ -154,15 +156,15 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
             String SalaryInt = getsplitstring(String.valueOf(companyJobAdModel.getSalary()));
             edit_amount.setText(SalaryInt);
             edit_jobdescription.setText(companyJobAdModel.getContent());
-            for (int i = 0; i < mSpinnerWeek.length; i++) {
-                String element = mSpinnerWeek[i];
-                if (element.equals(companyJobAdModel.getWeeklyHours())) {
-                    spinner_week.setListSelection(i);
 
-                }
+            if (companyJobAdModel.getJobSector() != null) {
+                int spinnerPosition = arraySectorAdapter.getPosition(companyJobAdModel.getJobSector());
+                spinner_jobsector.setSelection(spinnerPosition);
             }
-
-
+            if (companyJobAdModel.getWeeklyHours() != null) {
+                int spinnerPosition = arraySectorAdapter.getPosition(companyJobAdModel.getWeeklyHours());
+                spinner_week.setSelection(spinnerPosition);
+            }
         }
     }
 
@@ -185,27 +187,50 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
     }
 
     private void SettingWeekSpinner() {
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(),
+        arrayWeekAdapter = new ArrayAdapter<String>(getContext(),
                 android.R.layout.simple_dropdown_item_1line, mSpinnerWeek);
-        spinner_week.setAdapter(arrayAdapter);
-        spinner_week.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        spinner_week.setAdapter(arrayWeekAdapter);
+        spinner_jobsector.setSelection(0);
+        spinner_week.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 WeeklyHour = parent.getItemAtPosition(position).toString();
             }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
         });
     }
 
     private void SettingJobSectorSpinner() {
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(),
+        arraySectorAdapter = new ArrayAdapter<String>(getContext(),
                 android.R.layout.simple_dropdown_item_1line, mSpinnerJobSector);
-        spinner_jobsector.setAdapter(arrayAdapter);
-        spinner_jobsector.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        arraySectorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_jobsector.setAdapter(arraySectorAdapter);
+
+        spinner_jobsector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 JobSector = parent.getItemAtPosition(position).toString();
             }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
         });
+        spinner_jobsector.setSelection(0);
+//        if ((getArguments() != null)) {
+//
+//            if (companyJobAdModel.getJobSector() != null) {
+//                int spinnerPosition = arraySectorAdapter.getPosition(companyJobAdModel.getJobSector());
+//                spinner_jobsector.setSelection(0);
+//            }
+//        }
     }
 
 
@@ -218,7 +243,7 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
                         Toast.makeText(getContext(), "Please select job sector", Toast.LENGTH_SHORT).show();
                     } else if (WeeklyHour == null) {
                         Toast.makeText(getContext(), "Please select weekly hour", Toast.LENGTH_SHORT).show();
-                    } else if (partImage == null) {
+                    } else if (partImage == null && companyJobAdModel.getJobImage()==null) {
                         Toast.makeText(getContext(), "Please add image for job post", Toast.LENGTH_SHORT).show();
                     } else {
                         validator.validate();
@@ -245,6 +270,7 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
     private void UpdateJobAd() {
         showDialog();
         User user = LoginUtils.getLoggedinUser();
+        edit_jobtitle.setText( edit_jobpostion.getText().toString() + " for " + edit_companyName.getText().toString());
         createJobAdViewModel.UpdateJobAd(companyJobAdModel.getId(), user, partImage, JobSector, WeeklyHour,
                 Integer.parseInt(edit_amount.getText().toString()),
                 edit_companyName.getText().toString(),
@@ -277,6 +303,7 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
     private void CreateJobAd() {
         showDialog();
         User user = LoginUtils.getLoggedinUser();
+        edit_jobtitle.setText( edit_jobpostion.getText().toString() + " for " + edit_companyName.getText().toString());
         createJobAdViewModel.createJobAd(user, partImage, JobSector, WeeklyHour,
                 Integer.parseInt(edit_amount.getText().toString()),
                 edit_companyName.getText().toString(),
@@ -421,9 +448,6 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
             }
             if (view.getId() == R.id.edit_jobdescription) {
                 message = getString(R.string.err_role);
-            }
-            if (view.getId() == R.id.edit_jobtitle) {
-                message = getString(R.string.err_title);
             }
             if (view.getId() == R.id.edit_jobpostion) {
                 message = getString(R.string.err_position);

@@ -19,7 +19,7 @@ public class ImageFilePathUtil {
      * @param uri
      * @return path of the selected image file from gallery
      */
-    static String nopath = "Select Video Only";
+    static String nopath = "File path not found";
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @SuppressLint("NewApi")
@@ -59,13 +59,14 @@ public class ImageFilePathUtil {
                 final String type = split[0];
 
                 Uri contentUri = null;
-                if ("image".equals(type)) {
+                if ("image".equals(type) || "pdf".equals(type)) {
                     contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
                 } else if ("video".equals(type)) {
                     contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
                 } else if ("audio".equals(type)) {
                     contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
                 }
+
 
                 final String selection = "_id=?";
                 final String[] selectionArgs = new String[] { split[1] };

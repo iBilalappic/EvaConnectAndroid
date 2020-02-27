@@ -767,7 +767,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     }
 
                     AppUtils.setGlideImage(mContext, ((JobTypeViewHolder) holder).profile_image, posts.get(position).getJob_image());
-                    ((JobTypeViewHolder) holder).tv_name.setText(posts.get(position).getJob_title()+" For "+posts.get(position).getLocation());
+                    ((JobTypeViewHolder) holder).tv_name.setText(posts.get(position).getJob_title());
                     ((JobTypeViewHolder) holder).tv_location.setText(posts.get(position).getUser().getFirst_name());
                     ((JobTypeViewHolder) holder).tv_salary.setText("£ "+String.valueOf(posts.get(position).getSalary())+ " pa");
                     if(position==0)
