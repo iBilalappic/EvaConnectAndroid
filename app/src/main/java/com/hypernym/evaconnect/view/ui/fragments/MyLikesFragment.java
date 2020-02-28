@@ -70,16 +70,20 @@ public class MyLikesFragment extends BaseFragment implements MyLikeAdapter.OnIte
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_my_likes, container, false);
         ButterKnife.bind(this, view);
+
         init();
+
         return view;
     }
 
     private void init() {
         mylikeViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(MylikesViewModel.class);
-       GetMyLikes();
+        swipeRefresh.setOnRefreshListener(this);
+
         setupRecyclerview();
         setPageTitle("My Likes");
-        swipeRefresh.setOnRefreshListener(this);
+        GetMyLikes();
+
 
     }
 
@@ -125,14 +129,22 @@ public class MyLikesFragment extends BaseFragment implements MyLikeAdapter.OnIte
         mylikeViewModel.SetLikes(user.getUser_id(),AppConstants.TOTAL_PAGES,currentPage).observe(this, new Observer<BaseModel<List<MyLikesModel>>>() {
             @Override
             public void onChanged(BaseModel<List<MyLikesModel>> getnetworkconnection) {
-                if (getnetworkconnection != null && !getnetworkconnection.isError()) {
+                if (getnetworkconnection != null && !getnetworkconnection.isError() && getnetworkconnection.getData().size()>0 && getnetworkconnection.getData().get(0)!=null) {
                   //  myLikesModelList.clear();
                     myLikesModelList.addAll(getnetworkconnection.getData());
                     myLikeAdapter.notifyDataSetChanged();
                     swipeRefresh.setRefreshing(false);
                     myLikeAdapter.removeLoading();
                     isLoading = false;
-                } else {
+                    //hideDialog();
+                }
+                else if(getnetworkconnection !=null && !getnetworkconnection.isError() && getnetworkconnection.getData().size()==0)
+                {
+                    isLastPage = true;
+                    myLikeAdapter.removeLoading();
+                    isLoading = false;
+                }
+                else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
                 hideDialog();

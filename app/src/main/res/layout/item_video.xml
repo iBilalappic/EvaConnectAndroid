@@ -278,6 +278,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:maxLines="3"
+        android:ellipsize="end"
         android:layout_marginEnd="8dp"
         android:text="“Things you’d never hear in a ticket office” … Let’s play a game of mock the week, or the LinkedIn version of Mock the Week. I’ll Start: https://lnkd.in… see more"
         app:layout_constraintEnd_toEndOf="parent"

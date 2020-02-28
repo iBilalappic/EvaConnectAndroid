@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.view.ui.fragments.CalendarFragment;
 import com.hypernym.evaconnect.view.ui.fragments.EditProfileFragment;
 import com.hypernym.evaconnect.view.ui.fragments.JobListingFragment;
 import com.hypernym.evaconnect.view.ui.fragments.EditProfileFragment;
@@ -27,7 +28,7 @@ import com.hypernym.evaconnect.view.ui.fragments.PersonDetailFragment;
 public class NavigationDialog extends Dialog implements View.OnClickListener {
 
     private ImageView img_close;
-    private LinearLayout editProfile,logout,notifications,mJoblisting,mLike;
+    private LinearLayout editProfile,logout,notifications,mJoblisting,mLike,calendar;
     private Context context;
 
     public NavigationDialog(Context context) {
@@ -45,6 +46,7 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
         logout=findViewById(R.id.logout);
         notifications=findViewById(R.id.notifications);
         mJoblisting=findViewById(R.id.joblisting);
+        calendar=findViewById(R.id.calendar);
         mLike=findViewById(R.id.layoutLike);
         mJoblisting.setOnClickListener(this);
         mLike.setOnClickListener(this);
@@ -91,6 +93,16 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
                 transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
                 transaction.replace(R.id.framelayout, new NotificationsFragment());
                 transaction.commit();
+            }
+        });
+        calendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                dismiss();
+//                FragmentTransaction transaction =((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
+//                transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+//                transaction.replace(R.id.framelayout, new CalendarFragment());
+//                transaction.commit();
             }
         });
     }

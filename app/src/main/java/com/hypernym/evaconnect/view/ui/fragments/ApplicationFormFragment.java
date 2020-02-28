@@ -250,7 +250,14 @@ public class ApplicationFormFragment extends BaseFragment implements View.OnClic
                     if (tempFile.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.FILE_SIZE_LIMIT_IN_KB) {
                         networkResponseDialog(getString(R.string.error), getString(R.string.err_image_size_large));
                         return;
-                    } else {
+                    }
+                    else if(tempFile.toString().equalsIgnoreCase("File path not found"))
+                    {
+                        tv_cvname.setText(tempFile.toString());
+                        partImage=null;
+                        return;
+                    }
+                    else {
                         if (photoVar == null) {
                             currentPhotoPath = mProfileImageDecodableString;
                             // photoVar = GalleryImage;

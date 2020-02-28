@@ -84,24 +84,34 @@ public class OneSignalReceiver extends NotificationExtenderService {
                 int m = random.nextInt(9999 - 1000) + 1000;
                 if (additionalData != null)
                 {
-                    try {
-                        Log.e("additionaldata", "object_id: " + additionalData.getString("object_id"));
-                        Log.e("additionaldata", "object_type: " + additionalData.getString("object_type"));
-                        if(additionalData.getString("object_id") !=null && additionalData.getString("object_type") !=null)
-                        {
-                        if(additionalData.getString("object_type").equalsIgnoreCase("post"))
-                        {
-                            bundle.putInt("post",Integer.parseInt(additionalData.getString("object_id")));
-                        }
-                        }
+                    Log.e("additionaldata", "bundle: " + bundle.toString());
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    if(additionalData.has("object_id"))
+                    {
+                        try {
+                            Log.e("additionaldata", "object_id: " + additionalData.getString("object_id"));
+                            Log.e("additionaldata", "object_type: " + additionalData.getString("object_type"));
+                            if(additionalData.getString("object_id") !=null && additionalData.getString("object_type") !=null)
+                            {
+                                if(additionalData.getString("object_type").equalsIgnoreCase("post"))
+                                {
+                                    bundle.putInt("post",Integer.parseInt(additionalData.getString("object_id")));
+                                }
+                            }
 
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+
+                        }
+                        AppUtils.makeNotification(getApplication(), HomeActivity.class, PostDetailsFragment.class.getName(), bundle, payloadNotification.contents.en, true, m);
+                    }
+                    else
+                    {
+                        AppUtils.makeNotification(getApplication(), HomeActivity.class, HomeFragment.class.getName(), bundle, payloadNotification.contents.en, true, m);
                     }
                 }
-                Log.e("additionaldata", "bundle: " + bundle.toString());
-                    AppUtils.makeNotification(getApplication(), HomeActivity.class, PostDetailsFragment.class.getName(), bundle, payloadNotification.contents.en, true, m);
+
+
 
             } catch (Exception e) {
                 Log.e("TAAG", "" + e);

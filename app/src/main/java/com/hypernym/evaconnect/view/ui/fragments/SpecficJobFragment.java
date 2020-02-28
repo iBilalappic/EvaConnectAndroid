@@ -32,6 +32,7 @@ import com.hypernym.evaconnect.view.adapters.MyLikeAdapter;
 import com.hypernym.evaconnect.viewmodel.JobListViewModel;
 import com.hypernym.evaconnect.viewmodel.MylikesViewModel;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,7 +123,8 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
             AppUtils.setGlideImage(getContext(), profile_image, jobAd.getJobImage());
             tv_name.setText(jobAd.getJobTitle());
             tv_positionName.setText(jobAd.getPosition());
-            tv_salaryAmount.setText("$" + String.valueOf(jobAd.getSalary()));
+            DecimalFormat myFormatter = new DecimalFormat("############");
+            tv_salaryAmount.setText("£ " + myFormatter.format(jobAd.getSalary()) +" pa");
             tv_description.setText(jobAd.getContent());
             tv_locationName.setText(jobAd.getLocation());
             tv_weeklyHoursNumber.setText(jobAd.getWeeklyHours());

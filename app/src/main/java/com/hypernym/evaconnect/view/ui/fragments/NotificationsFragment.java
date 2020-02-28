@@ -112,6 +112,12 @@ public class NotificationsFragment extends BaseFragment implements Notifications
                     isLoading = false;
                     hideDialog();
                 }
+                else if(listBaseModel !=null && !listBaseModel.isError() && listBaseModel.getData().size()==0)
+                {
+                    isLastPage = true;
+                    notificationsAdapter.removeLoading();
+                    isLoading = false;
+                }
             }
         });
     }

@@ -20,6 +20,8 @@
     <color name="colorSimpleDialogBackground">#EA5454</color>
     <color name="colorSimpleDialogText">#002256</color>
     <color name="btn_border">#3C3F5C</color>
+    <color name="blue">#3140CE</color>
+
 
 
 </resources>
