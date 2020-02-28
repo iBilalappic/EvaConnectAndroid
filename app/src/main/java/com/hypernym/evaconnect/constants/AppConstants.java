@@ -29,7 +29,7 @@ public class AppConstants {
     public static final String REQUEST_ACCEPT = "Accept";
     public static final String SIMPLE_BASEURL = "simple base url";
     public static final String ONESIGNAL_BASEURL = "one signal url";
-    public static final String FIREASE_CHAT_ENDPOINT = "development";
+    public static final String FIREASE_CHAT_ENDPOINT = "development_interview";
     public static final String CHAT_FRAGMENT = "chat_fragment";
     public static final String APPLICANT_FRAGMENT = "applicant_fragment";
 

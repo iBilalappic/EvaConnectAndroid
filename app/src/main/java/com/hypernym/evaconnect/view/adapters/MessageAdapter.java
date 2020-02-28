@@ -1,6 +1,8 @@
 package com.hypernym.evaconnect.view.adapters;
 
 import android.content.Context;
+import android.os.Build;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,13 +46,23 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public void onBindViewHolder(@NonNull MessageAdapter.ViewHolder holder, int position) {
         if (networkConnectionList.get(position).getReceiver().getFirstName().equals(LoginUtils.getUser().getFirst_name())) {
             holder.tv_name.setText(networkConnectionList.get(position).getSender().getFirstName());
-            holder.tv_lastmsg.setText(networkConnectionList.get(position).getMessage());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                holder.tv_lastmsg.setText(Html.fromHtml(networkConnectionList.get(position).getMessage(), Html.FROM_HTML_MODE_COMPACT));
+            } else {
+                holder.tv_lastmsg.setText(Html.fromHtml(networkConnectionList.get(position).getMessage()));
+            }
+          //  holder.tv_lastmsg.setText(networkConnectionList.get(position).getMessage());
             AppUtils.setGlideImage(context, (holder).mImageview6, networkConnectionList.get(position).getSender().getUserImage());
             holder.tv_minago.setText(DateUtils.getTimeAgo(networkConnectionList.get(position).getCreatedDatetime()));
         }
         if (networkConnectionList.get(position).getSender().getFirstName().equals(LoginUtils.getUser().getFirst_name())) {
             holder.tv_name.setText(networkConnectionList.get(position).getReceiver().getFirstName());
-            holder.tv_lastmsg.setText(networkConnectionList.get(position).getMessage());
+         //   holder.tv_lastmsg.setText(networkConnectionList.get(position).getMessage());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                holder.tv_lastmsg.setText(Html.fromHtml(networkConnectionList.get(position).getMessage(), Html.FROM_HTML_MODE_COMPACT));
+            } else {
+                holder.tv_lastmsg.setText(Html.fromHtml(networkConnectionList.get(position).getMessage()));
+            }
             AppUtils.setGlideImage(context, (holder).mImageview6, networkConnectionList.get(position).getReceiver().getUserImage());
             holder.tv_minago.setText(DateUtils.getTimeAgo(networkConnectionList.get(position).getCreatedDatetime()));
         }
