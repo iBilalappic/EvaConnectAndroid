@@ -16,6 +16,7 @@ import com.hypernym.evaconnect.models.MyLikesModel;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +46,8 @@ public class JobAdAdapter extends RecyclerView.Adapter<JobAdAdapter.ViewHolder> 
 
         holder.tv_name.setText(jobAdList.get(position).getJobTitle());
         holder.tv_postion.setText(jobAdList.get(position).getPosition());
-        holder.tv_salary.setText("$" + String.valueOf(jobAdList.get(position).getSalary()));
+        DecimalFormat myFormatter = new DecimalFormat("############");
+        holder.tv_salary.setText("£ " + myFormatter.format(jobAdList.get(position).getSalary()) + " pa");
         AppUtils.setGlideImage(context, (holder).profile_image, jobAdList.get(position).getJobImage());
 
         if (jobAdList.get(position).getIs_job_like() != null && jobAdList.get(position).getIs_job_like() > 0) {

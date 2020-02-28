@@ -309,7 +309,7 @@
             android:gravity="center"
             android:imeOptions="actionDone"
             android:inputType="number"
-            android:maxLength="10"
+            android:maxLength="9"
             android:hint="$97,000 (per annum)"
             android:textColor="@color/dark_gray"
             android:textColorHint="@color/dark_gray"
