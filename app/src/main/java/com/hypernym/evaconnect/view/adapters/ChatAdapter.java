@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -32,12 +33,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private Context context;
     private List<ChatMessage> chatMessageList = new ArrayList<>();
     private NetworkConnection networkConnection;
+    private OnItemClickListener onItemClickListener;
 
-
-    public ChatAdapter(Context context, List<ChatMessage> chatMessages, NetworkConnection networkConnection) {
+    public ChatAdapter(Context context, List<ChatMessage> chatMessages, NetworkConnection networkConnection, OnItemClickListener itemClickListener) {
         this.context = context;
         this.chatMessageList = chatMessages;
         this.networkConnection = networkConnection;
+        this.onItemClickListener = itemClickListener;
     }
 
     @NonNull
@@ -50,6 +52,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ChatAdapter.ViewHolder holder, int position) {
         if (chatMessageList.get(position).getType() == 1) {
+
+
             if (chatMessageList.get(position).getType_interview() != null &&
                     chatMessageList.get(position).getType_interview().equals("Interview")) {
 
@@ -57,7 +61,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 holder.layout3.setVisibility(View.VISIBLE);
                 holder.layout_date.setVisibility(View.VISIBLE);
                 holder.layout_time.setVisibility(View.VISIBLE);
-               // holder.tv_interview.setText(chatMessageList.get(position).getMessage());
+                // holder.tv_interview.setText(chatMessageList.get(position).getMessage());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     holder.tv_interview.setText(Html.fromHtml(chatMessageList.get(position).getMessage(), Html.FROM_HTML_MODE_COMPACT));
                 } else {
@@ -141,7 +145,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
             }
 
-
         } else {
 
 
@@ -152,13 +155,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             holder.tv_receivertime.setVisibility(View.GONE);
             holder.layout_date.setVisibility(View.GONE);
             holder.layout_time.setVisibility(View.GONE);
+            if (chatMessageList.get(position).getType_interview() != null &&
+                    chatMessageList.get(position).getType_interview().equals("Interview")) {
+                holder.layout_accept.setVisibility(View.VISIBLE);
+            }
 
-           // holder.mtextview20.setText(chatMessageList.get(position).getMessage());
+            // holder.mtextview20.setText(chatMessageList.get(position).getMessage());
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 holder.mtextview20.setText(Html.fromHtml(chatMessageList.get(position).getMessage(), Html.FROM_HTML_MODE_COMPACT));
             } else {
                 holder.mtextview20.setText(Html.fromHtml(chatMessageList.get(position).getMessage()));
             }
+
+
             if (networkConnection.getSenderId().equals(LoginUtils.getUser().getId())) {
 
                 AppUtils.setGlideImage(context, (holder).imageView6, networkConnection.getReceiver().getUserImage());
@@ -220,19 +229,23 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
     @Override
     public int getItemCount() {
         return chatMessageList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView mtextview20, mtextview21, tv_sendertime, tv_receivertime, tv_interview,
-                tv_day, tv_month, tv_year, tv_hour, tv_mintues;
+                tv_day, tv_month, tv_year, tv_hour, tv_mintues, tv_accept, tv_decline, tv_reschedule, tv_acceptText, tv_declineText;
         CardView mlayout1, mlayout2, layout3;
         CircleImageView imageView6, imageView7, img_interviewSender;
         ImageView senderImage, receiveImage;
         RecyclerView recycler_viewSender, recycler_viewReceiver;
-        LinearLayout layout_date, layout_time;
+        LinearLayout layout_date, layout_time, layout_accept;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -240,6 +253,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             mtextview21 = itemView.findViewById(R.id.tv_lastmsg);
             mlayout1 = itemView.findViewById(R.id.layout1);
             mlayout2 = itemView.findViewById(R.id.layout2);
+            layout_accept = itemView.findViewById(R.id.layout_accept);
             imageView6 = itemView.findViewById(R.id.imageView6);
             imageView7 = itemView.findViewById(R.id.imageView7);
             tv_sendertime = itemView.findViewById(R.id.tv_sendtime);
@@ -256,8 +270,43 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             tv_year = itemView.findViewById(R.id.tv_year);
             tv_hour = itemView.findViewById(R.id.tv_hours);
             tv_mintues = itemView.findViewById(R.id.tv_minutes);
+            tv_accept = itemView.findViewById(R.id.tv_accept);
+            tv_decline = itemView.findViewById(R.id.tv_decline);
+            tv_reschedule = itemView.findViewById(R.id.tv_reschedule);
+            tv_declineText = itemView.findViewById(R.id.tv_declineText);
+            tv_acceptText = itemView.findViewById(R.id.tv_acceptText);
             recycler_viewSender = itemView.findViewById(R.id.recycler_viewSender);
             recycler_viewReceiver = itemView.findViewById(R.id.recycler_viewReceiver);
+            itemView.setOnClickListener(this);
+            tv_accept.setOnClickListener(this);
+            tv_decline.setOnClickListener(this);
+
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.tv_accept:
+                    onItemClickListener.onItemClick(v, getAdapterPosition());
+                    tv_acceptText.setVisibility(View.VISIBLE);
+                    tv_declineText.setVisibility(View.GONE);
+                    tv_accept.setVisibility(View.GONE);
+                    tv_decline.setVisibility(View.GONE);
+                    tv_reschedule.setVisibility(View.GONE);
+
+                    break;
+                case R.id.tv_decline:
+                    onItemClickListener.onItemClick(v, getAdapterPosition());
+                    tv_acceptText.setVisibility(View.GONE);
+                    tv_declineText.setVisibility(View.VISIBLE);
+                    tv_accept.setVisibility(View.GONE);
+                    tv_decline.setVisibility(View.GONE);
+                    tv_reschedule.setVisibility(View.GONE);
+                    break;
+                case R.id.tv_reschedule:
+                    break;
+            }
+
         }
     }
 }

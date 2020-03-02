@@ -66,6 +66,7 @@ import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.view.adapters.AttachmentsAdapter;
 import com.hypernym.evaconnect.view.adapters.ChatAdapter;
+import com.hypernym.evaconnect.view.adapters.MyLikeAdapter;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 
 import org.jsoup.helper.StringUtil;
@@ -93,7 +94,7 @@ import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
 
-public class ChatFragment extends BaseFragment implements View.OnClickListener, AttachmentsAdapter.ItemClickListener {
+public class ChatFragment extends BaseFragment implements View.OnClickListener, AttachmentsAdapter.ItemClickListener, ChatAdapter.OnItemClickListener {
 
 
     @BindView(R.id.rc_chat)
@@ -193,9 +194,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         Hour = getArguments().getInt("Hour");
         Minutes = getArguments().getInt("Mintues");
 
-        messageText="<p><b>You have been shortlisted for an interview</b> for the postion of </p>"+Job_name+","+
-                "<p>working internationally.</p><br>"+"Your interview slot is "+"<b>"+Day+"</b>"+" "+"<b>"+DateUtils.convertnumtocharmonths(Month)+"</b>"+" at "+"<b>"+Hour+"</b>"+":"+"<b>"+Minutes+"</b>";
-       // messageText = "You Have been shortlisted for an interview for the position of " + Job_name + " working internationally.";
+        messageText = "<p><b>You have been shortlisted for an interview</b> for the postion of </p>" + Job_name + "," +
+                "<p>working internationally.</p><br>" + "Your interview slot is " + "<b>" + Day + "</b>" + " " + "<b>" + DateUtils.convertnumtocharmonths(Month) + "</b>" + " at " + "<b>" + Hour + "</b>" + ":" + "<b>" + Minutes + "</b>";
+        // messageText = "You Have been shortlisted for an interview for the position of " + Job_name + " working internationally.";
         if (LoginUtils.getUser().getUser_id().equals(LoginUtils.getUser().getId())) {
             UserDetails.chatWith = appliedApplicants.getUser().getId().toString();
             UserDetails.email = appliedApplicants.getUser().getEmail();
@@ -468,7 +469,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setStackFromEnd(true);
         rc_chat.setLayoutManager(layoutManager);
-        chatAdapter = new ChatAdapter(getActivity(), chatMessageList, networkConnection);
+        chatAdapter = new ChatAdapter(getActivity(), chatMessageList, networkConnection, this);
         rc_chat.setAdapter(chatAdapter);
         if (chatMessageList.size() > 0) {
             rc_chat.smoothScrollToPosition(chatMessageList.size() - 1);
@@ -584,6 +585,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
             reference1.push().setValue(map);
             reference2.push().setValue(map);
+            sendNotification();
+            messageArea.setText("");
         } else if (SelectedImageUri != null) {
             UploadImageToFirebase();
         }
@@ -915,23 +918,63 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void onItemClick(View view, int position) {
-        simpleDialog = new SimpleDialog(getContext(), getString(R.string.confirmation), getString(R.string.msg_remove_attachment), getString(R.string.button_no), getString(R.string.button_yes), new OnOneOffClickListener() {
-            @Override
-            public void onSingleClick(View v) {
-                switch (v.getId()) {
-                    case R.id.button_positive:
-                        attachments.remove(position);
-                        MultiplePhoto.remove(position);
+
+        switch (view.getId()) {
+            case R.id.img_attach:
+                simpleDialog = new SimpleDialog(getContext(), getString(R.string.confirmation), getString(R.string.msg_remove_attachment), getString(R.string.button_no), getString(R.string.button_yes), new OnOneOffClickListener() {
+                    @Override
+                    public void onSingleClick(View v) {
+                        switch (v.getId()) {
+                            case R.id.button_positive:
+                                attachments.remove(position);
+                                MultiplePhoto.remove(position);
 //                        MultiplePhotoString.remove(position);
-                        attachmentsAdapter.notifyDataSetChanged();
-                        //  SelectedImageUri = null;
-                        break;
-                    case R.id.button_negative:
-                        break;
-                }
-                simpleDialog.dismiss();
-            }
-        });
-        simpleDialog.show();
+                                attachmentsAdapter.notifyDataSetChanged();
+                                //  SelectedImageUri = null;
+                                break;
+                            case R.id.button_negative:
+                                break;
+                        }
+                        simpleDialog.dismiss();
+                    }
+                });
+                simpleDialog.show();
+                break;
+            case R.id.tv_accept:
+//                Toast.makeText(getContext(), "accept", Toast.LENGTH_SHORT).show();
+//                chat_acceptFirebase();
+                break;
+        }
+
+    }
+
+    private void chat_acceptFirebase() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("message", "empty");
+        map.put("type", "Accept");
+        map.put("user", UserDetails.username);
+        map.put("time", DateUtils.GetCurrentdatetime());
+        map.put("status", AppConstants.UN_READ);
+        map.put("image", null);
+        if (networkConnection.getSender().getId().equals(LoginUtils.getLoggedinUser().getId())) {
+            map.put("sender_name", networkConnection.getSender().getFirstName());
+            map.put("receiver_name", networkConnection.getReceiver().getFirstName());
+            map.put("sender_email", networkConnection.getSender().getEmail());
+            map.put("receiver_email", networkConnection.getReceiver().getEmail());
+            map.put("sender_image", networkConnection.getSender().getUserImage());
+            map.put("receiver_image", networkConnection.getReceiver().getUserImage());
+            map.put("email", networkConnection.getReceiver().getEmail());
+        } else {
+            map.put("sender_name", networkConnection.getReceiver().getFirstName());
+            map.put("receiver_name", networkConnection.getSender().getFirstName());
+            map.put("sender_email", networkConnection.getReceiver().getEmail());
+            map.put("receiver_email", networkConnection.getSender().getEmail());
+            map.put("sender_image", networkConnection.getReceiver().getUserImage());
+            map.put("receiver_image", networkConnection.getSender().getUserImage());
+            map.put("email", networkConnection.getSender().getEmail());
+        }
+        map.put("timestamp", ServerValue.TIMESTAMP);
+        reference1.push().setValue(map);
+        reference2.push().setValue(map);
     }
 }

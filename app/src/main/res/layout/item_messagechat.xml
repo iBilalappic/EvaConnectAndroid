@@ -80,6 +80,85 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
+    <LinearLayout
+        android:id="@+id/layout_accept"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout1">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/spacing_large">
+
+            <TextView
+                android:id="@+id/tv_accept"
+                style="@style/TextStyle.Black"
+                android:layout_width="100dp"
+                android:layout_height="25dp"
+                android:background="@drawable/rounded_button_border"
+                android:gravity="center"
+                android:text="Accept"
+                android:visibility="visible"></TextView>
+
+            <TextView
+                android:id="@+id/tv_decline"
+                style="@style/TextStyle.Black"
+                android:layout_width="100dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="15dp"
+                android:background="@drawable/rounded_button_nobackground"
+                android:gravity="center"
+                android:text="Decline"
+                android:visibility="visible"></TextView>
+
+            <TextView
+                android:id="@+id/tv_declineText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:gravity="center"
+                android:text="You have declined this interview"
+                android:visibility="gone"></TextView>
+
+            <TextView
+                android:id="@+id/tv_acceptText"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:gravity="center"
+                android:maxLines="2"
+                android:visibility="gone"
+                android:text="You have accepted this interview. Your calendar has been updated."></TextView>
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_reschedule"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/rounded_button_border"
+            android:drawableRight="@drawable/ic_clock"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="Reschedule"
+            android:textColor="@color/black"
+            android:textSize="12sp"></TextView>
+
+
+    </LinearLayout>
+
     <androidx.cardview.widget.CardView
         android:id="@+id/layout2"
         android:layout_width="match_parent"
@@ -219,20 +298,20 @@
         android:id="@+id/layout_date"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:visibility="gone"
         android:layout_marginTop="40dp"
         android:background="@color/lighter_gray"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout3">
 
         <TextView
+            android:id="@+id/tv_day"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:id="@+id/tv_day"
             android:text="30">
 
         </TextView>
@@ -246,12 +325,12 @@
         </View>
 
         <TextView
+            android:id="@+id/tv_month"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:id="@+id/tv_month"
             android:text="June">
 
         </TextView>
@@ -265,12 +344,12 @@
         </View>
 
         <TextView
+            android:id="@+id/tv_year"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:id="@+id/tv_year"
             android:text="2019">
 
         </TextView>
@@ -283,19 +362,19 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
-        android:visibility="gone"
         android:background="@color/lighter_gray"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout_date">
 
         <TextView
+            android:id="@+id/tv_hours"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginEnd="20dp"
             android:layout_weight="1"
-            android:id="@+id/tv_hours"
             android:gravity="end|center"
             android:text="12">
 
@@ -310,12 +389,12 @@
         </View>
 
         <TextView
+            android:id="@+id/tv_minutes"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="20dp"
             android:layout_weight="1"
-            android:id="@+id/tv_minutes"
             android:gravity="start|center"
             android:text="00">
 
