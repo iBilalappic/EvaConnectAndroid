@@ -288,7 +288,6 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
             //  Log.d("TAAAG", "" + GsonUtils.toJson(networkConnection));
             loadFragment(R.id.framelayout, chatFragment, getContext(), true);
         } else {
-
             // Toast.makeText(getContext(), "" + newNetworkConnectionList.get(position).getSenderId(), Toast.LENGTH_SHORT).show();
             ItemPostionHorizontal = position;
         }

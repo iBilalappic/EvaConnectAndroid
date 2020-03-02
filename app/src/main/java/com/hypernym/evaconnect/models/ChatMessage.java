@@ -6,6 +6,7 @@ import java.util.List;
 public class ChatMessage {
     private String Message;
     private String Type_interview;
+    private String message_key;
 
     public String getDay() {
         return Day;
@@ -107,5 +108,13 @@ public class ChatMessage {
 
     public void setImage(List<String> image) {
         this.image = image;
+    }
+
+    public String getMessage_key() {
+        return message_key;
+    }
+
+    public void setMessage_key(String message_key) {
+        this.message_key = message_key;
     }
 }

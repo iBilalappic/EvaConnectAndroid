@@ -35,6 +35,8 @@ public class AppliedApplicants implements Serializable {
     @Expose
     private String status;
 
+    private String message_key;
+
     public Integer getId() {
         return id;
     }
@@ -115,4 +117,11 @@ public class AppliedApplicants implements Serializable {
         this.status = status;
     }
 
+    public String getMessage_key() {
+        return message_key;
+    }
+
+    public void setMessage_key(String message_key) {
+        this.message_key = message_key;
+    }
 }

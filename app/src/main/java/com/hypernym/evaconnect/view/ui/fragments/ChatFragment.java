@@ -418,6 +418,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     mMessage.setYear(Year);
                     mMessage.setHour(Hour);
                     mMessage.setMinutes(Mintues);
+mMessage.setMessage_key(userKey);
                     chatMessageList.add(mMessage);
                     Log.d("Taag", "" + chatMessageList.size());
                     chatAdapter.notifyDataSetChanged();
@@ -432,12 +433,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     mMessage.setDay(Day);
                     mMessage.setMonth(Month);
                     mMessage.setYear(Year);
+                    mMessage.setMessage_key(userKey);
                     chatMessageList.add(mMessage);
                     mMessage.setChattime(chatTime);
                     Log.d("Taag", "" + chatMessageList.size());
                     chatAdapter.notifyDataSetChanged();
                     //setupRecycler(chatMessageList);
                 }
+
                 if (chatMessageList.size() > 0) {
                     rc_chat.smoothScrollToPosition(chatMessageList.size() - 1);
                 }
@@ -941,6 +944,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 simpleDialog.show();
                 break;
             case R.id.tv_accept:
+                reference1.child(chatMessageList.get(position).getMessage_key()).child("type").setValue(AppConstants.INTERVIEW_ACCEPTED);
 //                Toast.makeText(getContext(), "accept", Toast.LENGTH_SHORT).show();
 //                chat_acceptFirebase();
                 break;

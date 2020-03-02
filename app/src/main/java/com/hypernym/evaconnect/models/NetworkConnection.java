@@ -42,6 +42,8 @@ public class NetworkConnection implements Serializable {
     @Expose
     private String message;
 
+    private String message_key;
+
     private int unread_msg_count;
 
     public Integer getId() {
@@ -138,5 +140,13 @@ public class NetworkConnection implements Serializable {
 
     public void setUnread_msg_count(int unread_msg_count) {
         this.unread_msg_count = unread_msg_count;
+    }
+
+    public String getMessage_key() {
+        return message_key;
+    }
+
+    public void setMessage_key(String message_key) {
+        this.message_key = message_key;
     }
 }

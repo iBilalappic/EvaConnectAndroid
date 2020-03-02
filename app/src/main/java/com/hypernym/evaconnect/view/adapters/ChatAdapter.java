@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.ChatMessage;
 import com.hypernym.evaconnect.models.NetworkConnection;
 import com.hypernym.evaconnect.models.UserDetails;
@@ -158,6 +159,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             if (chatMessageList.get(position).getType_interview() != null &&
                     chatMessageList.get(position).getType_interview().equals("Interview")) {
                 holder.layout_accept.setVisibility(View.VISIBLE);
+            }
+            else if(chatMessageList.get(position).getType_interview() != null &&
+                    chatMessageList.get(position).getType_interview().equals(AppConstants.INTERVIEW_ACCEPTED))
+            {
+                holder.layout_accept.setVisibility(View.VISIBLE);
+                holder.tv_acceptText.setVisibility(View.VISIBLE);
+                holder.tv_declineText.setVisibility(View.GONE);
+                holder.tv_accept.setVisibility(View.GONE);
+                holder.tv_decline.setVisibility(View.GONE);
+                holder.tv_reschedule.setVisibility(View.GONE);
             }
 
             // holder.mtextview20.setText(chatMessageList.get(position).getMessage());
