@@ -13,6 +13,7 @@ import java.util.TimeZone;
 public final class DateUtils {
     public static final String DATE_FORMAT_1 = "hh:mm a";
     public static final String DATE_FORMAT_2 = "d MMM";
+    public static final String DATE_FORMAT_3 = "dd MMMM yyyy";
     public static final String DATE_INPUT_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final String DATE_INPUT_FORMAT_WITHOUTTIME = "yyyy-MM-dd";
     public static final String SERVER_DATE_INPUT_FORMAT = "yyyy-MM-dd hh:mm:ss";
@@ -92,6 +93,47 @@ public final class DateUtils {
         df.setTimeZone(TimeZone.getTimeZone("gmt"));
         String completetime = df.format(Calendar.getInstance().getTime());
         return completetime;
+    }
+
+    public static String convertnumtocharmonths(int m){
+        String charname=null;
+        if(m==1){
+            charname="Jan";
+        }
+        if(m==2){
+            charname="Feb";
+        }
+        if(m==3){
+            charname="Mar";
+        }
+        if(m==4){
+            charname="April";
+        }
+        if(m==5){
+            charname="May";
+        }
+        if(m==6){
+            charname="June";
+        }
+        if(m==7){
+            charname="July";
+        }
+        if(m==8){
+            charname="Aug";
+        }
+        if(m==9){
+            charname="Sep";
+        }
+        if(m==10){
+            charname="Oct";
+        }
+        if(m==11){
+            charname="Nov";
+        }
+        if(m==12){
+            charname="Dec";
+        }
+        return charname;
     }
 
 

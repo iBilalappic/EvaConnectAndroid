@@ -102,7 +102,7 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
             setPageTitle("");
             showBackButton();
             appliedApplicants = (AppliedApplicants) getArguments().getSerializable(Constants.DATA);
-            Job_name=getArguments().getString("JOB_NAME");
+            Job_name = getArguments().getString("JOB_NAME");
             Log.d("TAAAG", "" + GsonUtils.toJson(appliedApplicants));
             AppUtils.setGlideImage(getContext(), cv_profile_image, appliedApplicants.getUser().getUserImage());
             tv_activefor.setText(Constants.SUBMITTED + DateUtils.getTimeAgo(appliedApplicants.getCreatedDatetime()));
@@ -154,20 +154,19 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
                 }
                 break;
             case R.id.tv_offerinterview:
-                ChatFragment chatFragment=new ChatFragment();
-                Bundle bundle=new Bundle();
-                bundle.putString(Constants.FRAGMENT_NAME, AppConstants.APPLICANT_FRAGMENT);
-                bundle.putSerializable(Constants.DATA,appliedApplicants);
-                bundle.putString("JOB_NAME",Job_name);
-                chatFragment.setArguments(bundle);
-                loadFragment(R.id.framelayout,chatFragment,getContext(),true);
-                Toast.makeText(getActivity(), "" + "Selected Date: " +
-                                datePicker.getDayOfMonth() + "/" +
-                                (datePicker.getMonth() + 1) + "/" +
-                                datePicker.getYear(),
-                        Toast.LENGTH_SHORT).show();
                 SetTimePicker();
-
+                ChatFragment chatFragment = new ChatFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(Constants.FRAGMENT_NAME, AppConstants.APPLICANT_FRAGMENT);
+                bundle.putSerializable(Constants.DATA, appliedApplicants);
+                bundle.putString("JOB_NAME", Job_name);
+                bundle.putInt("Day", datePicker.getDayOfMonth());
+                bundle.putInt("Month", datePicker.getMonth() + 1);
+                bundle.putInt("Year", datePicker.getYear());
+                bundle.putInt("Hour", hour);
+                bundle.putInt("Mintues", minute);
+                chatFragment.setArguments(bundle);
+                loadFragment(R.id.framelayout, chatFragment, getContext(), true);
                 break;
 
 
@@ -182,6 +181,5 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
             hour = timePicker.getCurrentHour();
             minute = timePicker.getCurrentMinute();
         }
-        Toast.makeText(getActivity(), "" + "Selected time: " + hour + ":" + minute, Toast.LENGTH_SHORT).show();
     }
 }

@@ -5,6 +5,63 @@ import java.util.List;
 
 public class ChatMessage {
     private String Message;
+    private String Type_interview;
+
+    public String getDay() {
+        return Day;
+    }
+
+    public void setDay(String day) {
+        Day = day;
+    }
+
+    public String getMonth() {
+        return Month;
+    }
+
+    public void setMonth(String month) {
+        Month = month;
+    }
+
+    public String getYear() {
+        return Year;
+    }
+
+    public void setYear(String year) {
+        Year = year;
+    }
+
+    private String Day;
+    private String Month;
+    private String Year;
+
+    public String getMinutes() {
+        return Minutes;
+    }
+
+    public void setMinutes(String minutes) {
+        Minutes = minutes;
+    }
+
+    public String getHour() {
+        return Hour;
+    }
+
+    public void setHour(String hour) {
+        Hour = hour;
+    }
+
+    private String Minutes;
+    private String Hour;
+
+    public String getType_interview() {
+        return Type_interview;
+    }
+
+    public void setType_interview(String type_interview) {
+        Type_interview = type_interview;
+    }
+
     private int type;
     private List<String> image;
 
