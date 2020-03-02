@@ -28,6 +28,7 @@ import com.hypernym.evaconnect.view.adapters.MyLikeAdapter;
 import com.hypernym.evaconnect.viewmodel.AppliedApplicantViewModel;
 import com.hypernym.evaconnect.viewmodel.MylikesViewModel;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,7 +101,6 @@ public class CompanyApplicantFragment extends BaseFragment implements View.OnCli
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
                 hideDialog();
-
             }
         });
     }
@@ -115,7 +115,8 @@ public class CompanyApplicantFragment extends BaseFragment implements View.OnCli
             AppUtils.setGlideImage(getContext(), profile_image, companyJobAdModel.getJobImage());
             tv_positionName.setText(companyJobAdModel.getPosition());
             tv_name.setText(companyJobAdModel.getJobTitle());
-            tv_salaryAmount.setText("$" + String.valueOf(companyJobAdModel.getSalary()));
+            DecimalFormat myFormatter = new DecimalFormat("############");
+            tv_salaryAmount.setText("£ " + myFormatter.format(companyJobAdModel.getSalary()) +" pa");
             tv_locationName.setText(companyJobAdModel.getLocation());
             tv_weeklyHoursNumber.setText(companyJobAdModel.getWeeklyHours());
 //            tv_minago.setText(DateUtils.getTimeAgo(jobAd.getCreatedDatetime()));

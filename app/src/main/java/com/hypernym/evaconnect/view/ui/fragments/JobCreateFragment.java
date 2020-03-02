@@ -145,11 +145,10 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
             postAd.setText("Update Job");
             showBackButton();
             companyJobAdModel = (CompanyJobAdModel) getArguments().getSerializable("COMPANY_AD");
-
             AppUtils.setGlideImage(getContext(), profile_image, companyJobAdModel.getJobImage());
-            String companyname = getsplitCompanyName(companyJobAdModel.getJobTitle());
+         //   String companyname = getsplitCompanyName(companyJobAdModel.getJobTitle());
             String jobtitle = getsplitTitle(companyJobAdModel.getJobTitle());
-            edit_companyName.setText(companyname);
+            edit_companyName.setText(jobtitle);
             edit_jobtitle.setText(jobtitle);
             edit_jobpostion.setText(companyJobAdModel.getPosition());
             edit_Location.setText(companyJobAdModel.getLocation());
@@ -284,7 +283,8 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
                     simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_jobAd_update), null, getString(R.string.ok), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            getActivity().onBackPressed();
+                           // getActivity().onBackPressed();
+                            loadFragment(R.id.framelayout,new JobListingFragment(),getContext(),false);
                             simpleDialog.dismiss();
                         }
                     });

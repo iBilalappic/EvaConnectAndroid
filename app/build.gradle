@@ -112,9 +112,7 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer-smoothstreaming:r2.4.0'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.10.5'
 
-
     implementation 'com.weiwangcn.betterspinner:library-material:1.1.0'
-    /*Calendar*/
-    implementation 'com.applandeo:material-calendar-view:1.8.0-rc01'
 
+    implementation 'com.applandeo:material-calendar-view:1.7.0'
 }
