@@ -36,6 +36,7 @@ public class AppConstants {
     public static final String READ = "read";
     public static final String UN_READ = "unread";
     public static final String INTERVIEW_ACCEPTED = "Interview_Accepted";
-
-
+    public static final String INTERVIEW_DECLINE = "Interview_Decline";
+    public static final String RESCHEDULE = "Interview_schedule";
+    public static final String INTERVIEW = "Interview";
 }

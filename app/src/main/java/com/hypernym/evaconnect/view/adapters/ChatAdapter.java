@@ -22,6 +22,7 @@ import com.hypernym.evaconnect.models.ChatMessage;
 import com.hypernym.evaconnect.models.NetworkConnection;
 import com.hypernym.evaconnect.models.UserDetails;
 import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 
@@ -56,7 +57,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
 
             if (chatMessageList.get(position).getType_interview() != null &&
-                    chatMessageList.get(position).getType_interview().equals("Interview")) {
+                    chatMessageList.get(position).getType_interview().equals(AppConstants.INTERVIEW)) {
 
 
                 holder.layout3.setVisibility(View.VISIBLE);
@@ -157,15 +158,30 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             holder.layout_date.setVisibility(View.GONE);
             holder.layout_time.setVisibility(View.GONE);
             if (chatMessageList.get(position).getType_interview() != null &&
-                    chatMessageList.get(position).getType_interview().equals("Interview")) {
+                    chatMessageList.get(position).getType_interview().equals(AppConstants.INTERVIEW)) {
                 holder.layout_accept.setVisibility(View.VISIBLE);
-            }
-            else if(chatMessageList.get(position).getType_interview() != null &&
-                    chatMessageList.get(position).getType_interview().equals(AppConstants.INTERVIEW_ACCEPTED))
-            {
+            } else if (chatMessageList.get(position).getType_interview() != null &&
+                    chatMessageList.get(position).getType_interview().equals(AppConstants.INTERVIEW_ACCEPTED)) {
                 holder.layout_accept.setVisibility(View.VISIBLE);
                 holder.tv_acceptText.setVisibility(View.VISIBLE);
                 holder.tv_declineText.setVisibility(View.GONE);
+                holder.tv_accept.setVisibility(View.GONE);
+                holder.tv_decline.setVisibility(View.GONE);
+                holder.tv_reschedule.setVisibility(View.GONE);
+            } else if (chatMessageList.get(position).getType_interview() != null &&
+                    chatMessageList.get(position).getType_interview().equals(AppConstants.INTERVIEW_DECLINE)) {
+                holder.layout_accept.setVisibility(View.VISIBLE);
+                holder.tv_acceptText.setVisibility(View.GONE);
+                holder.tv_declineText.setVisibility(View.VISIBLE);
+                holder.tv_accept.setVisibility(View.GONE);
+                holder.tv_decline.setVisibility(View.GONE);
+                holder.tv_reschedule.setVisibility(View.GONE);
+            } else if (chatMessageList.get(position).getType_interview() != null &&
+                    chatMessageList.get(position).getType_interview().equals(AppConstants.RESCHEDULE)) {
+                holder.layout_accept.setVisibility(View.VISIBLE);
+                holder.tv_acceptText.setVisibility(View.GONE);
+                holder.tv_declineText.setVisibility(View.GONE);
+                holder.tv_rescheduleText.setVisibility(View.VISIBLE);
                 holder.tv_accept.setVisibility(View.GONE);
                 holder.tv_decline.setVisibility(View.GONE);
                 holder.tv_reschedule.setVisibility(View.GONE);
@@ -251,7 +267,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView mtextview20, mtextview21, tv_sendertime, tv_receivertime, tv_interview,
-                tv_day, tv_month, tv_year, tv_hour, tv_mintues, tv_accept, tv_decline, tv_reschedule, tv_acceptText, tv_declineText;
+                tv_day, tv_month, tv_year, tv_hour, tv_mintues, tv_accept, tv_decline,
+                tv_reschedule, tv_acceptText, tv_declineText, tv_rescheduleText;
         CardView mlayout1, mlayout2, layout3;
         CircleImageView imageView6, imageView7, img_interviewSender;
         ImageView senderImage, receiveImage;
@@ -286,11 +303,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             tv_reschedule = itemView.findViewById(R.id.tv_reschedule);
             tv_declineText = itemView.findViewById(R.id.tv_declineText);
             tv_acceptText = itemView.findViewById(R.id.tv_acceptText);
+            tv_rescheduleText = itemView.findViewById(R.id.tv_rescheduleText);
             recycler_viewSender = itemView.findViewById(R.id.recycler_viewSender);
             recycler_viewReceiver = itemView.findViewById(R.id.recycler_viewReceiver);
             itemView.setOnClickListener(this);
             tv_accept.setOnClickListener(this);
             tv_decline.setOnClickListener(this);
+            tv_reschedule.setOnClickListener(this);
 
         }
 
@@ -315,6 +334,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                     tv_reschedule.setVisibility(View.GONE);
                     break;
                 case R.id.tv_reschedule:
+                    onItemClickListener.onItemClick(v, getAdapterPosition());
+                    tv_acceptText.setVisibility(View.GONE);
+                    tv_declineText.setVisibility(View.GONE);
+                    tv_rescheduleText.setVisibility(View.VISIBLE);
+                    tv_accept.setVisibility(View.GONE);
+                    tv_decline.setVisibility(View.GONE);
+                    tv_reschedule.setVisibility(View.GONE);
                     break;
             }
 
