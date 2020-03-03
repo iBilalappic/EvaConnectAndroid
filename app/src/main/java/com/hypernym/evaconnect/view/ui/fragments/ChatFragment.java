@@ -34,7 +34,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -418,7 +420,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     mMessage.setYear(Year);
                     mMessage.setHour(Hour);
                     mMessage.setMinutes(Mintues);
-mMessage.setMessage_key(userKey);
+                    mMessage.setMessage_key(userKey);
                     chatMessageList.add(mMessage);
                     Log.d("Taag", "" + chatMessageList.size());
                     chatAdapter.notifyDataSetChanged();
@@ -948,6 +950,17 @@ mMessage.setMessage_key(userKey);
 //                Toast.makeText(getContext(), "accept", Toast.LENGTH_SHORT).show();
 //                chat_acceptFirebase();
                 break;
+            case R.id.tv_decline:
+                reference1.child(chatMessageList.get(position).getMessage_key()).child("type").setValue(AppConstants.INTERVIEW_DECLINE);
+//                Toast.makeText(getContext(), "accept", Toast.LENGTH_SHORT).show();
+//                chat_acceptFirebase();
+                break;
+            case R.id.tv_reschedule:
+                reference1.child(chatMessageList.get(position).getMessage_key()).child("type").setValue(AppConstants.RESCHEDULE);
+             //   reference2.child(chatMessageList.get(position).getMessage_key()).child("type").setValue(AppConstants.RESCHEDULE);
+//                Toast.makeText(getContext(), "accept", Toast.LENGTH_SHORT).show();
+              //  chat_acceptFirebase();
+                break;
         }
 
     }
@@ -955,7 +968,7 @@ mMessage.setMessage_key(userKey);
     private void chat_acceptFirebase() {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("message", "empty");
-        map.put("type", "Accept");
+        map.put("type", AppConstants.RESCHEDULE);
         map.put("user", UserDetails.username);
         map.put("time", DateUtils.GetCurrentdatetime());
         map.put("status", AppConstants.UN_READ);
@@ -978,7 +991,6 @@ mMessage.setMessage_key(userKey);
             map.put("email", networkConnection.getSender().getEmail());
         }
         map.put("timestamp", ServerValue.TIMESTAMP);
-        reference1.push().setValue(map);
         reference2.push().setValue(map);
     }
 }

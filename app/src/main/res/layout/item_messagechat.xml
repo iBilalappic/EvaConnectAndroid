@@ -137,6 +137,16 @@
                 android:visibility="gone"
                 android:text="You have accepted this interview. Your calendar has been updated."></TextView>
 
+            <TextView
+                android:id="@+id/tv_rescheduleText"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:gravity="center"
+                android:maxLines="2"
+                android:visibility="gone"
+                android:text="You have requested a rescheduled interview."></TextView>
+
 
         </LinearLayout>
 
