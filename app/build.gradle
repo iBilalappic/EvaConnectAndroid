@@ -114,5 +114,7 @@ dependencies {
 
     implementation 'com.weiwangcn.betterspinner:library-material:1.1.0'
 
-    implementation 'com.applandeo:material-calendar-view:1.7.0'
+    implementation 'com.github.kizitonwose:CalendarView:0.3.2'
+
+    implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'
 }

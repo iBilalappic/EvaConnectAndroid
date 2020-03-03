@@ -7,30 +7,47 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-import com.applandeo.materialcalendarview.CalendarView;
-import com.applandeo.materialcalendarview.EventDay;
+
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.decorators.EventDecorator;
+
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CalendarFragment extends Fragment {
+public class CalendarFragment extends BaseFragment {
 
     @BindView(R.id.calendarView)
-    CalendarView calendarView;
+    MaterialCalendarView calendarView;
 
+    @BindView(R.id.newevent)
+    TextView newevent;
+
+    private List<CalendarDay> events = new ArrayList<>();
 
     public CalendarFragment() {
         // Required empty public constructor
@@ -48,41 +65,31 @@ public class CalendarFragment extends Fragment {
     }
 
     private void init() {
-//        List<EventDay> events = new ArrayList<>();
-//
-//        Calendar calendar = Calendar.getInstance();
-//        events.add(new EventDay(calendar, R.drawable.redcircle));
-//        Calendar calendar1 = Calendar.getInstance();
-//        events.add(new EventDay(calendar1, R.drawable.bluecircle));
-//or
-        // events.add(new EventDay(calendar, new Drawable()));
-//or if you want to specify event label color
-        //events.add(new EventDay(calendar, R.drawable.sample_icon, Color.parseColor("#228B22")));
 
-        //CalendarView calendarView = (CalendarView) findViewById(R.id.calendarView);
-        //calendarView.setEvents(events);
-//
-//        String[] arr = {"2020-03-10", "2020-03-11", "2020-03-15", "2020-03-16", "2020-03-25"};
-//        for (int i = 0; i < 5; i++) {
-//            int eventCount = 3;
-//            customCalendar.addAnEvent(arr[i], eventCount, getEventDataList(eventCount));
-//        }
-        List<EventDay> events = new ArrayList<>();
+        makeJsonObjectRequest();
+    }
+    private void makeJsonObjectRequest() {
 
-        Calendar calendar = Calendar.getInstance();
-        events.add(new EventDay(calendar, R.drawable.redcircle));
-
-        Calendar calendar1 = Calendar.getInstance();
-        events.add(new EventDay(calendar1, R.drawable.bluecircle));
-
-        calendarView.setEvents(events);
+        try {
+            CalendarDay day = CalendarDay.from(2020,03,05);
+            CalendarDay day1 = CalendarDay.from(2020,03,05);
+            events.add(day);
+            events.add(day1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        int[] threeColors = {
+                Color.rgb(0, 0, 255),
+                Color.rgb(0, 255, 0),
+                Color.rgb(255, 0, 0)};
+        EventDecorator eventDecorator = new EventDecorator(events, threeColors);
+        calendarView.addDecorator(eventDecorator);
     }
 
-//    private ArrayList<EventData> getEventDataList(int eventCount) {
-//        EventData eventData=new EventData();
-//        eventData.setData();
-//        return  null;
-//    }
-
+    @OnClick(R.id.newevent)
+    public void newEvent()
+    {
+        loadFragment(R.id.framelayout,new CreateEventFragment(),getContext(),true);
+    }
 
 }
