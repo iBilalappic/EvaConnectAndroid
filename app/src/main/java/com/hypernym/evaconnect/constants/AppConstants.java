@@ -39,4 +39,5 @@ public class AppConstants {
     public static final String INTERVIEW_DECLINE = "Interview_Decline";
     public static final String RESCHEDULE = "Interview_schedule";
     public static final String INTERVIEW = "Interview";
+    public static final String REQUEST_RESCHEDULE = "request_reschedule";
 }

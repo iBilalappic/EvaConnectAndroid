@@ -7,6 +7,31 @@ public class ChatMessage {
     private String Message;
     private String Type_interview;
     private String message_key;
+    private String Job_id;
+    private String Day;
+    private String Month;
+    private String Year;
+    private String Minutes;
+    private String Hour;
+
+    public String getApplication_id() {
+        return Application_id;
+    }
+
+    public void setApplication_id(String application_id) {
+        Application_id = application_id;
+    }
+
+    private String Application_id;
+
+
+    public String getJob_id() {
+        return Job_id;
+    }
+
+    public void setJob_id(String job_id) {
+        Job_id = job_id;
+    }
 
     public String getDay() {
         return Day;
@@ -32,9 +57,6 @@ public class ChatMessage {
         Year = year;
     }
 
-    private String Day;
-    private String Month;
-    private String Year;
 
     public String getMinutes() {
         return Minutes;
@@ -51,9 +73,6 @@ public class ChatMessage {
     public void setHour(String hour) {
         Hour = hour;
     }
-
-    private String Minutes;
-    private String Hour;
 
     public String getType_interview() {
         return Type_interview;

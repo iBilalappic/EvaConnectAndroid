@@ -23,6 +23,8 @@ import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -59,6 +61,7 @@ import com.hypernym.evaconnect.models.Receiver;
 import com.hypernym.evaconnect.models.Sender;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.models.UserDetails;
+import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.toolbar.OnItemClickListener;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.Constants;
@@ -70,6 +73,7 @@ import com.hypernym.evaconnect.view.adapters.AttachmentsAdapter;
 import com.hypernym.evaconnect.view.adapters.ChatAdapter;
 import com.hypernym.evaconnect.view.adapters.MyLikeAdapter;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
+import com.hypernym.evaconnect.viewmodel.JobListViewModel;
 
 import org.jsoup.helper.StringUtil;
 
@@ -124,11 +128,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     LinearLayoutManager layoutManager;
     ChatAdapter chatAdapter;
     String messageText, ChatTime;
-    public static final String DATE_INPUT_FORMAT = "yyyy-MM-dd HH:mm:ss";
     private static final int REQUEST_PHOTO_GALLERY = 4;
     private static final int CAMERAA = 1;
-    private String GalleryImage, mCurrentPhotoPath, globalImagePath, FileName;
-    private String mProfileImageDecodableString;
+    private String GalleryImage, globalImagePath, FileName;
+    public String mProfileImageDecodableString;
     private File tempFile, file_name;
     private String currentPhotoPath = "";
     private List<Uri> MultiplePhoto = new ArrayList<>();
@@ -143,6 +146,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private AppliedApplicants appliedApplicants = new AppliedApplicants();
     private int Day, Month, Year;
     private int Hour, Minutes;
+    private JobListViewModel jobListViewModel;
 
     public ChatFragment() {
         // Required empty public constructor
@@ -166,9 +170,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         sendButton.setOnClickListener(this);
         browsefiles.setOnClickListener(this);
         manipulateBundle();
+        initViewModel();
 
         return view;
 
+    }
+
+    private void initViewModel() {
+        jobListViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(JobListViewModel.class);
     }
 
     private void manipulateBundle() {
@@ -374,6 +383,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 String Year = null;
                 String Hour = null;
                 String Mintues = null;
+                String Job_id = null;
+                String Application_id = null;
 
                 String userKey = dataSnapshot.getKey();
                 if (email.equalsIgnoreCase(LoginUtils.getLoggedinUser().getEmail()) && map.get("status").equals(AppConstants.UN_READ)) {
@@ -407,6 +418,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 if (map.get("Minutes") != null) {
                     Mintues = map.get("Minutes").toString();
                 }
+                if (map.get("Job_id") != null) {
+                    Job_id = map.get("Job_id").toString();
+                }
+                if (map.get("application_id") != null) {
+                    Application_id = map.get("application_id").toString();
+                }
                 if (userName.equals(UserDetails.username)) {
                     mMessage = new ChatMessage();
                     mMessage.setMessage(message);
@@ -421,6 +438,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     mMessage.setHour(Hour);
                     mMessage.setMinutes(Mintues);
                     mMessage.setMessage_key(userKey);
+                    mMessage.setJob_id(Job_id);
+                    mMessage.setApplication_id(Application_id);
                     chatMessageList.add(mMessage);
                     Log.d("Taag", "" + chatMessageList.size());
                     chatAdapter.notifyDataSetChanged();
@@ -435,7 +454,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     mMessage.setDay(Day);
                     mMessage.setMonth(Month);
                     mMessage.setYear(Year);
+                    mMessage.setHour(Hour);
+                    mMessage.setMinutes(Mintues);
                     mMessage.setMessage_key(userKey);
+                    mMessage.setJob_id(Job_id);
+                    mMessage.setApplication_id(Application_id);
                     chatMessageList.add(mMessage);
                     mMessage.setChattime(chatTime);
                     Log.d("Taag", "" + chatMessageList.size());
@@ -568,6 +591,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             map.put("Year", Year);
             map.put("Hour", Hour);
             map.put("Minutes", Minutes);
+            map.put("Job_id", appliedApplicants.getJobId());
+            map.put("application_id", appliedApplicants.getId());
             if (LoginUtils.getUser().getUser_id().equals(LoginUtils.getUser().getId())) {
                 map.put("sender_name", LoginUtils.getUser().getFirst_name());
                 map.put("receiver_name", appliedApplicants.getUser().getFirstName());
@@ -636,7 +661,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 map.put("email", LoginUtils.getUser().getEmail());
             }
             map.put("timestamp", ServerValue.TIMESTAMP);
-
+            messageArea.setText("");
 
             reference1.push().setValue(map);
             reference2.push().setValue(map);
@@ -946,7 +971,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 simpleDialog.show();
                 break;
             case R.id.tv_accept:
-                reference1.child(chatMessageList.get(position).getMessage_key()).child("type").setValue(AppConstants.INTERVIEW_ACCEPTED);
+                Log.d("TAAAG",GsonUtils.toJson(chatMessageList.get(position)));
+                AppliedForInterview(position);
 //                Toast.makeText(getContext(), "accept", Toast.LENGTH_SHORT).show();
 //                chat_acceptFirebase();
                 break;
@@ -957,18 +983,40 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 break;
             case R.id.tv_reschedule:
                 reference1.child(chatMessageList.get(position).getMessage_key()).child("type").setValue(AppConstants.RESCHEDULE);
-             //   reference2.child(chatMessageList.get(position).getMessage_key()).child("type").setValue(AppConstants.RESCHEDULE);
 //                Toast.makeText(getContext(), "accept", Toast.LENGTH_SHORT).show();
-              //  chat_acceptFirebase();
+                chat_acceptFirebase();
                 break;
         }
 
     }
 
+    private void AppliedForInterview(int position) {
+
+        jobListViewModel.apply_interview(
+                Integer.parseInt(chatMessageList.get(position).getJob_id()),
+                Integer.parseInt(chatMessageList.get(position).getApplication_id()),
+                chatMessageList.get(position).getDay(),
+                chatMessageList.get(position).getMonth(),
+                chatMessageList.get(position).getYear(),
+                chatMessageList.get(position).getHour(),
+                chatMessageList.get(position).getMinutes()).observe(this, new Observer<BaseModel<List<Object>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Object>> apply_interview) {
+                if (apply_interview != null && !apply_interview.isError()) {
+                    reference1.child(chatMessageList.get(position).getMessage_key()).child("type").setValue(AppConstants.INTERVIEW_ACCEPTED);
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+                hideDialog();
+
+            }
+        });
+    }
+
     private void chat_acceptFirebase() {
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("message", "empty");
-        map.put("type", AppConstants.RESCHEDULE);
+        map.put("message", "The applicant has requested a rescheduled interview slot");
+        map.put("type", AppConstants.REQUEST_RESCHEDULE);
         map.put("user", UserDetails.username);
         map.put("time", DateUtils.GetCurrentdatetime());
         map.put("status", AppConstants.UN_READ);

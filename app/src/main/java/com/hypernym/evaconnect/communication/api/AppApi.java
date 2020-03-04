@@ -105,6 +105,11 @@ public interface AppApi {
         // Call<BaseModel<List<Object>>> setLikeJob();
     Call<BaseModel<List<Object>>> setLikeJob(@Body HashMap<String, Object> body);
 
+    @POST(APIConstants.APPLY_INTERVIEW)
+        // Call<BaseModel<List<Object>>> setLikeJob();
+    Call<BaseModel<List<Object>>> apply_interview(@Body HashMap<String, Object> body);
+
+
 
     @POST(APIConstants.CHECK_EMAIL_EXIST)
     Call<BaseModel<List<User>>> isEmailExist(@Body User user);

@@ -30,5 +30,6 @@ public interface APIConstants {
     public static String UPDATE_JOB_AD="job/details/{job_id}/";
   //  public static String GET_JOB_AD_BY_ID="job/details/{job_id}/";
     public static String GET_JOB_AD_BY_ID="job/show/details/{job_id}/";
-    public static String GET_APPLICANTS=" job/application/filter/";
+    public static String GET_APPLICANTS="job/application/filter/";
+    public static String APPLY_INTERVIEW="job/interview/";
 }

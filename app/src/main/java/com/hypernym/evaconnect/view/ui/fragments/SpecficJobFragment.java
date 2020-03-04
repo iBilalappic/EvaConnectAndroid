@@ -85,8 +85,6 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
     @BindView(R.id.img_share)
     ImageView img_share;
 
-    @BindView(R.id.swipeRefresh)
-    SwipeRefreshLayout swipeRefresh;
 
 
     private JobAd jobAd = new JobAd();
@@ -106,7 +104,6 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
         tv_apply.setOnClickListener(this);
         tv_goback.setOnClickListener(this);
         img_like.setOnClickListener(this);
-        swipeRefresh.setOnRefreshListener(this);
         init();
         return view;
     }
@@ -153,7 +150,6 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
                 hideDialog();
-                swipeRefresh.setRefreshing(false);
             }
         });
     }

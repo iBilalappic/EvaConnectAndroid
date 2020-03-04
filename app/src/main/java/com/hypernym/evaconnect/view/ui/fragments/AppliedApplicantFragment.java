@@ -15,19 +15,27 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.AppliedApplicants;
+import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.CompanyJobAdModel;
+import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.User;
+import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
+import com.hypernym.evaconnect.utils.NetworkUtils;
+import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 
 import java.io.File;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -76,7 +84,7 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
 
     int hour, minute;
     String Job_name;
-
+    private ConnectionViewModel connectionViewModel;
 
     public AppliedApplicantFragment() {
         // Required empty public constructor
@@ -101,6 +109,8 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
         if ((getArguments() != null)) {
             setPageTitle("");
             showBackButton();
+            connectionViewModel= ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
+
             appliedApplicants = (AppliedApplicants) getArguments().getSerializable(Constants.DATA);
             Job_name = getArguments().getString("JOB_NAME");
             Log.d("TAAAG", "" + GsonUtils.toJson(appliedApplicants));
@@ -154,6 +164,7 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
                 }
                 break;
             case R.id.tv_offerinterview:
+                OfferInterviewCall();
                 SetTimePicker();
                 ChatFragment chatFragment = new ChatFragment();
                 Bundle bundle = new Bundle();
@@ -171,6 +182,34 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
 
 
         }
+    }
+
+    private void OfferInterviewCall() {
+        if(NetworkUtils.isNetworkConnected(getContext())) {
+            ConnectionApiCall();
+        }
+        else
+        {
+            networkErrorDialog();
+        }
+    }
+
+    private void ConnectionApiCall() {
+        Connection connection=new Connection();
+        User user= LoginUtils.getLoggedinUser();
+        connection.setReceiver_id(appliedApplicants.getUserId());
+        connection.setStatus(AppConstants.ACTIVE);
+        connection.setSender_id(user.getId());
+        connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Connection>> listBaseModel) {
+                if(listBaseModel!=null && !listBaseModel.isError())
+                {
+
+                }
+                hideDialog();
+            }
+        });
     }
 
     private void SetTimePicker() {

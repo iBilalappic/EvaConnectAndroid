@@ -85,7 +85,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
 
                 AppUtils.setGlideImage(context, (holder).img_interviewSender, LoginUtils.getUser().getUser_image());
-            } else {
+            }  else {
                 holder.mlayout1.setVisibility(View.GONE);
                 holder.layout3.setVisibility(View.GONE);
                 holder.mlayout2.setVisibility(View.VISIBLE);
@@ -185,6 +185,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 holder.tv_accept.setVisibility(View.GONE);
                 holder.tv_decline.setVisibility(View.GONE);
                 holder.tv_reschedule.setVisibility(View.GONE);
+            }
+            else if (chatMessageList.get(position).getType_interview() != null &&
+                    chatMessageList.get(position).getType_interview().equals(AppConstants.REQUEST_RESCHEDULE)) {
+                holder.layout_accept.setVisibility(View.GONE);
+                holder.tv_reschedule.setVisibility(View.GONE);
+                holder.tv_rescheduleText.setVisibility(View.GONE);
+            }else{
+                holder.layout_accept.setVisibility(View.GONE);
+                holder.tv_rescheduleText.setVisibility(View.GONE);
             }
 
             // holder.mtextview20.setText(chatMessageList.get(position).getMessage());
