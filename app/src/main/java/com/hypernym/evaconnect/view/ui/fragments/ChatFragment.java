@@ -216,7 +216,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             UserDetails.senderName = LoginUtils.getUser().getFirst_name();
             UserDetails.senderEmail = appliedApplicants.getUser().getEmail();
             UserDetails.receiverEmail = LoginUtils.getUser().getEmail();
-            UserDetails.senderImage = appliedApplicants.getUser().getUserImage();
+            UserDetails.senderImage = LoginUtils.getUser().getUser_image();
         } else {
             UserDetails.chatWith = LoginUtils.getUser().getId().toString();
             UserDetails.email = LoginUtils.getUser().getEmail();
