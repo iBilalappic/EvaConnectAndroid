@@ -285,6 +285,12 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     mClickListener.onApplyClick(v, getAdapterPosition());
                 }
             });
+            profile_image.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onApplyClick(v, getAdapterPosition());
+                }
+            });
         }
 
     }
