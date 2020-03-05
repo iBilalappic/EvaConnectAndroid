@@ -225,21 +225,30 @@
                 android:paddingStart="30dp"
                 android:paddingEnd="30dp"
                 android:text="Apply"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.533"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view0" />
+            
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:id="@+id/space0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_apply"></Space>
 
             <ScrollView
                 android:id="@+id/sc_description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
+                android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_apply"
+                app:layout_constraintTop_toBottomOf="@+id/space0"
                 tools:ignore="NestedScrolling">
 
                 <TextView

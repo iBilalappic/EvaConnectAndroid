@@ -49,7 +49,7 @@ public class SpecficJobAd {
     private Integer applicantCount;
     @SerializedName("is_applied")
     @Expose
-    private Object isApplied;
+    private Integer isApplied;
     @SerializedName("like_count")
     @Expose
     private Integer likeCount;
@@ -184,11 +184,11 @@ public class SpecficJobAd {
         this.applicantCount = applicantCount;
     }
 
-    public Object getIsApplied() {
+    public Integer getIsApplied() {
         return isApplied;
     }
 
-    public void setIsApplied(Object isApplied) {
+    public void setIsApplied(Integer isApplied) {
         this.isApplied = isApplied;
     }
 
