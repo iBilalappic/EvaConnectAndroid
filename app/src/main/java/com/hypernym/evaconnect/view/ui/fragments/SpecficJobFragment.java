@@ -85,7 +85,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
     @BindView(R.id.img_share)
     ImageView img_share;
 
-
+    int job_id;
     private JobAd jobAd = new JobAd();
     private SpecficJobAd checkLikeCount = new SpecficJobAd();
     User user;
@@ -113,10 +113,16 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
             setPageTitle("");
             showBackButton();
             jobAd = (JobAd) getArguments().getSerializable("JOB_AD");
-            GetJob_id(jobAd.getId());
-            if(LoginUtils.getUser().getType().equals("company")){
+            job_id = getArguments().getInt("job_id");
+            if (job_id != 0) {
+                GetJob_id(job_id);
+
+            } else {
+                GetJob_id(jobAd.getId());
+            }
+            if (LoginUtils.getUser().getType().equals("company")) {
                 tv_apply.setVisibility(View.GONE);
-            }else{
+            } else {
                 tv_apply.setVisibility(View.VISIBLE);
             }
         }
@@ -160,7 +166,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_apply:
-                if (checkLikeCount.getIsApplied()== 0) {
+                if (checkLikeCount.getIsApplied() == 0) {
                     ApplicationFormFragment applicationFormFragment = new ApplicationFormFragment();
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("JOB_AD", jobAd);
@@ -208,7 +214,12 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
         if (NetworkUtils.isNetworkConnected(getContext())) {
 //            if (user != null && user.getType().equals("company")) {
 //            } else {
-            GetJob_id(jobAd.getId());
+            if (job_id != 0) {
+                GetJob_id(job_id);
+            } else {
+                GetJob_id(jobAd.getId());
+            }
+
             //  }
         } else {
             networkErrorDialog();
