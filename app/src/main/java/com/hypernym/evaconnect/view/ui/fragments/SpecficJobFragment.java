@@ -103,7 +103,6 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
         tv_apply.setOnClickListener(this);
         tv_goback.setOnClickListener(this);
         img_like.setOnClickListener(this);
-        init();
         return view;
     }
 
@@ -215,5 +214,11 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
             networkErrorDialog();
         }
 
+    }
+
+    @Override
+    public void onResume() {
+        init();
+        super.onResume();
     }
 }
