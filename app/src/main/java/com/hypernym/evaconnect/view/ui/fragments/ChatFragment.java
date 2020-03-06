@@ -974,17 +974,20 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 Log.d("TAAAG",GsonUtils.toJson(chatMessageList.get(position)));
                 AppliedForInterview(position);
 //                Toast.makeText(getContext(), "accept", Toast.LENGTH_SHORT).show();
-//                chat_acceptFirebase();
+                String message_accept="The applicant has accepted a interview slot";
+                chat_acceptFirebase(message_accept);
                 break;
             case R.id.tv_decline:
                 reference1.child(chatMessageList.get(position).getMessage_key()).child("type").setValue(AppConstants.INTERVIEW_DECLINE);
 //                Toast.makeText(getContext(), "accept", Toast.LENGTH_SHORT).show();
-//                chat_acceptFirebase();
+                String message_decline="The applicant has decline a interview slot";
+                chat_acceptFirebase(message_decline);
                 break;
             case R.id.tv_reschedule:
                 reference1.child(chatMessageList.get(position).getMessage_key()).child("type").setValue(AppConstants.RESCHEDULE);
 //                Toast.makeText(getContext(), "accept", Toast.LENGTH_SHORT).show();
-                chat_acceptFirebase();
+                String message_schedule="The applicant has requested a rescheduled interview slot";
+                chat_acceptFirebase(message_schedule);
                 break;
         }
 
@@ -1013,9 +1016,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         });
     }
 
-    private void chat_acceptFirebase() {
+    private void chat_acceptFirebase(String messageText) {
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("message", "The applicant has requested a rescheduled interview slot");
+        map.put("message", messageText);
         map.put("type", AppConstants.REQUEST_RESCHEDULE);
         map.put("user", UserDetails.username);
         map.put("time", DateUtils.GetCurrentdatetime());
