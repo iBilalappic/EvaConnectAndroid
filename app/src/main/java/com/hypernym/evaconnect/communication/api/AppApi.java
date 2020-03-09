@@ -13,6 +13,7 @@ import com.hypernym.evaconnect.models.Notification_onesignal;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.User;
+import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.viewmodel.AppliedApplicantViewModel;
 
 import java.util.HashMap;
@@ -150,7 +151,7 @@ public interface AppApi {
     @POST(APIConstants.GET_CONNECTION_BY_FILTER)
     Call<BaseModel<List<User>>> getConnectionByFilter(@Body User user,@Query("limit") int limit, @Query("offset") int offset);
 
-    @POST("api/v1/notifications")
+    @POST(Constants.MESSAGE_NOTIFICATION)
     Call<Object> postPackets(@Body Notification_onesignal data);
 
     @POST(APIConstants.GET_ALL_NOTIFICATIONS)
