@@ -81,7 +81,7 @@
     <string name="err_internal_supported">Sorry! Files from internal storage are supported only</string>
     <string name="err_email_already_exist">An account already exists with that email. Please try another one.</string>
     <string name="err_password">Your password cannot be empty and requires a length of between 8-30 characters.</string>
-    <string name="err_image_size_large">The file exceeded the maximum size required by Aviation Connect. Recommended maximum size is 1MB, please try again.</string>
+    <string name="err_image_size_large">The file exceeded the maximum size required by Aviation Connect. Recommended maximum size is 4MB, please try again.</string>
     <string name="err_signup">This email already exist.</string>
     <string name="err_login">Username or password combination was not recognised. Please try again or click the forgotten username/password link</string>
     <string name="network_error">Please check your internet connection and try again.</string>

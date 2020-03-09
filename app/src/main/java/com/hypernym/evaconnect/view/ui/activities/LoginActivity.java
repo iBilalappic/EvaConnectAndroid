@@ -112,7 +112,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     }
 
     private void callLoginApi() {
-        showDialog();
+
         userViewModel.login(user).observe(this, new Observer<BaseModel<List<User>>>() {
             @Override
             public void onChanged(BaseModel<List<User>> user) {
@@ -135,7 +135,6 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
                 } else if (user == null) {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
-                hideDialog();
             }
         });
     }

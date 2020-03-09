@@ -44,6 +44,7 @@ import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.User;
+import com.hypernym.evaconnect.models.UserDetails;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
@@ -55,6 +56,7 @@ import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.onesignal.OneSignal;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -133,6 +135,7 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getApplication(), this)).get(UserViewModel.class);
         email = getIntent().getStringExtra("Email");
         password = getIntent().getStringExtra("Password");
+        user.setUsername(email);
         user.setEmail(email);
         user.setPassword(password);
         btn_signup.setOnClickListener(new OnOneOffClickListener() {
@@ -376,15 +379,18 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
             public void onChanged(BaseModel<List<User>> logins) {
                 if (logins != null && !logins.isError()) {
                     LoginUtils.saveUser(user);
+                    callLoginApi();
+
                     simpleDialog = new SimpleDialog(SignupDetailsActivity.this, getString(R.string.success), getString(R.string.msg_signup), null, getString(R.string.ok), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = new Intent(SignupDetailsActivity.this, LoginActivity.class);
-                            // set the new task and clear flags
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
+                            callLoginApi();
+//                            Intent intent = new Intent(SignupDetailsActivity.this, LoginActivity.class);
+//                            // set the new task and clear flags
+//                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                            startActivity(intent);
                             setupFireBaseUser();
-                            simpleDialog.dismiss();
+
                         }
                     });
                 } else {
@@ -393,6 +399,38 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
                 hideDialog();
                 if (!simpleDialog.isShowing())
                     simpleDialog.show();
+            }
+        });
+    }
+
+    private void callLoginApi() {
+        showDialog();
+        userViewModel.login(user).observe(this, new Observer<BaseModel<List<User>>>() {
+            @Override
+            public void onChanged(BaseModel<List<User>> user) {
+                if (user != null && !user.isError() && user.getData().get(0) != null) {
+                    LoginUtils.userLoggedIn();
+
+                    User userData = user.getData().get(0);
+                    userData.setUser_id(userData.getId());
+                    LoginUtils.saveUser(user.getData().get(0));
+                    OneSignal.sendTag("email",userData.getEmail());
+                    UserDetails.username = userData.getFirst_name();
+                    if (user.getData().get(0) != null) {
+                        LoginUtils.saveUserToken(user.getData().get(0).getToken());
+                    }
+                    simpleDialog.dismiss();
+                    Intent intent = new Intent(SignupDetailsActivity.this, HomeActivity.class);
+                    // set the new task and clear flags
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+
+                } else if (user!=null && user.isError()) {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_login));
+                } else if (user == null) {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+                hideDialog();
             }
         });
     }
