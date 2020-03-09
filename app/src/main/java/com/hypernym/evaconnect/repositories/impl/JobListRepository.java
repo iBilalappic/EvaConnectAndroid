@@ -97,13 +97,13 @@ public class JobListRepository implements IJobAdRepository {
     }
 
     @Override
-    public LiveData<BaseModel<List<Object>>> apply_interview(int job_id,int application_id,String day,String month,String year,String hour,String mintues) {
+    public LiveData<BaseModel<List<Object>>> apply_interview(int job_id,int sender_id,int application_id,String day,String month,String year,String hour,String mintues) {
         InterviewMutableLiveData = new MutableLiveData<>();
         HashMap<String, Object> body = new HashMap<>();
         body.put("user_id",LoginUtils.getUser().getId());
         body.put("job_id",job_id);
         body.put("job_application_id",application_id);
-        body.put("created_by_id",LoginUtils.getUser().getId());
+        body.put("created_by_id",sender_id);
         body.put("interview_date",year+"-"+month+"-"+day);
         body.put("interview_time",hour+":"+mintues+":"+"00");
         body.put("status",LoginUtils.getUser().getStatus());

@@ -14,6 +14,16 @@ public class ChatMessage {
     private String Minutes;
     private String Hour;
 
+    public String getSender_id() {
+        return Sender_id;
+    }
+
+    public void setSender_id(String sender_id) {
+        Sender_id = sender_id;
+    }
+
+    private String Sender_id;
+
     public String getApplication_id() {
         return Application_id;
     }

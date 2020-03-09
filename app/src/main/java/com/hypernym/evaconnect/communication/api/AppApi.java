@@ -151,7 +151,7 @@ public interface AppApi {
     @POST(APIConstants.GET_CONNECTION_BY_FILTER)
     Call<BaseModel<List<User>>> getConnectionByFilter(@Body User user,@Query("limit") int limit, @Query("offset") int offset);
 
-    @POST(Constants.MESSAGE_NOTIFICATION)
+    @POST(APIConstants.SEND_NOTIFICATION)
     Call<Object> postPackets(@Body Notification_onesignal data);
 
     @POST(APIConstants.GET_ALL_NOTIFICATIONS)

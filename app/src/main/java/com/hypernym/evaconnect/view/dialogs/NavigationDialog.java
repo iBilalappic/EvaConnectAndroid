@@ -50,8 +50,8 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
         mLike=findViewById(R.id.layoutLike);
         mJoblisting.setOnClickListener(this);
         mLike.setOnClickListener(this);
-        setCanceledOnTouchOutside(false);
-        setCancelable(false);
+        setCanceledOnTouchOutside(true);
+        setCancelable(true);
         Window window = getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.gravity = Gravity.TOP |Gravity.RIGHT;

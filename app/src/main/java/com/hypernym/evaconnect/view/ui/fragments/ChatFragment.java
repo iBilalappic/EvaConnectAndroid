@@ -385,6 +385,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 String Mintues = null;
                 String Job_id = null;
                 String Application_id = null;
+                String Sender_id = null;
 
                 String userKey = dataSnapshot.getKey();
                 if (email.equalsIgnoreCase(LoginUtils.getLoggedinUser().getEmail()) && map.get("status").equals(AppConstants.UN_READ)) {
@@ -424,6 +425,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 if (map.get("application_id") != null) {
                     Application_id = map.get("application_id").toString();
                 }
+                if (map.get("Sender_id") != null) {
+                    Sender_id = map.get("Sender_id").toString();
+                }
                 if (userName.equals(UserDetails.username)) {
                     mMessage = new ChatMessage();
                     mMessage.setMessage(message);
@@ -440,6 +444,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     mMessage.setMessage_key(userKey);
                     mMessage.setJob_id(Job_id);
                     mMessage.setApplication_id(Application_id);
+                    mMessage.setSender_id(Sender_id);
                     chatMessageList.add(mMessage);
                     Log.d("Taag", "" + chatMessageList.size());
                     chatAdapter.notifyDataSetChanged();
@@ -459,6 +464,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     mMessage.setMessage_key(userKey);
                     mMessage.setJob_id(Job_id);
                     mMessage.setApplication_id(Application_id);
+                    mMessage.setSender_id(Sender_id);
                     chatMessageList.add(mMessage);
                     mMessage.setChattime(chatTime);
                     Log.d("Taag", "" + chatMessageList.size());
@@ -593,6 +599,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             map.put("Minutes", Minutes);
             map.put("Job_id", appliedApplicants.getJobId());
             map.put("application_id", appliedApplicants.getId());
+            map.put("Sender_id",LoginUtils.getUser().getId());
             if (LoginUtils.getUser().getUser_id().equals(LoginUtils.getUser().getId())) {
                 map.put("sender_name", LoginUtils.getUser().getFirst_name());
                 map.put("receiver_name", appliedApplicants.getUser().getFirstName());
@@ -997,6 +1004,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
         jobListViewModel.apply_interview(
                 Integer.parseInt(chatMessageList.get(position).getJob_id()),
+                Integer.parseInt(chatMessageList.get(position).getSender_id()),
                 Integer.parseInt(chatMessageList.get(position).getApplication_id()),
                 chatMessageList.get(position).getDay(),
                 chatMessageList.get(position).getMonth(),
