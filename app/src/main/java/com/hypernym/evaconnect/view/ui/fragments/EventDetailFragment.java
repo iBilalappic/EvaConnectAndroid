@@ -284,9 +284,17 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
             private void setEventData(Event event) {
                 tv_name.setText(event.getEvent_name());
                 tv_minago.setText(DateUtils.getTimeAgo(event.getCreated_datetime()));
-                AppUtils.setGlideImageUrl(getContext(),img_event,event.getEvent_image().get(0));
+                if(event.getEvent_image().size()>0)
+                {
+                    AppUtils.setGlideImageUrl(getContext(),img_event,event.getEvent_image().get(0));
+                    AppUtils.setGlideUrlThumbnail(getContext(),img_eventlogo,event.getEvent_image().get(0));
+                }
+              else {
+                    img_event.setBackground(getContext().getDrawable(R.drawable.no_thumbnail));
+                    img_eventlogo.setBackground(getContext().getDrawable(R.drawable.no_thumbnail));
+                }
                 tv_content.setText(event.getContent());
-                AppUtils.setGlideImage(getContext(),img_eventlogo,event.getEvent_image().get(0));
+
                 tv_date.setText(DateUtils.getFormattedDateDMY(event.getEvent_start_date())+" - "+ DateUtils.getFormattedDateDMY(event.getEvent_end_date()));
                 tv_time.setText(DateUtils.getFormattedTime(event.getStart_time())+" - "+DateUtils.getFormattedTime(event.getEnd_time()));
                 tv_location.setText(event.getEvent_address()+" , "+ event.getEvent_city());

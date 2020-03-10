@@ -290,8 +290,6 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
 
         try {
 
-
-
             for(CalendarModel calendarModel :marks)
             {
 
@@ -308,15 +306,15 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
                         events=new ArrayList<>();
                         calendarMark.setDay(day);
                         colors=new ArrayList<>();
-                        if(calendarModel.getObject_type().equalsIgnoreCase("event"))
+                        if(calendarModel.getObject_type().equalsIgnoreCase("event") && !colors.contains(getContext().getResources().getColor(R.color.black)))
                         {
                             colors.add(getContext().getResources().getColor(R.color.black));
                         }
-                        else if(calendarModel.getObject_type().equalsIgnoreCase("interview"))
+                        else if(calendarModel.getObject_type().equalsIgnoreCase("interview") &&  !colors.contains(getContext().getResources().getColor(R.color.colorAccent)))
                         {
                             colors.add(getContext().getResources().getColor(R.color.colorAccent));
                         }
-                        else if(calendarModel.getObject_type().equalsIgnoreCase("note"))
+                        else if(calendarModel.getObject_type().equalsIgnoreCase("note")  && !colors.contains(getContext().getResources().getColor(R.color.blue)))
                         {
                             colors.add(getContext().getResources().getColor(R.color.blue));
                         }
@@ -326,7 +324,6 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
                     }
                     else
                     {
-
                         if(calendarModel.getObject_type().equalsIgnoreCase("event") && !calendarMark.getColors().contains(getContext().getResources().getColor(R.color.black)))
                         {
                             calendarMark.getColors().add(getContext().getResources().getColor(R.color.black));
@@ -342,21 +339,26 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
                         calendarMark.setColors(calendarMark.getColors());
 
                     }
-                    int size = calendarMark.getColors().size();
-                    int[] result = new int[size];
-                    Integer[] temp = calendarMark.getColors().toArray(new Integer[size]);
-                    for (int n = 0; n < size; ++n) {
-                        result[n] = temp[n];
-                    }
-                    EventDecorator eventDecorator = new EventDecorator(events, result,calendarMarks);
-                    calendarView.addDecorator(eventDecorator);
+
 
                 } catch (ParseException ex) {
                     Log.v("Exception", ex.getLocalizedMessage());
                 }
 
             }
-
+            for(CalendarMarks colorMarks:calendarMarks)
+            {
+                events=new ArrayList<>();
+                int size = colorMarks.getColors().size();
+                int[] result = new int[size];
+                Integer[] temp = colorMarks.getColors().toArray(new Integer[size]);
+                for (int n = 0; n < size; ++n) {
+                    result[n] = temp[n];
+                }
+                events.add(colorMarks.getDay());
+                EventDecorator eventDecorator = new EventDecorator(events, result,calendarMarks);
+                calendarView.addDecorator(eventDecorator);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

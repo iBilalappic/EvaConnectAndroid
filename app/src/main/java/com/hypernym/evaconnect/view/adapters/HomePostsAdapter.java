@@ -761,8 +761,15 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     } else {
                         ((EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like));
                     }
+                    if(posts.get(position).getEvent_image().size()>0)
+                    {
+                        AppUtils.setGlideVideoThumbnail(mContext, ((EventTypeViewHolder) holder).profile_image, posts.get(position).getEvent_image().get(0));
+                    }
+                    else
+                    {
+                        ((EventTypeViewHolder) holder).profile_image.setBackground(mContext.getDrawable(R.drawable.no_thumbnail));
+                    }
 
-                    AppUtils.setGlideImage(mContext, ((EventTypeViewHolder) holder).profile_image, posts.get(position).getEvent_image().get(0));
                     ((EventTypeViewHolder) holder).tv_name.setText(posts.get(position).getEvent_name());
                     ((EventTypeViewHolder) holder).tv_location.setText(posts.get(position).getEvent_city());
                     ((EventTypeViewHolder) holder).tv_eventdate.setText(DateUtils.getFormattedDateDMY(posts.get(position).getEvent_start_date()));
@@ -778,8 +785,8 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
                     break;
                 case AppConstants.JOB_TYPE:
-                    ((JobTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((JobTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
+                    ((JobTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
 
                     if (posts.get(position).getIs_job_like() != null && posts.get(position).getIs_job_like() > 0) {
                         ((JobTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like_selected));
