@@ -13,6 +13,7 @@ import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.CalendarModel;
 import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.EventAttendees;
+import com.hypernym.evaconnect.utils.DateUtils;
 
 import java.util.List;
 
@@ -42,14 +43,16 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         {
             holder.tv_title.setText("Job Interview at "+events.get(position).getObject_details().getCompany_name()+" - "+events.get(position).getObject_details().getPosition()
                     +" | "+ events.get(position).getObject_details().getAddress());
-            holder.tv_datetime.setText(events.get(position).getObject_details().getInterview_time());
+            holder.tv_datetime.setText(DateUtils.getFormattedTime(events.get(position).getObject_details().getInterview_time()));
             holder.tv_title.setCompoundDrawablesWithIntrinsicBounds( R.drawable.redcircle, 0, 0, 0);
+            holder.tv_datetime.setVisibility(View.VISIBLE);
         }
         else if(events.get(position).getObject_type().equalsIgnoreCase("event"))
         {
             holder.tv_title.setText(events.get(position).getObject_details().getEvent_name()+" | "+ events.get(position).getObject_details().getEvent_city());
-            holder.tv_datetime.setText(events.get(position).getObject_details().getStart_time()+" - "+events.get(position).getObject_details().getEnd_time());
+            holder.tv_datetime.setText(DateUtils.getFormattedTime(events.get(position).getObject_details().getStart_time())+" - "+DateUtils.getFormattedTime(events.get(position).getObject_details().getEnd_time()));
             holder.tv_title.setCompoundDrawablesWithIntrinsicBounds( R.drawable.blackcircle, 0, 0, 0);
+            holder.tv_datetime.setVisibility(View.VISIBLE);
         }
         else if(events.get(position).getObject_type().equalsIgnoreCase("note"))
         {

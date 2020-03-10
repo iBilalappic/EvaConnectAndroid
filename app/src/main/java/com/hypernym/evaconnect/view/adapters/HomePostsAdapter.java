@@ -166,17 +166,29 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.profile_image)
         ImageView profile_image;
 
-        @BindView(R.id.tv_connections)
-        TextView tv_connections;
+        @BindView(R.id.view6)
+        View top_image;
 
-//        @BindView(R.id.top_)
-//        TextView tv_connections;
+        @BindView(R.id.tv_attending)
+        TextView tv_attending;
 
+        @BindView(R.id.tv_location)
+        TextView tv_location;
+
+        @BindView(R.id.tv_eventdate)
+        TextView tv_eventdate;
 
         public EventTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             tv_viewcomments.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onEventItemClick(v, getAdapterPosition());
+                }
+            });
+
+            tv_attending.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onEventItemClick(v, getAdapterPosition());
@@ -752,15 +764,17 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
                     AppUtils.setGlideImage(mContext, ((EventTypeViewHolder) holder).profile_image, posts.get(position).getEvent_image().get(0));
                     ((EventTypeViewHolder) holder).tv_name.setText(posts.get(position).getEvent_name());
+                    ((EventTypeViewHolder) holder).tv_location.setText(posts.get(position).getEvent_city());
+                    ((EventTypeViewHolder) holder).tv_eventdate.setText(DateUtils.getFormattedDateDMY(posts.get(position).getEvent_start_date()));
 
-//                    if(position==0)
-//                    {
-//                        ((EventTypeViewHolder) holder).top_image.setVisibility(View.GONE);
-//                    }
-//                    else
-//                    {
-//                        ((EventTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
-//                    }
+                    if(position==0)
+                    {
+                        ((EventTypeViewHolder) holder).top_image.setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                        ((EventTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
+                    }
 
                     break;
                 case AppConstants.JOB_TYPE:

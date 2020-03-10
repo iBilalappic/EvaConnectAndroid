@@ -153,15 +153,7 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
             networkErrorDialog();
         }
 
-        if(LoginUtils.getLoggedinUser().getType().equalsIgnoreCase("company"))
-        {
-            newevent.setVisibility(View.VISIBLE);
-        }
-        else
-        {
-            newevent.setVisibility(View.GONE);
-        }
-
+        newevent.setVisibility(View.VISIBLE);
         dayOfMonth.setText(String.valueOf(1));
         selectmonth.setText(DateUtils.getMonthForInt(cal.get(Calendar.MONTH)));
         selectyear.setText(String.valueOf(cal.get(Calendar.YEAR)));
