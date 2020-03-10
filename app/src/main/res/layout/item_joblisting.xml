@@ -60,9 +60,11 @@
     <TextView
         android:id="@+id/tv_connections"
         style="@style/TextStyle"
-        android:layout_width="100dp"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:text="Aviation international"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
@@ -70,13 +72,14 @@
     <TextView
         android:id="@+id/tv_salary"
         style="@style/TextStyle"
-        android:layout_width="100dp"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:text="$97,000 pa"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toBottomOf="@+id/tv_connections" />
-
 
     <TextView
         android:id="@+id/tv_gotoadd"

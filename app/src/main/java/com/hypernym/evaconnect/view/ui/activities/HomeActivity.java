@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.NotifyEvent;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
@@ -36,6 +37,7 @@ import com.hypernym.evaconnect.view.ui.fragments.ConnectionsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.HomeFragment;
 import com.hypernym.evaconnect.view.ui.fragments.MessageFragment;
 import com.hypernym.evaconnect.view.ui.fragments.PostDetailsFragment;
+import com.hypernym.evaconnect.view.ui.fragments.SpecficJobFragment;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
 
 
@@ -300,12 +302,23 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     }
     @Override
     public void onItemClick(View view, int position) {
-        PostDetailsFragment postDetailsFragment=new PostDetailsFragment();
-        Bundle bundle=new Bundle();
-        bundle.putInt("post",notifications.get(position).getObject_id());
-        postDetailsFragment.setArguments(bundle);
-        loadFragment(R.id.framelayout,postDetailsFragment,this,true);
-        hideNotificationPanel();
+        if (notifications.get(position).getObject_type().equals("job")) {
+            SpecficJobFragment specficJobFragment = new SpecficJobFragment();
+            Bundle bundle = new Bundle();
+            JobAd jobAd = new JobAd();
+            jobAd.setId(notifications.get(position).getObject_id());
+            bundle.putSerializable("JOB_AD", jobAd);
+            specficJobFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, specficJobFragment, this, true);
+            hideNotificationPanel();
+        } else {
+            PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("post", notifications.get(position).getObject_id());
+            postDetailsFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, postDetailsFragment, this, true);
+            hideNotificationPanel();
+        }
     }
 
     @Override

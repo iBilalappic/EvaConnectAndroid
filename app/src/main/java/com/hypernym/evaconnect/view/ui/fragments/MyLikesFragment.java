@@ -14,11 +14,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.MyLikesModel;
 import com.hypernym.evaconnect.models.NetworkConnection;
 import com.hypernym.evaconnect.models.User;
@@ -43,7 +45,7 @@ import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_ST
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyLikesFragment extends BaseFragment implements MyLikeAdapter.OnItemClickListener,SwipeRefreshLayout.OnRefreshListener {
+public class MyLikesFragment extends BaseFragment implements MyLikeAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.rc_mylikes)
     RecyclerView rc_mylikes;
@@ -59,6 +61,7 @@ public class MyLikesFragment extends BaseFragment implements MyLikeAdapter.OnIte
     private boolean isLastPage = false;
     private boolean isLoading = false;
     int itemCount = 0;
+
     public MyLikesFragment() {
         // Required empty public constructor
     }
@@ -89,7 +92,7 @@ public class MyLikesFragment extends BaseFragment implements MyLikeAdapter.OnIte
 
     private void setupRecyclerview() {
 //        networkConnectionList = removeDuplicates(networkConnectionList);
-        myLikeAdapter = new MyLikeAdapter(getContext(), myLikesModelList,this);
+        myLikeAdapter = new MyLikeAdapter(getContext(), myLikesModelList, this);
         linearLayoutManager = new LinearLayoutManager(getContext());
         rc_mylikes.setLayoutManager(linearLayoutManager);
         rc_mylikes.setAdapter(myLikeAdapter);
@@ -101,12 +104,10 @@ public class MyLikesFragment extends BaseFragment implements MyLikeAdapter.OnIte
             @Override
             protected void loadMoreItems() {
                 isLoading = true;
-                currentPage= AppConstants.TOTAL_PAGES+currentPage;
-                if(NetworkUtils.isNetworkConnected(getContext())) {
+                currentPage = AppConstants.TOTAL_PAGES + currentPage;
+                if (NetworkUtils.isNetworkConnected(getContext())) {
                     GetMyLikes();
-                }
-                else
-                {
+                } else {
                     networkErrorDialog();
                 }
             }
@@ -126,25 +127,22 @@ public class MyLikesFragment extends BaseFragment implements MyLikeAdapter.OnIte
     private void GetMyLikes() {
         showDialog();
         User user = LoginUtils.getLoggedinUser();
-        mylikeViewModel.SetLikes(user.getUser_id(),AppConstants.TOTAL_PAGES,currentPage).observe(this, new Observer<BaseModel<List<MyLikesModel>>>() {
+        mylikeViewModel.SetLikes(user.getUser_id(), AppConstants.TOTAL_PAGES, currentPage).observe(this, new Observer<BaseModel<List<MyLikesModel>>>() {
             @Override
             public void onChanged(BaseModel<List<MyLikesModel>> getnetworkconnection) {
-                if (getnetworkconnection != null && !getnetworkconnection.isError() && getnetworkconnection.getData().size()>0 && getnetworkconnection.getData().get(0)!=null) {
-                  //  myLikesModelList.clear();
+                if (getnetworkconnection != null && !getnetworkconnection.isError() && getnetworkconnection.getData().size() > 0 && getnetworkconnection.getData().get(0) != null) {
+                    //  myLikesModelList.clear();
                     myLikesModelList.addAll(getnetworkconnection.getData());
                     myLikeAdapter.notifyDataSetChanged();
                     swipeRefresh.setRefreshing(false);
                     myLikeAdapter.removeLoading();
                     isLoading = false;
                     //hideDialog();
-                }
-                else if(getnetworkconnection !=null && !getnetworkconnection.isError() && getnetworkconnection.getData().size()==0)
-                {
+                } else if (getnetworkconnection != null && !getnetworkconnection.isError() && getnetworkconnection.getData().size() == 0) {
                     isLastPage = true;
                     myLikeAdapter.removeLoading();
                     isLoading = false;
-                }
-                else {
+                } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
                 hideDialog();
@@ -154,11 +152,22 @@ public class MyLikesFragment extends BaseFragment implements MyLikeAdapter.OnIte
 
     @Override
     public void onItemClick(View view, int position) {
-        PostDetailsFragment postDetailsFragment=new PostDetailsFragment();
-        Bundle bundle=new Bundle();
-        bundle.putInt("post",myLikesModelList.get(position).getObjectId());
-        postDetailsFragment.setArguments(bundle);
-        loadFragment(R.id.framelayout,postDetailsFragment,getContext(),true);
+       if (myLikesModelList.get(position).getObjectType().equals("job")) {
+            SpecficJobFragment specficJobFragment = new SpecficJobFragment();
+            Bundle bundle = new Bundle();
+            JobAd jobAd = new JobAd();
+            jobAd.setId(myLikesModelList.get(position).getObjectId());
+            bundle.putSerializable("JOB_AD", jobAd);
+            specficJobFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, specficJobFragment, getContext(), true);
+        } else {
+            PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("post", myLikesModelList.get(position).getObjectId());
+            postDetailsFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, postDetailsFragment, getContext(), true);
+        }
+
     }
 
     @Override
@@ -167,11 +176,9 @@ public class MyLikesFragment extends BaseFragment implements MyLikeAdapter.OnIte
         currentPage = PAGE_START;
         isLastPage = false;
         myLikeAdapter.clear();
-        if(NetworkUtils.isNetworkConnected(getContext())) {
+        if (NetworkUtils.isNetworkConnected(getContext())) {
             GetMyLikes();
-        }
-        else
-        {
+        } else {
             networkErrorDialog();
         }
     }

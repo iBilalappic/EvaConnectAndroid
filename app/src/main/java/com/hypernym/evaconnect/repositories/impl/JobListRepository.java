@@ -25,6 +25,7 @@ public class JobListRepository implements IJobAdRepository {
     private MutableLiveData<BaseModel<List<CompanyJobAdModel>>> CompanyMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> LikeMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<SpecficJobAd>>> JobMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Object>>> InterviewMutableLiveData = new MutableLiveData<>();
 
     @Override
     public LiveData<BaseModel<List<JobAd>>> getjobAd(User user) {
@@ -94,6 +95,36 @@ public class JobListRepository implements IJobAdRepository {
         });
         return JobMutableLiveData;
     }
+
+    @Override
+    public LiveData<BaseModel<List<Object>>> apply_interview(int job_id,int sender_id,int application_id,String day,String month,String year,String hour,String mintues) {
+        InterviewMutableLiveData = new MutableLiveData<>();
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("user_id",LoginUtils.getUser().getId());
+        body.put("job_id",job_id);
+        body.put("job_application_id",application_id);
+        body.put("created_by_id",sender_id);
+        body.put("interview_date",year+"-"+month+"-"+day);
+        body.put("interview_time",hour+":"+mintues+":"+"00");
+        body.put("status",LoginUtils.getUser().getStatus());
+        RestClient.get().appApi().apply_interview(body).enqueue(new Callback<BaseModel<List<Object>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+                if (response.isSuccessful() && !response.body().isError())
+                    InterviewMutableLiveData.setValue(response.body());
+                if (response.code() == 500) {
+                    InterviewMutableLiveData.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+                InterviewMutableLiveData.setValue(null);
+            }
+        });
+        return InterviewMutableLiveData;
+    }
+
 
     @Override
     public LiveData<BaseModel<List<Object>>> setLike(User user, int application_id, String action) {

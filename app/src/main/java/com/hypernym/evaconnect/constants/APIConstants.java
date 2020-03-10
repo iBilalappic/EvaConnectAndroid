@@ -26,9 +26,9 @@ public interface APIConstants {
     public static String JOB_LIST_AD ="job/show/";
     public static String JOB_FILTER_AD ="job/filter/";
     public static String APPLICATION_SUBMITT ="job/application/";
-    public static String JOB_LIKE ="job/like/";
+    public static String JOB_LIKE =" job/like/";
     public static String UPDATE_JOB_AD="job/details/{job_id}/";
-  //  public static String GET_JOB_AD_BY_ID="job/details/{job_id}/";
+    public static String SEND_NOTIFICATION="api/v1/notifications";
     public static String GET_JOB_AD_BY_ID="job/show/details/{job_id}/";
     public static String GET_APPLICANTS="job/application/filter/";
     public static String ADD_EVENT="event/";
@@ -41,4 +41,5 @@ public interface APIConstants {
     public static String LIKE_EVENT="event/like/";
     public static String GET_CALENDAR_BY_DATE="user/calendar/day/";
     public static String CREATE_NOTE="user/notes/";
+    public static String APPLY_INTERVIEW="job/interview/";
 }

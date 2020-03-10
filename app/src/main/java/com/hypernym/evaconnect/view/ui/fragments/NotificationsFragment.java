@@ -20,6 +20,7 @@ import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.Notification;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
@@ -158,12 +159,22 @@ public class NotificationsFragment extends BaseFragment implements Notifications
 
     @Override
     public void onItemClick(View view, int position) {
-        PostDetailsFragment postDetailsFragment=new PostDetailsFragment();
-        Bundle bundle=new Bundle();
-        bundle.putInt("post",notifications.get(position).getObject_id());
-        Log.d("TAAAGNOTIFY",""+GsonUtils.toJson(notifications.get(position)));
-        postDetailsFragment.setArguments(bundle);
-        loadFragment(R.id.framelayout,postDetailsFragment,getContext(),true);
+        if (notifications.get(position).getObject_type().equals("job")) {
+            SpecficJobFragment specficJobFragment = new SpecficJobFragment();
+            Bundle bundle = new Bundle();
+            JobAd jobAd = new JobAd();
+            jobAd.setId(notifications.get(position).getObject_id());
+            bundle.putSerializable("JOB_AD", jobAd);
+            specficJobFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, specficJobFragment, getContext(), true);
+        } else {
+            PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("post", notifications.get(position).getObject_id());
+            Log.d("TAAAGNOTIFY", "" + GsonUtils.toJson(notifications.get(position)));
+            postDetailsFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, postDetailsFragment, getContext(), true);
+        }
     }
 
     @Override

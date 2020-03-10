@@ -85,10 +85,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
     @BindView(R.id.img_share)
     ImageView img_share;
 
-    @BindView(R.id.swipeRefresh)
-    SwipeRefreshLayout swipeRefresh;
-
-
+    int job_id;
     private JobAd jobAd = new JobAd();
     private SpecficJobAd checkLikeCount = new SpecficJobAd();
     User user;
@@ -106,8 +103,6 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
         tv_apply.setOnClickListener(this);
         tv_goback.setOnClickListener(this);
         img_like.setOnClickListener(this);
-        swipeRefresh.setOnRefreshListener(this);
-        init();
         return view;
     }
 
@@ -118,22 +113,17 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
             setPageTitle("");
             showBackButton();
             jobAd = (JobAd) getArguments().getSerializable("JOB_AD");
-            GetJob_id(jobAd.getId());
-            Log.d("TAAAG", "" + GsonUtils.toJson(jobAd));
-            AppUtils.setGlideImage(getContext(), profile_image, jobAd.getJobImage());
-            tv_name.setText(jobAd.getJobTitle());
-            tv_positionName.setText(jobAd.getPosition());
-            DecimalFormat myFormatter = new DecimalFormat("############");
-            tv_salaryAmount.setText("£ " + myFormatter.format(jobAd.getSalary()) +" pa");
-            tv_description.setText(jobAd.getContent());
-            tv_locationName.setText(jobAd.getLocation());
-            tv_weeklyHoursNumber.setText(jobAd.getWeeklyHours());
-            tv_createddateTime.setText(DateUtils.getFormattedDateTime(jobAd.getCreatedDatetime()));
-            tv_minago.setText(DateUtils.getTimeAgo(jobAd.getCreatedDatetime()));
-            if (jobAd.getIs_job_like() != null && jobAd.getIs_job_like() > 0) {
-                img_like.setBackground(getActivity().getDrawable(R.mipmap.ic_like_selected));
+            job_id = getArguments().getInt("job_id");
+            if (job_id != 0) {
+                GetJob_id(job_id);
+
             } else {
-                img_like.setBackground(getActivity().getDrawable(R.mipmap.ic_like));
+                GetJob_id(jobAd.getId());
+            }
+            if (LoginUtils.getUser().getType().equals("company")) {
+                tv_apply.setVisibility(View.GONE);
+            } else {
+                tv_apply.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -144,6 +134,16 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
             public void onChanged(BaseModel<List<SpecficJobAd>> getjobAd) {
                 if (getjobAd != null && !getjobAd.isError()) {
                     checkLikeCount = getjobAd.getData().get(0);
+                    AppUtils.setGlideImage(getContext(), profile_image, getjobAd.getData().get(0).getJobImage());
+                    tv_name.setText(getjobAd.getData().get(0).getJobTitle());
+                    tv_positionName.setText(getjobAd.getData().get(0).getPosition());
+                    DecimalFormat myFormatter = new DecimalFormat("############");
+                    tv_salaryAmount.setText("£ " + myFormatter.format(getjobAd.getData().get(0).getSalary()) + " pa");
+                    tv_description.setText(getjobAd.getData().get(0).getContent());
+                    tv_locationName.setText(getjobAd.getData().get(0).getLocation());
+                    tv_weeklyHoursNumber.setText(getjobAd.getData().get(0).getWeeklyHours());
+                    tv_createddateTime.setText(DateUtils.getFormattedDateTime(getjobAd.getData().get(0).getCreatedDatetime()));
+                    tv_minago.setText(DateUtils.getTimeAgo(getjobAd.getData().get(0).getCreatedDatetime()));
                     if (getjobAd.getData().get(0).getIsJobLike() != null && getjobAd.getData().get(0).getIsJobLike() > 0) {
                         img_like.setBackground(getActivity().getDrawable(R.mipmap.ic_like_selected));
                     } else {
@@ -153,7 +153,6 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
                 hideDialog();
-                swipeRefresh.setRefreshing(false);
             }
         });
     }
@@ -167,7 +166,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_apply:
-                if (jobAd.getIs_applied() == 0) {
+                if (checkLikeCount.getIsApplied() == 0) {
                     ApplicationFormFragment applicationFormFragment = new ApplicationFormFragment();
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("JOB_AD", jobAd);
@@ -181,7 +180,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
                 getActivity().onBackPressed();
                 break;
             case R.id.img_like:
-                if (checkLikeCount!=null&&checkLikeCount.getIsJobLike()>0) {
+                if (checkLikeCount != null && checkLikeCount.getIsJobLike() > 0) {
                     SetJobUnLike(checkLikeCount.getId());
                 } else {
                     SetJobLike(checkLikeCount.getId());
@@ -215,11 +214,22 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
         if (NetworkUtils.isNetworkConnected(getContext())) {
 //            if (user != null && user.getType().equals("company")) {
 //            } else {
-            GetJob_id(jobAd.getId());
+            if (job_id != 0) {
+                GetJob_id(job_id);
+            } else {
+                GetJob_id(jobAd.getId());
+            }
+
             //  }
         } else {
             networkErrorDialog();
         }
 
+    }
+
+    @Override
+    public void onResume() {
+        init();
+        super.onResume();
     }
 }

@@ -43,6 +43,9 @@ public class JobListViewModel extends AndroidViewModel {
     public LiveData<BaseModel<List<SpecficJobAd>>> getJobId(int job_id) {
         return iJobAdRepository.getJobId(job_id);
     }
+    public LiveData<BaseModel<List<Object>>> apply_interview(int job_id,int sender_id,int application_id,String day,String month,String year,String hour,String minutes) {
+        return iJobAdRepository.apply_interview(job_id,sender_id,application_id,day,month,year,hour,minutes);
+    }
 
 
 }

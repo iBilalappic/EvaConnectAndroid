@@ -15,6 +15,8 @@ import com.hypernym.evaconnect.models.Notification_onesignal;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.User;
+import com.hypernym.evaconnect.utils.Constants;
+import com.hypernym.evaconnect.viewmodel.AppliedApplicantViewModel;
 
 import java.util.HashMap;
 import java.util.List;
@@ -106,6 +108,11 @@ public interface AppApi {
         // Call<BaseModel<List<Object>>> setLikeJob();
     Call<BaseModel<List<Object>>> setLikeJob(@Body HashMap<String, Object> body);
 
+    @POST(APIConstants.APPLY_INTERVIEW)
+        // Call<BaseModel<List<Object>>> setLikeJob();
+    Call<BaseModel<List<Object>>> apply_interview(@Body HashMap<String, Object> body);
+
+
 
     @POST(APIConstants.CHECK_EMAIL_EXIST)
     Call<BaseModel<List<User>>> isEmailExist(@Body User user);
@@ -146,7 +153,7 @@ public interface AppApi {
     @POST(APIConstants.GET_CONNECTION_BY_FILTER)
     Call<BaseModel<List<User>>> getConnectionByFilter(@Body User user,@Query("limit") int limit, @Query("offset") int offset);
 
-    @POST("api/v1/notifications")
+    @POST(APIConstants.SEND_NOTIFICATION)
     Call<Object> postPackets(@Body Notification_onesignal data);
 
     @POST(APIConstants.GET_ALL_NOTIFICATIONS)
