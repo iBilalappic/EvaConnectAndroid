@@ -180,7 +180,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                     Log.d("User key", child.getKey());
                     String[] conversationkey=child.getKey().split("_");
                     User user=LoginUtils.getLoggedinUser();
-                    if(user.getId()==Integer.parseInt(conversationkey[0])) {
+                    if(user!=null && user.getId()==Integer.parseInt(conversationkey[0])) {
 
                         Query lastMessage = databaseReference.child(AppConstants.FIREASE_CHAT_ENDPOINT).child(child.getKey()).orderByKey().limitToLast(1);
                         lastMessage.addListenerForSingleValueEvent(new ValueEventListener() {

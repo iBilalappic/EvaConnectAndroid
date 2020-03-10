@@ -399,8 +399,6 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     @OnClick(R.id.img_video)
     public void playVideo() {
 
-
-
        AppUtils.playVideo(getContext(), post.getPost_video());
     }
 

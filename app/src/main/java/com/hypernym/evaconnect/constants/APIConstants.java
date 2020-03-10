@@ -26,9 +26,19 @@ public interface APIConstants {
     public static String JOB_LIST_AD ="job/show/";
     public static String JOB_FILTER_AD ="job/filter/";
     public static String APPLICATION_SUBMITT ="job/application/";
-    public static String JOB_LIKE =" job/like/";
+    public static String JOB_LIKE ="job/like/";
     public static String UPDATE_JOB_AD="job/details/{job_id}/";
   //  public static String GET_JOB_AD_BY_ID="job/details/{job_id}/";
     public static String GET_JOB_AD_BY_ID="job/show/details/{job_id}/";
-    public static String GET_APPLICANTS=" job/application/filter/";
+    public static String GET_APPLICANTS="job/application/filter/";
+    public static String ADD_EVENT="event/";
+    public static String GET_CALENDAR_MARKS="user/calendar/";
+    public static String GET_EVENT_DETAILS="event/details/";
+    public static String GET_EVENT_COMMENTS="event/comment/filter/";
+    public static String ADD_EVENT_COMMENT="event/comment/";
+    public static String ADD_EVENT_ATTENDANCE="event/attendee/";
+    public static String UPDATE_EVENT_ATTENDANCE=" event/attendee/detail/";
+    public static String LIKE_EVENT="event/like/";
+    public static String GET_CALENDAR_BY_DATE="user/calendar/day/";
+    public static String CREATE_NOTE="user/notes/";
 }

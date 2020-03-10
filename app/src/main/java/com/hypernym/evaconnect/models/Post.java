@@ -20,7 +20,8 @@ public class Post implements Serializable {
     private Integer id;
     private Integer object_id;
     private Integer is_applied;
-
+    private String company_name;
+    private String interview_time;
 
     public Integer getObject_id() {
         return object_id;
@@ -57,7 +58,16 @@ public class Post implements Serializable {
     private String job_image;
     private Integer applicant_count;
     private Integer is_job_like;
-
+    private List<String> event_image;
+    private String event_name;
+    private String event_city;
+    private String event_start_date;
+    private Integer event_id;
+    private Integer is_event_like;
+    private String start_time;
+    private String end_time;
+    private String address;
+    private String notes;
 
 
 
@@ -348,6 +358,102 @@ public class Post implements Serializable {
 
     public void setIs_applied(Integer is_applied) {
         this.is_applied = is_applied;
+    }
+
+    public List<String> getEvent_image() {
+        return event_image;
+    }
+
+    public void setEvent_image(List<String> event_image) {
+        this.event_image = event_image;
+    }
+
+    public String getEvent_name() {
+        return event_name;
+    }
+
+    public void setEvent_name(String event_name) {
+        this.event_name = event_name;
+    }
+
+    public String getEvent_city() {
+        return event_city;
+    }
+
+    public void setEvent_city(String event_city) {
+        this.event_city = event_city;
+    }
+
+    public String getEvent_start_date() {
+        return event_start_date;
+    }
+
+    public void setEvent_start_date(String event_start_date) {
+        this.event_start_date = event_start_date;
+    }
+
+    public Integer getEvent_id() {
+        return event_id;
+    }
+
+    public void setEvent_id(Integer event_id) {
+        this.event_id = event_id;
+    }
+
+    public Integer getIs_event_like() {
+        return is_event_like;
+    }
+
+    public void setIs_event_like(Integer is_event_like) {
+        this.is_event_like = is_event_like;
+    }
+
+    public String getCompany_name() {
+        return company_name;
+    }
+
+    public void setCompany_name(String company_name) {
+        this.company_name = company_name;
+    }
+
+    public String getInterview_time() {
+        return interview_time;
+    }
+
+    public void setInterview_time(String interview_time) {
+        this.interview_time = interview_time;
+    }
+
+    public String getStart_time() {
+        return start_time;
+    }
+
+    public void setStart_time(String start_time) {
+        this.start_time = start_time;
+    }
+
+    public String getEnd_time() {
+        return end_time;
+    }
+
+    public void setEnd_time(String end_time) {
+        this.end_time = end_time;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }
 

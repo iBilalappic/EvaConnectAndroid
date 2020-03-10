@@ -3,9 +3,11 @@ package com.hypernym.evaconnect.communication.api;
 import com.hypernym.evaconnect.constants.APIConstants;
 import com.hypernym.evaconnect.models.AppliedApplicants;
 import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.CalendarModel;
 import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.Connection;
+import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.MyLikesModel;
 import com.hypernym.evaconnect.models.NetworkConnection;
@@ -13,7 +15,6 @@ import com.hypernym.evaconnect.models.Notification_onesignal;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.User;
-import com.hypernym.evaconnect.viewmodel.AppliedApplicantViewModel;
 
 import java.util.HashMap;
 import java.util.List;
@@ -162,4 +163,47 @@ public interface AppApi {
 
     @GET(APIConstants.GET_CONNECTION_COUNT)
     Call<BaseModel<User>> getConnectionCount(@Path("id") int id);
+
+    @Multipart
+    @POST(APIConstants.ADD_EVENT)
+    Call<BaseModel<List<Event>>> createEvent(@Part("user_id") int user_id,
+                                             @Part("created_by_id") int created_by_id,
+                                             @Part("content") RequestBody content,
+                                             @Part("status") RequestBody status,
+                                             @Part("event_city") RequestBody event_city,
+                                             @Part("event_address") RequestBody event_address,
+                                             @Part("event_start_date") RequestBody start_date,
+                                             @Part("event_end_date") RequestBody end_date,
+                                             @Part("start_time") RequestBody start_time,
+                                             @Part("end_time") RequestBody end_time,
+                                             @Part("event_name") RequestBody event_name,
+                                             @Part MultipartBody.Part event_image);
+
+
+    @POST(APIConstants.GET_EVENT_DETAILS)
+    Call<BaseModel<List<Event>>> getEventDetails(@Body Event event);
+
+    @POST(APIConstants.GET_EVENT_COMMENTS)
+    Call<BaseModel<List<Comment>>> getEventComments(@Body Event event);
+
+    @POST(APIConstants.ADD_EVENT_COMMENT)
+    Call<BaseModel<List<Comment>>> addEventComment(@Body Comment comment);
+
+    @POST(APIConstants.ADD_EVENT_ATTENDANCE)
+    Call<BaseModel<List<Event>>> addEventAttendance(@Body Event eventAttendees);
+
+    @PATCH(APIConstants.UPDATE_EVENT_ATTENDANCE)
+    Call<BaseModel<List<Event>>> updateEventAttendance(@Body Event eventAttendees);
+
+    @POST(APIConstants.LIKE_EVENT)
+    Call<BaseModel<List<Event>>> likeEvent(@Body Event event);
+
+    @POST(APIConstants.GET_CALENDAR_MARKS)
+    Call<BaseModel<List<CalendarModel>>> getAllCalendarMarks(@Body CalendarModel calendarModel);
+
+    @POST(APIConstants.GET_CALENDAR_BY_DATE)
+    Call<BaseModel<List<CalendarModel>>> getCalendarMarksByDate(@Body CalendarModel calendarModel);
+
+    @POST(APIConstants.CREATE_NOTE)
+    Call<BaseModel<List<CalendarModel>>> createNote(@Body CalendarModel calendarModel);
 }

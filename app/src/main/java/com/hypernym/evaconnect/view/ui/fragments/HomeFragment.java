@@ -29,6 +29,7 @@ import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.Dashboard;
+import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
@@ -40,6 +41,7 @@ import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.HomePostsAdapter;
 import com.hypernym.evaconnect.view.ui.activities.SharePostActivity;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
+import com.hypernym.evaconnect.viewmodel.EventViewModel;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
 import com.hypernym.evaconnect.viewmodel.JobListViewModel;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
@@ -72,6 +74,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     private HomeViewModel homeViewModel;
     private PostViewModel postViewModel;
     private ConnectionViewModel connectionViewModel;
+    private EventViewModel eventViewModel;
     private int currentPage = PAGE_START;
     private boolean isLastPage = false;
     private boolean isLoading = false;
@@ -97,6 +100,8 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         postViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(PostViewModel.class);
         connectionViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
         jobListViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(JobListViewModel.class);
+        eventViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(EventViewModel.class);
+
      //   currentPage = PAGE_START;
         homePostsAdapter=new HomePostsAdapter(getContext(),posts,this);
         linearLayoutManager=new LinearLayoutManager(getContext());
@@ -436,6 +441,89 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         bundle.putSerializable("JOB_AD",jobAd);
         specficJobFragment.setArguments(bundle);
         loadFragment(R.id.framelayout, specficJobFragment, getContext(), true);
+    }
+
+    @Override
+    public void onEventItemClick(View view, int position) {
+        EventDetailFragment eventDetailFragment=new EventDetailFragment();
+        Bundle bundle=new Bundle();
+        bundle.putInt("id",posts.get(position).getId());
+        eventDetailFragment.setArguments(bundle);
+        loadFragment(R.id.framelayout,eventDetailFragment,getContext(),true);
+    }
+
+    @Override
+    public void onEventLikeClick(View view, int position, TextView likeCount) {
+        //showDialog();
+        Post post=posts.get(position);
+        User user=LoginUtils.getLoggedinUser();
+        post.setEvent_id(post.getId());
+        post.setCreated_by_id(user.getId());
+        if(post.getIs_event_like()==null ||post.getIs_event_like()<1)
+        {
+            post.setAction(AppConstants.LIKE);
+            if(post.getIs_event_like()==null)
+            {
+                post.setIs_event_like(1);
+                if(post.getLike_count()==null)
+                    post.setLike_count(0);
+                else
+                    post.setLike_count(post.getLike_count()+1);
+            }
+            else
+            {
+                post.setIs_event_like(post.getIs_event_like()+1);
+                if(post.getLike_count()==null)
+                    post.setLike_count(0);
+                else
+                    post.setLike_count(post.getLike_count()+1);
+            }
+        }
+        else
+        {
+            post.setAction(AppConstants.UNLIKE);
+            if(post.getIs_event_like()>0)
+            {
+                post.setIs_event_like(post.getIs_event_like()-1);
+                post.setLike_count(post.getLike_count()-1);
+            }
+            else
+            {
+                post.setIs_event_like(0);
+                post.setLike_count(0);
+            }
+
+        }
+       // Log.d("Listing status",post.getAction()+" count"+post.getIs_post_like());
+        if(NetworkUtils.isNetworkConnected(getContext())) {
+            likeEvent(post,position);
+        }
+        else
+        {
+            networkErrorDialog();
+        }
+    }
+
+    private void likeEvent(Post post, int position) {
+        Event event=new Event();
+        event.setEvent_id(post.getEvent_id());
+        event.setCreated_by_id(LoginUtils.getLoggedinUser().getId());
+        event.setAction(post.getAction());
+        event.setStatus(AppConstants.ACTIVE);
+        eventViewModel.likeEvent(event).observe(this, new Observer<BaseModel<List<Event>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Event>> listBaseModel) {
+                if(listBaseModel!=null && !listBaseModel.isError())
+                {
+                    homePostsAdapter.notifyItemChanged(position);
+                }
+                else
+                {
+                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                }
+                hideDialog();
+            }
+        });
     }
 
     private void callConnectApi(TextView text,int position) {

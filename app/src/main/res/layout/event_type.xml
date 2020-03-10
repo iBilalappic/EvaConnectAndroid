@@ -22,8 +22,8 @@
         android:id="@+id/profile_image"
         android:layout_width="100dp"
         android:layout_height="70dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:src="@drawable/post"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -34,9 +34,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="Networth And Vibe"
-        android:textSize="18dp"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -57,16 +56,16 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="23 Aug 19"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_connect"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toBottomOf="@+id/tv_location" />
 
 
     <TextView
+        style="@style/TextStyle.Title"
         android:id="@+id/tv_connect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/rounded_button_border"
         android:paddingLeft="15dp"
@@ -88,7 +87,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/cardView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView"
-        app:srcCompat="@mipmap/ic_like" />
+        android:background="@mipmap/ic_like" />
 
     <ImageView
         android:id="@+id/img_comment"
@@ -117,7 +116,7 @@
     <View
         android:id="@+id/view"
         android:layout_width="0dp"
-        android:layout_height="70dp"
+        android:layout_height="50dp"
         android:background="@color/colorwhite"
         android:elevation="2dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -145,7 +144,7 @@
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="8dp"
         app:cardElevation="4dp"
         app:cardPreventCornerOverlap="false"
         app:layout_constraintEnd_toEndOf="parent"
@@ -175,7 +174,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginBottom="37dp"
+                android:layout_marginBottom="24dp"
                 android:text="58"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -186,7 +185,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="37dp"
+                android:layout_marginBottom="24dp"
                 android:paddingLeft="5dp"
                 android:text="@string/likes"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -198,7 +197,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="37dp"
+                android:layout_marginBottom="24dp"
                 android:paddingLeft="10dp"
                 android:text="|"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -212,7 +211,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="37dp"
+                android:layout_marginBottom="24dp"
                 android:paddingLeft="10dp"
                 android:text="03"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -225,7 +224,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="37dp"
+                android:layout_marginBottom="24dp"
                 android:paddingLeft="5dp"
                 android:text="@string/comments"
                 app:layout_constraintBottom_toBottomOf="parent"

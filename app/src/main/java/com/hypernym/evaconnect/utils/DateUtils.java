@@ -3,6 +3,9 @@ package com.hypernym.evaconnect.utils;
 import android.text.format.DateFormat;
 import android.util.Log;
 
+import com.hypernym.evaconnect.dateTimePicker.DateTime;
+
+import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -13,10 +16,12 @@ import java.util.TimeZone;
 public final class DateUtils {
     public static final String DATE_FORMAT_1 = "hh:mm a";
     public static final String DATE_FORMAT_2 = "d MMM";
-    public static final String DATE_FORMAT_3 = "dd MMMM yyyy";
+    public static final String DATE_FORMAT_3 = "d MMM yyyy";
     public static final String DATE_INPUT_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final String DATE_INPUT_FORMAT_WITHOUTTIME = "yyyy-MM-dd";
     public static final String SERVER_DATE_INPUT_FORMAT = "yyyy-MM-dd hh:mm:ss";
+    public static final String EVENT_DATE_INPUT_FORMAT = "E, dd MMM yyyy";
+
 
     private DateUtils() {
         // This utility class is not publicly instantiable
@@ -44,7 +49,84 @@ public final class DateUtils {
 
         return mOutputDateString + " | " + mOutputTimeString;
     }
+    public static String getFormattedTime(String datetime) {
+        Date mParsedDate;
+        String mOutputDateString = "";
+        String mOutputTimeString = "";
+        SimpleDateFormat mInputDateFormat =
+                new SimpleDateFormat(DATE_INPUT_FORMAT, java.util.Locale.getDefault());
 
+        SimpleDateFormat mOutputDateFormat1 =
+                new SimpleDateFormat(DATE_FORMAT_1, java.util.Locale.getDefault());
+        try {
+            datetime = convertServerDateToUserTimeZone(datetime);
+            mParsedDate = mInputDateFormat.parse(datetime);
+            mOutputTimeString = mOutputDateFormat1.format(mParsedDate);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return mOutputTimeString;
+    }
+    public static String getFormattedDateDMY(String datetime) {
+        Date mParsedDate;
+        String mOutputDateString = "";
+
+        SimpleDateFormat mInputDateFormat =
+                new SimpleDateFormat(DATE_INPUT_FORMAT_WITHOUTTIME, java.util.Locale.getDefault());
+        SimpleDateFormat mOutputDateFormat =
+                new SimpleDateFormat(DATE_FORMAT_3, java.util.Locale.getDefault());
+
+        try {
+
+           // datetime = convertServerDateToUserTimeZone(datetime);
+            mParsedDate = mInputDateFormat.parse(datetime);
+            mOutputDateString = mOutputDateFormat.format(mParsedDate);
+
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return mOutputDateString ;
+    }
+    public static String getFormattedEventDate(String datetime) {
+        String formatedDate=null;
+        try {
+            datetime = convertEventDateToUserTimeZone(datetime);
+
+            SimpleDateFormat format = new SimpleDateFormat(DATE_INPUT_FORMAT);
+            Date newDate = format.parse(datetime);
+
+            format = new SimpleDateFormat(DATE_INPUT_FORMAT_WITHOUTTIME);
+            formatedDate = format.format(newDate);
+           return formatedDate;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return formatedDate ;
+    }
+    public static String getFormattedEventDateDMY(String datetime) {
+        String formatedDate=null;
+        try {
+            //datetime = convertEventDateToUserTimeZone(datetime);
+
+            SimpleDateFormat format = new SimpleDateFormat(DATE_INPUT_FORMAT);
+            Date newDate = format.parse(datetime);
+
+            format = new SimpleDateFormat(DATE_INPUT_FORMAT_WITHOUTTIME);
+            formatedDate = format.format(newDate);
+            return formatedDate;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return formatedDate ;
+    }
     public static String getFormattedDate(String datetime) {
         Date mParsedDate;
         String mOutputDateString = "";
@@ -213,6 +295,22 @@ public final class DateUtils {
         }
         return ourdate;
     }
+    public static String convertEventDateToUserTimeZone(String serverDate) {
+        String ourdate;
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat(EVENT_DATE_INPUT_FORMAT);
+            formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+            Date value = formatter.parse(serverDate);
+            SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_INPUT_FORMAT); //this format changeable
+            dateFormatter.setTimeZone(TimeZone.getDefault());
+            ourdate = dateFormatter.format(value);
+
+            Log.d("OurDate", ourdate);
+        } catch (Exception e) {
+            ourdate = "0000-00-00 00:00:00";
+        }
+        return ourdate;
+    }
 
     public static String getDate(String date) {
         if (date != null) {
@@ -231,5 +329,35 @@ public final class DateUtils {
         }
         return "-";
     }
+    public static String getMonthForInt(int num) {
+        String month = "wrong";
+        DateFormatSymbols dfs = new DateFormatSymbols();
+        String[] months = dfs.getMonths();
+        if (num >= 0 && num <= 11 ) {
+            month = months[num];
+        }
+        return month;
+    }
+    public static boolean compareDates(String date)
+    {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        try {
+
+            Date pickupDateTime=sdf.parse(date);
+
+            Calendar now = Calendar.getInstance();
+            Calendar givenDate = Calendar.getInstance();
+            givenDate.setTime(pickupDateTime);
+            if(!now.before(givenDate) && !now.getTime().equals(givenDate))
+            {
+                return false;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return true;
+    }
+
 
 }

@@ -27,6 +27,8 @@
     <string name="comment">Comment</string>
     <string name="connect">Connect</string>
     <string name="go_back">Go Back</string>
+    <string name="tab_date">Date</string>
+    <string name="tab_time">Time</string>
     <string name="notifications">Notifications</string>
     <string name="view_comments">View Comments</string>
     <string name="tap_here_to_comment">Tap Here To Comment</string>
@@ -72,6 +74,8 @@
     <string name="msg_signup">You have signed up successfully! Thank you for choosing Aviation Connect, please check your email to activate your account.</string>
     <string name="msg_jobAd">Your Job Ad has been created successfully.</string>
     <string name="msg_jobAd_update">Your Job Ad has been Updated successfully.</string>
+    <string name="msg_event_created">Your Event has been created successfully.</string>
+    <string name="msg_note_created">Your Note has been created successfully.</string>
     <string name="msg_application_form">Application Sent successfully.</string>
     <string name="msg_exit">Are you sure you want to exit?</string>
     <string name="msg_logout">Are you sure you want to logout? You will be returned to the login screen</string>
@@ -93,5 +97,9 @@
     <string name="err_title">Please enter job title.</string>
     <string name="err_position">Please enter job position.</string>
     <string name="err_try_with_correct_data">Enter valid email.</string>
+    <string name="upload_event_image">Upload event image</string>
+    <string name="msg_invalid_datetime">You have selected time that has already passed. Please select valid time.</string>
+    <string name="msg_create_event">Your Event has been created successfully.</string>
+
 </resources>
 

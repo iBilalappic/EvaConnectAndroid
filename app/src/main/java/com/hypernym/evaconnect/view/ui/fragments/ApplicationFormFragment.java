@@ -178,7 +178,7 @@ public class ApplicationFormFragment extends BaseFragment implements View.OnClic
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
                 hideDialog();
-                if (!simpleDialog.isShowing())
+                if (simpleDialog!=null && !simpleDialog.isShowing())
                     simpleDialog.show();
             }
 

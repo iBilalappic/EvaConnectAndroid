@@ -103,7 +103,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             img_like.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
+                    mClickListener.onEventLikeClick(v, getAdapterPosition(), tv_likecount);
                 }
             });
             img_comment.setOnClickListener(new OnOneOffClickListener() {
@@ -168,6 +168,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.tv_connections)
         TextView tv_connections;
 
+//        @BindView(R.id.top_)
+//        TextView tv_connections;
+
 
         public EventTypeViewHolder(View itemView) {
             super(itemView);
@@ -175,31 +178,31 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             tv_viewcomments.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    mClickListener.onItemClick(v, getAdapterPosition());
+                    mClickListener.onEventItemClick(v, getAdapterPosition());
                 }
             });
             img_like.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
+                    mClickListener.onEventLikeClick(v, getAdapterPosition(), tv_likecount);
                 }
             });
             img_comment.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    mClickListener.onItemClick(v, getAdapterPosition());
+                   // mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
             img_share.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    mClickListener.onShareClick(v, getAdapterPosition());
+                   // mClickListener.onShareClick(v, getAdapterPosition());
                 }
             });
             tv_comcount.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    mClickListener.onItemClick(v, getAdapterPosition());
+                  //  mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
 
@@ -742,19 +745,26 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     }
                     break;
                 case AppConstants.EVENT_TYPE:
-//                    if(posts.get(position).getIs_post_like()==1)
+                    ((EventTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
+                    ((EventTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
+
+                    if (posts.get(position).getIs_event_like() != null && posts.get(position).getIs_event_like() > 0) {
+                        ((EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like_selected));
+                    } else {
+                        ((EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like));
+                    }
+
+                    AppUtils.setGlideImage(mContext, ((EventTypeViewHolder) holder).profile_image, posts.get(position).getEvent_image().get(0));
+                    ((EventTypeViewHolder) holder).tv_name.setText(posts.get(position).getEvent_name());
+
+//                    if(position==0)
 //                    {
-//                        ((EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like_selected));
+//                        ((EventTypeViewHolder) holder).top_image.setVisibility(View.GONE);
 //                    }
 //                    else
 //                    {
-//                        ((EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like));
+//                        ((EventTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
 //                    }
-//
-//                    Glide.with(mContext)
-//                            .load(posts.get(position).getUser().getUser_image())
-//                            .into(((EventTypeViewHolder) holder).profile_image);
-//                    ((EventTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
 
                     break;
                 case AppConstants.JOB_TYPE:
@@ -884,6 +894,11 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         void onProfileClick(View view,int position);
 
         void onApplyClick(View view,int position);
+
+        void onEventItemClick(View view,int position);
+
+        void onEventLikeClick(View view,int position ,TextView likeCount);
+
     }
 
     private void initializeSlider(SliderView imageSlider, int position) {

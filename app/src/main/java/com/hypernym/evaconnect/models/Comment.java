@@ -11,6 +11,7 @@ public class Comment implements Serializable {
     private String status;
     private String created_datetime;
     private User user;
+    private Integer event_id;
 
 
 
@@ -63,5 +64,13 @@ public class Comment implements Serializable {
 
     public void setCreated_by_id(Integer created_by_id) {
         this.created_by_id = created_by_id;
+    }
+
+    public Integer getEvent_id() {
+        return event_id;
+    }
+
+    public void setEvent_id(Integer event_id) {
+        this.event_id = event_id;
     }
 }

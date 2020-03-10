@@ -208,6 +208,7 @@ public class BaseFragment extends Fragment {
         mediaScanIntent.setData(contentUri);
         getActivity().sendBroadcast(mediaScanIntent);
         return f;
+
     }
     public static Bitmap loadFromFile(String filename) {
         try {

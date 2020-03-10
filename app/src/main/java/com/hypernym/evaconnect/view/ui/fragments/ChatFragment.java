@@ -422,6 +422,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     mMessage.setMinutes(Mintues);
                     mMessage.setMessage_key(userKey);
                     chatMessageList.add(mMessage);
+
                     Log.d("Taag", "" + chatMessageList.size());
                     chatAdapter.notifyDataSetChanged();
                     // setupRecycler(chatMessageList);
