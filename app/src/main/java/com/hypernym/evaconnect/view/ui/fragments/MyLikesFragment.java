@@ -160,13 +160,20 @@ public class MyLikesFragment extends BaseFragment implements MyLikeAdapter.OnIte
             bundle.putSerializable("JOB_AD", jobAd);
             specficJobFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, specficJobFragment, getContext(), true);
-        } else {
+        } else if (myLikesModelList.get(position).getObjectType().equals("post")) {
             PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
             Bundle bundle = new Bundle();
             bundle.putInt("post", myLikesModelList.get(position).getObjectId());
             postDetailsFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, postDetailsFragment, getContext(), true);
         }
+       else if (myLikesModelList.get(position).getObjectType().equals("event")) {
+           EventDetailFragment eventDetailsFragment = new EventDetailFragment();
+           Bundle bundle = new Bundle();
+           bundle.putInt("id", myLikesModelList.get(position).getObjectId());
+           eventDetailsFragment.setArguments(bundle);
+           loadFragment(R.id.framelayout, eventDetailsFragment, getContext(), true);
+       }
 
     }
 

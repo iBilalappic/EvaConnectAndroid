@@ -167,13 +167,20 @@ public class NotificationsFragment extends BaseFragment implements Notifications
             bundle.putSerializable("JOB_AD", jobAd);
             specficJobFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, specficJobFragment, getContext(), true);
-        } else {
+        }else if (notifications.get(position).getObject_type().equals("post")) {
             PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
             Bundle bundle = new Bundle();
             bundle.putInt("post", notifications.get(position).getObject_id());
             Log.d("TAAAGNOTIFY", "" + GsonUtils.toJson(notifications.get(position)));
             postDetailsFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, postDetailsFragment, getContext(), true);
+        }
+        else if (notifications.get(position).getObject_type().equals("post")) {
+            EventDetailFragment eventDetailsFragment = new EventDetailFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("id", notifications.get(position).getObject_id());
+            eventDetailsFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, eventDetailsFragment, getContext(), true);
         }
     }
 

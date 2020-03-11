@@ -34,6 +34,7 @@ import com.hypernym.evaconnect.view.adapters.NotificationsAdapter;
 import com.hypernym.evaconnect.view.dialogs.NavigationDialog;
 import com.hypernym.evaconnect.view.ui.fragments.BaseFragment;
 import com.hypernym.evaconnect.view.ui.fragments.ConnectionsFragment;
+import com.hypernym.evaconnect.view.ui.fragments.EventDetailFragment;
 import com.hypernym.evaconnect.view.ui.fragments.HomeFragment;
 import com.hypernym.evaconnect.view.ui.fragments.MessageFragment;
 import com.hypernym.evaconnect.view.ui.fragments.PostDetailsFragment;
@@ -311,12 +312,20 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
             specficJobFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, specficJobFragment, this, true);
             hideNotificationPanel();
-        } else {
+        } else if (notifications.get(position).getObject_type().equals("post")){
             PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
             Bundle bundle = new Bundle();
             bundle.putInt("post", notifications.get(position).getObject_id());
             postDetailsFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, postDetailsFragment, this, true);
+            hideNotificationPanel();
+        }
+        else if (notifications.get(position).getObject_type().equals("event")){
+            EventDetailFragment eventDetailsFragment = new EventDetailFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("id", notifications.get(position).getObject_id());
+            eventDetailsFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, eventDetailsFragment, this, true);
             hideNotificationPanel();
         }
     }

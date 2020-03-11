@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER" />
 
     <application
         android:name=".EvaconnectApplication"
@@ -48,15 +49,7 @@
         <activity android:name=".view.ui.activities.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenLayout|screenSize"/>
 
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="com.hypernym.evaconnect.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_list" />
-        </provider>
+
 
                 <service
                     android:name=".service.OneSignalReceiver"
@@ -66,7 +59,15 @@
                         <action android:name="com.onesignal.NotificationExtender" />
                     </intent-filter>
                 </service>
-
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.hypernym.evaconnect.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_list" />
+        </provider>
     </application>
 
 </manifest>
