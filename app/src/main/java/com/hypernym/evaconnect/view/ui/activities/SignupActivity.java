@@ -64,7 +64,8 @@ public class SignupActivity extends BaseActivity implements Validator.Validation
         validator = new Validator(this);
         validator.setValidationListener(this);
         userViewModel = ViewModelProviders.of(this,new CustomViewModelFactory(getApplication(),this)).get(UserViewModel.class);
-
+        edt_email.setText(getIntent().getStringExtra("Email"));
+        edt_password.setText(getIntent().getStringExtra("Password"));
         btn_next.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
