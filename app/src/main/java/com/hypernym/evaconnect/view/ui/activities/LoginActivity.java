@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.User;
@@ -67,6 +68,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     private UserViewModel userViewModel;
     private User user = new User();
     private SimpleDialog simpleDialog;
+    String value ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +81,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
         btn_login.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
+                value="login";
                 validator.validate();
             }
         });
@@ -86,7 +89,8 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
         tv_signup.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
-                startActivity(new Intent(LoginActivity.this, SignupActivity.class));
+                value="signup";
+                validator.validate();
             }
         });
 
@@ -103,8 +107,15 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
         user.setUsername(edt_email.getText().toString());
         user.setPassword(edt_password.getText().toString());
         if (NetworkUtils.isNetworkConnected(this)) {
-            showDialog();
-            callLoginApi();
+            if(value.equals("login")){
+                showDialog();
+                callLoginApi();
+            }else{
+                Intent intent = new Intent(getBaseContext(), SignupActivity.class);
+                intent.putExtra("Email", edt_email.getText().toString());
+                intent.putExtra("Password", edt_password.getText().toString());
+                startActivity(intent);
+            }
         } else {
             networkErrorDialog();
         }
@@ -121,7 +132,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
                     User userData = user.getData().get(0);
                     userData.setUser_id(userData.getId());
                     LoginUtils.saveUser(user.getData().get(0));
-                    OneSignal.sendTag("email",userData.getEmail());
+                    OneSignal.sendTag("email", userData.getEmail());
                     UserDetails.username = userData.getFirst_name();
                     if (user.getData().get(0) != null) {
                         LoginUtils.saveUserToken(user.getData().get(0).getToken());
@@ -130,7 +141,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
                     // set the new task and clear flags
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
-                } else if (user!=null && user.isError()) {
+                } else if (user != null && user.isError()) {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_login));
                 } else if (user == null) {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
