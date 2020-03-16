@@ -42,4 +42,5 @@ public interface APIConstants {
     public static String GET_CALENDAR_BY_DATE="user/calendar/day/";
     public static String CREATE_NOTE="user/notes/";
     public static String APPLY_INTERVIEW="job/interview/";
+    public static String DECLINE_APPLICATION="job/application/details/{job_application_id}/";
 }

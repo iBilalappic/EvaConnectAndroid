@@ -16,14 +16,13 @@
         <TextView
             android:id="@+id/tv_name"
             style="@style/TextStyle.Bold"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:ellipsize="end"
-            android:maxLines="1"
             android:text="Event Name"
             android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@+id/tv_minago"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -56,39 +55,29 @@
 
         <ImageView
             android:id="@+id/img_like"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="32dp"
             android:layout_marginTop="24dp"
-            android:elevation="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/cardView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView"
             android:background="@mipmap/ic_like"
-            />
-
-        <ImageView
-            android:id="@+id/img_comment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:elevation="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/cardView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.264"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardView"
-            app:layout_constraintVertical_bias="0.354"
-            app:srcCompat="@mipmap/ic_comselected" />
+            app:layout_constraintVertical_bias="0.554" />
 
         <ImageView
             android:id="@+id/img_share"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="24dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="32dp"
             android:elevation="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/cardView"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/img_like"
             app:layout_constraintTop_toBottomOf="@+id/cardView"
+            app:layout_constraintVertical_bias="0.34"
             app:srcCompat="@mipmap/ic_share" />
 
 
@@ -245,13 +234,16 @@
             app:layout_constraintTop_toBottomOf="@+id/img_event" />
 
         <TextView
-            style="@style/TextStyle"
             android:id="@+id/tv_eventname"
-            android:layout_width="wrap_content"
+            style="@style/TextStyle"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:text="TextView"
             app:layout_constraintBottom_toBottomOf="@+id/img_eventlogo"
+            app:layout_constraintEnd_toStartOf="@+id/tv_date"
             app:layout_constraintStart_toEndOf="@+id/img_eventlogo"
             app:layout_constraintTop_toTopOf="@+id/img_eventlogo" />
 
@@ -366,18 +358,19 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_time" />
 
         <TextView
-            style="@style/TextStyle"
             android:id="@+id/tv_location"
-            android:layout_width="wrap_content"
+            style="@style/TextStyle"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:text="TextView"
             android:drawableRight="@drawable/location"
             android:drawablePadding="10dp"
-            android:gravity="center_vertical"
+            android:gravity="right|center_vertical"
+            android:text="TextView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_date" />
+            app:layout_constraintStart_toEndOf="@+id/img_eventlogo"
+            app:layout_constraintTop_toBottomOf="@+id/tv_eventname" />
 
         <TextView
             android:id="@+id/textView13"

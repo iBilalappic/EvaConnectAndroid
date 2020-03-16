@@ -273,7 +273,7 @@ public class BaseFragment extends Fragment {
     {
         List<Fragment> f = getActivity().getSupportFragmentManager().getFragments();
         if(f.size()>1) {
-            getActivity().findViewById(R.id.tv_back).setVisibility(View.VISIBLE);
+            getActivity().findViewById(R.id.tv_back).setVisibility(View.GONE);
         }
     }
     public void hideBackButton()

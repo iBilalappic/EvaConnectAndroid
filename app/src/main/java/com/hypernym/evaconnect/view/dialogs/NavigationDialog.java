@@ -75,6 +75,7 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
                 FragmentTransaction transaction =((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
                 transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
                 transaction.replace(R.id.framelayout, new EditProfileFragment());
+                transaction.addToBackStack(null);
                 transaction.commit();
             }
         });
@@ -92,6 +93,7 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
                 FragmentTransaction transaction =((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
                 transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
                 transaction.replace(R.id.framelayout, new NotificationsFragment());
+                transaction.addToBackStack(null);
                 transaction.commit();
             }
         });
@@ -102,6 +104,7 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
                 FragmentTransaction transaction =((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
                 transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
                 transaction.replace(R.id.framelayout, new CalendarFragment());
+                transaction.addToBackStack(null);
                 transaction.commit();
             }
         });
@@ -115,6 +118,7 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
                 FragmentTransaction transaction =((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
                 transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
                 transaction.replace(R.id.framelayout, new JobListingFragment());
+                transaction.addToBackStack(null);
                 transaction.commit();
             break;
             case R.id.layoutLike:
@@ -122,7 +126,9 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
                 FragmentTransaction transaction_1 =((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
                 transaction_1.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
                 transaction_1.replace(R.id.framelayout, new MyLikesFragment());
+                transaction_1.addToBackStack(null);
                 transaction_1.commit();
+
                 break;
         }
     }

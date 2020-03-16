@@ -82,8 +82,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 } else {
                     holder.tv_mintues.setText(chatMessageList.get(position).getMinutes());
                 }
-
-
                 AppUtils.setGlideImage(context, (holder).img_interviewSender, LoginUtils.getUser().getUser_image());
             }  else {
                 holder.mlayout1.setVisibility(View.GONE);
@@ -148,8 +146,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             }
 
         } else {
-
-
             holder.mlayout1.setVisibility(View.VISIBLE);
             holder.mlayout2.setVisibility(View.GONE);
             holder.layout3.setVisibility(View.GONE);
@@ -203,9 +199,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 holder.mtextview20.setText(Html.fromHtml(chatMessageList.get(position).getMessage()));
             }
 
-
             if (networkConnection.getSenderId().equals(LoginUtils.getUser().getId())) {
-
                 AppUtils.setGlideImage(context, (holder).imageView6, networkConnection.getReceiver().getUserImage());
                 holder.tv_receivertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
                 holder.tv_sendertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getChattime()));
@@ -245,9 +239,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                     LinearLayoutManager linearLayout = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
                     holder.recycler_viewSender.setLayoutManager(linearLayout);
                     holder.recycler_viewSender.setAdapter(ServicesInnerAdapter);
-
-//                    holder.receiveImage.setVisibility(View.VISIBLE);
-//                    holder.senderImage.setVisibility(View.VISIBLE);
                     holder.recycler_viewReceiver.setVisibility(View.VISIBLE);
                     holder.recycler_viewSender.setVisibility(View.VISIBLE);
                 } else {

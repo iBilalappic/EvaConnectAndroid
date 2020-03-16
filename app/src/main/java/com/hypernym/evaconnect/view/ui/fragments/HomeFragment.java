@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
@@ -108,11 +109,10 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
 
         rc_home.setLayoutManager(linearLayoutManager);
         rc_home.setAdapter(homePostsAdapter);
-//        if(posts.size()==0)
-//        {
-//            callPostsApi();
-//        }
-
+        RecyclerView.ItemAnimator animator = rc_home.getItemAnimator();
+        if (animator instanceof SimpleItemAnimator) {
+            ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
+        }
         swipeRefresh.setOnRefreshListener(this);
         /**
          * add scroll listener while user reach in bottom load more will call
@@ -282,6 +282,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         }
         Log.d("Listing status",post.getAction()+" count"+post.getIs_post_like());
         if(NetworkUtils.isNetworkConnected(getContext())) {
+
             likePost(post,position);
         }
         else

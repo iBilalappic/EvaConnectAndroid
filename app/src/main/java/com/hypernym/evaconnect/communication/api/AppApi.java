@@ -113,7 +113,6 @@ public interface AppApi {
     Call<BaseModel<List<Object>>> apply_interview(@Body HashMap<String, Object> body);
 
 
-
     @POST(APIConstants.CHECK_EMAIL_EXIST)
     Call<BaseModel<List<User>>> isEmailExist(@Body User user);
 
@@ -213,4 +212,7 @@ public interface AppApi {
 
     @POST(APIConstants.CREATE_NOTE)
     Call<BaseModel<List<CalendarModel>>> createNote(@Body CalendarModel calendarModel);
+
+    @PATCH(APIConstants.DECLINE_APPLICATION)
+    Call<BaseModel<List<AppliedApplicants>>> declineApplication(@Path("job_application_id") int job_id,@Body AppliedApplicants applicants);
 }

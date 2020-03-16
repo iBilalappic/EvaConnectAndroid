@@ -32,9 +32,14 @@ import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
+import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
+import com.hypernym.evaconnect.view.ui.activities.LoginActivity;
+import com.hypernym.evaconnect.viewmodel.AppliedApplicantViewModel;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
+import com.onesignal.OneSignal;
 
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -79,12 +84,16 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
     TextView tv_name;
 
 
+
+
     Uri uri;
     User user = new User();
 
     int hour, minute;
     String Job_name;
     private ConnectionViewModel connectionViewModel;
+    private AppliedApplicantViewModel appliedApplicantViewModel;
+    private SimpleDialog simpleDialog;
 
     public AppliedApplicantFragment() {
         // Required empty public constructor
@@ -99,6 +108,7 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
         tv_view_cv.setOnClickListener(this);
         tv_download_cv.setOnClickListener(this);
         tv_offerinterview.setOnClickListener(this);
+        tv_declineApplicant.setOnClickListener(this);
         timePicker.setIs24HourView(true);
         user = LoginUtils.getUser();
         init();
@@ -110,7 +120,7 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
             setPageTitle("");
             showBackButton();
             connectionViewModel= ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
-
+            appliedApplicantViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(AppliedApplicantViewModel.class);
             appliedApplicants = (AppliedApplicants) getArguments().getSerializable(Constants.DATA);
             Job_name = getArguments().getString("JOB_NAME");
             Log.d("TAAAG", "" + GsonUtils.toJson(appliedApplicants));
@@ -120,13 +130,7 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
             tv_name.setText(appliedApplicants.getUser().getFirstName());
             File file = new File(appliedApplicants.getApplicationAttachment());
             tv_applicant_cv_name.setText(file.getName());
-
-//            tv_positionName.setText(companyJobAdModel.getPosition());
-//            tv_name.setText(companyJobAdModel.getJobTitle());
-//            tv_salaryAmount.setText("$" + String.valueOf(companyJobAdModel.getSalary()));
-//            tv_locationName.setText(companyJobAdModel.getLocation());
-//            tv_weeklyHoursNumber.setText(companyJobAdModel.getWeeklyHours());
-//            tv_minago.setText(DateUtils.getTimeAgo(jobAd.getCreatedDatetime()));
+            datePicker.setMinDate(new Date().getTime());
         }
     }
 
@@ -179,9 +183,44 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
                 chatFragment.setArguments(bundle);
                 loadFragment(R.id.framelayout, chatFragment, getContext(), true);
                 break;
-
-
+            case R.id.tv_declineApplicant:
+                simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.decline_application_confirmation), getString(R.string.button_cancel), getString(R.string.ok), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // getActivity().onBackPressed();
+                        switch (v.getId()) {
+                            case R.id.button_positive:
+                                simpleDialog.dismiss();
+                                declineApplication();
+                                break;
+                            case R.id.button_negative:
+                                simpleDialog.dismiss();
+                                break;
+                        }
+                    }
+                });
+                simpleDialog.show();
+                break;
         }
+    }
+
+    private void declineApplication() {
+        AppliedApplicants declineData=new AppliedApplicants();
+        declineData.setStatus(AppConstants.DELETED);
+        declineData.setModified_by_id(user.getId());
+        declineData.setModified_datetime(DateUtils.GetCurrentdatetime());
+
+        appliedApplicantViewModel.declineApplication(appliedApplicants.getId(),declineData).observe(this, new Observer<BaseModel<List<AppliedApplicants>>>() {
+            @Override
+            public void onChanged(BaseModel<List<AppliedApplicants>> listBaseModel) {
+                if(listBaseModel!=null && !listBaseModel.isError())
+                {
+                    if (getFragmentManager().getBackStackEntryCount() != 0) {
+                        getFragmentManager().popBackStack();
+                    }
+                }
+            }
+        });
     }
 
     private void OfferInterviewCall() {

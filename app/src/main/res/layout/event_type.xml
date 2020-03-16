@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/page_bg"
-    android:paddingBottom="20dp">
+    android:clipToPadding="false"
+    android:paddingBottom="10dp">
     <View
         android:id="@+id/view6"
         android:layout_width="0dp"
@@ -51,10 +52,12 @@
     <TextView
         android:id="@+id/tv_location"
         style="@style/TextStyle"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="London"
+        android:ellipsize="end"
+        android:maxLines="1"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 

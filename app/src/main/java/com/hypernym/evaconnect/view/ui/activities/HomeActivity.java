@@ -40,6 +40,7 @@ import com.hypernym.evaconnect.view.ui.fragments.MessageFragment;
 import com.hypernym.evaconnect.view.ui.fragments.PostDetailsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.SpecficJobFragment;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
+import com.onesignal.OneSignal;
 
 
 import org.greenrobot.eventbus.EventBus;
@@ -263,7 +264,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         else
         {
            ConnectionsFragment fragment = new ConnectionsFragment();
-            loadFragment(R.id.framelayout,fragment,this,false);
+            loadFragment(R.id.framelayout,fragment,this,true);
         }
         tv_back.setVisibility(View.GONE);
         BaseFragment.pageTitle=getString(R.string.connections);
@@ -279,7 +280,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         PrefUtils.saveMessageCount(getApplicationContext(),0);
         badge_notification.setVisibility(View.GONE);
         MessageFragment fragment = new MessageFragment();
-        loadFragment(R.id.framelayout,fragment,this,false);
+        loadFragment(R.id.framelayout,fragment,this,true);
         BaseFragment.pageTitle=getString(R.string.messages);
     }
 
@@ -344,6 +345,11 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     @Override
     protected void onResume() {
         super.onResume();
+        // OneSignal Initialization
+        OneSignal.startInit(this)
+                .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+                .unsubscribeWhenNotificationsAreDisabled(true)
+                .init();
         getAllNotifications();
 
       //  hideNotificationPanel();
@@ -351,7 +357,6 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
 
     @Override
     protected void onDestroy() {
-
         super.onDestroy();
     }
 

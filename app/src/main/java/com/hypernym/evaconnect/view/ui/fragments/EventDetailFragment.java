@@ -296,7 +296,7 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
                 tv_content.setText(event.getContent());
 
                 tv_date.setText(DateUtils.getFormattedDateDMY(event.getEvent_start_date())+" - "+ DateUtils.getFormattedDateDMY(event.getEvent_end_date()));
-                tv_time.setText(DateUtils.getFormattedTime(event.getStart_time())+" - "+DateUtils.getFormattedTime(event.getEnd_time()));
+                tv_time.setText(DateUtils.getFormattedEventTime(event.getStart_time())+" - "+DateUtils.getFormattedEventTime(event.getEnd_time()));
                 tv_location.setText(event.getEvent_address()+" , "+ event.getEvent_city());
                 tv_eventname.setText(event.getEvent_name());
                 tv_likecount.setText(String.valueOf(event.getLike_count()));
@@ -348,6 +348,7 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
         {
             if(event.getIs_attending()==null)
             {
+                event.setIs_attending(eventAttendance.getAttendance_status());
                 addAttendance(eventAttendance);
             }
             else
@@ -380,6 +381,7 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
     }
 
     private void addAttendance(Event event) {
+
         eventViewModel.addEventAttendance(event).observe(this, new Observer<BaseModel<List<Event>>>() {
             @Override
             public void onChanged(BaseModel<List<Event>> listBaseModel) {

@@ -11,4 +11,6 @@ import java.util.List;
 
 public interface IApplicantRepository {
     LiveData<BaseModel<List<AppliedApplicants>>> getApplicants(int job_id);
+
+    LiveData<BaseModel<List<AppliedApplicants>>> declineApplication(int applicant_job_id,AppliedApplicants appliedApplicants);
 }

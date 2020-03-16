@@ -44,4 +44,25 @@ public class ApplicantsRepository implements IApplicantRepository {
         });
         return ApplicantsMutableLiveData;
     }
+
+    @Override
+    public LiveData<BaseModel<List<AppliedApplicants>>> declineApplication(int applicant_job_id, AppliedApplicants appliedApplicants) {
+        ApplicantsMutableLiveData=new MutableLiveData<>();
+
+        RestClient.get().appApi().declineApplication(applicant_job_id,appliedApplicants).enqueue(new Callback<BaseModel<List<AppliedApplicants>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<AppliedApplicants>>> call, Response<BaseModel<List<AppliedApplicants>>> response) {
+                if(response.isSuccessful() && !response.body().isError())
+                {
+                    ApplicantsMutableLiveData.setValue(response.body());
+                }
+            }
+            @Override
+            public void onFailure(Call<BaseModel<List<AppliedApplicants>>> call, Throwable t) {
+                ApplicantsMutableLiveData.setValue(null);
+            }
+        });
+
+        return ApplicantsMutableLiveData;
+    }
 }

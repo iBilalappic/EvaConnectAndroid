@@ -24,6 +24,7 @@ public class AppConstants {
     public static final String NOT_CONNECTED = "not_connected";
     public static final String PENDING = "pending";
     public static final String ACTIVE = "active";
+    public static final String DELETED = "deleted";
     public static final String CONNECTED = "Connected";
     public static final String REQUEST_SENT = "Pending";
     public static final String REQUEST_ACCEPT = "Accept";

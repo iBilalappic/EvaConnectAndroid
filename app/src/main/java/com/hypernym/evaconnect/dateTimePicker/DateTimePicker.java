@@ -73,6 +73,7 @@ public class DateTimePicker extends DialogFragment {
         // Setup the Dialog
         mBuilder.setTitle(mArgument.getCharSequence(KEY_DIALOG_TITLE));
         mBuilder.setNegativeButton(android.R.string.no,mButtonClickListener);
+
         mBuilder.setPositiveButton(android.R.string.yes,mButtonClickListener);
         // Create the Alert Dialog
         AlertDialog mDialog = mBuilder.create();
@@ -80,6 +81,15 @@ public class DateTimePicker extends DialogFragment {
         mDialog.setView(
                 createDateTimeView(mDialog.getLayoutInflater())
         );
+        //2. now setup to change color of the button
+        mDialog.setOnShowListener( new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface arg0) {
+                mDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(mContext.getResources().getColor(R.color.colorAccent));
+                mDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(mContext.getResources().getColor(R.color.colorAccent));
+            }
+        });
+
         // Return the Dialog created
         return mDialog;
     }
