@@ -39,6 +39,7 @@ import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.onesignal.OneSignal;
 
 import java.io.File;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -84,10 +85,9 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
     TextView tv_name;
 
 
-
-
     Uri uri;
     User user = new User();
+    int current_hour, current_mintues;
 
     int hour, minute;
     String Job_name;
@@ -119,8 +119,8 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
         if ((getArguments() != null)) {
             setPageTitle("");
             showBackButton();
-            connectionViewModel= ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
-            appliedApplicantViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(AppliedApplicantViewModel.class);
+            connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
+            appliedApplicantViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(AppliedApplicantViewModel.class);
             appliedApplicants = (AppliedApplicants) getArguments().getSerializable(Constants.DATA);
             Job_name = getArguments().getString("JOB_NAME");
             Log.d("TAAAG", "" + GsonUtils.toJson(appliedApplicants));
@@ -168,20 +168,32 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
                 }
                 break;
             case R.id.tv_offerinterview:
-                OfferInterviewCall();
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hours = mcurrentTime.get(Calendar.HOUR_OF_DAY);  // current hour
+                int minutess = mcurrentTime.get(Calendar.MINUTE);      // current min
+                current_hour = hours;
+                current_mintues = minutess;
                 SetTimePicker();
-                ChatFragment chatFragment = new ChatFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString(Constants.FRAGMENT_NAME, AppConstants.APPLICANT_FRAGMENT);
-                bundle.putSerializable(Constants.DATA, appliedApplicants);
-                bundle.putString("JOB_NAME", Job_name);
-                bundle.putInt("Day", datePicker.getDayOfMonth());
-                bundle.putInt("Month", datePicker.getMonth() + 1);
-                bundle.putInt("Year", datePicker.getYear());
-                bundle.putInt("Hour", hour);
-                bundle.putInt("Mintues", minute);
-                chatFragment.setArguments(bundle);
-                loadFragment(R.id.framelayout, chatFragment, getContext(), true);
+                String date = DateUtils.GetCurrentdate();
+
+                String[] separated = date.split("-");
+                String year = separated[0];
+                String month = separated[1];
+                String day = separated[2];
+
+                if (datePicker.getDayOfMonth() > Integer.parseInt(day)) {
+                    OfferInterviewCall();
+                } else if (datePicker.getMonth() + 1 > Integer.parseInt(month)) {
+                    OfferInterviewCall();
+                } else if (datePicker.getYear() > Integer.parseInt(year)) {
+                    OfferInterviewCall();
+                } else if (hour > current_hour) {
+                    OfferInterviewCall();
+                } else if (hour == current_hour && minute >= current_mintues) {
+                    OfferInterviewCall();
+                } else {
+                    Toast.makeText(getContext(), "you cannot set past time for interview", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.tv_declineApplicant:
                 simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.decline_application_confirmation), getString(R.string.button_cancel), getString(R.string.ok), new View.OnClickListener() {
@@ -205,16 +217,15 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
     }
 
     private void declineApplication() {
-        AppliedApplicants declineData=new AppliedApplicants();
+        AppliedApplicants declineData = new AppliedApplicants();
         declineData.setStatus(AppConstants.DELETED);
         declineData.setModified_by_id(user.getId());
         declineData.setModified_datetime(DateUtils.GetCurrentdatetime());
 
-        appliedApplicantViewModel.declineApplication(appliedApplicants.getId(),declineData).observe(this, new Observer<BaseModel<List<AppliedApplicants>>>() {
+        appliedApplicantViewModel.declineApplication(appliedApplicants.getId(), declineData).observe(this, new Observer<BaseModel<List<AppliedApplicants>>>() {
             @Override
             public void onChanged(BaseModel<List<AppliedApplicants>> listBaseModel) {
-                if(listBaseModel!=null && !listBaseModel.isError())
-                {
+                if (listBaseModel != null && !listBaseModel.isError()) {
                     if (getFragmentManager().getBackStackEntryCount() != 0) {
                         getFragmentManager().popBackStack();
                     }
@@ -224,26 +235,35 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
     }
 
     private void OfferInterviewCall() {
-        if(NetworkUtils.isNetworkConnected(getContext())) {
+        if (NetworkUtils.isNetworkConnected(getContext())) {
+            ChatFragment chatFragment = new ChatFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString(Constants.FRAGMENT_NAME, AppConstants.APPLICANT_FRAGMENT);
+            bundle.putSerializable(Constants.DATA, appliedApplicants);
+            bundle.putString("JOB_NAME", Job_name);
+            bundle.putInt("Day", datePicker.getDayOfMonth());
+            bundle.putInt("Month", datePicker.getMonth() + 1);
+            bundle.putInt("Year", datePicker.getYear());
+            bundle.putInt("Hour", hour);
+            bundle.putInt("Mintues", minute);
+            chatFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, chatFragment, getContext(), true);
             ConnectionApiCall();
-        }
-        else
-        {
+        } else {
             networkErrorDialog();
         }
     }
 
     private void ConnectionApiCall() {
-        Connection connection=new Connection();
-        User user= LoginUtils.getLoggedinUser();
+        Connection connection = new Connection();
+        User user = LoginUtils.getLoggedinUser();
         connection.setReceiver_id(appliedApplicants.getUserId());
         connection.setStatus(AppConstants.ACTIVE);
         connection.setSender_id(user.getId());
         connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
             @Override
             public void onChanged(BaseModel<List<Connection>> listBaseModel) {
-                if(listBaseModel!=null && !listBaseModel.isError())
-                {
+                if (listBaseModel != null && !listBaseModel.isError()) {
 
                 }
                 hideDialog();
