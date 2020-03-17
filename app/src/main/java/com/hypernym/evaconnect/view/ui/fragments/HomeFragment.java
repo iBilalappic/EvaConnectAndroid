@@ -92,11 +92,14 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this,view);
+
         return view;
     }
 
     private void init() {
+
         setPageTitle(getString(R.string.home));
+
         homeViewModel = ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(HomeViewModel.class);
         postViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(PostViewModel.class);
         connectionViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
