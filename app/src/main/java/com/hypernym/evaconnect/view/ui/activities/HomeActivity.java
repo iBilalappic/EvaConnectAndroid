@@ -208,7 +208,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     }
     public void hideNotificationPanel()
     {
-        notifications.clear();
+        List<Post> postNotifications = new ArrayList();
         if(NetworkUtils.isNetworkConnected(this))
         {
 
@@ -216,7 +216,8 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
                 @Override
                 public void onChanged(BaseModel<List<Post>> listBaseModel) {
                     if(listBaseModel !=null && !listBaseModel.isError() && listBaseModel.getData().size() >0) {
-                        notifications.clear();
+                       postNotifications.addAll(listBaseModel.getData());
+                       notifications=postNotifications;
                         notificationsAdapter.notifyDataSetChanged();
                     }
                 }

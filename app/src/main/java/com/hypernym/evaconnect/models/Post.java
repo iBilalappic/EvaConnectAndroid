@@ -22,6 +22,7 @@ public class Post implements Serializable {
     private Integer is_applied;
     private String company_name;
     private String interview_time;
+    private Integer connection_id;
 
     public Integer getObject_id() {
         return object_id;
@@ -454,6 +455,14 @@ public class Post implements Serializable {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public Integer getConnection_id() {
+        return connection_id;
+    }
+
+    public void setConnection_id(Integer connection_id) {
+        this.connection_id = connection_id;
     }
 }
 

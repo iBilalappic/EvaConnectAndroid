@@ -368,6 +368,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
             @Override
             public void onSingleClick(View v) {
                 if (NetworkUtils.isNetworkConnected(getContext())) {
+                    post.getUser().setConnection_id(post.getConnection_id());
                     callConnectApi(tv_connect, post.getUser());
                 } else {
                     networkErrorDialog();

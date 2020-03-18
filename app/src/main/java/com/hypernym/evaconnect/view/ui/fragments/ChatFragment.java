@@ -243,7 +243,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         networkConnection.setReceiver(receiver);
         networkConnection.setSender(sender);
         networkConnection.setSenderId(UserDetails.userid);
-
+        if (networkConnection.getSender().getFirstName().equalsIgnoreCase(LoginUtils.getUser().getFirst_name())) {
+            setPageTitle(networkConnection.getReceiver().getFirstName());
+        } else {
+            setPageTitle(networkConnection.getSender().getFirstName());
+        }
         initInterview();
     }
 

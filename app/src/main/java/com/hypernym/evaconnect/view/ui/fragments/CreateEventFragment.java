@@ -118,6 +118,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
 
     private boolean isStartDate=false;
     private Date startDate=new Date();
+    private Date selectedDate=new Date();
     DateFormat time = new SimpleDateFormat("hh:mm a");
     DateFormat dateformat = new SimpleDateFormat("E, dd MMM yyyy");
     private static final String TAG_DATETIME_FRAGMENT = "TAG_DATETIME_FRAGMENT";
@@ -165,8 +166,14 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
     public void setStartDate()
     {
         isStartDate=true;
+        try {
+            selectedDate=dateformat.parse(tv_startdate.getText().toString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         startDate=new Date();
         showDateTimePicker("Set Start Date & Time");
+
     }
 
 
@@ -174,14 +181,20 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
     public void setEndDate()
     {
         isStartDate=false;
+        try {
+            selectedDate=dateformat.parse(tv_enddate.getText().toString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         showDateTimePicker("Set End Date & Time");
     }
 
     private void showDateTimePicker(String title) {
         // Create a SimpleDateTimePicker and Show it
+
         SimpleDateTimePicker simpleDateTimePicker = SimpleDateTimePicker.make(
                 title,
-                new Date(),startDate,
+                selectedDate,startDate,
                 this,
                 getFragmentManager()
         );
