@@ -41,6 +41,7 @@ import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -152,8 +153,9 @@ public class JobCreateFragment extends BaseFragment implements View.OnClickListe
             edit_jobtitle.setText(jobtitle);
             edit_jobpostion.setText(companyJobAdModel.getPosition());
             edit_Location.setText(companyJobAdModel.getLocation());
-            String SalaryInt = getsplitstring(String.valueOf(companyJobAdModel.getSalary()));
-            edit_amount.setText(SalaryInt);
+          //  String SalaryInt = getsplitstring(String.valueOf(companyJobAdModel.getSalary()));
+            DecimalFormat myFormatter = new DecimalFormat("############");
+            edit_amount.setText(myFormatter.format(companyJobAdModel.getSalary()));
             edit_jobdescription.setText(companyJobAdModel.getContent());
 
             if (companyJobAdModel.getJobSector() != null) {

@@ -186,7 +186,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
                         notifications.clear();
                         notificationsAdapter.notifyDataSetChanged();
                         notifications.addAll(listBaseModel.getData());
-                        Collections.reverse(notifications);
+                     //   Collections.reverse(notifications);
                         notificationsAdapter.notifyDataSetChanged();
                         tv_pagetitle.setText(notifications.size()+" New Notifications");
                     }
