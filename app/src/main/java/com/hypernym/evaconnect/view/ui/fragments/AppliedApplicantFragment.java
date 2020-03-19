@@ -39,6 +39,7 @@ import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.onesignal.OneSignal;
 
 import java.io.File;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -88,6 +89,7 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
 
     Uri uri;
     User user = new User();
+    int current_hour, current_mintues;
 
     int hour, minute;
     String Job_name;
@@ -168,20 +170,32 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
                 }
                 break;
             case R.id.tv_offerinterview:
-                OfferInterviewCall();
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hours = mcurrentTime.get(Calendar.HOUR_OF_DAY);  // current hour
+                int minutess = mcurrentTime.get(Calendar.MINUTE);      // current min
+                current_hour = hours;
+                current_mintues = minutess;
                 SetTimePicker();
-                ChatFragment chatFragment = new ChatFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString(Constants.FRAGMENT_NAME, AppConstants.APPLICANT_FRAGMENT);
-                bundle.putSerializable(Constants.DATA, appliedApplicants);
-                bundle.putString("JOB_NAME", Job_name);
-                bundle.putInt("Day", datePicker.getDayOfMonth());
-                bundle.putInt("Month", datePicker.getMonth() + 1);
-                bundle.putInt("Year", datePicker.getYear());
-                bundle.putInt("Hour", hour);
-                bundle.putInt("Mintues", minute);
-                chatFragment.setArguments(bundle);
-                loadFragment(R.id.framelayout, chatFragment, getContext(), true);
+                String date = DateUtils.GetCurrentdate();
+
+                String[] separated = date.split("-");
+                String year = separated[0];
+                String month = separated[1];
+                String day = separated[2];
+
+                if (datePicker.getDayOfMonth() > Integer.parseInt(day)) {
+                    OfferInterviewCall();
+                } else if (datePicker.getMonth() + 1 > Integer.parseInt(month)) {
+                    OfferInterviewCall();
+                } else if (datePicker.getYear() > Integer.parseInt(year)) {
+                    OfferInterviewCall();
+                } else if (hour > current_hour) {
+                    OfferInterviewCall();
+                } else if (hour == current_hour && minute >= current_mintues) {
+                    OfferInterviewCall();
+                } else {
+                    Toast.makeText(getContext(), "you cannot set past time for interview", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.tv_declineApplicant:
                 simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.decline_application_confirmation), getString(R.string.button_cancel), getString(R.string.ok), new View.OnClickListener() {
