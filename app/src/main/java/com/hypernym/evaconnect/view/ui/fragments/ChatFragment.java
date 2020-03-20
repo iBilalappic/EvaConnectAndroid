@@ -186,7 +186,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
             if (mFragmentname != null && mFragmentname.equals(AppConstants.APPLICANT_FRAGMENT)) {
                 Interviewcode();
-                Toast.makeText(getContext(), "applicant", Toast.LENGTH_SHORT).show();
             } else {
                 ChatCode();
             }
