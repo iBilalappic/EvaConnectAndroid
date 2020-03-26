@@ -70,12 +70,12 @@ public class NotificationsFragment extends BaseFragment implements Notifications
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_notifications, container, false);
         ButterKnife.bind(this, view);
-        setPageTitle(getString(R.string.home));
+        setPageTitle(getString(R.string.notifications));
         homeViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(HomeViewModel.class);
         swipeRefreshLayout.setOnRefreshListener(this);
         initRecyclerView();
         getAllNotifications();
-        readAllNotifications();
+        //  readAllNotifications();
         return view;
     }
     private void readAllNotifications() {
@@ -104,21 +104,22 @@ public class NotificationsFragment extends BaseFragment implements Notifications
         homeViewModel.getAllNotifications(AppConstants.TOTAL_PAGES,currentPage).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError()) {
+                if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0 && listBaseModel.getData().get(0) != null) {
+                    //  myLikesModelList.clear();
                     notifications.addAll(listBaseModel.getData());
-                //    Collections.reverse(notifications);
                     notificationsAdapter.notifyDataSetChanged();
                     swipeRefreshLayout.setRefreshing(false);
                     notificationsAdapter.removeLoading();
                     isLoading = false;
-                    hideDialog();
-                }
-                else if(listBaseModel !=null && !listBaseModel.isError() && listBaseModel.getData().size()==0)
-                {
+                    //hideDialog();
+                } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
                     isLastPage = true;
                     notificationsAdapter.removeLoading();
                     isLoading = false;
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
+                hideDialog();
             }
         });
     }

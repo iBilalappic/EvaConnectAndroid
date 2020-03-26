@@ -202,8 +202,8 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
             @Override
             protected void loadMoreItems() {
                 isLoading = true;
-                if(!isSearchFlag)
-                {
+//                if(!isSearchFlag)
+//                {
                     currentPage=AppConstants.TOTAL_PAGES+currentPage;
                     if(NetworkUtils.isNetworkConnected(getContext())) {
                         getConnectionByFilter(type,currentPage,false);
@@ -212,7 +212,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
                     {
                         networkErrorDialog();
                     }
-                }
+                //}
 
 
             }
@@ -309,9 +309,9 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         connectionViewModel.getConnectionByFilter(userData,AppConstants.TOTAL_PAGES,currentPage).observe(this, new Observer<BaseModel<List<User>>>() {
             @Override
             public void onChanged(BaseModel<List<User>> listBaseModel) {
-                if(listBaseModel!=null && !listBaseModel.isError())
+                if(listBaseModel!=null && !listBaseModel.isError()  && listBaseModel.getData().size()>0)
                 {
-                    if((isSearchFlag  || currentPage==PAGE_START))
+                    if(currentPage==PAGE_START)
                     {
                         connectionList.clear();
                         connectionsAdapter.notifyDataSetChanged();
