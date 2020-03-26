@@ -240,6 +240,18 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
     private void OfferInterviewCall() {
         if(NetworkUtils.isNetworkConnected(getContext())) {
             ConnectionApiCall();
+            ChatFragment chatFragment = new ChatFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString(Constants.FRAGMENT_NAME, AppConstants.APPLICANT_FRAGMENT);
+            bundle.putSerializable(Constants.DATA, appliedApplicants);
+            bundle.putString("JOB_NAME", Job_name);
+            bundle.putInt("Day", datePicker.getDayOfMonth());
+            bundle.putInt("Month", datePicker.getMonth() + 1);
+            bundle.putInt("Year", datePicker.getYear());
+            bundle.putInt("Hour", hour);
+            bundle.putInt("Mintues", minute);
+            chatFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, chatFragment, getContext(), true);
         }
         else
         {
