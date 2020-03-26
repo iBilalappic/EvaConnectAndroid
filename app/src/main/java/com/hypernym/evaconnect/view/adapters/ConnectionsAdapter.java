@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
@@ -24,41 +25,49 @@ import butterknife.ButterKnife;
 
 public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.ViewHolder> {
     private Context context;
-    private List<User> connections,originalConnections;
+    private List<User> connections, originalConnections;
     private ConnectionsAdapter.OnItemClickListener onItemClickListener;
-    int count=0;
+    int count = 0;
     private boolean isLoaderVisible = false;
 
-    public ConnectionsAdapter(Context context, List<User> connectionList,ConnectionsAdapter.OnItemClickListener onItemClickListener)
-    {
-        this.context=context;
-        this.connections= connectionList;
-        this.onItemClickListener=onItemClickListener;
-        this.originalConnections=connectionList;
+    public ConnectionsAdapter(Context context, List<User> connectionList, ConnectionsAdapter.OnItemClickListener onItemClickListener) {
+        this.context = context;
+        this.connections = connectionList;
+        this.onItemClickListener = onItemClickListener;
+        this.originalConnections = connectionList;
     }
+
     @NonNull
     @Override
     public ConnectionsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(context).inflate(R.layout.item_connection,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_connection, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ConnectionsAdapter.ViewHolder holder, int position) {
-        AppUtils.setGlideImage(context,holder.profile_image,connections.get(position).getUser_image());
+        AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getUser_image());
         holder.tv_name.setText(connections.get(position).getFirst_name());
+        if (connections.get(position).getBio_data() != null && !connections.get(position).getBio_data().isEmpty()) {
+            holder.tv_designation.setText(connections.get(position).getBio_data());
+        } else {
+            holder.tv_designation.setText("--");
+        }
+
 
         //Hide connect option if post is from logged in user
-        User user= LoginUtils.getLoggedinUser();
-        if(connections.get(position).getId()==user.getId())
-        {
+        User user = LoginUtils.getLoggedinUser();
+        if (connections.get(position).getId() == user.getId()) {
             holder.tv_connect.setVisibility(View.GONE);
-        }
-        else
-        {
+        } else {
             holder.tv_connect.setVisibility(View.VISIBLE);
-            holder.tv_connect.setText(AppUtils.getConnectionStatus(context,connections.get(position).getIs_connected(),connections.get(position).isIs_receiver()));
-
+            holder.tv_connect.setText(AppUtils.getConnectionStatus(context, connections.get(position).getIs_connected(), connections.get(position).isIs_receiver()));
+            String connectionstatus = AppUtils.getConnectionStatus(context, connections.get(position).getIs_connected(), connections.get(position).isIs_receiver());
+            if (connectionstatus.equals(AppConstants.CONNECTED)) {
+                holder.tv_connect.setBackgroundResource(R.drawable.rounded_button_dark);
+            } else {
+                holder.tv_connect.setBackgroundResource(R.drawable.rounded_button_nobackground);
+            }
         }
 
     }
@@ -84,28 +93,26 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
             tv_connect.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            if(onItemClickListener!=null)
-                  onItemClickListener.onItemClick(v,originalConnections.indexOf(connections.get(getAdapterPosition())));
+            if (onItemClickListener != null)
+                onItemClickListener.onItemClick(v, originalConnections.indexOf(connections.get(getAdapterPosition())));
         }
     }
+
     //This method will filter the list
     //here we are passing the filtered data
     //and assigning it to the list with notifydatasetchanged method
     public void filterList(List<User> filterdNames) {
         connections.clear();
-        if(filterdNames.size()>0)
-        {
+        if (filterdNames.size() > 0) {
 
             connections.addAll(filterdNames);
-        }
-        else
-        {
+        } else {
             connections.addAll(originalConnections);
         }
 
@@ -116,6 +123,7 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
     }
+
     public void removeLoading() {
         isLoaderVisible = false;
         int position = connections.size() - 1;
@@ -125,8 +133,9 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
             notifyItemRemoved(position);
         }
     }
+
     User getItem(int position) {
-        if(connections.size()>0)
+        if (connections.size() > 0)
             return connections.get(position);
         else
             return null;

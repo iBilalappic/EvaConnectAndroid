@@ -44,13 +44,15 @@
     <TextView
         android:id="@+id/tv_content"
         style="@style/TextStyle.Title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:gravity="left"
         android:text="This"
         app:layout_constraintStart_toStartOf="parent"
+
         app:layout_constraintTop_toBottomOf="@+id/profile_image" />
 
     <View
