@@ -51,42 +51,7 @@ public class BaseActivity extends AppCompatActivity  {
     private ImageView img_uparrow;
     private static int count=0;
 
-    @Override
-    public void onBackPressed() {
 
-          Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.framelayout);
-            if (fragment instanceof HomeFragment || fragment instanceof ConnectionsFragment || fragment instanceof MessageFragment
-            ) {
-//                simpleDialog = new SimpleDialog(this, null, getString(R.string.msg_exit),
-//                        getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        switch (view.getId()) {
-//                            case R.id.button_positive:
-//                                simpleDialog.dismiss();
-//
-//                                break;
-//                            case R.id.button_negative:
-//                                simpleDialog.dismiss();
-//                                break;
-//                        }
-//                    }
-//                });
-//                simpleDialog.show();
-                finish();
-
-            }else if(fragment instanceof MyLikesFragment || fragment instanceof EditProfileFragment || fragment instanceof NotificationsFragment )
-            {
-                super.onBackPressed();
-            }
-
-            else {
-                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                if( findViewById(R.id.tv_back)!=null)
-                    findViewById(R.id.tv_back).setVisibility(View.GONE);
-                super.onBackPressed();
-            }
-    }
     public void showDialog() {
 
         if(customProgressBar != null && !customProgressBar.isShowing())

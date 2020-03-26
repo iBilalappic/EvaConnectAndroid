@@ -38,9 +38,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edt_search" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rc_connections"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
@@ -48,8 +47,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/empty" />
-
+        app:layout_constraintTop_toBottomOf="@+id/empty" >
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rc_connections"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     <TextView
         android:id="@+id/empty"
         android:layout_width="match_parent"

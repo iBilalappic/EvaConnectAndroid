@@ -34,9 +34,12 @@ import com.hypernym.evaconnect.view.adapters.NotificationsAdapter;
 import com.hypernym.evaconnect.view.dialogs.NavigationDialog;
 import com.hypernym.evaconnect.view.ui.fragments.BaseFragment;
 import com.hypernym.evaconnect.view.ui.fragments.ConnectionsFragment;
+import com.hypernym.evaconnect.view.ui.fragments.EditProfileFragment;
 import com.hypernym.evaconnect.view.ui.fragments.EventDetailFragment;
 import com.hypernym.evaconnect.view.ui.fragments.HomeFragment;
 import com.hypernym.evaconnect.view.ui.fragments.MessageFragment;
+import com.hypernym.evaconnect.view.ui.fragments.MyLikesFragment;
+import com.hypernym.evaconnect.view.ui.fragments.NotificationsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.PostDetailsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.SpecficJobFragment;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
@@ -399,5 +402,28 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
 
     }
 
+    @Override
+    public void onBackPressed() {
 
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.framelayout);
+        if (fragment instanceof HomeFragment ) {
+
+            finish();
+
+        }else if(fragment instanceof MyLikesFragment || fragment instanceof ConnectionsFragment || fragment instanceof EditProfileFragment || fragment instanceof NotificationsFragment || fragment instanceof MessageFragment )
+        {
+            img_home.setImageDrawable(getDrawable(R.drawable.home_selected));
+            img_connections.setImageDrawable(getDrawable(R.drawable.connections));
+            img_messages.setImageDrawable(getDrawable(R.drawable.messages));
+            img_logout.setImageDrawable(getDrawable(R.drawable.logout));
+            super.onBackPressed();
+        }
+
+        else {
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            if( findViewById(R.id.tv_back)!=null)
+                findViewById(R.id.tv_back).setVisibility(View.GONE);
+            super.onBackPressed();
+        }
+    }
 }

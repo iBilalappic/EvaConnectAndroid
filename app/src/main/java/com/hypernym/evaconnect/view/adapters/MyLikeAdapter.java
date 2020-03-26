@@ -97,8 +97,8 @@ public class MyLikeAdapter extends RecyclerView.Adapter<MyLikeAdapter.ViewHolder
         int position = myLikesModelList.size() - 1;
         MyLikesModel item = getItem(position);
         if (item != null) {
-            myLikesModelList.remove(position);
-            notifyItemRemoved(position);
+         //   myLikesModelList.remove(position);
+           // notifyItemRemoved(position);
         }
     }
     MyLikesModel getItem(int position) {
