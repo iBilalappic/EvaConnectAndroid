@@ -90,6 +90,9 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     @BindView(R.id.img_uparrow)
     ImageView img_uparrow;
 
+    @BindView(R.id.img_reddot)
+    ImageView img_reddot;
+
     @BindView(R.id.tv_back)
     TextView tv_back;
 
@@ -151,6 +154,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
             @Override
             public void onClick(View v) {
                 hideNotificationPanel();
+                img_reddot.setVisibility(View.GONE);
             }
         });
 
@@ -192,6 +196,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
                      //   Collections.reverse(notifications);
                         notificationsAdapter.notifyDataSetChanged();
                         tv_pagetitle.setText(notifications.size()+" New Notifications");
+                        img_reddot.setVisibility(View.VISIBLE);
                     }
                     setNotificationCount(notifications.size());
                 }
@@ -233,6 +238,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         rc_notifications.setVisibility(View.GONE);
         titleLayout.setVisibility(View.VISIBLE);
         img_uparrow.setVisibility(View.GONE);
+        img_reddot.setVisibility(View.GONE);
         tv_pagetitle.setText(BaseFragment.pageTitle);
     }
 

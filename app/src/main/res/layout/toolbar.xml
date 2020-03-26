@@ -78,13 +78,29 @@
                 android:gravity="center"
                 android:padding="5dp"
                 android:text="Home"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:textColor="@color/page_title"
                 android:textStyle="bold"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageView
+                android:id="@+id/img_reddot"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:gravity="center"
+                android:padding="5dp"
+                android:visibility="gone"
+                android:layout_marginTop="2dp"
+                android:src="@drawable/redcircle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintEnd_toStartOf="@+id/tv_title"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -118,9 +134,9 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@color/lighter_gray"
+            android:visibility="gone"
             app:layout_constraintHeight_default="wrap"
             app:layout_constraintHeight_max="280dp"
-            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@+id/img_uparrow" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -42,7 +42,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="0dp"
             android:background="@color/lighter_gray"/>
         <LinearLayout
             android:id="@+id/calendar"
@@ -65,7 +65,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="0dp"
             android:background="@color/lighter_gray"/>
         <LinearLayout
             android:layout_width="match_parent"
@@ -88,7 +88,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="0dp"
             android:background="@color/lighter_gray"/>
         <LinearLayout
             android:id="@+id/editProfile"
@@ -111,7 +111,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="0dp"
         android:background="@color/lighter_gray"/>
     <LinearLayout
         android:id="@+id/notifications"
@@ -135,7 +135,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="0dp"
             android:background="@color/lighter_gray"/>
         <LinearLayout
             android:layout_width="match_parent"
@@ -158,7 +158,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:visibility="gone"
             android:background="@color/lighter_gray"/>
         <LinearLayout
@@ -166,6 +166,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
+            android:layout_marginTop="5dp"
             android:gravity="center_vertical">
             <TextView
                 style="@style/TextStyle.Black"

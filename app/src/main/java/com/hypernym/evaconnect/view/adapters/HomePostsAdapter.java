@@ -203,7 +203,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             img_comment.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                   // mClickListener.onItemClick(v, getAdapterPosition());
+                    mClickListener.onEventItemClick(v, getAdapterPosition());
                 }
             });
             img_share.setOnClickListener(new OnOneOffClickListener() {
