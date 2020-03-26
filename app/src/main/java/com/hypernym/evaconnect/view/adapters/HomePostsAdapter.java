@@ -696,6 +696,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         if (object != null && object.getType() != null) {
             switch (object.getPost_type()) {
                 case AppConstants.TEXT_TYPE:
+                    if(String.valueOf(posts.get(position).getComment_count()).equals("0")){
+                        ((TextTypeViewHolder) holder).tv_viewcomments.setVisibility(View.GONE);
+                    }
                     ((TextTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((TextTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
                     ((TextTypeViewHolder) holder).tv_createdDateTime.setText(DateUtils.getFormattedDateTime(posts.get(position).getCreated_datetime()));
@@ -721,6 +724,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
                     break;
                 case AppConstants.IMAGE_TYPE:
+                    if(String.valueOf(posts.get(position).getComment_count()).equals("0")){
+                        ((ImageTypeViewHolder) holder).tv_viewcomments.setVisibility(View.GONE);
+                    }
                     if (posts.get(position).getPost_image().size() > 1) {
                         ((ImageTypeViewHolder) holder).imageSlider.setVisibility(View.VISIBLE);
                         ((ImageTypeViewHolder) holder).post_image.setVisibility(View.GONE);
@@ -753,6 +759,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     }
                     break;
                 case AppConstants.EVENT_TYPE:
+                    if(String.valueOf(posts.get(position).getComment_count()).equals("0")){
+                        ((EventTypeViewHolder) holder).tv_viewcomments.setVisibility(View.GONE);
+                    }
                     ((EventTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((EventTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
 
@@ -785,6 +794,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
                     break;
                 case AppConstants.JOB_TYPE:
+                    if(String.valueOf(posts.get(position).getComment_count()).equals("0")){
+                        ((JobTypeViewHolder) holder).tv_viewcomments.setVisibility(View.GONE);
+                    }
                     ((JobTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
                     ((JobTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
 
@@ -813,6 +825,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
                     break;
                 case AppConstants.VIDEO_TYPE:
+                    if(String.valueOf(posts.get(position).getComment_count()).equals("0")){
+                        ((VideoTypeViewHolder) holder).tv_viewcomments.setVisibility(View.GONE);
+                    }
                     ((VideoTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((VideoTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
                     ((VideoTypeViewHolder) holder).tv_createdDateTime.setText(DateUtils.getFormattedDateTime(posts.get(position).getCreated_datetime()));
@@ -836,6 +851,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     AppUtils.setGlideVideoThumbnail(mContext, ((VideoTypeViewHolder) holder).img_video, posts.get(position).getPost_video());
                     break;
                 case AppConstants.LINK_POST:
+                    if(String.valueOf(posts.get(position).getComment_count()).equals("0")){
+                        ((LinkTypeViewHolder) holder).tv_viewcomments.setVisibility(View.GONE);
+                    }
                     //  ((LinkTypeViewHolder) holder).img_link.setBackground(null);
                     ((LinkTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((LinkTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));

@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -82,7 +83,7 @@ import okhttp3.RequestBody;
 
 import static android.app.Activity.RESULT_OK;
 
-public class MessageFragment extends BaseFragment implements OnItemClickListener, View.OnClickListener,SwipeRefreshLayout.OnRefreshListener , TextWatcher, AttachmentsAdapter.ItemClickListener {
+public class MessageFragment extends BaseFragment implements OnItemClickListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, TextWatcher, AttachmentsAdapter.ItemClickListener {
 
     @BindView(R.id.rc_message)
     RecyclerView re_message;
@@ -93,9 +94,14 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
 
+    @BindView(R.id.img_nomail)
+    ImageView img_nomail;
+
+    @BindView(R.id.tv_nomail)
+    TextView tv_nomail;
 
 
-    private MessageAdapter messageAdapter,newmessageAdapter;
+    private MessageAdapter messageAdapter, newmessageAdapter;
     private HorizontalMessageAdapter messageAdapter_horizontal;
     private LinearLayoutManager linearLayoutManager;
     private MessageViewModel messageViewModel;
@@ -105,10 +111,10 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     private List<NetworkConnection> neworiginalNetworkConnectionList = new ArrayList<>();
     Dialog mDialogMessage;
     EditText editTextSearch, editTextMessage;
-    TextView mTextviewSend,empty;
+    TextView mTextviewSend, empty;
     RecyclerView mrecyclerviewFriends;
     TextView browsefiles;
-    private int Itempostion,ItemPostionHorizontal;
+    private int Itempostion, ItemPostionHorizontal;
     private static final int REQUEST_PHOTO_GALLERY = 4;
     private static final int CAMERAA = 1;
     private String GalleryImage, mCurrentPhotoPath, globalImagePath;
@@ -150,15 +156,12 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
         init();
         swipeRefresh.setOnRefreshListener(this);
         //
-        setupRecyclerview();
-        if(NetworkUtils.isNetworkConnected(getContext()))
-        {
+        //  setupRecyclerview();
+        if (NetworkUtils.isNetworkConnected(getContext())) {
             GetFriendDetails();
             // setupNetworkConnectionRecycler();
             GetFirebaseData();
-        }
-        else
-        {
+        } else {
             networkErrorDialog();
         }
 
@@ -168,7 +171,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     private void GetFirebaseData() {
         showDialog();
         networkConnectionList.clear();
-        messageAdapter.notifyDataSetChanged();
+        //     messageAdapter.notifyDataSetChanged();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         Query lastQuery = databaseReference.child(AppConstants.FIREASE_CHAT_ENDPOINT);
         lastQuery.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -176,17 +179,17 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 //  networkConnectionList.clear();
-                for (DataSnapshot child: dataSnapshot.getChildren()) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
                     Log.d("User key", child.getKey());
-                    String[] conversationkey=child.getKey().split("_");
-                    User user=LoginUtils.getLoggedinUser();
-                    if(user!=null && user.getId()==Integer.parseInt(conversationkey[0])) {
+                    String[] conversationkey = child.getKey().split("_");
+                    User user = LoginUtils.getLoggedinUser();
+                    if (user != null && user.getId() == Integer.parseInt(conversationkey[0])) {
 
                         Query lastMessage = databaseReference.child(AppConstants.FIREASE_CHAT_ENDPOINT).child(child.getKey()).orderByKey().limitToLast(1);
                         lastMessage.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                               for (DataSnapshot child: dataSnapshot.getChildren()) {
+                                for (DataSnapshot child : dataSnapshot.getChildren()) {
                                     Log.d("User key", child.getKey());
                                     Log.d("User val", child.child("message").getValue().toString());
 
@@ -206,29 +209,27 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                                                 networkConnectionList.add(networkConnection);
                                             }
                                         }
-                                        Collections.sort(networkConnectionList,new DateTimeComparator());
+                                        setupRecyclerview();
+                                        Collections.sort(networkConnectionList, new DateTimeComparator());
                                         Collections.reverse(networkConnectionList);
                                         messageAdapter.notifyDataSetChanged();
                                         swipeRefresh.setRefreshing(false);
                                         hideDialog();
-                                    }
-                                    catch (Exception ex)
-                                    {
+                                    } catch (Exception ex) {
                                         hideDialog();
                                         swipeRefresh.setRefreshing(false);
                                     }
                                 }
 
                             }
+
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
                                 hideDialog();
                                 swipeRefresh.setRefreshing(false);
                             }
                         });
-                    }
-                    else
-                    {
+                    } else {
                         hideDialog();
                     }
                 }
@@ -252,11 +253,21 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     }
 
     private void setupRecyclerview() {
-        networkConnectionList = removeDuplicates(networkConnectionList);
-        messageAdapter = new MessageAdapter(getContext(), networkConnectionList, this);
-        linearLayoutManager = new LinearLayoutManager(getContext());
-        re_message.setLayoutManager(linearLayoutManager);
-        re_message.setAdapter(messageAdapter);
+        if (networkConnectionList.size() > 0) {
+            re_message.setVisibility(View.VISIBLE);
+            img_nomail.setVisibility(View.GONE);
+            tv_nomail.setVisibility(View.GONE);
+            networkConnectionList = removeDuplicates(networkConnectionList);
+            messageAdapter = new MessageAdapter(getContext(), networkConnectionList, this);
+            linearLayoutManager = new LinearLayoutManager(getContext());
+            re_message.setLayoutManager(linearLayoutManager);
+            re_message.setAdapter(messageAdapter);
+        } else {
+            re_message.setVisibility(View.GONE);
+            img_nomail.setVisibility(View.VISIBLE);
+            tv_nomail.setVisibility(View.VISIBLE);
+        }
+
     }
 
 
@@ -315,7 +326,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
         mTextviewSend = mDialogMessage.findViewById(R.id.sendButton);
         browsefiles = mDialogMessage.findViewById(R.id.browsefiles);
         rc_attachments = mDialogMessage.findViewById(R.id.rc_attachments);
-        empty=mDialogMessage.findViewById(R.id.empty);
+        empty = mDialogMessage.findViewById(R.id.empty);
 
         attachmentsAdapter = new AttachmentsAdapter(getContext(), attachments, this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -329,17 +340,17 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
             @Override
             public void onClick(View v) {
                 String messageArea = editTextMessage.getText().toString();
-                if ((!messageArea.equals("") || attachments.size()>0) && messageAdapter_horizontal.getItemCount()>0) {
-                    Log.d("TAAAAG",""+ItemPostionHorizontal);
+                if ((!messageArea.equals("") || attachments.size() > 0) && messageAdapter_horizontal.getItemCount() > 0) {
+                    Log.d("TAAAAG", "" + ItemPostionHorizontal);
                     ChatFragment chatFragment = new ChatFragment();
                     Bundle bundle = new Bundle();
-                    int originalPosition=neworiginalNetworkConnectionList.indexOf(newNetworkConnectionList.get(ItemPostionHorizontal));
+                    int originalPosition = neworiginalNetworkConnectionList.indexOf(newNetworkConnectionList.get(ItemPostionHorizontal));
                     bundle.putSerializable(Constants.DATA, neworiginalNetworkConnectionList.get(originalPosition));
                     bundle.putString("MESSAGE", messageArea);
                     if (MultiplePhotoString != null && MultiplePhotoString.size() > 1) {
                         bundle.putStringArrayList("IMAGEURILIST", (ArrayList<String>) MultiplePhotoString);
                         bundle.putStringArrayList("FILENAMELIST", (ArrayList<String>) MultipleFileString);
-                    } else if (SelectedImageUri != null && attachments.size()>0) {
+                    } else if (SelectedImageUri != null && attachments.size() > 0) {
                         bundle.putString("IMAGEURI", SelectedImageUri.toString());
                         bundle.putString("FILENAME", tempFile.toString());
                     }
@@ -352,12 +363,9 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                     //  Log.d("TAAAG", "" + GsonUtils.toJson(networkConnection));
                     loadFragment(R.id.framelayout, chatFragment, getContext(), true);
                     mDialogMessage.dismiss();
-                }
-                else if(messageAdapter_horizontal.getItemCount()==0)
-                {
+                } else if (messageAdapter_horizontal.getItemCount() == 0) {
                     Toast.makeText(getContext(), getString(R.string.msg_no_sender), Toast.LENGTH_SHORT).show();
-                }
-                else{
+                } else {
                     Toast.makeText(getContext(), "Please type message...", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -415,7 +423,8 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     public void afterTextChanged(Editable s) {
 
 
-        filter(s.toString()); }
+        filter(s.toString());
+    }
 
     private void filter(String text) {
         //new array list that will hold the filtered data
@@ -435,15 +444,12 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
             }
         }
 
-        if(filterdNames.size()>0)
-        {
+        if (filterdNames.size() > 0) {
             empty.setVisibility(View.GONE);
-        }
-        else
-        {
+        } else {
             empty.setVisibility(View.VISIBLE);
         }
-        ItemPostionHorizontal=0;
+        ItemPostionHorizontal = 0;
         //calling a method of the adapter class and passing the filtered list
         messageAdapter_horizontal.filterList(removeDuplicates(filterdNames));
     }
@@ -566,11 +572,9 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     @Override
     public void onRefresh() {
 
-        if(NetworkUtils.isNetworkConnected(getContext())) {
+        if (NetworkUtils.isNetworkConnected(getContext())) {
             GetFirebaseData();
-        }
-        else
-        {
+        } else {
             networkErrorDialog();
         }
     }
