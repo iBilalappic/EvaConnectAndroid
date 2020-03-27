@@ -101,7 +101,8 @@
     <string name="msg_invalid_datetime">You have selected time that has already passed. Please select valid time.</string>
     <string name="msg_create_event">Your Event has been created successfully.</string>
     <string name="decline_application_confirmation">Are you sure you want to decline this application?</string>
-
+    <string name="block_user">Block User</string>
+    <string name="remove_user">Remove User</string>
 
 
 </resources>
