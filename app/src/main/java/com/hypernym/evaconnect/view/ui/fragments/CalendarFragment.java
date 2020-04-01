@@ -1,6 +1,7 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -11,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.hypernym.evaconnect.R;
@@ -41,6 +44,9 @@ import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.EventAdapter;
 import com.hypernym.evaconnect.view.adapters.MonthAdapter;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
+import com.hypernym.evaconnect.view.ui.activities.HomeActivity;
+import com.hypernym.evaconnect.view.ui.activities.LoginActivity;
+import com.hypernym.evaconnect.view.ui.activities.SplashActivity;
 import com.hypernym.evaconnect.viewmodel.CalendarViewModel;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
@@ -139,17 +145,14 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
         CalendarDay day = CalendarDay.from(cal.get(Calendar.YEAR),cal.get(Calendar.MONTH)+1,1);
         CalendarDay lastday = CalendarDay.from(cal.get(Calendar.YEAR),cal.get(Calendar.MONTH)+1,cal.getActualMaximum(Calendar.DAY_OF_MONTH));
         calendarView.state().edit().setMinimumDate(day).setMaximumDate(lastday).commit();
-        if(NetworkUtils.isNetworkConnected(getContext()))
-        {
-            getAllCalendarMarks(calendarView.getCurrentDate().getMonth(),calendarView.getCurrentDate().getYear());
-        }
-        else
-        {
-            networkErrorDialog();
-        }
+        calendarView.setDateSelected(CalendarDay.today(),true);
+
 
         newevent.setVisibility(View.VISIBLE);
         dayOfMonth.setText(String.valueOf(1));
+        String currentdate= String.valueOf(CalendarDay.today().getDay());
+       // dayOfMonth.setText(currentdate);
+        Log.d("TAAAF",currentdate);
         selectmonth.setText(DateUtils.getMonthForInt(cal.get(Calendar.MONTH)));
         selectyear.setText(String.valueOf(cal.get(Calendar.YEAR)));
         initMonths();
@@ -175,6 +178,23 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
         rc_events.setLayoutManager(linearLayoutManager);
         rc_events.setAdapter(eventAdapter);
+        showDialog();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                hideDialog();
+                getCalendarMarksByDate();
+                if(NetworkUtils.isNetworkConnected(getContext()))
+                {
+                    getAllCalendarMarks(calendarView.getCurrentDate().getMonth(),calendarView.getCurrentDate().getYear());
+                }
+                else
+                {
+                    networkErrorDialog();
+                }
+
+            }
+        }, 3000);
 
     }
     private void saveNote() {
@@ -465,6 +485,7 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
         if(selected)
         {
             dayOfMonth.setText(String.valueOf(date.getDate().getDayOfMonth()));
+            Log.d("TAAAF",String.valueOf(date.getDate().getDayOfMonth()));
          //   edt_note.setVisibility(View.VISIBLE);
             if(NetworkUtils.isNetworkConnected(getContext()))
             {

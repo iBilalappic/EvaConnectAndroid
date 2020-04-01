@@ -159,6 +159,9 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
         //  setupRecyclerview();
         if (NetworkUtils.isNetworkConnected(getContext())) {
             GetFriendDetails();
+
+            img_nomail.setVisibility(View.VISIBLE);
+            tv_nomail.setVisibility(View.VISIBLE);
             // setupNetworkConnectionRecycler();
             GetFirebaseData();
         } else {
