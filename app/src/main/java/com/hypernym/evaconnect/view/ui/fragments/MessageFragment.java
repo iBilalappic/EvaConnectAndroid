@@ -160,8 +160,6 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
         if (NetworkUtils.isNetworkConnected(getContext())) {
             GetFriendDetails();
 
-            img_nomail.setVisibility(View.VISIBLE);
-            tv_nomail.setVisibility(View.VISIBLE);
             // setupNetworkConnectionRecycler();
             GetFirebaseData();
         } else {
@@ -180,63 +178,67 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
         lastQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    //  networkConnectionList.clear();
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        Log.d("User key", child.getKey());
+                        String[] conversationkey = child.getKey().split("_");
+                        User user = LoginUtils.getLoggedinUser();
+                        if (user != null && user.getId() == Integer.parseInt(conversationkey[0])) {
 
-                //  networkConnectionList.clear();
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    Log.d("User key", child.getKey());
-                    String[] conversationkey = child.getKey().split("_");
-                    User user = LoginUtils.getLoggedinUser();
-                    if (user != null && user.getId() == Integer.parseInt(conversationkey[0])) {
+                            Query lastMessage = databaseReference.child(AppConstants.FIREASE_CHAT_ENDPOINT).child(child.getKey()).orderByKey().limitToLast(1);
+                            lastMessage.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                                        Log.d("User key", child.getKey());
+                                        Log.d("User val", child.child("message").getValue().toString());
 
-                        Query lastMessage = databaseReference.child(AppConstants.FIREASE_CHAT_ENDPOINT).child(child.getKey()).orderByKey().limitToLast(1);
-                        lastMessage.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                                    Log.d("User key", child.getKey());
-                                    Log.d("User val", child.child("message").getValue().toString());
+                                        try {
 
-                                    try {
+                                            for (NetworkConnection networkConnection : newNetworkConnectionList) {
+                                                if (((conversationkey[0].equalsIgnoreCase(networkConnection.getSenderId().toString())) &&
+                                                        (conversationkey[1].equalsIgnoreCase(networkConnection.getReceiverId().toString()))) ||
+                                                        ((conversationkey[0].equalsIgnoreCase(networkConnection.getReceiverId().toString())) &&
+                                                                (conversationkey[1].equalsIgnoreCase(networkConnection.getSenderId().toString())))) {
 
-                                        for (NetworkConnection networkConnection : newNetworkConnectionList) {
-                                            if (((conversationkey[0].equalsIgnoreCase(networkConnection.getSenderId().toString())) &&
-                                                    (conversationkey[1].equalsIgnoreCase(networkConnection.getReceiverId().toString()))) ||
-                                                    ((conversationkey[0].equalsIgnoreCase(networkConnection.getReceiverId().toString())) &&
-                                                            (conversationkey[1].equalsIgnoreCase(networkConnection.getSenderId().toString())))) {
-
-                                                networkConnection.setMessage(child.child("message").getValue().toString());
-                                                if (child.child("image").getValue() != null) {
-                                                    networkConnection.setMessage("image");
+                                                    networkConnection.setMessage(child.child("message").getValue().toString());
+                                                    if (child.child("image").getValue() != null) {
+                                                        networkConnection.setMessage("image");
+                                                    }
+                                                    networkConnection.setCreatedDatetime(child.child("time").getValue().toString());
+                                                    networkConnectionList.add(networkConnection);
                                                 }
-                                                networkConnection.setCreatedDatetime(child.child("time").getValue().toString());
-                                                networkConnectionList.add(networkConnection);
                                             }
+                                            setupRecyclerview();
+                                            Collections.sort(networkConnectionList, new DateTimeComparator());
+                                            Collections.reverse(networkConnectionList);
+                                            messageAdapter.notifyDataSetChanged();
+                                            swipeRefresh.setRefreshing(false);
+                                            hideDialog();
+                                        } catch (Exception ex) {
+                                            hideDialog();
+                                            swipeRefresh.setRefreshing(false);
                                         }
-                                        setupRecyclerview();
-                                        Collections.sort(networkConnectionList, new DateTimeComparator());
-                                        Collections.reverse(networkConnectionList);
-                                        messageAdapter.notifyDataSetChanged();
-                                        swipeRefresh.setRefreshing(false);
-                                        hideDialog();
-                                    } catch (Exception ex) {
-                                        hideDialog();
-                                        swipeRefresh.setRefreshing(false);
                                     }
+
                                 }
 
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                                hideDialog();
-                                swipeRefresh.setRefreshing(false);
-                            }
-                        });
-                    } else {
-                        hideDialog();
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    hideDialog();
+                                    swipeRefresh.setRefreshing(false);
+                                }
+                            });
+                        } else {
+                            hideDialog();
+                        }
                     }
+                } else {
+                    img_nomail.setVisibility(View.VISIBLE);
+                    tv_nomail.setVisibility(View.VISIBLE);
+                    swipeRefresh.setRefreshing(false);
                 }
-
             }
 
             @Override
