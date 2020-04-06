@@ -236,5 +236,6 @@
     <orderEntry type="library" name="Gradle: com.google.android.exoplayer:exoplayer-ui:2.10.5@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.jakewharton.threetenabp:threetenabp:1.1.1@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.github.prolificinteractive:material-calendarview:2.0.1@aar" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.http.legacy-android-29" level="project" />
   </component>
 </module>

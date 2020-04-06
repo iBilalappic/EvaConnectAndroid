@@ -21,8 +21,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".view.ui.activities.SharePostActivity"></activity>
-        <activity android:name=".view.ui.activities.HomeActivity"/>
+        <activity android:name=".view.ui.activities.LinkedinActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".view.ui.activities.SharePostActivity" />
+        <activity android:name=".view.ui.activities.HomeActivity" />
         <activity
             android:name=".view.ui.activities.ForgotPassword"
             android:theme="@style/AppTheme.FullScreen" />
@@ -40,25 +47,22 @@
         <activity
             android:name=".view.ui.activities.SplashActivity"
             android:theme="@style/AppTheme.FullScreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
-        <activity android:name=".view.ui.activities.MainActivity"
-            android:configChanges="orientation|keyboardHidden|screenLayout|screenSize"/>
 
+        <activity
+            android:name=".view.ui.activities.MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenLayout|screenSize" />
 
+        <service
+            android:name=".service.OneSignalReceiver"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE">
+            <intent-filter>
+                <action android:name="com.onesignal.NotificationExtender" />
+            </intent-filter>
+        </service>
 
-                <service
-                    android:name=".service.OneSignalReceiver"
-                    android:exported="true"
-                    android:permission="android.permission.BIND_JOB_SERVICE">
-                    <intent-filter>
-                        <action android:name="com.onesignal.NotificationExtender" />
-                    </intent-filter>
-                </service>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.hypernym.evaconnect.fileprovider"
