@@ -26,6 +26,7 @@ import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.models.UserDetails;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
+import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.ui.activities.BaseActivity;
@@ -70,7 +71,11 @@ public class BlankActivity extends BaseActivity {
                         //  if (listBaseModel.getData().get(0).getIsLinkedin() != null && listBaseModel.getData().get(0).getIsLinkedin() == 1) {
                         JustLoginApiCall();
                         //  }
-
+                    } else {
+                        Intent intent = new Intent(BlankActivity.this, SignupDetailsActivity.class);
+                        intent.putExtra("Email", linkedInUserEmailAddress);
+                        intent.putExtra(Constants.ACTIVITY_NAME,"LinkedinActivity");
+                        startActivity(intent);
                     }
                 }
             });
@@ -84,8 +89,7 @@ public class BlankActivity extends BaseActivity {
             userViewModel.linkedin_login(email).observe(this, new Observer<BaseModel<List<User>>>() {
                 @Override
                 public void onChanged(BaseModel<List<User>> listBaseModel) {
-                          LoginUtils.userLoggedIn();
-
+                    LoginUtils.userLoggedIn();
                     User userData = listBaseModel.getData().get(0);
                     userData.setUser_id(userData.getId());
                     LoginUtils.saveUser(listBaseModel.getData().get(0));

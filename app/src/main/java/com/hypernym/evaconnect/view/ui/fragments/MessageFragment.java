@@ -231,6 +231,9 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                                 }
                             });
                         } else {
+                            img_nomail.setVisibility(View.VISIBLE);
+                            tv_nomail.setVisibility(View.VISIBLE);
+                            swipeRefresh.setRefreshing(false);
                             hideDialog();
                         }
                     }

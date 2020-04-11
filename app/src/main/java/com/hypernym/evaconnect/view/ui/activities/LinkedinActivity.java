@@ -368,51 +368,7 @@ public class LinkedinActivity extends BaseActivity {
         intent.putExtra("Email", linkedInUserEmailAddress);
         startActivity(intent);
         pd.dismiss();
-       // CheckUserExist(linkedInUserEmailAddress);
-
-    }
-//    private void CheckUserExist(String linkedInUserEmailAddress) {
-//        if (NetworkUtils.isNetworkConnected(this)) {
-////            showDialog();
-//            userViewModel.isEmailExist_linkedin(linkedInUserEmailAddress).observe(this, new Observer<BaseModel<List<AccountCheck>>>() {
-//                @Override
-//                public void onChanged(BaseModel<List<AccountCheck>> listBaseModel) {
-//                    if (listBaseModel != null && !listBaseModel.isError()) {
-//                      //  if (listBaseModel.getData().get(0).getIsLinkedin() != null && listBaseModel.getData().get(0).getIsLinkedin() == 1) {
-//                         //   JustLoginApiCall();
-//                      //  }
-//
-//                    }
-//                }
-//            });
-//        }
-//    }
-
-    private void JustLoginApiCall() {
-
-        if (NetworkUtils.isNetworkConnected(this)) {
-//            showDialog();
-            userViewModel.linkedin_login(linkedInUserEmailAddress).observe(this, new Observer<BaseModel<List<User>>>() {
-                @Override
-                public void onChanged(BaseModel<List<User>> listBaseModel) {
-              //      LoginUtils.userLoggedIn();
-
-                    User userData = listBaseModel.getData().get(0);
-                    userData.setUser_id(userData.getId());
-                    LoginUtils.saveUser(listBaseModel.getData().get(0));
-                    OneSignal.sendTag("email", userData.getEmail());
-                    UserDetails.username = userData.getFirst_name();
-                    if (listBaseModel.getData().get(0) != null) {
-                        LoginUtils.saveUserToken(listBaseModel.getData().get(0).getToken());
-                    }
-
-//                    Intent intent = new Intent(LinkedinActivity.this, HomeActivity.class);
-//                    // set the new task and clear flags
-//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                    startActivity(intent);
-                }
-            });
-        }
+        // CheckUserExist(linkedInUserEmailAddress);
 
     }
 

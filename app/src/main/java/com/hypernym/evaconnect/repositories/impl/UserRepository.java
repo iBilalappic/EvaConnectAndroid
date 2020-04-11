@@ -28,7 +28,10 @@ public class UserRepository implements IUserRespository {
     public LiveData<BaseModel<List<User>>> signup(User user, MultipartBody.Part partImage) {
         userMutableLiveData = new MutableLiveData<>();
 
-        RestClient.get().appApi().signup(RequestBody.create(MediaType.parse("text/plain"), user.getStatus()), RequestBody.create(MediaType.parse("text/plain"), user.getFirst_name()), RequestBody.create(MediaType.parse("text/plain"), user.getEmail()),
+        RestClient.get().appApi().signup(RequestBody.create(MediaType.parse("text/plain"),
+                user.getStatus()), RequestBody.create(MediaType.parse("text/plain"), user.getFirst_name()),
+                RequestBody.create(MediaType.parse("text/plain"), user.getEmail()),
+                user.getIsLinkedin(),
                 RequestBody.create(MediaType.parse("text/plain"), user.getPassword()), RequestBody.create(MediaType.parse("text/plain"), user.getType()), RequestBody.create(MediaType.parse("text/plain"), user.getBio_data()), partImage).enqueue(new Callback<BaseModel<List<User>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
@@ -137,7 +140,7 @@ public class UserRepository implements IUserRespository {
             @Override
             public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
                 if (response.body() != null) {
-                     LinkedinLoginMutableLiveData.setValue(response.body());
+                    LinkedinLoginMutableLiveData.setValue(response.body());
                 }
             }
 

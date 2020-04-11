@@ -40,6 +40,7 @@ public interface AppApi {
     @POST(APIConstants.SIGNUP)
     Call<BaseModel<List<User>>> signup(@Part("status") RequestBody status, @Part("first_name") RequestBody firstname,
                                        @Part("email") RequestBody email,
+                                       @Part("is_linkedin") int is_linkedin,
                                        @Part("password") RequestBody password, @Part("type") RequestBody type,
                                        @Part("bio_data") RequestBody biodata, @Part MultipartBody.Part user_image);
 

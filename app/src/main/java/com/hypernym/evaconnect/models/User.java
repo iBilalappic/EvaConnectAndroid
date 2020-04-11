@@ -21,6 +21,16 @@ public class User implements Serializable {
     private Integer connection_id;
     private Integer receiver_id;
 
+    public Integer getIsLinkedin() {
+        return is_linkedin;
+    }
+
+    public void setIsLinkedin(Integer isLinkedin) {
+        this.is_linkedin = isLinkedin;
+    }
+
+    private Integer is_linkedin;
+
     public String getEmail() {
         return email;
     }

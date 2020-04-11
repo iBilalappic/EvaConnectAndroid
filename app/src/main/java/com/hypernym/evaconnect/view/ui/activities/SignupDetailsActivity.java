@@ -139,6 +139,7 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
             user.setUsername(email);
             user.setEmail(email);
             user.setPassword("hypernym");
+            user.setIsLinkedin(1);
         } else {
             email = getIntent().getStringExtra("Email");
             password = getIntent().getStringExtra("Password");
@@ -388,28 +389,51 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
             public void onChanged(BaseModel<List<User>> logins) {
                 if (logins != null && !logins.isError()) {
                     LoginUtils.saveUser(user);
-                    callLoginApi();
+                    if ("LinkedinActivity".equals(getIntent().getStringExtra(Constants.ACTIVITY_NAME))) {
+                        JustLoginApiCall();
+                    } else {
+                        simpleDialog = new SimpleDialog(SignupDetailsActivity.this, getString(R.string.success), getString(R.string.msg_signup), null, getString(R.string.ok), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                callLoginApi();
+                                setupFireBaseUser();
 
-                    simpleDialog = new SimpleDialog(SignupDetailsActivity.this, getString(R.string.success), getString(R.string.msg_signup), null, getString(R.string.ok), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            callLoginApi();
-//                            Intent intent = new Intent(SignupDetailsActivity.this, LoginActivity.class);
-//                            // set the new task and clear flags
-//                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                            startActivity(intent);
-                            setupFireBaseUser();
+                            }
+                        });
+                    }
 
-                        }
-                    });
+
                 } else {
                     simpleDialog = networkResponseDialog(getString(R.string.error), logins.getMessage());
                 }
-                hideDialog();
-                if (!simpleDialog.isShowing())
-                    simpleDialog.show();
             }
         });
+    }
+
+    private void JustLoginApiCall() {
+
+        if (NetworkUtils.isNetworkConnected(this)) {
+//            showDialog();
+            userViewModel.linkedin_login(email).observe(this, new Observer<BaseModel<List<User>>>() {
+                @Override
+                public void onChanged(BaseModel<List<User>> listBaseModel) {
+                    LoginUtils.userLoggedIn();
+                    User userData = listBaseModel.getData().get(0);
+                    userData.setUser_id(userData.getId());
+                    LoginUtils.saveUser(listBaseModel.getData().get(0));
+                    OneSignal.sendTag("email", userData.getEmail());
+                    UserDetails.username = userData.getFirst_name();
+                    if (listBaseModel.getData().get(0) != null) {
+                        LoginUtils.saveUserToken(listBaseModel.getData().get(0).getToken());
+                    }
+
+                    Intent intent = new Intent(SignupDetailsActivity.this, HomeActivity.class);
+                    // set the new task and clear flags
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }
+            });
+        }
     }
 
     private void callLoginApi() {
