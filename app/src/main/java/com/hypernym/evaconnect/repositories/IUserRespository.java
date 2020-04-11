@@ -2,6 +2,7 @@ package com.hypernym.evaconnect.repositories;
 
 import androidx.lifecycle.LiveData;
 
+import com.hypernym.evaconnect.models.AccountCheck;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.view.ui.activities.ForgotPassword;
@@ -21,4 +22,6 @@ public interface IUserRespository {
     LiveData<BaseModel<List<User>>> forgotPassword(String email);
 
     LiveData<BaseModel<List<User>>> isEmailExist(String email);
+    LiveData<BaseModel<List<AccountCheck>>> isEmailExist_linkedin(String email);
+    LiveData<BaseModel<List<User>>> linkedin_login(String email);
 }

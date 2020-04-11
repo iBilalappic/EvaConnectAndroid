@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProviders;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +52,9 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     @BindView(R.id.tv_forgotpass)
     TextView tv_forgotpass;
 
+    @BindView(R.id.btn_linkedin)
+    Button btn_linkedin;
+
     @BindView(R.id.btn_login)
     Button btn_login;
 
@@ -68,7 +72,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     private UserViewModel userViewModel;
     private User user = new User();
     private SimpleDialog simpleDialog;
-    String value ;
+    String value;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +85,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
         btn_login.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
-                value="login";
+                value = "login";
                 validator.validate();
             }
         });
@@ -89,7 +93,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
         tv_signup.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
-                value="signup";
+                value = "signup";
                 validator.validate();
             }
         });
@@ -100,6 +104,16 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
                 startActivity(new Intent(LoginActivity.this, ForgotPassword.class));
             }
         });
+
+        btn_linkedin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), LinkedinActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
+
     }
 
     @Override
@@ -107,10 +121,10 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
         user.setUsername(edt_email.getText().toString());
         user.setPassword(edt_password.getText().toString());
         if (NetworkUtils.isNetworkConnected(this)) {
-            if(value.equals("login")){
+            if (value.equals("login")) {
                 showDialog();
                 callLoginApi();
-            }else{
+            } else {
                 Intent intent = new Intent(getBaseContext(), SignupActivity.class);
                 intent.putExtra("Email", edt_email.getText().toString());
                 intent.putExtra("Password", edt_password.getText().toString());

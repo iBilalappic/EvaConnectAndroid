@@ -1,6 +1,7 @@
 package com.hypernym.evaconnect.communication.api;
 
 import com.hypernym.evaconnect.constants.APIConstants;
+import com.hypernym.evaconnect.models.AccountCheck;
 import com.hypernym.evaconnect.models.AppliedApplicants;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.CalendarModel;
@@ -115,6 +116,14 @@ public interface AppApi {
 
     @POST(APIConstants.CHECK_EMAIL_EXIST)
     Call<BaseModel<List<User>>> isEmailExist(@Body User user);
+
+    @POST(APIConstants.CHECK_EMAIL_EXIST)
+    Call<BaseModel<List<AccountCheck>>> isEmailExist_linkedin(@Body User user);
+
+    @POST(APIConstants.GETUSER_FROM_LINKEDIN)
+    Call<BaseModel<List<User>>> linkedin_login(@Body User user);
+
+
 
     @POST(APIConstants.DASHBOARD)
     Call<BaseModel<List<Post>>> getDashboard(@Body User user, @Query("limit") int limit, @Query("offset") int offset);

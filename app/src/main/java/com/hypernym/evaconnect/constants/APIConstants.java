@@ -43,4 +43,5 @@ public interface APIConstants {
     public static String CREATE_NOTE="user/notes/";
     public static String APPLY_INTERVIEW="job/interview/";
     public static String DECLINE_APPLICATION="job/application/details/{job_application_id}/";
+    public static String GETUSER_FROM_LINKEDIN="user/linkedin/login/";
 }

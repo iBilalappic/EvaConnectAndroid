@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.hypernym.evaconnect.models.AccountCheck;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IUserRespository;
@@ -41,5 +42,13 @@ public class UserViewModel extends AndroidViewModel {
     public LiveData<BaseModel<List<User>>> isEmailExist(String email)
     {
         return iUserRespository.isEmailExist(email);
+    }
+    public LiveData<BaseModel<List<AccountCheck>>> isEmailExist_linkedin(String email)
+    {
+        return iUserRespository.isEmailExist_linkedin(email);
+    }
+    public LiveData<BaseModel<List<User>>> linkedin_login(String email)
+    {
+        return iUserRespository.linkedin_login(email);
     }
 }

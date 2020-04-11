@@ -66,8 +66,8 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
-            android:maxLength="50"
             android:inputType="text"
+            android:maxLength="50"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lbl_username" />
@@ -146,10 +146,21 @@
             android:layout_marginTop="32dp"
             android:layout_marginBottom="50dp"
             android:text="@string/signup"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_login" />
+
+        <Button
+            android:id="@+id/btn_linkedin"
+            android:layout_width="240dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="22dp"
+            android:layout_marginBottom="50dp"
+            android:background="@drawable/ic_linkedin_large_default"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_signup" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

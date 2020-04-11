@@ -11,4 +11,5 @@ public class Constants {
     public static final String DATE = "2020-12-11";
     public static final String MESSAGE_NOTIFICATION = "message notification";
     public static final String SUBMITTED = "Submitted ";
+    public static final String ACTIVITY_NAME = "activity_name ";
 }

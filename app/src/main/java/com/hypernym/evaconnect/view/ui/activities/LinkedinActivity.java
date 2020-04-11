@@ -1,6 +1,8 @@
 package com.hypernym.evaconnect.view.ui.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -16,6 +18,16 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.models.AccountCheck;
+import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.User;
+import com.hypernym.evaconnect.models.UserDetails;
+import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
+import com.hypernym.evaconnect.utils.Constants;
+import com.hypernym.evaconnect.utils.LoginUtils;
+import com.hypernym.evaconnect.utils.NetworkUtils;
+import com.hypernym.evaconnect.viewmodel.UserViewModel;
+import com.onesignal.OneSignal;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -31,10 +43,11 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class LinkedinActivity extends Activity {
+public class LinkedinActivity extends BaseActivity {
 
     /*CONSTANT FOR THE AUTHORIZATION PROCESS*/
 
@@ -61,7 +74,7 @@ public class LinkedinActivity extends Activity {
     private static final String RESPONSE_TYPE_PARAM = "response_type";
     private static final String GRANT_TYPE_PARAM = "grant_type";
     private static final String GRANT_TYPE = "authorization_code";
-    private static final String RESPONSE_TYPE_VALUE ="code";
+    private static final String RESPONSE_TYPE_VALUE = "code";
     private static final String CLIENT_ID_PARAM = "client_id";
     private static final String STATE_PARAM = "state";
     private static final String REDIRECT_URI_PARAM = "redirect_uri";
@@ -75,11 +88,13 @@ public class LinkedinActivity extends Activity {
     private ProgressDialog pd;
     String linkedInUserId, linkedInUserFirstName, linkedInUserLastName, linkedInUserProfile;
 
+    private UserViewModel userViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        init();
         //get the webView from the layout
         webView = (WebView) findViewById(R.id.main_activity_web_view);
 
@@ -87,49 +102,50 @@ public class LinkedinActivity extends Activity {
         webView.requestFocus(View.FOCUS_DOWN);
 
         //Show a progress dialog to the user
-        pd = ProgressDialog.show(this, "", "Loading...",true);
+        pd = ProgressDialog.show(this, "", "Loading...", true);
 
         //Set a custom web view client
-        webView.setWebViewClient(new WebViewClient(){
+        webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
                 //This method will be executed each time a page finished loading.
                 //The only we do is dismiss the progressDialog, in case we are showing any.
-                if(pd!=null && pd.isShowing()){
+                if (pd != null && pd.isShowing()) {
                     pd.dismiss();
                 }
             }
+
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String authorizationUrl) {
                 //This method will be called when the Auth proccess redirect to our RedirectUri.
                 //We will check the url looking for our RedirectUri.
-                if(authorizationUrl.startsWith(REDIRECT_URI)){
+                if (authorizationUrl.startsWith(REDIRECT_URI)) {
                     Log.i("Authorize", "");
                     Uri uri = Uri.parse(authorizationUrl);
                     //We take from the url the authorizationToken and the state token. We have to check that the state token returned by the Service is the same we sent.
                     //If not, that means the request may be a result of CSRF and must be rejected.
                     String stateToken = uri.getQueryParameter(STATE_PARAM);
-                    if(stateToken==null || !stateToken.equals(STATE)){
+                    if (stateToken == null || !stateToken.equals(STATE)) {
                         Log.e("Authorize", "State token doesn't match");
                         return true;
                     }
 
                     //If the user doesn't allow authorization to our application, the authorizationToken Will be null.
                     String authorizationToken = uri.getQueryParameter(RESPONSE_TYPE_VALUE);
-                    if(authorizationToken==null){
+                    if (authorizationToken == null) {
                         Log.i("Authorize", "The user doesn't allow authorization.");
                         return true;
                     }
-                    Log.i("Authorize", "Auth token received: "+authorizationToken);
+                    Log.i("Authorize", "Auth token received: " + authorizationToken);
 
                     //Generate URL for requesting Access Token
                     String accessTokenUrl = getAccessTokenUrl(authorizationToken);
                     //We make the request in a AsyncTask
                     new PostRequestAsyncTask().execute(accessTokenUrl);
 
-                }else{
+                } else {
                     //Default behaviour
-                    Log.i("Authorize","Redirecting to: "+authorizationUrl);
+                    Log.i("Authorize", "Redirecting to: " + authorizationUrl);
                     webView.loadUrl(authorizationUrl);
                 }
                 return true;
@@ -138,65 +154,72 @@ public class LinkedinActivity extends Activity {
 
         //Get the authorization Url
         String authUrl = getAuthorizationUrl();
-        Log.i("Authorize","Loading Auth Url: "+authUrl);
+        Log.i("Authorize", "Loading Auth Url: " + authUrl);
         //Load the authorization URL into the webView
         webView.loadUrl(authUrl);
     }
 
+    private void init() {
+        userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getApplication(), this)).get(UserViewModel.class);
+
+    }
+
     /**
      * Method that generates the url for get the access token from the Service
+     *
      * @return Url
      */
-    private static String getAccessTokenUrl(String authorizationToken){
+    private static String getAccessTokenUrl(String authorizationToken) {
         String URL = ACCESS_TOKEN_URL
-                +QUESTION_MARK
-                +GRANT_TYPE_PARAM+EQUALS+GRANT_TYPE
-                +AMPERSAND
-                +RESPONSE_TYPE_VALUE+EQUALS+authorizationToken
-                +AMPERSAND
-                +CLIENT_ID_PARAM+EQUALS+API_KEY
-                +AMPERSAND
-                +REDIRECT_URI_PARAM+EQUALS+REDIRECT_URI
-                +AMPERSAND
-                +SECRET_KEY_PARAM+EQUALS+SECRET_KEY;
-        Log.i("accessToken URL",""+URL);
-        return URL;
-    }
-    /**
-     * Method that generates the url for get the authorization token from the Service
-     * @return Url
-     */
-    private static String getAuthorizationUrl(){
-        String URL = AUTHORIZATION_URL
-                +QUESTION_MARK+RESPONSE_TYPE_PARAM+EQUALS+RESPONSE_TYPE_VALUE
-                +AMPERSAND  +CLIENT_ID_PARAM    +EQUALS +API_KEY
-                +AMPERSAND  +SCOPE_PARAM        +EQUALS +SCOPES
-                +AMPERSAND  +STATE_PARAM        +EQUALS +STATE
-                +AMPERSAND  +REDIRECT_URI_PARAM +EQUALS +REDIRECT_URI;
-        Log.i("authorization URL",""+URL);
+                + QUESTION_MARK
+                + GRANT_TYPE_PARAM + EQUALS + GRANT_TYPE
+                + AMPERSAND
+                + RESPONSE_TYPE_VALUE + EQUALS + authorizationToken
+                + AMPERSAND
+                + CLIENT_ID_PARAM + EQUALS + API_KEY
+                + AMPERSAND
+                + REDIRECT_URI_PARAM + EQUALS + REDIRECT_URI
+                + AMPERSAND
+                + SECRET_KEY_PARAM + EQUALS + SECRET_KEY;
+        Log.i("accessToken URL", "" + URL);
         return URL;
     }
 
+    /**
+     * Method that generates the url for get the authorization token from the Service
+     *
+     * @return Url
+     */
+    private static String getAuthorizationUrl() {
+        String URL = AUTHORIZATION_URL
+                + QUESTION_MARK + RESPONSE_TYPE_PARAM + EQUALS + RESPONSE_TYPE_VALUE
+                + AMPERSAND + CLIENT_ID_PARAM + EQUALS + API_KEY
+                + AMPERSAND + SCOPE_PARAM + EQUALS + SCOPES
+                + AMPERSAND + STATE_PARAM + EQUALS + STATE
+                + AMPERSAND + REDIRECT_URI_PARAM + EQUALS + REDIRECT_URI;
+        Log.i("authorization URL", "" + URL);
+        return URL;
+    }
 
 
     private class PostRequestAsyncTask extends AsyncTask<String, Void, Boolean> {
 
         @Override
-        protected void onPreExecute(){
-            pd = ProgressDialog.show(LinkedinActivity.this, "", "Loading...",true);
+        protected void onPreExecute() {
+            pd = ProgressDialog.show(LinkedinActivity.this, "", "Loading...", true);
         }
 
         @Override
         protected Boolean doInBackground(String... urls) {
-            if(urls.length>0){
+            if (urls.length > 0) {
                 String url = urls[0];
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpPost httpost = new HttpPost(url);
-                try{
+                try {
                     HttpResponse response = httpClient.execute(httpost);
-                    if(response!=null){
+                    if (response != null) {
                         //If status is OK 200
-                        if(response.getStatusLine().getStatusCode()==200){
+                        if (response.getStatusLine().getStatusCode() == 200) {
                             String result = EntityUtils.toString(response.getEntity());
                             //Convert the string result to a JSON Object
                             JSONObject resultJson = new JSONObject(result);
@@ -204,9 +227,9 @@ public class LinkedinActivity extends Activity {
                             int expiresIn = resultJson.has("expires_in") ? resultJson.getInt("expires_in") : 0;
 
                             String accessToken = resultJson.has("access_token") ? resultJson.getString("access_token") : null;
-                            Log.e("Tokenm", ""+accessToken);
-                            if(expiresIn>0 && accessToken!=null){
-                                Log.i("Authorize", "This is the access Token: "+accessToken+". It will expires in "+expiresIn+" secs");
+                            Log.e("Tokenm", "" + accessToken);
+                            if (expiresIn > 0 && accessToken != null) {
+                                Log.i("Authorize", "This is the access Token: " + accessToken + ". It will expires in " + expiresIn + " secs");
 
                                 //Calculate date of expiration
                                 Calendar calendar = Calendar.getInstance();
@@ -224,21 +247,21 @@ public class LinkedinActivity extends Activity {
                             }
                         }
                     }
-                }catch(IOException e){
-                    Log.e("Authorize","Error Http response "+e.getLocalizedMessage());
+                } catch (IOException e) {
+                    Log.e("Authorize", "Error Http response " + e.getLocalizedMessage());
                 } catch (JSONException e) {
-                    Log.e("Authorize","Error Parsing Http response "+e.getLocalizedMessage());
+                    Log.e("Authorize", "Error Parsing Http response " + e.getLocalizedMessage());
                 }
             }
             return false;
         }
 
         @Override
-        protected void onPostExecute(Boolean status){
-            if(pd!=null && pd.isShowing()){
+        protected void onPostExecute(Boolean status) {
+            if (pd != null && pd.isShowing()) {
                 pd.dismiss();
             }
-            if(status){
+            if (status) {
                 //If everything went Ok, change to another activity.
                 SharedPreferences preferences = LinkedinActivity.this.getSharedPreferences("user_info", 0);
                 accessToken = preferences.getString("accessToken", null);
@@ -252,7 +275,10 @@ public class LinkedinActivity extends Activity {
             }
         }
 
-    };
+    }
+
+    ;
+
     private class GetProfileRequestAsyncTask extends AsyncTask<String, Void, JSONObject> {
 
         @Override
@@ -291,6 +317,7 @@ public class LinkedinActivity extends Activity {
 
 
     }
+
     public void sendGetRequest(String urlString, String accessToken) throws Exception {
         URL url = new URL(urlString);
         HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
@@ -336,9 +363,56 @@ public class LinkedinActivity extends Activity {
         }
         JSONObject jsonObject = new JSONObject(jsonString.toString());
         linkedInUserEmailAddress = jsonObject.getJSONArray("elements").getJSONObject(0).getJSONObject("handle~").getString("emailAddress");
-        Log.d("email json object", jsonObject.toString());
-       // sendRequestToServerForLinkwedInIntegration();
+        Log.d("email json object", linkedInUserEmailAddress);
+        Intent intent = new Intent(LinkedinActivity.this, BlankActivity.class);
+        intent.putExtra("Email", linkedInUserEmailAddress);
+        startActivity(intent);
+        pd.dismiss();
+       // CheckUserExist(linkedInUserEmailAddress);
 
+    }
+//    private void CheckUserExist(String linkedInUserEmailAddress) {
+//        if (NetworkUtils.isNetworkConnected(this)) {
+////            showDialog();
+//            userViewModel.isEmailExist_linkedin(linkedInUserEmailAddress).observe(this, new Observer<BaseModel<List<AccountCheck>>>() {
+//                @Override
+//                public void onChanged(BaseModel<List<AccountCheck>> listBaseModel) {
+//                    if (listBaseModel != null && !listBaseModel.isError()) {
+//                      //  if (listBaseModel.getData().get(0).getIsLinkedin() != null && listBaseModel.getData().get(0).getIsLinkedin() == 1) {
+//                         //   JustLoginApiCall();
+//                      //  }
+//
+//                    }
+//                }
+//            });
+//        }
+//    }
+
+    private void JustLoginApiCall() {
+
+        if (NetworkUtils.isNetworkConnected(this)) {
+//            showDialog();
+            userViewModel.linkedin_login(linkedInUserEmailAddress).observe(this, new Observer<BaseModel<List<User>>>() {
+                @Override
+                public void onChanged(BaseModel<List<User>> listBaseModel) {
+              //      LoginUtils.userLoggedIn();
+
+                    User userData = listBaseModel.getData().get(0);
+                    userData.setUser_id(userData.getId());
+                    LoginUtils.saveUser(listBaseModel.getData().get(0));
+                    OneSignal.sendTag("email", userData.getEmail());
+                    UserDetails.username = userData.getFirst_name();
+                    if (listBaseModel.getData().get(0) != null) {
+                        LoginUtils.saveUserToken(listBaseModel.getData().get(0).getToken());
+                    }
+
+//                    Intent intent = new Intent(LinkedinActivity.this, HomeActivity.class);
+//                    // set the new task and clear flags
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                    startActivity(intent);
+                }
+            });
+        }
 
     }
 

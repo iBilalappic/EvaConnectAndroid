@@ -22,11 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity android:name=".view.ui.activities.LinkedinActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".view.ui.activities.SharePostActivity" />
         <activity android:name=".view.ui.activities.HomeActivity" />
@@ -41,14 +37,26 @@
             android:theme="@style/AppTheme.FullScreen" />
         <activity
             android:name=".view.ui.activities.LoginActivity"
-            android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.FullScreen"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
+            android:windowSoftInputMode="stateHidden|adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".view.ui.activities.SplashActivity"
             android:theme="@style/AppTheme.FullScreen">
 
         </activity>
+
+        <activity
+            android:name=".view.ui.activities.BlankActivity"
+            android:theme="@style/AppTheme.FullScreen">
+
+        </activity>
+
 
         <activity
             android:name=".view.ui.activities.MainActivity"

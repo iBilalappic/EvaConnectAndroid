@@ -47,6 +47,7 @@ import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.models.UserDetails;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
@@ -133,11 +134,19 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
         validator = new Validator(this);
         validator.setValidationListener(this);
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getApplication(), this)).get(UserViewModel.class);
-        email = getIntent().getStringExtra("Email");
-        password = getIntent().getStringExtra("Password");
-        user.setUsername(email);
-        user.setEmail(email);
-        user.setPassword(password);
+        if ("LinkedinActivity".equals(getIntent().getStringExtra(Constants.ACTIVITY_NAME))) {
+            email = getIntent().getStringExtra("Email");
+            user.setUsername(email);
+            user.setEmail(email);
+            user.setPassword("hypernym");
+        } else {
+            email = getIntent().getStringExtra("Email");
+            password = getIntent().getStringExtra("Password");
+            user.setUsername(email);
+            user.setEmail(email);
+            user.setPassword(password);
+        }
+
         btn_signup.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
@@ -414,7 +423,7 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
                     User userData = user.getData().get(0);
                     userData.setUser_id(userData.getId());
                     LoginUtils.saveUser(user.getData().get(0));
-                    OneSignal.sendTag("email",userData.getEmail());
+                    OneSignal.sendTag("email", userData.getEmail());
                     UserDetails.username = userData.getFirst_name();
                     if (user.getData().get(0) != null) {
                         LoginUtils.saveUserToken(user.getData().get(0).getToken());
@@ -425,7 +434,7 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
 
-                } else if (user!=null && user.isError()) {
+                } else if (user != null && user.isError()) {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_login));
                 } else if (user == null) {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
