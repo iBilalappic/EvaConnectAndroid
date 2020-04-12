@@ -193,7 +193,7 @@ public class BaseFragment extends Fragment {
     private void LaunchGallery() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("image/*");
+        intent.setType("image/* video/*");
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_PHOTO_GALLERY);
     }
 

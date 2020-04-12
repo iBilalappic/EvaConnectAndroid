@@ -319,11 +319,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
                     //
                     connectionList.addAll(listBaseModel.getData());
                     connectionsAdapter.notifyDataSetChanged();
-                    if (connectionList.isEmpty()) {
-                        rc_connections.setVisibility(View.GONE);
-                        empty.setVisibility(View.VISIBLE);
-                    }
-                    else {
+                    if (connectionList.size()>0) {
                         rc_connections.setVisibility(View.VISIBLE);
                         empty.setVisibility(View.GONE);
                     }
@@ -331,6 +327,8 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
                 }
                 else if(listBaseModel !=null && !listBaseModel.isError() && listBaseModel.getData().size()==0)
                 {
+                    rc_connections.setVisibility(View.GONE);
+                    empty.setVisibility(View.VISIBLE);
                     isLastPage = true;
                     // homePostsAdapter.removeLoading();
                     isLoading = false;

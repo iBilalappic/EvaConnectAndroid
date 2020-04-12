@@ -180,6 +180,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
                     //  networkConnectionList.clear();
+                    swipeRefresh.setRefreshing(true);
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
                         Log.d("User key", child.getKey());
                         String[] conversationkey = child.getKey().split("_");
@@ -231,15 +232,10 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                                 }
                             });
                         } else {
-                            img_nomail.setVisibility(View.VISIBLE);
-                            tv_nomail.setVisibility(View.VISIBLE);
                             swipeRefresh.setRefreshing(false);
-                            hideDialog();
                         }
                     }
                 } else {
-                    img_nomail.setVisibility(View.VISIBLE);
-                    tv_nomail.setVisibility(View.VISIBLE);
                     swipeRefresh.setRefreshing(false);
                 }
             }
