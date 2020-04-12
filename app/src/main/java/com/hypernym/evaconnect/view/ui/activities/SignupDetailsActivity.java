@@ -146,6 +146,7 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
             user.setUsername(email);
             user.setEmail(email);
             user.setPassword(password);
+            user.setIsLinkedin(0);
         }
 
         btn_signup.setOnClickListener(new OnOneOffClickListener() {
@@ -406,6 +407,9 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
                 } else {
                     simpleDialog = networkResponseDialog(getString(R.string.error), logins.getMessage());
                 }
+                hideDialog();
+                if (!simpleDialog.isShowing())
+                    simpleDialog.show();
             }
         });
     }
