@@ -82,7 +82,7 @@ import static android.app.Activity.RESULT_OK;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CreateEventFragment extends BaseFragment implements DateTimePicker.OnDateTimeSetListener , Validator.ValidationListener  {
+public class CreateEventFragment extends BaseFragment implements DateTimePicker.OnDateTimeSetListener, Validator.ValidationListener {
     @BindView(R.id.tv_startdate)
     TextView tv_startdate;
 
@@ -116,9 +116,9 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
     @BindView(R.id.post)
     TextView post;
 
-    private boolean isStartDate=false;
-    private Date startDate=new Date();
-    private Date selectedDate=new Date();
+    private boolean isStartDate = false;
+    private Date startDate = new Date();
+    private Date selectedDate = new Date();
     DateFormat time = new SimpleDateFormat("hh:mm a");
     DateFormat dateformat = new SimpleDateFormat("E, dd MMM yyyy");
     private static final String TAG_DATETIME_FRAGMENT = "TAG_DATETIME_FRAGMENT";
@@ -145,8 +145,8 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_create_event, container, false);
-        ButterKnife.bind(this,view);
+        View view = inflater.inflate(R.layout.fragment_create_event, container, false);
+        ButterKnife.bind(this, view);
         init();
         return view;
     }
@@ -159,30 +159,28 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
         tv_endTime.setText(time.format(new Date()));
         validator = new Validator(this);
         validator.setValidationListener(this);
-        eventViewModel= ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(EventViewModel.class);
+        eventViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(EventViewModel.class);
     }
 
-    @OnClick({R.id.tv_startdate,R.id.tv_startTime})
-    public void setStartDate()
-    {
-        isStartDate=true;
+    @OnClick({R.id.tv_startdate, R.id.tv_startTime})
+    public void setStartDate() {
+        isStartDate = true;
         try {
-            selectedDate=dateformat.parse(tv_startdate.getText().toString());
+            selectedDate = dateformat.parse(tv_startdate.getText().toString());
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        startDate=new Date();
+        startDate = new Date();
         showDateTimePicker("Set Start Date & Time");
 
     }
 
 
-    @OnClick({R.id.tv_enddate,R.id.tv_endTime})
-    public void setEndDate()
-    {
-        isStartDate=false;
+    @OnClick({R.id.tv_enddate, R.id.tv_endTime})
+    public void setEndDate() {
+        isStartDate = false;
         try {
-            selectedDate=dateformat.parse(tv_enddate.getText().toString());
+            selectedDate = dateformat.parse(tv_enddate.getText().toString());
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -194,7 +192,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
 
         SimpleDateTimePicker simpleDateTimePicker = SimpleDateTimePicker.make(
                 title,
-                selectedDate,startDate,
+                selectedDate, startDate,
                 this,
                 getFragmentManager()
         );
@@ -206,23 +204,42 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
     @Override
     public void DateTimeSet(Date date) {
         DateTime mDateTime = new DateTime(date);
-        if(isStartDate)
-        {
+        if (isStartDate) {
             tv_startdate.setText(dateformat.format(mDateTime.getDate()));
             tv_startTime.setText(time.format(mDateTime.getDate()));
-            startDate=mDateTime.getDate();
+            startDate = mDateTime.getDate();
         }
-        tv_enddate.setText(dateformat.format(mDateTime.getDate()));
-        tv_endTime.setText(time.format(mDateTime.getDate()));
+        if (mDateTime.getDate().getMonth() == selectedDate.getMonth() && mDateTime.getDate().getDate() == selectedDate.getDate()) {
+            if (mDateTime.getDate().getHours() > startDate.getHours()) {
+                tv_enddate.setText(dateformat.format(mDateTime.getDate()));
+                tv_endTime.setText(time.format(mDateTime.getDate()));
+            } else {
+                Toast.makeText(getContext(), "End time must be greater than start time", Toast.LENGTH_SHORT).show();
+                tv_startdate.setText(dateformat.format(new Date()));
+                tv_startTime.setText(time.format(new Date()));
+                tv_enddate.setText(dateformat.format(new Date()));
+                tv_endTime.setText(time.format(new Date()));
+            }
+        } else if (mDateTime.getDate().getMonth() == selectedDate.getMonth() && mDateTime.getDate().getDate() > selectedDate.getDate()) {
 
-        Log.v("TEST_TAG","Date and Time selected: " + mDateTime.getDateString());
+            tv_enddate.setText(dateformat.format(mDateTime.getDate()));
+            tv_endTime.setText(time.format(mDateTime.getDate()));
+        } else if (mDateTime.getDate().getMonth() == selectedDate.getMonth()) {
+            tv_enddate.setText(dateformat.format(mDateTime.getDate()));
+            tv_endTime.setText(time.format(mDateTime.getDate()));
+        }
+
+
+
+
+        Log.v("TEST_TAG", "Date and Time selected: " + mDateTime.getDateString());
     }
 
     @Override
     public void onValidationSucceeded() {
-        if(NetworkUtils.isNetworkConnected(getContext())) {
+        if (NetworkUtils.isNetworkConnected(getContext())) {
             showDialog();
-            Event event=new Event();
+            Event event = new Event();
             event.setEvent_name(edt_eventname.getText().toString());
             event.setEvent_start_date(DateUtils.getFormattedEventDate(tv_startdate.getText().toString()));
             event.setEvent_end_date(DateUtils.getFormattedEventDate(tv_enddate.getText().toString()));
@@ -232,11 +249,10 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
             event.setEvent_city(edt_eventCity.getText().toString());
             event.setEvent_address(edt_eventAddress.getText().toString());
 
-            eventViewModel.createEvent(event,partImage).observe(this, new Observer<BaseModel<List<Event>>>() {
+            eventViewModel.createEvent(event, partImage).observe(this, new Observer<BaseModel<List<Event>>>() {
                 @Override
                 public void onChanged(BaseModel<List<Event>> listBaseModel) {
-                    if(listBaseModel!=null && !listBaseModel.isError())
-                    {
+                    if (listBaseModel != null && !listBaseModel.isError()) {
                         simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_event_created), null, getString(R.string.ok), new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -248,17 +264,13 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
                             }
                         });
                         simpleDialog.show();
-                    }
-                    else
-                    {
-                        networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                    } else {
+                        networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                     }
                     hideDialog();
                 }
             });
-        }
-        else
-        {
+        } else {
             networkErrorDialog();
         }
 
@@ -279,8 +291,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
     }
 
     @OnClick(R.id.img_event)
-    public void setImage()
-    {
+    public void setImage() {
         if (Checkpermission()) {
             BottomSheetPictureSelection bottomSheetPictureSelection = new BottomSheetPictureSelection(new YourDialogFragmentDismissHandler());
             bottomSheetPictureSelection.show(getFragmentManager(), bottomSheetPictureSelection.getTag());
@@ -290,8 +301,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
     }
 
     @OnClick(R.id.post)
-    public void post()
-    {
+    public void post() {
         validator.validate();
     }
 
@@ -309,6 +319,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
         intent.setType("image/*");
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_PHOTO_GALLERY);
     }
+
     private void takePhotoFromCamera() {
         Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
@@ -335,6 +346,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
         }
 
     }
+
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -349,6 +361,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
+
     public void galleryPic() {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File f = new File(mCurrentPhotoPath);
@@ -357,6 +370,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
         mediaScanIntent.setData(contentUri);
         getContext().sendBroadcast(mediaScanIntent);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

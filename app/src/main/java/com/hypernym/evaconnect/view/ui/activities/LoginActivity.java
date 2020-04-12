@@ -156,8 +156,10 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 } else if (user != null && user.isError()) {
+                    hideDialog();
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_login));
                 } else if (user == null) {
+                    hideDialog();
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
             }

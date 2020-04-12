@@ -152,7 +152,7 @@
 
         <Button
             android:id="@+id/btn_linkedin"
-            android:layout_width="240dp"
+            android:layout_width="170dp"
             android:layout_height="50dp"
             android:layout_marginTop="22dp"
             android:layout_marginBottom="50dp"

@@ -11,6 +11,7 @@ import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.PrefUtils;
 import com.hypernym.evaconnect.view.ui.activities.HomeActivity;
+import com.hypernym.evaconnect.view.ui.fragments.EventDetailFragment;
 import com.hypernym.evaconnect.view.ui.fragments.HomeFragment;
 import com.hypernym.evaconnect.view.ui.fragments.PostDetailsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.SpecficJobFragment;
@@ -102,7 +103,10 @@ public class OneSignalReceiver extends NotificationExtenderService {
                                 else if(additionalData.getString("object_type").equalsIgnoreCase("job")){
                                     bundle.putInt("job_id",Integer.parseInt(additionalData.getString("object_id")));
                                     AppUtils.makeNotification(getApplication(), HomeActivity.class, SpecficJobFragment.class.getName(), bundle, payloadNotification.contents.en, true, m);
-
+                                }
+                                else if(additionalData.getString("object_type").equalsIgnoreCase("event")){
+                                    bundle.putInt("id",Integer.parseInt(additionalData.getString("object_id")));
+                                    AppUtils.makeNotification(getApplication(), HomeActivity.class, EventDetailFragment.class.getName(), bundle, payloadNotification.contents.en, true, m);
                                 }
                             }
 
