@@ -209,8 +209,10 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
             tv_startTime.setText(time.format(mDateTime.getDate()));
             startDate = mDateTime.getDate();
         }
+
+
         if (mDateTime.getDate().getMonth() == selectedDate.getMonth() && mDateTime.getDate().getDate() == selectedDate.getDate()) {
-            if (mDateTime.getDate().getHours() > startDate.getHours()) {
+            if (mDateTime.getDate().getHours() > startDate.getHours()|| startDate.getHours()>mDateTime.getDate().getHours()) {
                 tv_enddate.setText(dateformat.format(mDateTime.getDate()));
                 tv_endTime.setText(time.format(mDateTime.getDate()));
             } else {
@@ -224,7 +226,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
 
             tv_enddate.setText(dateformat.format(mDateTime.getDate()));
             tv_endTime.setText(time.format(mDateTime.getDate()));
-        } else if (mDateTime.getDate().getMonth() == selectedDate.getMonth()) {
+        } else if (mDateTime.getDate().getMonth() > selectedDate.getMonth()) {
             tv_enddate.setText(dateformat.format(mDateTime.getDate()));
             tv_endTime.setText(time.format(mDateTime.getDate()));
         }
