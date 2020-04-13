@@ -3,14 +3,11 @@ package com.hypernym.evaconnect.utils;
 import android.text.format.DateFormat;
 import android.util.Log;
 
-import com.hypernym.evaconnect.dateTimePicker.DateTime;
-
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 import java.util.TimeZone;
 
 public final class DateUtils {
@@ -191,6 +188,16 @@ public final class DateUtils {
         String completetime = df.format(Calendar.getInstance().getTime());
         return completetime;
     }
+
+    public static String Gettime_UTC() {
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+        df.setTimeZone(TimeZone.getTimeZone("gmt"));
+        String completetime = df.format(Calendar.getInstance().getTime());
+        return completetime;
+    }
+
+
+
     public static String GetCurrentdate() {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         df.setTimeZone(TimeZone.getTimeZone("gmt"));
@@ -379,6 +386,79 @@ public final class DateUtils {
 
         return true;
     }
+    public static String getTime_utc(String date) {
+//        if (date != null) {
+//            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm aa");
+//            try {
+//                Date serverDate = simpleDateFormat.parse(date);
+//                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+//                calendar.setTime(serverDate);
+//                calendar.add(Calendar.MILLISECOND,
+//                        TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings());
+//                SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+//                return dateFormat.format(calendar.getTime());
+//            } catch (Exception e) {
+//                Log.e(">> Date Exception", e.getMessage());
+//            }
+//        }
+//        return "-";
+        Date mParsedDate;
+        String mOutputDateString = "";
+        String mOutputTimeString = "";
+        SimpleDateFormat mInputDateFormat =
+                new SimpleDateFormat("hh:mm aa", java.util.Locale.getDefault());
+
+        SimpleDateFormat mOutputDateFormat1 =
+                new SimpleDateFormat("HH:mm", java.util.Locale.getDefault());
+        try {
+
+            mParsedDate = mInputDateFormat.parse(date);
+            mOutputTimeString = mOutputDateFormat1.format(mParsedDate);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return mOutputTimeString;
+
+    }
+    public static String get12formant(String date) {
+//        if (date != null) {
+//            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm aa");
+//            try {
+//                Date serverDate = simpleDateFormat.parse(date);
+//                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+//                calendar.setTime(serverDate);
+//                calendar.add(Calendar.MILLISECOND,
+//                        TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings());
+//                SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+//                return dateFormat.format(calendar.getTime());
+//            } catch (Exception e) {
+//                Log.e(">> Date Exception", e.getMessage());
+//            }
+//        }
+//        return "-";
+        Date mParsedDate;
+        String mOutputDateString = "";
+        String mOutputTimeString = "";
+        SimpleDateFormat mInputDateFormat =
+                new SimpleDateFormat("hh:mm:ss", java.util.Locale.getDefault());
+
+        SimpleDateFormat mOutputDateFormat1 =
+                new SimpleDateFormat("hh:mm aa", java.util.Locale.getDefault());
+        try {
+
+            mParsedDate = mInputDateFormat.parse(date);
+            mOutputTimeString = mOutputDateFormat1.format(mParsedDate);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return mOutputTimeString;
+
+    }
+
 
 
 }

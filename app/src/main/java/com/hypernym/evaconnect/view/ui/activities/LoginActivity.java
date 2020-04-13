@@ -12,10 +12,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,6 +71,10 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     @BindView(R.id.edt_password)
     EditText edt_password;
 
+    @BindView(R.id.rootview)
+    ScrollView rootview;
+
+
     private Validator validator;
     private UserViewModel userViewModel;
     private User user = new User();
@@ -111,6 +118,20 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
                 Intent intent = new Intent(getBaseContext(), LinkedinActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+            }
+        });
+        findViewById(R.id.rootview).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                //Find the currently focused view, so we can grab the correct window token from it.
+                View view = getCurrentFocus();
+                //If no view currently has focus, create a new one, just so we can grab a window token from it
+                if (view == null) {
+                    view = new View(LoginActivity.this);
+                }
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                return true;
             }
         });
 

@@ -15,6 +15,24 @@ public class User implements Serializable {
     private String token;
     private Integer user_id;
     private String user_image;
+    private String linkedin_image_url ;
+
+    public String getLinkedin_image_url() {
+        return linkedin_image_url;
+    }
+
+    public void setLinkedin_image_url(String linkedin_image_url) {
+        this.linkedin_image_url = linkedin_image_url;
+    }
+
+    public Integer getIs_linkedin() {
+        return is_linkedin;
+    }
+
+    public void setIs_linkedin(Integer is_linkedin) {
+        this.is_linkedin = is_linkedin;
+    }
+
     private Integer total_connection;
     private String is_connected;
     private boolean is_receiver;

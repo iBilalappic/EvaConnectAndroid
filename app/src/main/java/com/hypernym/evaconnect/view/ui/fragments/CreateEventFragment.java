@@ -243,8 +243,9 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
             event.setEvent_name(edt_eventname.getText().toString());
             event.setEvent_start_date(DateUtils.getFormattedEventDate(tv_startdate.getText().toString()));
             event.setEvent_end_date(DateUtils.getFormattedEventDate(tv_enddate.getText().toString()));
-            event.setStart_time(tv_startTime.getText().toString());
-            event.setEnd_time(tv_endTime.getText().toString());
+            Log.d("TAAAG",tv_startTime.getText().toString());
+            event.setStart_time(DateUtils.getTime_utc(tv_startTime.getText().toString()));
+            event.setEnd_time(DateUtils.getTime_utc(tv_endTime.getText().toString()));
             event.setContent(edt_description.getText().toString());
             event.setEvent_city(edt_eventCity.getText().toString());
             event.setEvent_address(edt_eventAddress.getText().toString());

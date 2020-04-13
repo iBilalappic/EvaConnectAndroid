@@ -48,7 +48,7 @@ public class BlankActivity extends BaseActivity {
 
 
     private UserViewModel userViewModel;
-    String email;
+    String email,photourl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +58,7 @@ public class BlankActivity extends BaseActivity {
         showDialog();
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getApplication(), this)).get(UserViewModel.class);
         email = getIntent().getStringExtra("Email");
+        photourl = getIntent().getStringExtra("Photo");
         CheckUserExist(email);
     }
 
@@ -74,6 +75,7 @@ public class BlankActivity extends BaseActivity {
                     } else {
                         Intent intent = new Intent(BlankActivity.this, SignupDetailsActivity.class);
                         intent.putExtra("Email", linkedInUserEmailAddress);
+                        intent.putExtra("Photo", photourl);
                         intent.putExtra(Constants.ACTIVITY_NAME,"LinkedinActivity");
                         startActivity(intent);
                     }

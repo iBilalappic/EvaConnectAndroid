@@ -103,7 +103,7 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
     @BindView(R.id.img_profile)
     ImageView img_profile;
 
-    String email, password;
+    String email, password, photourl;
     private User user = new User();
     private UserViewModel userViewModel;
     private Validator validator;
@@ -136,10 +136,14 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getApplication(), this)).get(UserViewModel.class);
         if ("LinkedinActivity".equals(getIntent().getStringExtra(Constants.ACTIVITY_NAME))) {
             email = getIntent().getStringExtra("Email");
+            photourl = getIntent().getStringExtra("Photo");
             user.setUsername(email);
             user.setEmail(email);
             user.setPassword("hypernym");
             user.setIsLinkedin(1);
+            user.setLinkedin_image_url(photourl);
+            Glide.with(this).load(photourl).into(img_profile);
+            img_profile.setEnabled(false);
         } else {
             email = getIntent().getStringExtra("Email");
             password = getIntent().getStringExtra("Password");
@@ -147,6 +151,8 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
             user.setEmail(email);
             user.setPassword(password);
             user.setIsLinkedin(0);
+            user.setLinkedin_image_url("");
+
         }
 
         btn_signup.setOnClickListener(new OnOneOffClickListener() {
@@ -401,15 +407,12 @@ public class SignupDetailsActivity extends BaseActivity implements Validator.Val
 
                             }
                         });
+                        simpleDialog.show();
                     }
-
 
                 } else {
                     simpleDialog = networkResponseDialog(getString(R.string.error), logins.getMessage());
                 }
-                hideDialog();
-                if (!simpleDialog.isShowing())
-                    simpleDialog.show();
             }
         });
     }

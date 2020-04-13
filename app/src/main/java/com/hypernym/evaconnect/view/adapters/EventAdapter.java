@@ -50,7 +50,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         else if(events.get(position).getObject_type().equalsIgnoreCase("event"))
         {
             holder.tv_title.setText(events.get(position).getObject_details().getEvent_name()+" | "+ events.get(position).getObject_details().getEvent_city());
-            holder.tv_datetime.setText(DateUtils.getFormattedEventTime(events.get(position).getObject_details().getStart_time())+" - "+DateUtils.getFormattedEventTime(events.get(position).getObject_details().getEnd_time()));
+            holder.tv_datetime.setText(DateUtils.get12formant(events.get(position).getObject_details().getStart_time())+" - "+DateUtils.get12formant(events.get(position).getObject_details().getEnd_time()));
             holder.tv_title.setCompoundDrawablesWithIntrinsicBounds( R.drawable.blackcircle, 0, 0, 0);
             holder.tv_datetime.setVisibility(View.VISIBLE);
         }

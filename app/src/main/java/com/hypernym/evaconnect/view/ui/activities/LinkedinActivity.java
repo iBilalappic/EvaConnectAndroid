@@ -341,7 +341,7 @@ public class LinkedinActivity extends BaseActivity {
             linkedInUserFirstName = jsonObject.getJSONObject("firstName").getJSONObject("localized").getString(getFirstnameKey);
             linkedInUserLastName = jsonObject.getJSONObject("firstName").getJSONObject("localized").getString(getFirstnameKey);
             linkedInUserProfile = jsonObject.getJSONObject("profilePicture").getJSONObject("displayImage~").getJSONArray("elements").getJSONObject(0).getJSONArray("identifiers").getJSONObject(0).getString("identifier");
-
+            Log.d("PROFILE",""+linkedInUserProfile);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -366,6 +366,7 @@ public class LinkedinActivity extends BaseActivity {
         Log.d("email json object", linkedInUserEmailAddress);
         Intent intent = new Intent(LinkedinActivity.this, BlankActivity.class);
         intent.putExtra("Email", linkedInUserEmailAddress);
+        intent.putExtra("Photo", linkedInUserProfile);
         startActivity(intent);
         pd.dismiss();
         // CheckUserExist(linkedInUserEmailAddress);
