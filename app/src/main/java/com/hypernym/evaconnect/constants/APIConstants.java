@@ -44,4 +44,7 @@ public interface APIConstants {
     public static String APPLY_INTERVIEW="job/interview/";
     public static String DECLINE_APPLICATION="job/application/details/{job_application_id}/";
     public static String GETUSER_FROM_LINKEDIN="user/linkedin/login/";
+    public static String REMOVE_USER="user/connection/delete/{id}/";
+    public static String BLOCK_USER="user/connection/details/{connection_id}/";
+
 }

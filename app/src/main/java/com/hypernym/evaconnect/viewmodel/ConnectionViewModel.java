@@ -44,4 +44,12 @@ public class ConnectionViewModel extends AndroidViewModel {
     {
         return iConnectionRepository.getConnectionCount(user);
     }
+    public LiveData<BaseModel<List<Object>>> remove_user(Integer connection_id)
+    {
+        return iConnectionRepository.remove_user(connection_id);
+    }
+    public LiveData<BaseModel<List<Object>>> block_user(Integer connection_id, User user)
+    {
+        return iConnectionRepository.block_user(connection_id,user);
+    }
 }

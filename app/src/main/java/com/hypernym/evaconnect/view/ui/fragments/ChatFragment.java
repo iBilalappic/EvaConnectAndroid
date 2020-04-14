@@ -532,7 +532,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 //   openPictureDialog();
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("*/*");
+                intent.setType("image/*");
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_PHOTO_GALLERY);
                 break;
 

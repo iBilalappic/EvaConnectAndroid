@@ -14,5 +14,7 @@ public interface IConnectionRespository {
     LiveData<BaseModel<List<User>>> getAllConnections(int total,int current);
     LiveData<BaseModel<List<User>>> getConnectionByFilter(User user,int total,int current);
     LiveData<BaseModel<User>> getConnectionCount(User user);
+    LiveData<BaseModel<List<Object>>> remove_user(Integer connection_id);
+    LiveData<BaseModel<List<Object>>> block_user(Integer connection_id,User user);
 
 }

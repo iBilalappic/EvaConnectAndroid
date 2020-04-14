@@ -74,6 +74,8 @@
     <string name="msg_signup">You have signed up successfully! Thank you for choosing Aviation Connect, please check your email to activate your account.</string>
     <string name="msg_jobAd">Your Job Ad has been created successfully.</string>
     <string name="msg_jobAd_update">Your Job Ad has been Updated successfully.</string>
+    <string name="msg_remove_user">Your connection has been removed successfully.</string>
+    <string name="msg_block_user">Your connection has been block successfully.</string>
     <string name="msg_event_created">Your Event has been created successfully.</string>
     <string name="msg_note_created">Your Note has been created successfully.</string>
     <string name="msg_application_form">Application Sent successfully.</string>

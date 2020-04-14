@@ -171,6 +171,9 @@ public final class AppUtils {
                 case AppConstants.ACTIVE:
                     connectionStatus=AppConstants.CONNECTED;
                     break;
+                case AppConstants.DELETED:
+                    connectionStatus=AppConstants.DELETED;
+                    break;
                 case AppConstants.PENDING:
                     if(isreceiver)
                     {

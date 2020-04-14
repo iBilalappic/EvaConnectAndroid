@@ -4,13 +4,16 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.hypernym.evaconnect.communication.RestClient;
+import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IConnectionRespository;
+import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -23,6 +26,8 @@ public class ConnectionRepository implements IConnectionRespository {
     private MutableLiveData<BaseModel<List<User>>> userMutableLiveData = new MutableLiveData<>();
 
     private MutableLiveData<BaseModel<User>> connectionCountMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Object>>> remove_userMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Object>>> block_userMutableLiveData = new MutableLiveData<>();
 
     @Override
     public LiveData<BaseModel<List<Connection>>> connect(Connection connection) {
@@ -110,5 +115,41 @@ public class ConnectionRepository implements IConnectionRespository {
             }
         });
         return connectionCountMutableLiveData;
+    }
+    @Override
+    public LiveData<BaseModel<List<Object>>> remove_user(Integer connection_id) {
+        remove_userMutableLiveData=new MutableLiveData<>();
+
+        RestClient.get().appApi().remove_user(connection_id).enqueue(new Callback<BaseModel<List<Object>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+                remove_userMutableLiveData.setValue(response.body());
+            }
+            @Override
+            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+                remove_userMutableLiveData.setValue(null);
+            }
+        });
+        return remove_userMutableLiveData;
+    }
+    @Override
+    public LiveData<BaseModel<List<Object>>> block_user(Integer connection_id,User user) {
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("modified_by_id",user.getId());
+        body.put("modified_datetime", DateUtils.GetCurrentdatetime());
+        body.put("status", AppConstants.DELETED);
+        block_userMutableLiveData=new MutableLiveData<>();
+
+        RestClient.get().appApi().block_user(connection_id,body).enqueue(new Callback<BaseModel<List<Object>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+                block_userMutableLiveData.setValue(response.body());
+            }
+            @Override
+            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+                block_userMutableLiveData.setValue(null);
+            }
+        });
+        return block_userMutableLiveData;
     }
 }

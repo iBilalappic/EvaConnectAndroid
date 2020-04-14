@@ -26,6 +26,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
@@ -229,4 +230,12 @@ public interface AppApi {
 
     @PATCH(APIConstants.DECLINE_APPLICATION)
     Call<BaseModel<List<AppliedApplicants>>> declineApplication(@Path("job_application_id") int job_id,@Body AppliedApplicants applicants);
+
+    @DELETE(APIConstants.REMOVE_USER)
+    Call<BaseModel<List<Object>>> remove_user(@Path("id") int id);
+
+    @PATCH(APIConstants.BLOCK_USER)
+    Call<BaseModel<List<Object>>> block_user(@Path("connection_id") int connection_id,@Body HashMap<String, Object> body);
+
+
 }
