@@ -119,6 +119,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
     private boolean isStartDate = false;
     private Date startDate = new Date();
     private Date selectedDate = new Date();
+    Date endselectDate;
     DateFormat time = new SimpleDateFormat("hh:mm a");
     DateFormat dateformat = new SimpleDateFormat("E, dd MMM yyyy");
     private static final String TAG_DATETIME_FRAGMENT = "TAG_DATETIME_FRAGMENT";
@@ -209,29 +210,8 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
             tv_startTime.setText(time.format(mDateTime.getDate()));
             startDate = mDateTime.getDate();
         }
-
-
-        if (mDateTime.getDate().getMonth() == selectedDate.getMonth() && mDateTime.getDate().getDate() == selectedDate.getDate()) {
-            if (mDateTime.getDate().getHours() > startDate.getHours()|| startDate.getHours()>mDateTime.getDate().getHours()) {
-                tv_enddate.setText(dateformat.format(mDateTime.getDate()));
-                tv_endTime.setText(time.format(mDateTime.getDate()));
-            } else {
-                Toast.makeText(getContext(), "End time must be greater than start time", Toast.LENGTH_SHORT).show();
-                tv_startdate.setText(dateformat.format(new Date()));
-                tv_startTime.setText(time.format(new Date()));
-                tv_enddate.setText(dateformat.format(new Date()));
-                tv_endTime.setText(time.format(new Date()));
-            }
-        } else if (mDateTime.getDate().getMonth() == selectedDate.getMonth() && mDateTime.getDate().getDate() > selectedDate.getDate()) {
-
-            tv_enddate.setText(dateformat.format(mDateTime.getDate()));
-            tv_endTime.setText(time.format(mDateTime.getDate()));
-        } else if (mDateTime.getDate().getMonth() > selectedDate.getMonth()) {
-            tv_enddate.setText(dateformat.format(mDateTime.getDate()));
-            tv_endTime.setText(time.format(mDateTime.getDate()));
-        }
-
-
+        tv_enddate.setText(dateformat.format(mDateTime.getDate()));
+        tv_endTime.setText(time.format(mDateTime.getDate()));
 
 
         Log.v("TEST_TAG", "Date and Time selected: " + mDateTime.getDateString());
@@ -245,7 +225,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
             event.setEvent_name(edt_eventname.getText().toString());
             event.setEvent_start_date(DateUtils.getFormattedEventDate(tv_startdate.getText().toString()));
             event.setEvent_end_date(DateUtils.getFormattedEventDate(tv_enddate.getText().toString()));
-            Log.d("TAAAG",tv_startTime.getText().toString());
+            Log.d("TAAAG", tv_startTime.getText().toString());
             event.setStart_time(DateUtils.getTime_utc(tv_startTime.getText().toString()));
             event.setEnd_time(DateUtils.getTime_utc(tv_endTime.getText().toString()));
             event.setContent(edt_description.getText().toString());

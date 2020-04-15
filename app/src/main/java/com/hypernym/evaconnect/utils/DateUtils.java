@@ -47,6 +47,7 @@ public final class DateUtils {
 
         return mOutputDateString + " | " + mOutputTimeString;
     }
+
     public static String getFormattedTime(String datetime) {
         Date mParsedDate;
         String mOutputDateString = "";
@@ -67,6 +68,7 @@ public final class DateUtils {
 
         return mOutputTimeString;
     }
+
     public static String getFormattedEventTime(String datetime) {
         Date mParsedDate;
         String mOutputDateString = "";
@@ -87,6 +89,7 @@ public final class DateUtils {
 
         return mOutputTimeString;
     }
+
     public static String getFormattedDateDMY(String datetime) {
         Date mParsedDate;
         String mOutputDateString = "";
@@ -98,7 +101,7 @@ public final class DateUtils {
 
         try {
 
-           // datetime = convertServerDateToUserTimeZone(datetime);
+            // datetime = convertServerDateToUserTimeZone(datetime);
             mParsedDate = mInputDateFormat.parse(datetime);
             mOutputDateString = mOutputDateFormat.format(mParsedDate);
 
@@ -107,10 +110,11 @@ public final class DateUtils {
             e.printStackTrace();
         }
 
-        return mOutputDateString ;
+        return mOutputDateString;
     }
+
     public static String getFormattedEventDate(String datetime) {
-        String formatedDate=null;
+        String formatedDate = null;
         try {
             datetime = convertEventDateToUserTimeZone(datetime);
 
@@ -119,16 +123,17 @@ public final class DateUtils {
 
             format = new SimpleDateFormat(DATE_INPUT_FORMAT_WITHOUTTIME);
             formatedDate = format.format(newDate);
-           return formatedDate;
+            return formatedDate;
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return formatedDate ;
+        return formatedDate;
     }
+
     public static String getFormattedEventDateDMY(String datetime) {
-        String formatedDate=null;
+        String formatedDate = null;
         try {
             //datetime = convertEventDateToUserTimeZone(datetime);
 
@@ -143,8 +148,9 @@ public final class DateUtils {
             e.printStackTrace();
         }
 
-        return formatedDate ;
+        return formatedDate;
     }
+
     public static String getFormattedDate(String datetime) {
         Date mParsedDate;
         String mOutputDateString = "";
@@ -165,7 +171,7 @@ public final class DateUtils {
             e.printStackTrace();
         }
 
-        return mOutputDateString ;
+        return mOutputDateString;
     }
 
     public static String Getdatetime() {
@@ -182,6 +188,7 @@ public final class DateUtils {
 
         return "-";
     }
+
     public static String GetCurrentdatetime() {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         df.setTimeZone(TimeZone.getTimeZone("gmt"));
@@ -197,7 +204,6 @@ public final class DateUtils {
     }
 
 
-
     public static String GetCurrentdate() {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         df.setTimeZone(TimeZone.getTimeZone("gmt"));
@@ -205,47 +211,46 @@ public final class DateUtils {
         return completetime;
     }
 
-    public static String convertnumtocharmonths(int m){
-        String charname=null;
-        if(m==1){
-            charname="Jan";
+    public static String convertnumtocharmonths(int m) {
+        String charname = null;
+        if (m == 1) {
+            charname = "Jan";
         }
-        if(m==2){
-            charname="Feb";
+        if (m == 2) {
+            charname = "Feb";
         }
-        if(m==3){
-            charname="Mar";
+        if (m == 3) {
+            charname = "Mar";
         }
-        if(m==4){
-            charname="April";
+        if (m == 4) {
+            charname = "April";
         }
-        if(m==5){
-            charname="May";
+        if (m == 5) {
+            charname = "May";
         }
-        if(m==6){
-            charname="June";
+        if (m == 6) {
+            charname = "June";
         }
-        if(m==7){
-            charname="July";
+        if (m == 7) {
+            charname = "July";
         }
-        if(m==8){
-            charname="Aug";
+        if (m == 8) {
+            charname = "Aug";
         }
-        if(m==9){
-            charname="Sep";
+        if (m == 9) {
+            charname = "Sep";
         }
-        if(m==10){
-            charname="Oct";
+        if (m == 10) {
+            charname = "Oct";
         }
-        if(m==11){
-            charname="Nov";
+        if (m == 11) {
+            charname = "Nov";
         }
-        if(m==12){
-            charname="Dec";
+        if (m == 12) {
+            charname = "Dec";
         }
         return charname;
     }
-
 
 
     public static String getTimeAgo(String datetime) {
@@ -323,6 +328,7 @@ public final class DateUtils {
         }
         return ourdate;
     }
+
     public static String convertEventDateToUserTimeZone(String serverDate) {
         String ourdate;
         try {
@@ -357,27 +363,27 @@ public final class DateUtils {
         }
         return "-";
     }
+
     public static String getMonthForInt(int num) {
         String month = "wrong";
         DateFormatSymbols dfs = new DateFormatSymbols();
         String[] months = dfs.getMonths();
-        if (num >= 0 && num <= 11 ) {
+        if (num >= 0 && num <= 11) {
             month = months[num];
         }
         return month;
     }
-    public static boolean compareDates(String date)
-    {
+
+    public static boolean compareDates(String date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         try {
 
-            Date pickupDateTime=sdf.parse(date);
+            Date pickupDateTime = sdf.parse(date);
 
             Calendar now = Calendar.getInstance();
             Calendar givenDate = Calendar.getInstance();
             givenDate.setTime(pickupDateTime);
-            if(!now.before(givenDate) && !now.getTime().equals(givenDate))
-            {
+            if (!now.before(givenDate) && !now.getTime().equals(givenDate)) {
                 return false;
             }
         } catch (ParseException e) {
@@ -386,6 +392,7 @@ public final class DateUtils {
 
         return true;
     }
+
     public static String getTime_utc(String date) {
 //        if (date != null) {
 //            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm aa");
@@ -422,27 +429,14 @@ public final class DateUtils {
         return mOutputTimeString;
 
     }
+
     public static String get12formant(String date) {
-//        if (date != null) {
-//            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm aa");
-//            try {
-//                Date serverDate = simpleDateFormat.parse(date);
-//                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-//                calendar.setTime(serverDate);
-//                calendar.add(Calendar.MILLISECOND,
-//                        TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings());
-//                SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
-//                return dateFormat.format(calendar.getTime());
-//            } catch (Exception e) {
-//                Log.e(">> Date Exception", e.getMessage());
-//            }
-//        }
-//        return "-";
+
         Date mParsedDate;
         String mOutputDateString = "";
         String mOutputTimeString = "";
         SimpleDateFormat mInputDateFormat =
-                new SimpleDateFormat("hh:mm:ss", java.util.Locale.getDefault());
+                new SimpleDateFormat("HH:mm:ss", java.util.Locale.getDefault());
 
         SimpleDateFormat mOutputDateFormat1 =
                 new SimpleDateFormat("hh:mm aa", java.util.Locale.getDefault());
@@ -458,7 +452,6 @@ public final class DateUtils {
         return mOutputTimeString;
 
     }
-
 
 
 }
