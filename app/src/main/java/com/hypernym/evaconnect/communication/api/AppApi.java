@@ -237,5 +237,11 @@ public interface AppApi {
     @PATCH(APIConstants.BLOCK_USER)
     Call<BaseModel<List<Object>>> block_user(@Path("connection_id") int connection_id,@Body HashMap<String, Object> body);
 
+    @PATCH(APIConstants.PROFILE_UPDATE)
+    Call<BaseModel<List<Object>>> profile_update(@Path("userid") int user_id,@Body HashMap<String, Object> body);
+
+    @GET(APIConstants.GET_USER_DETAILS)
+    Call<BaseModel<List<User>>> getuser_details(@Path("id") int user_id);
+
 
 }

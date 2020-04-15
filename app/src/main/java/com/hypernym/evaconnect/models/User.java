@@ -17,6 +17,43 @@ public class User implements Serializable {
     private String user_image;
     private String linkedin_image_url ;
 
+    public String getDesignation() {
+        return designation;
+    }
+
+    public void setDesignation(String designation) {
+        this.designation = designation;
+    }
+
+    public String getField() {
+        return field;
+    }
+
+    public void setField(String field) {
+        this.field = field;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCompany_name() {
+        return company_name;
+    }
+
+    public void setCompany_name(String company_name) {
+        this.company_name = company_name;
+    }
+
+    private String designation ;
+    private String field ;
+    private String address ;
+    private String company_name ;
+
     public String getLinkedin_image_url() {
         return linkedin_image_url;
     }

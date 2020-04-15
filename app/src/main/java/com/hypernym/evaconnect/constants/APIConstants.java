@@ -46,5 +46,7 @@ public interface APIConstants {
     public static String GETUSER_FROM_LINKEDIN="user/linkedin/login/";
     public static String REMOVE_USER="user/connection/delete/{id}/";
     public static String BLOCK_USER="user/connection/details/{connection_id}/";
+    public static String PROFILE_UPDATE="user/details/{userid}/";
+    public static String GET_USER_DETAILS="user/details/{id}/";
 
 }

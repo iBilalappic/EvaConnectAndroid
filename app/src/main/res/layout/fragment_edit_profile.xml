@@ -51,27 +51,28 @@
         android:paddingLeft="15dp"
         android:paddingTop="5dp"
         android:paddingRight="15dp"
-        android:visibility="gone"
         android:paddingBottom="5dp"
         android:text="@string/connect"
         android:textColor="@color/darker_gray"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/tv_designation"
         style="@style/TextStyle.Black"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="25dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="No Data"
+        android:background="@color/colorwhite"
         android:drawableRight="@drawable/edit"
         android:drawablePadding="10dp"
+        android:hint="no designation"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_image" />
 
-    <TextView
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/tv_biodata"
         style="@style/TextStyle.Black"
         android:layout_width="0dp"
@@ -79,59 +80,77 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:background="@color/colorwhite"
         android:drawableRight="@drawable/edit"
         android:drawablePadding="10dp"
-        android:text="Sample Text Sample TextSample TextSample Text Sample Text Sample Text Sample Text Sample Text"
+        android:hint="no data"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_company" />
 
-    <TextView
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/tv_location"
         style="@style/TextStyle.Black"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="25dp"
         android:layout_marginEnd="16dp"
+        android:background="@color/colorwhite"
         android:drawableLeft="@drawable/location"
-        android:text="No Location"
         android:drawableRight="@drawable/edit"
         android:drawablePadding="10dp"
+        android:hint="No Location"
         app:layout_constraintBottom_toBottomOf="@+id/tv_field"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <TextView
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/tv_company"
         style="@style/TextStyle.Black"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="25dp"
         android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="No Data"
+        android:background="@color/colorwhite"
         android:drawableRight="@drawable/edit"
         android:drawablePadding="10dp"
-
-        app:layout_constraintEnd_toEndOf="@+id/tv_field"
+        android:hint="No company"
         app:layout_constraintStart_toStartOf="@+id/tv_field"
         app:layout_constraintTop_toBottomOf="@+id/tv_field" />
 
-    <TextView
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/tv_field"
         style="@style/TextStyle.Black"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_width="130dp"
+        android:layout_height="25dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/rounded_button_nobackground"
-        android:paddingLeft="15dp"
-        android:paddingTop="5dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="5dp"
-        android:text="No Data"
-        android:drawableRight="@drawable/edit"
         android:drawablePadding="10dp"
-        app:layout_constraintEnd_toEndOf="@+id/tv_designation"
+        android:drawableRight="@drawable/edit"
+        android:background="@color/colorwhite"
+        android:hint="no field"
         app:layout_constraintStart_toStartOf="@+id/tv_designation"
         app:layout_constraintTop_toBottomOf="@+id/tv_designation" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/update"
+            style="@style/TextStyle.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_button_border"
+            android:drawableLeft="@drawable/new_post"
+            android:drawablePadding="10dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="10dp"
+            android:text="Update Profile " />
+    </androidx.cardview.widget.CardView>
 
 
     <View

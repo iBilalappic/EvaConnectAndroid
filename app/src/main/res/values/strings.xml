@@ -105,6 +105,7 @@
     <string name="decline_application_confirmation">Are you sure you want to decline this application?</string>
     <string name="block_user">Block User</string>
     <string name="remove_user">Remove User</string>
+    <string name="no_data">No Data</string>
 
 
 </resources>
