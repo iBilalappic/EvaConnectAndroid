@@ -91,7 +91,7 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
             AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getUser_image());
             tv_name.setText(post.getUser().getFirst_name());
 
-            if (post.getUser().getId() == user.getId()) {
+            if (post.getUser().getId().equals( user.getId())) {
                 tv_connect.setVisibility(View.GONE);
                 img_options.setVisibility(View.GONE);
                 tv_openchat.setVisibility(View.GONE);
@@ -126,8 +126,11 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
             tv_name.setText(user.getFirst_name());
             if (post.getUser().getId() == user.getId()) {
                 tv_connect.setVisibility(View.GONE);
+                img_options.setVisibility(View.GONE);
+
             } else {
                 tv_connect.setVisibility(View.VISIBLE);
+                img_options.setVisibility(View.VISIBLE);
                 String status = AppUtils.getConnectionStatus(getContext(), post.getIs_connected(), post.isIs_receiver());
                 if (status.equals(AppConstants.DELETED)) {
                     tv_connect.setVisibility(View.GONE);
