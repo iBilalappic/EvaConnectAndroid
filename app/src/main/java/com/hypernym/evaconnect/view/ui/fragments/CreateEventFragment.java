@@ -122,6 +122,8 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
     Date endselectDate;
     DateFormat time = new SimpleDateFormat("hh:mm a");
     DateFormat dateformat = new SimpleDateFormat("E, dd MMM yyyy");
+    SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+
     private static final String TAG_DATETIME_FRAGMENT = "TAG_DATETIME_FRAGMENT";
     private static final int REQUEST_PHOTO_GALLERY = 4;
     private static final int CAMERAA = 1;
@@ -204,14 +206,45 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
 
     @Override
     public void DateTimeSet(Date date) {
+        Date selectedDate = null;
+        Date endDate = null;
         DateTime mDateTime = new DateTime(date);
         if (isStartDate) {
             tv_startdate.setText(dateformat.format(mDateTime.getDate()));
             tv_startTime.setText(time.format(mDateTime.getDate()));
             startDate = mDateTime.getDate();
+            tv_enddate.setText(dateformat.format(mDateTime.getDate()));
+            tv_endTime.setText(time.format(mDateTime.getDate()));
         }
-        tv_enddate.setText(dateformat.format(mDateTime.getDate()));
-        tv_endTime.setText(time.format(mDateTime.getDate()));
+
+        String str2 = mDateTime.getDate().toString();
+        try {
+            endDate = formatter.parse(str2);
+            Log.d("TAAAG", "enddate:" + endDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (mDateTime.getDate().getMonth() == startDate.getMonth() && mDateTime.getDate().getDate() == startDate.getDate()) {
+
+            if (endDate.compareTo(startDate) > 0) {
+                tv_enddate.setText(dateformat.format(mDateTime.getDate()));
+                tv_endTime.setText(time.format(mDateTime.getDate()));
+
+            } else {
+                Toast.makeText(getContext(), "End time must be greater than start time", Toast.LENGTH_SHORT).show();
+            }
+        } else if (endDate.compareTo(startDate) > 0) {
+            tv_enddate.setText(dateformat.format(mDateTime.getDate()));
+            tv_endTime.setText(time.format(mDateTime.getDate()));
+        } else {
+            tv_enddate.setText(dateformat.format(mDateTime.getDate()));
+            tv_endTime.setText(time.format(mDateTime.getDate()));
+        }
+
+
+//        tv_enddate.setText(dateformat.format(mDateTime.getDate()));
+//        tv_endTime.setText(time.format(mDateTime.getDate()));
 
 
         Log.v("TEST_TAG", "Date and Time selected: " + mDateTime.getDateString());
