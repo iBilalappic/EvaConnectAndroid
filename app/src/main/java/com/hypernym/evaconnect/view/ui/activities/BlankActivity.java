@@ -73,7 +73,7 @@ public class BlankActivity extends BaseActivity {
                         JustLoginApiCall();
                         //  }
                     } else {
-                        Intent intent = new Intent(BlankActivity.this, SignupDetailsActivity.class);
+                        Intent intent = new Intent(BlankActivity.this, SignupActivity_0.class);
                         intent.putExtra("Email", linkedInUserEmailAddress);
                         intent.putExtra("Photo", photourl);
                         intent.putExtra(Constants.ACTIVITY_NAME,"LinkedinActivity");

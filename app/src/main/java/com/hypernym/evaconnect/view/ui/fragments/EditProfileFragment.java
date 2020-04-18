@@ -85,6 +85,7 @@ public class EditProfileFragment extends BaseFragment implements TextInputEditTe
     User user = new User();
     private Validator validator;
     SimpleDialog simpleDialog;
+
     public EditProfileFragment() {
         // Required empty public constructor
     }
@@ -201,7 +202,7 @@ public class EditProfileFragment extends BaseFragment implements TextInputEditTe
         ).observe(this, new Observer<BaseModel<List<User>>>() {
             @Override
             public void onChanged(BaseModel<List<User>> listBaseModel) {
-                if (listBaseModel.getData()!=null&&!listBaseModel.isError()) {
+                if (listBaseModel.getData() != null && !listBaseModel.isError()) {
                     tv_biodata.setText(listBaseModel.getData().get(0).getBio_data());
                     tv_designation.setText(listBaseModel.getData().get(0).getDesignation());
                     tv_field.setText(listBaseModel.getData().get(0).getAddress());
