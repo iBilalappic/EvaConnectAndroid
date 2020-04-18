@@ -25,6 +25,7 @@ public class UserRepository implements IUserRespository {
     private MutableLiveData<BaseModel<List<AccountCheck>>> LinkedinMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<User>>> LinkedinLoginMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> ProfileUpdateMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<String>>> SectorMutableLiveData = new MutableLiveData<>();
 
 
     @Override
@@ -36,10 +37,14 @@ public class UserRepository implements IUserRespository {
                 RequestBody.create(MediaType.parse("text/plain"), user.getEmail()),
                 user.getIsLinkedin(),
                 RequestBody.create(MediaType.parse("text/plain"), user.getLinkedin_image_url()),
-
                 RequestBody.create(MediaType.parse("text/plain"), user.getPassword()),
                 RequestBody.create(MediaType.parse("text/plain"), user.getType()),
-                RequestBody.create(MediaType.parse("text/plain"), user.getBio_data()), partImage).enqueue(new Callback<BaseModel<List<User>>>() {
+                RequestBody.create(MediaType.parse("text/plain"), user.getBio_data()),
+                RequestBody.create(MediaType.parse("text/plain"), user.getSector()),
+                RequestBody.create(MediaType.parse("text/plain"), user.getCompany_name()),
+                RequestBody.create(MediaType.parse("text/plain"), user.getDesignation()),
+                RequestBody.create(MediaType.parse("text/plain"), user.getWork_aviation()),
+                partImage).enqueue(new Callback<BaseModel<List<User>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
                 if (response.body() != null) {
@@ -206,6 +211,28 @@ public class UserRepository implements IUserRespository {
             }
         });
         return userMutableLiveData;
+
+    }
+
+    @Override
+    public LiveData<BaseModel<List<String>>> getSector(String name) {
+        SectorMutableLiveData = new MutableLiveData<>();
+        HashMap<String, Object> body = new HashMap<String, Object>();
+        body.put("work_aviation", name);
+        RestClient.get().appApi().getSector(body).enqueue(new Callback<BaseModel<List<String>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<String>>> call, Response<BaseModel<List<String>>> response) {
+                if (response.body() != null) {
+                    SectorMutableLiveData.postValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<String>>> call, Throwable t) {
+                SectorMutableLiveData.postValue(null);
+            }
+        });
+        return SectorMutableLiveData;
 
     }
 }

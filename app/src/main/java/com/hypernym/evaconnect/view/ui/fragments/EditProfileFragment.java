@@ -202,11 +202,12 @@ public class EditProfileFragment extends BaseFragment implements TextInputEditTe
             @Override
             public void onChanged(BaseModel<List<User>> listBaseModel) {
                 if (listBaseModel.getData()!=null&&!listBaseModel.isError()) {
-                    tv_biodata.setText(listBaseModel.getData().get(0).getCompany_name());
+                    tv_biodata.setText(listBaseModel.getData().get(0).getBio_data());
                     tv_designation.setText(listBaseModel.getData().get(0).getDesignation());
                     tv_field.setText(listBaseModel.getData().get(0).getAddress());
                     tv_location.setText(listBaseModel.getData().get(0).getField());
-                    tv_company.setText(listBaseModel.getData().get(0).getBio_data());
+                    tv_company.setText(listBaseModel.getData().get(0).getCompany_name());
+                    tv_name.setText(listBaseModel.getData().get(0).getFirst_name());
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }

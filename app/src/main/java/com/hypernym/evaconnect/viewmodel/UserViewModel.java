@@ -60,4 +60,8 @@ public class UserViewModel extends AndroidViewModel {
     {
         return iUserRespository.getuser_details(id);
     }
+    public LiveData<BaseModel<List<String>>> getSector(String name)
+    {
+        return iUserRespository.getSector(name);
+    }
 }

@@ -48,5 +48,6 @@ public interface APIConstants {
     public static String BLOCK_USER="user/connection/details/{connection_id}/";
     public static String PROFILE_UPDATE="user/details/{userid}/";
     public static String GET_USER_DETAILS="user/details/{id}/";
+    public static String GET_SECTOR="user/sector/";
 
 }

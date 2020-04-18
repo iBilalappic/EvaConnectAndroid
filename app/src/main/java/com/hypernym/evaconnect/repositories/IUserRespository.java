@@ -26,4 +26,5 @@ public interface IUserRespository {
     LiveData<BaseModel<List<User>>> linkedin_login(String email);
     LiveData<BaseModel<List<Object>>> profile_update(Integer id, String designation, String field, String company_name, String address, String bio_data);
     LiveData<BaseModel<List<User>>> getuser_details(Integer id);
+    LiveData<BaseModel<List<String>>> getSector(String name);
 }

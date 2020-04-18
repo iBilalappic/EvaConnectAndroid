@@ -17,6 +17,25 @@ public class User implements Serializable {
     private String user_image;
     private String linkedin_image_url ;
 
+    public String getSector() {
+        return sector;
+    }
+
+    public void setSector(String sector) {
+        this.sector = sector;
+    }
+
+    public String getWork_aviation() {
+        return work_aviation;
+    }
+
+    public void setWork_aviation(String work_aviation) {
+        this.work_aviation = work_aviation;
+    }
+
+    private String sector;
+    private String work_aviation;
+
     public String getDesignation() {
         return designation;
     }

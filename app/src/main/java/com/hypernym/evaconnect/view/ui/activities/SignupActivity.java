@@ -34,7 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SignupActivity extends BaseActivity implements Validator.ValidationListener  {
+public class SignupActivity extends BaseActivity implements Validator.ValidationListener {
 
     @BindView(R.id.btn_signup)
     Button btn_next;
@@ -45,7 +45,7 @@ public class SignupActivity extends BaseActivity implements Validator.Validation
     EditText edt_email;
 
     @NotEmpty
-    @Password(min=8)
+    @Password(min = 8)
     @BindView(R.id.edt_password)
     EditText edt_password;
 
@@ -63,7 +63,7 @@ public class SignupActivity extends BaseActivity implements Validator.Validation
     private void init() {
         validator = new Validator(this);
         validator.setValidationListener(this);
-        userViewModel = ViewModelProviders.of(this,new CustomViewModelFactory(getApplication(),this)).get(UserViewModel.class);
+        userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getApplication(), this)).get(UserViewModel.class);
         edt_email.setText(getIntent().getStringExtra("Email"));
         edt_password.setText(getIntent().getStringExtra("Password"));
         btn_next.setOnClickListener(new OnOneOffClickListener() {
@@ -78,27 +78,25 @@ public class SignupActivity extends BaseActivity implements Validator.Validation
     @Override
     public void onValidationSucceeded() {
 
-        if(NetworkUtils.isNetworkConnected(this)) {
+        if (NetworkUtils.isNetworkConnected(this)) {
             showDialog();
             userViewModel.isEmailExist(edt_email.getText().toString()).observe(this, new Observer<BaseModel<List<User>>>() {
                 @Override
                 public void onChanged(BaseModel<List<User>> listBaseModel) {
                     if (listBaseModel != null && listBaseModel.isError()) {
-                        Intent intent = new Intent(SignupActivity.this, SignupDetailsActivity.class);
+                        Intent intent = new Intent(SignupActivity.this, SignupActivity_0.class);
                         intent.putExtra("Email", edt_email.getText().toString());
                         intent.putExtra("Password", edt_password.getText().toString());
                         startActivity(intent);
                     } else if (!listBaseModel.isError()) {
                         networkResponseDialog(getString(R.string.error), getString(R.string.err_email_already_exist));
                     } else {
-                       networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                        networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                     }
                     hideDialog();
                 }
             });
-        }
-        else
-        {
+        } else {
             networkErrorDialog();
         }
 
@@ -110,9 +108,8 @@ public class SignupActivity extends BaseActivity implements Validator.Validation
         for (ValidationError error : errors) {
             View view = error.getView();
             String message = error.getCollatedErrorMessage(this);
-            if(view.getId()==R.id.edt_password)
-            {
-                message=getString(R.string.err_password);
+            if (view.getId() == R.id.edt_password) {
+                message = getString(R.string.err_password);
             }
             // Display error messages
             if (view instanceof EditText) {

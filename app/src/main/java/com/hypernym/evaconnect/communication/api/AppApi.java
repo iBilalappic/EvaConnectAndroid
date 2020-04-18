@@ -47,6 +47,10 @@ public interface AppApi {
                                        @Part("password") RequestBody password,
                                        @Part("type") RequestBody type,
                                        @Part("bio_data") RequestBody biodata,
+                                       @Part("sector") RequestBody sector,
+                                       @Part("company_name") RequestBody company_name,
+                                       @Part("designation") RequestBody designation,
+                                       @Part("work_aviation") RequestBody work_aviation,
                                        @Part MultipartBody.Part user_image);
 
     @POST(APIConstants.LOGIN)
@@ -242,6 +246,10 @@ public interface AppApi {
 
     @GET(APIConstants.GET_USER_DETAILS)
     Call<BaseModel<List<User>>> getuser_details(@Path("id") int user_id);
+
+    @POST(APIConstants.GET_SECTOR)
+    Call<BaseModel<List<String>>> getSector(@Body HashMap<String, Object> body);
+
 
 
 }
