@@ -1,6 +1,8 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 
+import android.app.Application;
+import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,7 +13,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +31,8 @@ import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
+import com.hypernym.evaconnect.view.dialogs.Remove_block_dialog;
+import com.hypernym.evaconnect.view.dialogs.ShareDialog;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 
@@ -34,6 +40,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,6 +65,12 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
     @BindView(R.id.img_options)
     ImageView img_options;
 
+    LinearLayout unfollow, block;
+    Application context;
+    CircleImageView profile_image_dialog;
+    TextView tv_profilename;
+    ImageView img_close;
+
     private ConnectionViewModel connectionViewModel;
     Post post = new Post();
     User user = new User();
@@ -66,6 +79,8 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
     public PersonDetailFragment() {
         // Required empty public constructor
     }
+
+    Dialog Remove_block_Dialog;
 
 
     @Override
@@ -76,6 +91,8 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
         ButterKnife.bind(this, view);
         tv_openchat.setOnClickListener(this);
         img_options.setOnClickListener(this);
+
+
         init();
         return view;
     }
@@ -91,7 +108,7 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
             AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getUser_image());
             tv_name.setText(post.getUser().getFirst_name());
 
-            if (post.getUser().getId().equals( user.getId())) {
+            if (post.getUser().getId().equals(user.getId())) {
                 tv_connect.setVisibility(View.GONE);
                 img_options.setVisibility(View.GONE);
                 tv_openchat.setVisibility(View.GONE);
@@ -163,13 +180,49 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
                 loadFragment(R.id.framelayout, fragment, getContext(), true);
                 break;
             case R.id.img_options:
-                PopupMenu popup = new PopupMenu(getContext(), v);
-                popup.setOnMenuItemClickListener(this);
-                popup.inflate(R.menu.menu_options);
-                popup.show();
+                //    Remove_block_dialog remove_block_dialog;
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("Data",post);
+//                remove_block_dialog = new Remove_block_dialog(this,getActivity().getApplication(),bundle,getActivity());
+//                remove_block_dialog.show();
+//                PopupMenu popup = new PopupMenu(getContext(), v);
+//                popup.setOnMenuItemClickListener(this);
+//                popup.inflate(R.menu.menu_options);
+//                popup.show();
+                ShowOptionDialog();
+
+                break;
+            case R.id.img_close:
+                Remove_block_Dialog.dismiss();
+                break;
+            case R.id.unfollow:
+                RemoveUserApiCall();
+                break;
+            case R.id.block:
+                BlockUserApiCall();
                 break;
         }
 
+    }
+
+    private void ShowOptionDialog() {
+        Remove_block_Dialog = new Dialog(getContext());
+        Remove_block_Dialog.setCancelable(true);
+        Remove_block_Dialog.setContentView(R.layout.dialog_remove_block);
+
+
+        profile_image_dialog = Remove_block_Dialog.findViewById(R.id.profile_image);
+        img_close = Remove_block_Dialog.findViewById(R.id.img_close);
+        tv_profilename = Remove_block_Dialog.findViewById(R.id.tv_profilename);
+        unfollow = Remove_block_Dialog.findViewById(R.id.unfollow);
+        block = Remove_block_Dialog.findViewById(R.id.block);
+        tv_profilename.setText(post.getUser().getFirst_name());
+        AppUtils.setGlideImage(getContext(),profile_image_dialog, post.getUser().getUser_image());
+        img_close.setOnClickListener(this);
+        unfollow.setOnClickListener(this);
+        block.setOnClickListener(this);
+
+        Remove_block_Dialog.show();
     }
 
     @Override
@@ -195,6 +248,7 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
                 @Override
                 public void onChanged(BaseModel<List<Object>> listBaseModel) {
                     if (!listBaseModel.isError()) {
+                        Remove_block_Dialog.dismiss();
                         simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_block_user), null, getString(R.string.ok), new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -203,6 +257,7 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
                             }
                         });
                     } else {
+                        Remove_block_Dialog.dismiss();
                         simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), "Your connection is already block", null, getString(R.string.ok), new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -212,6 +267,7 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
                         });
                     }
                     hideDialog();
+                    Remove_block_Dialog.dismiss();
                     simpleDialog.show();
                     simpleDialog.setCancelable(false);
                 }
@@ -226,6 +282,7 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
                 @Override
                 public void onChanged(BaseModel<List<Object>> listBaseModel) {
                     if (!listBaseModel.isError()) {
+                        Remove_block_Dialog.dismiss();
                         simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_remove_user), null, getString(R.string.ok), new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -234,6 +291,7 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
                             }
                         });
                     } else {
+                        Remove_block_Dialog.dismiss();
                         simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), "Your connection is already remove", null, getString(R.string.ok), new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -242,6 +300,7 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
                             }
                         });
                     }
+                    Remove_block_Dialog.dismiss();
                     hideDialog();
                     simpleDialog.show();
                     simpleDialog.setCancelable(false);
