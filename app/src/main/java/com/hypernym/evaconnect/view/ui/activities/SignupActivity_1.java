@@ -106,7 +106,7 @@ public class SignupActivity_1 extends BaseActivity {
         btn_next.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
-                if (activity_type.equals("linkedin_type")) {
+                if (activity_type.equals("LinkedinActivity")) {
                     Intent intent = new Intent(SignupActivity_1.this, SignupActivity_2.class);
                     intent.putExtra("Email", email);
                     intent.putExtra("Photo", photourl);

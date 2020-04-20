@@ -115,28 +115,25 @@ public class SignupActivity_0 extends BaseActivity implements Validator.Validati
 
     @Override
     public void onValidationSucceeded() {
-        if (userType.equals("company")) {
-            Toast.makeText(this, "justLogin", Toast.LENGTH_SHORT).show();
+
+        if (activity_type.equals("LinkedinActivity")) {
+            Intent intent = new Intent(SignupActivity_0.this, SignupActivity_1.class);
+            intent.putExtra("Email", email);
+            intent.putExtra("Photo", photourl);
+            intent.putExtra("userType", userType);
+            intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+            intent.putExtra("username", edt_displayname.getText().toString());
+            startActivity(intent);
+
         } else {
+            Intent intent = new Intent(SignupActivity_0.this, SignupActivity_1.class);
+            intent.putExtra("Email", email);
+            intent.putExtra("Password", password);
+            intent.putExtra("userType", userType);
+            intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+            intent.putExtra("username", edt_displayname.getText().toString());
+            startActivity(intent);
 
-            if (activity_type.equals("LinkedinActivity")) {
-                Intent intent = new Intent(SignupActivity_0.this, SignupActivity_1.class);
-                intent.putExtra("Email", email);
-                intent.putExtra("Photo", photourl);
-                intent.putExtra("userType", userType);
-                intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-                intent.putExtra("username", edt_displayname.getText().toString());
-                startActivity(intent);
-
-            } else {
-                Intent intent = new Intent(SignupActivity_0.this, SignupActivity_1.class);
-                intent.putExtra("Email", email);
-                intent.putExtra("Password", password);
-                intent.putExtra("userType", userType);
-                intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-                intent.putExtra("username", edt_displayname.getText().toString());
-                startActivity(intent);
-            }
         }
 
 
