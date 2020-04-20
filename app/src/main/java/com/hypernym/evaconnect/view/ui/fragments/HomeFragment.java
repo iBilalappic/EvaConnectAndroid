@@ -40,6 +40,8 @@ import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.HomePostsAdapter;
+import com.hypernym.evaconnect.view.dialogs.NavigationDialog;
+import com.hypernym.evaconnect.view.dialogs.ShareDialog;
 import com.hypernym.evaconnect.view.ui.activities.SharePostActivity;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.EventViewModel;
@@ -59,7 +61,7 @@ import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_ST
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemClickListener,SwipeRefreshLayout.OnRefreshListener {
+public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemClickListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.rc_home)
     RecyclerView rc_home;
 
@@ -69,7 +71,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
 
-    private List<Post> posts=new ArrayList<>();
+    private List<Post> posts = new ArrayList<>();
     private HomePostsAdapter homePostsAdapter;
     private LinearLayoutManager linearLayoutManager;
     private HomeViewModel homeViewModel;
@@ -80,8 +82,9 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     private boolean isLastPage = false;
     private boolean isLoading = false;
     int itemCount = 0;
-    private List<Post> notifications=new ArrayList<>();
+    private List<Post> notifications = new ArrayList<>();
     private JobListViewModel jobListViewModel;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -90,22 +93,22 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_home, container, false);
-        ButterKnife.bind(this,view);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        ButterKnife.bind(this, view);
         return view;
     }
 
     private void init() {
         setPageTitle(getString(R.string.home));
-        homeViewModel = ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(HomeViewModel.class);
-        postViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(PostViewModel.class);
-        connectionViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
+        homeViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(HomeViewModel.class);
+        postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(PostViewModel.class);
+        connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
         jobListViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(JobListViewModel.class);
         eventViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(EventViewModel.class);
 
-     //   currentPage = PAGE_START;
-        homePostsAdapter=new HomePostsAdapter(getContext(),posts,this);
-        linearLayoutManager=new LinearLayoutManager(getContext());
+        //   currentPage = PAGE_START;
+        homePostsAdapter = new HomePostsAdapter(getContext(), posts, this);
+        linearLayoutManager = new LinearLayoutManager(getContext());
 
         rc_home.setLayoutManager(linearLayoutManager);
         rc_home.setAdapter(homePostsAdapter);
@@ -121,12 +124,10 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
             @Override
             protected void loadMoreItems() {
                 isLoading = true;
-                currentPage=AppConstants.TOTAL_PAGES+currentPage;
-                if(NetworkUtils.isNetworkConnected(getContext())) {
+                currentPage = AppConstants.TOTAL_PAGES + currentPage;
+                if (NetworkUtils.isNetworkConnected(getContext())) {
                     callPostsApi();
-                }
-                else
-                {
+                } else {
                     networkErrorDialog();
                 }
             }
@@ -142,7 +143,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
             }
         });
 
-        }
+    }
 
     @Override
     public void onResume() {
@@ -153,51 +154,36 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         newpost.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
-                loadFragment(R.id.framelayout,new NewPostFragment(),getContext(),true);
+                loadFragment(R.id.framelayout, new NewPostFragment(), getContext(), true);
             }
         });
     }
 
 
-
     private void callPostsApi() {
-        User user=LoginUtils.getLoggedinUser();
+        User user = LoginUtils.getLoggedinUser();
 
-        homeViewModel.getDashboard(user,AppConstants.TOTAL_PAGES,currentPage).observe(this, new Observer<BaseModel<List<Post>>>() {
+        homeViewModel.getDashboard(user, AppConstants.TOTAL_PAGES, currentPage).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> dashboardBaseModel) {
 
-             //   homePostsAdapter.clear();
-                if(dashboardBaseModel !=null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size()>0 && dashboardBaseModel.getData().get(0)!=null)
-                {
-                    for(Post post:dashboardBaseModel.getData())
-                    {
-                        if(post.getContent()==null)
-                        {
+                //   homePostsAdapter.clear();
+                if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
+                    for (Post post : dashboardBaseModel.getData()) {
+                        if (post.getContent() == null) {
                             post.setContent("");
                         }
-                        if(post.getType().equalsIgnoreCase("post") && post.getPost_image().size()>0)
-                        {
+                        if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() > 0) {
                             post.setPost_type(AppConstants.IMAGE_TYPE);
-                        }
-                        else if(post.getType().equalsIgnoreCase("post") && post.getPost_video()!=null)
-                        {
+                        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_video() != null) {
                             post.setPost_type(AppConstants.VIDEO_TYPE);
-                        }
-                        else if(post.getType().equalsIgnoreCase("post") && post.getPost_image().size()==0  && !post.isIs_url())
-                        {
+                        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() == 0 && !post.isIs_url()) {
                             post.setPost_type(AppConstants.TEXT_TYPE);
-                        }
-                        else if(post.getType().equalsIgnoreCase("event"))
-                        {
+                        } else if (post.getType().equalsIgnoreCase("event")) {
                             post.setPost_type(AppConstants.EVENT_TYPE);
-                        }
-                        else if(post.getType().equalsIgnoreCase("job"))
-                        {
+                        } else if (post.getType().equalsIgnoreCase("job")) {
                             post.setPost_type(AppConstants.JOB_TYPE);
-                        }
-                        else if(post.getType().equalsIgnoreCase("post") && post.isIs_url())
-                        {
+                        } else if (post.getType().equalsIgnoreCase("post") && post.isIs_url()) {
                             post.setPost_type(AppConstants.LINK_POST);
                         }
                     }
@@ -206,16 +192,12 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
                     swipeRefresh.setRefreshing(false);
                     homePostsAdapter.removeLoading();
                     isLoading = false;
-                }
-                else if(dashboardBaseModel !=null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size()==0)
-                {
+                } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
                     isLastPage = true;
                     homePostsAdapter.removeLoading();
                     isLoading = false;
-                }
-                else
-                {
-                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
 
             }
@@ -230,102 +212,89 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
 
     @Override
     public void onItemClick(View view, int position) {
-        PostDetailsFragment postDetailsFragment=new PostDetailsFragment();
-        Bundle bundle=new Bundle();
-        bundle.putInt("post",posts.get(position).getId());
-        Log.d("TAAAGNOTIFY",""+posts.get(position).getId());
+        PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("post", posts.get(position).getId());
+        Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
         postDetailsFragment.setArguments(bundle);
-        loadFragment(R.id.framelayout,postDetailsFragment,getContext(),true);
+        loadFragment(R.id.framelayout, postDetailsFragment, getContext(), true);
     }
 
     @Override
-    public void onLikeClick(View view, int position,TextView likeCount) {
+    public void onLikeClick(View view, int position, TextView likeCount) {
         //showDialog();
-        Post post=posts.get(position);
-        User user=LoginUtils.getLoggedinUser();
+        Post post = posts.get(position);
+        User user = LoginUtils.getLoggedinUser();
         post.setPost_id(post.getId());
         post.setCreated_by_id(user.getId());
-        if(post.getIs_post_like()==null ||post.getIs_post_like()<1)
-        {
+        if (post.getIs_post_like() == null || post.getIs_post_like() < 1) {
             post.setAction(AppConstants.LIKE);
-            if(post.getIs_post_like()==null)
-            {
+            if (post.getIs_post_like() == null) {
                 post.setIs_post_like(1);
-                if(post.getLike_count()==null)
+                if (post.getLike_count() == null)
                     post.setLike_count(0);
                 else
-                    post.setLike_count(post.getLike_count()+1);
-            }
-            else
-            {
-                post.setIs_post_like(post.getIs_post_like()+1);
-                if(post.getLike_count()==null)
+                    post.setLike_count(post.getLike_count() + 1);
+            } else {
+                post.setIs_post_like(post.getIs_post_like() + 1);
+                if (post.getLike_count() == null)
                     post.setLike_count(0);
                 else
-                    post.setLike_count(post.getLike_count()+1);
+                    post.setLike_count(post.getLike_count() + 1);
             }
-        }
-        else
-        {
+        } else {
             post.setAction(AppConstants.UNLIKE);
-            if(post.getIs_post_like()>0)
-            {
-                post.setIs_post_like(post.getIs_post_like()-1);
-                post.setLike_count(post.getLike_count()-1);
-            }
-            else
-            {
+            if (post.getIs_post_like() > 0) {
+                post.setIs_post_like(post.getIs_post_like() - 1);
+                post.setLike_count(post.getLike_count() - 1);
+            } else {
                 post.setIs_post_like(0);
                 post.setLike_count(0);
             }
 
         }
-        Log.d("Listing status",post.getAction()+" count"+post.getIs_post_like());
-        if(NetworkUtils.isNetworkConnected(getContext())) {
+        Log.d("Listing status", post.getAction() + " count" + post.getIs_post_like());
+        if (NetworkUtils.isNetworkConnected(getContext())) {
 
-            likePost(post,position);
-        }
-        else
-        {
+            likePost(post, position);
+        } else {
             networkErrorDialog();
         }
 
     }
 
     @Override
-    public void onJobLikeClick(View view, int position,TextView likeCount) {
-        if (posts.get(position).getIs_job_like()!=null && posts.get(position).getIs_job_like() > 0) {
+    public void onJobLikeClick(View view, int position, TextView likeCount) {
+        if (posts.get(position).getIs_job_like() != null && posts.get(position).getIs_job_like() > 0) {
             SetJobUnLike(posts.get(position).getId(), position);
         } else {
             SetJobLike(posts.get(position).getId(), position);
         }
     }
+
     private void SetJobLike(Integer id, int position) {
 
         jobListViewModel.setJobLike(LoginUtils.getUser(), id, "like").observe(this, new Observer<BaseModel<List<Object>>>() {
             @Override
             public void onChanged(BaseModel<List<Object>> setlike) {
-                Post post=posts.get(position);
+                Post post = posts.get(position);
                 post.setAction(AppConstants.LIKE);
-                if(post.getIs_job_like()==null)
-                {
+                if (post.getIs_job_like() == null) {
                     post.setIs_job_like(1);
-                    if(post.getLike_count()==null)
+                    if (post.getLike_count() == null)
                         post.setLike_count(0);
                     else
-                        post.setLike_count(post.getLike_count()+1);
-                }
-                else
-                {
-                    post.setIs_job_like(post.getIs_job_like()+1);
-                    if(post.getLike_count()==null)
+                        post.setLike_count(post.getLike_count() + 1);
+                } else {
+                    post.setIs_job_like(post.getIs_job_like() + 1);
+                    if (post.getLike_count() == null)
                         post.setLike_count(0);
                     else
-                        post.setLike_count(post.getLike_count()+1);
+                        post.setLike_count(post.getLike_count() + 1);
                 }
                 homePostsAdapter.notifyItemChanged(position);
 //                if (setlike != null && !setlike.isError()) {
-           //     onRefresh();
+                //     onRefresh();
 //                } else {
 //                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
 //                }
@@ -335,20 +304,18 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
             }
         });
     }
+
     private void SetJobUnLike(Integer id, int position) {
         jobListViewModel.setJobLike(LoginUtils.getUser(), id, "unlike").observe(this, new Observer<BaseModel<List<Object>>>() {
             @Override
             public void onChanged(BaseModel<List<Object>> setlike) {
-               // onRefresh();
-                Post post=posts.get(position);
+                // onRefresh();
+                Post post = posts.get(position);
                 post.setAction(AppConstants.UNLIKE);
-                if(post.getIs_job_like()>0)
-                {
-                    post.setIs_job_like(post.getIs_job_like()-1);
-                    post.setLike_count(post.getLike_count()-1);
-                }
-                else
-                {
+                if (post.getIs_job_like() > 0) {
+                    post.setIs_job_like(post.getIs_job_like() - 1);
+                    post.setLike_count(post.getLike_count() - 1);
+                } else {
                     post.setIs_job_like(0);
                     post.setLike_count(0);
                 }
@@ -358,17 +325,15 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
             }
         });
     }
-    private void likePost(Post post,int position) {
+
+    private void likePost(Post post, int position) {
         postViewModel.likePost(post).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                if(listBaseModel!=null && !listBaseModel.isError())
-                {
+                if (listBaseModel != null && !listBaseModel.isError()) {
                     homePostsAdapter.notifyItemChanged(position);
-                }
-                else
-                {
-                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
                 hideDialog();
             }
@@ -377,20 +342,23 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
 
     @Override
     public void onShareClick(View view, int position) {
-       Intent intent=new Intent(getContext(), SharePostActivity.class);
-       intent.putExtra("post",posts.get(position));
-       startActivity(intent);
+//       Intent intent=new Intent(getContext(), SharePostActivity.class);
+//       intent.putExtra("post",posts.get(position));
+//       startActivity(intent);
+        ShareDialog shareDialog;
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("PostData",posts.get(position));
+        shareDialog = new ShareDialog(getContext(),bundle);
+        shareDialog.show();
     }
 
     @Override
     public void onConnectClick(View view, int position) {
 
-        TextView text=(TextView)view;
-        if(NetworkUtils.isNetworkConnected(getContext())) {
-            callConnectApi(text,position);
-        }
-        else
-        {
+        TextView text = (TextView) view;
+        if (NetworkUtils.isNetworkConnected(getContext())) {
+            callConnectApi(text, position);
+        } else {
             networkErrorDialog();
         }
 
@@ -398,32 +366,32 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
 
     @Override
     public void onVideoClick(View view, int position) {
-        AppUtils.playVideo(getContext(),posts.get(position).getPost_video());
+        AppUtils.playVideo(getContext(), posts.get(position).getPost_video());
     }
 
     @Override
     public void onURLClick(View view, int position) {
-        LoadUrlFragment loadUrlFragment =new LoadUrlFragment();
-        Bundle bundle=new Bundle();
-        bundle.putString("url",posts.get(position).getContent());
+        LoadUrlFragment loadUrlFragment = new LoadUrlFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("url", posts.get(position).getContent());
         loadUrlFragment.setArguments(bundle);
-        loadFragment(R.id.framelayout,loadUrlFragment,getContext(),true);
+        loadFragment(R.id.framelayout, loadUrlFragment, getContext(), true);
     }
 
     @Override
     public void onProfileClick(View view, int position) {
-        PersonDetailFragment personDetailFragment=new PersonDetailFragment();
-        Bundle bundle=new Bundle();
-        bundle.putSerializable("PostData",posts.get(position));
+        PersonDetailFragment personDetailFragment = new PersonDetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("PostData", posts.get(position));
         personDetailFragment.setArguments(bundle);
-        loadFragment(R.id.framelayout,personDetailFragment,getContext(),true);
+        loadFragment(R.id.framelayout, personDetailFragment, getContext(), true);
     }
 
     @Override
     public void onApplyClick(View view, int position) {
         SpecficJobFragment specficJobFragment = new SpecficJobFragment();
         Bundle bundle = new Bundle();
-        JobAd jobAd=new JobAd();
+        JobAd jobAd = new JobAd();
         jobAd.setCommentCount(posts.get(position).getComment_count());
         jobAd.setContent(posts.get(position).getContent());
         jobAd.setCreatedById(posts.get(position).getCreated_by_id());
@@ -439,74 +407,63 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         jobAd.setPosition(posts.get(position).getPosition());
         jobAd.setSalary(posts.get(position).getSalary());
         jobAd.setWeeklyHours(posts.get(position).getWeekly_hours());
-        bundle.putSerializable("JOB_AD",jobAd);
+        bundle.putSerializable("JOB_AD", jobAd);
         specficJobFragment.setArguments(bundle);
         loadFragment(R.id.framelayout, specficJobFragment, getContext(), true);
     }
 
     @Override
     public void onEventItemClick(View view, int position) {
-        EventDetailFragment eventDetailFragment=new EventDetailFragment();
-        Bundle bundle=new Bundle();
-        bundle.putInt("id",posts.get(position).getId());
+        EventDetailFragment eventDetailFragment = new EventDetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", posts.get(position).getId());
         eventDetailFragment.setArguments(bundle);
-        loadFragment(R.id.framelayout,eventDetailFragment,getContext(),true);
+        loadFragment(R.id.framelayout, eventDetailFragment, getContext(), true);
     }
 
     @Override
     public void onEventLikeClick(View view, int position, TextView likeCount) {
         //showDialog();
-        Post post=posts.get(position);
-        User user=LoginUtils.getLoggedinUser();
+        Post post = posts.get(position);
+        User user = LoginUtils.getLoggedinUser();
         post.setEvent_id(post.getId());
         post.setCreated_by_id(user.getId());
-        if(post.getIs_event_like()==null ||post.getIs_event_like()<1)
-        {
+        if (post.getIs_event_like() == null || post.getIs_event_like() < 1) {
             post.setAction(AppConstants.LIKE);
-            if(post.getIs_event_like()==null)
-            {
+            if (post.getIs_event_like() == null) {
                 post.setIs_event_like(1);
-                if(post.getLike_count()==null)
+                if (post.getLike_count() == null)
                     post.setLike_count(0);
                 else
-                    post.setLike_count(post.getLike_count()+1);
-            }
-            else
-            {
-                post.setIs_event_like(post.getIs_event_like()+1);
-                if(post.getLike_count()==null)
+                    post.setLike_count(post.getLike_count() + 1);
+            } else {
+                post.setIs_event_like(post.getIs_event_like() + 1);
+                if (post.getLike_count() == null)
                     post.setLike_count(0);
                 else
-                    post.setLike_count(post.getLike_count()+1);
+                    post.setLike_count(post.getLike_count() + 1);
             }
-        }
-        else
-        {
+        } else {
             post.setAction(AppConstants.UNLIKE);
-            if(post.getIs_event_like()>0)
-            {
-                post.setIs_event_like(post.getIs_event_like()-1);
-                post.setLike_count(post.getLike_count()-1);
-            }
-            else
-            {
+            if (post.getIs_event_like() > 0) {
+                post.setIs_event_like(post.getIs_event_like() - 1);
+                post.setLike_count(post.getLike_count() - 1);
+            } else {
                 post.setIs_event_like(0);
                 post.setLike_count(0);
             }
 
         }
-       // Log.d("Listing status",post.getAction()+" count"+post.getIs_post_like());
-        if(NetworkUtils.isNetworkConnected(getContext())) {
-            likeEvent(post,position);
-        }
-        else
-        {
+        // Log.d("Listing status",post.getAction()+" count"+post.getIs_post_like());
+        if (NetworkUtils.isNetworkConnected(getContext())) {
+            likeEvent(post, position);
+        } else {
             networkErrorDialog();
         }
     }
 
     private void likeEvent(Post post, int position) {
-        Event event=new Event();
+        Event event = new Event();
         event.setEvent_id(post.getEvent_id());
         event.setCreated_by_id(LoginUtils.getLoggedinUser().getId());
         event.setAction(post.getAction());
@@ -514,38 +471,31 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         eventViewModel.likeEvent(event).observe(this, new Observer<BaseModel<List<Event>>>() {
             @Override
             public void onChanged(BaseModel<List<Event>> listBaseModel) {
-                if(listBaseModel!=null && !listBaseModel.isError())
-                {
+                if (listBaseModel != null && !listBaseModel.isError()) {
                     homePostsAdapter.notifyItemChanged(position);
-                }
-                else
-                {
-                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
                 hideDialog();
             }
         });
     }
 
-    private void callConnectApi(TextView text,int position) {
-        if(text.getText().toString().equalsIgnoreCase(getString(R.string.connect)))
-        {
+    private void callConnectApi(TextView text, int position) {
+        if (text.getText().toString().equalsIgnoreCase(getString(R.string.connect))) {
             showDialog();
-            User user=LoginUtils.getLoggedinUser();
-            Connection connection=new Connection();
+            User user = LoginUtils.getLoggedinUser();
+            Connection connection = new Connection();
             connection.setReceiver_id(posts.get(position).getUser().getId());
             connection.setSender_id(user.getId());
             connection.setStatus(AppConstants.STATUS_PENDING);
             connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
                 @Override
                 public void onChanged(BaseModel<List<Connection>> listBaseModel) {
-                    if(listBaseModel!=null && !listBaseModel.isError())
-                    {
+                    if (listBaseModel != null && !listBaseModel.isError()) {
                         text.setText("Request Sent");
-                    }
-                    else
-                    {
-                        networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                    } else {
+                        networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                     }
                     hideDialog();
                 }
@@ -558,12 +508,10 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         itemCount = 0;
         currentPage = PAGE_START;
         isLastPage = false;
-         homePostsAdapter.clear();
-        if(NetworkUtils.isNetworkConnected(getContext())) {
+        homePostsAdapter.clear();
+        if (NetworkUtils.isNetworkConnected(getContext())) {
             callPostsApi();
-        }
-        else
-        {
+        } else {
             networkErrorDialog();
         }
     }
