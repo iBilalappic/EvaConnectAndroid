@@ -272,6 +272,8 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
                     simpleDialog.setCancelable(false);
                 }
             });
+        }else{
+            Toast.makeText(getActivity(), "connection not exsist", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -306,6 +308,8 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
                     simpleDialog.setCancelable(false);
                 }
             });
+        }else{
+            Toast.makeText(getActivity(), "connection not exsist", Toast.LENGTH_SHORT).show();
         }
 
     }

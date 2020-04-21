@@ -10,6 +10,7 @@ import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.hypernym.evaconnect.BuildConfig;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.utils.GsonUtils;
@@ -68,14 +69,26 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
         switch (v.getId()) {
 
             case R.id.whatsapp:
-                Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
-                whatsappIntent.setType("text/plain");
-                whatsappIntent.setPackage("com.whatsapp");
-                whatsappIntent.putExtra(Intent.EXTRA_TEXT, "The text you wanted to share");
+//                Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
+////                whatsappIntent.setType("text/plain");
+////                whatsappIntent.setPackage("com.whatsapp");
+////                whatsappIntent.putExtra(Intent.EXTRA_TEXT, "The text you wanted to share");
+////                try {
+////                    getContext().startActivity(whatsappIntent);
+////                } catch (android.content.ActivityNotFoundException ex) {
+////                    Toast.makeText(context, "Whatsapp have not been installed.", Toast.LENGTH_SHORT).show();
+////                }
+
                 try {
-                    getContext().startActivity(whatsappIntent);
-                } catch (android.content.ActivityNotFoundException ex) {
-                    Toast.makeText(context, "Whatsapp have not been installed.", Toast.LENGTH_SHORT).show();
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("text/plain");
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "My application name");
+                    String shareMessage= "\nLet me recommend you this application\n\n";
+                    shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID +"\n\n";
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+                    getContext().startActivity(Intent.createChooser(shareIntent, "choose one"));
+                } catch(Exception e) {
+                    //e.toString();
                 }
                 break;
             case R.id.email:
