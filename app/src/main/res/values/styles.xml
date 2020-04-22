@@ -175,11 +175,11 @@
     </style>
     <style name="EditText.LineBlackRed">
          <item name="android:layout_height">1dp</item>
-        <item name="android:background">@drawable/line_blackred</item>
+        <item name="android:background">@drawable/ic_line_blue_red</item>
     </style>
     <style name="EditText.LineRedBlack">
         <item name="android:layout_height">1dp</item>
-        <item name="android:background">@drawable/line_redblack</item>
+        <item name="android:background">@drawable/ic_line_red_blue</item>
     </style>
     <style name="FloatingButton" parent="Widget.Design.FloatingActionButton">
         <item name="android:textSize">14sp</item>
