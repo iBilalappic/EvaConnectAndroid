@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -37,6 +38,7 @@ import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
+import com.hypernym.evaconnect.view.bottomsheets.BottomSheetPictureSelection;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
@@ -53,6 +55,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -82,6 +85,11 @@ public class SignupActivity_2 extends BaseActivity implements Validator.Validati
     @NotEmpty
     @BindView(R.id.btn_finish)
     Button btn_finish;
+
+    @BindView(R.id.img_profile)
+    CircleImageView img_profile;
+
+
     private Validator validator;
     SimpleDialog simpleDialog;
 
@@ -127,8 +135,8 @@ public class SignupActivity_2 extends BaseActivity implements Validator.Validati
             user.setWork_aviation(aviation_type);
             user.setFirst_name(username);
             user.setSector(JobSector);
-//            Glide.with(this).load(photourl).into(img_profile);
-//            img_profile.setEnabled(false);
+            Glide.with(this).load(photourl).into(img_profile);
+            img_profile.setEnabled(false);
         } else {
             email = getIntent().getStringExtra("Email");
             password = getIntent().getStringExtra("Password");
@@ -154,6 +162,17 @@ public class SignupActivity_2 extends BaseActivity implements Validator.Validati
                 validator.validate();
 
 
+            }
+        });
+        img_profile.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                if (Checkpermission()) {
+                    BottomSheetPictureSelection bottomSheetPictureSelection = new BottomSheetPictureSelection(new YourDialogFragmentDismissHandler());
+                    bottomSheetPictureSelection.show(getSupportFragmentManager(), bottomSheetPictureSelection.getTag());
+                } else {
+                    requestpermission();
+                }
             }
         });
 
@@ -338,7 +357,7 @@ public class SignupActivity_2 extends BaseActivity implements Validator.Validati
                             RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file_name);
                             partImage = MultipartBody.Part.createFormData("user_image", file_name.getName(), reqFile);
                             if (!TextUtils.isEmpty(currentPhotoPath) || currentPhotoPath != null) {
-                                //  Glide.with(this).load(currentPhotoPath).into(img_profile);
+                                  Glide.with(this).load(currentPhotoPath).into(img_profile);
 
                             } else {
                                 networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
@@ -369,9 +388,9 @@ public class SignupActivity_2 extends BaseActivity implements Validator.Validati
                 }
                 if (!TextUtils.isEmpty(globalImagePath) || globalImagePath != null) {
 
-//                    Glide.with(this).load(loadFromFile(globalImagePath))
-//                            .apply(new RequestOptions())
-//                            .into(img_profile);
+                    Glide.with(this).load(loadFromFile(globalImagePath))
+                            .apply(new RequestOptions())
+                            .into(img_profile);
 
                     Bitmap orignal = loadFromFile(globalImagePath);
                     File filenew = new File(globalImagePath);
@@ -485,5 +504,6 @@ public class SignupActivity_2 extends BaseActivity implements Validator.Validati
                 break;
         }
     }
+
 
 }
