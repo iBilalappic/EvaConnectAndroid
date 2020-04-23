@@ -712,8 +712,13 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     } else {
                         ((TextTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like));
                     }
+                    if (posts.get(position).getUser().getIs_linkedin() == 1) {
+                        AppUtils.setGlideImage(mContext, ((TextTypeViewHolder) holder).profile_image, posts.get(position).getUser().getLinkedin_image_url());
 
-                    AppUtils.setGlideImage(mContext, ((TextTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
+                    } else {
+                        AppUtils.setGlideImage(mContext, ((TextTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
+                    }
+
                     ((TextTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
 
                     ((TextTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getUser().getTotal_connection()));
@@ -749,7 +754,13 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         ((ImageTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like));
                     }
 
-                    AppUtils.setGlideImage(mContext, ((ImageTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
+                    if (posts.get(position).getUser().getIs_linkedin() == 1) {
+                        AppUtils.setGlideImage(mContext, ((ImageTypeViewHolder) holder).profile_image, posts.get(position).getUser().getLinkedin_image_url());
+
+                    } else {
+                        AppUtils.setGlideImage(mContext, ((ImageTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
+                    }
+
                     ((ImageTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
                     ((ImageTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getUser().getTotal_connection()));
 
@@ -834,7 +845,12 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         ((VideoTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like));
                     }
 
-                    AppUtils.setGlideImage(mContext, ((VideoTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
+                    if (posts.get(position).getUser().getIs_linkedin() == 1) {
+                        AppUtils.setGlideImage(mContext, ((VideoTypeViewHolder) holder).profile_image, posts.get(position).getUser().getLinkedin_image_url());
+
+                    } else {
+                        AppUtils.setGlideImage(mContext, ((VideoTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
+                    }
                     ((VideoTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
                     ((VideoTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getUser().getTotal_connection()));
 
@@ -876,8 +892,12 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     } else {
                         ((LinkTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like));
                     }
+                    if (posts.get(position).getUser().getIs_linkedin() == 1) {
+                        AppUtils.setGlideImage(mContext, ((LinkTypeViewHolder) holder).profile_image, posts.get(position).getUser().getLinkedin_image_url());
 
-                    AppUtils.setGlideImage(mContext, ((LinkTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
+                    } else {
+                        AppUtils.setGlideImage(mContext, ((LinkTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
+                    }
                     ((LinkTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
                     ((LinkTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getUser().getTotal_connection()));
 

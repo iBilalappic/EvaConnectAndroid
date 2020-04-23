@@ -9,12 +9,12 @@
     android:padding="10dp">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="30dp"
-        android:src="@drawable/logo" />
+        android:src="@drawable/share" />
 
     <LinearLayout
         android:id="@+id/layoutconnection"
@@ -24,9 +24,9 @@
         android:padding="10dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/like_selected" />
+            android:layout_width="25dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_new_app_logo" />
 
         <TextView
             style="@style/TextStyle.Black"
@@ -51,12 +51,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:padding="10dp">
+        android:paddingStart="5dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/calendar" />
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_mail" />
 
         <TextView
             style="@style/TextStyle.Black"
@@ -83,9 +86,9 @@
         android:padding="10dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/job_listing" />
+            android:layout_width="25dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_whatsapp" />
 
         <TextView
             style="@style/TextStyle.Black"
@@ -113,10 +116,9 @@
         android:padding="10dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|end"
-            android:src="@drawable/edit_profile" />
+            android:layout_width="25dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_tweet" />
 
         <TextView
             style="@style/TextStyle.Black"
@@ -144,10 +146,9 @@
         android:padding="10dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|end"
-            android:src="@drawable/settings" />
+            android:layout_width="25dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_sms" />
 
         <TextView
             style="@style/TextStyle.Black"
@@ -176,14 +177,13 @@
         android:visibility="visible">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|end"
-            android:src="@drawable/settings" />
+            android:layout_width="23dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_link" />
 
         <TextView
             style="@style/TextStyle.Black"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_weight="1"

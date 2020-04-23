@@ -31,6 +31,7 @@ import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
+import com.hypernym.evaconnect.view.adapters.HomePostsAdapter;
 import com.hypernym.evaconnect.view.dialogs.Remove_block_dialog;
 import com.hypernym.evaconnect.view.dialogs.ShareDialog;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
@@ -68,7 +69,7 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
     LinearLayout unfollow, block;
     Application context;
     CircleImageView profile_image_dialog;
-    TextView tv_profilename,connection_stauts;
+    TextView tv_profilename, connection_stauts;
     ImageView img_close;
 
     private ConnectionViewModel connectionViewModel;
@@ -105,7 +106,11 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
         if ((getArguments() != null)) {
             showBackButton();
             post = (Post) getArguments().getSerializable("PostData");
-            AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getUser_image());
+            if (post.getUser().getIs_linkedin() == 1) {
+                AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getLinkedin_image_url());
+            } else {
+                AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getUser_image());
+            }
             tv_name.setText(post.getUser().getFirst_name());
 
             if (post.getUser().getId().equals(user.getId())) {
@@ -218,7 +223,11 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
         unfollow = Remove_block_Dialog.findViewById(R.id.unfollow);
         block = Remove_block_Dialog.findViewById(R.id.block);
         tv_profilename.setText(post.getUser().getFirst_name());
-        AppUtils.setGlideImage(getContext(),profile_image_dialog, post.getUser().getUser_image());
+        if (post.getUser().getIs_linkedin() == 1) {
+            AppUtils.setGlideImage(getContext(), profile_image_dialog, post.getUser().getLinkedin_image_url());
+        } else {
+            AppUtils.setGlideImage(getContext(), profile_image_dialog, post.getUser().getUser_image());
+        }
         connection_stauts.setText(AppUtils.getConnectionStatus(getContext(), post.getIs_connected(), post.isIs_receiver()));
         img_close.setOnClickListener(this);
         unfollow.setOnClickListener(this);
@@ -274,7 +283,7 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
                     simpleDialog.setCancelable(false);
                 }
             });
-        }else{
+        } else {
             Toast.makeText(getActivity(), "connection not exsist", Toast.LENGTH_SHORT).show();
         }
 
@@ -310,7 +319,7 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
                     simpleDialog.setCancelable(false);
                 }
             });
-        }else{
+        } else {
             Toast.makeText(getActivity(), "connection not exsist", Toast.LENGTH_SHORT).show();
         }
 

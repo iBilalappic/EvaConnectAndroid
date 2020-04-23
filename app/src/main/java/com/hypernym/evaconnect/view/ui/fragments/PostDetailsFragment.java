@@ -126,7 +126,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     private SliderImageAdapter sliderImageAdapter;
     private List<Comment> comments = new ArrayList<>();
     private PostViewModel postViewModel;
-      Post post=new Post();
+    Post post = new Post();
     int post_id;
     private Validator validator;
     private ConnectionViewModel connectionViewModel;
@@ -167,7 +167,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
             @Override
             public void onChanged(BaseModel<List<Post>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError()) {
-                    post=listBaseModel.getData().get(0);
+                    post = listBaseModel.getData().get(0);
                     settingpostType();
                     setPostData(listBaseModel.getData().get(0));
                     initRecyclerView();
@@ -181,28 +181,18 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     }
 
     private void settingpostType() {
-        if(post.getContent()==null)
-        {
+        if (post.getContent() == null) {
             post.setContent("");
         }
-        if(post.getType().equalsIgnoreCase("post") && post.getPost_image().size()>0)
-        {
+        if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() > 0) {
             post.setPost_type(AppConstants.IMAGE_TYPE);
-        }
-        else if(post.getType().equalsIgnoreCase("post") && post.getPost_video()!=null)
-        {
+        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_video() != null) {
             post.setPost_type(AppConstants.VIDEO_TYPE);
-        }
-        else if(post.getType().equalsIgnoreCase("post") && post.getPost_image().size()==0  && AppUtils.containsURL(post.getContent()).size()==0)
-        {
+        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() == 0 && AppUtils.containsURL(post.getContent()).size() == 0) {
             post.setPost_type(AppConstants.TEXT_TYPE);
-        }
-        else if(post.getType().equalsIgnoreCase("event"))
-        {
+        } else if (post.getType().equalsIgnoreCase("event")) {
             post.setPost_type(AppConstants.EVENT_TYPE);
-        }
-        else if(post.getType().equalsIgnoreCase("post") && AppUtils.containsURL(post.getContent()).size()>0)
-        {
+        } else if (post.getType().equalsIgnoreCase("post") && AppUtils.containsURL(post.getContent()).size() > 0) {
             post.setPost_type(AppConstants.LINK_POST);
         }
     }
@@ -230,9 +220,19 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
             tv_connect.setVisibility(View.VISIBLE);
             tv_connect.setText(AppUtils.getConnectionStatus(getContext(), post.getIs_connected(), post.isIs_receiver()));
         }
+        if (post.getUser().getIs_linkedin() == 1) {
+            AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getLinkedin_image_url());
 
-        AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getUser_image());
-        AppUtils.setGlideImage(getContext(), img_user, user.getUser_image());
+        } else {
+            AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getUser_image());
+        }
+        if (LoginUtils.getUser().getIs_linkedin() == 1) {
+            AppUtils.setGlideImage(getContext(), img_user, user.getLinkedin_image_url());
+        } else {
+            AppUtils.setGlideImage(getContext(), img_user, user.getUser_image());
+        }
+
+
         if (post.getIs_post_like() != null && post.getIs_post_like() > 0) {
             img_like.setBackground(getContext().getDrawable(R.mipmap.ic_like_selected));
         } else {
@@ -275,7 +275,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
             public void onChanged(BaseModel<List<Comment>> listBaseModel) {
                 if (!listBaseModel.isError()) {
 
-                   // Toast.makeText(getContext(), getString(R.string.msg_comment_created), Toast.LENGTH_LONG).show();
+                    // Toast.makeText(getContext(), getString(R.string.msg_comment_created), Toast.LENGTH_LONG).show();
                     edt_comment.setText("");
                     //networkResponseDialog(getString(R.string.success),getString(R.string.msg_comment_created));
                     getComments();
@@ -308,7 +308,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     }
 
     private void initializeSlider(Post post) {
-        sliderImageAdapter = new SliderImageAdapter(getContext(), post.getPost_image(),slider_images_detail);
+        sliderImageAdapter = new SliderImageAdapter(getContext(), post.getPost_image(), slider_images_detail);
         slider_images_detail.setSliderAdapter(sliderImageAdapter);
         slider_images_detail.setIndicatorAnimation(IndicatorAnimations.WORM); //set indicator animation by using SliderLayout.IndicatorAnimations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
         slider_images_detail.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
@@ -400,7 +400,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     @OnClick(R.id.img_video)
     public void playVideo() {
 
-       AppUtils.playVideo(getContext(), post.getPost_video());
+        AppUtils.playVideo(getContext(), post.getPost_video());
     }
 
     @OnClick(R.id.tv_goback)
