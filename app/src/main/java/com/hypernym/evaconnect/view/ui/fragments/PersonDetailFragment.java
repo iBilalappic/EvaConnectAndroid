@@ -68,7 +68,7 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
     LinearLayout unfollow, block;
     Application context;
     CircleImageView profile_image_dialog;
-    TextView tv_profilename;
+    TextView tv_profilename,connection_stauts;
     ImageView img_close;
 
     private ConnectionViewModel connectionViewModel;
@@ -214,10 +214,12 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
         profile_image_dialog = Remove_block_Dialog.findViewById(R.id.profile_image);
         img_close = Remove_block_Dialog.findViewById(R.id.img_close);
         tv_profilename = Remove_block_Dialog.findViewById(R.id.tv_profilename);
+        connection_stauts = Remove_block_Dialog.findViewById(R.id.tv_connect);
         unfollow = Remove_block_Dialog.findViewById(R.id.unfollow);
         block = Remove_block_Dialog.findViewById(R.id.block);
         tv_profilename.setText(post.getUser().getFirst_name());
         AppUtils.setGlideImage(getContext(),profile_image_dialog, post.getUser().getUser_image());
+        connection_stauts.setText(AppUtils.getConnectionStatus(getContext(), post.getIs_connected(), post.isIs_receiver()));
         img_close.setOnClickListener(this);
         unfollow.setOnClickListener(this);
         block.setOnClickListener(this);

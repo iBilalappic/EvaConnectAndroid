@@ -203,6 +203,11 @@ public class EditProfileFragment extends BaseFragment implements TextInputEditTe
             @Override
             public void onChanged(BaseModel<List<User>> listBaseModel) {
                 if (listBaseModel.getData() != null && !listBaseModel.isError()) {
+                    if (listBaseModel.getData().get(0).getIs_linkedin() == 1) {
+                        AppUtils.setGlideImage(getContext(), cv_profile_image, user.getLinkedin_image_url());
+                    } else {
+                        AppUtils.setGlideImage(getContext(), cv_profile_image, user.getUser_image());
+                    }
                     tv_biodata.setText(listBaseModel.getData().get(0).getBio_data());
                     tv_designation.setText(listBaseModel.getData().get(0).getDesignation());
                     tv_field.setText(listBaseModel.getData().get(0).getAddress());

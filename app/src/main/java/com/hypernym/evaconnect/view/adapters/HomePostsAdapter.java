@@ -209,13 +209,13 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             img_share.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                   // mClickListener.onShareClick(v, getAdapterPosition());
+                    // mClickListener.onShareClick(v, getAdapterPosition());
                 }
             });
             tv_comcount.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                  //  mClickListener.onItemClick(v, getAdapterPosition());
+                    //  mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
 
@@ -683,6 +683,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         }
 
     }
+
     Post getItem(int position) {
         if (posts.size() > 0)
             return posts.get(position);
@@ -696,7 +697,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         if (object != null && object.getType() != null) {
             switch (object.getPost_type()) {
                 case AppConstants.TEXT_TYPE:
-                    if(String.valueOf(posts.get(position).getComment_count()).equals("0")){
+                    if (String.valueOf(posts.get(position).getComment_count()).equals("0")) {
                         ((TextTypeViewHolder) holder).tv_viewcomments.setVisibility(View.GONE);
                     }
                     ((TextTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
@@ -724,7 +725,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
                     break;
                 case AppConstants.IMAGE_TYPE:
-                    if(String.valueOf(posts.get(position).getComment_count()).equals("0")){
+                    if (String.valueOf(posts.get(position).getComment_count()).equals("0")) {
                         ((ImageTypeViewHolder) holder).tv_viewcomments.setVisibility(View.GONE);
                     }
                     if (posts.get(position).getPost_image().size() > 1) {
@@ -759,7 +760,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     }
                     break;
                 case AppConstants.EVENT_TYPE:
-                    if(String.valueOf(posts.get(position).getComment_count()).equals("0")){
+                    if (String.valueOf(posts.get(position).getComment_count()).equals("0")) {
                         ((EventTypeViewHolder) holder).tv_viewcomments.setVisibility(View.GONE);
                     }
                     ((EventTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
@@ -770,12 +771,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     } else {
                         ((EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like));
                     }
-                    if(posts.get(position).getEvent_image().size()>0)
-                    {
+                    if (posts.get(position).getEvent_image().size() > 0) {
                         AppUtils.setGlideVideoThumbnail(mContext, ((EventTypeViewHolder) holder).profile_image, posts.get(position).getEvent_image().get(0));
-                    }
-                    else
-                    {
+                    } else {
                         ((EventTypeViewHolder) holder).profile_image.setBackground(mContext.getDrawable(R.drawable.no_thumbnail));
                     }
 
@@ -783,18 +781,15 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     ((EventTypeViewHolder) holder).tv_location.setText(posts.get(position).getEvent_city());
                     ((EventTypeViewHolder) holder).tv_eventdate.setText(DateUtils.getFormattedDateDMY(posts.get(position).getEvent_start_date()));
 
-                    if(position==0)
-                    {
+                    if (position == 0) {
                         ((EventTypeViewHolder) holder).top_image.setVisibility(View.GONE);
-                    }
-                    else
-                    {
+                    } else {
                         ((EventTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
 
                     break;
                 case AppConstants.JOB_TYPE:
-                    if(String.valueOf(posts.get(position).getComment_count()).equals("0")){
+                    if (String.valueOf(posts.get(position).getComment_count()).equals("0")) {
                         ((JobTypeViewHolder) holder).tv_viewcomments.setVisibility(View.GONE);
                     }
                     ((JobTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
@@ -825,7 +820,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
                     break;
                 case AppConstants.VIDEO_TYPE:
-                    if(String.valueOf(posts.get(position).getComment_count()).equals("0")){
+                    if (String.valueOf(posts.get(position).getComment_count()).equals("0")) {
                         ((VideoTypeViewHolder) holder).tv_viewcomments.setVisibility(View.GONE);
                     }
                     ((VideoTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
@@ -851,7 +846,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     AppUtils.setGlideVideoThumbnail(mContext, ((VideoTypeViewHolder) holder).img_video, posts.get(position).getPost_video());
                     break;
                 case AppConstants.LINK_POST:
-                    if(String.valueOf(posts.get(position).getComment_count()).equals("0")){
+                    if (String.valueOf(posts.get(position).getComment_count()).equals("0")) {
                         ((LinkTypeViewHolder) holder).tv_viewcomments.setVisibility(View.GONE);
                     }
                     //  ((LinkTypeViewHolder) holder).img_link.setBackground(null);
@@ -923,9 +918,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
         void onApplyClick(View view, int position);
 
-        void onEventItemClick(View view,int position);
+        void onEventItemClick(View view, int position);
 
-        void onEventLikeClick(View view,int position ,TextView likeCount);
+        void onEventLikeClick(View view, int position, TextView likeCount);
 
     }
 
