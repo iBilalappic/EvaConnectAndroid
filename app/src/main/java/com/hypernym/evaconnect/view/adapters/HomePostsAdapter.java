@@ -1,7 +1,9 @@
 package com.hypernym.evaconnect.view.adapters;
 
 import android.content.Context;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -18,6 +20,7 @@ import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.bumptech.glide.request.RequestOptions;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
+import com.hypernym.evaconnect.listeners.OnDoubleTapClickListner;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.utils.AppUtils;
@@ -51,6 +54,8 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
     // flag for footer ProgressBar (i.e. last item of list)
     private boolean isLoadingAdded = false;
     private boolean isLoaderVisible = false;
+    GestureDetector gestureDetector;
+
 
     public class TextTypeViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_viewcomments)
@@ -416,6 +421,17 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     mClickListener.onProfileClick(v, getAdapterPosition());
                 }
             });
+            post_image.setOnClickListener(new OnDoubleTapClickListner() {
+                @Override
+                public void onSingleClick(View v) {
+                }
+
+                @Override
+                public void onDoubleClick(View v) {
+                    mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
+                }
+            });
+
         }
 
 

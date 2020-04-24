@@ -26,7 +26,6 @@
                                                 <entry key="color" value="000000" />
                                                 <entry key="opacityPercent" value="80" />
                                                 <entry key="paddingPercent" value="15" />
-                                                <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -37,7 +36,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/D:/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_more_horiz_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/D:/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_thumb_up_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -59,9 +58,9 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="ic_option" />
+                                      <entry key="outputName" value="ic_thumbs_up" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="918e8e" />
+                                      <entry key="themeColor" value="838181" />
                                     </map>
                                   </option>
                                 </PersistentState>
