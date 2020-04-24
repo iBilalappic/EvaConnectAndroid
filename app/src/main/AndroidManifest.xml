@@ -30,7 +30,31 @@
 
         </activity>
         <activity android:name=".view.ui.activities.SharePostActivity" />
-        <activity android:name=".view.ui.activities.HomeActivity" />
+        <activity android:name=".view.ui.activities.HomeActivity">
+
+            <intent-filter >
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "http://www.example.com/gizmos” -->
+                <data
+                    android:host="www.example.com"
+                    android:pathPrefix="/gizmos"
+                    android:scheme="http" />
+                <!-- note that the leading "/" is required for pathPrefix-->
+            </intent-filter>
+            <intent-filter >
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "example://gizmos” -->
+                <data
+                    android:host="gizmos"
+                    android:scheme="example" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".view.ui.activities.ForgotPassword"
             android:theme="@style/AppTheme.FullScreen" />

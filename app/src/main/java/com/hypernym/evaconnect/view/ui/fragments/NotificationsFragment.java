@@ -163,9 +163,9 @@ public class NotificationsFragment extends BaseFragment implements Notifications
         if (notifications.get(position).getObject_type().equals("job")) {
             SpecficJobFragment specficJobFragment = new SpecficJobFragment();
             Bundle bundle = new Bundle();
-            JobAd jobAd = new JobAd();
-            jobAd.setId(notifications.get(position).getObject_id());
-            bundle.putSerializable("JOB_AD", jobAd);
+//            JobAd jobAd = new JobAd();
+//            jobAd.setId(notifications.get(position).getObject_id());
+            bundle.putInt("job_id", notifications.get(position).getObject_id());
             specficJobFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, specficJobFragment, getContext(), true);
         }else if (notifications.get(position).getObject_type().equals("post")) {

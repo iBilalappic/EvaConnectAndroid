@@ -155,9 +155,9 @@ public class MyLikesFragment extends BaseFragment implements MyLikeAdapter.OnIte
        if (myLikesModelList.get(position).getObjectType().equals("job")) {
             SpecficJobFragment specficJobFragment = new SpecficJobFragment();
             Bundle bundle = new Bundle();
-            JobAd jobAd = new JobAd();
-            jobAd.setId(myLikesModelList.get(position).getObjectId());
-            bundle.putSerializable("JOB_AD", jobAd);
+//            JobAd jobAd = new JobAd();
+//            jobAd.setId(myLikesModelList.get(position).getObjectId());
+            bundle.putInt("job_id", myLikesModelList.get(position).getObjectId());
             specficJobFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, specficJobFragment, getContext(), true);
         } else if (myLikesModelList.get(position).getObjectType().equals("post")) {

@@ -169,7 +169,7 @@ public class JobListingFragment extends BaseFragment implements View.OnClickList
             case R.id.tv_gotoadd:
                 SpecficJobFragment specficJobFragment = new SpecficJobFragment();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("JOB_AD", jobAdList.get(position));
+                bundle.putInt("job_id", jobAdList.get(position).getId());;
                 specficJobFragment.setArguments(bundle);
                 loadFragment(R.id.framelayout, specficJobFragment, getContext(), true);
 //                Toast.makeText(getContext(), "goto" + position, Toast.LENGTH_SHORT).show();

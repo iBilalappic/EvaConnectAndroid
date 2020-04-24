@@ -209,7 +209,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             img_share.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    // mClickListener.onShareClick(v, getAdapterPosition());
+                     mClickListener.onShareClick(v, getAdapterPosition());
                 }
             });
             tv_comcount.setOnClickListener(new OnOneOffClickListener() {
@@ -285,7 +285,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             img_share.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    // mClickListener.onShareClick(v, getAdapterPosition());
+                     mClickListener.onShareClick(v, getAdapterPosition());
                 }
             });
             tv_comcount.setOnClickListener(new OnOneOffClickListener() {

@@ -391,23 +391,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     public void onApplyClick(View view, int position) {
         SpecficJobFragment specficJobFragment = new SpecficJobFragment();
         Bundle bundle = new Bundle();
-        JobAd jobAd = new JobAd();
-        jobAd.setCommentCount(posts.get(position).getComment_count());
-        jobAd.setContent(posts.get(position).getContent());
-        jobAd.setCreatedById(posts.get(position).getCreated_by_id());
-        jobAd.setCreatedDatetime(posts.get(position).getCreated_datetime());
-        jobAd.setId(posts.get(position).getId());
-        jobAd.setIs_applied(posts.get(position).getIs_applied());
-        jobAd.setJobImage(posts.get(position).getJob_image());
-        jobAd.setJobNature(posts.get(position).getJob_nature());
-        jobAd.setJobSector(posts.get(position).getJob_nature());
-        jobAd.setJobTitle(posts.get(position).getJob_title());
-        jobAd.setLocation(posts.get(position).getLocation());
-        jobAd.setLikeCount(posts.get(position).getLike_count());
-        jobAd.setPosition(posts.get(position).getPosition());
-        jobAd.setSalary(posts.get(position).getSalary());
-        jobAd.setWeeklyHours(posts.get(position).getWeekly_hours());
-        bundle.putSerializable("JOB_AD", jobAd);
+        bundle.putInt("job_id", posts.get(position).getId());
         specficJobFragment.setArguments(bundle);
         loadFragment(R.id.framelayout, specficJobFragment, getContext(), true);
     }

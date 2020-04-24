@@ -112,7 +112,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
         if ((getArguments() != null)) {
             setPageTitle("");
             showBackButton();
-            jobAd = (JobAd) getArguments().getSerializable("JOB_AD");
+          //  jobAd = (JobAd) getArguments().getSerializable("JOB_AD");
             job_id = getArguments().getInt("job_id");
             if (job_id != 0) {
                 GetJob_id(job_id);
@@ -133,6 +133,8 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
             @Override
             public void onChanged(BaseModel<List<SpecficJobAd>> getjobAd) {
                 if (getjobAd != null && !getjobAd.isError()) {
+                    settingData(getjobAd.getData().get(0));
+
                     checkLikeCount = getjobAd.getData().get(0);
                     AppUtils.setGlideImage(getContext(), profile_image, getjobAd.getData().get(0).getJobImage());
                     tv_name.setText(getjobAd.getData().get(0).getJobTitle());
@@ -155,6 +157,24 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
                 hideDialog();
             }
         });
+    }
+
+    private void settingData(SpecficJobAd specficJobAd) {
+        jobAd = new JobAd();
+        jobAd.setCommentCount(specficJobAd.getCommentCount());
+        jobAd.setContent(specficJobAd.getContent());
+        jobAd.setCreatedById(specficJobAd.getCreatedById());
+        jobAd.setCreatedDatetime(specficJobAd.getCreatedDatetime());
+        jobAd.setId(specficJobAd.getId());
+        jobAd.setIs_applied(specficJobAd.getIsApplied());
+        jobAd.setJobImage(specficJobAd.getJobImage());
+        jobAd.setJobNature(specficJobAd.getJobNature());
+        jobAd.setJobTitle(specficJobAd.getJobTitle());
+        jobAd.setLocation(specficJobAd.getLocation());
+        jobAd.setLikeCount(specficJobAd.getLikeCount());
+        jobAd.setPosition(specficJobAd.getPosition());
+        jobAd.setSalary(specficJobAd.getSalary());
+        jobAd.setWeeklyHours(specficJobAd.getWeeklyHours());
     }
 
     @Override
