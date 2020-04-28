@@ -127,8 +127,8 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
             if (data != null) {
                 url = data.toString();
                 String[] separated = url.split("/");
-                String type = separated[4];
-                int id = Integer.parseInt(separated[5]);
+                String type = separated[3];
+                int id = Integer.parseInt(separated[4]);
                 Log.d("TAAG", "" + id);
                 if (type != null && type.equals("event")) {
 
@@ -145,11 +145,10 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
                     postDetailsFragment.setArguments(bundle);
                     loadFragment(R.id.framelayout, postDetailsFragment, this, true);
 
-                }
-                else if (type != null && type.equals("job")) {
+                } else if (type != null && type.equals("job")) {
                     SpecficJobFragment specficJobFragment = new SpecficJobFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putInt("job_id",id);
+                    bundle.putInt("job_id", id);
                     specficJobFragment.setArguments(bundle);
                     loadFragment(R.id.framelayout, specficJobFragment, this, true);
 

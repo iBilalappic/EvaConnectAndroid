@@ -89,10 +89,10 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
                 whatsappIntent.setType("text/plain");
                 whatsappIntent.setPackage("com.whatsapp");
                 if (jobAd != null) {
-                    whatsappIntent.putExtra(Intent.EXTRA_TEXT, "http://www.example.com/gizmos/" + "job" + "/" + jobAd.getId());
+                    whatsappIntent.putExtra(Intent.EXTRA_TEXT, "https://www.evaintmedia.com/" + "job" + "/" + jobAd.getId());
 
                 } else {
-                    whatsappIntent.putExtra(Intent.EXTRA_TEXT, "http://www.example.com/gizmos/" + post.getType() + "/" + post.getId());
+                    whatsappIntent.putExtra(Intent.EXTRA_TEXT, "https://www.evaintmedia.com/" + post.getType() + "/" + post.getId());
                 }
                 try {
                     getContext().startActivity(whatsappIntent);
@@ -105,13 +105,12 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
                 Intent gmail = new Intent(Intent.ACTION_SEND);
                 gmail.putExtra(Intent.EXTRA_SUBJECT, post.getType());
                 if (jobAd != null) {
-                    gmail.putExtra(Intent.EXTRA_TEXT, "http://www.example.com/gizmos/" + "job" + "/" + jobAd.getId());
+                    gmail.putExtra(Intent.EXTRA_TEXT, "https://www.evaintmedia.com/" + "job" + "/" + jobAd.getId());
 
                 } else {
-                    gmail.putExtra(Intent.EXTRA_TEXT, "http://www.example.com/gizmos/" + post.getType() + "/" + post.getId());
+                    gmail.putExtra(Intent.EXTRA_TEXT, "https://www.evaintmedia.com/" + post.getType() + "/" + post.getId());
 
                 }
-                gmail.putExtra(Intent.EXTRA_TEXT, "http://www.example.com/gizmos/" + post.getType() + "/" + post.getId());
                 gmail.setType("message/rfc822");
                 gmail.setPackage("com.google.android.gm");
                 getContext().startActivity(gmail);
@@ -121,11 +120,9 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
                 Intent smsIntent = new Intent(android.content.Intent.ACTION_VIEW);
                 smsIntent.setType("vnd.android-dir/mms-sms");
                 if (jobAd != null) {
-                    smsIntent.putExtra("sms_body", "http://www.example.com/gizmos/" + "job" + "/" + jobAd.getId());
-
+                    smsIntent.putExtra("sms_body", "https://www.evaintmedia.com/" + "job" + "/" + jobAd.getId());
                 } else {
-                    smsIntent.putExtra("sms_body", "http://www.example.com/gizmos/" + post.getType() + "/" + post.getId());
-
+                    smsIntent.putExtra("sms_body", "https://www.evaintmedia.com/" + post.getType() + "/" + post.getId());
                 }
                 getContext().startActivity(smsIntent);
                 break;
@@ -138,10 +135,10 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
                     intent.setClassName("com.twitter.android", "com.twitter.android.composer.ComposerActivity");
                     intent.setType("text/plain");
                     if (jobAd != null) {
-                        intent.putExtra(Intent.EXTRA_TEXT, "http://www.example.com/gizmos/" + "job" + "/" + jobAd.getId());
+                        intent.putExtra(Intent.EXTRA_TEXT, "https://www.evaintmedia.com/" + "job" + "/" + jobAd.getId());
 
                     } else {
-                        intent.putExtra(Intent.EXTRA_TEXT, "http://www.example.com/gizmos/" + post.getType() + "/" + post.getId());
+                        intent.putExtra(Intent.EXTRA_TEXT, "https://www.evaintmedia.com/" + post.getType() + "/" + post.getId());
 
                     }
                     getContext().startActivity(intent);
@@ -162,10 +159,10 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
                 ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(CLIPBOARD_SERVICE);
                 ClipData clip;
                 if (jobAd != null) {
-                     clip = ClipData.newPlainText("label", "http://www.example.com/gizmos/" + "job" + "/" + jobAd.getId());
+                    clip = ClipData.newPlainText("label", "https://www.evaintmedia.com/" + "job" + "/" + jobAd.getId());
 
                 } else {
-                     clip = ClipData.newPlainText("label", "http://www.example.com/gizmos/" + post.getType() + "/" + post.getId());
+                    clip = ClipData.newPlainText("label", "https://www.evaintmedia.com/" + post.getType() + "/" + post.getId());
                 }
                 clipboard.setPrimaryClip(clip);
                 Toast.makeText(context, "link copied", Toast.LENGTH_SHORT).show();
