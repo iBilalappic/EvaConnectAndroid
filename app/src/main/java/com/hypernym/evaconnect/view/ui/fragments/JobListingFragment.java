@@ -27,6 +27,7 @@ import com.hypernym.evaconnect.view.adapters.CompanyJobAdAdapter;
 import com.hypernym.evaconnect.view.adapters.JobAdAdapter;
 import com.hypernym.evaconnect.view.adapters.MyLikeAdapter;
 import com.hypernym.evaconnect.view.adapters.NotificationsAdapter;
+import com.hypernym.evaconnect.view.dialogs.ShareDialog;
 import com.hypernym.evaconnect.viewmodel.CreateJobAdViewModel;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
 import com.hypernym.evaconnect.viewmodel.JobListViewModel;
@@ -188,6 +189,14 @@ public class JobListingFragment extends BaseFragment implements View.OnClickList
                 bundle_0.putSerializable("COMPANY_AD", companyJobAdModelList.get(position));
                 companyApplicantFragment.setArguments(bundle_0);
                 loadFragment(R.id.framelayout, companyApplicantFragment, getContext(), true);
+                break;
+            case R.id.img_share:
+                ShareDialog shareDialog;
+                Bundle bundle_share = new Bundle();
+                bundle_share.putSerializable("JobData",jobAdList.get(position));
+                shareDialog = new ShareDialog(getContext(),bundle_share);
+                shareDialog.show();
+//                Toast.makeText(getContext(), "goto" + position, Toast.LENGTH_SHORT).show();
                 break;
         }
     }

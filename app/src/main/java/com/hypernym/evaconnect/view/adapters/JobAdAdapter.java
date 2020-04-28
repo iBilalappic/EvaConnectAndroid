@@ -80,6 +80,7 @@ public class JobAdAdapter extends RecyclerView.Adapter<JobAdAdapter.ViewHolder> 
             img_share = itemView.findViewById(R.id.img_share);
             itemView.setOnClickListener(this);
             img_like.setOnClickListener(this);
+            img_share.setOnClickListener(this);
             tv_gotoadd.setOnClickListener(this);
         }
 
@@ -91,6 +92,9 @@ public class JobAdAdapter extends RecyclerView.Adapter<JobAdAdapter.ViewHolder> 
                     onItemClickListener.onItemClick(v, getAdapterPosition());
                     break;
                 case R.id.tv_gotoadd:
+                    onItemClickListener.onItemClick(v, getAdapterPosition());
+                    break;
+                case R.id.img_share:
                     onItemClickListener.onItemClick(v, getAdapterPosition());
                     break;
             }

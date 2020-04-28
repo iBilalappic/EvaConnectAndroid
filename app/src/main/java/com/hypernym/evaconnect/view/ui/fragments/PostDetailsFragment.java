@@ -38,6 +38,7 @@ import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.CommentsAdapter;
 import com.hypernym.evaconnect.view.adapters.HomePostsAdapter;
 import com.hypernym.evaconnect.view.adapters.SliderImageAdapter;
+import com.hypernym.evaconnect.view.dialogs.ShareDialog;
 import com.hypernym.evaconnect.view.dialogs.VideoViewDialog;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
@@ -104,6 +105,11 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     @BindView(R.id.img_like)
     ImageView img_like;
 
+    @BindView(R.id.img_share)
+    ImageView img_share;
+
+
+
     @BindView(R.id.profile_image)
     ImageView profile_image;
 
@@ -157,6 +163,16 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
             @Override
             public void onSingleClick(View v) {
                 validator.validate();
+            }
+        });
+        img_share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShareDialog shareDialog;
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("PostData",post);
+                shareDialog = new ShareDialog(getContext(),bundle);
+                shareDialog.show();
             }
         });
         return view;

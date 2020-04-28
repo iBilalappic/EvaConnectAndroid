@@ -15,8 +15,12 @@ import android.widget.Toast;
 
 import com.hypernym.evaconnect.BuildConfig;
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.utils.GsonUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 
@@ -27,6 +31,7 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
     private Context context;
     private Bundle bundle;
     Post post = new Post();
+    JobAd jobAd = new JobAd();
 
     public ShareDialog(Context context, Bundle bundle) {
         super(context);
@@ -69,6 +74,8 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
     }
 
     private void init() {
+        jobAd = (JobAd) bundle.getSerializable("JobData");
+
         post = (Post) bundle.getSerializable("PostData");
         Log.d("TAAAG", "" + GsonUtils.toJson(post));
     }
@@ -81,7 +88,12 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
                 Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
                 whatsappIntent.setType("text/plain");
                 whatsappIntent.setPackage("com.whatsapp");
-                whatsappIntent.putExtra(Intent.EXTRA_TEXT, "http://www.example.com/gizmos/" + post.getType() + "/" + post.getId());
+                if (jobAd != null) {
+                    whatsappIntent.putExtra(Intent.EXTRA_TEXT, "http://www.example.com/gizmos/" + "job" + "/" + jobAd.getId());
+
+                } else {
+                    whatsappIntent.putExtra(Intent.EXTRA_TEXT, "http://www.example.com/gizmos/" + post.getType() + "/" + post.getId());
+                }
                 try {
                     getContext().startActivity(whatsappIntent);
                 } catch (android.content.ActivityNotFoundException ex) {
@@ -92,6 +104,13 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
 
                 Intent gmail = new Intent(Intent.ACTION_SEND);
                 gmail.putExtra(Intent.EXTRA_SUBJECT, post.getType());
+                if (jobAd != null) {
+                    gmail.putExtra(Intent.EXTRA_TEXT, "http://www.example.com/gizmos/" + "job" + "/" + jobAd.getId());
+
+                } else {
+                    gmail.putExtra(Intent.EXTRA_TEXT, "http://www.example.com/gizmos/" + post.getType() + "/" + post.getId());
+
+                }
                 gmail.putExtra(Intent.EXTRA_TEXT, "http://www.example.com/gizmos/" + post.getType() + "/" + post.getId());
                 gmail.setType("message/rfc822");
                 gmail.setPackage("com.google.android.gm");
@@ -101,7 +120,13 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
             case R.id.sms:
                 Intent smsIntent = new Intent(android.content.Intent.ACTION_VIEW);
                 smsIntent.setType("vnd.android-dir/mms-sms");
-                smsIntent.putExtra("sms_body","http://www.example.com/gizmos/" + post.getType() + "/" + post.getId());
+                if (jobAd != null) {
+                    smsIntent.putExtra("sms_body", "http://www.example.com/gizmos/" + "job" + "/" + jobAd.getId());
+
+                } else {
+                    smsIntent.putExtra("sms_body", "http://www.example.com/gizmos/" + post.getType() + "/" + post.getId());
+
+                }
                 getContext().startActivity(smsIntent);
                 break;
 
@@ -112,7 +137,13 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
                     Intent intent = new Intent(Intent.ACTION_SEND);
                     intent.setClassName("com.twitter.android", "com.twitter.android.composer.ComposerActivity");
                     intent.setType("text/plain");
-                    intent.putExtra(Intent.EXTRA_TEXT, "http://www.example.com/gizmos/" + post.getType() + "/" + post.getId());
+                    if (jobAd != null) {
+                        intent.putExtra(Intent.EXTRA_TEXT, "http://www.example.com/gizmos/" + "job" + "/" + jobAd.getId());
+
+                    } else {
+                        intent.putExtra(Intent.EXTRA_TEXT, "http://www.example.com/gizmos/" + post.getType() + "/" + post.getId());
+
+                    }
                     getContext().startActivity(intent);
 
                 } catch (Exception e) {
@@ -129,7 +160,13 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
             case R.id.copylink:
 
                 ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("label", "http://www.example.com/gizmos/" + post.getType() + "/" + post.getId());
+                ClipData clip;
+                if (jobAd != null) {
+                     clip = ClipData.newPlainText("label", "http://www.example.com/gizmos/" + "job" + "/" + jobAd.getId());
+
+                } else {
+                     clip = ClipData.newPlainText("label", "http://www.example.com/gizmos/" + post.getType() + "/" + post.getId());
+                }
                 clipboard.setPrimaryClip(clip);
                 Toast.makeText(context, "link copied", Toast.LENGTH_SHORT).show();
                 break;
