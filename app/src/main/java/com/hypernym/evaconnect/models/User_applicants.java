@@ -59,6 +59,30 @@ public class User_applicants implements Serializable {
     @Expose
     private String status;
 
+    public String getLinkedin_image_url() {
+        return linkedin_image_url;
+    }
+
+    public void setLinkedin_image_url(String linkedin_image_url) {
+        this.linkedin_image_url = linkedin_image_url;
+    }
+
+    public Integer getIs_linkedin() {
+        return is_linkedin;
+    }
+
+    public void setIs_linkedin(Integer is_linkedin) {
+        this.is_linkedin = is_linkedin;
+    }
+
+    @SerializedName("linkedin_image_url")
+    @Expose
+    private String linkedin_image_url;
+
+    @SerializedName("is_linkedin")
+    @Expose
+    private Integer is_linkedin;
+
     public Integer getId() {
         return id;
     }
