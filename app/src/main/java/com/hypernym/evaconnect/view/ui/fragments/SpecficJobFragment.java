@@ -29,6 +29,7 @@ import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.MyLikeAdapter;
+import com.hypernym.evaconnect.view.dialogs.ShareDialog;
 import com.hypernym.evaconnect.viewmodel.JobListViewModel;
 import com.hypernym.evaconnect.viewmodel.MylikesViewModel;
 
@@ -86,7 +87,8 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
     ImageView img_share;
 
     int job_id;
-    private JobAd jobAd = new JobAd();
+    JobAd jobAd = new JobAd();
+    SpecficJobAd specficJobAd=new SpecficJobAd();
     private SpecficJobAd checkLikeCount = new SpecficJobAd();
     User user;
 
@@ -103,6 +105,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
         tv_apply.setOnClickListener(this);
         tv_goback.setOnClickListener(this);
         img_like.setOnClickListener(this);
+        img_share.setOnClickListener(this);
         return view;
     }
 
@@ -134,7 +137,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
             public void onChanged(BaseModel<List<SpecficJobAd>> getjobAd) {
                 if (getjobAd != null && !getjobAd.isError()) {
                     settingData(getjobAd.getData().get(0));
-
+                    specficJobAd=getjobAd.getData().get(0);
                     checkLikeCount = getjobAd.getData().get(0);
                     AppUtils.setGlideImage(getContext(), profile_image, getjobAd.getData().get(0).getJobImage());
                     tv_name.setText(getjobAd.getData().get(0).getJobTitle());
@@ -205,6 +208,13 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
                 } else {
                     SetJobLike(checkLikeCount.getId());
                 }
+                break;
+            case R.id.img_share:
+                ShareDialog shareDialog;
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("specficJob",specficJobAd);
+                shareDialog = new ShareDialog(getContext(),bundle);
+                shareDialog.show();
                 break;
         }
     }

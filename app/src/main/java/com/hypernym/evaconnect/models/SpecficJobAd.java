@@ -3,7 +3,9 @@ package com.hypernym.evaconnect.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class SpecficJobAd {
+import java.io.Serializable;
+
+public class SpecficJobAd implements Serializable {
 
     @SerializedName("id")
     @Expose

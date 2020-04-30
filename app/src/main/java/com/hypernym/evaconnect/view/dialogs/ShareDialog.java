@@ -17,6 +17,7 @@ import com.hypernym.evaconnect.BuildConfig;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.Post;
+import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.utils.GsonUtils;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
     private Bundle bundle;
     Post post = new Post();
     JobAd jobAd = new JobAd();
+    SpecficJobAd specficJobAd = new SpecficJobAd();
 
     public ShareDialog(Context context, Bundle bundle) {
         super(context);
@@ -77,6 +79,8 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
         jobAd = (JobAd) bundle.getSerializable("JobData");
 
         post = (Post) bundle.getSerializable("PostData");
+
+        specficJobAd = (SpecficJobAd) bundle.getSerializable("specficJob");
         Log.d("TAAAG", "" + GsonUtils.toJson(post));
     }
 
@@ -90,6 +94,9 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
                 whatsappIntent.setPackage("com.whatsapp");
                 if (jobAd != null) {
                     whatsappIntent.putExtra(Intent.EXTRA_TEXT, "https://www.evaintmedia.com/" + "job" + "/" + jobAd.getId());
+
+                } else if (specficJobAd != null) {
+                    whatsappIntent.putExtra(Intent.EXTRA_TEXT, "https://www.evaintmedia.com/" + "job" + "/" + specficJobAd.getId());
 
                 } else {
                     whatsappIntent.putExtra(Intent.EXTRA_TEXT, "https://www.evaintmedia.com/" + post.getType() + "/" + post.getId());
@@ -107,6 +114,9 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
                 if (jobAd != null) {
                     gmail.putExtra(Intent.EXTRA_TEXT, "https://www.evaintmedia.com/" + "job" + "/" + jobAd.getId());
 
+                } else if (specficJobAd != null) {
+                    gmail.putExtra(Intent.EXTRA_TEXT, "https://www.evaintmedia.com/" + "job" + "/" + specficJobAd.getId());
+
                 } else {
                     gmail.putExtra(Intent.EXTRA_TEXT, "https://www.evaintmedia.com/" + post.getType() + "/" + post.getId());
 
@@ -121,6 +131,9 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
                 smsIntent.setType("vnd.android-dir/mms-sms");
                 if (jobAd != null) {
                     smsIntent.putExtra("sms_body", "https://www.evaintmedia.com/" + "job" + "/" + jobAd.getId());
+                } else if (specficJobAd != null) {
+                    smsIntent.putExtra(Intent.EXTRA_TEXT, "https://www.evaintmedia.com/" + "job" + "/" + specficJobAd.getId());
+
                 } else {
                     smsIntent.putExtra("sms_body", "https://www.evaintmedia.com/" + post.getType() + "/" + post.getId());
                 }
@@ -136,6 +149,9 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
                     intent.setType("text/plain");
                     if (jobAd != null) {
                         intent.putExtra(Intent.EXTRA_TEXT, "https://www.evaintmedia.com/" + "job" + "/" + jobAd.getId());
+
+                    } else if (specficJobAd != null) {
+                        intent.putExtra(Intent.EXTRA_TEXT, "https://www.evaintmedia.com/" + "job" + "/" + specficJobAd.getId());
 
                     } else {
                         intent.putExtra(Intent.EXTRA_TEXT, "https://www.evaintmedia.com/" + post.getType() + "/" + post.getId());
@@ -160,6 +176,9 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
                 ClipData clip;
                 if (jobAd != null) {
                     clip = ClipData.newPlainText("label", "https://www.evaintmedia.com/" + "job" + "/" + jobAd.getId());
+
+                } else if (specficJobAd != null) {
+                    clip = ClipData.newPlainText("label", "https://www.evaintmedia.com/" + "job" + "/" + specficJobAd.getId());
 
                 } else {
                     clip = ClipData.newPlainText("label", "https://www.evaintmedia.com/" + post.getType() + "/" + post.getId());

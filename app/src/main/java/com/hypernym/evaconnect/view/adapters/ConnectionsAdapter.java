@@ -46,7 +46,11 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ConnectionsAdapter.ViewHolder holder, int position) {
-        AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getUser_image());
+        if (connections.get(position).getIs_linkedin() == 1) {
+            AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getLinkedin_image_url());
+        } else {
+            AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getUser_image());
+        }
         holder.tv_name.setText(connections.get(position).getFirst_name());
         if (connections.get(position).getBio_data() != null && !connections.get(position).getBio_data().isEmpty()) {
             holder.tv_designation.setText(connections.get(position).getBio_data());
@@ -57,7 +61,7 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
 
         //Hide connect option if post is from logged in user
         User user = LoginUtils.getLoggedinUser();
-        if (connections.get(position).getId() == user.getId()) {
+        if (connections.get(position).getId().equals(user.getId())) {
             holder.tv_connect.setVisibility(View.GONE);
         } else {
             holder.tv_connect.setVisibility(View.VISIBLE);
@@ -69,7 +73,7 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
             } else {
                 holder.tv_connect.setBackgroundResource(R.drawable.custom_button);
                 holder.tv_connect.setTextColor(context.getResources().getColor(R.color.white));
-               // holder.tv_connect.setBackgroundResource(R.drawable.rounded_button_nobackground);
+                // holder.tv_connect.setBackgroundResource(R.drawable.rounded_button_nobackground);
             }
         }
 
