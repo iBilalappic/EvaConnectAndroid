@@ -66,6 +66,18 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
     @BindView(R.id.img_options)
     ImageView img_options;
 
+    @BindView(R.id.tv_designation)
+    TextView tv_designation;
+
+    @BindView(R.id.tv_field)
+    TextView tv_field;
+
+    @BindView(R.id.tv_company)
+    TextView tv_company;
+
+    @BindView(R.id.tv_location)
+    TextView tv_location;
+
     LinearLayout unfollow, block;
     Application context;
     CircleImageView profile_image_dialog;
@@ -93,7 +105,6 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
         tv_openchat.setOnClickListener(this);
         img_options.setOnClickListener(this);
 
-
         init();
         return view;
     }
@@ -112,6 +123,32 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
                 AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getUser_image());
             }
             tv_name.setText(post.getUser().getFirst_name());
+            if (post.getUser().getDesignation() != null) {
+                tv_designation.setText(post.getUser().getDesignation());
+            } else {
+                tv_designation.setText("no designation");
+            }
+
+            if (post.getUser().getField() != null) {
+                tv_field.setText(post.getUser().getField());
+            } else {
+                tv_field.setText("no field");
+            }
+
+            if (post.getUser().getAddress() != null) {
+                tv_location.setText(post.getUser().getAddress());
+            } else {
+                tv_location.setText("no location");
+            }
+
+
+            if (post.getUser().getCompany_name() != null) {
+                tv_company.setText(post.getUser().getCompany_name());
+            } else {
+                tv_company.setText("no company ");
+            }
+
+
 
             if (post.getUser().getId().equals(user.getId())) {
                 tv_connect.setVisibility(View.GONE);
