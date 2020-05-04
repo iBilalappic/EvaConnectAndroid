@@ -115,19 +115,19 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
 
 
     private AttachmentsAdapter attachmentsAdapter;
-    private List<String> attachments=new ArrayList<>();
-    private List<MultipartBody.Part> part_images=new ArrayList<>();
-    private MultipartBody.Part video=null;
+    private List<String> attachments = new ArrayList<>();
+    private List<MultipartBody.Part> part_images = new ArrayList<>();
+    private MultipartBody.Part video = null;
     private static final int REQUEST_PHOTO_GALLERY = 4;
     private static final int CAMERAA = 1;
 
     private String GalleryImage, mCurrentPhotoPath, globalImagePath;
     private String mProfileImageDecodableString;
-    private File tempFile,file_name;
+    private File tempFile, file_name;
     private String currentPhotoPath = "";
     private String photoVar = null;
     private PostViewModel postViewModel;
-    private Post postModel=new Post();
+    private Post postModel = new Post();
     private Validator validator;
     private SimpleDialog simpleDialog;
     private ConnectionViewModel connectionViewModel;
@@ -141,31 +141,28 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_new_post, container, false);
-        ButterKnife.bind(this,view);
-        postViewModel= ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(PostViewModel.class);
-        connectionViewModel= ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
+        View view = inflater.inflate(R.layout.fragment_new_post, container, false);
+        ButterKnife.bind(this, view);
+        postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(PostViewModel.class);
+        connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
         init();
         initRecyclerView();
         browsefiles.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
-              openPictureDialog();
+                openPictureDialog();
             }
         });
 
         post.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
-                if(edt_content.getText().length()>0 || part_images.size()>0 || video!=null) {
-                   if(NetworkUtils.isNetworkConnected(getContext()))
-                   {
-                       createPost();
-                   }
-                   else
-                   {
-                       networkErrorDialog();
-                   }
+                if (edt_content.getText().length() > 0 || part_images.size() > 0 || video != null) {
+                    if (NetworkUtils.isNetworkConnected(getContext())) {
+                        createPost();
+                    } else {
+                        networkErrorDialog();
+                    }
                 }
 
             }
@@ -175,13 +172,20 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
     }
 
     private void init() {
-        User user=LoginUtils.getLoggedinUser();
-        AppUtils.setGlideImage(getContext(),profile_image,user.getUser_image());
+        User user = LoginUtils.getLoggedinUser();
+        AppUtils.setGlideImage(getContext(), profile_image, user.getUser_image());
+
+        if (user.getIs_linkedin() == 1) {
+            AppUtils.setGlideImage(getContext(), profile_image, user.getLinkedin_image_url());
+
+        } else {
+            AppUtils.setGlideImage(getContext(), profile_image, user.getUser_image());
+        }
         tv_name.setText(user.getFirst_name());
         getConnectionCount();
 
         showBackButton();
-        edt_content.addTextChangedListener(new URLTextWatcher(getActivity(),edt_content,urlEmbeddedView));
+        edt_content.addTextChangedListener(new URLTextWatcher(getActivity(), edt_content, urlEmbeddedView));
         edt_content.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -195,23 +199,20 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
 
             @Override
             public void afterTextChanged(Editable s) {
-               setPostButton();
+                setPostButton();
             }
         });
     }
 
     private void getConnectionCount() {
-        User user=LoginUtils.getLoggedinUser();
+        User user = LoginUtils.getLoggedinUser();
         connectionViewModel.getConnectionCount(user).observe(this, new Observer<BaseModel<User>>() {
             @Override
             public void onChanged(BaseModel<User> listBaseModel) {
-                if(listBaseModel!=null && !listBaseModel.isError())
-                {
+                if (listBaseModel != null && !listBaseModel.isError()) {
                     tv_connections.setText(AppUtils.getConnectionsCount(listBaseModel.getData().getTotal_connection()));
-                }
-                else
-                {
-                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
             }
         });
@@ -219,45 +220,40 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
 
 
     private void createPost() {
-            showDialog();
-            ArrayList<String> urlList=AppUtils.containsURL(edt_content.getText().toString());
-            if(urlList.size()>0)
-            {
-                postModel.setIs_url(true);
-            }
-            else
-            {
-                postModel.setIs_url(false);
-            }
-            postModel.setAttachments(part_images);
-            postModel.setContent(edt_content.getText().toString());
-            postModel.setVideo(video);
-            postViewModel.createPost(postModel).observe(this, new Observer<BaseModel<List<Post>>>() {
-                @Override
-                public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                    if(listBaseModel!=null && !listBaseModel.isError())
-                    {
-                        Toast.makeText(getContext(),getString(R.string.msg_post_created),Toast.LENGTH_LONG).show();
-                      // networkResponseDialog(getString(R.string.success),getString(R.string.msg_post_created));
-                        if (getFragmentManager().getBackStackEntryCount() != 0) {
-                            getFragmentManager().popBackStack();
-                        }
+        showDialog();
+        ArrayList<String> urlList = AppUtils.containsURL(edt_content.getText().toString());
+        if (urlList.size() > 0) {
+            postModel.setIs_url(true);
+        } else {
+            postModel.setIs_url(false);
+        }
+        postModel.setAttachments(part_images);
+        postModel.setContent(edt_content.getText().toString());
+        postModel.setVideo(video);
+        postViewModel.createPost(postModel).observe(this, new Observer<BaseModel<List<Post>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Post>> listBaseModel) {
+                if (listBaseModel != null && !listBaseModel.isError()) {
+                    Toast.makeText(getContext(), getString(R.string.msg_post_created), Toast.LENGTH_LONG).show();
+                    // networkResponseDialog(getString(R.string.success),getString(R.string.msg_post_created));
+                    if (getFragmentManager().getBackStackEntryCount() != 0) {
+                        getFragmentManager().popBackStack();
                     }
-                    else
-                    {
-                       networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
-                    }
-                    hideDialog();
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
-            });
+                hideDialog();
+            }
+        });
     }
 
     private void initRecyclerView() {
-        attachmentsAdapter=new AttachmentsAdapter(getContext(),attachments,this);
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
+        attachmentsAdapter = new AttachmentsAdapter(getContext(), attachments, this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         rc_attachments.setLayoutManager(linearLayoutManager);
         rc_attachments.setAdapter(attachmentsAdapter);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -272,7 +268,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                     tempFile = new File(GalleryImage);
                     Log.e(getClass().getName(), "file path details: " + tempFile.getName() + " " + tempFile.getAbsolutePath() + "length" + tempFile.length());
                     if (tempFile.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.FILE_SIZE_LIMIT_IN_KB) {
-                        networkResponseDialog(getString(R.string.error),getString(R.string.err_image_size_large));
+                        networkResponseDialog(getString(R.string.error), getString(R.string.err_image_size_large));
                         return;
                     } else {
                         if (photoVar == null) {
@@ -281,18 +277,16 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                             file_name = new File(ImageFilePathUtil.getPath(getActivity(), SelectedImageUri));
                             RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file_name);
 
-                           // partImage = MultipartBody.Part.createFormData("user_image", file_name.getName(), reqFile);
+                            // partImage = MultipartBody.Part.createFormData("user_image", file_name.getName(), reqFile);
 
                             if (!TextUtils.isEmpty(currentPhotoPath) || currentPhotoPath != null) {
                                 if (currentPhotoPath.toString().endsWith(".mp4")) {
                                     img_video.setVisibility(View.VISIBLE);
                                     img_play.setVisibility(View.VISIBLE);
-                                    AppUtils.setGlideVideoThumbnail(getContext(),img_video,currentPhotoPath);
-                                    video=MultipartBody.Part.createFormData("post_video", file_name.getName(), reqFile);
+                                    AppUtils.setGlideVideoThumbnail(getContext(), img_video, currentPhotoPath);
+                                    video = MultipartBody.Part.createFormData("post_video", file_name.getName(), reqFile);
                                     setPostButton();
-                                }
-                                else
-                                {
+                                } else {
                                     attachments.add(currentPhotoPath);
                                     attachmentsAdapter.notifyDataSetChanged();
                                     rc_attachments.setVisibility(View.VISIBLE);
@@ -303,10 +297,10 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                                 }
 
                             } else {
-                                networkResponseDialog(getString(R.string.error),getString(R.string.err_internal_supported));
+                                networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
                             }
                         } else {
-                            networkResponseDialog(getString(R.string.error),getString(R.string.err_one_file_at_a_time));
+                            networkResponseDialog(getString(R.string.error), getString(R.string.err_one_file_at_a_time));
                             return;
                         }
                     }
@@ -340,12 +334,12 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
             if (requestCode == CAMERAA && resultCode == RESULT_OK) {
 
                 //mIsProfileImageAdded = true;
-                File file=galleryAddPic();
+                File file = galleryAddPic();
                 RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
                 // imgName = file_name.getName();
                 globalImagePath = file.getAbsolutePath();
                 if (file.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.IMAGE_SIZE_IN_KB) {
-                    networkResponseDialog(getString(R.string.error),getString(R.string.err_image_size_large));
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_image_size_large));
                     //   AppUtils.showSnackBar(getView(), getString(R.string.err_image_size_large, AppConstants.IMAGE_SIZE_IN_KB));
                     return;
                 }
@@ -364,12 +358,10 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                     if (globalImagePath.toString().endsWith(".mp4")) {
                         img_video.setVisibility(View.VISIBLE);
                         img_play.setVisibility(View.VISIBLE);
-                        AppUtils.setGlideVideoThumbnail(getContext(),img_video,globalImagePath);
-                        video=MultipartBody.Part.createFormData("post_video", file_name.getName(), reqFile);
+                        AppUtils.setGlideVideoThumbnail(getContext(), img_video, globalImagePath);
+                        video = MultipartBody.Part.createFormData("post_video", file_name.getName(), reqFile);
                         setPostButton();
-                    }
-                    else
-                    {
+                    } else {
 
                         attachments.add(globalImagePath);
                         attachmentsAdapter.notifyDataSetChanged();
@@ -387,46 +379,39 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
 
 
     @OnClick(R.id.img_video)
-    public void playVideo()
-    {
-        AppUtils.playVideo(getActivity(),currentPhotoPath);
+    public void playVideo() {
+        AppUtils.playVideo(getActivity(), currentPhotoPath);
     }
 
     @Override
     public void onItemClick(View view, int position) {
-        simpleDialog=new SimpleDialog(getContext(), getString(R.string.confirmation), getString(R.string.msg_remove_attachment), getString(R.string.button_no), getString(R.string.button_yes), new OnOneOffClickListener() {
-                @Override
-                public void onSingleClick(View v) {
-                    switch (v.getId())
-                    {
-                        case R.id.button_positive:
-                            attachments.remove(position);
-                            attachmentsAdapter.notifyDataSetChanged();
-                            part_images.remove(position);
-                            setPostButton();
-                            break;
-                        case R.id.button_negative:
-                            break;
-                    }
-
-                    simpleDialog.dismiss();
+        simpleDialog = new SimpleDialog(getContext(), getString(R.string.confirmation), getString(R.string.msg_remove_attachment), getString(R.string.button_no), getString(R.string.button_yes), new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                switch (v.getId()) {
+                    case R.id.button_positive:
+                        attachments.remove(position);
+                        attachmentsAdapter.notifyDataSetChanged();
+                        part_images.remove(position);
+                        setPostButton();
+                        break;
+                    case R.id.button_negative:
+                        break;
                 }
-            });
-                simpleDialog.show();
+
+                simpleDialog.dismiss();
+            }
+        });
+        simpleDialog.show();
     }
 
-    public void setPostButton()
-    {
-       if(edt_content.getText().length()>0 || part_images.size()>0 || video!=null)
-       {
-           post.setBackground(getResources().getDrawable(R.drawable.rounded_button));
-       }
-       else
-       {
-           post.setBackground(getResources().getDrawable(R.drawable.button_unfocused));
-       }
+    public void setPostButton() {
+        if (edt_content.getText().length() > 0 || part_images.size() > 0 || video != null) {
+            post.setBackground(getResources().getDrawable(R.drawable.rounded_button));
+        } else {
+            post.setBackground(getResources().getDrawable(R.drawable.button_unfocused));
+        }
     }
-
 
 
 }
