@@ -10,25 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="50dp"
-            android:src="@drawable/ic_new_logo"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:text="Sign Up"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
 
         <TextView
@@ -36,17 +17,19 @@
             style="@style/TextStyle.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="120dp"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold"
             android:text="Company you are work for"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <EditText
             android:id="@+id/edt_companyname"
             style="@style/EditText"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_marginStart="56dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="40dp"
@@ -57,9 +40,8 @@
             android:hint="e.g easyJet"
             android:maxLength="100"
             android:paddingLeft="10dp"
-            android:textColor="@color/black"
-            android:textColorHint="@color/black"
-            android:textStyle="bold"
+            android:textColor="@color/gray_1"
+            android:textColorHint="@color/gray_1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
@@ -67,7 +49,7 @@
         <ImageView
             android:id="@+id/img_view0"
             style="@style/EditText.LineBlackRed"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_marginStart="56dp"
             android:layout_marginLeft="16dp"
             android:layout_marginEnd="56dp"
@@ -84,6 +66,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
             android:text="Job Title"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/img_view0" />
@@ -92,20 +76,16 @@
         <EditText
             android:id="@+id/edt_jobtitle"
             style="@style/EditText"
-            android:layout_width="match_parent"
-            android:layout_marginStart="56dp"
-            android:layout_marginLeft="16dp"
+            android:layout_width="250dp"
             android:layout_marginTop="40dp"
-            android:layout_marginEnd="56dp"
             android:layout_marginRight="16dp"
             android:backgroundTint="@color/colorwhite"
             android:gravity="center"
             android:hint="e.g Ground Handler"
             android:maxLength="100"
             android:paddingLeft="10dp"
-            android:textColor="@color/black"
-            android:textColorHint="@color/black"
-            android:textStyle="bold"
+            android:textColor="@color/gray_1"
+            android:textColorHint="@color/gray_1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
@@ -113,7 +93,7 @@
         <ImageView
             android:id="@+id/img_view1"
             style="@style/EditText.LineRedBlack"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_marginStart="56dp"
             android:layout_marginLeft="16dp"
             android:layout_marginEnd="56dp"
@@ -130,6 +110,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
             android:text="Tell us a bit about you"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/img_view1" />
@@ -160,21 +142,23 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/img_profile"
-            android:layout_width="110dp"
-            android:layout_height="wrap_content"
+            android:layout_width="111dp"
+            android:layout_height="111dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/attach"
+            android:background="@drawable/ic_user_profile"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layout0"
-            app:srcCompat="@drawable/attach" />
+            app:srcCompat="@drawable/ic_user_profile" />
 
         <TextView
             android:id="@+id/textView6"
-            style="@style/TextStyle.Title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            style="@style/Button.border_unselected_white"
+            android:layout_width="152dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="18dp"
+            android:gravity="center"
+            android:textColor="#3C3F5C"
             android:text="@string/upload_an_image_of_you"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -184,7 +168,7 @@
         <Button
             android:id="@+id/btn_finish"
             style="@style/Button.border_selected_red"
-            android:layout_width="150dp"
+            android:layout_width="250dp"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="24dp"
             android:text="Finish"
