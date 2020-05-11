@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -72,7 +73,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     EditText edt_password;
 
     @BindView(R.id.rootview)
-    ScrollView rootview;
+    FrameLayout rootview;
 
 
     private Validator validator;
