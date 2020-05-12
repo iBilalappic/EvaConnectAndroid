@@ -5,8 +5,8 @@
     android:id="@+id/linearLayout2"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clipToPadding="false"
-    android:background="@color/page_bg">
+    android:background="@color/page_bg"
+    android:clipToPadding="false">
 
     <View
         android:id="@+id/view6"
@@ -24,10 +24,9 @@
         android:layout_marginTop="1dp"
         android:background="@color/colorwhite"
         app:layout_constraintBottom_toBottomOf="@+id/view"
-        app:layout_constraintTop_toBottomOf="@+id/view6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/view6" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
@@ -75,61 +74,16 @@
         android:drawablePadding="5dp"
         android:gravity="center_vertical"
         android:text="(33m ago)"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_createddateTime"
-        style="@style/TextStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:text="12:04pm | 12 jan"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_minago" />
-
-
-    <ImageView
-        android:id="@+id/img_like"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:background="@mipmap/ic_like"
-        android:elevation="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/cardView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView" />
-
-    <ImageView
-        android:id="@+id/img_comment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@mipmap/ic_comment"
-        android:elevation="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/cardView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView"
-        app:layout_constraintVertical_bias="0.354" />
-
-    <ImageView
-        android:id="@+id/img_share"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:background="@mipmap/ic_share"
-        android:elevation="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/cardView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
     <View
         android:id="@+id/view"
         android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:background="@color/colorwhite"
+        android:layout_height="15dp"
+        android:background="@color/lighter_gray"
         android:elevation="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -146,6 +100,7 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:text="@string/view_comments"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -157,8 +112,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        app:cardElevation="4dp"
-        app:cardPreventCornerOverlap="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_content">
@@ -170,29 +123,32 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-<ImageView
-    android:id="@+id/post_image"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/gray"
-    android:visibility="gone"
-    android:adjustViewBounds="true"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintBottom_toTopOf="@id/view2"/>
+
+            <ImageView
+                android:id="@+id/post_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:background="@color/gray"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@id/view2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <com.smarteist.autoimageslider.SliderView
                 android:id="@+id/slider_images"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
+                android:adjustViewBounds="true"
                 android:background="@color/gray"
+                android:scaleType="fitXY"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@id/view2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:sliderAnimationDuration="600"
-                android:scaleType="fitXY"
-                android:visibility="gone"
-                android:adjustViewBounds="true"
                 app:sliderAutoCycleDirection="back_and_forth"
                 app:sliderAutoCycleEnabled="true"
                 app:sliderCircularHandlerEnabled="true"
@@ -205,14 +161,12 @@
                 app:sliderIndicatorSelectedColor="@color/btn_border"
                 app:sliderIndicatorUnselectedColor="@color/colorwhite"
                 app:sliderScrollTimeInSec="1"
-                app:layout_constraintBottom_toTopOf="@id/view2"
                 app:sliderStartAutoCycle="true" />
 
             <View
                 android:id="@+id/view2"
                 android:layout_width="0dp"
                 android:layout_height="35dp"
-                android:background="@color/lighter_gray"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -227,6 +181,8 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="50dp"
                 android:text="58"
+                android:textStyle="bold"
+                android:textColor="@color/blue_1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/slider_images" />
@@ -240,6 +196,8 @@
                 android:layout_marginBottom="50dp"
                 android:paddingLeft="5dp"
                 android:text="@string/likes"
+                android:textStyle="bold"
+                android:textColor="@color/blue_1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tv_likecount"
                 app:layout_constraintTop_toBottomOf="@+id/slider_images" />
@@ -250,8 +208,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="50dp"
-                android:paddingLeft="10dp"
-                android:text="|"
+                android:text="@string/amp"
+                android:textStyle="bold"
+                android:layout_marginStart="@dimen/spacing_small"
+                android:textColor="@color/blue_1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView10"
                 app:layout_constraintTop_toBottomOf="@+id/slider_images" />
@@ -261,11 +221,12 @@
                 style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginStart="@dimen/spacing_small"
                 android:layout_marginBottom="50dp"
-                android:paddingLeft="10dp"
                 android:text="03"
+                android:textStyle="bold"
+                android:textColor="@color/blue_1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView11"
                 app:layout_constraintTop_toBottomOf="@+id/slider_images" />
@@ -279,12 +240,145 @@
                 android:layout_marginBottom="50dp"
                 android:paddingLeft="5dp"
                 android:text="@string/comments"
+                android:textStyle="bold"
+                android:textColor="@color/blue_1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tv_comcount"
                 app:layout_constraintTop_toBottomOf="@+id/slider_images" />
 
 
+            <TextView
+                android:id="@+id/tv_createddateTime"
+                style="@style/TextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="50dp"
+                android:text="12:04pm | 12 jan"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/slider_images" />
+
+
+            <View
+                android:id="@+id/view4"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/gray_1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+
+                android:layout_marginTop="@dimen/spacing_medium"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view4"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Like"
+                        android:textColor="@color/gray_1" />
+
+                    <ImageView
+                        android:id="@+id/img_like"
+                        android:layout_width="13dp"
+                        android:layout_height="13dp"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="@dimen/spacing_medium"
+                        android:layout_weight="0"
+                        android:background="@drawable/ic_like" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/spacing_medium"
+                        android:text="|"
+                        android:textColor="@color/gray_1" />
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.2">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Comment"
+                        android:textColor="@color/gray_1" />
+
+                    <ImageView
+                        android:id="@+id/img_comment"
+                        android:layout_width="13dp"
+                        android:layout_height="13dp"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="@dimen/spacing_medium"
+                        android:layout_weight="0"
+                        android:background="@drawable/ic_comment" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/spacing_medium"
+                        android:text="|"
+                        android:textColor="@color/gray_1" />
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="16dp"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Share"
+                        android:textColor="@color/gray_1" />
+
+                    <ImageView
+                        android:id="@+id/img_share"
+                        android:layout_width="13dp"
+                        android:layout_height="13dp"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="@dimen/spacing_medium"
+                        android:layout_weight="0"
+                        android:background="@drawable/ic_share" />
+
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     </androidx.cardview.widget.CardView>
 
 
@@ -293,11 +387,11 @@
         style="@style/TextStyle.Title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:maxLines="3"
-        android:ellipsize="end"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="12dp"
+        android:ellipsize="end"
+        android:maxLines="3"
         android:text="“Things you’d never hear in a ticket office” … Let’s play a game of mock the week, or the LinkedIn version of Mock the Week. I’ll Start: https://lnkd.in… see more"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

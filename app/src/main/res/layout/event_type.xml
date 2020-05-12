@@ -61,71 +61,31 @@
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
-    <TextView
-        android:id="@+id/tv_eventdate"
-        style="@style/TextStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="23 Aug 19"
-        app:layout_constraintStart_toEndOf="@+id/profile_image"
-        app:layout_constraintTop_toBottomOf="@+id/tv_location" />
+
 
 
     <TextView
-        style="@style/TextStyle.Title"
+        style="@style/Button_selected_light_blue"
         android:id="@+id/tv_attending"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/rounded_button_border"
         android:paddingLeft="15dp"
         android:paddingTop="5dp"
         android:paddingRight="15dp"
         android:paddingBottom="5dp"
         android:text="@string/attending"
-        android:textColor="@color/darker_gray"
+
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/img_like"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:elevation="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/view3"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view3"
-        android:background="@mipmap/ic_like" />
-
-    <ImageView
-        android:id="@+id/img_comment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:elevation="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/view3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view3"
-        app:srcCompat="@mipmap/ic_comment" />
-
-    <ImageView
-        android:id="@+id/img_share"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:elevation="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/view3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view3"
-        app:srcCompat="@mipmap/ic_share" />
 
     <View
         android:id="@+id/view"
         android:layout_width="0dp"
-        android:layout_height="30dp"
+        android:layout_height="0dp"
         android:background="@color/colorwhite"
         android:elevation="2dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -149,7 +109,6 @@
             android:layout_width="0dp"
             android:layout_height="30dp"
             android:layout_marginTop="8dp"
-            android:background="@color/lighter_gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -163,7 +122,8 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:text="58"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textStyle="bold"
+            android:textColor="@color/blue_1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -175,7 +135,8 @@
             android:layout_marginTop="8dp"
             android:paddingLeft="5dp"
             android:text="@string/likes"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textStyle="bold"
+            android:textColor="@color/blue_1"
             app:layout_constraintStart_toEndOf="@+id/tv_likecount"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -184,9 +145,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:paddingLeft="10dp"
-            android:text="|"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="@string/amp"
+            android:textStyle="bold"
+            android:layout_marginStart="@dimen/spacing_medium"
+            android:textColor="@color/blue_1"
             app:layout_constraintStart_toEndOf="@+id/textView10"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -194,12 +156,12 @@
             android:id="@+id/tv_comcount"
             style="@style/TextStyle"
             android:layout_width="wrap_content"
+            android:layout_marginStart="@dimen/spacing_medium"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:paddingLeft="10dp"
             android:text="03"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textStyle="bold"
+            android:textColor="@color/blue_1"
             app:layout_constraintStart_toEndOf="@+id/textView11"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -211,18 +173,142 @@
             android:layout_marginTop="8dp"
             android:paddingLeft="5dp"
             android:text="@string/comments"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textStyle="bold"
+            android:textColor="@color/blue_1"
             app:layout_constraintStart_toEndOf="@+id/tv_comcount"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/tv_eventdate"
+            style="@style/TextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            android:text="23 Aug 19"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
+        <View
+            android:id="@+id/view4"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/gray_1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="@dimen/spacing_medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view4"
+            android:baselineAligned="false">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/spacing_medium"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Like"
+                    android:textColor="@color/gray_1" />
+
+                <ImageView
+                    android:id="@+id/img_like"
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:layout_weight="0"
+                    android:background="@drawable/ic_like" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:text="|"
+                    android:textColor="@color/gray_1" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.2">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Comment"
+                    android:textColor="@color/gray_1" />
+
+                <ImageView
+                    android:id="@+id/img_comment"
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:layout_weight="0"
+                    android:background="@drawable/ic_comment" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:text="|"
+                    android:textColor="@color/gray_1" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Share"
+                    android:textColor="@color/gray_1" />
+
+                <ImageView
+                    android:id="@+id/img_share"
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:layout_weight="0"
+                    android:background="@drawable/ic_like" />
+
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
         android:id="@+id/view1"
         android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:background="@color/colorwhite"
+        android:layout_height="15dp"
+        android:background="@color/lighter_gray"
         android:elevation="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -235,12 +321,14 @@
         android:layout_height="30dp"
         android:background="@drawable/rounded_button_whitebg"
         android:elevation="1dp"
+        android:visibility="gone"
         android:gravity="center"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:text="@string/view_comments"
         app:layout_constraintBottom_toBottomOf="@+id/view1"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view1" />
 

@@ -106,6 +106,7 @@
     <string name="block_user">Block User</string>
     <string name="remove_user">Remove User</string>
     <string name="no_data">No Data</string>
+    <string name="amp"><![CDATA[&]]></string>
 
 
 </resources>

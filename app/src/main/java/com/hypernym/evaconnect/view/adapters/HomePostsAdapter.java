@@ -724,9 +724,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     AppUtils.makeTextViewResizable(((TextTypeViewHolder) holder).tv_content, 3, posts.get(position).getContent());
                     ((TextTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
                     if (posts.get(position).getIs_post_like() != null && posts.get(position).getIs_post_like() > 0) {
-                        ((TextTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like_selected));
+                        ((TextTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     } else {
-                        ((TextTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like));
+                        ((TextTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }
                     if (posts.get(position).getUser().getIs_linkedin() == 1) {
                         AppUtils.setGlideImage(mContext, ((TextTypeViewHolder) holder).profile_image, posts.get(position).getUser().getLinkedin_image_url());
@@ -765,9 +765,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     AppUtils.makeTextViewResizable(((ImageTypeViewHolder) holder).tv_content, 3, posts.get(position).getContent());
                     ((ImageTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
                     if (posts.get(position).getIs_post_like() != null && posts.get(position).getIs_post_like() > 0) {
-                        ((ImageTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like_selected));
+                        ((ImageTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     } else {
-                        ((ImageTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like));
+                        ((ImageTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }
 
                     if (posts.get(position).getUser().getIs_linkedin() == 1) {
@@ -794,9 +794,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     ((EventTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
 
                     if (posts.get(position).getIs_event_like() != null && posts.get(position).getIs_event_like() > 0) {
-                        ((EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like_selected));
+                        ((EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     } else {
-                        ((EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like));
+                        ((EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }
                     if (posts.get(position).getEvent_image().size() > 0) {
                         AppUtils.setGlideVideoThumbnail(mContext, ((EventTypeViewHolder) holder).profile_image, posts.get(position).getEvent_image().get(0));
@@ -823,9 +823,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     ((JobTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
 
                     if (posts.get(position).getIs_job_like() != null && posts.get(position).getIs_job_like() > 0) {
-                        ((JobTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like_selected));
+                        ((JobTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     } else {
-                        ((JobTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like));
+                        ((JobTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }
 
                     AppUtils.setGlideImage(mContext, ((JobTypeViewHolder) holder).profile_image, posts.get(position).getJob_image());
@@ -856,9 +856,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     AppUtils.makeTextViewResizable(((VideoTypeViewHolder) holder).tv_content, 3, posts.get(position).getContent());
                     ((VideoTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
                     if (posts.get(position).getIs_post_like() != null && posts.get(position).getIs_post_like() > 0) {
-                        ((VideoTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like_selected));
+                        ((VideoTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     } else {
-                        ((VideoTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like));
+                        ((VideoTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }
 
                     if (posts.get(position).getUser().getIs_linkedin() == 1) {
@@ -904,9 +904,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     // ((LinkTypeViewHolder) holder).tv_content.setText(posts.get(position).getContent());
                     ((LinkTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
                     if (posts.get(position).getIs_post_like() != null && posts.get(position).getIs_post_like() > 0) {
-                        ((LinkTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like_selected));
+                        ((LinkTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     } else {
-                        ((LinkTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like));
+                        ((LinkTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }
                     if (posts.get(position).getUser().getIs_linkedin() == 1) {
                         AppUtils.setGlideImage(mContext, ((LinkTypeViewHolder) holder).profile_image, posts.get(position).getUser().getLinkedin_image_url());
