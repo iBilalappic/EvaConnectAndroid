@@ -2,6 +2,7 @@ package com.hypernym.evaconnect.view.ui.activities;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -43,6 +45,7 @@ import com.hypernym.evaconnect.view.ui.fragments.HomeFragment;
 import com.hypernym.evaconnect.view.ui.fragments.MessageFragment;
 import com.hypernym.evaconnect.view.ui.fragments.MyLikesFragment;
 import com.hypernym.evaconnect.view.ui.fragments.NotificationsFragment;
+import com.hypernym.evaconnect.view.ui.fragments.PersonDetailFragment;
 import com.hypernym.evaconnect.view.ui.fragments.PostDetailsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.SpecficJobFragment;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
@@ -186,10 +189,11 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         setRecyclerView();
 
 
-        img_home.setImageDrawable(getDrawable(R.drawable.home_selected));
-        img_connections.setImageDrawable(getDrawable(R.drawable.connections));
-        img_messages.setImageDrawable(getDrawable(R.drawable.messages));
-        img_logout.setImageDrawable(getDrawable(R.drawable.logout));
+        // img_home.setImageDrawable(getDrawable(R.drawable.home_selected));
+        img_home.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
+        img_connections.setImageDrawable(getDrawable(R.drawable.ic_connection_1));
+        img_messages.setImageDrawable(getDrawable(R.drawable.ic_message_1));
+        img_logout.setImageDrawable(getDrawable(R.drawable.ic_profile_1));
 
 
         img_uparrow.setOnClickListener(new View.OnClickListener() {
@@ -280,10 +284,14 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
 
     @OnClick(R.id.img_home)
     public void home() {
-        img_home.setImageDrawable(getDrawable(R.drawable.home_selected));
-        img_connections.setImageDrawable(getDrawable(R.drawable.connections));
-        img_messages.setImageDrawable(getDrawable(R.drawable.messages));
-        img_logout.setImageDrawable(getDrawable(R.drawable.logout));
+        img_home.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
+        img_connections.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+        img_messages.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+        img_logout.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+
+//        img_connections.setImageDrawable(getDrawable(R.drawable.connections));
+//        img_messages.setImageDrawable(getDrawable(R.drawable.messages));
+//        img_logout.setImageDrawable(getDrawable(R.drawable.logout));
 
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.framelayout);
         if (f instanceof HomeFragment) {
@@ -297,10 +305,12 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
 
     @OnClick(R.id.img_connections)
     public void connections() {
-        img_home.setImageDrawable(getDrawable(R.drawable.home));
-        img_connections.setImageDrawable(getDrawable(R.drawable.connection_selected));
-        img_messages.setImageDrawable(getDrawable(R.drawable.messages));
-        img_logout.setImageDrawable(getDrawable(R.drawable.logout));
+
+        img_home.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+        img_connections.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
+        img_messages.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+        img_logout.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.framelayout);
         if (f instanceof ConnectionsFragment) {
         } else {
@@ -313,10 +323,11 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
 
     @OnClick(R.id.img_messages)
     public void messages() {
-        img_home.setImageDrawable(getDrawable(R.drawable.home));
-        img_connections.setImageDrawable(getDrawable(R.drawable.connections));
-        img_messages.setImageDrawable(getDrawable(R.drawable.message_selected));
-        img_logout.setImageDrawable(getDrawable(R.drawable.logout));
+
+        img_home.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+        img_connections.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+        img_messages.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
+        img_logout.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
         PrefUtils.saveMessageCount(getApplicationContext(), 0);
         badge_notification.setVisibility(View.GONE);
         MessageFragment fragment = new MessageFragment();
@@ -326,7 +337,15 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
 
     @OnClick(R.id.img_logout)
     public void signout() {
-        AppUtils.logout(this);
+       // AppUtils.logout(this);
+        img_home.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+        img_connections.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+        img_messages.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+        img_logout.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
+        EditProfileFragment fragment = new EditProfileFragment();
+        loadFragment(R.id.framelayout, fragment, this, true);
+        BaseFragment.pageTitle = "Profile";
+
     }
 
     @OnClick(R.id.toolbarlayout)
@@ -442,10 +461,17 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
             finish();
 
         } else if (fragment instanceof MyLikesFragment || fragment instanceof ConnectionsFragment || fragment instanceof EditProfileFragment || fragment instanceof NotificationsFragment || fragment instanceof MessageFragment) {
-            img_home.setImageDrawable(getDrawable(R.drawable.home_selected));
-            img_connections.setImageDrawable(getDrawable(R.drawable.connections));
-            img_messages.setImageDrawable(getDrawable(R.drawable.messages));
-            img_logout.setImageDrawable(getDrawable(R.drawable.logout));
+//            img_home.setImageDrawable(getDrawable(R.drawable.home_selected));
+//            img_connections.setImageDrawable(getDrawable(R.drawable.connections));
+//            img_messages.setImageDrawable(getDrawable(R.drawable.messages));
+//            img_logout.setImageDrawable(getDrawable(R.drawable.logout));
+
+            img_home.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
+            img_connections.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+            img_messages.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+            img_logout.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+
+
             super.onBackPressed();
         } else {
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
