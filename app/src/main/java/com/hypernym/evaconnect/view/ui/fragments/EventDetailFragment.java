@@ -96,7 +96,7 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
     RecyclerView rc_attendees;
 
     @BindView(R.id.btn_addcomment)
-    TextView btn_addcomment;
+    ImageView btn_addcomment;
 
     @NotEmpty
     @BindView(R.id.edt_comment)
