@@ -31,7 +31,7 @@
     <string name="tab_time">Time</string>
     <string name="notifications">Notifications</string>
     <string name="view_comments">View Comments</string>
-    <string name="tap_here_to_comment">Tap Here To Comment</string>
+    <string name="tap_here_to_comment">Write a reply</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="openDrawer">openDrawer</string>

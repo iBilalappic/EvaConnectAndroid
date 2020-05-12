@@ -179,7 +179,6 @@
     <style name="EditText.Comments">
         <item name="android:textAppearance">@style/TextAppearance.Text.Light</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:background">@drawable/editextbg</item>
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:gravity">left|center_vertical</item>
         <item name="android:paddingLeft">10dp</item>

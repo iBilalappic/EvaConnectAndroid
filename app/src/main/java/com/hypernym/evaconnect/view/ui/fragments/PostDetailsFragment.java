@@ -74,7 +74,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     EditText edt_comment;
 
     @BindView(R.id.btn_addcomment)
-    TextView btn_addcomment;
+    ImageView btn_addcomment;
 
     @BindView(R.id.tv_name)
     TextView tv_name;
@@ -251,9 +251,9 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
 
 
         if (post.getIs_post_like() != null && post.getIs_post_like() > 0) {
-            img_like.setBackground(getContext().getDrawable(R.mipmap.ic_like_selected));
+            img_like.setBackground(getContext().getDrawable(R.drawable.ic_like));
         } else {
-            img_like.setBackground(getContext().getDrawable(R.mipmap.ic_like));
+            img_like.setBackground(getContext().getDrawable(R.drawable.ic_like));
         }
         slider_images_detail.setVisibility(View.GONE);
         img_video.setVisibility(View.GONE);

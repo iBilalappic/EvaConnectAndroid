@@ -123,7 +123,7 @@
             android:layout_marginTop="8dp"
             android:text="58"
             android:textStyle="bold"
-            android:textColor="@color/blue_1"
+            android:textColor="@color/skyblue"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -136,7 +136,7 @@
             android:paddingLeft="5dp"
             android:text="@string/likes"
             android:textStyle="bold"
-            android:textColor="@color/blue_1"
+            android:textColor="@color/skyblue"
             app:layout_constraintStart_toEndOf="@+id/tv_likecount"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -148,7 +148,7 @@
             android:text="@string/amp"
             android:textStyle="bold"
             android:layout_marginStart="@dimen/spacing_medium"
-            android:textColor="@color/blue_1"
+            android:textColor="@color/skyblue"
             app:layout_constraintStart_toEndOf="@+id/textView10"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -161,7 +161,7 @@
             android:layout_marginTop="8dp"
             android:text="03"
             android:textStyle="bold"
-            android:textColor="@color/blue_1"
+            android:textColor="@color/skyblue"
             app:layout_constraintStart_toEndOf="@+id/textView11"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -174,7 +174,7 @@
             android:paddingLeft="5dp"
             android:text="@string/comments"
             android:textStyle="bold"
-            android:textColor="@color/blue_1"
+            android:textColor="@color/skyblue"
             app:layout_constraintStart_toEndOf="@+id/tv_comcount"
             app:layout_constraintTop_toTopOf="parent" />
 
