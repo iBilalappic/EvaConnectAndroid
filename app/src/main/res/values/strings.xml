@@ -13,7 +13,7 @@
     <string name="which_of_these_describes_you_best">Which of these describes you best?</string>
     <string name="company">Company</string>
     <string name="individual">Individual</string>
-    <string name="reset">Reset</string>
+    <string name="reset">Reset my password</string>
     <string name="email">Email</string>
     <string name="upload_an_image_of_you">Upload image</string>
     <string name="desc_forgot_password">Once you have submitted the detials of the desired account, please check your email to reset your password</string>
