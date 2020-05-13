@@ -43,7 +43,7 @@
     <string name="settings">Settings</string>
     <string name="logout">Continue</string>
     <string name="logout_menu">Logout</string>
-    <string name="hint_search">Search Here</string>
+    <string name="hint_search">Search for a Connection</string>
     <string name="hint_set_your_display_name">Display name</string>
     <string name="hint_write_a_brief_bio_here">Write a brief bio/introduction here(200 char limit)</string>
     <string name="everyone">Everyone</string>
