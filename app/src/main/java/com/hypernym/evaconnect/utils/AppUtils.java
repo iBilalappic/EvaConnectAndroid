@@ -192,14 +192,14 @@ public final class AppUtils {
     {
         if(type.equalsIgnoreCase(AppConstants.UNLIKE))
         {
-           img_like.setBackground(context.getDrawable(R.mipmap.ic_like));
+           img_like.setBackground(context.getDrawable(R.drawable.ic_like));
            int likes=Integer.parseInt(likeCount.getText().toString());
            if(likes>0)
              likeCount.setText(String.valueOf(likes-1));
         }
         else
         {
-            img_like.setBackground(context.getDrawable(R.mipmap.ic_like_selected));
+            img_like.setBackground(context.getDrawable(R.drawable.ic_like));
             int likes=Integer.parseInt(likeCount.getText().toString());
             likeCount.setText(String.valueOf(likes+1));
         }
