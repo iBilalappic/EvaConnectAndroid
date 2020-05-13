@@ -224,8 +224,8 @@
 
                 <ImageView
                     android:id="@+id/img_like"
-                    android:layout_width="13dp"
-                    android:layout_height="13dp"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
                     android:layout_gravity="center"
                     android:layout_marginEnd="@dimen/spacing_medium"
                     android:layout_weight="0"
@@ -256,8 +256,8 @@
 
                 <ImageView
                     android:id="@+id/img_comment"
-                    android:layout_width="13dp"
-                    android:layout_height="13dp"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
                     android:layout_gravity="center"
                     android:layout_marginEnd="@dimen/spacing_medium"
                     android:layout_weight="0"
@@ -289,8 +289,8 @@
 
                 <ImageView
                     android:id="@+id/img_share"
-                    android:layout_width="13dp"
-                    android:layout_height="13dp"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
                     android:layout_gravity="center"
                     android:layout_marginEnd="@dimen/spacing_medium"
                     android:layout_weight="0"
