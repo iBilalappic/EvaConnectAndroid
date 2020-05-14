@@ -35,7 +35,7 @@
                     android:layout_weight="1"
 
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_new_app_logo" />
+                    android:src="@mipmap/ic_new_app_logo" />
 
                 <TextView
                     android:id="@+id/text_title"

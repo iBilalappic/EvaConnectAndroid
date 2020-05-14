@@ -23,7 +23,7 @@
                 android:layout_width="131dp"
                 android:layout_height="121dp"
                 android:layout_marginTop="50dp"
-                android:src="@drawable/ic_new_app_logo"
+                android:src="@mipmap/ic_new_app_logo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
