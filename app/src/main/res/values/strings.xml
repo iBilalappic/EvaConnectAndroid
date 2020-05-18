@@ -82,6 +82,10 @@
     <string name="msg_exit">Are you sure you want to exit?</string>
     <string name="msg_logout">Are you sure you want to logout? You will be returned to the login screen</string>
     <string name="msg_no_sender">No friend found.</string>
+
+    <string name="msg_firstname">Please enter first name.</string>
+    <string name="msg_surname">Please enter sur name.</string>
+
     <!--Error Messages-->
     <string name="err_one_file_at_a_time">Only one image file can be selected at a time</string>
     <string name="err_internal_supported">Sorry! Files from internal storage are supported only</string>

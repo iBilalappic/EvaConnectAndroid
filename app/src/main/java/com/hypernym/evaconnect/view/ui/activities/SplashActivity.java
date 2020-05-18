@@ -15,6 +15,7 @@ import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.onesignal.OneSignal;
 
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static com.hypernym.evaconnect.view.ui.activities.SignupDetailsActivity.RequestPermissionCode;
@@ -40,14 +41,17 @@ public class SplashActivity extends AppCompatActivity {
 
         int ExternalReadResult = ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE);
         int CameraResult = ContextCompat.checkSelfPermission(this, CAMERA);
+        int locationResult = ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION);
         return          ExternalReadResult == PackageManager.PERMISSION_GRANTED &&
-                CameraResult == PackageManager.PERMISSION_GRANTED;
+                CameraResult == PackageManager.PERMISSION_GRANTED &&
+                locationResult== PackageManager.PERMISSION_GRANTED;
     }
     private void requestpermission() {
         ActivityCompat.requestPermissions(this, new String[]
                 {
                         READ_EXTERNAL_STORAGE,
-                        CAMERA
+                        CAMERA,
+                        ACCESS_FINE_LOCATION
                 }, RequestPermissionCode);
     }
     @Override

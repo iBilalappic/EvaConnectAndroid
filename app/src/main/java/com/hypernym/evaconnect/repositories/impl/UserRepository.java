@@ -39,11 +39,13 @@ public class UserRepository implements IUserRespository {
                 RequestBody.create(MediaType.parse("text/plain"), user.getLinkedin_image_url()),
                 RequestBody.create(MediaType.parse("text/plain"), user.getPassword()),
                 RequestBody.create(MediaType.parse("text/plain"), user.getType()),
-                RequestBody.create(MediaType.parse("text/plain"), user.getBio_data()),
                 RequestBody.create(MediaType.parse("text/plain"), user.getSector()),
                 RequestBody.create(MediaType.parse("text/plain"), user.getCompany_name()),
                 RequestBody.create(MediaType.parse("text/plain"), user.getDesignation()),
                 RequestBody.create(MediaType.parse("text/plain"), user.getWork_aviation()),
+                RequestBody.create(MediaType.parse("text/plain"), user.getCountry()),
+                RequestBody.create(MediaType.parse("text/plain"), user.getCity()),
+                RequestBody.create(MediaType.parse("text/plain"), user.getLast_name()),
                 partImage).enqueue(new Callback<BaseModel<List<User>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {

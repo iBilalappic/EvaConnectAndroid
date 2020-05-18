@@ -147,9 +147,8 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
                 showDialog();
                 callLoginApi();
             } else {
-                Intent intent = new Intent(getBaseContext(), SignupActivity.class);
+                Intent intent = new Intent(getBaseContext(), CreateAccount_1_Activity.class);
                 intent.putExtra("Email", edt_email.getText().toString());
-                intent.putExtra("Password", edt_password.getText().toString());
                 startActivity(intent);
             }
         } else {

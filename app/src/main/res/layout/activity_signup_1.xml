@@ -58,7 +58,7 @@
             android:gravity="center"
             android:textColor="@color/colorAccent"
             android:textStyle="bold"
-            android:text="Which sector do you work in"
+            android:text="Which sector do you work in:"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_commercial_aviation" />

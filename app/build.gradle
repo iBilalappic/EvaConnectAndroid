@@ -95,6 +95,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:19.2.0'
     implementation 'com.android.volley:volley:1.1.0'
     implementation 'com.google.firebase:firebase-messaging:20.1.0'
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
 
 
     /*Slider*/
@@ -122,7 +123,8 @@ dependencies {
     implementation 'com.github.kizitonwose:CalendarView:0.3.2'
 
     implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
-   
+
 }
 
