@@ -30,6 +30,7 @@ import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Password;
 import com.onesignal.OneSignal;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
@@ -42,8 +43,8 @@ import okhttp3.RequestBody;
 public class PasswordActivity extends BaseActivity implements Validator.ValidationListener {
 
     String email, password, photourl, activity_type, user_type,
-                    aviation_type, JobSector, username, firstname, surname,
-                    city, country, filepath, jobtitle, company_name;
+            aviation_type, JobSector, username, firstname, surname,
+            city, country, filepath, jobtitle, company_name;
 
     private Validator validator;
 
@@ -59,6 +60,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
     Button btn_finish;
     MultipartBody.Part partImage;
     SimpleDialog simpleDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,7 +97,6 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             company_name = getIntent().getStringExtra("companyname");
 
 
-
             user.setUsername(email);
             user.setEmail(email);
             user.setPassword("hypernym");
@@ -110,7 +111,6 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             user.setCountry(country);
             user.setCompany_name(company_name);
             user.setDesignation(jobtitle);
-
 
 
         } else {
@@ -128,9 +128,10 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             company_name = getIntent().getStringExtra("companyname");
             activity_type = "normal_type";
             user.setLinkedin_image_url("");
+            File file = new File(filepath);
 
-//            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), filepath);
-//            partImage = MultipartBody.Part.createFormData("user_image", filepath.getName(), reqFile);
+            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+            partImage = MultipartBody.Part.createFormData("user_image", file.getName(), reqFile);
 
             user.setWork_aviation(aviation_type);
             user.setUsername(email);
@@ -168,7 +169,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
                 if (logins != null && !logins.isError()) {
                     LoginUtils.saveUser(user);
                     if ("LinkedinActivity".equals(getIntent().getStringExtra(Constants.ACTIVITY_NAME))) {
-                      //  JustLoginApiCall();
+                        //  JustLoginApiCall();
                     } else {
                         simpleDialog = new SimpleDialog(PasswordActivity.this, getString(R.string.success), getString(R.string.msg_signup), null, getString(R.string.ok), new View.OnClickListener() {
                             @Override

@@ -115,6 +115,7 @@ public class CreateAccount_2_Activity extends BaseActivity implements Validator.
             firstname = getIntent().getStringExtra("FirstName");
             surname = getIntent().getStringExtra("SurName");
 
+
         } else {
             email = getIntent().getStringExtra("Email");
             activity_type = "normal_type";
@@ -187,10 +188,10 @@ public class CreateAccount_2_Activity extends BaseActivity implements Validator.
             View view = error.getView();
             String message = error.getCollatedErrorMessage(this);
             if (view.getId() == R.id.tv_country) {
-                message = getString(R.string.err_password);
+                message = getString(R.string.msg_country);
             }
             if (view.getId() == R.id.tv_city) {
-                message = getString(R.string.err_password);
+                message = getString(R.string.msg_city);
             }
             // Display error messages
             if (view instanceof EditText) {
@@ -203,7 +204,7 @@ public class CreateAccount_2_Activity extends BaseActivity implements Validator.
 
     @SuppressLint("RestrictedApi")
     protected void startLocationUpdates() {
-
+        showDialog();
         // Create the location request to start receiving updates
         mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -247,13 +248,12 @@ public class CreateAccount_2_Activity extends BaseActivity implements Validator.
     @Override
     public void onLocationChanged(Location location) {
         mLastLocation = new LatLng(location.getLatitude(), location.getLongitude());
-        showDialog();
         setAddress(mLastLocation.latitude, mLastLocation.longitude);
     }
 
     private void setAddress(Double latitude, Double longitude) {
         if (latitude != null && longitude != null) {
-
+            showDialog();
             Geocoder geocoder;
             List<Address> addresses = null;
             geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());

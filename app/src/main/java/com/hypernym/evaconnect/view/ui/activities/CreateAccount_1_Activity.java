@@ -105,6 +105,7 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
     private String currentPhotoPath = "";
     private String photoVar = null;
     MultipartBody.Part partImage;
+    Uri SelectedUri;
 
 
     private Validator validator;
@@ -145,6 +146,8 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
             email = getIntent().getStringExtra("Email");
             photourl = getIntent().getStringExtra("Photo");
             activity_type = "LinkedinActivity";
+            Glide.with(this).load(photourl).into(img_profile);
+            img_profile.setEnabled(false);
 
         } else {
             email = getIntent().getStringExtra("Email");
@@ -168,11 +171,10 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
 
         } else {
             Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
-
             intent.putExtra("Email", email);
             intent.putExtra("FirstName", edt_firstname.getText().toString());
             intent.putExtra("SurName", edt_surname.getText().toString());
-            intent.putExtra("FilePath", file_name);
+            intent.putExtra("FilePath", file_name.toString());
             intent.putExtra("userType", userType);
             intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
             startActivity(intent);
@@ -274,10 +276,10 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
         if (requestCode == REQUEST_PHOTO_GALLERY && resultCode == RESULT_OK) {
             try {
                 if (data != null && data.getData() != null) {
-                    Uri SelectedImageUri = data.getData();
+                    SelectedUri= data.getData();
 
-                    GalleryImage = ImageFilePathUtil.getPath(this, SelectedImageUri);
-                    mProfileImageDecodableString = ImageFilePathUtil.getPath(this, SelectedImageUri);
+                    GalleryImage = ImageFilePathUtil.getPath(this, SelectedUri);
+                    mProfileImageDecodableString = ImageFilePathUtil.getPath(this, SelectedUri);
                     Log.e(getClass().getName(), "image file path: " + GalleryImage);
 
                     tempFile = new File(GalleryImage);
@@ -292,7 +294,7 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
                         if (photoVar == null) {
                             currentPhotoPath = GalleryImage;
                             // photoVar = GalleryImage;
-                            file_name = new File(ImageFilePathUtil.getPath(this, SelectedImageUri));
+                            file_name = new File(ImageFilePathUtil.getPath(this, SelectedUri));
                             RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file_name);
                             partImage = MultipartBody.Part.createFormData("user_image", file_name.getName(), reqFile);
                             if (!TextUtils.isEmpty(currentPhotoPath) || currentPhotoPath != null) {
