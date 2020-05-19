@@ -9,12 +9,14 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
         android:name=".EvaconnectApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
-        android:icon="@drawable/ic_new_app_logo"
+        android:icon="@mipmap/ic_new_app_logo"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:networkSecurityConfig="@xml/network_security_config"
@@ -58,25 +60,36 @@
             android:name=".view.ui.activities.ForgotPassword"
             android:theme="@style/AppTheme.FullScreen" />
         <activity
-            android:name=".view.ui.activities.SignupDetailsActivity"
-            android:theme="@style/AppTheme.FullScreen" />
-        <activity
-            android:name=".view.ui.activities.SignupActivity"
-            android:theme="@style/AppTheme.FullScreen" />
-        <activity
-            android:name=".view.ui.activities.SignupActivity_0"
-            android:theme="@style/AppTheme.FullScreen" />
-        <activity
-            android:name=".view.ui.activities.SignupActivity_2"
-            android:theme="@style/AppTheme.FullScreen" />
-        <activity
-            android:name=".view.ui.activities.SignupActivity_1"
+            android:name=".view.ui.activities.CreateAccount_3_Activity"
             android:theme="@style/AppTheme.FullScreen" />
         <activity
             android:name=".view.ui.activities.LoginActivity"
             android:theme="@style/AppTheme.FullScreen"
             android:windowSoftInputMode="stateHidden|adjustPan">
 
+        </activity>
+
+        <activity
+            android:name=".view.ui.activities.CreateAccount_1_Activity"
+            android:theme="@style/AppTheme.FullScreen"
+            android:windowSoftInputMode="stateHidden|adjustPan">
+        </activity>
+
+        <activity
+            android:name=".view.ui.activities.CreateAccount_2_Activity"
+            android:theme="@style/AppTheme.FullScreen"
+            android:windowSoftInputMode="stateHidden|adjustPan">
+        </activity>
+        <activity
+            android:name=".view.ui.activities.CreateAccount_4_Activity"
+            android:theme="@style/AppTheme.FullScreen"
+            android:windowSoftInputMode="stateHidden|adjustPan">
+        </activity>
+
+        <activity
+            android:name=".view.ui.activities.PasswordActivity"
+            android:theme="@style/AppTheme.FullScreen"
+            android:windowSoftInputMode="stateHidden|adjustPan">
         </activity>
         <activity
             android:name=".view.ui.activities.SplashActivity"

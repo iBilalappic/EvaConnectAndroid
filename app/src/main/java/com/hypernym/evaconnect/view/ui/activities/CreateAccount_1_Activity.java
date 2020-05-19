@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -32,19 +33,17 @@ import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.User;
-import com.hypernym.evaconnect.models.UserDetails;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
-import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.bottomsheets.BottomSheetPictureSelection;
-import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
-import com.onesignal.OneSignal;
+import com.mobsandgeeks.saripaar.annotation.Password;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -59,39 +58,42 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.http.Multipart;
 
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 
-public class SignupActivity_2 extends BaseActivity implements Validator.ValidationListener {
+public class CreateAccount_1_Activity extends BaseActivity implements Validator.ValidationListener, View.OnClickListener {
 
-    String email, password, photourl, activity_type, user_type, aviation_type, JobSector, username;
-    private UserViewModel userViewModel;
-    private User user = new User();
+    @BindView(R.id.btn_next)
+    Button btn_next;
 
+    @BindView(R.id.tv_company)
+    TextView tv_company;
 
-    @NotEmpty
-    @BindView(R.id.edt_companyname)
-    EditText edt_companyname;
-
-    @NotEmpty
-    @BindView(R.id.edt_jobtitle)
-    EditText edt_jobtitle;
-
-
-    @BindView(R.id.tv_biodata)
-    EditText tv_biodata;
+    @BindView(R.id.tv_individual)
+    TextView tv_individual;
 
     @NotEmpty
-    @BindView(R.id.btn_finish)
-    Button btn_finish;
+    @BindView(R.id.edt_firstname)
+    EditText edt_firstname;
+
+    @BindView(R.id.tv_upload_image)
+    TextView tv_upload_image;
+
+    @NotEmpty
+    @BindView(R.id.edt_surname)
+    EditText edt_surname;
 
     @BindView(R.id.img_profile)
     CircleImageView img_profile;
 
 
-    private Validator validator;
-    SimpleDialog simpleDialog;
+    @BindView(R.id.img_backarrow)
+    ImageView img_backarrow;
+
+    @BindView(R.id.img_cross)
+    ImageView img_cross;
 
 
     private static final int REQUEST_PHOTO_GALLERY = 4;
@@ -103,192 +105,93 @@ public class SignupActivity_2 extends BaseActivity implements Validator.Validati
     private String currentPhotoPath = "";
     private String photoVar = null;
     MultipartBody.Part partImage;
+    Uri SelectedUri;
+
+
+    private Validator validator;
+
+    private String userType = "user";
+
+    String email, password, photourl, activity_type;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup_2);
+        setContentView(R.layout.activity_create_account_1);
         ButterKnife.bind(this);
-        validator = new Validator(this);
-        validator.setValidationListener(this);
         init();
-
+        btn_next.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                validator.validate();
+                Log.d("TAAAG",""+ file_name);
+            }
+        });
     }
 
     private void init() {
-        userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(this.getApplication())).get(UserViewModel.class);
+        validator = new Validator(this);
+        validator.setValidationListener(this);
+        img_backarrow.setOnClickListener(this);
+        tv_company.setOnClickListener(this);
+        tv_individual.setOnClickListener(this);
+        img_cross.setOnClickListener(this);
+        img_backarrow.setOnClickListener(this);
+        tv_upload_image.setOnClickListener(this);
+        tv_company.setBackground(getDrawable(R.drawable.rounded_button_border));
+        tv_individual.setBackground(getDrawable(R.drawable.rounded_button_selected));
 
         if ("LinkedinActivity".equals(getIntent().getStringExtra(Constants.ACTIVITY_NAME))) {
             email = getIntent().getStringExtra("Email");
             photourl = getIntent().getStringExtra("Photo");
-            user_type = getIntent().getStringExtra("userType");
-            aviation_type = getIntent().getStringExtra("aviation_type");
-            JobSector = getIntent().getStringExtra("job_sector");
-            username = getIntent().getStringExtra("username");
-            user.setUsername(email);
-            user.setEmail(email);
-            user.setPassword("hypernym");
-            user.setIsLinkedin(1);
-            user.setLinkedin_image_url(photourl);
-            user.setType(user_type);
-            user.setWork_aviation(aviation_type);
-            user.setFirst_name(username);
-            user.setSector(JobSector);
+            activity_type = "LinkedinActivity";
             Glide.with(this).load(photourl).into(img_profile);
-            img_profile.setEnabled(false);
+            tv_upload_image.setEnabled(false);
+
         } else {
             email = getIntent().getStringExtra("Email");
-            password = getIntent().getStringExtra("Password");
-            user_type = getIntent().getStringExtra("userType");
-            aviation_type = getIntent().getStringExtra("aviation_type");
-            JobSector = getIntent().getStringExtra("job_sector");
-            username = getIntent().getStringExtra("username");
-            user.setWork_aviation(aviation_type);
-            user.setUsername(email);
-            user.setEmail(email);
-            user.setPassword(password);
-            user.setIsLinkedin(0);
-            user.setType(user_type);
-            user.setFirst_name(username);
-            user.setSector(JobSector);
-            user.setLinkedin_image_url("");
-
+            activity_type = "normal_type";
         }
-
-        btn_finish.setOnClickListener(new OnOneOffClickListener() {
-            @Override
-            public void onSingleClick(View v) {
-                validator.validate();
-
-
-            }
-        });
-        img_profile.setOnClickListener(new OnOneOffClickListener() {
-            @Override
-            public void onSingleClick(View v) {
-                if (Checkpermission()) {
-                    BottomSheetPictureSelection bottomSheetPictureSelection = new BottomSheetPictureSelection(new YourDialogFragmentDismissHandler());
-                    bottomSheetPictureSelection.show(getSupportFragmentManager(), bottomSheetPictureSelection.getTag());
-                } else {
-                    requestpermission();
-                }
-            }
-        });
-
-
     }
 
 
     @Override
     public void onValidationSucceeded() {
-        if (!tv_biodata.getText().toString().isEmpty() || tv_biodata.getText().toString().length() > 0) {
-            user.setBio_data(tv_biodata.getText().toString());
+
+        if (activity_type.equals("LinkedinActivity")) {
+            Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
+            intent.putExtra("Email", email);
+            intent.putExtra("Photo", photourl);
+            intent.putExtra("userType", userType);
+            intent.putExtra("FirstName", edt_firstname.getText().toString());
+            intent.putExtra("SurName", edt_surname.getText().toString());
+            intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+            startActivity(intent);
+
         } else {
-            user.setBio_data("");
-        }
-        user.setCompany_name(edt_companyname.getText().toString());
-        user.setDesignation(edt_jobtitle.getText().toString());
-        user.setStatus(AppConstants.USER_STATUS);
-        if (NetworkUtils.isNetworkConnected(this)) {
-            showDialog();
-            callSignupApi();
-        } else {
-            networkErrorDialog();
-        }
-
-    }
-
-    public void callSignupApi() {
-        userViewModel.signUp(user, partImage).observe(this, new Observer<BaseModel<List<User>>>() {
-            @Override
-            public void onChanged(BaseModel<List<User>> logins) {
-                if (logins != null && !logins.isError()) {
-                    LoginUtils.saveUser(user);
-                    if ("LinkedinActivity".equals(getIntent().getStringExtra(Constants.ACTIVITY_NAME))) {
-                        JustLoginApiCall();
-                    } else {
-                        simpleDialog = new SimpleDialog(SignupActivity_2.this, getString(R.string.success), getString(R.string.msg_signup), null, getString(R.string.ok), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                callLoginApi();
-
-                            }
-                        });
-                        simpleDialog.show();
-                    }
-
-                } else {
-                    simpleDialog = networkResponseDialog(getString(R.string.error), logins.getMessage());
-                }
-            }
-        });
-    }
-
-    private void JustLoginApiCall() {
-
-        if (NetworkUtils.isNetworkConnected(this)) {
-//            showDialog();
-            userViewModel.linkedin_login(email).observe(this, new Observer<BaseModel<List<User>>>() {
-                @Override
-                public void onChanged(BaseModel<List<User>> listBaseModel) {
-                    LoginUtils.userLoggedIn();
-                    User userData = listBaseModel.getData().get(0);
-                    userData.setUser_id(userData.getId());
-                    LoginUtils.saveUser(listBaseModel.getData().get(0));
-                    OneSignal.sendTag("email", userData.getEmail());
-                    UserDetails.username = userData.getFirst_name();
-                    if (listBaseModel.getData().get(0) != null) {
-                        LoginUtils.saveUserToken(listBaseModel.getData().get(0).getToken());
-                    }
-
-                    Intent intent = new Intent(SignupActivity_2.this, HomeActivity.class);
-                    // set the new task and clear flags
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                }
-            });
+            Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
+            intent.putExtra("Email", email);
+            intent.putExtra("FirstName", edt_firstname.getText().toString());
+            intent.putExtra("SurName", edt_surname.getText().toString());
+            intent.putExtra("FilePath", file_name.toString());
+            intent.putExtra("userType", userType);
+            intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+            startActivity(intent);
         }
     }
-
-    private void callLoginApi() {
-        showDialog();
-        userViewModel.login(user).observe(this, new Observer<BaseModel<List<User>>>() {
-            @Override
-            public void onChanged(BaseModel<List<User>> user) {
-                if (user != null && !user.isError() && user.getData().get(0) != null) {
-                    LoginUtils.userLoggedIn();
-
-                    User userData = user.getData().get(0);
-                    userData.setUser_id(userData.getId());
-                    LoginUtils.saveUser(user.getData().get(0));
-                    OneSignal.sendTag("email", userData.getEmail());
-                    UserDetails.username = userData.getFirst_name();
-                    if (user.getData().get(0) != null) {
-                        LoginUtils.saveUserToken(user.getData().get(0).getToken());
-                    }
-                    simpleDialog.dismiss();
-                    Intent intent = new Intent(SignupActivity_2.this, HomeActivity.class);
-                    // set the new task and clear flags
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-
-                } else if (user != null && user.isError()) {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_login));
-                } else if (user == null) {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
-            }
-        });
-    }
-
 
     @Override
     public void onValidationFailed(List<ValidationError> errors) {
         for (ValidationError error : errors) {
             View view = error.getView();
             String message = error.getCollatedErrorMessage(this);
+            if (view.getId() == R.id.edt_firstname) {
+                message = getString(R.string.msg_firstname);
+            }
+            if (view.getId() == R.id.edt_surname) {
+                message = getString(R.string.msg_surname);
+            }
             // Display error messages
             if (view instanceof EditText) {
                 ((EditText) view).setError(message);
@@ -298,6 +201,44 @@ public class SignupActivity_2 extends BaseActivity implements Validator.Validati
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.img_backarrow:
+                this.finish();
+                break;
+
+            case R.id.img_cross:
+                this.finish();
+                break;
+
+            case R.id.tv_upload_image:
+                if (Checkpermission()) {
+                    BottomSheetPictureSelection bottomSheetPictureSelection = new BottomSheetPictureSelection(new YourDialogFragmentDismissHandler());
+                    bottomSheetPictureSelection.show(getSupportFragmentManager(), bottomSheetPictureSelection.getTag());
+                } else {
+                    requestpermission();
+                }
+                break;
+
+            case R.id.tv_individual:
+                tv_company.setBackground(getDrawable(R.drawable.rounded_button_border));
+                tv_individual.setBackground(getDrawable(R.drawable.rounded_button_selected));
+                tv_company.setTextColor(getResources().getColor(R.color.gray));
+                tv_individual.setTextColor(getResources().getColor(R.color.white));
+                userType = "user";
+                break;
+
+            case R.id.tv_company:
+                tv_company.setBackground(getDrawable(R.drawable.rounded_button_selected));
+                tv_company.setTextColor(getResources().getColor(R.color.white));
+                tv_individual.setBackground(getDrawable(R.drawable.rounded_button_border));
+                tv_individual.setTextColor(getResources().getColor(R.color.gray));
+                userType = "company";
+                break;
+
+        }
+    }
 
     public boolean Checkpermission() {
 
@@ -335,10 +276,10 @@ public class SignupActivity_2 extends BaseActivity implements Validator.Validati
         if (requestCode == REQUEST_PHOTO_GALLERY && resultCode == RESULT_OK) {
             try {
                 if (data != null && data.getData() != null) {
-                    Uri SelectedImageUri = data.getData();
+                    SelectedUri= data.getData();
 
-                    GalleryImage = ImageFilePathUtil.getPath(this, SelectedImageUri);
-                    mProfileImageDecodableString = ImageFilePathUtil.getPath(this, SelectedImageUri);
+                    GalleryImage = ImageFilePathUtil.getPath(this, SelectedUri);
+                    mProfileImageDecodableString = ImageFilePathUtil.getPath(this, SelectedUri);
                     Log.e(getClass().getName(), "image file path: " + GalleryImage);
 
                     tempFile = new File(GalleryImage);
@@ -353,11 +294,11 @@ public class SignupActivity_2 extends BaseActivity implements Validator.Validati
                         if (photoVar == null) {
                             currentPhotoPath = GalleryImage;
                             // photoVar = GalleryImage;
-                            file_name = new File(ImageFilePathUtil.getPath(this, SelectedImageUri));
+                            file_name = new File(ImageFilePathUtil.getPath(this, SelectedUri));
                             RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file_name);
                             partImage = MultipartBody.Part.createFormData("user_image", file_name.getName(), reqFile);
                             if (!TextUtils.isEmpty(currentPhotoPath) || currentPhotoPath != null) {
-                                  Glide.with(this).load(currentPhotoPath).into(img_profile);
+                                Glide.with(this).load(currentPhotoPath).into(img_profile);
 
                             } else {
                                 networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));

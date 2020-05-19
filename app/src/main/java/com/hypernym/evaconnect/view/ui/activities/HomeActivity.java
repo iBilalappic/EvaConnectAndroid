@@ -46,6 +46,7 @@ import com.hypernym.evaconnect.view.ui.fragments.MessageFragment;
 import com.hypernym.evaconnect.view.ui.fragments.MyLikesFragment;
 import com.hypernym.evaconnect.view.ui.fragments.NotificationsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.PersonDetailFragment;
+import com.hypernym.evaconnect.view.ui.fragments.PersonProfileFragment;
 import com.hypernym.evaconnect.view.ui.fragments.PostDetailsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.SpecficJobFragment;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
@@ -342,9 +343,9 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         img_connections.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
         img_messages.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
         img_logout.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
-        EditProfileFragment fragment = new EditProfileFragment();
+        PersonProfileFragment fragment = new PersonProfileFragment();
         loadFragment(R.id.framelayout, fragment, this, true);
-        BaseFragment.pageTitle = "Profile";
+      //  BaseFragment.pageTitle = "Profile";
 
     }
 

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorwhite">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/layout_header"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:gravity="start|center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <ImageView
+                android:id="@+id/img_backarrow"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
+                android:layout_marginStart="20dp"
+                android:src="@drawable/ic_arrow_left" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_weight="1"
+                android:text="Profession"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/img_cross"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/ic_close"
+                android:tint="@color/black" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/view1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_header" />
+
+
+
+
+
+        <TextView
+            android:id="@+id/textView3"
+            style="@style/TextStyle.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="120dp"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold"
+            android:text="Company you are work for"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <EditText
+            android:id="@+id/edt_companyname"
+            style="@style/EditText"
+            android:layout_width="250dp"
+            android:layout_marginStart="56dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="56dp"
+            android:layout_marginRight="16dp"
+            android:backgroundTint="@color/colorwhite"
+            android:gravity="center"
+            android:hint="e.g easyJet"
+            android:maxLength="100"
+            android:paddingLeft="10dp"
+            android:textColor="@color/text_color"
+            android:textColorHint="@color/gray_1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+        <ImageView
+            android:id="@+id/img_view0"
+            style="@style/EditText.LineBlackRed"
+            android:layout_width="250dp"
+            android:layout_marginStart="56dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginEnd="56dp"
+            android:layout_marginRight="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edt_companyname" />
+
+
+        <TextView
+            android:id="@+id/textView4"
+            style="@style/TextStyle.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="Job Title"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_view0" />
+
+
+        <EditText
+            android:id="@+id/edt_jobtitle"
+            style="@style/EditText"
+            android:layout_width="250dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginRight="16dp"
+            android:backgroundTint="@color/colorwhite"
+            android:gravity="center"
+            android:hint="e.g Ground Handler"
+            android:maxLength="100"
+            android:paddingLeft="10dp"
+            android:textColor="@color/text_color"
+            android:textColorHint="@color/gray_1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+        <ImageView
+            android:id="@+id/img_view1"
+            style="@style/EditText.LineRedBlack"
+            android:layout_width="250dp"
+            android:layout_marginStart="56dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginEnd="56dp"
+            android:layout_marginRight="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edt_jobtitle" />
+
+
+
+
+        <Button
+            android:id="@+id/btn_next"
+            style="@style/Button_selected_light_blue"
+            android:layout_width="250dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginBottom="24dp"
+            android:text="@string/next"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_view1" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
+

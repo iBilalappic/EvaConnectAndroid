@@ -46,11 +46,13 @@ public interface AppApi {
                                        @Part("linkedin_image_url") RequestBody linkedin_image_url,
                                        @Part("password") RequestBody password,
                                        @Part("type") RequestBody type,
-                                       @Part("bio_data") RequestBody biodata,
                                        @Part("sector") RequestBody sector,
                                        @Part("company_name") RequestBody company_name,
                                        @Part("designation") RequestBody designation,
                                        @Part("work_aviation") RequestBody work_aviation,
+                                       @Part("country") RequestBody country,
+                                       @Part("city") RequestBody city,
+                                       @Part("last_name") RequestBody last_name,
                                        @Part MultipartBody.Part user_image);
 
     @POST(APIConstants.LOGIN)

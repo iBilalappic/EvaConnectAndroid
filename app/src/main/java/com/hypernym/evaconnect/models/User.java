@@ -17,6 +17,34 @@ public class User implements Serializable {
     private String user_image;
     private String linkedin_image_url ;
 
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getLast_name() {
+        return last_name;
+    }
+
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
+    }
+
+    private String city  ;
+    private String country ;
+    private String last_name ;
+
     public String getSector() {
         return sector;
     }
