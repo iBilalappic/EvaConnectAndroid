@@ -43,7 +43,9 @@ public interface AppApi {
                                        @Part("first_name") RequestBody firstname,
                                        @Part("email") RequestBody email,
                                        @Part("is_linkedin") int is_linkedin,
+                                       @Part("is_facebook") int is_facebook,
                                        @Part("linkedin_image_url") RequestBody linkedin_image_url,
+                                       @Part("facebook_image_url") RequestBody facebook_image_url,
                                        @Part("password") RequestBody password,
                                        @Part("type") RequestBody type,
                                        @Part("sector") RequestBody sector,
@@ -135,7 +137,8 @@ public interface AppApi {
     @POST(APIConstants.GETUSER_FROM_LINKEDIN)
     Call<BaseModel<List<User>>> linkedin_login(@Body User user);
 
-
+    @POST(APIConstants.FACEBOOK_LOGIN)
+    Call<BaseModel<List<User>>> facebookLogin(@Body User user);
 
     @POST(APIConstants.DASHBOARD)
     Call<BaseModel<List<Post>>> getDashboard(@Body User user, @Query("limit") int limit, @Query("offset") int offset);

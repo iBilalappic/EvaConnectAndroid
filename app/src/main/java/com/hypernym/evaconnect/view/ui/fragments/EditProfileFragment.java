@@ -205,7 +205,11 @@ public class EditProfileFragment extends BaseFragment implements TextInputEditTe
                 if (listBaseModel.getData() != null && !listBaseModel.isError()) {
                     if (listBaseModel.getData().get(0).getIs_linkedin() == 1) {
                         AppUtils.setGlideImage(getContext(), cv_profile_image, user.getLinkedin_image_url());
-                    } else {
+                    }
+                    else if (listBaseModel.getData().get(0).getIs_facebook() == 1){
+                        AppUtils.setGlideImage(getContext(), cv_profile_image, user.getFacebook_image_url());
+                    }
+                    else {
                         AppUtils.setGlideImage(getContext(), cv_profile_image, user.getUser_image());
                     }
                     tv_biodata.setText(listBaseModel.getData().get(0).getBio_data());

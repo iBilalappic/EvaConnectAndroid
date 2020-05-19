@@ -2,6 +2,7 @@ package com.hypernym.evaconnect.view.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +16,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
@@ -73,6 +75,9 @@ public class CreateAccount_3_Activity extends BaseActivity implements View.OnCli
         getSectorFromApi(aviation_type);
         tv_general_business.setBackground(getDrawable(R.drawable.rounded_button_border));
         tv_commercial_aviation.setBackground(getDrawable(R.drawable.rounded_button_selected));
+
+        String type = getIntent().getStringExtra(Constants.ACTIVITY_NAME);
+
         if ("LinkedinActivity".equals(getIntent().getStringExtra(Constants.ACTIVITY_NAME))) {
             email = getIntent().getStringExtra("Email");
             photourl = getIntent().getStringExtra("Photo");
@@ -84,7 +89,19 @@ public class CreateAccount_3_Activity extends BaseActivity implements View.OnCli
             city = getIntent().getStringExtra("city");
             country = getIntent().getStringExtra("country");
 
-        } else {
+        }
+        else if (!TextUtils.isEmpty(type) && type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)){
+            email = getIntent().getStringExtra("Email");
+            photourl = getIntent().getStringExtra("Photo");
+            user_type = getIntent().getStringExtra("userType");
+            username = getIntent().getStringExtra("username");
+            activity_type = AppConstants.FACEBOOK_LOGIN_TYPE;
+            firstname = getIntent().getStringExtra("FirstName");
+            surname = getIntent().getStringExtra("SurName");
+            city = getIntent().getStringExtra("city");
+            country = getIntent().getStringExtra("country");
+        }
+        else {
             email = getIntent().getStringExtra("Email");
             user_type = getIntent().getStringExtra("userType");
             username = getIntent().getStringExtra("username");
@@ -140,7 +157,23 @@ public class CreateAccount_3_Activity extends BaseActivity implements View.OnCli
                     intent.putExtra("country", country);
                     startActivity(intent);
 
-                } else {
+                }
+                else if (activity_type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)){
+                    Intent intent = new Intent(CreateAccount_3_Activity.this, CreateAccount_4_Activity.class);
+                    intent.putExtra("Email", email);
+                    intent.putExtra("Photo", photourl);
+                    intent.putExtra("userType", user_type);
+                    intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+                    intent.putExtra("aviation_type", aviation_type);
+                    intent.putExtra("job_sector", JobSector);
+                    intent.putExtra("username", username);
+                    intent.putExtra("FirstName",firstname);
+                    intent.putExtra("SurName", surname);
+                    intent.putExtra("city", city);
+                    intent.putExtra("country", country);
+                    startActivity(intent);
+                }
+                else {
                     Intent intent = new Intent(CreateAccount_3_Activity.this, CreateAccount_4_Activity.class);
                     intent.putExtra("Email", email);
                     intent.putExtra("userType", user_type);

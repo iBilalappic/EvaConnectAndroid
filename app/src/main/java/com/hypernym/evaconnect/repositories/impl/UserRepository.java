@@ -24,6 +24,7 @@ public class UserRepository implements IUserRespository {
     private MutableLiveData<BaseModel<List<User>>> userMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<AccountCheck>>> LinkedinMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<User>>> LinkedinLoginMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<User>>> facebookLoginMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> ProfileUpdateMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<String>>> SectorMutableLiveData = new MutableLiveData<>();
 
@@ -36,7 +37,9 @@ public class UserRepository implements IUserRespository {
                 user.getStatus()), RequestBody.create(MediaType.parse("text/plain"), user.getFirst_name()),
                 RequestBody.create(MediaType.parse("text/plain"), user.getEmail()),
                 user.getIsLinkedin(),
+                user.getIs_facebook(),
                 RequestBody.create(MediaType.parse("text/plain"), user.getLinkedin_image_url()),
+                RequestBody.create(MediaType.parse("text/plain"), user.getFacebook_image_url()),
                 RequestBody.create(MediaType.parse("text/plain"), user.getPassword()),
                 RequestBody.create(MediaType.parse("text/plain"), user.getType()),
                 RequestBody.create(MediaType.parse("text/plain"), user.getSector()),
@@ -164,6 +167,31 @@ public class UserRepository implements IUserRespository {
             }
         });
         return LinkedinLoginMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<User>>> facebookLogin(String email) {
+        facebookLoginMutableLiveData = new MutableLiveData<>();
+        User user = new User();
+        user.setUsername(email);
+
+        RestClient.get().appApi().facebookLogin(user).enqueue(new Callback<BaseModel<List<User>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
+                if (response.body() != null && response.isSuccessful())
+                {
+                    facebookLoginMutableLiveData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<User>>> call, Throwable t) {
+                facebookLoginMutableLiveData.setValue(null);
+                t.printStackTrace();
+            }
+        });
+
+        return facebookLoginMutableLiveData;
     }
 
 

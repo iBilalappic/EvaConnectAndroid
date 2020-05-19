@@ -117,6 +117,7 @@
     <string name="remove_user">Remove User</string>
     <string name="no_data">No Data</string>
     <string name="amp"><![CDATA[&]]></string>
+    <string name="fb_sign_in_text">Sign in with Facebook</string>
 
 
 </resources>

@@ -40,11 +40,13 @@ import android.widget.Toast;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
+import com.hypernym.evaconnect.models.AccountCheck;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.models.UserDetails;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
@@ -197,14 +199,14 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
         {
             GraphRequest request = GraphRequest.newMeRequest(accessToken, (object, response) -> {
                 try{
-                    String first_name = object.getString(AppConstants.FIRST_NAME);
-                    String last_name = object.getString(AppConstants.LAST_NAME);
+                    /*String first_name = object.getString(AppConstants.FIRST_NAME);
+                    String last_name = object.getString(AppConstants.LAST_NAME);*/
                     String email = object.getString(AppConstants.EMAIL);
                     String id = object.getString(AppConstants.ID);
                     String facebook_photo = AppConstants.FACEBOOK_PIC_BASE_URL + id + AppConstants.FACEBOOK_PIC_URL;
 
-                    Log.e(TAG, "onCompleted: " + first_name + " " + last_name + " " + email + " " + id + " " + facebook_photo);
-
+                    // check whether user already exists or not
+                    checkUserExist(email, facebook_photo);
                 }
                 catch(JSONException exc){
                     exc.printStackTrace();
@@ -216,6 +218,45 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
             request.setParameters(parameters);
             request.executeAsync();
         }
+    }
+
+    private void checkUserExist(String email, String facebook_photo)
+    {
+        if (NetworkUtils.isNetworkConnected(LoginActivity.this))
+        {
+            userViewModel.isEmailExist_linkedin(email).observe(this, listBaseModel -> {
+                if (listBaseModel != null && !listBaseModel.isError())
+                {
+                    JustLoginApiCall(email);
+                }
+                else {
+                    Intent intent = new Intent(LoginActivity.this, CreateAccount_1_Activity.class);
+                    intent.putExtra("Email", email);
+                    intent.putExtra("Photo", facebook_photo);
+                    intent.putExtra(Constants.ACTIVITY_NAME, AppConstants.FACEBOOK_LOGIN_TYPE);
+                    startActivity(intent);
+                }
+            });
+        }
+    }
+
+    private void JustLoginApiCall(String email) {
+        userViewModel.facebookLogin(email).observe(this, listBaseModel -> {
+            LoginUtils.userLoggedIn();
+            User userData = listBaseModel.getData().get(0);
+            userData.setUser_id(userData.getId());
+            LoginUtils.saveUser(listBaseModel.getData().get(0));
+            OneSignal.sendTag("email", userData.getEmail());
+            UserDetails.username = userData.getFirst_name();
+            if (listBaseModel.getData().get(0) != null) {
+                LoginUtils.saveUserToken(listBaseModel.getData().get(0).getToken());
+            }
+
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            // set the new task and clear flags
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        });
     }
 
     @Override

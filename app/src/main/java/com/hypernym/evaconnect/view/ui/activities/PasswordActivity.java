@@ -2,6 +2,7 @@ package com.hypernym.evaconnect.view.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,6 +52,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
 
     private User user = new User();
     private UserViewModel userViewModel;
+    private String type = "";
 
     @NotEmpty
     @Password(min = 8)
@@ -89,6 +91,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
     private void init() {
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(this.getApplication())).get(UserViewModel.class);
 
+        type = getIntent().getStringExtra(Constants.ACTIVITY_NAME);
 
         if ("LinkedinActivity".equals(getIntent().getStringExtra(Constants.ACTIVITY_NAME))) {
             email = getIntent().getStringExtra("Email");
@@ -110,7 +113,9 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             user.setEmail(email);
             user.setPassword("hypernym");
             user.setIsLinkedin(1);
+            user.setIs_facebook(0);
             user.setLinkedin_image_url(photourl);
+            user.setFacebook_image_url("");
             user.setType(user_type);
             user.setWork_aviation(aviation_type);
             user.setFirst_name(firstname);
@@ -122,7 +127,41 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             user.setDesignation(jobtitle);
 
 
-        } else {
+        }
+        else if (!TextUtils.isEmpty(type) && type.equals(AppConstants.FACEBOOK_LOGIN_TYPE))
+        {
+            email = getIntent().getStringExtra("Email");
+            photourl = getIntent().getStringExtra("Photo");
+            user_type = getIntent().getStringExtra("userType");
+            username = getIntent().getStringExtra("username");
+            activity_type = AppConstants.FACEBOOK_LOGIN_TYPE;
+            firstname = getIntent().getStringExtra("FirstName");
+            surname = getIntent().getStringExtra("SurName");
+            city = getIntent().getStringExtra("city");
+            country = getIntent().getStringExtra("country");
+            aviation_type = getIntent().getStringExtra("aviation_type");
+            JobSector = getIntent().getStringExtra("job_sector");
+            jobtitle = getIntent().getStringExtra("jobtitle");
+            company_name = getIntent().getStringExtra("companyname");
+
+            user.setUsername(email);
+            user.setEmail(email);
+            user.setPassword("hypernym");
+            user.setIs_facebook(1);
+            user.setIsLinkedin(0);
+            user.setFacebook_image_url(photourl);
+            user.setLinkedin_image_url("");
+            user.setType(user_type);
+            user.setWork_aviation(aviation_type);
+            user.setFirst_name(firstname);
+            user.setSector(JobSector);
+            user.setLast_name(surname);
+            user.setCity(city);
+            user.setCountry(country);
+            user.setCompany_name(company_name);
+            user.setDesignation(jobtitle);
+        }
+        else {
             email = getIntent().getStringExtra("Email");
             user_type = getIntent().getStringExtra("userType");
             username = getIntent().getStringExtra("username");
@@ -137,6 +176,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             company_name = getIntent().getStringExtra("companyname");
             activity_type = "normal_type";
             user.setLinkedin_image_url("");
+            user.setFacebook_image_url("");
             File file = new File(filepath);
 
             RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
@@ -146,6 +186,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             user.setUsername(email);
             user.setEmail(email);
             user.setIsLinkedin(0);
+            user.setIs_facebook(0);
             user.setType(user_type);
             user.setFirst_name(firstname);
             user.setSector(JobSector);
@@ -155,6 +196,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             user.setCompany_name(company_name);
             user.setDesignation(jobtitle);
             user.setLinkedin_image_url("");
+            user.setFacebook_image_url("");
         }
     }
 
@@ -179,7 +221,11 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
                     LoginUtils.saveUser(user);
                     if ("LinkedinActivity".equals(getIntent().getStringExtra(Constants.ACTIVITY_NAME))) {
                           JustLoginApiCall();
-                    } else {
+                    }
+                    else if (type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)){
+                        loginWithFacebook();
+                    }
+                    else {
                         simpleDialog = new SimpleDialog(PasswordActivity.this, getString(R.string.success), getString(R.string.msg_signup), null, getString(R.string.ok), new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -255,6 +301,27 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
         }
     }
 
+    private void loginWithFacebook() {
+        if (NetworkUtils.isNetworkConnected(this))
+        {
+            userViewModel.facebookLogin(email).observe(this, listBaseModel -> {
+                LoginUtils.userLoggedIn();
+                User userData = listBaseModel.getData().get(0);
+                userData.setUser_id(userData.getId());
+                LoginUtils.saveUser(listBaseModel.getData().get(0));
+                OneSignal.sendTag("email", userData.getEmail());
+                UserDetails.username = userData.getFirst_name();
+                if (listBaseModel.getData().get(0) != null) {
+                    LoginUtils.saveUserToken(listBaseModel.getData().get(0).getToken());
+                }
+
+                Intent intent = new Intent(PasswordActivity.this, HomeActivity.class);
+                // set the new task and clear flags
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            });
+        }
+    }
 
     @Override
     public void onValidationFailed(List<ValidationError> errors) {

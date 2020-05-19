@@ -15,7 +15,32 @@ public class User implements Serializable {
     private String token;
     private Integer user_id;
     private String user_image;
-    private String linkedin_image_url ;
+    private String linkedin_image_url;
+    private String facebook_image_url;
+    private String city;
+    private String country;
+    private String last_name;
+    private String sector;
+    private String work_aviation;
+    private String designation;
+    private String field;
+    private String address;
+    private String company_name;
+    private Integer total_connection;
+    private String is_connected;
+    private boolean is_receiver;
+    private Integer connection_id;
+    private Integer receiver_id;
+    private Integer is_linkedin;
+    private Integer is_facebook;
+
+    public String getFacebook_image_url() {
+        return facebook_image_url;
+    }
+
+    public void setFacebook_image_url(String facebook_image_url) {
+        this.facebook_image_url = facebook_image_url;
+    }
 
     public String getCity() {
         return city;
@@ -41,10 +66,6 @@ public class User implements Serializable {
         this.last_name = last_name;
     }
 
-    private String city  ;
-    private String country ;
-    private String last_name ;
-
     public String getSector() {
         return sector;
     }
@@ -60,9 +81,6 @@ public class User implements Serializable {
     public void setWork_aviation(String work_aviation) {
         this.work_aviation = work_aviation;
     }
-
-    private String sector;
-    private String work_aviation;
 
     public String getDesignation() {
         return designation;
@@ -96,11 +114,6 @@ public class User implements Serializable {
         this.company_name = company_name;
     }
 
-    private String designation ;
-    private String field ;
-    private String address ;
-    private String company_name ;
-
     public String getLinkedin_image_url() {
         return linkedin_image_url;
     }
@@ -117,12 +130,6 @@ public class User implements Serializable {
         this.is_linkedin = is_linkedin;
     }
 
-    private Integer total_connection;
-    private String is_connected;
-    private boolean is_receiver;
-    private Integer connection_id;
-    private Integer receiver_id;
-
     public Integer getIsLinkedin() {
         return is_linkedin;
     }
@@ -131,7 +138,15 @@ public class User implements Serializable {
         this.is_linkedin = isLinkedin;
     }
 
-    private Integer is_linkedin;
+
+
+    public Integer getIs_facebook() {
+        return is_facebook;
+    }
+
+    public void setIs_facebook(Integer is_facebook) {
+        this.is_facebook = is_facebook;
+    }
 
     public String getEmail() {
         return email;

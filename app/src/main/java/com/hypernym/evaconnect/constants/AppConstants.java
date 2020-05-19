@@ -20,6 +20,7 @@ public class AppConstants {
     public static String FACEBOOK_PIC_BASE_URL = "https://graph.facebook.com/";
     public static String FACEBOOK_PIC_URL = "/picture?type=normal";
     public static String ID = "id";
+    public static String FACEBOOK_LOGIN_TYPE = "type_facebook";
 
     public static final int TEXT_TYPE=1;
     public static final int IMAGE_TYPE=0;
