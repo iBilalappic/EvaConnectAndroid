@@ -54,6 +54,9 @@ dependencies {
     // font
     implementation "uk.co.chrisjenx:calligraphy:2.2.0"
 
+    // facebook SDK dependency
+    implementation 'com.facebook.android:facebook-android-sdk:5.15.3'
+
     /* dagger dependency for DI*/
     implementation "com.google.dagger:dagger:2.24"
     annotationProcessor "com.google.dagger:dagger-compiler:2.21"

@@ -9,6 +9,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -28,6 +29,7 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.model.LatLng;
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.utils.Constants;
 import com.mobsandgeeks.saripaar.ValidationError;
@@ -85,6 +87,8 @@ public class CreateAccount_2_Activity extends BaseActivity implements Validator.
     }
 
     private void init() {
+        String type = getIntent().getStringExtra(Constants.ACTIVITY_NAME);
+
         if ("LinkedinActivity".equals(getIntent().getStringExtra(Constants.ACTIVITY_NAME))) {
             email = getIntent().getStringExtra("Email");
             photourl = getIntent().getStringExtra("Photo");
@@ -94,7 +98,16 @@ public class CreateAccount_2_Activity extends BaseActivity implements Validator.
             surname = getIntent().getStringExtra("SurName");
 
 
-        } else {
+        }
+        else if (!TextUtils.isEmpty(type) && type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)){
+            email = getIntent().getStringExtra("Email");
+            photourl = getIntent().getStringExtra("Photo");
+            user_type = getIntent().getStringExtra("userType");
+            activity_type = AppConstants.FACEBOOK_LOGIN_TYPE;
+            firstname = getIntent().getStringExtra("FirstName");
+            surname = getIntent().getStringExtra("SurName");
+        }
+        else {
             email = getIntent().getStringExtra("Email");
             activity_type = "normal_type";
             file_name = getIntent().getStringExtra("FilePath");
@@ -146,7 +159,20 @@ public class CreateAccount_2_Activity extends BaseActivity implements Validator.
             intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
             startActivity(intent);
 
-        } else {
+        }
+        else if (activity_type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)){
+            Intent intent = new Intent(CreateAccount_2_Activity.this, CreateAccount_3_Activity.class);
+            intent.putExtra("Email", email);
+            intent.putExtra("Photo", photourl);
+            intent.putExtra("userType", user_type);
+            intent.putExtra("FirstName",firstname);
+            intent.putExtra("SurName", surname);
+            intent.putExtra("city", tv_city.getText().toString());
+            intent.putExtra("country", tv_country.getText().toString());
+            intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+            startActivity(intent);
+        }
+        else {
             Intent intent = new Intent(CreateAccount_2_Activity.this, CreateAccount_3_Activity.class);
 
             intent.putExtra("Email", email);

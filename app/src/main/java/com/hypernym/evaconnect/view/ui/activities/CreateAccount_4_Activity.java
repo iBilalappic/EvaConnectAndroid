@@ -2,6 +2,7 @@ package com.hypernym.evaconnect.view.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +14,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.User;
@@ -97,7 +99,25 @@ public class CreateAccount_4_Activity extends BaseActivity implements Validator.
             intent.putExtra("companyname", edt_companyname.getText().toString());
             startActivity(intent);
 
-        } else {
+        }
+        else if (activity_type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)){
+            Intent intent = new Intent(CreateAccount_4_Activity.this, PasswordActivity.class);
+            intent.putExtra("Email", email);
+            intent.putExtra("Photo", photourl);
+            intent.putExtra("userType", user_type);
+            intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+            intent.putExtra("aviation_type", aviation_type);
+            intent.putExtra("job_sector", JobSector);
+            intent.putExtra("username", username);
+            intent.putExtra("FirstName", firstname);
+            intent.putExtra("SurName", surname);
+            intent.putExtra("city", city);
+            intent.putExtra("country", country);
+            intent.putExtra("jobtitle", edt_jobtitle.getText().toString());
+            intent.putExtra("companyname", edt_companyname.getText().toString());
+            startActivity(intent);
+        }
+        else {
             Intent intent = new Intent(CreateAccount_4_Activity.this, PasswordActivity.class);
             intent.putExtra("Email", email);
             intent.putExtra("userType", user_type);
@@ -119,6 +139,7 @@ public class CreateAccount_4_Activity extends BaseActivity implements Validator.
     }
 
     private void init() {
+        String type = getIntent().getStringExtra(Constants.ACTIVITY_NAME);
 
         if ("LinkedinActivity".equals(getIntent().getStringExtra(Constants.ACTIVITY_NAME))) {
             email = getIntent().getStringExtra("Email");
@@ -132,9 +153,22 @@ public class CreateAccount_4_Activity extends BaseActivity implements Validator.
             country = getIntent().getStringExtra("country");
             aviation_type = getIntent().getStringExtra("aviation_type");
             JobSector = getIntent().getStringExtra("job_sector");
-
-
-        } else {
+        }
+        else if (!TextUtils.isEmpty(type) && type.equals(AppConstants.FACEBOOK_LOGIN_TYPE))
+        {
+            email = getIntent().getStringExtra("Email");
+            photourl = getIntent().getStringExtra("Photo");
+            user_type = getIntent().getStringExtra("userType");
+            username = getIntent().getStringExtra("username");
+            activity_type = AppConstants.FACEBOOK_LOGIN_TYPE;
+            firstname = getIntent().getStringExtra("FirstName");
+            surname = getIntent().getStringExtra("SurName");
+            city = getIntent().getStringExtra("city");
+            country = getIntent().getStringExtra("country");
+            aviation_type = getIntent().getStringExtra("aviation_type");
+            JobSector = getIntent().getStringExtra("job_sector");
+        }
+        else {
             email = getIntent().getStringExtra("Email");
             password = getIntent().getStringExtra("Password");
             user_type = getIntent().getStringExtra("userType");

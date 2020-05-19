@@ -49,6 +49,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
+import com.facebook.login.LoginManager;
 import com.google.android.material.snackbar.Snackbar;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
@@ -365,6 +366,7 @@ public final class AppUtils {
                         context.startActivity(intent);
                         LoginUtils.clearUser(getApplicationContext());
                         LoginUtils.removeAuthToken(getApplicationContext());
+                        AppUtils.facebookLogout();
                         OneSignal.sendTag("email","null");
                         break;
                     case R.id.button_negative:
@@ -381,4 +383,9 @@ public final class AppUtils {
        return ThumbnailUtils.createVideoThumbnail(url,MediaStore.Video.Thumbnails.MINI_KIND);
     }
 
+    public static void facebookLogout(){
+        if (LoginManager.getInstance()!=null){
+            LoginManager.getInstance().logOut();
+        }
+    }
 }

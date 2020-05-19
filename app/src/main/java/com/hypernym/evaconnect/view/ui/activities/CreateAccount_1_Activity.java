@@ -45,6 +45,8 @@ import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Password;
 
+import org.w3c.dom.Text;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -142,6 +144,8 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
         tv_company.setBackground(getDrawable(R.drawable.rounded_button_border));
         tv_individual.setBackground(getDrawable(R.drawable.rounded_button_selected));
 
+        String type = getIntent().getStringExtra(Constants.ACTIVITY_NAME);
+
         if ("LinkedinActivity".equals(getIntent().getStringExtra(Constants.ACTIVITY_NAME))) {
             email = getIntent().getStringExtra("Email");
             photourl = getIntent().getStringExtra("Photo");
@@ -149,7 +153,15 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
             Glide.with(this).load(photourl).into(img_profile);
             tv_upload_image.setEnabled(false);
 
-        } else {
+        }
+        else if (!TextUtils.isEmpty(type) && type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)){
+            email = getIntent().getStringExtra("Email");
+            photourl = getIntent().getStringExtra("Photo");
+            activity_type = AppConstants.FACEBOOK_LOGIN_TYPE;
+            Glide.with(this).load(photourl).into(img_profile);
+            tv_upload_image.setEnabled(false);
+        }
+        else {
             email = getIntent().getStringExtra("Email");
             activity_type = "normal_type";
         }
@@ -169,7 +181,18 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
             intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
             startActivity(intent);
 
-        } else {
+        }
+        else if (activity_type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)){
+            Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
+            intent.putExtra("Email", email);
+            intent.putExtra("Photo", photourl);
+            intent.putExtra("userType", userType);
+            intent.putExtra("FirstName", edt_firstname.getText().toString());
+            intent.putExtra("SurName", edt_surname.getText().toString());
+            intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+            startActivity(intent);
+        }
+        else {
             Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
             intent.putExtra("Email", email);
             intent.putExtra("FirstName", edt_firstname.getText().toString());

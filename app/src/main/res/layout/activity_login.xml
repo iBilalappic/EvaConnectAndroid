@@ -155,14 +155,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_forgotpass" />
 
-            <Button
+            <com.facebook.login.widget.LoginButton
+                xmlns:fb="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/btn_facebook"
-                style="@style/Button_selected_blue"
-                android:layout_width="188dp"
+                style="@style/Button_selected_blue_fb"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
+                fb:com_facebook_login_text="@string/fb_sign_in_text"
+                fb:com_facebook_logout_text="@string/fb_sign_in_text"
                 android:layout_marginBottom="50dp"
-                android:text="Sign in with Facebook"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_or" />
@@ -171,14 +173,14 @@
             <Button
                 android:id="@+id/btn_linkedin"
                 style="@style/Button_selected_blue"
-                android:layout_width="188dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
                 android:layout_marginBottom="50dp"
                 android:text="Sign in with Linkedin"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_facebook" />
+                app:layout_constraintTop_toBottomOf="@id/btn_facebook" />
 
 
             <Button

@@ -260,7 +260,7 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
         unfollow = Remove_block_Dialog.findViewById(R.id.unfollow);
         block = Remove_block_Dialog.findViewById(R.id.block);
         tv_profilename.setText(post.getUser().getFirst_name());
-        if (post.getUser().getIs_linkedin() == 1) {
+        if (post.getUser().getIs_linkedin() == 1){
             AppUtils.setGlideImage(getContext(), profile_image_dialog, post.getUser().getLinkedin_image_url());
         } else {
             AppUtils.setGlideImage(getContext(), profile_image_dialog, post.getUser().getUser_image());
