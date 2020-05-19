@@ -37,6 +37,10 @@
     <string name="openDrawer">openDrawer</string>
     <string name="closeDrawer">closeDrawer</string>
     <string name="my_likes">My Likes</string>
+
+    <string name="facebook_app_id">228522088449900</string>
+    <string name="fb_login_protocol_scheme">fb228522088449900</string>
+
     <string name="calendar">Calender</string>
     <string name="job_listings">Job Listings</string>
     <string name="edit_profile">Edit Profile</string>

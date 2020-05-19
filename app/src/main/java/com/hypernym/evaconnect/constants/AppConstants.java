@@ -11,6 +11,16 @@ public class AppConstants {
     public static final int FILE_SIZE_LIMIT_IN_KB = 4000; // for video and image]'
     public static String STATUS_PENDING="pending";
     public static String STATUS_ACTIVE="active";
+
+    //facebook constants
+    public static String EMAIL="email";
+    public static String PUBLIC_PROFILE="public_profile";
+    public static String FIRST_NAME = "first_name";
+    public static String LAST_NAME = "last_name";
+    public static String FACEBOOK_PIC_BASE_URL = "https://graph.facebook.com/";
+    public static String FACEBOOK_PIC_URL = "/picture?type=normal";
+    public static String ID = "id";
+
     public static final int TEXT_TYPE=1;
     public static final int IMAGE_TYPE=0;
     public static final int VIDEO_TYPE=2;
