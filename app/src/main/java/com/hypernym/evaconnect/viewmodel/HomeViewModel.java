@@ -46,4 +46,11 @@ public class HomeViewModel extends AndroidViewModel {
     {
         return iHomeRepository.getNewSources();
     }
+
+    public LiveData<BaseModel<List<NewSources>>> setNewSources(List<Integer> newsSelectedids)
+    {
+        return iHomeRepository.setNewSources(newsSelectedids);
+    }
+
+
 }

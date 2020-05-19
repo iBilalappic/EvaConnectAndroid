@@ -256,6 +256,9 @@ public interface AppApi {
     @GET(APIConstants.Get_NEWS_SOURCES)
     Call<BaseModel<List<NewSources>>> getNewSources();
 
+    @POST(APIConstants.SET_NEWS_SOURCES)
+    Call<BaseModel<List<NewSources>>> setNewSources(@Body HashMap<String, Object> body);
+
 
 
 }

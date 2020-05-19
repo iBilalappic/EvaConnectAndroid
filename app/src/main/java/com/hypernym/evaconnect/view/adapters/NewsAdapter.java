@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -25,12 +26,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     private Context context;
-    private List<NewSources> newSources = new ArrayList<>();
+    public List<NewSources> newSources = new ArrayList<>();
+    public List<NewSources> selected_NewsList=new ArrayList<>();
     private OnItemClickListener onItemClickListener;
 
-    public NewsAdapter(Context context, List<NewSources> newSources, OnItemClickListener itemClickListener) {
+    public NewsAdapter(Context context, List<NewSources> newSources, OnItemClickListener itemClickListener, List<NewSources> multiSelect) {
         this.context = context;
         this.newSources = newSources;
+        this.selected_NewsList=multiSelect;
         this.onItemClickListener = itemClickListener;
 
     }
@@ -47,6 +50,11 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         if (newSources.get(position).getImage() != null) {
             Glide.with(context).load(newSources.get(position).getImage()).into(holder.img_icon);
         }
+
+        if(selected_NewsList.contains(newSources.get(position)))
+            holder.layout_news.setBackgroundResource(R.drawable.border_skyblue);
+        else
+            holder.layout_news.setBackgroundResource(R.drawable.border_gery);
     }
 
     @Override

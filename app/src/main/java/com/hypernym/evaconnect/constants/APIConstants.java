@@ -50,5 +50,6 @@ public interface APIConstants {
     public static String GET_USER_DETAILS="user/details/{id}/";
     public static String GET_SECTOR="user/sector/";
     public static String Get_NEWS_SOURCES="news/sources/";
+    public static String SET_NEWS_SOURCES="news/selection/";
 
 }
