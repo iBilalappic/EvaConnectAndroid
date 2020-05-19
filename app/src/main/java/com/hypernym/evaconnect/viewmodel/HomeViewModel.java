@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.Dashboard;
+import com.hypernym.evaconnect.models.NewSources;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IHomeRepository;
@@ -39,5 +40,10 @@ public class HomeViewModel extends AndroidViewModel {
     public LiveData<BaseModel<List<Post>>> notificationMarkAsRead(int id)
     {
         return iHomeRepository.notificationMarkAsRead(id);
+    }
+
+    public LiveData<BaseModel<List<NewSources>>> getNewSources()
+    {
+        return iHomeRepository.getNewSources();
     }
 }

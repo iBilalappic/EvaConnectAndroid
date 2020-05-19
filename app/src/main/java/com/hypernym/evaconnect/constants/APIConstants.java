@@ -49,5 +49,6 @@ public interface APIConstants {
     public static String PROFILE_UPDATE="user/details/{userid}/";
     public static String GET_USER_DETAILS="user/details/{id}/";
     public static String GET_SECTOR="user/sector/";
+    public static String Get_NEWS_SOURCES="news/sources/";
 
 }

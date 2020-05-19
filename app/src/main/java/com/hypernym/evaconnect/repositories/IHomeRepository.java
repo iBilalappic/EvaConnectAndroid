@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.Dashboard;
+import com.hypernym.evaconnect.models.NewSources;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 
@@ -15,5 +16,6 @@ public interface IHomeRepository {
     LiveData<BaseModel<List<Post>>> getAllNotifications(int totalpages,int currentPage);
     LiveData<BaseModel<List<Post>>> notificationMarkAsRead(int id);
     LiveData<BaseModel<List<Post>>> getAllUnReadNotifications();
+    LiveData<BaseModel<List<NewSources>>> getNewSources();
 
 }

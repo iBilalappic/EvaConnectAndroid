@@ -12,6 +12,7 @@ import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.MyLikesModel;
 import com.hypernym.evaconnect.models.NetworkConnection;
+import com.hypernym.evaconnect.models.NewSources;
 import com.hypernym.evaconnect.models.Notification_onesignal;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.SpecficJobAd;
@@ -251,6 +252,9 @@ public interface AppApi {
 
     @POST(APIConstants.GET_SECTOR)
     Call<BaseModel<List<String>>> getSector(@Body HashMap<String, Object> body);
+
+    @GET(APIConstants.Get_NEWS_SOURCES)
+    Call<BaseModel<List<NewSources>>> getNewSources();
 
 
 

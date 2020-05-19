@@ -62,7 +62,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (LoginUtils.isUserLogin()) {
-                    Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
+                    Intent intent = new Intent(SplashActivity.this, NewsActivity.class);
                     startActivity(intent);
                     finish();
                 } else {

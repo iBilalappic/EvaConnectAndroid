@@ -7,6 +7,7 @@ import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.Dashboard;
+import com.hypernym.evaconnect.models.NewSources;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IHomeRepository;
@@ -24,6 +25,7 @@ public class HomeRepository implements IHomeRepository {
 
     private MutableLiveData<BaseModel<List<Post>>> dashboardMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Post>>> notificationMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<NewSources>>> newsoucesMutableLiveData = new MutableLiveData<>();
 
 
     @Override
@@ -99,5 +101,21 @@ public class HomeRepository implements IHomeRepository {
             }
         });
         return notificationMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<NewSources>>> getNewSources() {
+        newsoucesMutableLiveData=new MutableLiveData<>();
+        RestClient.get().appApi().getNewSources().enqueue(new Callback<BaseModel<List<NewSources>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<NewSources>>> call, Response<BaseModel<List<NewSources>>> response) {
+                newsoucesMutableLiveData.setValue(response.body());
+            }
+            @Override
+            public void onFailure(Call<BaseModel<List<NewSources>>> call, Throwable t) {
+                newsoucesMutableLiveData.setValue(null);
+            }
+        });
+        return newsoucesMutableLiveData;
     }
 }
