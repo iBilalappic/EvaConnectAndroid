@@ -147,7 +147,7 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
             photourl = getIntent().getStringExtra("Photo");
             activity_type = "LinkedinActivity";
             Glide.with(this).load(photourl).into(img_profile);
-            img_profile.setEnabled(false);
+            tv_upload_image.setEnabled(false);
 
         } else {
             email = getIntent().getStringExtra("Email");

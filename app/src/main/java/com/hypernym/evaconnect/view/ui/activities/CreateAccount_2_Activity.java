@@ -4,8 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -19,55 +17,35 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
-import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.User;
-import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
-import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.Constants;
-import com.hypernym.evaconnect.utils.NetworkUtils;
-import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
-import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
-import com.mobsandgeeks.saripaar.annotation.Password;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-import static android.Manifest.permission.CALL_PHONE;
 import static android.Manifest.permission.CAMERA;
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 
 public class CreateAccount_2_Activity extends BaseActivity implements Validator.ValidationListener,
-        com.google.android.gms.location.LocationListener {
+        com.google.android.gms.location.LocationListener, View.OnClickListener {
 
 
     private Validator validator;
@@ -127,6 +105,9 @@ public class CreateAccount_2_Activity extends BaseActivity implements Validator.
 
         validator = new Validator(this);
         validator.setValidationListener(this);
+        img_backarrow.setOnClickListener(this);
+        img_cross.setOnClickListener(this);
+
         btn_next.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
@@ -154,7 +135,7 @@ public class CreateAccount_2_Activity extends BaseActivity implements Validator.
     public void onValidationSucceeded() {
 
         if (activity_type.equals("LinkedinActivity")) {
-            Intent intent = new Intent(CreateAccount_2_Activity.this, SignupActivity_1.class);
+            Intent intent = new Intent(CreateAccount_2_Activity.this, CreateAccount_3_Activity.class);
             intent.putExtra("Email", email);
             intent.putExtra("Photo", photourl);
             intent.putExtra("userType", user_type);
@@ -166,7 +147,7 @@ public class CreateAccount_2_Activity extends BaseActivity implements Validator.
             startActivity(intent);
 
         } else {
-            Intent intent = new Intent(CreateAccount_2_Activity.this, SignupActivity_1.class);
+            Intent intent = new Intent(CreateAccount_2_Activity.this, CreateAccount_3_Activity.class);
 
             intent.putExtra("Email", email);
             intent.putExtra("FirstName", firstname);
@@ -339,4 +320,17 @@ public class CreateAccount_2_Activity extends BaseActivity implements Validator.
     }
 
 
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+            case R.id.img_backarrow:
+                this.finish();
+                break;
+
+            case R.id.img_cross:
+                this.finish();
+                break;
+        }
+    }
 }

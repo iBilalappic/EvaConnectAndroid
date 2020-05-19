@@ -18,10 +18,9 @@ import com.onesignal.OneSignal;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
-import static com.hypernym.evaconnect.view.ui.activities.SignupDetailsActivity.RequestPermissionCode;
 
 public class SplashActivity extends AppCompatActivity {
-
+    public static final int RequestPermissionCode = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

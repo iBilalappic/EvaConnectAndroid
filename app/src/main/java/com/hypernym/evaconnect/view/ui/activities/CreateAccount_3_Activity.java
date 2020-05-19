@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -16,7 +17,6 @@ import androidx.lifecycle.ViewModelProviders;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
@@ -27,7 +27,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SignupActivity_1 extends BaseActivity {
+public class CreateAccount_3_Activity extends BaseActivity implements View.OnClickListener {
 
     String email, password, photourl, activity_type, user_type,
             aviation_type = "Commercial Aviation", JobSector,username,firstname,surname,city,country,filepath;
@@ -43,6 +43,14 @@ public class SignupActivity_1 extends BaseActivity {
 
     @BindView(R.id.btn_next)
     Button btn_next;
+
+    @BindView(R.id.img_backarrow)
+    ImageView img_backarrow;
+
+    @BindView(R.id.img_cross)
+    ImageView img_cross;
+
+
     private List<String> jobsector = new ArrayList<>();
     ArrayAdapter<String> arraySectorAdapter;
 
@@ -51,8 +59,10 @@ public class SignupActivity_1 extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup_1);
+        setContentView(R.layout.activity_create_account_3);
         ButterKnife.bind(this);
+        img_backarrow.setOnClickListener(this);
+        img_cross.setOnClickListener(this);
         init();
 
 
@@ -116,7 +126,7 @@ public class SignupActivity_1 extends BaseActivity {
             @Override
             public void onSingleClick(View v) {
                 if (activity_type.equals("LinkedinActivity")) {
-                    Intent intent = new Intent(SignupActivity_1.this, CreateAccount_4_Activity.class);
+                    Intent intent = new Intent(CreateAccount_3_Activity.this, CreateAccount_4_Activity.class);
                     intent.putExtra("Email", email);
                     intent.putExtra("Photo", photourl);
                     intent.putExtra("userType", user_type);
@@ -131,7 +141,7 @@ public class SignupActivity_1 extends BaseActivity {
                     startActivity(intent);
 
                 } else {
-                    Intent intent = new Intent(SignupActivity_1.this, CreateAccount_4_Activity.class);
+                    Intent intent = new Intent(CreateAccount_3_Activity.this, CreateAccount_4_Activity.class);
                     intent.putExtra("Email", email);
                     intent.putExtra("userType", user_type);
                     intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
@@ -195,4 +205,16 @@ public class SignupActivity_1 extends BaseActivity {
     }
 
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.img_backarrow:
+                this.finish();
+                break;
+
+            case R.id.img_cross:
+                this.finish();
+                break;
+        }
+    }
 }

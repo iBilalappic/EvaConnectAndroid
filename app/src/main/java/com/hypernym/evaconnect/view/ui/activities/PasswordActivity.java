@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.lifecycle.Observer;
@@ -40,7 +41,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class PasswordActivity extends BaseActivity implements Validator.ValidationListener {
+public class PasswordActivity extends BaseActivity implements Validator.ValidationListener, View.OnClickListener {
 
     String email, password, photourl, activity_type, user_type,
             aviation_type, JobSector, username, firstname, surname,
@@ -61,6 +62,12 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
     MultipartBody.Part partImage;
     SimpleDialog simpleDialog;
 
+    @BindView(R.id.img_backarrow)
+    ImageView img_backarrow;
+
+    @BindView(R.id.img_cross)
+    ImageView img_cross;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +76,8 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
         validator = new Validator(this);
         validator.setValidationListener(this);
         init();
+        img_backarrow.setOnClickListener(this);
+        img_cross.setOnClickListener(this);
         btn_finish.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
@@ -169,7 +178,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
                 if (logins != null && !logins.isError()) {
                     LoginUtils.saveUser(user);
                     if ("LinkedinActivity".equals(getIntent().getStringExtra(Constants.ACTIVITY_NAME))) {
-                        //  JustLoginApiCall();
+                          JustLoginApiCall();
                     } else {
                         simpleDialog = new SimpleDialog(PasswordActivity.this, getString(R.string.success), getString(R.string.msg_signup), null, getString(R.string.ok), new View.OnClickListener() {
                             @Override
@@ -220,6 +229,32 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
         });
     }
 
+    private void JustLoginApiCall() {
+
+        if (NetworkUtils.isNetworkConnected(this)) {
+//            showDialog();
+            userViewModel.linkedin_login(email).observe(this, new Observer<BaseModel<List<User>>>() {
+                @Override
+                public void onChanged(BaseModel<List<User>> listBaseModel) {
+                    LoginUtils.userLoggedIn();
+                    User userData = listBaseModel.getData().get(0);
+                    userData.setUser_id(userData.getId());
+                    LoginUtils.saveUser(listBaseModel.getData().get(0));
+                    OneSignal.sendTag("email", userData.getEmail());
+                    UserDetails.username = userData.getFirst_name();
+                    if (listBaseModel.getData().get(0) != null) {
+                        LoginUtils.saveUserToken(listBaseModel.getData().get(0).getToken());
+                    }
+
+                    Intent intent = new Intent(PasswordActivity.this, HomeActivity.class);
+                    // set the new task and clear flags
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }
+            });
+        }
+    }
+
 
     @Override
     public void onValidationFailed(List<ValidationError> errors) {
@@ -235,4 +270,16 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.img_backarrow:
+                this.finish();
+                break;
+
+            case R.id.img_cross:
+                this.finish();
+                break;
+        }
+    }
 }

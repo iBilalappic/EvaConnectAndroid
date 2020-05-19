@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.lifecycle.Observer;
@@ -32,7 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CreateAccount_4_Activity extends BaseActivity implements Validator.ValidationListener {
+public class CreateAccount_4_Activity extends BaseActivity implements Validator.ValidationListener, View.OnClickListener {
 
     String email, password, photourl, activity_type, user_type,
             aviation_type, JobSector, username, firstname, surname, city, country, filepath;
@@ -50,6 +51,12 @@ public class CreateAccount_4_Activity extends BaseActivity implements Validator.
     @BindView(R.id.btn_next)
     Button btn_next;
 
+    @BindView(R.id.img_backarrow)
+    ImageView img_backarrow;
+
+    @BindView(R.id.img_cross)
+    ImageView img_cross;
+
     private Validator validator;
 
     @Override
@@ -59,6 +66,8 @@ public class CreateAccount_4_Activity extends BaseActivity implements Validator.
         ButterKnife.bind(this);
         validator = new Validator(this);
         validator.setValidationListener(this);
+        img_cross.setOnClickListener(this);
+        img_backarrow.setOnClickListener(this);
         init();
         btn_next.setOnClickListener(new OnOneOffClickListener() {
             @Override
@@ -159,4 +168,16 @@ public class CreateAccount_4_Activity extends BaseActivity implements Validator.
     }
 
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.img_backarrow:
+                this.finish();
+                break;
+
+            case R.id.img_cross:
+                this.finish();
+                break;
+        }
+    }
 }

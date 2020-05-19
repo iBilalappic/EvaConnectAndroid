@@ -60,19 +60,7 @@
             android:name=".view.ui.activities.ForgotPassword"
             android:theme="@style/AppTheme.FullScreen" />
         <activity
-            android:name=".view.ui.activities.SignupDetailsActivity"
-            android:theme="@style/AppTheme.FullScreen" />
-        <activity
-            android:name=".view.ui.activities.SignupActivity"
-            android:theme="@style/AppTheme.FullScreen" />
-        <activity
-            android:name=".view.ui.activities.SignupActivity_0"
-            android:theme="@style/AppTheme.FullScreen" />
-        <activity
-            android:name=".view.ui.activities.SignupActivity_2"
-            android:theme="@style/AppTheme.FullScreen" />
-        <activity
-            android:name=".view.ui.activities.SignupActivity_1"
+            android:name=".view.ui.activities.CreateAccount_3_Activity"
             android:theme="@style/AppTheme.FullScreen" />
         <activity
             android:name=".view.ui.activities.LoginActivity"
