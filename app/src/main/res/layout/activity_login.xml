@@ -159,7 +159,7 @@
                 xmlns:fb="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/btn_facebook"
                 style="@style/Button_selected_blue_fb"
-                android:layout_width="wrap_content"
+                android:layout_width="188dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
                 fb:com_facebook_login_text="@string/fb_sign_in_text"
@@ -173,7 +173,7 @@
             <Button
                 android:id="@+id/btn_linkedin"
                 style="@style/Button_selected_blue"
-                android:layout_width="wrap_content"
+                android:layout_width="188dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
                 android:layout_marginBottom="50dp"
