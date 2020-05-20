@@ -178,8 +178,7 @@ public class UserRepository implements IUserRespository {
         RestClient.get().appApi().facebookLogin(user).enqueue(new Callback<BaseModel<List<User>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
-                if (response.body() != null && response.isSuccessful())
-                {
+                if (response.body() != null && response.isSuccessful()) {
                     facebookLoginMutableLiveData.setValue(response.body());
                 }
             }
@@ -196,18 +195,20 @@ public class UserRepository implements IUserRespository {
 
 
     @Override
-    public LiveData<BaseModel<List<Object>>> profile_update(Integer id, String designation, String field, String company_name, String address, String bio_data) {
+    public LiveData<BaseModel<List<Object>>> profile_update(int id, String designation, String firstname, MultipartBody.Part partImage) {
         HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("designation", designation);
-        body.put("field", field);
-        body.put("company_name", company_name);
-        body.put("address", address);
-        body.put("bio_data", bio_data);
+        body.put("first_name", designation);
         body.put("modified_by_id", id);
         body.put("modified_datetime", DateUtils.GetCurrentdatetime());
         ProfileUpdateMutableLiveData = new MutableLiveData<>();
 
-        RestClient.get().appApi().profile_update(id, body).enqueue(new Callback<BaseModel<List<Object>>>() {
+
+        RestClient.get().appApi().profile_update(
+                id,
+                RequestBody.create(MediaType.parse("text/plain"), designation),
+                RequestBody.create(MediaType.parse("text/plain"), firstname),
+                id, RequestBody.create(MediaType.parse("text/plain"), DateUtils.GetCurrentdatetime()), partImage).enqueue(new Callback<BaseModel<List<Object>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
                 if (response.body() != null) {

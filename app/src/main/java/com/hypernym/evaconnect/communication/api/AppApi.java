@@ -247,8 +247,15 @@ public interface AppApi {
     @PATCH(APIConstants.BLOCK_USER)
     Call<BaseModel<List<Object>>> block_user(@Path("connection_id") int connection_id,@Body HashMap<String, Object> body);
 
+    @Multipart
     @PATCH(APIConstants.PROFILE_UPDATE)
-    Call<BaseModel<List<Object>>> profile_update(@Path("userid") int user_id,@Body HashMap<String, Object> body);
+    Call<BaseModel<List<Object>>> profile_update(
+            @Path("userid") int user_id,
+            @Part("designation") RequestBody designation,
+            @Part("first_name") RequestBody firstname,
+            @Part("modified_by_id") int modify_by_id,
+            @Part("modified_datetime") RequestBody modify_datetime,
+            @Part MultipartBody.Part event_image);
 
     @GET(APIConstants.GET_USER_DETAILS)
     Call<BaseModel<List<User>>> getuser_details(@Path("id") int user_id);

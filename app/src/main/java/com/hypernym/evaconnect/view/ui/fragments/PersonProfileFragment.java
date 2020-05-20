@@ -313,7 +313,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                 }
             });
         } else {
-            Toast.makeText(getActivity(), "your connection with user does not exist!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Your connection with user does not exist!", Toast.LENGTH_SHORT).show();
         }
 
     }
