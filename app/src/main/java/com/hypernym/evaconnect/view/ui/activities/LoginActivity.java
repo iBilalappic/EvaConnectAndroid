@@ -170,6 +170,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     private void initFacebookLogin() {
         facebookCallbackManager = CallbackManager.Factory.create();
         btn_facebook.setPermissions(Arrays.asList(AppConstants.EMAIL, AppConstants.PUBLIC_PROFILE));
+        btn_facebook.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null);
         btn_facebook.setLoginBehavior(LoginBehavior.WEB_ONLY);
 
         btn_facebook.registerCallback(facebookCallbackManager, new FacebookCallback<LoginResult>() {

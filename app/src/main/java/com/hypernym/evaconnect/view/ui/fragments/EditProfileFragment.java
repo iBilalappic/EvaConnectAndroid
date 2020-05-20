@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -203,10 +204,14 @@ public class EditProfileFragment extends BaseFragment implements TextInputEditTe
             @Override
             public void onChanged(BaseModel<List<User>> listBaseModel) {
                 if (listBaseModel.getData() != null && !listBaseModel.isError()) {
-                    if (listBaseModel.getData().get(0).getIs_linkedin() == 1) {
+                    if (listBaseModel.getData().get(0).getIs_linkedin() == 1
+                            && !TextUtils.isEmpty(listBaseModel.getData().get(0).getLinkedin_image_url()))
+                    {
                         AppUtils.setGlideImage(getContext(), cv_profile_image, user.getLinkedin_image_url());
                     }
-                    else if (listBaseModel.getData().get(0).getIs_facebook() == 1){
+                    else if (listBaseModel.getData().get(0).getIs_facebook() == 1
+                            && !TextUtils.isEmpty(listBaseModel.getData().get(0).getFacebook_image_url()))
+                    {
                         AppUtils.setGlideImage(getContext(), cv_profile_image, user.getFacebook_image_url());
                     }
                     else {
