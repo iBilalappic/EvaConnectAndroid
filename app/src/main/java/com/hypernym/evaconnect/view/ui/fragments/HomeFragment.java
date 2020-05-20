@@ -380,7 +380,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
 
     @Override
     public void onProfileClick(View view, int position) {
-        PersonDetailFragment personDetailFragment = new PersonDetailFragment();
+        PersonProfileFragment personDetailFragment = new PersonProfileFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("PostData", posts.get(position));
         personDetailFragment.setArguments(bundle);
