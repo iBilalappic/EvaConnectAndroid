@@ -8,22 +8,32 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
+import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
+import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
+import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
+import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class PersonProfileFragment extends BaseFragment {
+public class PersonProfileFragment extends BaseFragment implements View.OnClickListener {
 
     @BindView(R.id.profile_image)
     ImageView profile_image;
@@ -80,9 +90,10 @@ public class PersonProfileFragment extends BaseFragment {
     @BindView(R.id.view4)
     View view4;
 
-
+    SimpleDialog simpleDialog;
     Post post = new Post();
     User user = new User();
+    private ConnectionViewModel connectionViewModel;
 
     public PersonProfileFragment() {
         // Required empty public constructor
@@ -95,11 +106,15 @@ public class PersonProfileFragment extends BaseFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_person_profile, container, false);
         ButterKnife.bind(this, view);
+        layout_disconnect.setOnClickListener(this);
+        layout_block.setOnClickListener(this);
         init();
         return view;
     }
 
     private void init() {
+        connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
+
         setPageTitle("Profile");
         user = LoginUtils.getLoggedinUser();
         if ((getArguments() != null)) {
@@ -213,6 +228,96 @@ public class PersonProfileFragment extends BaseFragment {
             });
         }
     }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.layout_disconnect:
+                RemoveUserApiCall();
+                break;
+            case R.id.layout_block:
+                BlockUserApiCall();
+                break;
+            case R.id.layout_message:
+                break;
+            case R.id.layout_EditDetail:
+                break;
+            case R.id.layout_notification:
+                break;
+            case R.id.layout_settings:
+                break;
+        }
+    }
+
+    private void BlockUserApiCall() {
+        if (post.getConnection_id() != null) {
+            connectionViewModel.block_user(post.getConnection_id(), user).observe(this, new Observer<BaseModel<List<Object>>>() {
+                @Override
+                public void onChanged(BaseModel<List<Object>> listBaseModel) {
+                    if (!listBaseModel.isError()) {
+                        simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_block_user), null, getString(R.string.ok), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                getActivity().onBackPressed();
+                                simpleDialog.dismiss();
+                            }
+                        });
+                    } else {
+
+                        simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), "Your connection is already block", null, getString(R.string.ok), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                getActivity().onBackPressed();
+                                simpleDialog.dismiss();
+                            }
+                        });
+                    }
+                    hideDialog();
+                    simpleDialog.show();
+                    simpleDialog.setCancelable(false);
+                }
+            });
+        } else {
+            Toast.makeText(getActivity(), "your connection with user does not exist!", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private void RemoveUserApiCall() {
+        if (post.getConnection_id() != null) {
+            connectionViewModel.remove_user(post.getConnection_id()).observe(this, new Observer<BaseModel<List<Object>>>() {
+                @Override
+                public void onChanged(BaseModel<List<Object>> listBaseModel) {
+                    if (!listBaseModel.isError()) {
+
+                        simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_remove_user), null, getString(R.string.ok), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                getActivity().onBackPressed();
+                                simpleDialog.dismiss();
+                            }
+                        });
+                    } else {
+
+                        simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), "Your connection is already remove", null, getString(R.string.ok), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                getActivity().onBackPressed();
+                                simpleDialog.dismiss();
+                            }
+                        });
+                    }
+                    hideDialog();
+                    simpleDialog.show();
+                    simpleDialog.setCancelable(false);
+                }
+            });
+        } else {
+            Toast.makeText(getActivity(), "your connection with user does not exist!", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
 
 }
 
