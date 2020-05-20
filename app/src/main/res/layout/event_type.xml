@@ -38,13 +38,14 @@
 
     <TextView
         android:id="@+id/tv_name"
-        style="@style/TextStyle.Bold"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="26dp"
         android:ellipsize="end"
         android:maxLines="1"
+        android:textColor="@color/black"
+        android:textStyle="bold"
         android:text="Networth And Vibe"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toTopOf="parent" />
@@ -69,7 +70,7 @@
         android:id="@+id/tv_attending"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="26dp"
         android:layout_marginEnd="16dp"
         android:paddingLeft="15dp"
         android:paddingTop="5dp"
@@ -146,6 +147,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/amp"
+            style="@style/TextStyle"
             android:textStyle="bold"
             android:layout_marginStart="@dimen/spacing_medium"
             android:textColor="@color/skyblue"
@@ -245,6 +247,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/spacing_medium"
                 android:layout_weight="1.2">
 
                 <TextView
@@ -258,7 +261,6 @@
                     android:id="@+id/img_comment"
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    android:layout_gravity="center"
                     android:layout_marginEnd="@dimen/spacing_medium"
                     android:layout_weight="0"
                     android:background="@drawable/ic_comment" />
@@ -278,6 +280,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="16dp"
+                android:layout_marginBottom="@dimen/spacing_medium"
                 android:layout_weight="1">
 
                 <TextView

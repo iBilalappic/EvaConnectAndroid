@@ -234,7 +234,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         if (post.getUser().getId() == user.getId()) {
             tv_connect.setVisibility(View.GONE);
         } else {
-            tv_connect.setVisibility(View.VISIBLE);
+            tv_connect.setVisibility(View.GONE);
             tv_connect.setText(AppUtils.getConnectionStatus(getContext(), post.getIs_connected(), post.isIs_receiver()));
         }
         if (post.getUser().getIs_linkedin() == 1) {

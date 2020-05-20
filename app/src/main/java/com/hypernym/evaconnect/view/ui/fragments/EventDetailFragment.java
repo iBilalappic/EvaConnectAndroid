@@ -302,9 +302,9 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
                 tv_likecount.setText(String.valueOf(event.getLike_count()));
                 tv_comcount.setText(String.valueOf(event.getComment_count()));
                 if (event.getIs_event_like() != null && event.getIs_event_like() > 0) {
-                    img_like.setBackground(getContext().getDrawable(R.mipmap.ic_like_selected));
+                    img_like.setBackground(getContext().getDrawable(R.drawable.ic_like));
                 } else {
-                    img_like.setBackground(getContext().getDrawable(R.mipmap.ic_like));
+                    img_like.setBackground(getContext().getDrawable(R.drawable.ic_like));
                 }
             }
         });
