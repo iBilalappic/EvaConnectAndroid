@@ -195,7 +195,7 @@ public class UserRepository implements IUserRespository {
 
 
     @Override
-    public LiveData<BaseModel<List<Object>>> profile_update(int id, String designation, String firstname, MultipartBody.Part partImage) {
+    public LiveData<BaseModel<List<Object>>> profile_update(int id, String designation,String companyname, String firstname, MultipartBody.Part partImage) {
         HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("designation", designation);
         body.put("first_name", designation);
@@ -207,6 +207,7 @@ public class UserRepository implements IUserRespository {
         RestClient.get().appApi().profile_update(
                 id,
                 RequestBody.create(MediaType.parse("text/plain"), designation),
+                RequestBody.create(MediaType.parse("text/plain"), companyname),
                 RequestBody.create(MediaType.parse("text/plain"), firstname),
                 id, RequestBody.create(MediaType.parse("text/plain"), DateUtils.GetCurrentdatetime()), partImage).enqueue(new Callback<BaseModel<List<Object>>>() {
             @Override

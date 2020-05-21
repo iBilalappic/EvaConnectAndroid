@@ -114,6 +114,18 @@
 
         </androidx.cardview.widget.CardView>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="45dp"
+            android:layout_marginStart="20dp"
+            android:id="@+id/lbl_name"
+            android:textColor="@color/gray"
+            android:text="name"
+            app:layout_constraintTop_toBottomOf="@+id/cardView_Main"></TextView>
+
+
 
         <EditText
             android:id="@+id/edt_firstname"
@@ -124,13 +136,12 @@
             android:layout_marginEnd="20dp"
             android:backgroundTint="@color/colorwhite"
             android:gravity="start|center"
-            android:hint="First Name"
             android:paddingLeft="10dp"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/lbl_name"
             app:layout_constraintTop_toBottomOf="@+id/cardView_Main" />
 
         <View
@@ -146,6 +157,19 @@
             app:layout_constraintTop_toBottomOf="@+id/edt_firstname" />
 
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="25dp"
+            android:layout_marginStart="20dp"
+            android:id="@+id/lbl_location"
+            android:textColor="@color/gray"
+            android:text="location"
+            app:layout_constraintTop_toBottomOf="@+id/img_view0"></TextView>
+
+
+
         <EditText
             android:id="@+id/edt_location"
             style="@style/EditText"
@@ -156,14 +180,14 @@
             android:backgroundTint="@color/colorwhite"
             android:enabled="false"
             android:gravity="start|center"
-            android:hint="Location"
             android:maxLength="100"
             android:paddingLeft="10dp"
             android:textColor="@color/gray_1"
             android:textColorHint="@color/black"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/lbl_location"
+
             app:layout_constraintTop_toBottomOf="@+id/img_view0" />
 
         <View
@@ -179,8 +203,21 @@
             app:layout_constraintTop_toBottomOf="@+id/edt_location" />
 
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="25dp"
+            android:layout_marginStart="20dp"
+            android:id="@+id/lbl_company"
+            android:textColor="@color/gray"
+            android:text="company"
+            app:layout_constraintTop_toBottomOf="@+id/img_view1"/>
+
+
+
         <EditText
-            android:id="@+id/edt_sector"
+            android:id="@+id/edt_company"
             style="@style/EditText"
             android:layout_width="0dp"
             android:layout_marginStart="20dp"
@@ -188,16 +225,59 @@
             android:layout_marginEnd="20dp"
             android:backgroundTint="@color/colorwhite"
             android:gravity="start|center"
-            android:hint="Sector"
-            android:enabled="false"
             android:maxLength="100"
             android:paddingLeft="10dp"
-            android:textColor="@color/gray_1"
+            android:textColor="@color/black"
             android:textColorHint="@color/black"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/lbl_location"
+
             app:layout_constraintTop_toBottomOf="@+id/img_view1" />
+
+        <View
+            android:id="@+id/img_view4"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="@dimen/spacing_large"
+            android:layout_marginEnd="20dp"
+            android:background="@color/gray_1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edt_company" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="25dp"
+            android:layout_marginStart="20dp"
+            android:id="@+id/lbl_title"
+            android:textColor="@color/gray"
+            android:text="title"
+            app:layout_constraintTop_toBottomOf="@+id/img_view4"/>
+
+
+
+        <EditText
+            android:id="@+id/edt_title"
+            style="@style/EditText"
+            android:layout_width="0dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:backgroundTint="@color/colorwhite"
+            android:gravity="start|center"
+            android:maxLength="100"
+            android:paddingLeft="10dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/lbl_title"
+            app:layout_constraintTop_toBottomOf="@+id/img_view4" />
 
         <View
             android:id="@+id/img_view2"
@@ -209,10 +289,22 @@
             android:background="@color/gray_1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edt_sector" />
+            app:layout_constraintTop_toBottomOf="@+id/edt_title" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="25dp"
+            android:layout_marginStart="20dp"
+            android:id="@+id/lbl_sector"
+            android:textColor="@color/gray"
+            android:text="sector"
+            app:layout_constraintTop_toBottomOf="@+id/img_view2"/>
+
 
         <EditText
-            android:id="@+id/edt_designation"
+            android:id="@+id/edt_sector"
             style="@style/EditText"
             android:layout_width="0dp"
             android:layout_marginStart="20dp"
@@ -220,14 +312,14 @@
             android:layout_marginEnd="20dp"
             android:backgroundTint="@color/colorwhite"
             android:gravity="start|center"
-            android:hint="Designation"
             android:maxLength="100"
+            android:enabled="false"
             android:paddingLeft="10dp"
-            android:textColor="@color/black"
+            android:textColor="@color/gray"
             android:textColorHint="@color/black"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/lbl_sector"
             app:layout_constraintTop_toBottomOf="@+id/img_view2" />
 
         <View
@@ -240,7 +332,7 @@
             android:background="@color/gray_1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edt_designation" />
+            app:layout_constraintTop_toBottomOf="@+id/edt_sector" />
 
 
         <TextView

@@ -23,7 +23,7 @@ public interface IUserRespository {
     LiveData<BaseModel<List<AccountCheck>>> isEmailExist_linkedin(String email);
     LiveData<BaseModel<List<User>>> linkedin_login(String email);
     LiveData<BaseModel<List<User>>> facebookLogin(String email);
-    LiveData<BaseModel<List<Object>>> profile_update(int id, String designation, String firstname, MultipartBody.Part partImage);
+    LiveData<BaseModel<List<Object>>> profile_update(int id, String designation ,String companyname, String firstname, MultipartBody.Part partImage);
     LiveData<BaseModel<List<User>>> getuser_details(Integer id);
     LiveData<BaseModel<List<String>>> getSector(String name);
 }

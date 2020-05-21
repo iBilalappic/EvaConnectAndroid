@@ -86,7 +86,7 @@ public class EditProfileFragment extends BaseFragment implements Validator.Valid
     EditText edt_location;
 
     @NotEmpty
-    @BindView(R.id.edt_designation)
+    @BindView(R.id.edt_title)
     EditText edt_designation;
 
     @NotEmpty
@@ -96,6 +96,10 @@ public class EditProfileFragment extends BaseFragment implements Validator.Valid
     @NotEmpty
     @BindView(R.id.edt_firstname)
     EditText edt_firstname;
+
+    @NotEmpty
+    @BindView(R.id.edt_company)
+    EditText edt_company;
 
     @BindView(R.id.tv_name)
     TextView tv_name;
@@ -205,6 +209,7 @@ public class EditProfileFragment extends BaseFragment implements Validator.Valid
         userViewModel.profile_update(
                 user.getId(),
                 edt_designation.getText().toString(),
+                edt_company.getText().toString(),
                 edt_firstname.getText().toString(),partImage).observe(this, new Observer<BaseModel<List<Object>>>() {
             @Override
             public void onChanged(BaseModel<List<Object>> listBaseModel) {
@@ -249,6 +254,7 @@ public class EditProfileFragment extends BaseFragment implements Validator.Valid
                     edt_firstname.setText(listBaseModel.getData().get(0).getFirst_name());
                     edt_sector.setText(listBaseModel.getData().get(0).getSector());
                     edt_designation.setText(listBaseModel.getData().get(0).getDesignation());
+                    edt_company.setText(listBaseModel.getData().get(0).getCompany_name());
                     tv_name.setText(listBaseModel.getData().get(0).getFirst_name());
                     LoginUtils.saveUser(listBaseModel.getData().get(0));
                 } else {

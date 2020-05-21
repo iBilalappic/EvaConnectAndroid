@@ -252,6 +252,7 @@ public interface AppApi {
     Call<BaseModel<List<Object>>> profile_update(
             @Path("userid") int user_id,
             @Part("designation") RequestBody designation,
+            @Part("company_name") RequestBody companyname,
             @Part("first_name") RequestBody firstname,
             @Part("modified_by_id") int modify_by_id,
             @Part("modified_datetime") RequestBody modify_datetime,
