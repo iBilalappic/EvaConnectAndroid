@@ -284,7 +284,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         String toServerUnicodeEncoded = StringEscapeUtils.escapeJava(edt_comment.getText().toString());
 
         comment.setContent(toServerUnicodeEncoded);
-        comment.setCreated_by_id(user.getUser_id());
+        comment.setCreated_by_id(user.getId());
         comment.setStatus(AppConstants.STATUS_ACTIVE);
         comment.setPost_id(postID);
         postViewModel.addComment(comment).observe(this, new Observer<BaseModel<List<Comment>>>() {
