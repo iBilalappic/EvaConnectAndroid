@@ -83,6 +83,11 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
     @BindView(R.id.tv_upload_image)
     TextView tv_upload_image;
 
+    @BindView(R.id.tv_already_account)
+    TextView tv_already_account;
+
+
+
     @NotEmpty
     @BindView(R.id.edt_surname)
     EditText edt_surname;
@@ -141,6 +146,7 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
         img_cross.setOnClickListener(this);
         img_backarrow.setOnClickListener(this);
         tv_upload_image.setOnClickListener(this);
+        tv_already_account.setOnClickListener(this);
         tv_company.setBackground(getDrawable(R.drawable.rounded_button_border));
         tv_individual.setBackground(getDrawable(R.drawable.rounded_button_selected));
 
@@ -193,14 +199,25 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
             startActivity(intent);
         }
         else {
-            Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
-            intent.putExtra("Email", email);
-            intent.putExtra("FirstName", edt_firstname.getText().toString());
-            intent.putExtra("SurName", edt_surname.getText().toString());
-            intent.putExtra("FilePath", file_name.toString());
-            intent.putExtra("userType", userType);
-            intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-            startActivity(intent);
+            if(file_name!=null){
+                Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
+                intent.putExtra("Email", email);
+                intent.putExtra("FirstName", edt_firstname.getText().toString());
+                intent.putExtra("SurName", edt_surname.getText().toString());
+                intent.putExtra("FilePath", file_name.toString());
+                intent.putExtra("userType", userType);
+                intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+                startActivity(intent);
+            }else{
+                Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
+                intent.putExtra("Email", email);
+                intent.putExtra("FirstName", edt_firstname.getText().toString());
+                intent.putExtra("SurName", edt_surname.getText().toString());
+                intent.putExtra("userType", userType);
+                intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+                startActivity(intent);
+            }
+
         }
     }
 
@@ -258,6 +275,12 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
                 tv_individual.setBackground(getDrawable(R.drawable.rounded_button_border));
                 tv_individual.setTextColor(getResources().getColor(R.color.gray));
                 userType = "company";
+                break;
+
+            case R.id.tv_already_account:
+                Intent intent = new Intent(CreateAccount_1_Activity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
                 break;
 
         }

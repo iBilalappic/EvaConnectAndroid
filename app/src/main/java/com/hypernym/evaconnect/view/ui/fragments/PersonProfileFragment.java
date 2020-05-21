@@ -108,6 +108,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
         ButterKnife.bind(this, view);
         layout_disconnect.setOnClickListener(this);
         layout_block.setOnClickListener(this);
+        layout_EditDetail.setOnClickListener(this);
         init();
         return view;
     }
@@ -241,6 +242,8 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
             case R.id.layout_message:
                 break;
             case R.id.layout_EditDetail:
+                EditProfileFragment editProfileFragment = new EditProfileFragment();
+                loadFragment(R.id.framelayout, editProfileFragment, getContext(), true);
                 break;
             case R.id.layout_notification:
                 break;
@@ -278,7 +281,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                 }
             });
         } else {
-            Toast.makeText(getActivity(), "your connection with user does not exist!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Your connection with user does not exist!", Toast.LENGTH_SHORT).show();
         }
 
     }

@@ -27,18 +27,18 @@
 
             <ImageView
                 android:id="@+id/img_backarrow"
-                android:layout_width="13dp"
-                android:layout_height="13dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:src="@drawable/ic_arrow_left" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
                 android:layout_marginEnd="20dp"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:textStyle="bold"
                 android:text="Edit Profile"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
@@ -156,10 +156,10 @@
             android:backgroundTint="@color/colorwhite"
             android:enabled="false"
             android:gravity="start|center"
-            android:hint="Location "
+            android:hint="Location"
             android:maxLength="100"
             android:paddingLeft="10dp"
-            android:textColor="@color/black"
+            android:textColor="@color/gray_1"
             android:textColorHint="@color/black"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -192,7 +192,7 @@
             android:enabled="false"
             android:maxLength="100"
             android:paddingLeft="10dp"
-            android:textColor="@color/black"
+            android:textColor="@color/gray_1"
             android:textColorHint="@color/black"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"

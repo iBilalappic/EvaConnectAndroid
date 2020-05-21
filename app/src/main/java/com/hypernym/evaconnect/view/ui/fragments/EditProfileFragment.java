@@ -47,6 +47,9 @@ import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.view.bottomsheets.BottomSheetPictureSelection;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.view.ui.activities.CreateAccount_1_Activity;
+import com.hypernym.evaconnect.view.ui.activities.HomeActivity;
+import com.hypernym.evaconnect.view.ui.activities.LoginActivity;
+import com.hypernym.evaconnect.view.ui.activities.SplashActivity;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
@@ -103,12 +106,15 @@ public class EditProfileFragment extends BaseFragment implements Validator.Valid
     @BindView(R.id.img_edit)
     ImageView img_edit;
 
+    @BindView(R.id.img_backarrow)
+    ImageView img_backarrow;
 
     @BindView(R.id.tv_updated)
     TextView tv_updated;
 
     @BindView(R.id.btn_save)
     TextView btn_save;
+
 
     @BindView(R.id.profile_image)
     CircleImageView cv_profile_image;
@@ -164,6 +170,12 @@ public class EditProfileFragment extends BaseFragment implements Validator.Valid
 
             }
         });
+        img_backarrow.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+
+            }
+        });
 
         return view;
     }
@@ -197,21 +209,25 @@ public class EditProfileFragment extends BaseFragment implements Validator.Valid
             @Override
             public void onChanged(BaseModel<List<Object>> listBaseModel) {
                 if (!listBaseModel.isError()) {
-                    simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), "Profile updated successfully", null, getString(R.string.ok), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            simpleDialog.dismiss();
-                        }
-                    });
+                   tv_updated.setVisibility(View.VISIBLE);
+                   initHandler();
                     GetUserDetails();
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
                 hideDialog();
-                simpleDialog.show();
-                simpleDialog.setCancelable(false);
             }
         });
+    }
+
+    private void initHandler() {
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                tv_updated.setVisibility(View.GONE);
+            }
+        }, 3000);
     }
 
     private void GetUserDetails() {
@@ -303,15 +319,15 @@ public class EditProfileFragment extends BaseFragment implements Validator.Valid
                 Log.e(getClass().getName(), "exc: " + exc.getMessage());
             }
         } else {
-            if (requestCode == CAMERAA) {
+            if (requestCode == CAMERAA && resultCode == RESULT_OK) {
 
                 //mIsProfileImageAdded = true;
-                File file = galleryAddPic();
-                RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+                 galleryAddPic();
+                RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file_name);
                 // imgName = file_name.getName();
 
-                globalImagePath = file.getAbsolutePath();
-                if (file.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.IMAGE_SIZE_IN_KB) {
+                globalImagePath = file_name.getAbsolutePath();
+                if (file_name.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.IMAGE_SIZE_IN_KB) {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_image_size_large));
                     return;
                 }
@@ -332,11 +348,9 @@ public class EditProfileFragment extends BaseFragment implements Validator.Valid
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    partImage = MultipartBody.Part.createFormData("user_image", file.getName(), reqFile);
+                    partImage = MultipartBody.Part.createFormData("user_image", file_name.getName(), reqFile);
                     //AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 8));
 
-                } else {
-                    cv_profile_image.setImageResource(R.drawable.app_logo);
                 }
 
             }
