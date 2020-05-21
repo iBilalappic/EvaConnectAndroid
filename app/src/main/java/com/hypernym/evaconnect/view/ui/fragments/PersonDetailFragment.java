@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -117,9 +118,15 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
         if ((getArguments() != null)) {
             showBackButton();
             post = (Post) getArguments().getSerializable("PostData");
-            if (post.getUser().getIs_linkedin() == 1) {
+            if (post.getUser().getIs_linkedin() == 1 && !TextUtils.isEmpty(post.getUser().getLinkedin_image_url()))
+            {
                 AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getLinkedin_image_url());
-            } else {
+            }
+            else if (post.getUser().getIs_facebook() == 1 && !TextUtils.isEmpty(post.getUser().getFacebook_image_url()))
+            {
+                AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getFacebook_image_url());
+            }
+            else {
                 AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getUser_image());
             }
             tv_name.setText(post.getUser().getFirst_name());
@@ -260,9 +267,15 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
         unfollow = Remove_block_Dialog.findViewById(R.id.unfollow);
         block = Remove_block_Dialog.findViewById(R.id.block);
         tv_profilename.setText(post.getUser().getFirst_name());
-        if (post.getUser().getIs_linkedin() == 1){
+        if (post.getUser().getIs_linkedin() == 1 && !TextUtils.isEmpty(post.getUser().getLinkedin_image_url()))
+        {
             AppUtils.setGlideImage(getContext(), profile_image_dialog, post.getUser().getLinkedin_image_url());
-        } else {
+        }
+        else if (post.getUser().getIs_facebook() == 1 && !TextUtils.isEmpty(post.getUser().getFacebook_image_url()))
+        {
+            AppUtils.setGlideImage(getContext(), profile_image_dialog, post.getUser().getFacebook_image_url());
+        }
+        else {
             AppUtils.setGlideImage(getContext(), profile_image_dialog, post.getUser().getUser_image());
         }
         connection_stauts.setText(AppUtils.getConnectionStatus(getContext(), post.getIs_connected(), post.isIs_receiver()));

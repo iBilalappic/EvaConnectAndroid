@@ -1,6 +1,7 @@
 package com.hypernym.evaconnect.view.adapters;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,9 +47,13 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ConnectionsAdapter.ViewHolder holder, int position) {
-        if (connections.get(position).getIs_linkedin() == 1) {
+        if (connections.get(position).getIs_linkedin() == 1 && !TextUtils.isEmpty(connections.get(position).getLinkedin_image_url())) {
             AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getLinkedin_image_url());
-        } else {
+        }
+        else if (connections.get(position).getIs_facebook() == 1 && !TextUtils.isEmpty(connections.get(position).getFacebook_image_url())){
+            AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getFacebook_image_url());
+        }
+        else {
             AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getUser_image());
         }
         holder.tv_name.setText(connections.get(position).getFirst_name());

@@ -415,7 +415,7 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
             Comment comment = new Comment();
             String toServerUnicodeEncoded = StringEscapeUtils.escapeJava(edt_comment.getText().toString());
             comment.setContent(toServerUnicodeEncoded);
-            comment.setCreated_by_id(user.getUser_id());
+            comment.setCreated_by_id(user.getId());
             comment.setStatus(AppConstants.STATUS_ACTIVE);
             comment.setEvent_id(event_id);
             eventViewModel.addComment(comment).observe(this, new Observer<BaseModel<List<Comment>>>() {

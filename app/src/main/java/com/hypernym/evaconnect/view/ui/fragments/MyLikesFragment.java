@@ -127,7 +127,7 @@ public class MyLikesFragment extends BaseFragment implements MyLikeAdapter.OnIte
     private void GetMyLikes() {
         showDialog();
         User user = LoginUtils.getLoggedinUser();
-        mylikeViewModel.SetLikes(user.getUser_id(), AppConstants.TOTAL_PAGES, currentPage).observe(this, new Observer<BaseModel<List<MyLikesModel>>>() {
+        mylikeViewModel.SetLikes(user.getId(), AppConstants.TOTAL_PAGES, currentPage).observe(this, new Observer<BaseModel<List<MyLikesModel>>>() {
             @Override
             public void onChanged(BaseModel<List<MyLikesModel>> getnetworkconnection) {
                 if (getnetworkconnection != null && !getnetworkconnection.isError() && getnetworkconnection.getData().size() > 0 && getnetworkconnection.getData().get(0) != null) {

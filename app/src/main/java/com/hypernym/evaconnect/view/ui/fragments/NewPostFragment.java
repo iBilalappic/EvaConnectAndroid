@@ -175,11 +175,11 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
         User user = LoginUtils.getLoggedinUser();
         AppUtils.setGlideImage(getContext(), profile_image, user.getUser_image());
 
-        if (user.getIs_linkedin() == 1) {
+        if (user.getIs_linkedin() == 1 && !TextUtils.isEmpty(user.getLinkedin_image_url())) {
             AppUtils.setGlideImage(getContext(), profile_image, user.getLinkedin_image_url());
 
         }
-        else if (user.getIs_facebook() == 1){
+        else if (user.getIs_facebook() == 1 && !TextUtils.isEmpty(user.getFacebook_image_url())){
             AppUtils.setGlideImage(getContext(), profile_image, user.getFacebook_image_url());
         }
         else {
