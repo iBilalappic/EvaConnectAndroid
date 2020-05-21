@@ -34,6 +34,17 @@ public class User implements Serializable {
     private Integer is_linkedin;
     private Integer is_facebook;
 
+    public Integer getConnection_count() {
+        return connection_count;
+    }
+
+    public void setConnection_count(Integer connection_count) {
+        this.connection_count = connection_count;
+    }
+
+    private Integer connection_count;
+
+
     public String getFacebook_image_url() {
         return facebook_image_url;
     }

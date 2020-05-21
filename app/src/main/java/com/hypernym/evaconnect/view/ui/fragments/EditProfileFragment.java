@@ -250,6 +250,7 @@ public class EditProfileFragment extends BaseFragment implements Validator.Valid
                     edt_sector.setText(listBaseModel.getData().get(0).getSector());
                     edt_designation.setText(listBaseModel.getData().get(0).getDesignation());
                     tv_name.setText(listBaseModel.getData().get(0).getFirst_name());
+                    LoginUtils.saveUser(listBaseModel.getData().get(0));
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
@@ -319,10 +320,10 @@ public class EditProfileFragment extends BaseFragment implements Validator.Valid
                 Log.e(getClass().getName(), "exc: " + exc.getMessage());
             }
         } else {
-            if (requestCode == CAMERAA && resultCode == RESULT_OK) {
+            if (requestCode == CAMERAA&& resultCode == RESULT_OK ) {
 
                 //mIsProfileImageAdded = true;
-                 galleryAddPic();
+                 galleryAddPics();
                 RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file_name);
                 // imgName = file_name.getName();
 
@@ -355,6 +356,16 @@ public class EditProfileFragment extends BaseFragment implements Validator.Valid
 
             }
         }
+    }
+
+    private void galleryAddPics() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        mCurrentPhotoPath=getCurrentPhotoPath();
+        File f = new File(mCurrentPhotoPath);
+        file_name = f;
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        getActivity().sendBroadcast(mediaScanIntent);
     }
 
 

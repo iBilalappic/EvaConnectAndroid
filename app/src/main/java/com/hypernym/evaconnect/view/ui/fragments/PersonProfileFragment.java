@@ -204,7 +204,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
 
             tv_location.setText(user.getCountry() + "," + user.getCity());
             tv_company.setText(user.getSector() + " | " + user.getCompany_name());
-            tv_connections_count.setText(String.valueOf(user.getTotal_connection()));
+            tv_connections_count.setText(String.valueOf(user.getConnection_count()));
             if (user.getDesignation() != null) {
                 tv_profession.setText(user.getDesignation());
             }
