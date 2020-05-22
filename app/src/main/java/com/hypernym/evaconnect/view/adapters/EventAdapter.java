@@ -41,27 +41,45 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         if(events.get(position).getObject_type().equalsIgnoreCase("interview"))
         {
-            holder.tv_title.setText("Job Interview at "+events.get(position).getObject_details().getCompany_name()+" - "+events.get(position).getObject_details().getPosition()
+            holder.itemView.setVisibility(View.VISIBLE);
+
+            holder.eventTitle.setText("Job Interview at "+events.get(position).getObject_details().getCompany_name()+" - "+events.get(position).getObject_details().getPosition()
                     +" | "+ events.get(position).getObject_details().getAddress());
-            holder.tv_datetime.setText(DateUtils.getFormattedEventTime(events.get(position).getObject_details().getInterview_time()));
-            holder.tv_title.setCompoundDrawablesWithIntrinsicBounds( R.drawable.redcircle, 0, 0, 0);
-            holder.tv_datetime.setVisibility(View.VISIBLE);
+            holder.time.setText(DateUtils.getFormattedEventTime(events.get(position).getObject_details().getInterview_time()));
+            holder.month.setText(DateUtils.extractMonth(events.get(position).getObject_details().getEvent_start_date()));
+            holder.type.setText(events.get(position).getObject_type());
+            holder.type.setTextColor(context.getResources().getColor(R.color.red_2));
+
+            holder.day.setText(DateUtils.extractDay(events.get(position).getObject_details().getEvent_start_date()));
         }
         else if(events.get(position).getObject_type().equalsIgnoreCase("event"))
         {
-            holder.tv_title.setText(events.get(position).getObject_details().getEvent_name()+" | "+ events.get(position).getObject_details().getEvent_city());
-            holder.tv_datetime.setText(DateUtils.get12formant(events.get(position).getObject_details().getStart_time())+" - "+DateUtils.get12formant(events.get(position).getObject_details().getEnd_time()));
-            holder.tv_title.setCompoundDrawablesWithIntrinsicBounds( R.drawable.blackcircle, 0, 0, 0);
-            holder.tv_datetime.setVisibility(View.VISIBLE);
+            holder.itemView.setVisibility(View.VISIBLE);
+
+            holder.eventTitle.setText(events.get(position).getObject_details().getEvent_name() + " | " + events.get(position).getObject_details().getEvent_city());
+            holder.time.setText(DateUtils.get12formant(events.get(position).getObject_details().getStart_time())+" - "+DateUtils.get12formant(events.get(position).getObject_details().getEnd_time()));
+            holder.month.setText(DateUtils.extractMonth(events.get(position).getObject_details().getEvent_start_date()));
+            holder.type.setText(events.get(position).getObject_type());
+            holder.type.setTextColor(context.getResources().getColor(R.color.calendar_selection_colour));
+
+            holder.day.setText(DateUtils.extractDay(events.get(position).getObject_details().getEvent_start_date()));
         }
-        else if(events.get(position).getObject_type().equalsIgnoreCase("note"))
+        else if(events.get(position).getObject_type().equalsIgnoreCase("meeting"))
         {
-            holder.tv_title.setText(events.get(position).getNotes());
-            holder.tv_datetime.setVisibility(View.GONE);
-            holder.tv_title.setCompoundDrawablesWithIntrinsicBounds( R.drawable.bluecircle, 0, 0, 0);
+            holder.itemView.setVisibility(View.VISIBLE);
+
+            holder.eventTitle.setText(events.get(position).getObject_details().getEvent_name() + " | " + events.get(position).getObject_details().getEvent_city());
+            holder.time.setText(DateUtils.get12formant(events.get(position).getObject_details().getStart_time())+" - "+DateUtils.get12formant(events.get(position).getObject_details().getEnd_time()));
+            holder.month.setText(DateUtils.extractMonth(events.get(position).getObject_details().getEvent_start_date()));
+            holder.type.setText(events.get(position).getObject_type());
+            holder.type.setTextColor(context.getResources().getColor(R.color.calendar_meetings));
+
+            holder.day.setText(DateUtils.extractDay(events.get(position).getObject_details().getEvent_start_date()));
+        }
+        else{
+            holder.itemView.setVisibility(View.GONE);
         }
     }
-
 
     @Override
     public int getItemCount() {
@@ -69,11 +87,20 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder  {
-        @BindView(R.id.tv_title)
-        TextView tv_title;
+        @BindView(R.id.day)
+        TextView day;
 
-        @BindView(R.id.tv_datetime)
-        TextView tv_datetime;
+        @BindView(R.id.month)
+        TextView month;
+
+        @BindView(R.id.eventTitle)
+        TextView eventTitle;
+
+        @BindView(R.id.object_type)
+        TextView type;
+
+        @BindView(R.id.time)
+        TextView time;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -81,5 +108,4 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         }
 
     }
-
 }

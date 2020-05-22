@@ -14,6 +14,8 @@ public final class DateUtils {
     public static final String DATE_FORMAT_1 = "hh:mm a";
     public static final String DATE_FORMAT_2 = "d MMM";
     public static final String DATE_FORMAT_3 = "d MMM yyyy";
+    public static final String DATE_FORMAT_4 = "MMM";
+    public static final String DATE_FORMAT_5 = "dd";
     public static final String TIME_FORMAT_1 = "HH:mm:ss";
     public static final String DATE_INPUT_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final String DATE_INPUT_FORMAT_WITHOUTTIME = "yyyy-MM-dd";
@@ -81,6 +83,48 @@ public final class DateUtils {
         try {
 
             mParsedDate = mInputDateFormat.parse(datetime);
+            mOutputTimeString = mOutputDateFormat1.format(mParsedDate);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return mOutputTimeString;
+    }
+
+    public static String extractMonth(String date){
+        Date mParsedDate;
+        String mOutputDateString = "";
+        String mOutputTimeString = "";
+        SimpleDateFormat mInputDateFormat =
+                new SimpleDateFormat(DATE_INPUT_FORMAT_WITHOUTTIME, java.util.Locale.getDefault());
+
+        SimpleDateFormat mOutputDateFormat1 =
+                new SimpleDateFormat(DATE_FORMAT_4, java.util.Locale.getDefault());
+        try {
+
+            mParsedDate = mInputDateFormat.parse(date);
+            mOutputTimeString = mOutputDateFormat1.format(mParsedDate);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return mOutputTimeString;
+    }
+
+    public static String extractDay(String date){
+        Date mParsedDate;
+        String mOutputDateString = "";
+        String mOutputTimeString = "";
+        SimpleDateFormat mInputDateFormat =
+                new SimpleDateFormat(DATE_INPUT_FORMAT_WITHOUTTIME, java.util.Locale.getDefault());
+
+        SimpleDateFormat mOutputDateFormat1 =
+                new SimpleDateFormat(DATE_FORMAT_5, java.util.Locale.getDefault());
+        try {
+
+            mParsedDate = mInputDateFormat.parse(date);
             mOutputTimeString = mOutputDateFormat1.format(mParsedDate);
 
         } catch (ParseException e) {

@@ -24,18 +24,22 @@
 
     <style name="TextAppearance.Text.Regular" parent="android:TextAppearance">
         <item name="fontPath">fonts/nunitosansregular.ttf</item>
+        <item name="android:textStyle">normal</item>
     </style>
 
     <style name="TextAppearance.Text.Bold" parent="android:TextAppearance">
         <item name="fontPath">fonts/nunitosansbold.ttf</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="TextAppearance.Text.Light" parent="android:TextAppearance">
         <item name="fontPath">fonts/nunitosanslight.ttf</item>
+        <item name="android:textStyle">normal</item>
     </style>
 
     <style name="TextAppearance.Text.Italic" parent="android:TextAppearance">
         <item name="fontPath">fonts/nunitosansitalic.ttf</item>
+        <item name="android:textStyle">italic</item>
     </style>
 
     <style name="Button">
@@ -181,6 +185,19 @@
         <item name="android:textColor">@color/light_black</item>
         <item name="android:textAppearance">@style/TextAppearance.Text.Light</item>
          <item name="android:textSize">14sp</item>
+    </style>
+
+
+    <style name="TextStyle.Title1">
+        <item name="android:textColor">@color/calendar_selection_colour</item>
+        <item name="android:textAppearance">@style/TextAppearance.Text.Bold</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextStyle.Title2">
+        <item name="android:textColor">@color/calendar_selection_colour</item>
+        <item name="android:textAppearance">@style/TextAppearance.Text.Light</item>
     </style>
 
     <style name="TextStyle">
