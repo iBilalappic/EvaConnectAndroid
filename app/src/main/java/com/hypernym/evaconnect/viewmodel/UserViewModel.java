@@ -56,9 +56,9 @@ public class UserViewModel extends AndroidViewModel {
         return iUserRespository.facebookLogin(user_email);
     }
 
-    public LiveData<BaseModel<List<Object>>> profile_update(Integer id, String designation, String field, String company_name, String address, String bio_data)
+    public LiveData<BaseModel<List<Object>>> profile_update(int id, String designation,String companyname, String firstname, MultipartBody.Part partImage)
     {
-        return iUserRespository.profile_update(id,designation,field,company_name,address,bio_data);
+        return iUserRespository.profile_update(id,designation,companyname,firstname,partImage);
     }
 
     public LiveData<BaseModel<List<User>>> getuser_details(Integer id)

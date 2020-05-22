@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.lifecycle.Observer;
@@ -70,6 +71,10 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
     @BindView(R.id.img_cross)
     ImageView img_cross;
 
+
+    @BindView(R.id.tv_already_account)
+    TextView tv_already_account;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +85,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
         init();
         img_backarrow.setOnClickListener(this);
         img_cross.setOnClickListener(this);
+        tv_already_account.setOnClickListener(this);
         btn_finish.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
@@ -177,10 +183,13 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             activity_type = "normal_type";
             user.setLinkedin_image_url("");
             user.setFacebook_image_url("");
-            File file = new File(filepath);
+            if(filepath!=null){
+                File file = new File(filepath);
 
-            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
-            partImage = MultipartBody.Part.createFormData("user_image", file.getName(), reqFile);
+                RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+                partImage = MultipartBody.Part.createFormData("user_image", file.getName(), reqFile);
+            }
+
 
             user.setWork_aviation(aviation_type);
             user.setUsername(email);
@@ -346,6 +355,12 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
 
             case R.id.img_cross:
                 this.finish();
+                break;
+
+            case R.id.tv_already_account:
+                Intent intent = new Intent(PasswordActivity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
                 break;
         }
     }

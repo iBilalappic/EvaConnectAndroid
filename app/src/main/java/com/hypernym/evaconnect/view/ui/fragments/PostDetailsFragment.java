@@ -235,7 +235,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         if (post.getUser().getId() == user.getId()) {
             tv_connect.setVisibility(View.GONE);
         } else {
-            tv_connect.setVisibility(View.VISIBLE);
+            tv_connect.setVisibility(View.GONE);
             tv_connect.setText(AppUtils.getConnectionStatus(getContext(), post.getIs_connected(), post.isIs_receiver()));
         }
         if (post.getUser().getIs_linkedin() == 1 && !TextUtils.isEmpty(post.getUser().getLinkedin_image_url())) {
@@ -294,7 +294,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         String toServerUnicodeEncoded = StringEscapeUtils.escapeJava(edt_comment.getText().toString());
 
         comment.setContent(toServerUnicodeEncoded);
-        comment.setCreated_by_id(user.getUser_id());
+        comment.setCreated_by_id(user.getId());
         comment.setStatus(AppConstants.STATUS_ACTIVE);
         comment.setPost_id(postID);
         postViewModel.addComment(comment).observe(this, new Observer<BaseModel<List<Comment>>>() {

@@ -302,9 +302,9 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
                 tv_likecount.setText(String.valueOf(event.getLike_count()));
                 tv_comcount.setText(String.valueOf(event.getComment_count()));
                 if (event.getIs_event_like() != null && event.getIs_event_like() > 0) {
-                    img_like.setBackground(getContext().getDrawable(R.mipmap.ic_like_selected));
+                    img_like.setBackground(getContext().getDrawable(R.drawable.ic_like));
                 } else {
-                    img_like.setBackground(getContext().getDrawable(R.mipmap.ic_like));
+                    img_like.setBackground(getContext().getDrawable(R.drawable.ic_like));
                 }
             }
         });
@@ -415,7 +415,7 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
             Comment comment = new Comment();
             String toServerUnicodeEncoded = StringEscapeUtils.escapeJava(edt_comment.getText().toString());
             comment.setContent(toServerUnicodeEncoded);
-            comment.setCreated_by_id(user.getUser_id());
+            comment.setCreated_by_id(user.getId());
             comment.setStatus(AppConstants.STATUS_ACTIVE);
             comment.setEvent_id(event_id);
             eventViewModel.addComment(comment).observe(this, new Observer<BaseModel<List<Comment>>>() {

@@ -69,7 +69,11 @@ public class CreateAccount_2_Activity extends BaseActivity implements Validator.
     @BindView(R.id.img_cross)
     ImageView img_cross;
 
-    String email, photourl, activity_type,user_type,firstname,surname,file_name;
+
+    @BindView(R.id.tv_already_account)
+    TextView tv_already_account;
+
+    String email, photourl, activity_type, user_type, firstname, surname, file_name;
 
     public static final int RequestPermissionCode = 1;
     LatLng mLastLocation;
@@ -83,6 +87,7 @@ public class CreateAccount_2_Activity extends BaseActivity implements Validator.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account_2);
         ButterKnife.bind(this);
+        tv_already_account.setOnClickListener(this);
         init();
     }
 
@@ -98,16 +103,14 @@ public class CreateAccount_2_Activity extends BaseActivity implements Validator.
             surname = getIntent().getStringExtra("SurName");
 
 
-        }
-        else if (!TextUtils.isEmpty(type) && type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)){
+        } else if (!TextUtils.isEmpty(type) && type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)) {
             email = getIntent().getStringExtra("Email");
             photourl = getIntent().getStringExtra("Photo");
             user_type = getIntent().getStringExtra("userType");
             activity_type = AppConstants.FACEBOOK_LOGIN_TYPE;
             firstname = getIntent().getStringExtra("FirstName");
             surname = getIntent().getStringExtra("SurName");
-        }
-        else {
+        } else {
             email = getIntent().getStringExtra("Email");
             activity_type = "normal_type";
             file_name = getIntent().getStringExtra("FilePath");
@@ -152,38 +155,47 @@ public class CreateAccount_2_Activity extends BaseActivity implements Validator.
             intent.putExtra("Email", email);
             intent.putExtra("Photo", photourl);
             intent.putExtra("userType", user_type);
-            intent.putExtra("FirstName",firstname);
+            intent.putExtra("FirstName", firstname);
             intent.putExtra("SurName", surname);
             intent.putExtra("city", tv_city.getText().toString());
             intent.putExtra("country", tv_country.getText().toString());
             intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
             startActivity(intent);
 
-        }
-        else if (activity_type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)){
+        } else if (activity_type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)) {
             Intent intent = new Intent(CreateAccount_2_Activity.this, CreateAccount_3_Activity.class);
             intent.putExtra("Email", email);
             intent.putExtra("Photo", photourl);
             intent.putExtra("userType", user_type);
-            intent.putExtra("FirstName",firstname);
-            intent.putExtra("SurName", surname);
-            intent.putExtra("city", tv_city.getText().toString());
-            intent.putExtra("country", tv_country.getText().toString());
-            intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-            startActivity(intent);
-        }
-        else {
-            Intent intent = new Intent(CreateAccount_2_Activity.this, CreateAccount_3_Activity.class);
-
-            intent.putExtra("Email", email);
             intent.putExtra("FirstName", firstname);
             intent.putExtra("SurName", surname);
-            intent.putExtra("FilePath", file_name);
-            intent.putExtra("userType", user_type);
             intent.putExtra("city", tv_city.getText().toString());
             intent.putExtra("country", tv_country.getText().toString());
             intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
             startActivity(intent);
+        } else {
+            Intent intent = new Intent(CreateAccount_2_Activity.this, CreateAccount_3_Activity.class);
+            if (file_name != null) {
+
+                intent.putExtra("Email", email);
+                intent.putExtra("FirstName", firstname);
+                intent.putExtra("SurName", surname);
+                intent.putExtra("FilePath", file_name);
+                intent.putExtra("userType", user_type);
+                intent.putExtra("city", tv_city.getText().toString());
+                intent.putExtra("country", tv_country.getText().toString());
+                intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+                startActivity(intent);
+            } else {
+                intent.putExtra("Email", email);
+                intent.putExtra("FirstName", firstname);
+                intent.putExtra("SurName", surname);
+                intent.putExtra("userType", user_type);
+                intent.putExtra("city", tv_city.getText().toString());
+                intent.putExtra("country", tv_country.getText().toString());
+                intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+                startActivity(intent);
+            }
         }
 
     }
@@ -333,7 +345,7 @@ public class CreateAccount_2_Activity extends BaseActivity implements Validator.
                     boolean LocationPermission = grantResults[0] == PackageManager.PERMISSION_GRANTED;
 
 
-                    if (  LocationPermission) {
+                    if (LocationPermission) {
                         startLocationUpdates();
                         // Toast.makeText(HomeActivity.this, "Permission Granted", Toast.LENGTH_LONG).show();
                     } else {
@@ -356,6 +368,12 @@ public class CreateAccount_2_Activity extends BaseActivity implements Validator.
 
             case R.id.img_cross:
                 this.finish();
+                break;
+
+            case R.id.tv_already_account:
+                Intent intent = new Intent(CreateAccount_2_Activity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
                 break;
         }
     }

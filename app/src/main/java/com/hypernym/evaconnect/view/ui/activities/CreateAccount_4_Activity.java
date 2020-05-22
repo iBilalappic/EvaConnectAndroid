@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.lifecycle.Observer;
@@ -59,6 +60,10 @@ public class CreateAccount_4_Activity extends BaseActivity implements Validator.
     @BindView(R.id.img_cross)
     ImageView img_cross;
 
+
+    @BindView(R.id.tv_already_account)
+    TextView tv_already_account;
+
     private Validator validator;
 
     @Override
@@ -70,6 +75,7 @@ public class CreateAccount_4_Activity extends BaseActivity implements Validator.
         validator.setValidationListener(this);
         img_cross.setOnClickListener(this);
         img_backarrow.setOnClickListener(this);
+        tv_already_account.setOnClickListener(this);
         init();
         btn_next.setOnClickListener(new OnOneOffClickListener() {
             @Override
@@ -119,20 +125,37 @@ public class CreateAccount_4_Activity extends BaseActivity implements Validator.
         }
         else {
             Intent intent = new Intent(CreateAccount_4_Activity.this, PasswordActivity.class);
-            intent.putExtra("Email", email);
-            intent.putExtra("userType", user_type);
-            intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-            intent.putExtra("aviation_type", aviation_type);
-            intent.putExtra("job_sector", JobSector);
-            intent.putExtra("username", username);
-            intent.putExtra("FirstName", firstname);
-            intent.putExtra("SurName", surname);
-            intent.putExtra("city", city);
-            intent.putExtra("country", country);
-            intent.putExtra("FilePath", filepath);
-            intent.putExtra("jobtitle", edt_jobtitle.getText().toString());
-            intent.putExtra("companyname", edt_companyname.getText().toString());
-            startActivity(intent);
+            if (filepath != null) {
+
+                intent.putExtra("Email", email);
+                intent.putExtra("userType", user_type);
+                intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+                intent.putExtra("aviation_type", aviation_type);
+                intent.putExtra("job_sector", JobSector);
+                intent.putExtra("username", username);
+                intent.putExtra("FirstName", firstname);
+                intent.putExtra("SurName", surname);
+                intent.putExtra("city", city);
+                intent.putExtra("country", country);
+                intent.putExtra("FilePath", filepath);
+                intent.putExtra("jobtitle", edt_jobtitle.getText().toString());
+                intent.putExtra("companyname", edt_companyname.getText().toString());
+                startActivity(intent);
+            } else {
+                intent.putExtra("Email", email);
+                intent.putExtra("userType", user_type);
+                intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+                intent.putExtra("aviation_type", aviation_type);
+                intent.putExtra("job_sector", JobSector);
+                intent.putExtra("username", username);
+                intent.putExtra("FirstName", firstname);
+                intent.putExtra("SurName", surname);
+                intent.putExtra("city", city);
+                intent.putExtra("country", country);
+                intent.putExtra("jobtitle", edt_jobtitle.getText().toString());
+                intent.putExtra("companyname", edt_companyname.getText().toString());
+                startActivity(intent);
+            }
         }
 
 
@@ -211,6 +234,12 @@ public class CreateAccount_4_Activity extends BaseActivity implements Validator.
 
             case R.id.img_cross:
                 this.finish();
+                break;
+
+            case R.id.tv_already_account:
+                Intent intent = new Intent(CreateAccount_4_Activity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
                 break;
         }
     }

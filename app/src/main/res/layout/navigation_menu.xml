@@ -1,188 +1,296 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/dialog_width"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="10dp"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="277dp"
+    android:layout_height="fill_parent"
     android:layout_gravity="right|end"
+    android:layout_marginBottom="40dp"
+    android:background="@color/colorwhite"
     android:elevation="4dp"
-    android:background="@color/colorwhite">
+    android:orientation="vertical">
 
 
-        <ImageView
-            android:id="@+id/img_close"
-            android:layout_width="wrap_content"
+    <ImageView
+        android:id="@+id/img_close"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_gravity="right|end"
+        android:src="@drawable/ic_close"
+        android:tint="@color/black"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_image"
+        android:layout_width="91dp"
+        android:layout_height="91dp"
+        android:src="@drawable/profile"
+        app:civ_border_color="@color/skyblue"
+        app:civ_border_overlay="true"
+        app:civ_border_width="3.5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_close" />
+
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:text="Deinal Edwell"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_image">
+
+    </TextView>
+
+    <LinearLayout
+        android:id="@+id/layout1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_name">
+
+
+        <TextView
+            android:id="@+id/tv_designation"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_close"
-            android:tint="@color/black"
-            android:layout_gravity="right|end"/>
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:src="@mipmap/ic_new_app_logo"/>
-        <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:text="Manager at"
+            android:textAlignment="textEnd"
+            android:textSize="12sp"
+            android:textStyle="bold">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/tv_company"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:id="@+id/layoutLike"
-            android:gravity="center_vertical">
-            <TextView
-                style="@style/TextStyle.Black"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/my_likes"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right|end"
-                android:src="@drawable/like_selected"/>
-        </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="0dp"
-            android:background="@color/lighter_gray"/>
-        <LinearLayout
-            android:id="@+id/calendar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:gravity="center_vertical">
-            <TextView
-                style="@style/TextStyle.Black"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/calendar"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right|end"
-                android:src="@drawable/calendar"/>
-        </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="0dp"
-            android:background="@color/lighter_gray"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:id="@+id/joblisting"
-            android:gravity="center_vertical">
-            <TextView
-                style="@style/TextStyle.Black"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/job_listings"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right|end"
-                android:src="@drawable/job_listing"/>
-        </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="0dp"
-            android:background="@color/lighter_gray"/>
-        <LinearLayout
-            android:id="@+id/editProfile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:gravity="center_vertical">
-            <TextView
-                style="@style/TextStyle.Black"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/edit_profile"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right|end"
-                android:src="@drawable/edit_profile"/>
-        </LinearLayout>
+            android:layout_marginStart="@dimen/spacing_small"
+            android:layout_weight="1"
+            android:maxLines="1"
+            android:text="Easyjet"
+            android:textColor="@color/colorAccent"
+            android:textSize="12sp">
+
+        </TextView>
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tv_location"
+        style="@style/TextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="London,United kingdom"
+        android:textColor="@color/gray"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout1" />
+
     <View
+        android:id="@+id/view0"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="0dp"
-        android:background="@color/lighter_gray"/>
+        android:layout_marginTop="15dp"
+        android:background="@color/gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_location"></View>
+
+
+    <TextView
+        android:id="@+id/tv_connections_count"
+        style="@style/TextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="457"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/view1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view0" />
+
+    <TextView
+        android:id="@+id/tv_connections"
+        style="@style/TextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Connections"
+        android:textColor="@color/gray"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/view1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_connections_count" />
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="1dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view0" />
+
+
+    <TextView
+        android:id="@+id/tv_notication_count"
+        style="@style/TextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="457"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/view1"
+        app:layout_constraintTop_toBottomOf="@+id/view0" />
+
+    <TextView
+        android:id="@+id/tv_notification"
+        style="@style/TextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Notifications"
+        android:textColor="@color/gray"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/view1"
+        app:layout_constraintTop_toBottomOf="@+id/tv_notication_count" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/spacing_small"
+        android:background="@color/gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view1"></View>
+
+
     <LinearLayout
-        android:id="@+id/notifications"
+        android:id="@+id/layoutLike"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view2">
+
+        <TextView
+            style="@style/TextStyle.Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="My Activity" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|end"
+            android:src="@drawable/like_selected" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/calendar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutLike">
+
+        <TextView
+            style="@style/TextStyle.Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/calendar" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|end"
+            android:src="@drawable/calendar" />
+    </LinearLayout>
+
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendar"
+        android:layout_marginEnd="20dp"
+        android:id="@+id/joblisting"
         android:gravity="center_vertical">
         <TextView
             style="@style/TextStyle.Black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/notifications"/>
+            android:text="@string/job_listings"/>
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right|end"
-            android:src="@drawable/settings"/>
+            android:src="@drawable/job_listing"/>
     </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="0dp"
-            android:background="@color/lighter_gray"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:visibility="gone"
-            android:gravity="center_vertical">
-            <TextView
-                style="@style/TextStyle.Black"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/settings"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right|end"
-                android:src="@drawable/settings"/>
-        </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="5dp"
-            android:visibility="gone"
-            android:background="@color/lighter_gray"/>
-        <LinearLayout
-            android:id="@+id/logout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:layout_marginTop="5dp"
-            android:gravity="center_vertical">
-            <TextView
-                style="@style/TextStyle.Black"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/logout_menu"/>
-
-        </LinearLayout>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:textSize="10sp"
-        android:text="@string/app_version"/>
+        android:id="@+id/newpost"
+        style="@style/TextStyle.Title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/button_gradient_1"
+        android:drawablePadding="10dp"
+        android:gravity="start|center"
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="10dp"
+        android:text="Log Out"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

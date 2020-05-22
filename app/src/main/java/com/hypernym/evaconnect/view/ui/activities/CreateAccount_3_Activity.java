@@ -53,6 +53,10 @@ public class CreateAccount_3_Activity extends BaseActivity implements View.OnCli
     ImageView img_cross;
 
 
+    @BindView(R.id.tv_already_account)
+    TextView tv_already_account;
+
+
     private List<String> jobsector = new ArrayList<>();
     ArrayAdapter<String> arraySectorAdapter;
 
@@ -65,6 +69,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements View.OnCli
         ButterKnife.bind(this);
         img_backarrow.setOnClickListener(this);
         img_cross.setOnClickListener(this);
+        tv_already_account.setOnClickListener(this);
         init();
 
 
@@ -174,19 +179,36 @@ public class CreateAccount_3_Activity extends BaseActivity implements View.OnCli
                     startActivity(intent);
                 }
                 else {
+
                     Intent intent = new Intent(CreateAccount_3_Activity.this, CreateAccount_4_Activity.class);
-                    intent.putExtra("Email", email);
-                    intent.putExtra("userType", user_type);
-                    intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-                    intent.putExtra("aviation_type", aviation_type);
-                    intent.putExtra("job_sector", JobSector);
-                    intent.putExtra("username", username);
-                    intent.putExtra("FirstName",firstname);
-                    intent.putExtra("SurName", surname);
-                    intent.putExtra("city", city);
-                    intent.putExtra("country", country);
-                    intent.putExtra("FilePath", filepath);
-                    startActivity(intent);
+                    if (filepath != null) {
+
+                        intent.putExtra("Email", email);
+                        intent.putExtra("userType", user_type);
+                        intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+                        intent.putExtra("aviation_type", aviation_type);
+                        intent.putExtra("job_sector", JobSector);
+                        intent.putExtra("username", username);
+                        intent.putExtra("FirstName",firstname);
+                        intent.putExtra("SurName", surname);
+                        intent.putExtra("city", city);
+                        intent.putExtra("country", country);
+                        intent.putExtra("FilePath", filepath);
+                        startActivity(intent);
+                    } else {
+                        intent.putExtra("Email", email);
+                        intent.putExtra("userType", user_type);
+                        intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+                        intent.putExtra("aviation_type", aviation_type);
+                        intent.putExtra("job_sector", JobSector);
+                        intent.putExtra("username", username);
+                        intent.putExtra("FirstName",firstname);
+                        intent.putExtra("SurName", surname);
+                        intent.putExtra("city", city);
+                        intent.putExtra("country", country);
+                        startActivity(intent);
+                    }
+
                 }
 
             }
@@ -247,6 +269,12 @@ public class CreateAccount_3_Activity extends BaseActivity implements View.OnCli
 
             case R.id.img_cross:
                 this.finish();
+                break;
+
+            case R.id.tv_already_account:
+                Intent intent = new Intent(CreateAccount_3_Activity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
                 break;
         }
     }
