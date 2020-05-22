@@ -118,6 +118,7 @@
     <string name="no_data">No Data</string>
     <string name="amp"><![CDATA[&]]></string>
     <string name="fb_sign_in_text">Sign in with Facebook</string>
+    <string name="no_events_or_meetings">No events or meetings</string>
 
 
 </resources>

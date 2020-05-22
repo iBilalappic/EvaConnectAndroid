@@ -1,5 +1,6 @@
 package com.hypernym.evaconnect.models;
 
+import com.google.gson.annotations.SerializedName;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.io.Serializable;
@@ -16,6 +17,8 @@ public class CalendarModel implements Serializable {
 
     private String status;
     private String object_id;
+
+    @SerializedName("object_details")
     private Post object_details;
 
     public int getUser_id() {
