@@ -121,6 +121,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textAppearance">@style/TextAppearance.Text.Light</item>
         <item name="android:background">@drawable/rounded_button_blue</item>
+        <item name="android:fontFamily">@font/nunitosansregular</item>
     </style>
 
     <style name="Button_selected_blue_fb">
@@ -181,6 +182,7 @@
         <item name="android:textColor">@color/light_black</item>
         <item name="android:textAppearance">@style/TextAppearance.Text.Light</item>
          <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/nunitosansbold</item>
     </style>
 
     <style name="TextStyle">
@@ -204,6 +206,7 @@
         <item name="android:gravity">center</item>
         <item name="android:background">@null</item>
         <item name="android:layout_height">30dp</item>
+        <item name="android:fontFamily">@font/nunitosansregular</item>
     </style>
     <style name="EditText.Comments">
         <item name="android:textAppearance">@style/TextAppearance.Text.Light</item>
