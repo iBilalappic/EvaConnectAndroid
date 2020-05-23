@@ -60,7 +60,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             holder.time.setText(DateUtils.get12formant(events.get(position).getObject_details().getStart_time())+" - "+DateUtils.get12formant(events.get(position).getObject_details().getEnd_time()));
             holder.month.setText(DateUtils.extractMonth(events.get(position).getObject_details().getEvent_start_date()));
             holder.type.setText(events.get(position).getObject_type());
-            holder.type.setTextColor(context.getResources().getColor(R.color.calendar_selection_colour));
+            holder.type.setTextColor(context.getResources().getColor(R.color.red_2));
 
             holder.day.setText(DateUtils.extractDay(events.get(position).getObject_details().getEvent_start_date()));
         }

@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/title"
-            android:text="Title"
+            android:text="Meeting Subject"
             android:textSize="12sp"
             android:textAppearance="@style/TextAppearance.Text.Bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +37,7 @@
             android:maxLength="50"
             android:textSize="14sp"
             android:textColorHint="#B4B4B4"
-            android:hint="Name of the event"
+            android:hint="Meeting Subject"
             android:backgroundTint="#5894DD"
             android:paddingTop="16dp"
             android:paddingBottom="16dp"
@@ -75,7 +75,7 @@
             app:layout_constraintStart_toEndOf="@id/clock"
             app:layout_constraintTop_toBottomOf="@id/edt_eventname"
             android:layout_marginStart="@dimen/spacing_xsmall"
-            android:layout_marginTop="@dimen/spacing_medium"
+            android:layout_marginTop="@dimen/spacing_large"
             />
 
         <EditText
@@ -151,7 +151,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_small"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/spacing_large"
             android:backgroundTint="#F6F6F6"
             android:drawablePadding="8dp"
             android:hint="Location"
@@ -164,33 +164,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/location_icon"
             app:layout_constraintTop_toBottomOf="@id/tv_enddate" />
-
-        <ImageView
-            android:id="@+id/calendar_icon"
-            android:layout_width="20dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/calendar_icon"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="@dimen/spacing_large"
-            app:layout_constraintTop_toTopOf="@id/event_type_spinner"
-            app:layout_constraintBottom_toBottomOf="@id/event_type_spinner"
-            app:layout_constraintVertical_bias="0.50"
-            />
-
-        <Spinner
-            android:id="@+id/event_type_spinner"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/spacing_small"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="#E1DFDF"
-            android:padding="10dp"
-            android:entries="@array/events_types"
-            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
-            android:layout_marginEnd="@dimen/spacing_large"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/location_icon"
-            app:layout_constraintTop_toBottomOf="@id/edt_eventlocation" />
 
         <ImageView
             android:id="@+id/icon_pen"
@@ -209,7 +182,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_small"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/spacing_large"
             android:backgroundTint="#F6F6F6"
             android:drawablePadding="8dp"
             android:hint="Details"
@@ -221,38 +194,7 @@
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/location_icon"
-            app:layout_constraintTop_toBottomOf="@id/event_type_spinner" />
-
-        <ImageView
-            android:id="@+id/icon_link"
-            android:layout_width="20dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_link"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="@dimen/spacing_large"
-            app:layout_constraintTop_toTopOf="@id/edt_link"
-            app:layout_constraintBottom_toBottomOf="@id/edt_link"
-            app:layout_constraintVertical_bias="0.50"
-            />
-
-        <EditText
-            android:id="@+id/edt_link"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/spacing_small"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="#F6F6F6"
-            android:drawablePadding="8dp"
-            android:hint="Registration Link"
-            android:padding="10dp"
-            android:layout_marginEnd="@dimen/spacing_large"
-            android:textAppearance="@style/TextAppearance.Text.Regular"
-            android:textColor="@color/black"
-            android:textColorHint="#B4B4B4"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/location_icon"
-            app:layout_constraintTop_toBottomOf="@id/edt_content" />
+            app:layout_constraintTop_toBottomOf="@id/edt_eventlocation" />
 
         <TextView
             android:id="@+id/invited"
@@ -261,14 +203,14 @@
             android:text="Invited"
             android:textSize="12sp"
             android:textAppearance="@style/TextAppearance.Text.Bold"
-            app:layout_constraintTop_toBottomOf="@id/icon_link"
+            app:layout_constraintTop_toBottomOf="@id/edt_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/spacing_large"
             android:layout_marginEnd="16dp"
             />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/invite_people"
+            android:id="@+id/invite_people_meeting"
             android:layout_width="0dp"
             android:layout_height="120dp"
             android:layout_marginStart="16dp"
@@ -284,9 +226,9 @@
             android:layout_marginEnd="16dp"
             android:paddingTop="4dp"
             android:src="@drawable/iconadd"
-            app:layout_constraintBottom_toBottomOf="@+id/invite_people"
+            app:layout_constraintBottom_toBottomOf="@id/invite_people_meeting"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/invite_people"
+            app:layout_constraintTop_toTopOf="@id/invite_people_meeting"
             app:layout_constraintVertical_bias="0.35" />
 
         <ImageView
@@ -298,47 +240,21 @@
             app:layout_constraintTop_toTopOf="@id/add1"
             app:layout_constraintBottom_toBottomOf="@id/add1"
             android:src="@drawable/circle"
-             />
-
-
-
-        <TextView
-            android:id="@+id/coverImageTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Cover Image"
-            android:textAppearance="@style/TextAppearance.Text.Bold"
-            app:layout_constraintTop_toBottomOf="@id/invite_people"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="13dp"
             />
-
-        <ImageView
-            android:id="@+id/img_event"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="12dp"
-            app:layout_constraintBottom_toTopOf="@id/post"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/coverImageTitle"
-            app:srcCompat="@drawable/no_thumbnail" />
 
         <TextView
             android:id="@+id/post"
             style="@style/TextStyle.Title"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@drawable/button_gradient_1"
+            android:background="@color/calendar_meetings_button"
             android:drawablePadding="10dp"
             android:gravity="center"
             android:paddingLeft="20dp"
             android:paddingTop="10dp"
             android:paddingRight="20dp"
             android:paddingBottom="10dp"
-            android:text="Create Event"
+            android:text="Create Meeting"
             android:textColor="@color/white"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"

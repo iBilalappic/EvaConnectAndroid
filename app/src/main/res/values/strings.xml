@@ -119,7 +119,14 @@
     <string name="amp"><![CDATA[&]]></string>
     <string name="fb_sign_in_text">Sign in with Facebook</string>
     <string name="no_events_or_meetings">No events or meetings</string>
+    <string name="no_result_found">No Result Found</string>
+    <string name="cancel_invite">cancel invite</string>
+    <string name="invite_connections_to_event">Invite Connections to Event</string>
 
+    <string-array name="events_types">
+        <item>Public Event</item>
+        <item>Private Event</item>
+    </string-array>
 
 </resources>
 

@@ -104,7 +104,7 @@
             app:mcv_showOtherDates="all"
             app:mcv_weekDayTextAppearance="@style/TextStyle.Title2"
             app:mcv_headerTextAppearance="@style/TextStyle.Title1"
-            app:mcv_tileHeight="45dp"
+            app:mcv_tileHeight="30dp"
             />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -121,13 +121,12 @@
             android:id="@+id/addEvent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:elevation="8dp"
-            app:elevation="8dp"
+            android:elevation="10dp"
+            app:elevation="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_margin="@dimen/spacing_large"
             app:backgroundTint="@color/calendar_selection_colour"
-            android:tint="@color/white"
             android:background="@color/calendar_selection_colour"
             android:src="@drawable/ic_add_black_24dp"
             />

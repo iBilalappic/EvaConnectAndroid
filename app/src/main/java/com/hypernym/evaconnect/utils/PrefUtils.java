@@ -6,6 +6,7 @@ import androidx.preference.PreferenceManager;
 
 import com.google.gson.reflect.TypeToken;
 import com.hypernym.evaconnect.models.ChatMessage;
+import com.hypernym.evaconnect.models.User;
 
 import java.util.HashSet;
 import java.util.List;
@@ -58,6 +59,22 @@ public class PrefUtils {
 
     public static Set<String> getStringSet(Context context, String key) {
         return PreferenceManager.getDefaultSharedPreferences(context).getStringSet(key, new HashSet<String>());
+    }
+
+    public static void persistConnections(Context context, List<User> users){
+        PrefUtils.persistString(context,Constants.PERSIST_CONNECTIONS,GsonUtils.toJson(users));
+    }
+
+    public static List<User> getConnections(Context context){
+        return GsonUtils.fromJson(PrefUtils.getString(context, Constants.PERSIST_CONNECTIONS), new TypeToken<List<User>>(){}.getType());
+    }
+
+    public static void persistConnectionsMeeting(Context context, List<User> users){
+        PrefUtils.persistString(context,Constants.PERSIST_CONNECTIONS_MEETING,GsonUtils.toJson(users));
+    }
+
+    public static List<User> getConnectionsMeeting(Context context){
+        return GsonUtils.fromJson(PrefUtils.getString(context, Constants.PERSIST_CONNECTIONS_MEETING), new TypeToken<List<User>>(){}.getType());
     }
 
     public static void saveChat(Context context, List<ChatMessage> chatMessageList){

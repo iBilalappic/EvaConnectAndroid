@@ -32,7 +32,6 @@ public class EventRepository implements IEventRepository {
                 RequestBody.create(MediaType.parse("text/plain"),event.getContent()),
                 RequestBody.create(MediaType.parse("text/plain"), AppConstants.ACTIVE),
                 RequestBody.create(MediaType.parse("text/plain"), event.getEvent_city()),
-                RequestBody.create(MediaType.parse("text/plain"), event.getEvent_address()),
                 RequestBody.create(MediaType.parse("text/plain"), event.getEvent_start_date()),
                 RequestBody.create(MediaType.parse("text/plain"), event.getEvent_end_date()),
                 RequestBody.create(MediaType.parse("text/plain"), event.getStart_time()),

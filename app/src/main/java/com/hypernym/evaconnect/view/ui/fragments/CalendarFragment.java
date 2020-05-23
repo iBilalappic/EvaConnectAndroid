@@ -125,8 +125,6 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
     private MonthAdapter monthAdapter,yearAdapter;
     private SimpleDialog simpleDialog;
     private List<CalendarModel> eventList=new ArrayList<>();
-    private final int WIDTH = 720;
-    private final int HEIGHT = 290;
     private EventAdapter eventAdapter;
     List<CalendarMarks> calendarMarks=new ArrayList<>();
 
@@ -149,6 +147,7 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
     }
 
     private void initCalendarActions() {
+        calendarAction.clear();
         calendarAction.add(new PowerMenuItem("Create a Meeting Schedule"));
         calendarAction.add(new PowerMenuItem("Create an Event"));
 
@@ -156,8 +155,7 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
                 .addItemList(calendarAction)
                 .setAutoDismiss(true)
                 .setTextSize(14)
-                .setWidth(WIDTH)
-                .setHeight(HEIGHT)
+                .setWidth(600)
                 .setDivider(new ColorDrawable(ContextCompat.getColor(getContext(), R.color.gray)))
                 .setDividerHeight(1)
                 .setAnimation(MenuAnimation.SHOW_UP_CENTER)
@@ -170,7 +168,7 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
         addEvent.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
-                powerMenu.showAsDropDown(addEvent);
+                powerMenu.showAsAnchorCenter(addEvent);
             }
         });
     }
@@ -179,6 +177,7 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
 
         calendarViewModel= ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(CalendarViewModel.class);
         calendarView.setTopbarVisible(true);
+        calendarView.setDynamicHeightEnabled(true);
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
@@ -607,8 +606,9 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
         {
             loadFragment(R.id.framelayout,new CreateEventFragment(),getContext(),true);
         }
-        else if (item.getTitle().equals("Create a Meeting Schedule")){
-            Toast.makeText(getContext(), "Meeting Screen", Toast.LENGTH_SHORT).show();
+        else if (item.getTitle().equals("Create a Meeting Schedule"))
+        {
+            loadFragment(R.id.framelayout,new CreateMeetingFragment(), getContext(),true);
         }
     }
 

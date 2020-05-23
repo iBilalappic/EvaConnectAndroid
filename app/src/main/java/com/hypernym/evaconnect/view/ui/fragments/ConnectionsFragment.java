@@ -178,7 +178,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         subCategories.add(option3);
 
         subOptionsAdapter = new OptionsAdapter(getContext(), subCategories, this);
-        linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true);
         rc_subcategories.setLayoutManager(linearLayoutManager);
         rc_subcategories.setAdapter(subOptionsAdapter);
     }
@@ -316,7 +316,6 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
-                //  hideDialog();
             }
         });
     }

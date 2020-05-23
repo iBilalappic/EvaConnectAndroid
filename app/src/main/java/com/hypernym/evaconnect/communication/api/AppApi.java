@@ -202,7 +202,6 @@ public interface AppApi {
                                              @Part("content") RequestBody content,
                                              @Part("status") RequestBody status,
                                              @Part("event_city") RequestBody event_city,
-                                             @Part("event_address") RequestBody event_address,
                                              @Part("event_start_date") RequestBody start_date,
                                              @Part("event_end_date") RequestBody end_date,
                                              @Part("start_time") RequestBody start_time,
