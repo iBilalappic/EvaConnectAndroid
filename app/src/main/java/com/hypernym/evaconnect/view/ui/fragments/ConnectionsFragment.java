@@ -178,7 +178,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         subCategories.add(option3);
 
         subOptionsAdapter = new OptionsAdapter(getContext(), subCategories, this);
-        linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true);
+        linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         rc_subcategories.setLayoutManager(linearLayoutManager);
         rc_subcategories.setAdapter(subOptionsAdapter);
     }
