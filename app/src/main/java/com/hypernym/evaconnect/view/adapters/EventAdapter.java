@@ -47,7 +47,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             holder.eventTitle.setText("Job Interview at "+events.get(position).getObject_details().getCompany_name()+" - "+events.get(position).getObject_details().getPosition()
                     +" | "+ events.get(position).getObject_details().getAddress());
             holder.time.setText(DateUtils.getFormattedEventTime(events.get(position).getObject_details().getInterview_time()));
-            holder.month.setText(DateUtils.extractMonth(events.get(position).getObject_details().getEvent_start_date()));
+            if (events.get(position).getObject_details().getEvent_start_date() != null)
+                holder.month.setText(DateUtils.extractMonth(events.get(position).getObject_details().getEvent_start_date()));
             holder.type.setText(events.get(position).getObject_type());
             holder.type.setTextColor(context.getResources().getColor(R.color.red_2));
 
@@ -59,7 +60,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
             holder.eventTitle.setText(events.get(position).getObject_details().getEvent_name() + " | " + events.get(position).getObject_details().getEvent_city());
             holder.time.setText(DateUtils.get12formant(events.get(position).getObject_details().getStart_time())+" - "+DateUtils.get12formant(events.get(position).getObject_details().getEnd_time()));
-            holder.month.setText(DateUtils.extractMonth(events.get(position).getObject_details().getEvent_start_date()));
+            if (events.get(position).getObject_details().getEvent_start_date() != null)
+                holder.month.setText(DateUtils.extractMonth(events.get(position).getObject_details().getEvent_start_date()));
             holder.type.setText(events.get(position).getObject_type());
             holder.type.setTextColor(context.getResources().getColor(R.color.red_2));
 
@@ -71,7 +73,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
             holder.eventTitle.setText(events.get(position).getObject_details().getEvent_name() + " | " + events.get(position).getObject_details().getEvent_city());
             holder.time.setText(DateUtils.get12formant(events.get(position).getObject_details().getStart_time())+" - "+DateUtils.get12formant(events.get(position).getObject_details().getEnd_time()));
-            holder.month.setText(DateUtils.extractMonth(events.get(position).getObject_details().getEvent_start_date()));
+            if (events.get(position).getObject_details().getEvent_start_date() != null)
+                holder.month.setText(DateUtils.extractMonth(events.get(position).getObject_details().getEvent_start_date()));
             holder.type.setText(events.get(position).getObject_type());
             holder.type.setTextColor(context.getResources().getColor(R.color.calendar_meetings));
 
@@ -99,10 +102,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             superscript = "th";
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            holder.day.setText(Html.fromHtml(date + "<sup>" + superscript + "<sup>", Html.FROM_HTML_MODE_LEGACY));
+            holder.day.setText(Html.fromHtml(date + "<small><sup>" + superscript + "</sup></small>", Html.FROM_HTML_MODE_LEGACY));
         }
         else {
-            holder.day.setText(Html.fromHtml(date + "<sup>" + superscript + "<sup>"));
+            holder.day.setText(Html.fromHtml(date + "<small><sup>" + superscript + "</sup></small>"));
         }
     }
 
