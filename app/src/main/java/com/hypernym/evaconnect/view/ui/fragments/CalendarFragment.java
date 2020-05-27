@@ -408,7 +408,7 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
         }
         else if (item.getTitle().equals("Create a Meeting Schedule"))
         {
-            /*loadFragment(R.id.framelayout,new CreateMeetingFragment(), getContext(),true);*/
+            loadFragment(R.id.framelayout,new CreateMeetingFragment(), getContext(),true);
         }
     }
 }
