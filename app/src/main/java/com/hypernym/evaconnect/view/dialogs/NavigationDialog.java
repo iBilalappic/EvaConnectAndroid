@@ -7,23 +7,10 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.hypernym.evaconnect.R;
-import com.hypernym.evaconnect.utils.AppUtils;
-import com.hypernym.evaconnect.view.ui.fragments.CalendarFragment;
-import com.hypernym.evaconnect.view.ui.fragments.EditProfileFragment;
-import com.hypernym.evaconnect.view.ui.fragments.JobListingFragment;
-import com.hypernym.evaconnect.view.ui.fragments.EditProfileFragment;
-import com.hypernym.evaconnect.view.ui.fragments.MyLikesFragment;
-import com.hypernym.evaconnect.view.ui.fragments.NotificationsFragment;
-import com.hypernym.evaconnect.view.ui.fragments.PersonDetailFragment;
 
 public class NavigationDialog extends Dialog implements View.OnClickListener {
 
@@ -42,11 +29,11 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation_menu);
         img_close=findViewById(R.id.img_close);
-        calendar=findViewById(R.id.calendar);
 //        editProfile=findViewById(R.id.editProfile);
 //        logout=findViewById(R.id.logout);
 //        notifications=findViewById(R.id.notifications);
 //        mJoblisting=findViewById(R.id.joblisting);
+       calendar=findViewById(R.id.calendar);
 //        mLike=findViewById(R.id.layoutLike);
      //   mJoblisting.setOnClickListener(this);
        // mLike.setOnClickListener(this);
@@ -66,18 +53,6 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                dismiss();
-            }
-        });
-
-        calendar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-                FragmentTransaction transaction =((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
-                transaction.replace(R.id.framelayout, new CalendarFragment());
-                transaction.addToBackStack(null);
-                transaction.commit();
             }
         });
 
@@ -110,7 +85,17 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
 //                transaction.commit();
 //            }
 //        });
-//
+        calendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+                FragmentTransaction transaction =((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+                transaction.replace(R.id.framelayout, new CalendarFragment());
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
     }
 
     @Override
