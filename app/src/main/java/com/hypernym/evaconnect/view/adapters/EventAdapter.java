@@ -1,6 +1,7 @@
 package com.hypernym.evaconnect.view.adapters;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +51,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             holder.type.setText(events.get(position).getObject_type());
             holder.type.setTextColor(context.getResources().getColor(R.color.red_2));
 
-            holder.day.setText(DateUtils.extractDay(events.get(position).getObject_details().getEvent_start_date()));
+            setDayTextWithSuperScript(holder, position);
         }
         else if(events.get(position).getObject_type().equalsIgnoreCase("event"))
         {
@@ -62,7 +63,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             holder.type.setText(events.get(position).getObject_type());
             holder.type.setTextColor(context.getResources().getColor(R.color.red_2));
 
-            holder.day.setText(DateUtils.extractDay(events.get(position).getObject_details().getEvent_start_date()));
+            setDayTextWithSuperScript(holder, position);
         }
         else if(events.get(position).getObject_type().equalsIgnoreCase("meeting"))
         {
@@ -74,10 +75,34 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             holder.type.setText(events.get(position).getObject_type());
             holder.type.setTextColor(context.getResources().getColor(R.color.calendar_meetings));
 
-            holder.day.setText(DateUtils.extractDay(events.get(position).getObject_details().getEvent_start_date()));
+            setDayTextWithSuperScript(holder, position);
         }
         else{
             holder.itemView.setVisibility(View.GONE);
+        }
+    }
+
+    private void setDayTextWithSuperScript(ViewHolder holder, int position) {
+
+        String date = "";
+        date = DateUtils.extractDay(events.get(position).getObject_details().getEvent_start_date());
+
+        String superscript = "";
+
+        if (date.equals("1") || date.equals("21") || date.equals("31"))
+            superscript = "st";
+        else if (date.equals("2") || date.equals("22"))
+            superscript = "nd";
+        else if (date.equals("3") || date.equals("23"))
+            superscript = "rd";
+        else
+            superscript = "th";
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            holder.day.setText(Html.fromHtml(date + "<sup>" + superscript + "<sup>", Html.FROM_HTML_MODE_LEGACY));
+        }
+        else {
+            holder.day.setText(Html.fromHtml(date + "<sup>" + superscript + "<sup>"));
         }
     }
 

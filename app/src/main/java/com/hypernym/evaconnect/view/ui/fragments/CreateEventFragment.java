@@ -198,11 +198,11 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
         tv_startTime.setText(time.format(new Date()));
         tv_startTime.setInputType(InputType.TYPE_NULL);
 
-        tv_enddate.setText(dateformat.format(new Date()));
+        /*tv_enddate.setText(dateformat.format(new Date()));
         tv_enddate.setInputType(InputType.TYPE_NULL);
 
         tv_endTime.setText(time.format(new Date()));
-        tv_endTime.setInputType(InputType.TYPE_NULL);
+        tv_endTime.setInputType(InputType.TYPE_NULL);*/
 
         validator = new Validator(this);
         validator.setValidationListener(this);
@@ -263,37 +263,42 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
         Date selectedDate = null;
         Date endDate = null;
         DateTime mDateTime = new DateTime(date);
+
         if (isStartDate) {
             tv_startdate.setText(dateformat.format(mDateTime.getDate()));
             tv_startTime.setText(time.format(mDateTime.getDate()));
             startDate = mDateTime.getDate();
-            tv_enddate.setText(dateformat.format(mDateTime.getDate()));
-            tv_endTime.setText(time.format(mDateTime.getDate()));
+            /*tv_enddate.setText(dateformat.format(mDateTime.getDate()));
+            tv_endTime.setText(time.format(mDateTime.getDate()));*/
+        }
+        else{
+            String str2 = mDateTime.getDate().toString();
+            try {
+                endDate = formatter.parse(str2);
+                Log.d("TAAAG", "enddate:" + endDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
-        String str2 = mDateTime.getDate().toString();
-        try {
-            endDate = formatter.parse(str2);
-            Log.d("TAAAG", "enddate:" + endDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        if (endDate != null && startDate!=null)
+        {
+            if (mDateTime.getDate().getMonth() == startDate.getMonth() && mDateTime.getDate().getDate() == startDate.getDate()) {
 
-        if (mDateTime.getDate().getMonth() == startDate.getMonth() && mDateTime.getDate().getDate() == startDate.getDate()) {
+                if (endDate.compareTo(startDate) > 0) {
+                    tv_enddate.setText(dateformat.format(mDateTime.getDate()));
+                    tv_endTime.setText(time.format(mDateTime.getDate()));
 
-            if (endDate.compareTo(startDate) > 0) {
+                } else {
+                    Toast.makeText(getContext(), "End time must be greater than start time", Toast.LENGTH_SHORT).show();
+                }
+            } else if (endDate.compareTo(startDate) > 0) {
                 tv_enddate.setText(dateformat.format(mDateTime.getDate()));
                 tv_endTime.setText(time.format(mDateTime.getDate()));
-
             } else {
-                Toast.makeText(getContext(), "End time must be greater than start time", Toast.LENGTH_SHORT).show();
+                tv_enddate.setText(dateformat.format(mDateTime.getDate()));
+                tv_endTime.setText(time.format(mDateTime.getDate()));
             }
-        } else if (endDate.compareTo(startDate) > 0) {
-            tv_enddate.setText(dateformat.format(mDateTime.getDate()));
-            tv_endTime.setText(time.format(mDateTime.getDate()));
-        } else {
-            tv_enddate.setText(dateformat.format(mDateTime.getDate()));
-            tv_endTime.setText(time.format(mDateTime.getDate()));
         }
 
         Log.v("TEST_TAG", "Date and Time selected: " + mDateTime.getDateString());

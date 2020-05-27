@@ -112,7 +112,7 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
     TextView tv_nothing_happened;
 
     @BindView(R.id.addEvent)
-    FloatingActionButton addEvent;
+    ImageView addEvent;
 
     private CalendarViewModel calendarViewModel;
     int[] threeColors;
@@ -244,7 +244,6 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
             calendarModel.setMonth(String.valueOf(calendarView.getCurrentDate().getMonth()));
             calendarModel.setYear(String.valueOf(calendarView.getCurrentDate().getYear()));
 
-            // API call, no need to call observer as we have already initialized observer once.
             calendarViewModel.getAllCalendarMarks(calendarModel);
         });
 
