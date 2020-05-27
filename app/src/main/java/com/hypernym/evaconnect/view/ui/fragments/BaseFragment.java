@@ -127,6 +127,9 @@ public class BaseFragment extends Fragment {
     {
         FragmentTransaction transaction =((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+
+        fragment.setArguments(bundle);
+
         transaction.replace(id, fragment);
         if(isBack)
         {

@@ -316,7 +316,6 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
-                //  hideDialog();
             }
         });
     }

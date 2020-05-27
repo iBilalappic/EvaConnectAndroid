@@ -72,14 +72,6 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
             holder.tv_connect.setVisibility(View.VISIBLE);
             holder.tv_connect.setText(AppUtils.getConnectionStatus(context, connections.get(position).getIs_connected(), connections.get(position).isIs_receiver()));
             String connectionstatus = AppUtils.getConnectionStatus(context, connections.get(position).getIs_connected(), connections.get(position).isIs_receiver());
-//            if (connectionstatus.equals(AppConstants.CONNECTED)) {
-//                holder.tv_connect.setBackgroundResource(R.drawable.custom_button);
-//                holder.tv_connect.setTextColor(context.getResources().getColor(R.color.white));
-//            } else {
-//                holder.tv_connect.setBackgroundResource(R.drawable.custom_button);
-//                holder.tv_connect.setTextColor(context.getResources().getColor(R.color.white));
-//                // holder.tv_connect.setBackgroundResource(R.drawable.rounded_button_nobackground);
-//            }
         }
 
     }

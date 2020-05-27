@@ -7,23 +7,10 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.hypernym.evaconnect.R;
-import com.hypernym.evaconnect.utils.AppUtils;
-import com.hypernym.evaconnect.view.ui.fragments.CalendarFragment;
-import com.hypernym.evaconnect.view.ui.fragments.EditProfileFragment;
-import com.hypernym.evaconnect.view.ui.fragments.JobListingFragment;
-import com.hypernym.evaconnect.view.ui.fragments.EditProfileFragment;
-import com.hypernym.evaconnect.view.ui.fragments.MyLikesFragment;
-import com.hypernym.evaconnect.view.ui.fragments.NotificationsFragment;
-import com.hypernym.evaconnect.view.ui.fragments.PersonDetailFragment;
 
 public class NavigationDialog extends Dialog implements View.OnClickListener {
 

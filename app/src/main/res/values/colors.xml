@@ -11,6 +11,7 @@
     <color name="gray">#BDBABA</color>
     <color name="calendar_selection_colour">#5894DD</color>
     <color name="calendar_meetings">#2ECC71</color>
+    <color name="calendar_meetings_button">#5BD78F</color>
     <color name="calendar_selection_arrows">#707070</color>
     <color name="gray_1">#B4B4B4</color>
 

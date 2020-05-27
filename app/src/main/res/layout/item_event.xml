@@ -7,7 +7,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:elevation="@dimen/spacing_xsmall"
-    android:layout_marginTop="@dimen/spacing_medium"
     android:layout_marginBottom="@dimen/spacing_medium">
 
 
