@@ -11,8 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.CalendarModel;
-import com.hypernym.evaconnect.models.Event;
-import com.hypernym.evaconnect.models.EventAttendees;
 import com.hypernym.evaconnect.utils.DateUtils;
 
 import java.util.List;
@@ -46,7 +44,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             holder.eventTitle.setText("Job Interview at "+events.get(position).getObject_details().getCompany_name()+" - "+events.get(position).getObject_details().getPosition()
                     +" | "+ events.get(position).getObject_details().getAddress());
             holder.time.setText(DateUtils.getFormattedEventTime(events.get(position).getObject_details().getInterview_time()));
-            holder.month.setText(DateUtils.extractMonth(events.get(position).getObject_details().getEvent_start_date()));
+            if(events.get(position).getObject_details().getEvent_start_date()!=null)
+              holder.month.setText(DateUtils.extractMonth(events.get(position).getObject_details().getEvent_start_date()));
             holder.type.setText(events.get(position).getObject_type());
             holder.type.setTextColor(context.getResources().getColor(R.color.red_2));
 

@@ -6,295 +6,93 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="#1DB4B4B4">
+    >
 
-<LinearLayout
 
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/lighter_gray"
-    android:visibility="gone"
-    android:padding="5dp">
-    <TextView
-        android:id="@+id/dayOfMonth"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:text="12"/>
-    <TextView
-        android:layout_width="1dp"
-        android:layout_height="wrap_content"
-        android:background="@color/gray"/>
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_weight="1"
-    android:gravity="center"
-    android:orientation="vertical">
-    <TextView
-        android:id="@+id/selectmonth"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:drawableRight="@drawable/ic_down_arrow"
-        android:text="December"/>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rc_month"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:gravity="center"
-        android:visibility="gone"
-        android:layout_gravity="center"/>
-</LinearLayout>
-
-    <TextView
-        android:layout_width="1dp"
-        android:layout_height="wrap_content"
-        android:background="@color/gray"/>
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
         android:orientation="vertical">
-        <TextView
-            android:id="@+id/selectyear"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:drawableRight="@drawable/ic_down_arrow"
-            android:text="2020"/>
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rc_year"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:gravity="center"
-            android:visibility="gone"
-            android:layout_gravity="center"/>
-    </LinearLayout>
-
-</LinearLayout>
-    <ImageView
-        android:id="@+id/close_selection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/lighter_gray"
-        android:visibility="gone"
-        android:src="@drawable/ic_up_arrow"/>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <com.prolificinteractive.materialcalendarview.MaterialCalendarView
             android:id="@+id/calendarView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:mcv_selectionColor="@color/calendar_selection_colour"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="10dp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/eventDetailsRecyclerview"
+            app:mcv_selectionColor="@color/light_blue"
+            app:mcv_headerTextAppearance="@style/CalendarWidgetHeader"
             app:mcv_showOtherDates="all"
-            app:mcv_weekDayTextAppearance="@style/TextStyle.Title2"
-            app:mcv_headerTextAppearance="@style/TextStyle.Title1"
-            app:mcv_tileHeight="45dp"
-            />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/eventDetailsRecyclerview"
+            app:mcv_tileHeight="30dp" />
+        <ImageView
+            android:id="@+id/divider"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="2dp"
+            android:src="@drawable/ic_blue_red"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/calendarView"
+            android:scaleType="centerCrop"
             />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/addEvent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:elevation="8dp"
-            app:elevation="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_margin="@dimen/spacing_large"
-            app:backgroundTint="@color/calendar_selection_colour"
-            android:tint="@color/white"
-            android:background="@color/calendar_selection_colour"
-            android:src="@drawable/ic_add_black_24dp"
-            />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-<!--    <TextView
-        android:id="@+id/tv_nothing_happened"
-        style="@style/TextStyle.Title"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:textAlignment="center"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:visibility="gone"
-        android:layout_weight="1"
-        android:layout_marginTop="16dp"
-        android:text="Nothing Happened Today"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />-->
-
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:visibility="gone">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/tv_nothing_happened"
-            style="@style/TextStyle.Title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Nothing Happened Today"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
-        <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" >
-        <TextView
-            style="@style/Button.border"
-            android:id="@+id/newevent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/new_post"
-            android:drawablePadding="10dp"
-            android:paddingLeft="20dp"
-            android:paddingTop="10dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="10dp"
-            android:text="New Event"
-          />
-        </androidx.cardview.widget.CardView>
-
-
-        <TextView
-            android:id="@+id/textView"
-            style="@style/TextStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:drawableLeft="@drawable/redcircle"
-            android:drawablePadding="5dp"
-            android:gravity="center_vertical"
-            android:text="Job Interview"
-            app:layout_constraintEnd_toStartOf="@+id/textView8"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textView8"
-            style="@style/TextStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:drawableLeft="@drawable/bluecircle"
-            android:drawablePadding="5dp"
-            android:gravity="center_vertical"
-            android:text="Notes"
-            app:layout_constraintEnd_toStartOf="@+id/textView9"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textView9"
-            style="@style/TextStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:drawableLeft="@drawable/blackcircle"
-            android:drawablePadding="5dp"
-            android:gravity="center_vertical"
-            android:text="Event"
-            app:layout_constraintEnd_toStartOf="@+id/textView12"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textView12"
-            style="@style/TextStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:drawableLeft="@drawable/greencircle"
-            android:drawablePadding="5dp"
-            android:gravity="center_vertical"
-            android:text="Meeting"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/edt_note"
-            style="@style/TextStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:background="@null"
-            android:drawableRight="@drawable/edit"
-            android:drawablePadding="10dp"
-            android:gravity="center_vertical"
-            android:hint="Enter Note here"
-            android:inputType="textMultiLine"
-            android:visibility="gone"
-            android:maxWidth="200dp"
-            android:textColorHint="@color/black"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_nothing_happened" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rc_events"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="8dp"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-        <Button
-            android:id="@+id/btn_save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:elevation="4dp"
-            android:gravity="center"
-            android:text="Save Note"
-            android:textColor="@color/black"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/edt_note"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/edt_note" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+                <TextView
+                    android:id="@+id/tv_nothing_happened"
+                    style="@style/TextStyle.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Nothing Happened Today"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" >
+                    <TextView
+                        style="@style/Button.border"
+                        android:id="@+id/newevent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/new_post"
+                        android:drawablePadding="10dp"
+                        android:paddingLeft="20dp"
+                        android:paddingTop="10dp"
+                        android:paddingRight="20dp"
+                        android:paddingBottom="10dp"
+                        android:text="New Event"
+                        />
+                </androidx.cardview.widget.CardView>
 
-</LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rc_events"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:visibility="visible"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+    </LinearLayout>
 </ScrollView>
 
