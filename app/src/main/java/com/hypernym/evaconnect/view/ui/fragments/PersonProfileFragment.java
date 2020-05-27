@@ -1,6 +1,7 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -122,11 +123,18 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
             showBackButton();
             post = (Post) getArguments().getSerializable("PostData");
             Log.d("TAAAG", GsonUtils.toJson(post));
-            if (post.getUser().getIs_linkedin() == 1) {
+
+            if (post.getUser().getIs_linkedin() == 1 && !TextUtils.isEmpty(post.getUser().getLinkedin_image_url())) {
                 AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getLinkedin_image_url());
-            } else {
+
+            }
+            else if (post.getUser().getIs_facebook() == 1 && !TextUtils.isEmpty(post.getUser().getFacebook_image_url())){
+                AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getFacebook_image_url());
+            }
+            else {
                 AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getUser_image());
             }
+
             tv_name.setText(post.getUser().getFirst_name());
 
             if (post.getUser().getDesignation() != null) {
@@ -199,7 +207,18 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
         } else {
             user = LoginUtils.getLoggedinUser();
             Log.d("TAAAG", GsonUtils.toJson(user));
-            AppUtils.setGlideImage(getContext(), profile_image, user.getUser_image());
+
+            if (user.getIs_linkedin() == 1 && !TextUtils.isEmpty(user.getLinkedin_image_url())) {
+                AppUtils.setGlideImage(getContext(), profile_image, user.getLinkedin_image_url());
+
+            }
+            else if (user.getIs_facebook() == 1 && !TextUtils.isEmpty(user.getFacebook_image_url())){
+                AppUtils.setGlideImage(getContext(), profile_image, user.getFacebook_image_url());
+            }
+            else {
+                AppUtils.setGlideImage(getContext(), profile_image, user.getUser_image());
+            }
+
             tv_name.setText(user.getFirst_name());
 
             tv_location.setText(user.getCountry() + "," + user.getCity());

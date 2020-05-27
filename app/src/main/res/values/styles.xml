@@ -23,22 +23,22 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="TextAppearance.Text.Regular" parent="android:TextAppearance">
-        <item name="fontPath">fonts/nunitosansregular.ttf</item>
+        <item name="fontPath">fonts/nunitosansregular</item>
         <item name="android:textStyle">normal</item>
     </style>
 
     <style name="TextAppearance.Text.Bold" parent="android:TextAppearance">
-        <item name="fontPath">fonts/nunitosansbold.ttf</item>
+        <item name="fontPath">fonts/nunitosansbold</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="TextAppearance.Text.Light" parent="android:TextAppearance">
-        <item name="fontPath">fonts/nunitosanslight.ttf</item>
+        <item name="fontPath">fonts/nunitosanslight</item>
         <item name="android:textStyle">normal</item>
     </style>
 
     <style name="TextAppearance.Text.Italic" parent="android:TextAppearance">
-        <item name="fontPath">fonts/nunitosansitalic.ttf</item>
+        <item name="fontPath">fonts/nunitosansitalic</item>
         <item name="android:textStyle">italic</item>
     </style>
 
