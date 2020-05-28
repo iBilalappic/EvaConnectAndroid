@@ -38,6 +38,7 @@
                 android:layout_marginEnd="20dp"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:fontFamily="@font/nunitosansbold"
                 android:textStyle="bold"
                 android:text="Edit Profile"
                 android:textColor="@color/black"
@@ -80,6 +81,8 @@
                     android:layout_marginStart="28dp"
                     android:layout_marginTop="20dp"
                     android:text="Ed Hunter"
+
+                    android:fontFamily="@font/nunitosansbold"
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:textColor="@color/black"
@@ -98,6 +101,7 @@
                     android:textColor="@color/gray"
                     android:textSize="14sp"
                     android:textStyle="bold"
+                    android:fontFamily="@font/nunitosansbold"
                     app:layout_constraintStart_toEndOf="@+id/profile_image"
                     app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
@@ -119,8 +123,10 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="45dp"
+            android:layout_marginEnd="40dp"
             android:layout_marginStart="20dp"
             android:id="@+id/lbl_name"
+            android:fontFamily="@font/nunitosansregular"
             android:textColor="@color/gray"
             android:text="name"
             app:layout_constraintTop_toBottomOf="@+id/cardView_Main"></TextView>
@@ -130,18 +136,18 @@
         <EditText
             android:id="@+id/edt_firstname"
             style="@style/EditText"
-            android:layout_width="0dp"
-            android:layout_marginStart="20dp"
+            android:layout_width="260dp"
+            android:layout_marginStart="40dp"
             android:layout_marginTop="40dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="30dp"
             android:backgroundTint="@color/colorwhite"
-            android:gravity="start|center"
+            android:gravity="center"
             android:paddingLeft="10dp"
+            android:fontFamily="@font/nunitosansbold"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/lbl_name"
             app:layout_constraintTop_toBottomOf="@+id/cardView_Main" />
 
         <View
@@ -166,6 +172,7 @@
             android:id="@+id/lbl_location"
             android:textColor="@color/gray"
             android:text="location"
+            android:fontFamily="@font/nunitosansregular"
             app:layout_constraintTop_toBottomOf="@+id/img_view0"></TextView>
 
 
@@ -173,21 +180,20 @@
         <EditText
             android:id="@+id/edt_location"
             style="@style/EditText"
-            android:layout_width="0dp"
-            android:layout_marginStart="20dp"
+            android:layout_width="260dp"
+            android:layout_marginStart="40dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="30dp"
             android:backgroundTint="@color/colorwhite"
             android:enabled="false"
-            android:gravity="start|center"
+            android:gravity="center"
             android:maxLength="100"
+            android:fontFamily="@font/nunitosansbold"
             android:paddingLeft="10dp"
             android:textColor="@color/gray_1"
             android:textColorHint="@color/black"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/lbl_location"
-
             app:layout_constraintTop_toBottomOf="@+id/img_view0" />
 
         <View
@@ -208,10 +214,12 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="25dp"
+            android:layout_marginEnd="40dp"
             android:layout_marginStart="20dp"
             android:id="@+id/lbl_company"
             android:textColor="@color/gray"
             android:text="company"
+            android:fontFamily="@font/nunitosansregular"
             app:layout_constraintTop_toBottomOf="@+id/img_view1"/>
 
 
@@ -219,19 +227,19 @@
         <EditText
             android:id="@+id/edt_company"
             style="@style/EditText"
-            android:layout_width="0dp"
-            android:layout_marginStart="20dp"
+            android:layout_width="260dp"
+            android:layout_marginStart="40dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="30dp"
             android:backgroundTint="@color/colorwhite"
-            android:gravity="start|center"
+            android:gravity="center"
             android:maxLength="100"
             android:paddingLeft="10dp"
+            android:fontFamily="@font/nunitosansbold"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/lbl_location"
 
             app:layout_constraintTop_toBottomOf="@+id/img_view1" />
 
@@ -257,6 +265,7 @@
             android:id="@+id/lbl_title"
             android:textColor="@color/gray"
             android:text="title"
+            android:fontFamily="@font/nunitosansregular"
             app:layout_constraintTop_toBottomOf="@+id/img_view4"/>
 
 
@@ -264,19 +273,19 @@
         <EditText
             android:id="@+id/edt_title"
             style="@style/EditText"
-            android:layout_width="0dp"
-            android:layout_marginStart="20dp"
+            android:layout_width="260dp"
+            android:layout_marginStart="40dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="30dp"
             android:backgroundTint="@color/colorwhite"
-            android:gravity="start|center"
+            android:gravity="center"
             android:maxLength="100"
             android:paddingLeft="10dp"
             android:textColor="@color/black"
+            android:fontFamily="@font/nunitosansbold"
             android:textColorHint="@color/black"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/lbl_title"
             app:layout_constraintTop_toBottomOf="@+id/img_view4" />
 
         <View
@@ -300,26 +309,27 @@
             android:id="@+id/lbl_sector"
             android:textColor="@color/gray"
             android:text="sector"
+            android:fontFamily="@font/nunitosansregular"
             app:layout_constraintTop_toBottomOf="@+id/img_view2"/>
 
 
         <EditText
             android:id="@+id/edt_sector"
             style="@style/EditText"
-            android:layout_width="0dp"
-            android:layout_marginStart="20dp"
+            android:layout_width="260dp"
+            android:layout_marginStart="40dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="30dp"
             android:backgroundTint="@color/colorwhite"
-            android:gravity="start|center"
+            android:gravity="center"
             android:maxLength="100"
             android:enabled="false"
             android:paddingLeft="10dp"
             android:textColor="@color/gray"
+            android:fontFamily="@font/nunitosansbold"
             android:textColorHint="@color/black"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/lbl_sector"
             app:layout_constraintTop_toBottomOf="@+id/img_view2" />
 
         <View
@@ -343,6 +353,7 @@
             android:layout_marginTop="40dp"
             android:layout_marginBottom="24dp"
             android:gravity="center"
+            android:fontFamily="@font/nunitosansregular"
             android:text="Save Changes"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -370,7 +381,7 @@
             android:layout_marginBottom="30dp"
             android:text="or Manage your Settings here"
             android:textColor="#545454"
-            android:textStyle="bold"
+            android:fontFamily="@font/nunitosansbold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
