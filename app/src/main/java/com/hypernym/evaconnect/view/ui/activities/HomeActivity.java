@@ -42,6 +42,7 @@ import com.hypernym.evaconnect.view.ui.fragments.ConnectionsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.EditProfileFragment;
 import com.hypernym.evaconnect.view.ui.fragments.EventDetailFragment;
 import com.hypernym.evaconnect.view.ui.fragments.HomeFragment;
+import com.hypernym.evaconnect.view.ui.fragments.MainViewPagerFragment;
 import com.hypernym.evaconnect.view.ui.fragments.MessageFragment;
 import com.hypernym.evaconnect.view.ui.fragments.MyLikesFragment;
 import com.hypernym.evaconnect.view.ui.fragments.NotificationsFragment;
@@ -180,7 +181,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
                 loadFragment(R.id.framelayout, fragment, this, false);
             }
         } else {
-            loadFragment(R.id.framelayout, new HomeFragment(), this, false);
+            loadFragment(R.id.framelayout, new MainViewPagerFragment(), this, false);
             //  getAllNotifications();
         }
 
@@ -209,7 +210,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
             @Override
             public void onClick(View v) {
                 if (notifications.size() > 0) {
-                    showNotificationPanel();
+                  //  showNotificationPanel();
                 }
             }
         });
@@ -218,7 +219,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     private void setMessageNotificationCount() {
         int count = PrefUtils.getMessageCount(getApplicationContext());
         badge_notification.setText(String.valueOf(count));
-        badge_notification.setVisibility(View.VISIBLE);
+        badge_notification.setVisibility(View.GONE);
     }
 
     private void setRecyclerView() {
@@ -240,8 +241,8 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
                         notifications.addAll(listBaseModel.getData());
                         //   Collections.reverse(notifications);
                         notificationsAdapter.notifyDataSetChanged();
-                        tv_pagetitle.setText(notifications.size() + " New Notifications");
-                        img_reddot.setVisibility(View.VISIBLE);
+                      //  tv_pagetitle.setText(notifications.size() + " New Notifications");
+                     //   img_reddot.setVisibility(View.VISIBLE);
                     }
                     setNotificationCount(notifications.size());
                 }
@@ -276,7 +277,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
             networkErrorDialog();
         }
         rc_notifications.setVisibility(View.GONE);
-        titleLayout.setVisibility(View.VISIBLE);
+        titleLayout.setVisibility(View.GONE);
         img_uparrow.setVisibility(View.GONE);
         img_reddot.setVisibility(View.GONE);
         tv_pagetitle.setText(BaseFragment.pageTitle);
