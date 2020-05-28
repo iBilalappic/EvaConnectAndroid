@@ -127,6 +127,8 @@ dependencies {
 
     implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.android.support:design:29.0.0'
+    implementation 'com.android.support:appcompat-v7:29.0.0' // appcompat library
 
 
 }

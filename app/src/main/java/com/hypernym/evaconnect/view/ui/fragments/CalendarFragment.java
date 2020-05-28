@@ -6,17 +6,23 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.decorators.EventDecorator;
 import com.hypernym.evaconnect.models.BaseModel;
@@ -43,7 +49,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -53,8 +58,7 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
     @BindView(R.id.calendarView)
     MaterialCalendarView calendarView;
 
-    @BindView(R.id.newevent)
-    TextView newevent;
+
 
 
     @BindView(R.id.rc_events)
@@ -63,6 +67,10 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
 
     @BindView(R.id.tv_nothing_happened)
     TextView tv_nothing_happened;
+
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+
 
     private CalendarViewModel calendarViewModel;
     int[] threeColors;
@@ -76,6 +84,7 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
     private List<CalendarModel> eventList=new ArrayList<>();
     private EventAdapter eventAdapter;
     List<CalendarMarks> calendarMarks=new ArrayList<>();
+    boolean isFABOpen=false;
 
     public CalendarFragment() {
         // Required empty public constructor
@@ -102,8 +111,6 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
 
         calendarView.setDateSelected(CalendarDay.today(),true);
 
-
-        newevent.setVisibility(View.VISIBLE);
 
         String currentdate= String.valueOf(CalendarDay.today().getDay());
         // dayOfMonth.setText(currentdate);
@@ -133,6 +140,48 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
 
             }
         }, 3000);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final OvershootInterpolator interpolator = new OvershootInterpolator();
+                ViewCompat.animate(fab).
+                        rotation(135f).
+                        withLayer().
+                        setDuration(300).
+                        setInterpolator(interpolator).
+                        start();
+                /** Instantiating PopupMenu class */
+                PopupMenu popup = new PopupMenu(getContext(), v);
+
+                /** Adding menu items to the popumenu */
+                popup.getMenuInflater().inflate(R.menu.calendar_popup, popup.getMenu());
+
+                popup.setOnDismissListener(new PopupMenu.OnDismissListener() {
+                    @Override
+                    public void onDismiss(PopupMenu menu) {
+                        ViewCompat.animate(fab).
+                                rotation(0f).
+                                withLayer().
+                                setDuration(300).
+                                setInterpolator(interpolator).
+                                start();
+                    }
+                });
+                /** Defining menu item click listener for the popup menu */
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+
+                        Toast.makeText(getContext(), item.getOrder()+"You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
+
+                /** Showing the popup menu */
+                popup.show();
+            }
+        });
 
     }
 
@@ -234,11 +283,6 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
 
     }
 
-    @OnClick(R.id.newevent)
-    public void newEvent()
-    {
-        loadFragment(R.id.framelayout,new CreateEventFragment(),getContext(),true);
-    }
     private void makeJsonObjectRequest(List<CalendarModel> marks) {
 
         try {

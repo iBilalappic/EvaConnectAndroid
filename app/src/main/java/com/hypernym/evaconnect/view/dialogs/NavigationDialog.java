@@ -10,7 +10,11 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.view.ui.fragments.CalendarFragment;
 
 public class NavigationDialog extends Dialog implements View.OnClickListener {
 
