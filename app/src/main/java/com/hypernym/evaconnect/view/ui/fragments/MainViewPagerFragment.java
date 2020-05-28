@@ -59,7 +59,7 @@ public class MainViewPagerFragment extends Fragment implements View.OnClickListe
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                     return new HomeFragment();
+                     return new PostFragment();
                 case 1:
                      return new HomeFragment();
                 case 2:
