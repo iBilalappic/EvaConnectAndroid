@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.CalendarModel;
-import com.hypernym.evaconnect.models.Event;
-import com.hypernym.evaconnect.models.EventAttendees;
 import com.hypernym.evaconnect.utils.DateUtils;
 
 import java.util.List;

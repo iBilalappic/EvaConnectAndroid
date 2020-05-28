@@ -2,58 +2,43 @@ package com.hypernym.evaconnect.view.ui.fragments;
 
 
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
+import android.widget.PopupMenu;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Handler;
-import android.text.Editable;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hypernym.evaconnect.R;
-import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.decorators.EventDecorator;
-
-import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.CalendarMarks;
 import com.hypernym.evaconnect.models.CalendarModel;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
-import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.EventAdapter;
 import com.hypernym.evaconnect.view.adapters.MonthAdapter;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
-import com.hypernym.evaconnect.view.ui.activities.BaseActivity;
 import com.hypernym.evaconnect.viewmodel.CalendarViewModel;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
-import com.skydoves.powermenu.MenuAnimation;
-import com.skydoves.powermenu.OnMenuItemClickListener;
-import com.skydoves.powermenu.PowerMenu;
-import com.skydoves.powermenu.PowerMenuItem;
-
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -62,18 +47,19 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemClickListener, OnDateSelectedListener,OnMonthChangedListener, OnMenuItemClickListener<PowerMenuItem> {
+public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemClickListener, OnDateSelectedListener,OnMonthChangedListener {
 
     @BindView(R.id.calendarView)
     MaterialCalendarView calendarView;
+
+
+
 
     @BindView(R.id.rc_events)
     RecyclerView rc_events;
@@ -82,8 +68,9 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
     @BindView(R.id.tv_nothing_happened)
     TextView tv_nothing_happened;
 
-    @BindView(R.id.addEvent)
-    ImageView addEvent;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+
 
     private CalendarViewModel calendarViewModel;
     int[] threeColors;
@@ -92,12 +79,12 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
     private List<CalendarDay> events = new ArrayList<>();
     private List<String> months=new ArrayList<>();
     private List<String> years=new ArrayList<>();
-    private List<PowerMenuItem> calendarAction = new ArrayList<>();
     private MonthAdapter monthAdapter,yearAdapter;
     private SimpleDialog simpleDialog;
     private List<CalendarModel> eventList=new ArrayList<>();
     private EventAdapter eventAdapter;
     List<CalendarMarks> calendarMarks=new ArrayList<>();
+    boolean isFABOpen=false;
 
     public CalendarFragment() {
         // Required empty public constructor
@@ -111,59 +98,25 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
         View view=inflater.inflate(R.layout.fragment_calendar, container, false);
         ButterKnife.bind(this,view);
         init();
-
-        initCalendarActions();
-
         return view;
-    }
-
-    private void initCalendarActions() {
-        calendarAction.clear();
-        calendarAction.add(new PowerMenuItem("Create a Meeting Schedule"));
-        calendarAction.add(new PowerMenuItem("Create an Event"));
-
-        PowerMenu powerMenu = new PowerMenu.Builder(getContext())
-                .addItemList(calendarAction)
-                .setAutoDismiss(true)
-                .setTextSize(14)
-                .setWidth(600)
-                .setDivider(new ColorDrawable(ContextCompat.getColor(getContext(), R.color.gray)))
-                .setDividerHeight(1)
-                .setAnimation(MenuAnimation.SHOW_UP_CENTER)
-                .setMenuRadius(4f)
-                .setMenuShadow(10f)
-                .setTextColor(ContextCompat.getColor(getContext(), R.color.dark_gray_2))
-                .setOnMenuItemClickListener(this)
-                .build();
-
-        addEvent.setOnClickListener(new OnOneOffClickListener() {
-            @Override
-            public void onSingleClick(View v) {
-                powerMenu.showAsAnchorCenter(addEvent);
-            }
-        });
     }
 
     private void init() {
 
         calendarViewModel= ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(CalendarViewModel.class);
-        calendarView.setTopbarVisible(true);
-        calendarView.setDynamicHeightEnabled(true);
-
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
-        /*CalendarDay day = CalendarDay.from(cal.get(Calendar.YEAR),cal.get(Calendar.MONTH)+1,1);
+        CalendarDay day = CalendarDay.from(cal.get(Calendar.YEAR),cal.get(Calendar.MONTH)+1,1);
         CalendarDay lastday = CalendarDay.from(cal.get(Calendar.YEAR),cal.get(Calendar.MONTH)+1,cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-        calendarView.state().edit().setMinimumDate(day).setMaximumDate(lastday).commit();*/
+
         calendarView.setDateSelected(CalendarDay.today(),true);
+
 
         String currentdate= String.valueOf(CalendarDay.today().getDay());
         // dayOfMonth.setText(currentdate);
 
         calendarView.setOnDateChangedListener(this);
         calendarView.setOnMonthChangedListener(this);
-
-        calendarView.setAllowClickDaysOutsideCurrentMonth(false);
 
 
         eventAdapter=new EventAdapter(getContext(),eventList);
@@ -175,7 +128,7 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
             @Override
             public void run() {
                 hideDialog();
-                getCalendarMarksByDate(calendarView.getCurrentDate().getYear(),calendarView.getCurrentDate().getMonth(),CalendarDay.today().getDay());
+                getCalendarMarksByDate(calendarView.getCurrentDate().getYear(),calendarView.getCurrentDate().getMonth(),calendarView.getCurrentDate().getDay());
                 if(NetworkUtils.isNetworkConnected(getContext()))
                 {
                     getAllCalendarMarks(calendarView.getCurrentDate().getMonth(),calendarView.getCurrentDate().getYear());
@@ -187,6 +140,48 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
 
             }
         }, 3000);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final OvershootInterpolator interpolator = new OvershootInterpolator();
+                ViewCompat.animate(fab).
+                        rotation(135f).
+                        withLayer().
+                        setDuration(300).
+                        setInterpolator(interpolator).
+                        start();
+                /** Instantiating PopupMenu class */
+                PopupMenu popup = new PopupMenu(getContext(), v);
+
+                /** Adding menu items to the popumenu */
+                popup.getMenuInflater().inflate(R.menu.calendar_popup, popup.getMenu());
+
+                popup.setOnDismissListener(new PopupMenu.OnDismissListener() {
+                    @Override
+                    public void onDismiss(PopupMenu menu) {
+                        ViewCompat.animate(fab).
+                                rotation(0f).
+                                withLayer().
+                                setDuration(300).
+                                setInterpolator(interpolator).
+                                start();
+                    }
+                });
+                /** Defining menu item click listener for the popup menu */
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+
+                        Toast.makeText(getContext(), item.getOrder()+"You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
+
+                /** Showing the popup menu */
+                popup.show();
+            }
+        });
 
     }
 
@@ -234,13 +229,13 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
                         events=new ArrayList<>();
                         calendarMark.setDay(day);
                         colors=new ArrayList<>();
-                        if(calendarModel.getObject_type().equalsIgnoreCase("event") && !colors.contains(getContext().getResources().getColor(R.color.calendar_selection_colour)))
+                        if(calendarModel.getObject_type().equalsIgnoreCase("event") && !colors.contains(getContext().getResources().getColor(R.color.light_blue)))
                         {
-                            colors.add(getContext().getResources().getColor(R.color.calendar_selection_colour));
+                            colors.add(getContext().getResources().getColor(R.color.light_blue));
                         }
-                        else if(calendarModel.getObject_type().equalsIgnoreCase("meeting") &&  !colors.contains(getContext().getResources().getColor(R.color.calendar_meetings)))
+                        else if(calendarModel.getObject_type().equalsIgnoreCase("meeting") &&  !colors.contains(getContext().getResources().getColor(R.color.light_green)))
                         {
-                            colors.add(getContext().getResources().getColor(R.color.calendar_meetings));
+                            colors.add(getContext().getResources().getColor(R.color.light_green));
                         }
 
                         calendarMark.setColors(colors);
@@ -249,13 +244,13 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
                     }
                     else
                     {
-                        if(calendarModel.getObject_type().equalsIgnoreCase("event") && !calendarMark.getColors().contains(getContext().getResources().getColor(R.color.calendar_selection_colour)))
+                        if(calendarModel.getObject_type().equalsIgnoreCase("event") && !calendarMark.getColors().contains(getContext().getResources().getColor(R.color.light_blue)))
                         {
-                            calendarMark.getColors().add(getContext().getResources().getColor(R.color.calendar_selection_colour));
+                            calendarMark.getColors().add(getContext().getResources().getColor(R.color.light_blue));
                         }
-                        else if(calendarModel.getObject_type().equalsIgnoreCase("meeting") && !calendarMark.getColors().contains(getContext().getResources().getColor(R.color.calendar_meetings)))
+                        else if(calendarModel.getObject_type().equalsIgnoreCase("meeting") && !calendarMark.getColors().contains(getContext().getResources().getColor(R.color.light_green)))
                         {
-                            calendarMark.getColors().add(getContext().getResources().getColor(R.color.calendar_meetings));
+                            calendarMark.getColors().add(getContext().getResources().getColor(R.color.light_green));
                         }
 
                         calendarMark.setColors(calendarMark.getColors());
@@ -286,6 +281,41 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
         }
 
 
+    }
+
+    private void makeJsonObjectRequest(List<CalendarModel> marks) {
+
+        try {
+            for(CalendarModel calendarModel :marks) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                try {
+                    Date d = sdf.parse(calendarModel.getOccurrence_date());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(d);
+                    CalendarDay day = CalendarDay.from(cal.get(Calendar.YEAR),cal.get(Calendar.MONTH)+1,cal.get(Calendar.DAY_OF_MONTH));
+                    if(calendarModel.getObject_type().equalsIgnoreCase("event"))
+                    {
+//                        threeColors[0]= Color.rgb(0, 0, 0);
+//                        threeColors[1]= Color.rgb(0, 0, 255);
+                    }
+                    events.add(day);
+                } catch (ParseException ex) {
+                    Log.v("Exception", ex.getLocalizedMessage());
+                }
+//                CalendarDay day = CalendarDay.from(2020, 3, 5);
+//
+//                events.add(day);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        int[] threeColors = {
+                Color.rgb(0, 0, 255),
+                Color.rgb(0, 255, 0),
+                Color.rgb(255, 0, 0)};
+        EventDecorator eventDecorator = new EventDecorator(events, threeColors,calendarMarks);
+        calendarView.addDecorator(eventDecorator);
     }
 
     @Override
@@ -400,15 +430,4 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
         return new CalendarMarks();
     }
 
-    @Override
-    public void onItemClick(int position, PowerMenuItem item) {
-        if (item.getTitle().equals("Create an Event"))
-        {
-            loadFragment(R.id.framelayout,new CreateEventFragment(),getContext(),true);
-        }
-        else if (item.getTitle().equals("Create a Meeting Schedule"))
-        {
-            loadFragment(R.id.framelayout,new CreateMeetingFragment(), getContext(),true);
-        }
-    }
 }
