@@ -2,6 +2,7 @@ package com.hypernym.evaconnect.view.ui.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,10 +28,12 @@ import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
+import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.HomePostsAdapter;
 import com.hypernym.evaconnect.view.adapters.PostAdapter;
+import com.hypernym.evaconnect.view.dialogs.ShareDialog;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.EventViewModel;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
@@ -159,31 +162,98 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
 
     @Override
     public void onItemClick(View view, int position) {
-
+        PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("post", posts.get(position).getId());
+        Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
+        postDetailsFragment.setArguments(bundle);
+        loadFragment(R.id.framelayout, postDetailsFragment, getContext(), true);
     }
 
     @Override
     public void onLikeClick(View view, int position, TextView likeCount) {
+        Post post = posts.get(position);
+        User user = LoginUtils.getLoggedinUser();
+        post.setPost_id(post.getId());
+        post.setCreated_by_id(user.getId());
+        if (post.getIs_post_like() == null || post.getIs_post_like() < 1) {
+            post.setAction(AppConstants.LIKE);
+            if (post.getIs_post_like() == null) {
+                post.setIs_post_like(1);
+                if (post.getLike_count() == null)
+                    post.setLike_count(0);
+                else
+                    post.setLike_count(post.getLike_count() + 1);
+            } else {
+                post.setIs_post_like(post.getIs_post_like() + 1);
+                if (post.getLike_count() == null)
+                    post.setLike_count(0);
+                else
+                    post.setLike_count(post.getLike_count() + 1);
+            }
+        } else {
+            post.setAction(AppConstants.UNLIKE);
+            if (post.getIs_post_like() > 0) {
+                post.setIs_post_like(post.getIs_post_like() - 1);
+                post.setLike_count(post.getLike_count() - 1);
+            } else {
+                post.setIs_post_like(0);
+                post.setLike_count(0);
+            }
 
+        }
+        Log.d("Listing status", post.getAction() + " count" + post.getIs_post_like());
+        if (NetworkUtils.isNetworkConnected(getContext())) {
+
+            likePost(post, position);
+        } else {
+            networkErrorDialog();
+        }
+
+    }
+    private void likePost(Post post, int position) {
+        postViewModel.likePost(post).observe(this, new Observer<BaseModel<List<Post>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Post>> listBaseModel) {
+                if (listBaseModel != null && !listBaseModel.isError()) {
+                    postAdapter.notifyItemChanged(position);
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+                hideDialog();
+            }
+        });
     }
 
     public void onShareClick(View view, int position) {
-
+        ShareDialog shareDialog;
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("PostData",posts.get(position));
+        shareDialog = new ShareDialog(getContext(),bundle);
+        shareDialog.show();
     }
 
     @Override
     public void onVideoClick(View view, int position) {
-
+        AppUtils.playVideo(getContext(), posts.get(position).getPost_video());
     }
 
     @Override
     public void onURLClick(View view, int position) {
-
+        LoadUrlFragment loadUrlFragment = new LoadUrlFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("url", posts.get(position).getContent());
+        loadUrlFragment.setArguments(bundle);
+        loadFragment(R.id.framelayout, loadUrlFragment, getContext(), true);
     }
 
     @Override
     public void onProfileClick(View view, int position) {
-
+        PersonProfileFragment personDetailFragment = new PersonProfileFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("PostData", posts.get(position));
+        personDetailFragment.setArguments(bundle);
+        loadFragment(R.id.framelayout, personDetailFragment, getContext(), true);
     }
 
     private void callPostsApi() {
