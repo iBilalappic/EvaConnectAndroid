@@ -240,15 +240,21 @@ public class EditProfileFragment extends BaseFragment implements Validator.Valid
         userViewModel.getuser_details(user.getId()
         ).observe(this, new Observer<BaseModel<List<User>>>() {
             @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel) {
-                if (listBaseModel.getData() != null && !listBaseModel.isError()) {
-                    if (listBaseModel.getData().get(0).getIs_linkedin() == 1) {
+            public void onChanged(BaseModel<List<User>> listBaseModel)
+            {
+                if (listBaseModel.getData() != null && !listBaseModel.isError())
+                {
+                    if (listBaseModel.getData().get(0).getIs_linkedin() == 1 && !TextUtils.isEmpty(listBaseModel.getData().get(0).getLinkedin_image_url()))
+                    {
                         AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getLinkedin_image_url());
-                    } else if (listBaseModel.getData().get(0).getIs_facebook() == 1) {
+                    }
+                    else if (listBaseModel.getData().get(0).getIs_facebook() == 1 && !TextUtils.isEmpty(listBaseModel.getData().get(0).getFacebook_image_url())) {
                         AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getFacebook_image_url());
-                    } else {
+                    }
+                    else {
                         AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getUser_image());
                     }
+
                     tv_location.setText(listBaseModel.getData().get(0).getCountry() + "," + listBaseModel.getData().get(0).getCity());
                     edt_location.setText(listBaseModel.getData().get(0).getCountry() + "," + listBaseModel.getData().get(0).getCity());
                     edt_firstname.setText(listBaseModel.getData().get(0).getFirst_name());
