@@ -173,7 +173,7 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
 
-                        Toast.makeText(getContext(), item.getOrder()+"You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), item.getGroupId()+"You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
                         return true;
                     }
                 });
