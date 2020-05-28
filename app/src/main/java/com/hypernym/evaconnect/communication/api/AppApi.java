@@ -272,6 +272,9 @@ public interface AppApi {
     @POST(APIConstants.POST)
     Call<BaseModel<List<Post>>> getPost(@Body User user, @Query("limit") int limit, @Query("offset") int offset);
 
+    @POST(APIConstants.EVENT)
+    Call<BaseModel<List<Post>>> getEvent(@Body User user, @Query("limit") int limit, @Query("offset") int offset);
+
 
 
 }
