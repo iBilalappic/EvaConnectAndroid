@@ -10,6 +10,7 @@ import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.MyLikesModel;
+import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IJobAdRepository;
@@ -46,6 +47,9 @@ public class JobListViewModel extends AndroidViewModel {
     public LiveData<BaseModel<List<Object>>> apply_interview(int job_id,int sender_id,int application_id,String day,String month,String year,String hour,String minutes) {
         return iJobAdRepository.apply_interview(job_id,sender_id,application_id,day,month,year,hour,minutes);
     }
-
+    public LiveData<BaseModel<List<Post>>> getJob(User user, int totalpages, int currentPage)
+    {
+        return iJobAdRepository.getJob(user,totalpages,currentPage);
+    }
 
 }

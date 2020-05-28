@@ -65,7 +65,7 @@ public class MainViewPagerFragment extends Fragment implements View.OnClickListe
                 case 2:
                     return new HomeFragment();
                 case 3:
-                    return new HomeFragment();
+                    return new JobFragment();
                 case 4:
                     return new HomeFragment();
             }
