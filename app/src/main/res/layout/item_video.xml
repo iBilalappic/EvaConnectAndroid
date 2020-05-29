@@ -48,6 +48,7 @@
         android:layout_marginTop="34dp"
         android:ellipsize="end"
         android:maxLines="1"
+        android:fontFamily="@font/nunitosansbold"
         android:textSize="12sp"
         android:textStyle="bold"
         android:textColor="@color/black"
@@ -166,6 +167,7 @@
                 android:layout_marginBottom="50dp"
                 android:text="58"
                 android:textColor="@color/skyblue"
+                android:fontFamily="@font/nunitosansbold"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -180,6 +182,7 @@
                 android:layout_marginBottom="50dp"
                 android:paddingLeft="5dp"
                 android:text="@string/likes"
+                android:fontFamily="@font/nunitosansbold"
                 android:textColor="@color/skyblue"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -194,6 +197,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="50dp"
                 android:text="@string/amp"
+                android:fontFamily="@font/nunitosansbold"
                 style="@style/TextStyle"
                 android:textColor="@color/skyblue"
                 android:textStyle="bold"
@@ -211,6 +215,7 @@
                 android:layout_marginEnd="@dimen/spacing_small"
                 android:layout_marginBottom="50dp"
                 android:text="03"
+                android:fontFamily="@font/nunitosansbold"
                 android:textColor="@color/skyblue"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -226,6 +231,7 @@
                 android:layout_marginBottom="50dp"
                 android:paddingLeft="5dp"
                 android:text="@string/comments"
+                android:fontFamily="@font/nunitosansbold"
                 android:textColor="@color/skyblue"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -241,6 +247,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="50dp"
                 android:text="12:04pm | 12 jan"
+                android:fontFamily="@font/nunitosansregular"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/img_video" />
@@ -276,6 +283,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Like"
+                        android:fontFamily="@font/nunitosansregular"
                         android:textColor="@color/gray_1" />
 
                     <ImageView
@@ -308,6 +316,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Comment"
+                        android:fontFamily="@font/nunitosansregular"
                         android:textColor="@color/gray_1" />
 
                     <ImageView
@@ -341,6 +350,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Share"
+                        android:fontFamily="@font/nunitosansregular"
                         android:textColor="@color/gray_1" />
 
                     <ImageView
@@ -373,6 +383,7 @@
         android:layout_marginEnd="12dp"
         android:ellipsize="end"
         android:maxLines="3"
+        android:fontFamily="@font/nunitosansregular"
         android:text="“Things you’d never hear in a ticket office” … Let’s play a game of mock the week, or the LinkedIn version of Mock the Week. I’ll Start: https://lnkd.in… see more"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

@@ -44,6 +44,7 @@
         android:layout_marginTop="26dp"
         android:ellipsize="end"
         android:maxLines="1"
+        android:fontFamily="@font/nunitosansbold"
         android:textColor="@color/black"
         android:textStyle="bold"
         android:text="Networth And Vibe"
@@ -57,6 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="London"
+        android:fontFamily="@font/nunitosansregular"
         android:ellipsize="end"
         android:maxLines="1"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
@@ -77,6 +79,7 @@
         android:paddingRight="15dp"
         android:paddingBottom="5dp"
         android:text="@string/attending"
+        android:fontFamily="@font/nunitosansregular"
 
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
@@ -123,6 +126,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:text="58"
+            android:fontFamily="@font/nunitosansbold"
             android:textStyle="bold"
             android:textColor="@color/skyblue"
             app:layout_constraintStart_toStartOf="parent"
@@ -136,6 +140,8 @@
             android:layout_marginTop="8dp"
             android:paddingLeft="5dp"
             android:text="@string/likes"
+            android:fontFamily="@font/nunitosansbold"
+
             android:textStyle="bold"
             android:textColor="@color/skyblue"
             app:layout_constraintStart_toEndOf="@+id/tv_likecount"
@@ -147,6 +153,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/amp"
+            android:fontFamily="@font/nunitosansbold"
+
             style="@style/TextStyle"
             android:textStyle="bold"
             android:layout_marginStart="@dimen/spacing_medium"
@@ -162,6 +170,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="03"
+            android:fontFamily="@font/nunitosansbold"
+
             android:textStyle="bold"
             android:textColor="@color/skyblue"
             app:layout_constraintStart_toEndOf="@+id/textView11"
@@ -175,6 +185,8 @@
             android:layout_marginTop="8dp"
             android:paddingLeft="5dp"
             android:text="@string/comments"
+            android:fontFamily="@font/nunitosansbold"
+
             android:textStyle="bold"
             android:textColor="@color/skyblue"
             app:layout_constraintStart_toEndOf="@+id/tv_comcount"
@@ -189,6 +201,8 @@
             android:layout_marginEnd="16dp"
             android:layout_marginTop="8dp"
             android:text="23 Aug 19"
+            android:fontFamily="@font/nunitosansregular"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -222,6 +236,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Like"
+                    android:fontFamily="@font/nunitosansregular"
                     android:textColor="@color/gray_1" />
 
                 <ImageView
@@ -255,6 +270,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Comment"
+                    android:fontFamily="@font/nunitosansregular"
                     android:textColor="@color/gray_1" />
 
                 <ImageView
@@ -288,6 +304,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Share"
+                    android:fontFamily="@font/nunitosansregular"
                     android:textColor="@color/gray_1" />
 
                 <ImageView

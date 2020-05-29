@@ -51,6 +51,7 @@
         android:maxLines="1"
         android:textSize="12sp"
         android:textStyle="bold"
+        android:fontFamily="@font/nunitosansbold"
         android:textColor="@color/black"
         android:text="Ed Hunter"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
@@ -145,6 +146,7 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="4dp"
                 android:text="58"
+                android:fontFamily="@font/nunitosansbold"
                 android:textStyle="bold"
                 android:textColor="@color/skyblue"
                 app:layout_constraintEnd_toStartOf="@+id/view2"
@@ -172,6 +174,7 @@
                 android:text="@string/amp"
                 style="@style/TextStyle"
                 android:textStyle="bold"
+                android:fontFamily="@font/nunitosansbold"
                 android:layout_marginStart="@dimen/spacing_small"
                 android:textColor="@color/skyblue"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -200,18 +203,20 @@
                 android:paddingLeft="5dp"
                 android:text="@string/comments"
                 android:textStyle="bold"
+                android:fontFamily="@font/nunitosansbold"
                 android:textColor="@color/skyblue"
                 app:layout_constraintStart_toEndOf="@+id/tv_comcount"
                 app:layout_constraintTop_toTopOf="parent" />
             <TextView
                 android:id="@+id/tv_createddateTime"
-                style="@style/TextStyle"
+                style="@style/TextStyle.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="50dp"
                 android:text="12:04pm | 12 jan"
+                android:fontFamily="@font/nunitosansregular"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -247,6 +252,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Like"
+                        android:fontFamily="@font/nunitosansregular"
                         android:textColor="@color/gray_1" />
 
                     <ImageView
@@ -279,6 +285,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Comment"
+                        android:fontFamily="@font/nunitosansregular"
                         android:textColor="@color/gray_1" />
 
                     <ImageView
@@ -312,6 +319,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Share"
+                        android:fontFamily="@font/nunitosansregular"
                         android:textColor="@color/gray_1" />
 
                     <ImageView
@@ -343,6 +351,7 @@
         android:textSize="12sp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
+        android:fontFamily="@font/nunitosansregular"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="12dp"
         android:text="“Things you’d never hear in a ticket office” … Let’s play a game of mock the week, or the LinkedIn version of Mock the Week. I’ll Start: https://lnkd.in… see more"

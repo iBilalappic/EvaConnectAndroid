@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.Post;
+import com.hypernym.evaconnect.models.User;
 
 import java.util.List;
 
@@ -19,4 +20,5 @@ public interface IPostRepository {
 
     LiveData<BaseModel<List<Post>>> getPostById(int id);
 
+    LiveData<BaseModel<List<Post>>> getPost(User user, int total, int current);
 }

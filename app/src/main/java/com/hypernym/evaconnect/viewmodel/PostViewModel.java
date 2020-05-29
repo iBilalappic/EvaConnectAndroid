@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.Post;
+import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IPostRepository;
 import com.hypernym.evaconnect.repositories.impl.PostRepository;
 
@@ -42,5 +43,9 @@ public class PostViewModel extends AndroidViewModel {
     public LiveData<BaseModel<List<Post>>> getPostByID(int id)
     {
         return iPostRepository.getPostById(id);
+    }
+    public LiveData<BaseModel<List<Post>>> getPost(User user, int totalpages, int currentPage)
+    {
+        return iPostRepository.getPost(user,totalpages,currentPage);
     }
 }
