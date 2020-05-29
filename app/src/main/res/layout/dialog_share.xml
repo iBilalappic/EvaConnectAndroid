@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/dialog_width"
-    android:layout_height="450dp"
+    android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:background="@color/colorwhite"
     android:elevation="4dp"
@@ -13,8 +13,22 @@
         android:layout_height="40dp"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
+        android:visibility="gone"
         android:layout_marginBottom="30dp"
         android:src="@drawable/share" />
+
+    <TextView
+        style="@style/TextAppearance.Text.Bold"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/spacing_medium"
+        android:gravity="center"
+        android:textColor="#545454"
+        android:textSize="14sp"
+        android:layout_marginBottom="@dimen/spacing_medium"
+        android:textAlignment="center"
+        android:text="Share" />
 
     <LinearLayout
         android:id="@+id/layoutconnection"
@@ -26,15 +40,17 @@
         <ImageView
             android:layout_width="25dp"
             android:layout_height="30dp"
-            android:src="@mipmap/ic_new_app_logo" />
+            android:src="@drawable/ic_share_with_connection" />
 
         <TextView
-            style="@style/TextStyle.Black"
+            style="@style/TextAppearance.Text.Regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
+            android:textColor="@color/dark_gray_2"
+            android:textSize="14sp"
             android:layout_weight="1"
-            android:text="Share with a connection" />
+            android:text="Share with a Connection" />
 
 
     </LinearLayout>
@@ -49,6 +65,7 @@
     <LinearLayout
         android:id="@+id/email"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:paddingStart="5dp"
@@ -74,36 +91,17 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:visibility="gone"
         android:layout_marginStart="65dp"
         android:layout_marginTop="0dp"
         android:background="@color/lighter_gray" />
 
-    <LinearLayout
-        android:id="@+id/whatsapp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="10dp">
 
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="30dp"
-            android:src="@drawable/ic_whatsapp" />
-
-        <TextView
-            style="@style/TextStyle.Black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_weight="1"
-            android:text="Share via Whatsapp" />
-
-
-    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:visibility="gone"
         android:layout_marginStart="65dp"
         android:layout_marginTop="0dp"
         android:background="@color/lighter_gray" />
@@ -113,6 +111,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
+        android:visibility="gone"
         android:padding="10dp">
 
         <ImageView
@@ -136,6 +135,7 @@
         android:layout_height="1dp"
         android:layout_marginStart="65dp"
         android:layout_marginTop="0dp"
+        android:visibility="gone"
         android:background="@color/lighter_gray" />
 
     <LinearLayout
@@ -143,6 +143,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
+        android:visibility="gone"
         android:padding="10dp">
 
         <ImageView
@@ -164,6 +165,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:visibility="gone"
         android:layout_marginStart="65dp"
         android:layout_marginTop="0dp"
         android:background="@color/lighter_gray" />
@@ -177,17 +179,19 @@
         android:visibility="visible">
 
         <ImageView
-            android:layout_width="23dp"
-            android:layout_height="30dp"
-            android:src="@drawable/ic_link" />
+            android:layout_width="20dp"
+            android:layout_height="25dp"
+            android:src="@drawable/share_url" />
 
         <TextView
-            style="@style/TextStyle.Black"
+            style="@style/TextAppearance.Text.Regular"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
+            android:layout_marginStart="35dp"
+            android:textColor="@color/dark_gray_2"
+            android:textSize="14sp"
             android:layout_weight="1"
-            android:text="Copy Link" />
+            android:text="Share URL" />
 
 
     </LinearLayout>
@@ -197,8 +201,32 @@
         android:layout_height="1dp"
         android:layout_marginStart="65dp"
         android:layout_marginTop="5dp"
-        android:background="@color/lighter_gray"
-        android:visibility="gone" />
+        android:background="@color/lighter_gray" />
 
+    <LinearLayout
+        android:id="@+id/whatsapp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="@dimen/spacing_large"
+        android:padding="10dp">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_share_whatsapp" />
+
+        <TextView
+            style="@style/TextAppearance.Text.Regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
+            android:textColor="@color/dark_gray_2"
+            android:textSize="14sp"
+            android:layout_weight="1"
+            android:text="Share on WhatsApp" />
+
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +21,7 @@ public class EventDialog extends Dialog {
     private CalendarModel event;
     private TextView tv_title,tv_createdby,tv_location,tv_createdDate,tv_description,tv_event_type;
     private TextView btn_viewEvent;
+    private ImageView img_close;
 
     public EventDialog(CalendarModel event, Context context) {
         super(context);
@@ -36,25 +38,51 @@ public class EventDialog extends Dialog {
         tv_createdby=findViewById(R.id.tv_createdby);
         tv_createdDate=findViewById(R.id.tv_createdDate);
         tv_description=findViewById(R.id.tv_description);
+        img_close = findViewById(R.id.img_close);
         tv_location=findViewById(R.id.tv_createdLocation);
         tv_event_type=findViewById(R.id.tv_event_type);
         btn_viewEvent=findViewById(R.id.btn_viewEvent);
         setCanceledOnTouchOutside(true);
         setCancelable(true);
         getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        tv_title.setText(event.getObject_details().getEvent_name());
-        tv_location.setText(event.getObject_details().getEvent_city());
-        tv_description.setText(event.getObject_details().getContent());
-        tv_createdby.setText("Created By "+event.getObject_details().getUser().getFirst_name());
-        if(event.getObject_details().getIs_private()==0)
-        {
-            tv_event_type.setText("Open to the public");
+
+        if (event.getObject_type().equalsIgnoreCase("event")) {
+            tv_title.setText(event.getObject_details().getEvent_name());
+            tv_location.setText(event.getObject_details().getEvent_city());
+            tv_description.setText(event.getObject_details().getContent());
+            tv_createdby.setText("Created By "+event.getObject_details().getUser().getFirst_name());
+            tv_event_type.setVisibility(View.VISIBLE);
+            if(event.getObject_details().getIs_private()==0)
+            {
+                tv_event_type.setText("Open to the public");
+            }
+            else
+            {
+                tv_event_type.setText("Private to the public");
+            }
+            tv_createdDate.setText(DateUtils.getFormattedDateDMY(event.getObject_details().getEvent_start_date()));
+
+            btn_viewEvent.setText("View Event");
         }
-        else
+        else if (event.getObject_type().equalsIgnoreCase("meeting"))
         {
-            tv_event_type.setText("Private to the public");
+            tv_title.setText(event.getObject_details().getSubject());
+            tv_location.setText(event.getObject_details().getAddress());
+            tv_description.setText(event.getObject_details().getNotes());
+            tv_createdby.setText("Created By "+event.getObject_details().getUser().getFirst_name());
+            tv_event_type.setVisibility(View.GONE);
+            tv_createdDate.setText(DateUtils.getFormattedDateDMY(event.getObject_details().getStart_date()));
+
+            btn_viewEvent.setText("View Meeting");
         }
-        tv_createdDate.setText(DateUtils.getFormattedDateDMY(event.getObject_details().getEvent_start_date()));
+
+        img_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+
         btn_viewEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -4,10 +4,14 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -19,6 +23,7 @@ import androidx.recyclerview.widget.SimpleItemAnimator;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
@@ -55,6 +60,9 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
 
     @BindView(R.id.newpost)
     TextView newpost;
+
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
 
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
@@ -143,6 +151,59 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
                 return isLoading;
             }
         });
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final OvershootInterpolator interpolator = new OvershootInterpolator();
+                ViewCompat.animate(fab).
+                        rotation(135f).
+                        withLayer().
+                        setDuration(300).
+                        setInterpolator(interpolator).
+                        start();
+                /** Instantiating PopupMenu class */
+                PopupMenu popup = new PopupMenu(getContext(), v);
+
+                /** Adding menu items to the popumenu */
+                popup.getMenuInflater().inflate(R.menu.dashboard_menu, popup.getMenu());
+
+                popup.setOnDismissListener(new PopupMenu.OnDismissListener() {
+                    @Override
+                    public void onDismiss(PopupMenu menu) {
+                        ViewCompat.animate(fab).
+                                rotation(0f).
+                                withLayer().
+                                setDuration(300).
+                                setInterpolator(interpolator).
+                                start();
+                    }
+                });
+                /** Defining menu item click listener for the popup menu */
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+
+                        //    Toast.makeText(getContext(), item.getGroupId()+"You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+//                        if(item.getTitle().toString().equalsIgnoreCase(getString(R.string.action1)))
+//                        {
+//                            loadFragment(R.id.framelayout,new CreateEventFragment(),getContext(),true);
+//                        }
+//                        else
+//                        {
+//                            loadFragment(R.id.framelayout,new CreateMeetingFragment(), getContext(),true);
+//                        }
+
+                        return true;
+                    }
+                });
+
+                /** Showing the popup menu */
+                popup.show();
+            }
+        });
+
 
     }
 
