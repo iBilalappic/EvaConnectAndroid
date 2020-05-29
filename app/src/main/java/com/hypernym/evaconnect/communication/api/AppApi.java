@@ -8,6 +8,7 @@ import com.hypernym.evaconnect.models.CalendarModel;
 import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.Connection;
+import com.hypernym.evaconnect.models.CreateMeeting;
 import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.MyLikesModel;
@@ -209,6 +210,9 @@ public interface AppApi {
                                              @Part("is_private") int is_private,
                                              @Part("event_attendees") List<Integer> event_attendees,
                                              @Part MultipartBody.Part event_image);
+
+    @POST(APIConstants.ADD_MEETING)
+    Call<BaseModel<List<CreateMeeting>>> createMeeting(@Body CreateMeeting meeting);
 
 
     @POST(APIConstants.GET_EVENT_DETAILS)

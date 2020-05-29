@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Comment;
+import com.hypernym.evaconnect.models.CreateMeeting;
 import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.User;
 
@@ -14,6 +15,8 @@ import retrofit2.http.Part;
 
 public interface IEventRepository {
     LiveData<BaseModel<List<Event>>> createEvent(Event event, @Part MultipartBody.Part user_image);
+
+    LiveData<BaseModel<List<CreateMeeting>>> createMeeting(CreateMeeting meeting);
 
     LiveData<BaseModel<List<Event>>> getCalendarEvents(int user_id, String month,String year);
 

@@ -32,6 +32,7 @@ public interface APIConstants {
     public static String GET_JOB_AD_BY_ID="job/show/details/{job_id}/";
     public static String GET_APPLICANTS="job/application/filter/";
     public static String ADD_EVENT="event/";
+    public static String ADD_MEETING="meeting/";
     public static String GET_CALENDAR_MARKS="user/calendar/";
     public static String GET_EVENT_DETAILS="event/details/";
     public static String GET_EVENT_COMMENTS="event/comment/filter/";

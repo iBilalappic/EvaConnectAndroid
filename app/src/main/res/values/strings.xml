@@ -81,6 +81,7 @@
     <string name="msg_remove_user">Your connection has been removed successfully.</string>
     <string name="msg_block_user">Your connection has been block successfully.</string>
     <string name="msg_event_created">Your Event has been created successfully.</string>
+    <string name="msg_meeting_created">Your Meeting has been created successfully.</string>
     <string name="msg_note_created">Your Note has been created successfully.</string>
     <string name="msg_application_form">Application Sent successfully.</string>
     <string name="msg_exit">Are you sure you want to exit?</string>
