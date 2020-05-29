@@ -50,7 +50,7 @@
             android:textColor="@color/dark_gray_2"
             android:textSize="14sp"
             android:layout_weight="1"
-            android:text="@string/share_with_a_connection" />
+            android:text="Share with a Connection" />
 
 
     </LinearLayout>
@@ -191,7 +191,7 @@
             android:textColor="@color/dark_gray_2"
             android:textSize="14sp"
             android:layout_weight="1"
-            android:text="@string/share_url" />
+            android:text="Share URL" />
 
 
     </LinearLayout>
@@ -224,7 +224,7 @@
             android:textColor="@color/dark_gray_2"
             android:textSize="14sp"
             android:layout_weight="1"
-            android:text="@string/share_on_whatsapp" />
+            android:text="Share on WhatsApp" />
 
 
     </LinearLayout>
