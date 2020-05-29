@@ -104,6 +104,18 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     @BindView(R.id.tv_back)
     TextView tv_back;
 
+    @BindView(R.id.tv_home)
+    TextView tv_home;
+
+    @BindView(R.id.tv_connections)
+    TextView tv_connections;
+
+    @BindView(R.id.tv_message)
+    TextView tv_message;
+
+    @BindView(R.id.tv_profile)
+    TextView tv_profile;
+
     @BindView(R.id.tv_pagetitle)
     ConstraintLayout titleLayout;
 
@@ -193,6 +205,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
 
         // img_home.setImageDrawable(getDrawable(R.drawable.home_selected));
         img_home.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
+        tv_home.setTextColor(ContextCompat.getColor(this, R.color.skyblue));
         img_connections.setImageDrawable(getDrawable(R.drawable.ic_connection_1));
         img_messages.setImageDrawable(getDrawable(R.drawable.ic_message_1));
         img_logout.setImageDrawable(getDrawable(R.drawable.ic_profile_1));
@@ -287,6 +300,10 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     @OnClick(R.id.img_home)
     public void home() {
         img_home.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
+        tv_home.setTextColor(ContextCompat.getColor(this, R.color.skyblue));
+        tv_connections.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+        tv_message.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+        tv_profile.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
         img_connections.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
         img_messages.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
         img_logout.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
@@ -296,9 +313,9 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
 //        img_logout.setImageDrawable(getDrawable(R.drawable.logout));
 
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.framelayout);
-        if (f instanceof HomeFragment) {
+        if (f instanceof MainViewPagerFragment) {
         } else {
-            loadFragment(R.id.framelayout, new HomeFragment(), this, false);
+            loadFragment(R.id.framelayout, new MainViewPagerFragment(), this, false);
         }
         tv_back.setVisibility(View.GONE);
         BaseFragment.pageTitle = getString(R.string.home);
@@ -312,6 +329,11 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         img_connections.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
         img_messages.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
         img_logout.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+
+        tv_home.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+        tv_connections.setTextColor(ContextCompat.getColor(this, R.color.skyblue));
+        tv_message.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+        tv_profile.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
 
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.framelayout);
         if (f instanceof ConnectionsFragment) {
@@ -330,6 +352,13 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         img_connections.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
         img_messages.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
         img_logout.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+
+        tv_home.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+        tv_connections.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+        tv_message.setTextColor(ContextCompat.getColor(this, R.color.skyblue));
+        tv_profile.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+
+
         PrefUtils.saveMessageCount(getApplicationContext(), 0);
         badge_notification.setVisibility(View.GONE);
         MessageFragment fragment = new MessageFragment();
@@ -344,6 +373,13 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         img_connections.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
         img_messages.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
         img_logout.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
+
+        tv_home.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+        tv_connections.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+        tv_message.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+        tv_profile.setTextColor(ContextCompat.getColor(this, R.color.skyblue));
+
+
         PersonProfileFragment fragment = new PersonProfileFragment();
         loadFragment(R.id.framelayout, fragment, this, true);
       //  BaseFragment.pageTitle = "Profile";
