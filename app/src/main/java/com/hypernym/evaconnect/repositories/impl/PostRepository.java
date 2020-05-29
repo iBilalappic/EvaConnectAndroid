@@ -25,6 +25,7 @@ import retrofit2.Response;
 public class PostRepository implements IPostRepository {
     private MutableLiveData<BaseModel<List<Post>>> postMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Comment>>> commentMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Post>>> dashboardMutableLiveData = new MutableLiveData<>();
     @Override
     public LiveData<BaseModel<List<Post>>> createPost(Post post) {
         postMutableLiveData=new MutableLiveData<>();
@@ -114,5 +115,22 @@ public class PostRepository implements IPostRepository {
             }
         });
         return postMutableLiveData;
+    }
+    @Override
+    public LiveData<BaseModel<List<Post>>> getPost(User user, int total, int current) {
+        dashboardMutableLiveData = new MutableLiveData<>();
+        user.setUser_id(user.getId());
+        RestClient.get().appApi().getPost(user, total, current).enqueue(new Callback<BaseModel<List<Post>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
+                dashboardMutableLiveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Post>>> call, Throwable t) {
+                dashboardMutableLiveData.setValue(null);
+            }
+        });
+        return dashboardMutableLiveData;
     }
 }

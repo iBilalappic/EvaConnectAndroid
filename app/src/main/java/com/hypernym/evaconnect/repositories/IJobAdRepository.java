@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.JobAd;
+import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.User;
 
@@ -19,4 +20,6 @@ public interface IJobAdRepository {
     LiveData<BaseModel<List<Object>>> setLike(User user ,int application_id,String action);
     LiveData<BaseModel<List<SpecficJobAd>>> getJobId(int job_id);
     LiveData<BaseModel<List<Object>>> apply_interview(int job_id,int sender_id,int application_id,String day,String month,String year,String hour,String minutes);
+    LiveData<BaseModel<List<Post>>> getJob(User user, int total, int current);
+
 }

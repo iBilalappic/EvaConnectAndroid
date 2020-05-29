@@ -7,6 +7,7 @@ import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.JobAd;
+import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IJobAdRepository;
@@ -26,6 +27,7 @@ public class JobListRepository implements IJobAdRepository {
     private MutableLiveData<BaseModel<List<Object>>> LikeMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<SpecficJobAd>>> JobMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> InterviewMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Post>>> dashboardMutableLiveData = new MutableLiveData<>();
 
     @Override
     public LiveData<BaseModel<List<JobAd>>> getjobAd(User user) {
@@ -150,5 +152,23 @@ public class JobListRepository implements IJobAdRepository {
             }
         });
         return LikeMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<Post>>> getJob(User user, int total, int current) {
+        dashboardMutableLiveData = new MutableLiveData<>();
+        user.setUser_id(user.getId());
+        RestClient.get().appApi().getJob(user, total, current).enqueue(new Callback<BaseModel<List<Post>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
+                dashboardMutableLiveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Post>>> call, Throwable t) {
+                dashboardMutableLiveData.setValue(null);
+            }
+        });
+        return dashboardMutableLiveData;
     }
 }

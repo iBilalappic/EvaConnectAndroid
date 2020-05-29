@@ -7,8 +7,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.text.Editable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +27,7 @@ import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.Options;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
+import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
@@ -32,6 +35,7 @@ import com.hypernym.evaconnect.utils.TextWatcher;
 import com.hypernym.evaconnect.view.adapters.ConnectionsAdapter;
 import com.hypernym.evaconnect.view.adapters.OptionsAdapter;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
+import com.hypernym.evaconnect.viewmodel.UserViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +45,7 @@ import butterknife.ButterKnife;
 
 import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
 
-public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.ItemClickListener, ConnectionsAdapter.OnItemClickListener {
+public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.ItemClickListener, ConnectionsAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.rc_connections)
     RecyclerView rc_connections;
 
@@ -57,6 +61,10 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
     @BindView(R.id.empty)
     TextView empty;
 
+    @BindView(R.id.swipeRefresh)
+    SwipeRefreshLayout swipeRefresh;
+
+
     List<Options> mainCategories = new ArrayList<>();
     List<Options> subCategories = new ArrayList<>();
 
@@ -66,6 +74,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
     private OptionsAdapter optionsAdapter, subOptionsAdapter;
     private LinearLayoutManager linearLayoutManager;
     private ConnectionViewModel connectionViewModel;
+    private UserViewModel userViewModel;
     String type = "user";
     private int currentPage = PAGE_START;
     private boolean isLastPage = false;
@@ -90,7 +99,10 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         View view = inflater.inflate(R.layout.fragment_connections, container, false);
         ButterKnife.bind(this, view);
         connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
+        userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(UserViewModel.class);
+
         currentPage = PAGE_START;
+        swipeRefresh.setOnRefreshListener(this);
         initMainOptionsRecView();
         initSubOptionsRecView();
         initRecyclerView();
@@ -325,6 +337,17 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         if (NetworkUtils.isNetworkConnected(getContext())) {
             TextView textView = (TextView) view;
             callConnectApi(textView, connectionList.get(position));
+            GetUserDetails();
+        } else {
+            networkErrorDialog();
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        if (NetworkUtils.isNetworkConnected(getContext())) {
+            GetUserDetails();
+            getConnectionByFilter(type, currentPage, false);
         } else {
             networkErrorDialog();
         }
@@ -359,5 +382,23 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
 
         }
 
+    }
+
+    private void GetUserDetails() {
+        User user = new User();
+        user = LoginUtils.getUser();
+        userViewModel.getuser_details(user.getId()
+        ).observe(this, new Observer<BaseModel<List<User>>>() {
+            @Override
+            public void onChanged(BaseModel<List<User>> listBaseModel) {
+                if (listBaseModel.getData() != null && !listBaseModel.isError()) {
+                    swipeRefresh.setRefreshing(false);
+                    LoginUtils.saveUser(listBaseModel.getData().get(0));
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+                hideDialog();
+            }
+        });
     }
 }

@@ -9,6 +9,8 @@ import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.CreateMeeting;
 import com.hypernym.evaconnect.models.Event;
+import com.hypernym.evaconnect.models.Post;
+import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IEventRepository;
 import com.hypernym.evaconnect.utils.LoginUtils;
 
@@ -25,6 +27,7 @@ public class EventRepository implements IEventRepository {
     private MutableLiveData<BaseModel<List<Event>>> eventMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<CreateMeeting>>> meetingMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Comment>>> commentMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Post>>> dashboardMutableLiveData = new MutableLiveData<>();
 
     @Override
     public LiveData<BaseModel<List<CreateMeeting>>> createMeeting(CreateMeeting meeting) {
@@ -205,5 +208,22 @@ public class EventRepository implements IEventRepository {
             }
         });
         return eventMutableLiveData;
+    }
+    @Override
+    public LiveData<BaseModel<List<Post>>> getEvent(User user, int total, int current) {
+        dashboardMutableLiveData = new MutableLiveData<>();
+        user.setUser_id(user.getId());
+        RestClient.get().appApi().getEvent(user, total, current).enqueue(new Callback<BaseModel<List<Post>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
+                dashboardMutableLiveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Post>>> call, Throwable t) {
+                dashboardMutableLiveData.setValue(null);
+            }
+        });
+        return dashboardMutableLiveData;
     }
 }

@@ -2,11 +2,14 @@ package com.hypernym.evaconnect.view.ui.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
 import android.text.TextUtils;
@@ -18,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -81,15 +85,49 @@ public class CreateAccount_2_Activity extends BaseActivity implements Validator.
     long FASTEST_INTERVAL = 501; /* 1/2 sec */
     public static int counter = 0;
     private LocationRequest mLocationRequest;
-
+    private LocationManager locationManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account_2);
         ButterKnife.bind(this);
         tv_already_account.setOnClickListener(this);
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+        isLocationEnabled();
         init();
     }
+
+    private void isLocationEnabled() {
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            return;
+        } else {
+            buildAlertMessageNoGps();
+        }
+    }
+
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Enable GPS", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.setCancelable(false);
+        alert.setIcon(R.drawable.ic_location_disabled_black_24dp);
+        alert.setCanceledOnTouchOutside(false);
+        alert.show();
+    }
+
 
     private void init() {
         String type = getIntent().getStringExtra(Constants.ACTIVITY_NAME);

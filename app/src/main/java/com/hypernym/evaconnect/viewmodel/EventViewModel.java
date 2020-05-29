@@ -10,6 +10,7 @@ import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.CreateMeeting;
 import com.hypernym.evaconnect.models.Event;
+import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IEventRepository;
 import com.hypernym.evaconnect.repositories.IUserRespository;
@@ -71,6 +72,9 @@ public class EventViewModel extends AndroidViewModel {
         return iEventRepository.likeEvent(event);
     }
 
-
+    public LiveData<BaseModel<List<Post>>> getEvent(User user, int totalpages, int currentPage)
+    {
+        return iEventRepository.getEvent(user,totalpages,currentPage);
+    }
 
 }
