@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -17,12 +18,16 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.OvershootInterpolator;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
@@ -62,7 +67,8 @@ import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_ST
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemClickListener,
+        SwipeRefreshLayout.OnRefreshListener, FloatingActionButton.OnClickListener {
     @BindView(R.id.rc_home)
     RecyclerView rc_home;
 
@@ -71,6 +77,10 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
 
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
+
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+
 
     private List<Post> posts = new ArrayList<>();
     private HomePostsAdapter homePostsAdapter;
@@ -86,6 +96,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     private List<Post> notifications = new ArrayList<>();
     private JobListViewModel jobListViewModel;
     private UserViewModel userViewModel;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -114,6 +125,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
 
         rc_home.setLayoutManager(linearLayoutManager);
         rc_home.setAdapter(homePostsAdapter);
+        fab.setOnClickListener(this);
         RecyclerView.ItemAnimator animator = rc_home.getItemAnimator();
         if (animator instanceof SimpleItemAnimator) {
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
@@ -355,8 +367,8 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
 //       startActivity(intent);
         ShareDialog shareDialog;
         Bundle bundle = new Bundle();
-        bundle.putSerializable("PostData",posts.get(position));
-        shareDialog = new ShareDialog(getContext(),bundle);
+        bundle.putSerializable("PostData", posts.get(position));
+        shareDialog = new ShareDialog(getContext(), bundle);
         shareDialog.show();
     }
 
@@ -509,15 +521,13 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     }
 
     private void GetUserDetails() {
-        User user=new User();
-        user=LoginUtils.getUser();
+        User user = new User();
+        user = LoginUtils.getUser();
         userViewModel.getuser_details(user.getId()
         ).observe(this, new Observer<BaseModel<List<User>>>() {
             @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel)
-            {
-                if (listBaseModel.getData() != null && !listBaseModel.isError())
-                {
+            public void onChanged(BaseModel<List<User>> listBaseModel) {
+                if (listBaseModel.getData() != null && !listBaseModel.isError()) {
                     swipeRefresh.setRefreshing(false);
                     LoginUtils.saveUser(listBaseModel.getData().get(0));
                 } else {
@@ -526,5 +536,53 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
                 hideDialog();
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        final OvershootInterpolator interpolator = new OvershootInterpolator();
+        ViewCompat.animate(fab).
+                rotation(135f).
+                withLayer().
+                setDuration(300).
+                setInterpolator(interpolator).
+                start();
+        /** Instantiating PopupMenu class */
+        PopupMenu popup = new PopupMenu(getContext(), v);
+
+        /** Adding menu items to the popumenu */
+        popup.getMenuInflater().inflate(R.menu.dashboard_menu, popup.getMenu());
+
+        popup.setOnDismissListener(new PopupMenu.OnDismissListener() {
+            @Override
+            public void onDismiss(PopupMenu menu) {
+                ViewCompat.animate(fab).
+                        rotation(0f).
+                        withLayer().
+                        setDuration(300).
+                        setInterpolator(interpolator).
+                        start();
+            }
+        });
+        /** Defining menu item click listener for the popup menu */
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+
+                //    Toast.makeText(getContext(), item.getGroupId()+"You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+//                if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.action1))) {
+//                    loadFragment(R.id.framelayout, new CreateEventFragment(), getContext(), true);
+//                } else {
+//                    loadFragment(R.id.framelayout, new CreateMeetingFragment(), getContext(), true);
+//                }
+
+                return true;
+            }
+        });
+
+        /** Showing the popup menu */
+        popup.show();
+
     }
 }

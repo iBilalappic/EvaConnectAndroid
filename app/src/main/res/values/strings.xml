@@ -130,5 +130,10 @@
     <string name="str_btn">Open Popup Menu</string>
     <string name="action1">Create an Event</string>
     <string name="action2">Create a Meeting Schedule</string>
+    <string name="menu1">Publish a message</string>
+    <string name="menu2">Share a video</string>
+    <string name="menu3">Post an event</string>
+    <string name="menu4">Share an article</string>
+
 </resources>
 
