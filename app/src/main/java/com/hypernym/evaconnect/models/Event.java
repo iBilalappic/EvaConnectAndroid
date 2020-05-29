@@ -31,7 +31,9 @@ public class Event implements Serializable {
     private int modified_by_id;
     private int created_by_id;
     private String action;
-
+    private List<Integer> event_attendees;
+private String registration_link;
+private int is_private;
 
     public String getEvent_name() {
         return event_name;
@@ -247,5 +249,29 @@ public class Event implements Serializable {
 
     public void setAction(String action) {
         this.action = action;
+    }
+
+    public List<Integer> getEvent_attendees() {
+        return event_attendees;
+    }
+
+    public void setEvent_attendees(List<Integer> event_attendees) {
+        this.event_attendees = event_attendees;
+    }
+
+    public String getRegistration_link() {
+        return registration_link;
+    }
+
+    public void setRegistration_link(String registration_link) {
+        this.registration_link = registration_link;
+    }
+
+    public int getIs_private() {
+        return is_private;
+    }
+
+    public void setIs_private(int is_private) {
+        this.is_private = is_private;
     }
 }

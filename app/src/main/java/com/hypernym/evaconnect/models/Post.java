@@ -1,8 +1,5 @@
 package com.hypernym.evaconnect.models;
 
-import com.google.gson.annotations.SerializedName;
-
-import java.io.File;
 import java.io.Serializable;
 import java.util.List;
 
@@ -69,6 +66,7 @@ public class Post implements Serializable {
     private String end_time;
     private String address;
     private String notes;
+    private int is_private;
 
 
 
@@ -463,6 +461,14 @@ public class Post implements Serializable {
 
     public void setConnection_id(Integer connection_id) {
         this.connection_id = connection_id;
+    }
+
+    public int getIs_private() {
+        return is_private;
+    }
+
+    public void setIs_private(int is_private) {
+        this.is_private = is_private;
     }
 }
 

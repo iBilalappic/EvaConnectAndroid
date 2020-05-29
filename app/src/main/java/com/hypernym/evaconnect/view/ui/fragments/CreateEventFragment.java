@@ -5,16 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.FileProvider;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -31,6 +21,15 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -57,7 +56,6 @@ import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -72,7 +70,6 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnTouch;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -80,7 +77,6 @@ import okhttp3.RequestBody;
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.app.Activity.RESULT_OK;
-import static com.hypernym.evaconnect.utils.Constants.CONNECTIONS_ALREADY_ADDED;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -198,20 +194,14 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
         tv_startTime.setText(time.format(new Date()));
         tv_startTime.setInputType(InputType.TYPE_NULL);
 
-        /*tv_enddate.setText(dateformat.format(new Date()));
-        tv_enddate.setInputType(InputType.TYPE_NULL);
-
-        tv_endTime.setText(time.format(new Date()));
-        tv_endTime.setInputType(InputType.TYPE_NULL);*/
-
         validator = new Validator(this);
         validator.setValidationListener(this);
         eventViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(EventViewModel.class);
-
+        invitedConnections.clear();
         event_type_spinner.setOnItemSelectedListener(this);
     }
 
-    @OnTouch({R.id.tv_startdate, R.id.tv_startTime})
+    @OnClick({R.id.tv_startdate, R.id.tv_startTime})
     public void setStartDate() {
         isStartDate = true;
         try {
@@ -225,7 +215,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
     }
 
 
-    @OnTouch({R.id.tv_enddate, R.id.tv_endTime})
+    @OnClick({R.id.tv_enddate, R.id.tv_endTime})
     public void setEndDate() {
         isStartDate = false;
         try {
@@ -240,7 +230,6 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
     public void addConnections(){
         Bundle bundle = new Bundle();
         bundle.putString(Constants.FRAGMENT_TYPE, Constants.FRAGMENT_NAME_2);
-
         loadFragment_bundle(R.id.framelayout, new InviteConnections(), getContext(), true, bundle);
     }
 
@@ -317,7 +306,15 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
             event.setEnd_time(DateUtils.getTime_utc(tv_endTime.getText().toString()));
             event.setContent(edt_description.getText().toString());
             event.setEvent_city(edt_eventCity.getText().toString());
-            /*event.setEvent_address(edt_eventAddress.getText().toString());*/
+            event.setIs_private(event_type_spinner.getSelectedItemPosition());
+
+            List<Integer> event_attendees=new ArrayList<>();
+            for(User inviteConnections:invitedConnections)
+            {
+                event_attendees.add(inviteConnections.getUser_id());
+            }
+            event.setEvent_attendees(event_attendees);
+            event.setRegistration_link(edt_link.getText().toString());
 
             eventViewModel.createEvent(event, partImage).observe(this, new Observer<BaseModel<List<Event>>>() {
                 @Override
