@@ -45,6 +45,7 @@
                 android:layout_marginStart="28dp"
                 android:layout_marginTop="20dp"
                 android:text="Ed Hunter"
+                android:fontFamily="@font/nunitosansbold"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -60,6 +61,7 @@
                 android:text="London,United kingdom"
                 android:textColor="@color/gray"
                 android:textSize="14sp"
+                android:fontFamily="@font/nunitosansbold"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/profile_image"
                 app:layout_constraintTop_toBottomOf="@+id/tv_name" />
@@ -75,7 +77,7 @@
                 android:gravity="center"
                 android:paddingLeft="15dp"
                 android:paddingTop="5dp"
-
+                android:fontFamily="@font/nunitosansbold"
                 android:paddingRight="15dp"
                 android:paddingBottom="5dp"
                 android:text="Connect"
@@ -104,6 +106,7 @@
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold"
+                android:fontFamily="@font/nunitosansbold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -116,6 +119,7 @@
                 android:text="Crew Attendent | Eva jet"
                 android:textColor="@color/colorAccent"
                 android:textSize="14sp"
+                android:fontFamily="@font/nunitosansbold"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -142,6 +146,7 @@
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold"
+                android:fontFamily="@font/nunitosansbold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -155,6 +160,7 @@
                 android:textColor="@color/gray"
                 android:textSize="12sp"
                 android:textStyle="bold"
+                android:fontFamily="@font/nunitosansbold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_connections_count" />
@@ -188,6 +194,7 @@
                     android:text="Notifications"
                     android:textColor="@color/black"
                     android:textSize="12sp"
+                    android:fontFamily="@font/nunitosansbold"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -219,6 +226,7 @@
                     android:text="Edit Details"
                     android:textColor="@color/black"
                     android:textSize="12sp"
+                    android:fontFamily="@font/nunitosansbold"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -249,6 +257,7 @@
                     android:text="Settings"
                     android:textColor="@color/black"
                     android:textSize="12sp"
+                    android:fontFamily="@font/nunitosansbold"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -280,6 +289,7 @@
                     android:text="Message"
                     android:textColor="@color/black"
                     android:textSize="12sp"
+                    android:fontFamily="@font/nunitosansbold"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -309,6 +319,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:text="Disconnect"
+
+                    android:fontFamily="@font/nunitosansbold"
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -342,6 +354,7 @@
                     android:text="Block"
                     android:textColor="@color/black"
                     android:textSize="12sp"
+                    android:fontFamily="@font/nunitosansbold"
                     android:textStyle="bold" />
 
             </LinearLayout>

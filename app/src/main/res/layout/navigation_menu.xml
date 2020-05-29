@@ -36,13 +36,14 @@
 
     <TextView
         android:id="@+id/tv_name"
-        android:layout_width="140dp"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:ellipsize="end"
         android:gravity="center"
-        android:maxLines="1"
-        android:text="Deinal Edwell"
+        android:maxLines="2"
+        android:fontFamily="@font/nunitosansbold"
+        android:text="Deinal Edwell "
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -56,7 +57,8 @@
         android:id="@+id/layout1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginTop="5dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -70,7 +72,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ellipsize="end"
-            android:text="Manager at"
+            android:maxLines="1"
+            android:gravity="center|end"
+            android:text="Manager"
+            android:fontFamily="@font/nunitosansbold"
             android:textAlignment="textEnd"
             android:textSize="12sp"
             android:textStyle="bold">
@@ -78,13 +83,31 @@
         </TextView>
 
         <TextView
+            android:id="@+id/tv_at"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center|end"
+            android:text=" at "
+            android:fontFamily="@font/nunitosansbold"
+            android:textAlignment="textEnd"
+            android:textSize="12sp"
+            android:textStyle="bold">
+
+        </TextView>
+
+
+        <TextView
             android:id="@+id/tv_company"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_small"
             android:layout_weight="1"
-            android:maxLines="1"
+            android:ellipsize="end"
+            android:gravity="center|start"
             android:text="Easyjet"
+            android:fontFamily="@font/nunitosansbold"
+            android:maxLines="1"
             android:textColor="@color/colorAccent"
             android:textSize="12sp">
 
@@ -101,6 +124,7 @@
         android:textColor="@color/gray"
         android:textSize="14sp"
         android:textStyle="bold"
+        android:fontFamily="@font/nunitosansbold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout1" />
@@ -123,6 +147,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="457"
+        android:fontFamily="@font/nunitosansbold"
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="@+id/view1"
@@ -137,7 +162,7 @@
         android:text="Connections"
         android:textColor="@color/gray"
         android:textSize="12sp"
-        android:textStyle="bold"
+        android:fontFamily="@font/nunitosansbold"
         app:layout_constraintEnd_toEndOf="@+id/view1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_connections_count" />
@@ -162,6 +187,7 @@
         android:text="457"
         android:textColor="@color/black"
         android:textSize="20sp"
+        android:fontFamily="@font/nunitosansbold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/view1"
         app:layout_constraintTop_toBottomOf="@+id/view0" />
@@ -175,6 +201,7 @@
         android:textColor="@color/gray"
         android:textSize="12sp"
         android:textStyle="bold"
+        android:fontFamily="@font/nunitosansbold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/view1"
         app:layout_constraintTop_toBottomOf="@+id/tv_notication_count" />
@@ -191,7 +218,7 @@
 
 
     <LinearLayout
-        android:id="@+id/layoutLike"
+        android:id="@+id/layout_myactivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -208,6 +235,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:fontFamily="@font/nunitosansbold"
             android:text="My Activity" />
 
         <ImageView
@@ -229,13 +257,15 @@
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutLike">
+        app:layout_constraintTop_toBottomOf="@+id/layout_myactivity">
 
         <TextView
             style="@style/TextStyle.Black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/tv_calender_event"
             android:layout_weight="1"
+            android:fontFamily="@font/nunitosansbold"
             android:text="@string/calendar" />
 
         <ImageView
@@ -246,35 +276,50 @@
     </LinearLayout>
 
 
-
     <LinearLayout
+        android:id="@+id/joblisting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calendar"
         android:layout_marginEnd="20dp"
-        android:id="@+id/joblisting"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendar">
+
         <TextView
             style="@style/TextStyle.Black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/job_listings"/>
+            android:fontFamily="@font/nunitosansbold"
+            android:id="@+id/tv_joblisting"
+            android:text="@string/job_listings" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right|end"
-            android:src="@drawable/job_listing"/>
+            android:src="@drawable/job_listing" />
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginStart="30dp"
+        android:text="@string/app_version"
+        android:textColor="@color/gray"
+        android:textSize="12sp"
+        android:fontFamily="@font/nunitosansbold"
+        app:layout_constraintBottom_toTopOf="@+id/tv_logout"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <TextView
-        android:id="@+id/newpost"
+        android:id="@+id/tv_logout"
         style="@style/TextStyle.Title"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -286,6 +331,7 @@
         android:paddingRight="20dp"
         android:paddingBottom="10dp"
         android:text="Log Out"
+        android:fontFamily="@font/nunitosansbold"
         android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"

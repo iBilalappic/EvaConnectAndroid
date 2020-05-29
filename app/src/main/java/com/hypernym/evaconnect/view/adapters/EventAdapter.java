@@ -22,11 +22,13 @@ import butterknife.ButterKnife;
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> {
     private Context context;
     private List<CalendarModel> events;
+    private OnItemClickListener onItemClickListener;
 
-    public EventAdapter(Context context, List<CalendarModel> events)
+    public EventAdapter(Context context, List<CalendarModel> events,  OnItemClickListener itemClickListener)
     {
         this.context=context;
         this.events=events;
+        this.onItemClickListener = itemClickListener;
     }
 
     @NonNull
@@ -112,7 +114,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         return events.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder  {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener  {
         @BindView(R.id.day)
         TextView day;
 
@@ -131,7 +133,15 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
+            itemView.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View v) {
+            onItemClickListener.onItemClick(v, getAdapterPosition());
+        }
+    }
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
     }
 }

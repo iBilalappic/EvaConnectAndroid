@@ -2,14 +2,6 @@ package com.hypernym.evaconnect.view.ui.fragments;
 
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,18 +10,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
-import com.google.android.exoplayer2.C;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
-import com.hypernym.evaconnect.dateTimePicker.DateTime;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.EventAttendees;
-import com.hypernym.evaconnect.models.Options;
-import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
@@ -38,8 +31,8 @@ import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.CommentsAdapter;
 import com.hypernym.evaconnect.view.adapters.EventAttendeesAdapter;
+import com.hypernym.evaconnect.view.adapters.InvitedUsersAdapter;
 import com.hypernym.evaconnect.viewmodel.EventViewModel;
-import com.hypernym.evaconnect.viewmodel.HomeViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
@@ -48,7 +41,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -62,8 +54,6 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
    @BindView(R.id.tv_name)
    TextView tv_name;
 
-    @BindView(R.id.tv_eventname)
-    TextView tv_eventname;
 
    @BindView(R.id.img_event)
     ImageView img_event;
@@ -71,19 +61,13 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
    @BindView(R.id.tv_content)
    TextView tv_content;
 
-   @BindView(R.id.tv_minago)
-   TextView tv_minago;
 
-    @BindView(R.id.img_eventlogo)
-    ImageView img_eventlogo;
 
-    @BindView(R.id.tv_date)
+    @BindView(R.id.tv_eventdate)
     TextView tv_date;
 
-    @BindView(R.id.tv_time)
-    TextView tv_time;
 
-    @BindView(R.id.tv_location)
+    @BindView(R.id.tv_eventLocation)
     TextView tv_location;
 
     @BindView(R.id.rc_comments)
@@ -92,8 +76,6 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
     @BindView(R.id.img_user)
     ImageView img_user;
 
-    @BindView(R.id.rc_attendees)
-    RecyclerView rc_attendees;
 
     @BindView(R.id.btn_addcomment)
     ImageView btn_addcomment;
@@ -111,6 +93,9 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
     @BindView(R.id.img_like)
     ImageView img_like;
 
+    @BindView(R.id.invite_people)
+    RecyclerView invite_people;
+
 
     private List<Comment> comments=new ArrayList<>();
     private List<EventAttendees> eventAttendees=new ArrayList<>();
@@ -121,6 +106,8 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
     private Validator validator;
     int event_id;
     private Event event=new Event();
+    private InvitedUsersAdapter usersAdapter;
+    private List<User> invitedConnections = new ArrayList<>();
 
     public EventDetailFragment() {
         // Required empty public constructor
@@ -203,49 +190,10 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
     }
 
     private void setAttendeesAdapter(Event event) {
-        EventAttendees goingAttendees=new EventAttendees();
-        goingAttendees.setName("Going");
-        goingAttendees.setCount(event.getGoing());
-        goingAttendees.setElevation(0);
-        goingAttendees.setColor(getContext().getResources().getColor(R.color.gray));
-
-        EventAttendees maybeAttendees=new EventAttendees();
-        maybeAttendees.setName("Maybe");
-        maybeAttendees.setCount(event.getMay_be());
-        maybeAttendees.setElevation(0);
-        maybeAttendees.setColor(getContext().getResources().getColor(R.color.gray));
-
-        EventAttendees notgoingAttendees=new EventAttendees();
-        notgoingAttendees.setName("Not Going");
-        notgoingAttendees.setCount(event.getNot_going());
-        notgoingAttendees.setElevation(0);
-        notgoingAttendees.setColor(getContext().getResources().getColor(R.color.gray));
-        if(event.getIs_attending()!=null)
-        {
-            if(event.getIs_attending().equalsIgnoreCase("going"))
-            {
-                goingAttendees.setElevation(2);
-                goingAttendees.setColor(getContext().getResources().getColor(R.color.light_black));
-            }
-            else if(event.getIs_attending().equalsIgnoreCase("may be"))
-            {
-                maybeAttendees.setElevation(2);
-                maybeAttendees.setColor(getContext().getResources().getColor(R.color.light_black));
-            }
-            else if(event.getIs_attending().equalsIgnoreCase("not going"))
-            {
-                notgoingAttendees.setElevation(2);
-                notgoingAttendees.setColor(getContext().getResources().getColor(R.color.light_black));
-            }
-        }
-        eventAttendees.add(goingAttendees);
-        eventAttendees.add(maybeAttendees);
-        eventAttendees.add(notgoingAttendees);
-
-        eventAttendeesAdapter=new EventAttendeesAdapter(getContext(),eventAttendees,this);
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
-        rc_attendees.setLayoutManager(linearLayoutManager);
-        rc_attendees.setAdapter(eventAttendeesAdapter);
+            usersAdapter = new InvitedUsersAdapter(getContext(), invitedConnections);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+            invite_people.setLayoutManager(linearLayoutManager);
+            invite_people.setAdapter(usersAdapter);
     }
 
     private void getEventComments(int event_id) {
@@ -283,22 +231,22 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
 
             private void setEventData(Event event) {
                 tv_name.setText(event.getEvent_name());
-                tv_minago.setText(DateUtils.getTimeAgo(event.getCreated_datetime()));
+
                 if(event.getEvent_image().size()>0)
                 {
                     AppUtils.setGlideImageUrl(getContext(),img_event,event.getEvent_image().get(0));
-                    AppUtils.setGlideUrlThumbnail(getContext(),img_eventlogo,event.getEvent_image().get(0));
+
                 }
               else {
                     img_event.setBackground(getContext().getDrawable(R.drawable.no_thumbnail));
-                    img_eventlogo.setBackground(getContext().getDrawable(R.drawable.no_thumbnail));
+
                 }
                 tv_content.setText(event.getContent());
 
                 tv_date.setText(DateUtils.getFormattedDateDMY(event.getEvent_start_date())+" - "+ DateUtils.getFormattedDateDMY(event.getEvent_end_date()));
-                tv_time.setText(DateUtils.getFormattedEventTime(event.getStart_time())+" - "+DateUtils.getFormattedEventTime(event.getEnd_time()));
+
                 tv_location.setText(event.getEvent_address()+" , "+ event.getEvent_city());
-                tv_eventname.setText(event.getEvent_name());
+
                 tv_likecount.setText(String.valueOf(event.getLike_count()));
                 tv_comcount.setText(String.valueOf(event.getComment_count()));
                 if (event.getIs_event_like() != null && event.getIs_event_like() > 0) {
