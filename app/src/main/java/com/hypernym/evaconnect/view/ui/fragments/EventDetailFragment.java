@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -98,6 +99,18 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
 
     @BindView(R.id.tv_event_type)
     TextView tv_event_type;
+
+    @BindView(R.id.modify_event)
+    ImageButton modify_event;
+
+    @BindView(R.id.accept_invite)
+    ImageButton accept_invite;
+
+    @BindView(R.id.interested)
+    ImageButton interested;
+
+    @BindView(R.id.register)
+    ImageButton register;
 
     private List<Comment> comments=new ArrayList<>();
     private List<EventAttendees> eventAttendees=new ArrayList<>();
@@ -233,6 +246,16 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
                 {
                     networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
                 }
+                if(event.getCreated_by_id()== LoginUtils.getLoggedinUser().getUser_id())
+                {
+                    modify_event.setVisibility(View.VISIBLE);
+
+                }
+                else
+                {
+                    modify_event.setVisibility(View.GONE);
+                    accept_invite.setVisibility(View.VISIBLE);
+                }
             }
 
             private void setEventData(Event event) {
@@ -249,7 +272,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
                 }
                 tv_content.setText(event.getContent());
 
-                tv_date.setText(DateUtils.getFormattedDateDMY(event.getEvent_start_date())+" - "+ DateUtils.getFormattedDateDMY(event.getEvent_end_date()));
+                tv_date.setText(DateUtils.getFormattedDateDMY(event.getEvent_start_date())+" - "+ DateUtils.getFormattedDateDMY(event.getEvent_end_date()) +" | "+event.getStart_time()+" - "+event.getEnd_time());
 
                 tv_location.setText(event.getEvent_city());
                 if(event.getIs_private()==0)
@@ -347,7 +370,15 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
             });
 
     }
-
+    @OnClick(R.id.modify_event)
+    public void modifyevent()
+    {
+        CreateEventFragment createEventFragment=new CreateEventFragment();
+        Bundle bundle=new Bundle();
+        bundle.putSerializable("event",event);
+        createEventFragment.setArguments(bundle);
+        loadFragment(R.id.framelayout,createEventFragment,getContext(),true);
+    }
     @Override
     public void onValidationFailed(List<ValidationError> errors) {
         for (ValidationError error : errors) {

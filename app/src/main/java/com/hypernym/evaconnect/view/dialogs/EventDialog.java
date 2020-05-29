@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,7 +19,7 @@ public class EventDialog extends Dialog {
     private Context context;
     private CalendarModel event;
     private TextView tv_title,tv_createdby,tv_location,tv_createdDate,tv_description,tv_event_type;
-    private Button btn_viewEvent;
+    private TextView btn_viewEvent;
 
     public EventDialog(CalendarModel event, Context context) {
         super(context);

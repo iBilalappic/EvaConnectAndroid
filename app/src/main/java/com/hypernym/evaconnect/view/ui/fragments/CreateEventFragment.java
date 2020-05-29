@@ -40,8 +40,10 @@ import com.hypernym.evaconnect.dateTimePicker.DateTimePicker;
 import com.hypernym.evaconnect.dateTimePicker.SimpleDateTimePicker;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Event;
+import com.hypernym.evaconnect.models.EventAttendees;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
+import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.GsonUtils;
@@ -174,8 +176,9 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_create_event, container, false);
         ButterKnife.bind(this, view);
-        init();
         initRecyclerview();
+        init();
+
         return view;
     }
 
@@ -199,6 +202,29 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
         eventViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(EventViewModel.class);
         invitedConnections.clear();
         event_type_spinner.setOnItemSelectedListener(this);
+        if(getArguments()!=null)
+        {
+            Event event=(Event) getArguments().getSerializable("event");
+            edt_eventname.setText(event.getEvent_name());
+            edt_description.setText(event.getContent());
+            edt_eventCity.setText(event.getEvent_city());
+            edt_link.setText(event.getRegistration_link());
+            tv_startdate.setText(event.getEvent_start_date());
+            tv_startTime.setText(event.getStart_time());
+            tv_enddate.setText(event.getEvent_end_date());
+            tv_endTime.setText(event.getEnd_time());
+            event_type_spinner.setSelection(event.getIs_private());
+            for(EventAttendees eventAttendees:event.getEvent_attendees())
+            {
+                invitedConnections.add(eventAttendees.getUser());
+            }
+            usersAdapter.notifyDataSetChanged();
+            if(event.getEvent_image().size()>0)
+              AppUtils.setGlideUrlThumbnail(getContext(),img_event,event.getEvent_image().get(0));
+        }
+
+
+
     }
 
     @OnClick({R.id.tv_startdate, R.id.tv_startTime})
