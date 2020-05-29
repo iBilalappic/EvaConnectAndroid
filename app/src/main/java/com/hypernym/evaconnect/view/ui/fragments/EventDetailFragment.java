@@ -246,7 +246,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
                 {
                     networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
                 }
-                if(event.getCreated_by_id()== LoginUtils.getLoggedinUser().getUser_id())
+                if(event.getCreated_by_id()== LoginUtils.getLoggedinUser().getId())
                 {
                     modify_event.setVisibility(View.VISIBLE);
 
