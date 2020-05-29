@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
@@ -33,6 +32,7 @@ import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.EventAdapter;
 import com.hypernym.evaconnect.view.adapters.MonthAdapter;
+import com.hypernym.evaconnect.view.dialogs.EventDialog;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.viewmodel.CalendarViewModel;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -53,7 +53,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemClickListener, OnDateSelectedListener,OnMonthChangedListener {
+public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemClickListener, OnDateSelectedListener,OnMonthChangedListener,EventAdapter.OnItemClickListener {
 
     @BindView(R.id.calendarView)
     MaterialCalendarView calendarView;
@@ -119,7 +119,7 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
         calendarView.setOnMonthChangedListener(this);
 
 
-        eventAdapter=new EventAdapter(getContext(),eventList);
+        eventAdapter=new EventAdapter(getContext(),eventList,this);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
         rc_events.setLayoutManager(linearLayoutManager);
         rc_events.setAdapter(eventAdapter);
@@ -173,7 +173,16 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
 
-                        Toast.makeText(getContext(), item.getOrder()+"You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                    //    Toast.makeText(getContext(), item.getGroupId()+"You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                       if(item.getTitle().toString().equalsIgnoreCase(getString(R.string.action1)))
+                       {
+                           loadFragment(R.id.framelayout,new CreateEventFragment(),getContext(),true);
+                       }
+                       else
+                       {
+                           loadFragment(R.id.framelayout,new CreateMeetingFragment(), getContext(),true);
+                       }
+
                         return true;
                     }
                 });
@@ -430,4 +439,8 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
         return new CalendarMarks();
     }
 
+    @Override
+    public void onItemClick(View view, int position) {
+       new EventDialog(eventList.get(position),getContext()).show();
+    }
 }

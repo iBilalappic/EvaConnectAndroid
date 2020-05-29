@@ -17,8 +17,6 @@ import com.hypernym.evaconnect.models.Notification_onesignal;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.User;
-import com.hypernym.evaconnect.utils.Constants;
-import com.hypernym.evaconnect.viewmodel.AppliedApplicantViewModel;
 
 import java.util.HashMap;
 import java.util.List;
@@ -207,6 +205,9 @@ public interface AppApi {
                                              @Part("start_time") RequestBody start_time,
                                              @Part("end_time") RequestBody end_time,
                                              @Part("event_name") RequestBody event_name,
+                                             @Part("registration_link") RequestBody registration_link,
+                                             @Part("is_private") int is_private,
+                                             @Part("event_attendees") List<Integer> event_attendees,
                                              @Part MultipartBody.Part event_image);
 
 

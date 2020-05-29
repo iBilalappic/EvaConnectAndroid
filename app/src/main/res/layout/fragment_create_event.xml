@@ -51,7 +51,7 @@
             android:id="@+id/clock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_clock"
+            android:src="@drawable/clock_black"
             android:tint="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_startdate"
@@ -138,7 +138,7 @@
             android:id="@+id/location_icon"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_location_black"
+            android:src="@drawable/location_black"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="@dimen/spacing_large"
             app:layout_constraintTop_toTopOf="@id/edt_eventlocation"
@@ -169,13 +169,12 @@
             android:id="@+id/calendar_icon"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/calendar_icon"
+            android:src="@drawable/event_type"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="@dimen/spacing_large"
             app:layout_constraintTop_toTopOf="@id/event_type_spinner"
             app:layout_constraintBottom_toBottomOf="@id/event_type_spinner"
-            app:layout_constraintVertical_bias="0.50"
-            />
+            app:layout_constraintVertical_bias="0.50"/>
 
         <Spinner
             android:id="@+id/event_type_spinner"
