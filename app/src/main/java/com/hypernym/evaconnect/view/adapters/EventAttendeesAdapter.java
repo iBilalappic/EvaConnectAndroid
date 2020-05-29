@@ -37,10 +37,7 @@ public class EventAttendeesAdapter extends RecyclerView.Adapter<EventAttendeesAd
 
     @Override
     public void onBindViewHolder(@NonNull EventAttendeesAdapter.ViewHolder holder, int position) {
-        holder.tv_name.setText(eventAttendees.get(position).getName());
-        holder.tv_name.setElevation(eventAttendees.get(position).getElevation());
-        holder.tv_name.setTextColor(eventAttendees.get(position).getColor());
-        holder.tv_count.setText(String.valueOf(eventAttendees.get(position).getCount()));
+
     }
 
     @Override

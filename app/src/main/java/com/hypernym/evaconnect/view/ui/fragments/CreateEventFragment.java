@@ -311,9 +311,9 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
             List<Integer> event_attendees=new ArrayList<>();
             for(User inviteConnections:invitedConnections)
             {
-                event_attendees.add(inviteConnections.getUser_id());
+                event_attendees.add(inviteConnections.getId());
             }
-            event.setEvent_attendees(event_attendees);
+            event.setEvent_attendeeIDs(event_attendees);
             event.setRegistration_link(edt_link.getText().toString());
 
             eventViewModel.createEvent(event, partImage).observe(this, new Observer<BaseModel<List<Event>>>() {
