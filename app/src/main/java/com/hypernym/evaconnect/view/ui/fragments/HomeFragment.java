@@ -48,6 +48,7 @@ import com.hypernym.evaconnect.viewmodel.EventViewModel;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
 import com.hypernym.evaconnect.viewmodel.JobListViewModel;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
+import com.hypernym.evaconnect.viewmodel.UserViewModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -84,7 +85,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     int itemCount = 0;
     private List<Post> notifications = new ArrayList<>();
     private JobListViewModel jobListViewModel;
-
+    private UserViewModel userViewModel;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -105,6 +106,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
         jobListViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(JobListViewModel.class);
         eventViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(EventViewModel.class);
+        userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(UserViewModel.class);
 
         //   currentPage = PAGE_START;
         homePostsAdapter = new HomePostsAdapter(getContext(), posts, this);
@@ -150,6 +152,12 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         super.onResume();
         init();
         onRefresh();
+
+        if (NetworkUtils.isNetworkConnected(getContext())) {
+            GetUserDetails();
+        } else {
+            networkErrorDialog();
+        }
 
         newpost.setOnClickListener(new OnOneOffClickListener() {
             @Override
@@ -498,5 +506,25 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         } else {
             networkErrorDialog();
         }
+    }
+
+    private void GetUserDetails() {
+        User user=new User();
+        user=LoginUtils.getUser();
+        userViewModel.getuser_details(user.getId()
+        ).observe(this, new Observer<BaseModel<List<User>>>() {
+            @Override
+            public void onChanged(BaseModel<List<User>> listBaseModel)
+            {
+                if (listBaseModel.getData() != null && !listBaseModel.isError())
+                {
+                    swipeRefresh.setRefreshing(false);
+                    LoginUtils.saveUser(listBaseModel.getData().get(0));
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+                hideDialog();
+            }
+        });
     }
 }

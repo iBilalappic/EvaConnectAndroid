@@ -312,6 +312,7 @@ public class BaseFragment extends Fragment {
                     if(tv_connect.getText().toString().equalsIgnoreCase(getString(R.string.connect)))
                     {
                         tv_connect.setText(AppConstants.REQUEST_SENT);
+
                     }
                     else
                     {
