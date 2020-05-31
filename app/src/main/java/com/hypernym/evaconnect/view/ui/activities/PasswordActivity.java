@@ -269,7 +269,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
                         LoginUtils.saveUserToken(user.getData().get(0).getToken());
                     }
                     simpleDialog.dismiss();
-                    Intent intent = new Intent(PasswordActivity.this, HomeActivity.class);
+                    Intent intent = new Intent(PasswordActivity.this, NewsActivity.class);
                     // set the new task and clear flags
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
@@ -301,7 +301,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
                         LoginUtils.saveUserToken(listBaseModel.getData().get(0).getToken());
                     }
 
-                    Intent intent = new Intent(PasswordActivity.this, HomeActivity.class);
+                    Intent intent = new Intent(PasswordActivity.this, NewsActivity.class);
                     // set the new task and clear flags
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
@@ -324,7 +324,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
                     LoginUtils.saveUserToken(listBaseModel.getData().get(0).getToken());
                 }
 
-                Intent intent = new Intent(PasswordActivity.this, HomeActivity.class);
+                Intent intent = new Intent(PasswordActivity.this, NewsActivity.class);
                 // set the new task and clear flags
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);

@@ -1,5 +1,6 @@
 package com.hypernym.evaconnect.view.ui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ActionMode;
@@ -265,14 +266,17 @@ public class NewsActivity extends BaseActivity implements Validator.ValidationLi
 
         switch (v.getId()) {
             case R.id.img_backarrow:
+                NewsSelectedids.clear();
                 this.finish();
                 break;
 
             case R.id.img_cross:
+                NewsSelectedids.clear();
                 this.finish();
                 break;
             case R.id.btn_next:
                 CheckSelectedNews();
+
                 break;
         }
     }
@@ -286,7 +290,11 @@ public class NewsActivity extends BaseActivity implements Validator.ValidationLi
             @Override
             public void onChanged(BaseModel<List<NewSources>> getNewsources) {
                 if (getNewsources != null && !getNewsources.isError()) {
-                    Toast.makeText(NewsActivity.this, "sucess", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(NewsActivity.this, HomeActivity.class);
+                    // set the new task and clear flags
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                  //  Toast.makeText(NewsActivity.this, "sucess", Toast.LENGTH_SHORT).show();
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }

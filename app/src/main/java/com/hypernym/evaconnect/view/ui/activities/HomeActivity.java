@@ -509,6 +509,11 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
             img_messages.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
             img_logout.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
 
+            tv_home.setTextColor(ContextCompat.getColor(this, R.color.skyblue));
+            tv_connections.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+            tv_message.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+            tv_profile.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+
 
             super.onBackPressed();
         } else {
