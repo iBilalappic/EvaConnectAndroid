@@ -134,10 +134,10 @@ public interface AppApi {
     @POST(APIConstants.CHECK_EMAIL_EXIST)
     Call<BaseModel<List<AccountCheck>>> isEmailExist_linkedin(@Body User user);
 
-    @POST(APIConstants.GETUSER_FROM_LINKEDIN)
+    @POST(APIConstants.LOGIN)
     Call<BaseModel<List<User>>> linkedin_login(@Body User user);
 
-    @POST(APIConstants.FACEBOOK_LOGIN)
+    @POST(APIConstants.LOGIN)
     Call<BaseModel<List<User>>> facebookLogin(@Body User user);
 
     @POST(APIConstants.DASHBOARD)

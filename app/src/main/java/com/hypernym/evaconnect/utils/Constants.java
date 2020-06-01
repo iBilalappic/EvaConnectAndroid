@@ -19,4 +19,6 @@ public class Constants {
     public static final String FRAGMENT_NAME_1 = "meetings";
     public static final String FRAGMENT_TYPE = "fragment_type";
     public static final String FRAGMENT_NAME_2 = "events";
+    public static final String LINKEDIN_TYPE = "linkedin";
+    public static final String FACEBOOK_TYPE = "facebook";
 }

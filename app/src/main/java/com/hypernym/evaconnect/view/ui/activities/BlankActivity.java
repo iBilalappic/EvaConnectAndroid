@@ -88,7 +88,7 @@ public class BlankActivity extends BaseActivity {
 
         if (NetworkUtils.isNetworkConnected(this)) {
 //            showDialog();
-            userViewModel.linkedin_login(email).observe(this, new Observer<BaseModel<List<User>>>() {
+            userViewModel.linkedin_login(email,Constants.LINKEDIN_TYPE).observe(this, new Observer<BaseModel<List<User>>>() {
                 @Override
                 public void onChanged(BaseModel<List<User>> listBaseModel) {
                     LoginUtils.userLoggedIn();

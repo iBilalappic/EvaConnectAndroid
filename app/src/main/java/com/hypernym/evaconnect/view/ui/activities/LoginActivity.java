@@ -242,7 +242,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     }
 
     private void JustLoginApiCall(String email) {
-        userViewModel.facebookLogin(email).observe(this, listBaseModel -> {
+        userViewModel.facebookLogin(email,Constants.FACEBOOK_TYPE).observe(this, listBaseModel -> {
             LoginUtils.userLoggedIn();
             User userData = listBaseModel.getData().get(0);
             userData.setUser_id(userData.getId());

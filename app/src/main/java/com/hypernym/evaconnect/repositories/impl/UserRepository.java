@@ -149,10 +149,11 @@ public class UserRepository implements IUserRespository {
     }
 
     @Override
-    public LiveData<BaseModel<List<User>>> linkedin_login(String email) {
+    public LiveData<BaseModel<List<User>>> linkedin_login(String email, String linkedinType) {
         LinkedinLoginMutableLiveData = new MutableLiveData<>();
         User user = new User();
         user.setUsername(email);
+        user.setLogin_type(linkedinType);
         RestClient.get().appApi().linkedin_login(user).enqueue(new Callback<BaseModel<List<User>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
@@ -170,11 +171,11 @@ public class UserRepository implements IUserRespository {
     }
 
     @Override
-    public LiveData<BaseModel<List<User>>> facebookLogin(String email) {
+    public LiveData<BaseModel<List<User>>> facebookLogin(String email, String facebookType) {
         facebookLoginMutableLiveData = new MutableLiveData<>();
         User user = new User();
         user.setUsername(email);
-
+        user.setLogin_type(facebookType);
         RestClient.get().appApi().facebookLogin(user).enqueue(new Callback<BaseModel<List<User>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {

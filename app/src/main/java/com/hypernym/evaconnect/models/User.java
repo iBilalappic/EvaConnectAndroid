@@ -28,11 +28,22 @@ public class User implements Serializable {
     private String company_name;
     private Integer total_connection;
     private String is_connected;
+
+    public String getLogin_type() {
+        return login_type;
+    }
+
+    public void setLogin_type(String login_type) {
+        this.login_type = login_type;
+    }
+
+    private String login_type;
     private boolean is_receiver;
     private Integer connection_id;
     private Integer receiver_id;
     private Integer is_linkedin;
     private Integer is_facebook;
+
 
     public Integer getConnection_count() {
         return connection_count;

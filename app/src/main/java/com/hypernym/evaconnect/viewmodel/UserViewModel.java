@@ -15,7 +15,6 @@ import com.hypernym.evaconnect.repositories.impl.UserRepository;
 import java.util.List;
 
 import okhttp3.MultipartBody;
-import retrofit2.http.Multipart;
 
 public class UserViewModel extends AndroidViewModel {
     private IUserRespository iUserRespository =new UserRepository();
@@ -47,13 +46,13 @@ public class UserViewModel extends AndroidViewModel {
     {
         return iUserRespository.isEmailExist_linkedin(email);
     }
-    public LiveData<BaseModel<List<User>>> linkedin_login(String email)
+    public LiveData<BaseModel<List<User>>> linkedin_login(String email, String linkedinType)
     {
-        return iUserRespository.linkedin_login(email);
+        return iUserRespository.linkedin_login(email,linkedinType);
     }
 
-    public LiveData<BaseModel<List<User>>> facebookLogin(String user_email){
-        return iUserRespository.facebookLogin(user_email);
+    public LiveData<BaseModel<List<User>>> facebookLogin(String user_email, String facebookType){
+        return iUserRespository.facebookLogin(user_email,facebookType);
     }
 
     public LiveData<BaseModel<List<Object>>> profile_update(int id, String designation,String companyname, String firstname, MultipartBody.Part partImage)

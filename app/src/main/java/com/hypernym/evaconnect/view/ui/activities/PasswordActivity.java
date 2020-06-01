@@ -13,7 +13,6 @@ import android.widget.Toast;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.bumptech.glide.Glide;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
@@ -28,7 +27,6 @@ import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
-import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Password;
 import com.onesignal.OneSignal;
@@ -38,7 +36,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -288,7 +285,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
 
         if (NetworkUtils.isNetworkConnected(this)) {
 //            showDialog();
-            userViewModel.linkedin_login(email).observe(this, new Observer<BaseModel<List<User>>>() {
+            userViewModel.linkedin_login(email, Constants.LINKEDIN_TYPE).observe(this, new Observer<BaseModel<List<User>>>() {
                 @Override
                 public void onChanged(BaseModel<List<User>> listBaseModel) {
                     LoginUtils.userLoggedIn();
@@ -300,7 +297,6 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
                     if (listBaseModel.getData().get(0) != null) {
                         LoginUtils.saveUserToken(listBaseModel.getData().get(0).getToken());
                     }
-
                     Intent intent = new Intent(PasswordActivity.this, NewsActivity.class);
                     // set the new task and clear flags
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -313,7 +309,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
     private void loginWithFacebook() {
         if (NetworkUtils.isNetworkConnected(this))
         {
-            userViewModel.facebookLogin(email).observe(this, listBaseModel -> {
+            userViewModel.facebookLogin(email, Constants.FACEBOOK_TYPE).observe(this, listBaseModel -> {
                 LoginUtils.userLoggedIn();
                 User userData = listBaseModel.getData().get(0);
                 userData.setUser_id(userData.getId());
