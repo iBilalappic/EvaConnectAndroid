@@ -31,9 +31,10 @@ public class Event implements Serializable {
     private int modified_by_id;
     private int created_by_id;
     private String action;
-    private List<Integer> event_attendees;
-private String registration_link;
-private int is_private;
+    private List<Integer> event_attendeeIDs;
+    private String registration_link;
+    private int is_private;
+    private List<EventAttendees> event_attendees;
 
     public String getEvent_name() {
         return event_name;
@@ -251,13 +252,21 @@ private int is_private;
         this.action = action;
     }
 
-    public List<Integer> getEvent_attendees() {
-        return event_attendees;
+    public List<Integer> getEvent_attendeeIDs() {
+        return event_attendeeIDs;
     }
 
-    public void setEvent_attendees(List<Integer> event_attendees) {
-        this.event_attendees = event_attendees;
+    public void setEvent_attendeeIDs(List<Integer> event_attendeeIDs) {
+        this.event_attendeeIDs = event_attendeeIDs;
     }
+
+//    public List<InviteConnections> getEvent_attendees() {
+//        return event_attendees;
+//    }
+//
+//    public void setEvent_attendees(List<InviteConnections> event_attendees) {
+//        this.event_attendees = event_attendees;
+//    }
 
     public String getRegistration_link() {
         return registration_link;
@@ -273,5 +282,13 @@ private int is_private;
 
     public void setIs_private(int is_private) {
         this.is_private = is_private;
+    }
+
+    public List<EventAttendees> getEvent_attendees() {
+        return event_attendees;
+    }
+
+    public void setEvent_attendees(List<EventAttendees> event_attendees) {
+        this.event_attendees = event_attendees;
     }
 }

@@ -7,6 +7,7 @@ import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Comment;
+import com.hypernym.evaconnect.models.CreateMeeting;
 import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
@@ -24,8 +25,31 @@ import retrofit2.Response;
 
 public class EventRepository implements IEventRepository {
     private MutableLiveData<BaseModel<List<Event>>> eventMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<CreateMeeting>>> meetingMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Comment>>> commentMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Post>>> dashboardMutableLiveData = new MutableLiveData<>();
+
+    @Override
+    public LiveData<BaseModel<List<CreateMeeting>>> createMeeting(CreateMeeting meeting) {
+        meetingMutableLiveData = new MutableLiveData<>();
+
+        RestClient.get().appApi().createMeeting(meeting).enqueue(new Callback<BaseModel<List<CreateMeeting>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<CreateMeeting>>> call, Response<BaseModel<List<CreateMeeting>>> response) {
+                if (response.body()!=null){
+                    meetingMutableLiveData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<CreateMeeting>>> call, Throwable t) {
+                meetingMutableLiveData.setValue(null);
+                t.printStackTrace();
+            }
+        });
+
+        return meetingMutableLiveData;
+    }
 
     @Override
     public LiveData<BaseModel<List<Event>>> createEvent(Event event, MultipartBody.Part user_image) {
@@ -40,7 +64,7 @@ public class EventRepository implements IEventRepository {
                 RequestBody.create(MediaType.parse("text/plain"), event.getEnd_time()),
                 RequestBody.create(MediaType.parse("text/plain"), event.getEvent_name()),
                 RequestBody.create(MediaType.parse("text/plain"), event.getRegistration_link()),
-                event.getIs_private(),  event.getEvent_attendees(),user_image)
+                event.getIs_private(),  event.getEvent_attendeeIDs(),user_image)
                 .enqueue(new Callback<BaseModel<List<Event>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Event>>> call, Response<BaseModel<List<Event>>> response) {

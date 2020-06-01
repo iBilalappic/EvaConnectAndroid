@@ -17,6 +17,34 @@ public class Post implements Serializable {
     private Integer id;
     private Integer object_id;
     private Integer is_applied;
+    private String subject;
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public String getStart_date() {
+        return start_date;
+    }
+
+    public void setStart_date(String start_date) {
+        this.start_date = start_date;
+    }
+
+    public String getEnd_date() {
+        return end_date;
+    }
+
+    public void setEnd_date(String end_date) {
+        this.end_date = end_date;
+    }
+
+    private String start_date;
+    private String end_date;
     private String company_name;
     private String interview_time;
     private Integer connection_id;

@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Comment;
+import com.hypernym.evaconnect.models.CreateMeeting;
 import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
@@ -30,6 +31,11 @@ public class EventViewModel extends AndroidViewModel {
     public LiveData<BaseModel<List<Event>>> createEvent(Event event, MultipartBody.Part image)
     {
         return iEventRepository.createEvent(event,image);
+    }
+
+    public LiveData<BaseModel<List<CreateMeeting>>> createMeeting(CreateMeeting meeting)
+    {
+        return iEventRepository.createMeeting(meeting);
     }
 
     public LiveData<BaseModel<List<Event>>> getCalendarEvents(int user_id, String month,String year)

@@ -38,12 +38,38 @@
             app:layout_constraintTop_toTopOf="@+id/tv_goback" />
 
         <ImageButton
+            android:id="@+id/modify_event"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/modify_event"
             app:layout_constraintBottom_toBottomOf="@+id/img_event"
             app:layout_constraintEnd_toEndOf="parent" />
+        <ImageButton
+            android:id="@+id/accept_invite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:background="@drawable/accept_invite"
+            app:layout_constraintBottom_toBottomOf="@+id/img_event"
+            app:layout_constraintEnd_toEndOf="parent" />
+        <ImageButton
+            android:id="@+id/interested"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:background="@drawable/interested"
+            app:layout_constraintBottom_toBottomOf="@+id/img_event"
+            app:layout_constraintEnd_toEndOf="parent" />
 
+        <ImageButton
+            android:id="@+id/register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="140dp"
+            android:background="@drawable/register"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/img_event"
+            app:layout_constraintEnd_toEndOf="@+id/modify_event" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
@@ -183,19 +209,6 @@
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tv_comcount"
-                    app:layout_constraintTop_toBottomOf="@+id/linearlayout" />
-
-                <TextView
-                    android:id="@+id/tv_time"
-                    style="@style/TextStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:drawablePadding="10dp"
-                    android:gravity="center_vertical"
-                    android:text="TextView"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/linearlayout" />
 
 
@@ -473,17 +486,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
-        <ImageView
-            android:id="@+id/add1"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:layout_marginEnd="16dp"
-            android:paddingTop="4dp"
-            android:src="@drawable/iconadd"
-            app:layout_constraintBottom_toBottomOf="@+id/invite_people"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/invite_people"
-            app:layout_constraintVertical_bias="0.35" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
