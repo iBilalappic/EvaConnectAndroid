@@ -250,7 +250,6 @@
             android:textColor="@color/black"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@+id/img_1"
-            app:layout_constraintEnd_toEndOf="parent0"
             app:layout_constraintStart_toEndOf="@+id/img_1"
             app:layout_constraintTop_toTopOf="@+id/img_1" />
 
@@ -275,7 +274,6 @@
             android:textColor="@color/black"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@+id/img_2"
-            app:layout_constraintEnd_toEndOf="parent0"
             app:layout_constraintStart_toEndOf="@+id/img_2"
             app:layout_constraintTop_toTopOf="@+id/img_2" />
 
@@ -299,7 +297,6 @@
             android:textColor="@color/black"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@+id/img_3"
-            app:layout_constraintEnd_toEndOf="parent0"
             app:layout_constraintStart_toEndOf="@+id/img_3"
             app:layout_constraintTop_toTopOf="@+id/img_3" />
 
@@ -323,7 +320,6 @@
             android:textColor="@color/black"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@+id/img_4"
-            app:layout_constraintEnd_toEndOf="parent0"
             app:layout_constraintStart_toEndOf="@+id/img_4"
             app:layout_constraintTop_toTopOf="@+id/img_4" />
 
