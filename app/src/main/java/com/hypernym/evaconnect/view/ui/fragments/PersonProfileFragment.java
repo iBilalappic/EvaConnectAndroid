@@ -110,6 +110,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
         layout_disconnect.setOnClickListener(this);
         layout_block.setOnClickListener(this);
         layout_EditDetail.setOnClickListener(this);
+        layout_settings.setOnClickListener(this);
         init();
         return view;
     }
@@ -267,6 +268,8 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
             case R.id.layout_notification:
                 break;
             case R.id.layout_settings:
+                SettingsFragment settingsFragment = new SettingsFragment();
+                loadFragment(R.id.framelayout, settingsFragment, getContext(), true);
                 break;
         }
     }

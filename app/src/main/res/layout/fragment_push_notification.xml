@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -58,8 +57,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="178dp"
-                android:elevation="@dimen/spacing_large"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:elevation="@dimen/spacing_large">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/profile_image"
@@ -112,131 +111,164 @@
         </androidx.cardview.widget.CardView>
 
         <TextView
-            android:id="@+id/lbl_email"
+            android:id="@+id/lbl_company"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="45dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="40dp"
+            android:fontFamily="@font/nunitosansbold"
+            android:text="Push Notifications"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView_Main" />
+
+        <TextView
+            android:id="@+id/lbl_txt1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="40dp"
             android:fontFamily="@font/nunitosansregular"
-            android:text="email"
-            android:visibility="gone"
-            android:textColor="@color/gray"
+            android:text="We send notificaitons to you for"
+            android:textColor="@color/black"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView_Main" />
+            app:layout_constraintTop_toBottomOf="@+id/lbl_company" />
 
 
-        <EditText
-            android:id="@+id/edt_email"
-            style="@style/EditText"
-            android:layout_width="260dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginEnd="10dp"
-            android:backgroundTint="@color/colorwhite"
-            android:fontFamily="@font/nunitosansbold"
-            android:gravity="start|center"
-            android:paddingLeft="10dp"
-            android:enabled="false"
-            android:textColor="@color/gray_1"
-            android:textColorHint="@color/black"
+        <ImageView
+            android:id="@+id/img_1"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="25dp"
+            android:src="@drawable/ic_block"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView_Main" />
-
-        <View
-            android:id="@+id/img_view0"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="@dimen/spacing_large"
-            android:layout_marginEnd="20dp"
-            android:background="@color/gray_1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edt_email" />
-
+            app:layout_constraintTop_toBottomOf="@+id/lbl_txt1" />
 
         <TextView
-            android:id="@+id/lbl_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginEnd="40dp"
             android:fontFamily="@font/nunitosansregular"
-            android:text="password"
-            android:visibility="gone"
-            android:textColor="@color/gray"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_view0" />
-
-
-        <TextView
-            android:id="@+id/tv_password"
-            style="@style/EditText"
-            android:layout_width="260dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="30dp"
-            android:backgroundTint="@color/colorwhite"
-            android:fontFamily="@font/nunitosansbold"
-            android:gravity="start|center"
-            android:inputType="textPassword"
-            android:maxLength="100"
-            android:hint="Password"
-            android:paddingLeft="10dp"
-            android:textColor="@color/gray_1"
-            android:textColorHint="@color/black"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_view0" />
-
-        <View
-            android:id="@+id/img_view1"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="@dimen/spacing_large"
-            android:layout_marginEnd="20dp"
-            android:background="@color/gray_1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_password" />
-
-        <TextView
-            android:id="@+id/tv_pushNotification"
-            style="@style/EditText"
-            android:layout_width="260dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="30dp"
-            android:backgroundTint="@color/colorwhite"
-            android:fontFamily="@font/nunitosansbold"
-            android:gravity="start|center"
-            android:maxLength="100"
-            android:text="Push Notifcations"
-            android:paddingLeft="10dp"
+            android:text="Comments Updates"
             android:textColor="@color/black"
-            android:textColorHint="@color/black"
-            android:textStyle="bold"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/img_1"
+            app:layout_constraintStart_toEndOf="@+id/img_1"
+            app:layout_constraintTop_toTopOf="@+id/img_1" />
+
+
+        <ImageView
+            android:id="@+id/img_2"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="25dp"
+            android:src="@drawable/ic_block"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_view1" />
+            app:layout_constraintTop_toBottomOf="@+id/img_1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="40dp"
+            android:fontFamily="@font/nunitosansregular"
+            android:text="Event Invitations and Updates"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/img_2"
+            app:layout_constraintStart_toEndOf="@+id/img_2"
+            app:layout_constraintTop_toTopOf="@+id/img_2" />
+
+        <ImageView
+            android:id="@+id/img_3"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="25dp"
+            android:src="@drawable/ic_block"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_2" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="40dp"
+            android:fontFamily="@font/nunitosansregular"
+            android:text="Job Opportunities and Responses"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/img_3"
+            app:layout_constraintStart_toEndOf="@+id/img_3"
+            app:layout_constraintTop_toTopOf="@+id/img_3" />
+
+        <ImageView
+            android:id="@+id/img_4"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="25dp"
+            android:src="@drawable/ic_block"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_3" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="40dp"
+            android:fontFamily="@font/nunitosansregular"
+            android:text="Chat Notifications"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/img_4"
+            app:layout_constraintStart_toEndOf="@+id/img_4"
+            app:layout_constraintTop_toTopOf="@+id/img_4" />
+
+
+        <TextView
+            android:id="@+id/lbl_txt2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="40dp"
+            android:fontFamily="@font/nunitosansbold"
+            android:text="Push Notifications"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_4" />
+
+
+        <Switch
+            android:id="@+id/switch_push"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="40dp"
+            app:layout_constraintBottom_toBottomOf="@+id/lbl_txt2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/lbl_txt2" />
+
 
         <View
-            android:id="@+id/img_view2"
+            android:id="@+id/img_view4"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="@dimen/spacing_large"
+            android:layout_marginTop="30dp"
             android:layout_marginEnd="20dp"
             android:background="@color/gray_1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_pushNotification" />
-
-
-
-
-
+            app:layout_constraintTop_toBottomOf="@+id/lbl_txt2" />
 
 
         <TextView
@@ -251,7 +283,7 @@
             android:text="Save Changes"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_view2" />
+            app:layout_constraintTop_toBottomOf="@+id/img_view4" />
 
 
         <TextView

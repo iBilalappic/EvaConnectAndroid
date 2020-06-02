@@ -27,6 +27,16 @@ public class User implements Serializable {
     private String address;
     private String company_name;
     private Integer total_connection;
+
+    public Integer getIs_notifications() {
+        return is_notifications;
+    }
+
+    public void setIs_notifications(Integer is_notifications) {
+        this.is_notifications = is_notifications;
+    }
+
+    private Integer is_notifications;
     private String is_connected;
 
     public String getLogin_type() {

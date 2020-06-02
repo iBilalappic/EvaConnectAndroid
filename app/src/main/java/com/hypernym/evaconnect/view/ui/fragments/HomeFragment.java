@@ -1,6 +1,7 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;

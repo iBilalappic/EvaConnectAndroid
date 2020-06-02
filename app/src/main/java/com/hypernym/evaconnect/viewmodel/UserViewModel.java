@@ -68,4 +68,14 @@ public class UserViewModel extends AndroidViewModel {
     {
         return iUserRespository.getSector(name);
     }
+
+    public LiveData<BaseModel<List<User>>> setting_update(Integer notification, Integer id)
+    {
+        return iUserRespository.setting_update(notification,id);
+    }
+
+    public LiveData<BaseModel<List<User>>> update_password(String Oldpassword,String Newpassword)
+    {
+        return iUserRespository.update_password(Oldpassword,Newpassword);
+    }
 }
