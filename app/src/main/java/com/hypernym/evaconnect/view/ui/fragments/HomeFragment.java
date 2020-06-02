@@ -2,11 +2,17 @@ package com.hypernym.evaconnect.view.ui.fragments;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
+import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -16,17 +22,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.OvershootInterpolator;
-import android.widget.PopupMenu;
-import android.widget.TextView;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
@@ -34,20 +29,15 @@ import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
-import com.hypernym.evaconnect.models.Dashboard;
 import com.hypernym.evaconnect.models.Event;
-import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
-import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.HomePostsAdapter;
-import com.hypernym.evaconnect.view.dialogs.NavigationDialog;
 import com.hypernym.evaconnect.view.dialogs.ShareDialog;
-import com.hypernym.evaconnect.view.ui.activities.SharePostActivity;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.EventViewModel;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
@@ -56,7 +46,6 @@ import com.hypernym.evaconnect.viewmodel.PostViewModel;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -131,6 +120,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
         }
         swipeRefresh.setOnRefreshListener(this);
+        hideBackButton();
         /**
          * add scroll listener while user reach in bottom load more will call
          */
