@@ -262,6 +262,12 @@ public interface AppApi {
             @Part("modified_datetime") RequestBody modify_datetime,
             @Part MultipartBody.Part event_image);
 
+    @PATCH(APIConstants.SETTING_UPDATE)
+    Call<BaseModel<List<User>>> setting_update(@Body HashMap<String, Object> body,@Path("user_id") int user_id);
+
+    @POST(APIConstants.UPDATE_PASSWORD)
+    Call<BaseModel<List<User>>> update_password(@Body HashMap<String, Object> body);
+
     @GET(APIConstants.GET_USER_DETAILS)
     Call<BaseModel<List<User>>> getuser_details(@Path("id") int user_id);
 

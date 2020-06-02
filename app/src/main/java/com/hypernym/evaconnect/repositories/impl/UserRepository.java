@@ -9,6 +9,7 @@ import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IUserRespository;
 import com.hypernym.evaconnect.utils.DateUtils;
+import com.hypernym.evaconnect.utils.LoginUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -70,6 +71,52 @@ public class UserRepository implements IUserRespository {
     public LiveData<BaseModel<List<User>>> login(User user) {
         userMutableLiveData = new MutableLiveData<>();
         RestClient.get().appApi().login(user).enqueue(new Callback<BaseModel<List<User>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
+                if (response.body() != null) {
+                    userMutableLiveData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<User>>> call, Throwable t) {
+                userMutableLiveData.setValue(null);
+            }
+        });
+        return userMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<User>>> setting_update(Integer notification, Integer id) {
+        userMutableLiveData = new MutableLiveData<>();
+        HashMap<String, Object> body = new HashMap<String, Object>();
+        body.put("is_notifications", notification);
+        body.put("modified_by_id", id);
+        body.put("modified_datetime", DateUtils.GetCurrentdatetime());
+        RestClient.get().appApi().setting_update(body,id).enqueue(new Callback<BaseModel<List<User>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
+                if (response.body() != null) {
+                    userMutableLiveData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<User>>> call, Throwable t) {
+                userMutableLiveData.setValue(null);
+            }
+        });
+        return userMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<User>>> update_password(String Oldpassword, String Newpassword) {
+        userMutableLiveData = new MutableLiveData<>();
+        HashMap<String, Object> body = new HashMap<String, Object>();
+        body.put("user_id", LoginUtils.getUser().getId());
+        body.put("old_password", Oldpassword);
+        body.put("new_password", Newpassword);
+        RestClient.get().appApi().update_password(body).enqueue(new Callback<BaseModel<List<User>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
                 if (response.body() != null) {

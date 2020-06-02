@@ -107,6 +107,10 @@ public class EditProfileFragment extends BaseFragment implements Validator.Valid
     @BindView(R.id.tv_location)
     TextView tv_location;
 
+    @BindView(R.id.tv_text_manage)
+    TextView tv_text_manage;
+
+
     @BindView(R.id.img_edit)
     ImageView img_edit;
 
@@ -177,7 +181,14 @@ public class EditProfileFragment extends BaseFragment implements Validator.Valid
         img_backarrow.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
-
+                getActivity().onBackPressed();
+            }
+        });
+        tv_text_manage.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                SettingsFragment settingsFragment = new SettingsFragment();
+                loadFragment(R.id.framelayout, settingsFragment, getContext(), true);
             }
         });
 
@@ -187,15 +198,6 @@ public class EditProfileFragment extends BaseFragment implements Validator.Valid
     private void SettingUserProfile(User user) {
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(UserViewModel.class);
         GetUserDetails();
-
-//        if (user != null) {
-//            Log.d("USERDATA", "" + GsonUtils.toJson(user));
-//            AppUtils.setGlideImage(getContext(), cv_profile_image, user.getUser_image());
-//            tv_name.setText(user.getFirst_name());
-//            tv_biodata.setText(user.getBio_data());
-//            //  tv_location.setText(user.getBio_data());
-//            // tv_designation.setText();
-//        }
     }
 
 

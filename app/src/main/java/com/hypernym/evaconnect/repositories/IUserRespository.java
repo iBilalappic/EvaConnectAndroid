@@ -26,4 +26,6 @@ public interface IUserRespository {
     LiveData<BaseModel<List<Object>>> profile_update(int id, String designation ,String companyname, String firstname, MultipartBody.Part partImage);
     LiveData<BaseModel<List<User>>> getuser_details(Integer id);
     LiveData<BaseModel<List<String>>> getSector(String name);
+    LiveData<BaseModel<List<User>>> setting_update(Integer notification, Integer id);
+    LiveData<BaseModel<List<User>>> update_password(String Oldpassword, String Newpassword);
 }
