@@ -62,7 +62,7 @@ public class EventDialog extends Dialog {
             }
             tv_createdDate.setText(DateUtils.getFormattedDateDMY(event.getObject_details().getEvent_start_date()));
 
-            btn_viewEvent.setText("View Event");
+          //  btn_viewEvent.setText("View Event");
         }
         else if (event.getObject_type().equalsIgnoreCase("meeting"))
         {
@@ -73,7 +73,7 @@ public class EventDialog extends Dialog {
             tv_event_type.setVisibility(View.GONE);
             tv_createdDate.setText(DateUtils.getFormattedDateDMY(event.getObject_details().getStart_date()));
 
-            btn_viewEvent.setText("View Meeting");
+          //  btn_viewEvent.setText("View Meeting");
         }
 
         img_close.setOnClickListener(new View.OnClickListener() {
