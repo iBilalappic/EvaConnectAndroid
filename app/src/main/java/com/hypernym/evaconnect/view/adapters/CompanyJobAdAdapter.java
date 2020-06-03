@@ -45,12 +45,13 @@ public class CompanyJobAdAdapter extends RecyclerView.Adapter<CompanyJobAdAdapte
     public void onBindViewHolder(@NonNull CompanyJobAdAdapter.ViewHolder holder, int position) {
 
         holder.tv_name.setText(companyJobAdModelList.get(position).getJobTitle());
-        holder.tv_postion.setText(companyJobAdModelList.get(position).getPosition());
-        holder.tv_date.setText(DateUtils.getFormattedDate(companyJobAdModelList.get(position).getCreatedDatetime()));
+        holder.tv_sector.setText(companyJobAdModelList.get(position).getJobSector());
+        holder.tv_content.setText(companyJobAdModelList.get(position).getContent());
+     //   holder.tv_date.setText(DateUtils.getFormattedDate(companyJobAdModelList.get(position).getCreatedDatetime()));
         if (companyJobAdModelList.get(position).getApplicant_count() != null) {
-            holder.tv_totalapplicant.setText(String.valueOf(companyJobAdModelList.get(position).getApplicant_count() + " applicants"));
+            holder.tv_totalapplicant.setText(String.valueOf(companyJobAdModelList.get(position).getApplicant_count() + " Applicants"));
         } else {
-            holder.tv_totalapplicant.setText("0 applicants");
+            holder.tv_totalapplicant.setText("0 Applicants");
         }
         AppUtils.setGlideImage(context, (holder).profile_image, companyJobAdModelList.get(position).getJobImage());
     }
@@ -61,7 +62,7 @@ public class CompanyJobAdAdapter extends RecyclerView.Adapter<CompanyJobAdAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView tv_name, tv_postion, tv_date, tv_totalapplicant;
+        TextView tv_name, tv_content, tv_edit, tv_totalapplicant,tv_sector;
         CircleImageView profile_image;
         ConstraintLayout contraintlayout;
 //        ImageView img_like, img_comment, img_share;
@@ -69,8 +70,9 @@ public class CompanyJobAdAdapter extends RecyclerView.Adapter<CompanyJobAdAdapte
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_name = itemView.findViewById(R.id.tv_name);
-            tv_postion = itemView.findViewById(R.id.tv_connections);
-            tv_date = itemView.findViewById(R.id.tv_date);
+            tv_sector = itemView.findViewById(R.id.tv_sector);
+            tv_content = itemView.findViewById(R.id.tv_content);
+            tv_edit = itemView.findViewById(R.id.tv_edit);
             tv_totalapplicant = itemView.findViewById(R.id.tv_totalapplicant);
             profile_image = itemView.findViewById(R.id.profile_image);
             contraintlayout = itemView.findViewById(R.id.contraintlayout);

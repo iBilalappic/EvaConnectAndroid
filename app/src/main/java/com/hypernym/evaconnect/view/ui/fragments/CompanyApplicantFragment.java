@@ -49,21 +49,23 @@ public class CompanyApplicantFragment extends BaseFragment implements View.OnCli
     @BindView(R.id.profile_image)
     CircleImageView profile_image;
 
-    @BindView(R.id.tv_positionName)
-    TextView tv_positionName;
-
-    @BindView(R.id.tv_salaryAmount)
-    TextView tv_salaryAmount;
+    @BindView(R.id.tv_content)
+    TextView tv_content;
 
     @BindView(R.id.tv_name)
     TextView tv_name;
 
+    @BindView(R.id.tv_totalapplicant)
+    TextView tv_totalapplicant;
 
-    @BindView(R.id.tv_locationName)
-    TextView tv_locationName;
+    @BindView(R.id.tv_activehour)
+    TextView tv_activehour;
 
-    @BindView(R.id.tv_weeklyHoursNumber)
-    TextView tv_weeklyHoursNumber;
+    @BindView(R.id.tv_sector)
+    TextView tv_sector;
+//
+//    @BindView(R.id.tv_weeklyHoursNumber)
+//    TextView tv_weeklyHoursNumber;
 
     @BindView(R.id.tv_edit)
     TextView tv_edit;
@@ -113,12 +115,11 @@ public class CompanyApplicantFragment extends BaseFragment implements View.OnCli
             showBackButton();
             companyJobAdModel = (CompanyJobAdModel) getArguments().getSerializable("COMPANY_AD");
             AppUtils.setGlideImage(getContext(), profile_image, companyJobAdModel.getJobImage());
-            tv_positionName.setText(companyJobAdModel.getPosition());
             tv_name.setText(companyJobAdModel.getJobTitle());
-            DecimalFormat myFormatter = new DecimalFormat("############");
-            tv_salaryAmount.setText("£ " + myFormatter.format(companyJobAdModel.getSalary()) +" pa");
-            tv_locationName.setText(companyJobAdModel.getLocation());
-            tv_weeklyHoursNumber.setText(companyJobAdModel.getWeeklyHours());
+            tv_content.setText(companyJobAdModel.getContent());
+            tv_sector.setText(companyJobAdModel.getJobSector());
+          //  tv_weeklyHoursNumber.setText(companyJobAdModel.getWeeklyHours());
+            tv_totalapplicant.setText(companyJobAdModel.getApplicant_count()+" Applicants");
 //            tv_minago.setText(DateUtils.getTimeAgo(jobAd.getCreatedDatetime()));
             GetApplicants();
 
@@ -146,12 +147,13 @@ public class CompanyApplicantFragment extends BaseFragment implements View.OnCli
                 break;
         }
     }
+
     @Override
     public void onItemClick(View view, int position) {
         AppliedApplicantFragment appliedApplicantFragment = new AppliedApplicantFragment();
-        Bundle bundle=new Bundle();
-        bundle.putSerializable(Constants.DATA,appliedApplicantModel.get(position));
-        bundle.putString("JOB_NAME",companyJobAdModel.getJobTitle());
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Constants.DATA, appliedApplicantModel.get(position));
+        bundle.putString("JOB_NAME", companyJobAdModel.getJobTitle());
         appliedApplicantFragment.setArguments(bundle);
         loadFragment(R.id.framelayout, appliedApplicantFragment, getContext(), true);
 

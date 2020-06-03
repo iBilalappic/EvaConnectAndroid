@@ -42,7 +42,7 @@
 
     <TextView
         android:id="@+id/tv_name"
-        android:layout_width="200dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
@@ -51,20 +51,24 @@
         android:fontFamily="@font/nunitosansbold"
         android:textColor="@color/black"
         android:textStyle="bold"
-        android:maxLines="1"
+        android:maxLines="2"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_location"
         style="@style/TextStyle"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:visibility="visible"
+        android:textSize="10sp"
+        android:maxLines="3"
         android:text="Aviation International"
-        android:fontFamily="@font/nunitosansbold"
+        android:fontFamily="@font/nunitosansregular"
         android:textColor="@color/black"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
+        app:layout_constraintEnd_toEndOf="@+id/tv_name"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
     <TextView
@@ -74,6 +78,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="$23,000"
+        android:visibility="gone"
         android:fontFamily="@font/nunitosansregular"
         android:textColor="@color/black"
         app:layout_constraintStart_toEndOf="@+id/profile_image"

@@ -42,7 +42,6 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
     GestureDetector gestureDetector;
 
 
-
     public class JobTypeViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_viewcomments)
         TextView tv_viewcomments;
@@ -130,7 +129,6 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
     }
 
 
-
     public class LoadingTypeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 
@@ -144,9 +142,6 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
 
         }
     }
-
-
-
 
 
     public JobHomeAdapter(Context context, List<Post> data, JobHomeAdapter.ItemClickListener mClickListener) {
@@ -221,9 +216,11 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
 
                     AppUtils.setGlideImage(mContext, ((JobHomeAdapter.JobTypeViewHolder) holder).profile_image, posts.get(position).getJob_image());
                     ((JobHomeAdapter.JobTypeViewHolder) holder).tv_name.setText(posts.get(position).getJob_title());
-                    ((JobHomeAdapter.JobTypeViewHolder) holder).tv_location.setText(posts.get(position).getUser().getFirst_name());
                     DecimalFormat myFormatter = new DecimalFormat("############");
-                    ((JobHomeAdapter.JobTypeViewHolder) holder).tv_salary.setText("£ " + myFormatter.format(posts.get(position).getSalary()) + " pa");
+
+                    ((JobHomeAdapter.JobTypeViewHolder) holder).tv_location.setText(posts.get(position).getJob_sector()
+                            +" | "+ posts.get(position).getLocation()+" | "+"£ "+myFormatter.format(posts.get((position)).getSalary())+" PA");
+                   // ((JobHomeAdapter.JobTypeViewHolder) holder).tv_salary.setText("£ " + myFormatter.format(posts.get(position).getSalary()) + " pa");
                     if (position == 0) {
                         ((JobHomeAdapter.JobTypeViewHolder) holder).top_image.setVisibility(View.GONE);
                     } else {

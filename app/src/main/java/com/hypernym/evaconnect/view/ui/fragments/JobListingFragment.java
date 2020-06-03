@@ -1,6 +1,7 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.hypernym.evaconnect.models.MyLikesModel;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
+import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.CompanyJobAdAdapter;
@@ -147,6 +149,7 @@ public class JobListingFragment extends BaseFragment implements View.OnClickList
     }
 
     private void setupRecyclerviewCompany() {
+        Log.d("TAAAG", GsonUtils.toJson(companyJobAdModelList));
         companyJobAdAdapter = new CompanyJobAdAdapter(getContext(), companyJobAdModelList, this);
         CompanylinearLayoutManager = new LinearLayoutManager(getContext());
         rc_joblisting.setLayoutManager(CompanylinearLayoutManager);

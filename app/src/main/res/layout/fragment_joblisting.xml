@@ -10,7 +10,7 @@
         android:id="@+id/swipeRefresh"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/newjobAd"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -25,29 +25,20 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        app:cardCornerRadius="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+
 
         <TextView
             android:id="@+id/newjobAd"
-            style="@style/TextStyle.Title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/new_post"
-            android:visibility="gone"
-            android:background="@drawable/rounded_button_border"
-            android:drawablePadding="10dp"
-            android:paddingLeft="20dp"
-            android:paddingTop="10dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="10dp"
-            android:text="New Job Ad"/>
-    </androidx.cardview.widget.CardView>
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/button_gradient_1"
+            android:fontFamily="@font/nunitosansbold"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="Create a new Job Listing"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

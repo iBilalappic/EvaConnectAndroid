@@ -248,6 +248,7 @@
             android:layout_marginBottom="24dp"
             android:fontFamily="@font/nunitosansregular"
             android:gravity="center"
+            android:visibility="gone"
             android:text="Save Changes"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

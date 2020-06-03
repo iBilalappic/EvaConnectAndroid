@@ -44,14 +44,15 @@ public class AppliedApplicantAdapter extends RecyclerView.Adapter<AppliedApplica
     @Override
     public void onBindViewHolder(@NonNull AppliedApplicantAdapter.ViewHolder holder, int position) {
 
-        if (appliedApplicantModels.get(position).getUser().getIs_linkedin()== 1) {
+        if (appliedApplicantModels.get(position).getUser().getIs_linkedin() == 1) {
             AppUtils.setGlideImage(context, (holder).mProfileImage, appliedApplicantModels.get(position).getUser().getLinkedin_image_url());
         } else {
             AppUtils.setGlideImage(context, (holder).mProfileImage, appliedApplicantModels.get(position).getUser().getUserImage());
         }
-        holder.tv_description.setText(appliedApplicantModels.get(position).getContent());
+        //  holder.tv_description.setText(appliedApplicantModels.get(position).getContent());
         holder.tv_name.setText(appliedApplicantModels.get(position).getUser().getFirstName());
-        holder.tv_activefor.setText("Submitted "+DateUtils.getTimeAgo(appliedApplicantModels.get(position).getCreatedDatetime()));
+        holder.tv_date.setText(appliedApplicantModels.get(position).getCreatedDatetime());
+        //    holder.tv_activefor.setText("Submitted "+DateUtils.getTimeAgo(appliedApplicantModels.get(position).getCreatedDatetime()));
 
     }
 
@@ -62,14 +63,14 @@ public class AppliedApplicantAdapter extends RecyclerView.Adapter<AppliedApplica
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         CircleImageView mProfileImage;
-        TextView tv_name, tv_activefor, tv_description;
+        TextView tv_name, tv_date;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mProfileImage = itemView.findViewById(R.id.profile_image);
             tv_name = itemView.findViewById(R.id.tv_name);
-            tv_activefor = itemView.findViewById(R.id.tv_activefor);
-            tv_description = itemView.findViewById(R.id.tv_description);
+            tv_date = itemView.findViewById(R.id.tv_date);
+            // tv_description = itemView.findViewById(R.id.tv_description);
             itemView.setOnClickListener(this);
         }
 
