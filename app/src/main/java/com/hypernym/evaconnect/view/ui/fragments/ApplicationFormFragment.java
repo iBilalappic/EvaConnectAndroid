@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,14 +66,9 @@ public class ApplicationFormFragment extends BaseFragment implements View.OnClic
     @BindView(R.id.tv_name)
     TextView tv_name;
 
-    @BindView(R.id.tv_minago)
-    TextView tv_minago;
-
     @BindView(R.id.tv_positionName)
     TextView tv_positionName;
 
-    @BindView(R.id.tv_createddateTime)
-    TextView tv_createddateTime;
     @NotEmpty
     @BindView(R.id.edit_coverletter)
     EditText edit_coverletter;
@@ -85,6 +81,10 @@ public class ApplicationFormFragment extends BaseFragment implements View.OnClic
 
     @BindView(R.id.tv_apply)
     TextView tv_apply;
+
+    @BindView(R.id.img_backarrow)
+    ImageView img_backarrow;
+
 
     String mProfileImageDecodableString;
     private File tempFile, file_name;
@@ -104,6 +104,7 @@ public class ApplicationFormFragment extends BaseFragment implements View.OnClic
         validator.setValidationListener(this);
         browsefiles.setOnClickListener(this);
         tv_apply.setOnClickListener(this);
+        img_backarrow.setOnClickListener(this);
         init();
         return view;
     }
@@ -116,8 +117,6 @@ public class ApplicationFormFragment extends BaseFragment implements View.OnClic
             AppUtils.setGlideImage(getContext(), profile_image, jobAd.getJobImage());
             tv_name.setText(jobAd.getJobTitle());
             tv_positionName.setText(jobAd.getPosition());
-            tv_createddateTime.setText(DateUtils.getFormattedDateTime(jobAd.getCreatedDatetime()));
-            tv_minago.setText(DateUtils.getTimeAgo(jobAd.getCreatedDatetime()));
         }
         applicationSubmitViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(ApplicationSubmitViewModel.class);
 
@@ -139,6 +138,9 @@ public class ApplicationFormFragment extends BaseFragment implements View.OnClic
                 } else {
                     validator.validate();
                 }
+                break;
+            case R.id.img_backarrow:
+                getActivity().onBackPressed();
                 break;
         }
     }
