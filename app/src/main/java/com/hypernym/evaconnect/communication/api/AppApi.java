@@ -75,15 +75,14 @@ public interface AppApi {
     Call<BaseModel<List<Object>>> createJobAd(@Part("user_id") int user_id,
                                               @Part("status") RequestBody status,
                                               @Part("job_title") RequestBody job_title,
-                                              @Part("job_nature") RequestBody job_nature,
                                               @Part("job_sector") RequestBody job_sector,
                                               @Part("position") RequestBody position,
                                               @Part("content") RequestBody content,
-                                              @Part("weekly_hours") RequestBody weekly_hours,
                                               @Part("location") RequestBody location,
                                               @Part("salary") int salary,
                                               @Part("created_by_id") int created_by_id,
                                               @Part("published_date") RequestBody published_date,
+                                              @Part("active_hours ") int active_hours ,
                                               @Part MultipartBody.Part job_image);
 
     @Multipart

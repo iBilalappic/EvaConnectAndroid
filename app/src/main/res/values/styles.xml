@@ -312,4 +312,19 @@
         <item name="android:colorForeground">#42221f1f
         </item>
     </style>
+
+    <style name="MyEditTextTheme">
+        <item name="colorControlNormal">@color/gray_1</item>
+        <item name="colorControlActivated">@color/skyblue</item>
+        <item name="colorControlHighlight">@color/gray_1</item>
+        <item name="android:fontFamily">@font/nunitosansregular</item>
+    </style>
+
+    <style name="Spinner">
+        <item name="colorControlNormal">@color/gray_1</item>
+        <item name="colorControlActivated">@color/gray_1</item>
+        <item name="colorControlHighlight">@color/gray_1</item>
+        <item name="android:fontFamily">@font/nunitosansregular</item>
+        <item name="android:textSize">12sp</item>
+    </style>
 </resources>

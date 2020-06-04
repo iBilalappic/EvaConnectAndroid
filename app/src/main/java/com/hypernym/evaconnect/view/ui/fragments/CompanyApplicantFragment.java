@@ -15,20 +15,12 @@ import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.AppliedApplicants;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.CompanyJobAdModel;
-import com.hypernym.evaconnect.models.JobAd;
-import com.hypernym.evaconnect.models.MyLikesModel;
-import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.Constants;
-import com.hypernym.evaconnect.utils.DateUtils;
-import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.view.adapters.AppliedApplicantAdapter;
-import com.hypernym.evaconnect.view.adapters.MyLikeAdapter;
 import com.hypernym.evaconnect.viewmodel.AppliedApplicantViewModel;
-import com.hypernym.evaconnect.viewmodel.MylikesViewModel;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -139,11 +131,11 @@ public class CompanyApplicantFragment extends BaseFragment implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_edit:
-                JobCreateFragment jobCreateFragment = new JobCreateFragment();
+                CreateJobFragment createJobFragment = new CreateJobFragment();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("COMPANY_AD", companyJobAdModel);
-                jobCreateFragment.setArguments(bundle);
-                loadFragment(R.id.framelayout, jobCreateFragment, getContext(), true);
+                createJobFragment.setArguments(bundle);
+                loadFragment(R.id.framelayout, createJobFragment, getContext(), true);
                 break;
         }
     }

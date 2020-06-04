@@ -48,13 +48,13 @@
 
         <TextView
             android:id="@+id/tv_name"
-            android:layout_width="200dp"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="25dp"
             android:ellipsize="end"
             android:fontFamily="@font/nunitosansbold"
-            android:maxLines="1"
+            android:maxLines="2"
             android:text="AirLine Pilot"
             android:textColor="@color/black"
             android:textSize="12sp"

@@ -27,14 +27,14 @@ public class CreateJobAdViewModel extends AndroidViewModel {
     }
 
     public LiveData<BaseModel<List<Object>>> createJobAd(User user, MultipartBody.Part image,
-                                                         String jobsector, String weeklyhour, int amount,
-                                                         String companyName, String jobDescription, String Location, String jobtitle, String postion) {
-        return iCreateJobAdRepository.createJobAd(user, image, jobsector, weeklyhour, amount, companyName, jobDescription, Location, jobtitle, postion);
+                                                         String jobsector, int amount,
+                                                         String companyName, String jobDescription, String Location, String jobtitle, String postion,int duration) {
+        return iCreateJobAdRepository.createJobAd(user, image, jobsector, amount, companyName, jobDescription, Location, jobtitle, postion,duration);
     }
 
     public LiveData<BaseModel<List<Object>>> UpdateJobAd(int job_id, User user, MultipartBody.Part image,
                                                          String jobsector, String weeklyhour, int amount,
-                                                         String companyName, String jobDescription, String Location, String jobtitle, String postion) {
-        return iCreateJobAdRepository.UpdateJobAd(job_id, user, image, jobsector, weeklyhour, amount, companyName, jobDescription, Location, jobtitle, postion);
+                                                         String companyName, String jobDescription, String Location, String jobtitle, String postion,int duration) {
+        return iCreateJobAdRepository.UpdateJobAd(job_id, user, image, jobsector, weeklyhour, amount, companyName, jobDescription, Location, jobtitle, postion,duration);
     }
 }
