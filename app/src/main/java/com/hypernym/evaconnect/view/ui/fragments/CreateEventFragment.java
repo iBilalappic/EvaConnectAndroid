@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
@@ -125,6 +126,9 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
     @BindView(R.id.post)
     TextView post;
 
+    @BindView(R.id.invite_layout)
+    ConstraintLayout invite_layout;
+
     private boolean isStartDate = false;
     private Date startDate = new Date();
     private Date selectedDate = new Date();
@@ -214,6 +218,14 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
             tv_enddate.setText(event.getEvent_end_date());
             tv_endTime.setText(event.getEnd_time());
             event_type_spinner.setSelection(event.getIs_private());
+            if(event.getIs_private()==1)
+            {
+                invite_layout.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                invite_layout.setVisibility(View.GONE);
+            }
             for(EventAttendees eventAttendees:event.getEvent_attendees())
             {
                 invitedConnections.add(eventAttendees.getUser());
@@ -553,6 +565,14 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
     {
         event_type = parent.getItemAtPosition(position).toString();
+        if(position==1)
+        {
+            invite_layout.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            invite_layout.setVisibility(View.GONE);
+        }
         Log.e(TAG, "onItemClick: " + event_type);
     }
 
