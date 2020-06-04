@@ -124,7 +124,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
     private UserViewModel userViewModel;
 
     //    private String[] mSpinnerJobSector = {"Piolots", "ITSystems", "Security"};
-    private String[] mSpinnerActive = {"12", "24"};
+    private String[] mSpinnerActive = {"How long would you like this listing", "12", "24"};
 
     private List<String> mSpinnerJobsector = new ArrayList<>();
     String JobSector, JobDuration;
@@ -228,7 +228,10 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
         spinner_jobduration.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                JobDuration = parent.getItemAtPosition(position).toString();
+                Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
+                if (position != 0) {
+                    JobDuration = parent.getItemAtPosition(position).toString();
+                }
             }
 
             @Override
@@ -262,7 +265,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
             }
 
         });
-      //  spinner_jobsector.setSelection(0);
+        //  spinner_jobsector.setSelection(0);
 //        if ((getArguments() != null)) {
 //
 //            if (companyJobAdModel.getJobSector() != null) {
@@ -312,22 +315,22 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
     private void UpdateJobAd() {
         showDialog();
         User user = LoginUtils.getLoggedinUser();
-        edit_jobtitle.setText(edit_jobpostion.getText().toString() + " for " + edit_companyName.getText().toString());
+     //   edit_jobtitle.setText(edit_jobpostion.getText().toString() + " for " + edit_companyName.getText().toString());
         createJobAdViewModel.UpdateJobAd(companyJobAdModel.getId(), user, partImage, JobSector, JobDuration,
                 Integer.parseInt(edit_amount.getText().toString()),
                 edit_companyName.getText().toString(),
                 edit_jobdescription.getText().toString(),
                 edit_Location.getText().toString(),
                 edit_jobtitle.getText().toString(),
-                edit_jobpostion.getText().toString(),Integer.parseInt(JobDuration)).observe(this, new Observer<BaseModel<List<Object>>>() {
+                edit_jobpostion.getText().toString(), Integer.parseInt(JobDuration)).observe(this, new Observer<BaseModel<List<Object>>>() {
             @Override
             public void onChanged(BaseModel<List<Object>> getnetworkconnection) {
                 if (getnetworkconnection != null && !getnetworkconnection.isError()) {
                     simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_jobAd_update), null, getString(R.string.ok), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            // getActivity().onBackPressed();
-                            loadFragment(R.id.framelayout, new JobListingFragment(), getContext(), false);
+                             getActivity().onBackPressed();
+                            //loadFragment(R.id.framelayout, new JobListingFragment(), getContext(), false);
                             simpleDialog.dismiss();
                         }
                     });
@@ -353,7 +356,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
                 edit_jobdescription.getText().toString(),
                 edit_Location.getText().toString(),
                 edit_jobtitle.getText().toString(),
-                edit_jobpostion.getText().toString(),Integer.parseInt(JobDuration)).observe(this, new Observer<BaseModel<List<Object>>>() {
+                edit_jobpostion.getText().toString(), Integer.parseInt(JobDuration)).observe(this, new Observer<BaseModel<List<Object>>>() {
             @Override
             public void onChanged(BaseModel<List<Object>> getnetworkconnection) {
                 if (getnetworkconnection != null && !getnetworkconnection.isError()) {

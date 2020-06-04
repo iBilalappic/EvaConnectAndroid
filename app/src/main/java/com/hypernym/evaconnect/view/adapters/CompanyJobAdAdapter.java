@@ -47,6 +47,7 @@ public class CompanyJobAdAdapter extends RecyclerView.Adapter<CompanyJobAdAdapte
         holder.tv_name.setText(companyJobAdModelList.get(position).getJobTitle());
         holder.tv_sector.setText(companyJobAdModelList.get(position).getJobSector());
         holder.tv_content.setText(companyJobAdModelList.get(position).getContent());
+        holder.tv_activehour.setText("Active for "+String.valueOf(companyJobAdModelList.get(position).getActive_hours()));
      //   holder.tv_date.setText(DateUtils.getFormattedDate(companyJobAdModelList.get(position).getCreatedDatetime()));
         if (companyJobAdModelList.get(position).getApplicant_count() != null) {
             holder.tv_totalapplicant.setText(String.valueOf(companyJobAdModelList.get(position).getApplicant_count() + " Applicants"));
@@ -62,7 +63,7 @@ public class CompanyJobAdAdapter extends RecyclerView.Adapter<CompanyJobAdAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView tv_name, tv_content, tv_edit, tv_totalapplicant,tv_sector;
+        TextView tv_name, tv_content, tv_edit, tv_totalapplicant,tv_sector,tv_activehour;
         CircleImageView profile_image;
         ConstraintLayout contraintlayout;
 //        ImageView img_like, img_comment, img_share;
@@ -75,6 +76,7 @@ public class CompanyJobAdAdapter extends RecyclerView.Adapter<CompanyJobAdAdapte
             tv_edit = itemView.findViewById(R.id.tv_edit);
             tv_totalapplicant = itemView.findViewById(R.id.tv_totalapplicant);
             profile_image = itemView.findViewById(R.id.profile_image);
+            tv_activehour = itemView.findViewById(R.id.tv_activehour);
             contraintlayout = itemView.findViewById(R.id.contraintlayout);
             itemView.setOnClickListener(this);
         }
