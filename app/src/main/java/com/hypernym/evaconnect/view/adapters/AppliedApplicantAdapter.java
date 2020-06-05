@@ -53,7 +53,17 @@ public class AppliedApplicantAdapter extends RecyclerView.Adapter<AppliedApplica
         holder.tv_name.setText(appliedApplicantModels.get(position).getUser().getFirstName());
         holder.tv_date.setText(appliedApplicantModels.get(position).getCreatedDatetime());
         //    holder.tv_activefor.setText("Submitted "+DateUtils.getTimeAgo(appliedApplicantModels.get(position).getCreatedDatetime()));
-
+        if (appliedApplicantModels.get(position).getIs_hidden() == 1) {
+            holder.tv_view.setText("Hidden");
+            holder.tv_view.setTextColor(context.getResources().getColor(R.color.unselected_grey));
+            holder.tv_name.setTextColor(context.getResources().getColor(R.color.lite_black));
+            holder.tv_view.setBackgroundResource(R.drawable.rounded_button_border_grey);
+        } else {
+            holder.tv_view.setText("View");
+            holder.tv_view.setTextColor(context.getResources().getColor(R.color.skyblue));
+            holder.tv_name.setTextColor(context.getResources().getColor(R.color.black));
+            holder.tv_view.setBackgroundResource(R.drawable.rounded_button_border_blue);
+        }
     }
 
     @Override
@@ -63,13 +73,14 @@ public class AppliedApplicantAdapter extends RecyclerView.Adapter<AppliedApplica
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         CircleImageView mProfileImage;
-        TextView tv_name, tv_date;
+        TextView tv_name, tv_date, tv_view;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mProfileImage = itemView.findViewById(R.id.profile_image);
             tv_name = itemView.findViewById(R.id.tv_name);
             tv_date = itemView.findViewById(R.id.tv_date);
+            tv_view = itemView.findViewById(R.id.tv_view);
             // tv_description = itemView.findViewById(R.id.tv_description);
             itemView.setOnClickListener(this);
         }

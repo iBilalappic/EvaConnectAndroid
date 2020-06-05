@@ -106,6 +106,7 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
 
     int hour, minute;
     String Job_name;
+    int hidden_value = 0;
     private ConnectionViewModel connectionViewModel;
     private AppliedApplicantViewModel appliedApplicantViewModel;
     private SimpleDialog simpleDialog;
@@ -147,12 +148,37 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
             tv_description.setText(appliedApplicants.getContent());
             tv_name_applicant.setText(appliedApplicants.getUser().getFirstName());
             AppUtils.setGlideImage(getContext(), profile_image, companyJobAdModel.getJobImage());
-            tv_activehour.setText("Active for "+String.valueOf(companyJobAdModel.getActive_hours())+" hrs");
-            tv_totalapplicant.setText(String.valueOf(companyJobAdModel.getApplicant_count()+" Applicants"));
+            tv_activehour.setText("Active for " + String.valueOf(companyJobAdModel.getActive_hours()) + " hrs");
+            tv_totalapplicant.setText(String.valueOf(companyJobAdModel.getApplicant_count() + " Applicants"));
             tv_sector.setText(companyJobAdModel.getJobSector());
             File file = new File(appliedApplicants.getApplicationAttachment());
             //  tv_applicant_cv_name.setText(file.getName());
             //  datePicker.setMinDate(new Date().getTime());
+            getAppicantDetail();
+        }
+    }
+
+    private void getAppicantDetail() {
+        appliedApplicantViewModel.getApplicant(appliedApplicants.getId()).observe(this, new Observer<BaseModel<List<AppliedApplicants>>>() {
+            @Override
+            public void onChanged(BaseModel<List<AppliedApplicants>> listBaseModel) {
+                if (listBaseModel != null && !listBaseModel.isError()) {
+                    appliedApplicants = listBaseModel.getData().get(0);
+                    settingApplicant();
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+            }
+        });
+    }
+
+    private void settingApplicant() {
+        if (appliedApplicants.getIs_hidden() == 0) {
+            tv_hide.setText("Hide");
+            hidden_value = 1;
+        } else {
+            tv_hide.setText("Hidden");
+            hidden_value = 0;
         }
     }
 
@@ -197,7 +223,7 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
                 loadFragment(R.id.framelayout, createJobFragment, getContext(), true);
                 break;
             case R.id.tv_hide:
-
+                HideApplication();
                 break;
 
 
@@ -250,19 +276,24 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
         }
     }
 
-    private void declineApplication() {
+    private void HideApplication() {
         AppliedApplicants declineData = new AppliedApplicants();
-        declineData.setStatus(AppConstants.DELETED);
+//        declineData.setStatus(AppConstants.DELETED);
         declineData.setModified_by_id(user.getId());
         declineData.setModified_datetime(DateUtils.GetCurrentdatetime());
-
+        declineData.setIs_hidden(hidden_value);
+        showDialog();
         appliedApplicantViewModel.declineApplication(appliedApplicants.getId(), declineData).observe(this, new Observer<BaseModel<List<AppliedApplicants>>>() {
             @Override
             public void onChanged(BaseModel<List<AppliedApplicants>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError()) {
-                    if (getFragmentManager().getBackStackEntryCount() != 0) {
-                        getFragmentManager().popBackStack();
-                    }
+//                    if (getFragmentManager().getBackStackEntryCount() != 0) {
+//                        getFragmentManager().popBackStack();
+//                    }
+                    hideDialog();
+                    getAppicantDetail();
+                }else{
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
             }
         });

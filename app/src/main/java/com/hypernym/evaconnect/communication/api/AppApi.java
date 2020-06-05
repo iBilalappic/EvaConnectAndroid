@@ -287,6 +287,7 @@ public interface AppApi {
     @POST(APIConstants.JOB)
     Call<BaseModel<List<Post>>> getJob(@Body User user, @Query("limit") int limit, @Query("offset") int offset);
 
-
+    @GET(APIConstants.DECLINE_APPLICATION)
+    Call<BaseModel<List<AppliedApplicants>>> getApplicant(@Path("job_application_id") int job_id);
 
 }

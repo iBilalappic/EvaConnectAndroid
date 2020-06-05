@@ -31,4 +31,7 @@ public class AppliedApplicantViewModel extends AndroidViewModel {
     public LiveData<BaseModel<List<AppliedApplicants>>> declineApplication(int application_id,AppliedApplicants appliedApplicants) {
         return iApplicantRepository.declineApplication(application_id,appliedApplicants);
     }
+    public LiveData<BaseModel<List<AppliedApplicants>>> getApplicant(int application_id) {
+        return iApplicantRepository.getApplicant(application_id);
+    }
 }
