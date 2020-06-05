@@ -110,7 +110,8 @@ public class CompanyApplicantFragment extends BaseFragment implements View.OnCli
             tv_name.setText(companyJobAdModel.getJobTitle());
             tv_content.setText(companyJobAdModel.getContent());
             tv_sector.setText(companyJobAdModel.getJobSector());
-          //  tv_weeklyHoursNumber.setText(companyJobAdModel.getWeeklyHours());
+            tv_activehour.setText("Active for"+companyJobAdModel.getActive_hours()+" hrs");
+         //   tv_weeklyHoursNumber.setText(companyJobAdModel.getWeeklyHours());
             tv_totalapplicant.setText(companyJobAdModel.getApplicant_count()+" Applicants");
 //            tv_minago.setText(DateUtils.getTimeAgo(jobAd.getCreatedDatetime()));
             GetApplicants();
@@ -146,6 +147,7 @@ public class CompanyApplicantFragment extends BaseFragment implements View.OnCli
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constants.DATA, appliedApplicantModel.get(position));
         bundle.putString("JOB_NAME", companyJobAdModel.getJobTitle());
+        bundle.putSerializable("JOB_DETAIL", companyJobAdModel);
         appliedApplicantFragment.setArguments(bundle);
         loadFragment(R.id.framelayout, appliedApplicantFragment, getContext(), true);
 

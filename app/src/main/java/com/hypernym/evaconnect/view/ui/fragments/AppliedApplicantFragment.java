@@ -50,11 +50,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class AppliedApplicantFragment extends BaseFragment implements View.OnClickListener {
     private AppliedApplicants appliedApplicants = new AppliedApplicants();
 
-    @BindView(R.id.datePicker)
-    DatePicker datePicker;
-
-    @BindView(R.id.tv_download_cv)
-    TextView tv_download_cv;
 
     @BindView(R.id.tv_view_cv)
     TextView tv_view_cv;
@@ -62,29 +57,47 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
     @BindView(R.id.tv_description)
     TextView tv_description;
 
-    @BindView(R.id.tv_offerinterview)
-    TextView tv_offerinterview;
 
-    @BindView(R.id.tv_declineApplicant)
-    TextView tv_declineApplicant;
+//    @BindView(R.id.tv_declineApplicant)
+//    TextView tv_declineApplicant;
 
-    @BindView(R.id.tv_activefor)
-    TextView tv_activefor;
-
-    @BindView(R.id.tv_applicant_cv_name)
-    TextView tv_applicant_cv_name;
-
+    @BindView(R.id.tv_activehour)
+    TextView tv_activehour;
 
     @BindView(R.id.profile_image)
-    CircleImageView cv_profile_image;
+    CircleImageView profile_image;
 
-    @BindView(R.id.timePicker)
-    TimePicker timePicker;
+    @BindView(R.id.profile_image_applicant)
+    CircleImageView profile_image_applicant;
+
+
+//    @BindView(R.id.timePicker)
+//    TimePicker timePicker;
 
     @BindView(R.id.tv_name)
     TextView tv_name;
 
+    @BindView(R.id.tv_name_applicant)
+    TextView tv_name_applicant;
 
+    @BindView(R.id.tv_sector)
+    TextView tv_sector;
+
+    @BindView(R.id.tv_message)
+    TextView tv_message;
+
+    @BindView(R.id.tv_hide)
+    TextView tv_hide;
+
+
+    @BindView(R.id.tv_totalapplicant)
+    TextView tv_totalapplicant;
+
+    @BindView(R.id.tv_edit)
+    TextView tv_edit;
+
+    @BindView(R.id.tv_date)
+    TextView tv_date;
 
 
     Uri uri;
@@ -96,6 +109,7 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
     private ConnectionViewModel connectionViewModel;
     private AppliedApplicantViewModel appliedApplicantViewModel;
     private SimpleDialog simpleDialog;
+    private CompanyJobAdModel companyJobAdModel;
 
     public AppliedApplicantFragment() {
         // Required empty public constructor
@@ -108,10 +122,11 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
         View view = inflater.inflate(R.layout.fragment_applicant_detail, container, false);
         ButterKnife.bind(this, view);
         tv_view_cv.setOnClickListener(this);
-        tv_download_cv.setOnClickListener(this);
-        tv_offerinterview.setOnClickListener(this);
-        tv_declineApplicant.setOnClickListener(this);
-        timePicker.setIs24HourView(true);
+        tv_edit.setOnClickListener(this);
+        tv_hide.setOnClickListener(this);
+
+        //   tv_declineApplicant.setOnClickListener(this);
+        //  timePicker.setIs24HourView(true);
         user = LoginUtils.getUser();
         init();
         return view;
@@ -121,18 +136,23 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
         if ((getArguments() != null)) {
             setPageTitle("");
             showBackButton();
-            connectionViewModel= ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
-            appliedApplicantViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(AppliedApplicantViewModel.class);
+            connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
+            appliedApplicantViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(AppliedApplicantViewModel.class);
             appliedApplicants = (AppliedApplicants) getArguments().getSerializable(Constants.DATA);
             Job_name = getArguments().getString("JOB_NAME");
+            companyJobAdModel = (CompanyJobAdModel) getArguments().getSerializable("JOB_DETAIL");
             Log.d("TAAAG", "" + GsonUtils.toJson(appliedApplicants));
-            AppUtils.setGlideImage(getContext(), cv_profile_image, appliedApplicants.getUser().getUserImage());
-            tv_activefor.setText(Constants.SUBMITTED + DateUtils.getTimeAgo(appliedApplicants.getCreatedDatetime()));
+            AppUtils.setGlideImage(getContext(), profile_image_applicant, appliedApplicants.getUser().getUserImage());
+            tv_date.setText(DateUtils.getTimeAgo(appliedApplicants.getCreatedDatetime()));
             tv_description.setText(appliedApplicants.getContent());
-            tv_name.setText(appliedApplicants.getUser().getFirstName());
+            tv_name_applicant.setText(appliedApplicants.getUser().getFirstName());
+            AppUtils.setGlideImage(getContext(), profile_image, companyJobAdModel.getJobImage());
+            tv_activehour.setText("Active for "+String.valueOf(companyJobAdModel.getActive_hours())+" hrs");
+            tv_totalapplicant.setText(String.valueOf(companyJobAdModel.getApplicant_count()+" Applicants"));
+            tv_sector.setText(companyJobAdModel.getJobSector());
             File file = new File(appliedApplicants.getApplicationAttachment());
-            tv_applicant_cv_name.setText(file.getName());
-            datePicker.setMinDate(new Date().getTime());
+            //  tv_applicant_cv_name.setText(file.getName());
+            //  datePicker.setMinDate(new Date().getTime());
         }
     }
 
@@ -169,66 +189,77 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
                     Toast.makeText(getActivity(), "No File to Download", Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case R.id.tv_offerinterview:
-                Calendar mcurrentTime = Calendar.getInstance();
-                int hours = mcurrentTime.get(Calendar.HOUR_OF_DAY);  // current hour
-                int minutess = mcurrentTime.get(Calendar.MINUTE);      // current min
-                current_hour = hours;
-                current_mintues = minutess;
-                SetTimePicker();
-                String date = DateUtils.GetCurrentdate();
-
-                String[] separated = date.split("-");
-                String year = separated[0];
-                String month = separated[1];
-                String day = separated[2];
-
-                if (datePicker.getDayOfMonth() > Integer.parseInt(day)) {
-                    OfferInterviewCall();
-                } else if (datePicker.getMonth() + 1 > Integer.parseInt(month)) {
-                    OfferInterviewCall();
-                } else if (datePicker.getYear() > Integer.parseInt(year)) {
-                    OfferInterviewCall();
-                } else if (hour > current_hour) {
-                    OfferInterviewCall();
-                } else if (hour == current_hour && minute >= current_mintues) {
-                    OfferInterviewCall();
-                } else {
-                    Toast.makeText(getContext(), "you cannot set past time for interview", Toast.LENGTH_SHORT).show();
-                }
+            case R.id.tv_edit:
+                CreateJobFragment createJobFragment = new CreateJobFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("COMPANY_AD", companyJobAdModel);
+                createJobFragment.setArguments(bundle);
+                loadFragment(R.id.framelayout, createJobFragment, getContext(), true);
                 break;
-            case R.id.tv_declineApplicant:
-                simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.decline_application_confirmation), getString(R.string.button_cancel), getString(R.string.ok), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // getActivity().onBackPressed();
-                        switch (v.getId()) {
-                            case R.id.button_positive:
-                                simpleDialog.dismiss();
-                                declineApplication();
-                                break;
-                            case R.id.button_negative:
-                                simpleDialog.dismiss();
-                                break;
-                        }
-                    }
-                });
-                simpleDialog.show();
+            case R.id.tv_hide:
+
                 break;
+
+
+//            case R.id.tv_offerinterview:
+//                Calendar mcurrentTime = Calendar.getInstance();
+//                int hours = mcurrentTime.get(Calendar.HOUR_OF_DAY);  // current hour
+//                int minutess = mcurrentTime.get(Calendar.MINUTE);      // current min
+//                current_hour = hours;
+//                current_mintues = minutess;
+//                SetTimePicker();
+//                String date = DateUtils.GetCurrentdate();
+//
+//                String[] separated = date.split("-");
+//                String year = separated[0];
+//                String month = separated[1];
+//                String day = separated[2];
+//
+//                if (datePicker.getDayOfMonth() > Integer.parseInt(day)) {
+//                    OfferInterviewCall();
+//                } else if (datePicker.getMonth() + 1 > Integer.parseInt(month)) {
+//                    OfferInterviewCall();
+//                } else if (datePicker.getYear() > Integer.parseInt(year)) {
+//                    OfferInterviewCall();
+//                } else if (hour > current_hour) {
+//                    OfferInterviewCall();
+//                } else if (hour == current_hour && minute >= current_mintues) {
+//                    OfferInterviewCall();
+//                } else {
+//                    Toast.makeText(getContext(), "you cannot set past time for interview", Toast.LENGTH_SHORT).show();
+//                }
+//                break;
+//            case R.id.tv_declineApplicant:
+//                simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.decline_application_confirmation), getString(R.string.button_cancel), getString(R.string.ok), new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        // getActivity().onBackPressed();
+//                        switch (v.getId()) {
+//                            case R.id.button_positive:
+//                                simpleDialog.dismiss();
+//                                declineApplication();
+//                                break;
+//                            case R.id.button_negative:
+//                                simpleDialog.dismiss();
+//                                break;
+//                        }
+//                    }
+//                });
+//                simpleDialog.show();
+//                break;
         }
     }
 
     private void declineApplication() {
-        AppliedApplicants declineData=new AppliedApplicants();
+        AppliedApplicants declineData = new AppliedApplicants();
         declineData.setStatus(AppConstants.DELETED);
         declineData.setModified_by_id(user.getId());
         declineData.setModified_datetime(DateUtils.GetCurrentdatetime());
 
-        appliedApplicantViewModel.declineApplication(appliedApplicants.getId(),declineData).observe(this, new Observer<BaseModel<List<AppliedApplicants>>>() {
+        appliedApplicantViewModel.declineApplication(appliedApplicants.getId(), declineData).observe(this, new Observer<BaseModel<List<AppliedApplicants>>>() {
             @Override
             public void onChanged(BaseModel<List<AppliedApplicants>> listBaseModel) {
-                if(listBaseModel!=null && !listBaseModel.isError())
-                {
+                if (listBaseModel != null && !listBaseModel.isError()) {
                     if (getFragmentManager().getBackStackEntryCount() != 0) {
                         getFragmentManager().popBackStack();
                     }
@@ -237,39 +268,38 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
         });
     }
 
-    private void OfferInterviewCall() {
-        if(NetworkUtils.isNetworkConnected(getContext())) {
-            ConnectionApiCall();
-            ChatFragment chatFragment = new ChatFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString(Constants.FRAGMENT_NAME, AppConstants.APPLICANT_FRAGMENT);
-            bundle.putSerializable(Constants.DATA, appliedApplicants);
-            bundle.putString("JOB_NAME", Job_name);
-            bundle.putInt("Day", datePicker.getDayOfMonth());
-            bundle.putInt("Month", datePicker.getMonth() + 1);
-            bundle.putInt("Year", datePicker.getYear());
-            bundle.putInt("Hour", hour);
-            bundle.putInt("Mintues", minute);
-            chatFragment.setArguments(bundle);
-            loadFragment(R.id.framelayout, chatFragment, getContext(), true);
-        }
-        else
-        {
-            networkErrorDialog();
-        }
-    }
+//    private void OfferInterviewCall() {
+//        if(NetworkUtils.isNetworkConnected(getContext())) {
+//            ConnectionApiCall();
+//            ChatFragment chatFragment = new ChatFragment();
+//            Bundle bundle = new Bundle();
+//            bundle.putString(Constants.FRAGMENT_NAME, AppConstants.APPLICANT_FRAGMENT);
+//            bundle.putSerializable(Constants.DATA, appliedApplicants);
+//            bundle.putString("JOB_NAME", Job_name);
+//            bundle.putInt("Day", datePicker.getDayOfMonth());
+//            bundle.putInt("Month", datePicker.getMonth() + 1);
+//            bundle.putInt("Year", datePicker.getYear());
+//            bundle.putInt("Hour", hour);
+//            bundle.putInt("Mintues", minute);
+//            chatFragment.setArguments(bundle);
+//            loadFragment(R.id.framelayout, chatFragment, getContext(), true);
+//        }
+//        else
+//        {
+//            networkErrorDialog();
+//        }
+//    }
 
     private void ConnectionApiCall() {
-        Connection connection=new Connection();
-        User user= LoginUtils.getLoggedinUser();
+        Connection connection = new Connection();
+        User user = LoginUtils.getLoggedinUser();
         connection.setReceiver_id(appliedApplicants.getUserId());
         connection.setStatus(AppConstants.ACTIVE);
         connection.setSender_id(user.getId());
         connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
             @Override
             public void onChanged(BaseModel<List<Connection>> listBaseModel) {
-                if(listBaseModel!=null && !listBaseModel.isError())
-                {
+                if (listBaseModel != null && !listBaseModel.isError()) {
 
                 }
                 hideDialog();
@@ -277,13 +307,13 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
         });
     }
 
-    private void SetTimePicker() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            hour = timePicker.getHour();
-            minute = timePicker.getMinute();
-        } else {
-            hour = timePicker.getCurrentHour();
-            minute = timePicker.getCurrentMinute();
-        }
-    }
+//    private void SetTimePicker() {
+//        if (Build.VERSION.SDK_INT >= 23) {
+//            hour = timePicker.getHour();
+//            minute = timePicker.getMinute();
+//        } else {
+//            hour = timePicker.getCurrentHour();
+//            minute = timePicker.getCurrentMinute();
+//        }
+//    }
 }

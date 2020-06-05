@@ -69,7 +69,7 @@ public class CreateJobRepository implements ICreateJobAdRepository {
 
     @Override
     public LiveData<BaseModel<List<Object>>> UpdateJobAd(int job_id, User user, MultipartBody.Part partImage,
-                                                         String jobSector, String WeeklyHour, int amount,
+                                                         String jobSector, int amount,
                                                          String companyName, String jobDescription,
                                                          String Location, String jobtitle, String postion,int duration) {
         UpdateMutableLiveData = new MutableLiveData<>();
@@ -78,13 +78,12 @@ public class CreateJobRepository implements ICreateJobAdRepository {
         RestClient.get().appApi().UpdateJobAd(job_id,
                 RequestBody.create(MediaType.parse("text/plain"), user.getStatus()),
                 RequestBody.create(MediaType.parse("text/plain"), postion + " for " + companyName),
-                RequestBody.create(MediaType.parse("text/plain"), Constants.ANNUAL),
                 RequestBody.create(MediaType.parse("text/plain"), jobSector),
                 RequestBody.create(MediaType.parse("text/plain"), postion),
                 RequestBody.create(MediaType.parse("text/plain"), jobDescription),
-                RequestBody.create(MediaType.parse("text/plain"), WeeklyHour),
                 RequestBody.create(MediaType.parse("text/plain"), Location), amount, user.getId(),
                 RequestBody.create(MediaType.parse("text/plain"), DateUtils.GetCurrentdatetime()),
+                duration,
                 partImage).enqueue(new Callback<BaseModel<List<Object>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {

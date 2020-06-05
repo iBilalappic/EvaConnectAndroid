@@ -146,7 +146,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
                     tv_salaryAmount.setText("£ " + myFormatter.format(getjobAd.getData().get(0).getSalary()) + " pa");
                     tv_description.setText(getjobAd.getData().get(0).getContent());
                     tv_locationName.setText(getjobAd.getData().get(0).getLocation());
-                    tv_weeklyHoursNumber.setText(getjobAd.getData().get(0).getWeeklyHours());
+                  //  tv_weeklyHoursNumber.setText(getjobAd.getData().get(0).getWeeklyHours());
 //                    tv_createddateTime.setText(DateUtils.getFormattedDateTime(getjobAd.getData().get(0).getCreatedDatetime()));
 //                    tv_minago.setText(DateUtils.getTimeAgo(getjobAd.getData().get(0).getCreatedDatetime()));
                     if (getjobAd.getData().get(0).getIsJobLike() != null && getjobAd.getData().get(0).getIsJobLike() > 0) {

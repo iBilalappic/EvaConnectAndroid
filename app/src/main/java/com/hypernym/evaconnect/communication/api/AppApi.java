@@ -91,15 +91,14 @@ public interface AppApi {
             @Path("job_id") int job_id,
             @Part("status") RequestBody status,
             @Part("job_title") RequestBody job_title,
-            @Part("job_nature") RequestBody job_nature,
             @Part("job_sector") RequestBody job_sector,
             @Part("position") RequestBody position,
             @Part("content") RequestBody content,
-            @Part("weekly_hours") RequestBody weekly_hours,
             @Part("location") RequestBody location,
             @Part("salary") int salary,
             @Part("modified_by_id") int modified_by_id,
             @Part("modified_datetime") RequestBody modified_datetime,
+            @Part("active_hours ") int active_hours ,
             @Part MultipartBody.Part job_image);
 
     @POST(APIConstants.GET_JOB_AD_BY_ID)

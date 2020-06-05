@@ -224,11 +224,9 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
         arrayWeekAdapter = new ArrayAdapter<String>(getContext(),
                 android.R.layout.simple_dropdown_item_1line, mSpinnerActive);
         spinner_jobduration.setAdapter(arrayWeekAdapter);
-        spinner_jobsector.setSelection(0);
         spinner_jobduration.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
                 if (position != 0) {
                     JobDuration = parent.getItemAtPosition(position).toString();
                 }
@@ -316,7 +314,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
         showDialog();
         User user = LoginUtils.getLoggedinUser();
      //   edit_jobtitle.setText(edit_jobpostion.getText().toString() + " for " + edit_companyName.getText().toString());
-        createJobAdViewModel.UpdateJobAd(companyJobAdModel.getId(), user, partImage, JobSector, JobDuration,
+        createJobAdViewModel.UpdateJobAd(companyJobAdModel.getId(), user, partImage, JobSector,
                 Integer.parseInt(edit_amount.getText().toString()),
                 edit_companyName.getText().toString(),
                 edit_jobdescription.getText().toString(),
