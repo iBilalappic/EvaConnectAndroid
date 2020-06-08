@@ -1,11 +1,11 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -17,19 +17,14 @@ import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.JobAd;
-import com.hypernym.evaconnect.models.MyLikesModel;
-import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
+import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.CompanyJobAdAdapter;
 import com.hypernym.evaconnect.view.adapters.JobAdAdapter;
-import com.hypernym.evaconnect.view.adapters.MyLikeAdapter;
-import com.hypernym.evaconnect.view.adapters.NotificationsAdapter;
 import com.hypernym.evaconnect.view.dialogs.ShareDialog;
-import com.hypernym.evaconnect.viewmodel.CreateJobAdViewModel;
-import com.hypernym.evaconnect.viewmodel.HomeViewModel;
 import com.hypernym.evaconnect.viewmodel.JobListViewModel;
 
 import java.util.ArrayList;
@@ -147,6 +142,7 @@ public class JobListingFragment extends BaseFragment implements View.OnClickList
     }
 
     private void setupRecyclerviewCompany() {
+        Log.d("TAAAG", GsonUtils.toJson(companyJobAdModelList));
         companyJobAdAdapter = new CompanyJobAdAdapter(getContext(), companyJobAdModelList, this);
         CompanylinearLayoutManager = new LinearLayoutManager(getContext());
         rc_joblisting.setLayoutManager(CompanylinearLayoutManager);
@@ -158,7 +154,7 @@ public class JobListingFragment extends BaseFragment implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.newjobAd:
-                loadFragment(R.id.framelayout, new JobCreateFragment(), getContext(), true);
+                loadFragment(R.id.framelayout, new CreateJobFragment(), getContext(), true);
                 break;
 
         }

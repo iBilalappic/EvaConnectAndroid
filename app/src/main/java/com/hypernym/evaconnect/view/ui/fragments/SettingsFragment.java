@@ -46,8 +46,6 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
     @BindView(R.id.edt_email)
     EditText edt_email;
 
-//    @NotEmpty
-//    @Password(min = 8)
     @BindView(R.id.tv_password)
     TextView tv_password;
 
@@ -74,10 +72,9 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
     CircleImageView cv_profile_image;
 
     User user = new User();
-    private Validator validator;
     private UserViewModel userViewModel;
 
-    boolean passwordMatches;
+    private Validator validator;
     Integer notification_check = 0;
 
     Dialog mdialog;
@@ -93,7 +90,6 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
         ButterKnife.bind(this, view);
-        validator = new Validator(this);
         img_backarrow.setOnClickListener(this);
 //        switch_push.setOnClickListener(this);
 //
@@ -111,7 +107,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         btn_save.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
-                validator.validate();
+
             }
         });
 
@@ -128,7 +124,6 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                 loadFragment(R.id.framelayout, pushNotificationsFragment, getContext(), true);
             }
         });
-
 
 
         user = LoginUtils.getUser();
@@ -160,7 +155,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                     edt_email.setText(listBaseModel.getData().get(0).getEmail());
                     tv_location.setText(listBaseModel.getData().get(0).getCountry() + "," + listBaseModel.getData().get(0).getCity());
                     tv_name.setText(listBaseModel.getData().get(0).getFirst_name());
-                    notification_check=listBaseModel.getData().get(0).getIs_notifications();
+                    notification_check = listBaseModel.getData().get(0).getIs_notifications();
 
                     LoginUtils.saveUser(listBaseModel.getData().get(0));
                 } else {
@@ -170,7 +165,6 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
             }
         });
     }
-
 
 
     private void ShowConfirmationDialog() {
@@ -187,13 +181,28 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         tv_confirm.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
-                if (editText_newpassword.getText().toString().matches(editText_confirmpassword.getText().toString())) {
-                    passwordMatches = true;
-                    UpdatePassword(editText_old_password.getText().toString(),editText_newpassword.getText().toString());
-                    mdialog.dismiss();
+
+                if (!(TextUtils.isEmpty(editText_old_password.getText())) && !(TextUtils.isEmpty(editText_newpassword.getText()) &&
+                        !(TextUtils.isEmpty(editText_confirmpassword.getText())))) {
+                    if (editText_old_password.length() >= 8 && editText_newpassword.length() >= 8 && editText_confirmpassword.length() >= 8) {
+
+                        if (editText_newpassword.getText().toString().matches(editText_confirmpassword.getText().toString())) {
+                            mdialog.dismiss();
+                            UpdatePassword(editText_old_password.getText().toString(), editText_newpassword.getText().toString());
+                        } else {
+                            Toast.makeText(getContext(), "password didn't match", Toast.LENGTH_SHORT).show();
+                        }
+
+                    } else {
+                        editText_old_password.setError(getString(R.string.err_password));
+                        editText_newpassword.setError(getString(R.string.err_password));
+                        editText_confirmpassword.setError(getString(R.string.err_password));
+                    }
                 } else {
-                    Toast.makeText(getContext(), "password didn't match...", Toast.LENGTH_SHORT).show();
-                    passwordMatches = false;
+                    editText_old_password.setError(getString(R.string.err_password));
+                    editText_newpassword.setError(getString(R.string.err_password));
+                    editText_confirmpassword.setError(getString(R.string.err_password));
+
                 }
             }
         });
@@ -201,14 +210,16 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void UpdatePassword(String oldpassword, String Newpassword) {
-        userViewModel.update_password(oldpassword,Newpassword).observe(this, new Observer<BaseModel<List<User>>>() {
+        userViewModel.update_password(oldpassword, Newpassword).observe(this, new Observer<BaseModel<List<User>>>() {
             @Override
             public void onChanged(BaseModel<List<User>> listBaseModel) {
                 if (listBaseModel.getData() != null && !listBaseModel.isError()) {
-                    Toast.makeText(getContext(), ""+listBaseModel.getMessage(), Toast.LENGTH_SHORT).show();
-                }else if(listBaseModel.isError()){
+                    mdialog.dismiss();
+                    Toast.makeText(getContext(), "" + listBaseModel.getMessage(), Toast.LENGTH_SHORT).show();
+                } else if (listBaseModel.isError()) {
                     networkResponseDialog(getString(R.string.messages), listBaseModel.getMessage());
                 } else {
+                    mdialog.dismiss();
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
                 hideDialog();

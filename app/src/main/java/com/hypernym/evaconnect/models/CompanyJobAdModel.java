@@ -68,6 +68,18 @@ public class CompanyJobAdModel implements Serializable {
     @Expose
     private String status;
 
+    public Integer getActive_hours() {
+        return active_hours;
+    }
+
+    public void setActive_hours(Integer active_hours) {
+        this.active_hours = active_hours;
+    }
+
+    @Expose
+    private Integer active_hours;
+    @SerializedName("active_hours")
+
     public Integer getApplicant_count() {
         return applicant_count;
     }

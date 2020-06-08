@@ -15,20 +15,12 @@ import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.AppliedApplicants;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.CompanyJobAdModel;
-import com.hypernym.evaconnect.models.JobAd;
-import com.hypernym.evaconnect.models.MyLikesModel;
-import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.Constants;
-import com.hypernym.evaconnect.utils.DateUtils;
-import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.view.adapters.AppliedApplicantAdapter;
-import com.hypernym.evaconnect.view.adapters.MyLikeAdapter;
 import com.hypernym.evaconnect.viewmodel.AppliedApplicantViewModel;
-import com.hypernym.evaconnect.viewmodel.MylikesViewModel;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,21 +41,23 @@ public class CompanyApplicantFragment extends BaseFragment implements View.OnCli
     @BindView(R.id.profile_image)
     CircleImageView profile_image;
 
-    @BindView(R.id.tv_positionName)
-    TextView tv_positionName;
-
-    @BindView(R.id.tv_salaryAmount)
-    TextView tv_salaryAmount;
+    @BindView(R.id.tv_content)
+    TextView tv_content;
 
     @BindView(R.id.tv_name)
     TextView tv_name;
 
+    @BindView(R.id.tv_totalapplicant)
+    TextView tv_totalapplicant;
 
-    @BindView(R.id.tv_locationName)
-    TextView tv_locationName;
+    @BindView(R.id.tv_activehour)
+    TextView tv_activehour;
 
-    @BindView(R.id.tv_weeklyHoursNumber)
-    TextView tv_weeklyHoursNumber;
+    @BindView(R.id.tv_sector)
+    TextView tv_sector;
+//
+//    @BindView(R.id.tv_weeklyHoursNumber)
+//    TextView tv_weeklyHoursNumber;
 
     @BindView(R.id.tv_edit)
     TextView tv_edit;
@@ -113,12 +107,11 @@ public class CompanyApplicantFragment extends BaseFragment implements View.OnCli
             showBackButton();
             companyJobAdModel = (CompanyJobAdModel) getArguments().getSerializable("COMPANY_AD");
             AppUtils.setGlideImage(getContext(), profile_image, companyJobAdModel.getJobImage());
-            tv_positionName.setText(companyJobAdModel.getPosition());
             tv_name.setText(companyJobAdModel.getJobTitle());
-            DecimalFormat myFormatter = new DecimalFormat("############");
-            tv_salaryAmount.setText("£ " + myFormatter.format(companyJobAdModel.getSalary()) +" pa");
-            tv_locationName.setText(companyJobAdModel.getLocation());
-            tv_weeklyHoursNumber.setText(companyJobAdModel.getWeeklyHours());
+            tv_content.setText(companyJobAdModel.getContent());
+            tv_sector.setText(companyJobAdModel.getJobSector());
+          //  tv_weeklyHoursNumber.setText(companyJobAdModel.getWeeklyHours());
+            tv_totalapplicant.setText(companyJobAdModel.getApplicant_count()+" Applicants");
 //            tv_minago.setText(DateUtils.getTimeAgo(jobAd.getCreatedDatetime()));
             GetApplicants();
 
@@ -138,20 +131,21 @@ public class CompanyApplicantFragment extends BaseFragment implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_edit:
-                JobCreateFragment jobCreateFragment = new JobCreateFragment();
+                CreateJobFragment createJobFragment = new CreateJobFragment();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("COMPANY_AD", companyJobAdModel);
-                jobCreateFragment.setArguments(bundle);
-                loadFragment(R.id.framelayout, jobCreateFragment, getContext(), true);
+                createJobFragment.setArguments(bundle);
+                loadFragment(R.id.framelayout, createJobFragment, getContext(), true);
                 break;
         }
     }
+
     @Override
     public void onItemClick(View view, int position) {
         AppliedApplicantFragment appliedApplicantFragment = new AppliedApplicantFragment();
-        Bundle bundle=new Bundle();
-        bundle.putSerializable(Constants.DATA,appliedApplicantModel.get(position));
-        bundle.putString("JOB_NAME",companyJobAdModel.getJobTitle());
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Constants.DATA, appliedApplicantModel.get(position));
+        bundle.putString("JOB_NAME", companyJobAdModel.getJobTitle());
         appliedApplicantFragment.setArguments(bundle);
         loadFragment(R.id.framelayout, appliedApplicantFragment, getContext(), true);
 

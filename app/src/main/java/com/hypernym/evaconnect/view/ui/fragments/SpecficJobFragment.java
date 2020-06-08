@@ -50,11 +50,11 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
     @BindView(R.id.tv_name)
     TextView tv_name;
 
-    @BindView(R.id.tv_minago)
-    TextView tv_minago;
+//    @BindView(R.id.tv_minago)
+//    TextView tv_minago;
 
-    @BindView(R.id.tv_createddateTime)
-    TextView tv_createddateTime;
+//    @BindView(R.id.tv_createddateTime)
+//    TextView tv_createddateTime;
 
     @BindView(R.id.tv_positionName)
     TextView tv_positionName;
@@ -74,8 +74,8 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
     @BindView(R.id.tv_description)
     TextView tv_description;
 
-    @BindView(R.id.tv_goback)
-    TextView tv_goback;
+    @BindView(R.id.img_backarrow)
+    ImageView img_backarrow;
 
     @BindView(R.id.img_like)
     ImageView img_like;
@@ -103,7 +103,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
         View view = inflater.inflate(R.layout.fragment_specfic_job_ad, container, false);
         ButterKnife.bind(this, view);
         tv_apply.setOnClickListener(this);
-        tv_goback.setOnClickListener(this);
+        img_backarrow.setOnClickListener(this);
         img_like.setOnClickListener(this);
         img_share.setOnClickListener(this);
         return view;
@@ -147,12 +147,12 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
                     tv_description.setText(getjobAd.getData().get(0).getContent());
                     tv_locationName.setText(getjobAd.getData().get(0).getLocation());
                     tv_weeklyHoursNumber.setText(getjobAd.getData().get(0).getWeeklyHours());
-                    tv_createddateTime.setText(DateUtils.getFormattedDateTime(getjobAd.getData().get(0).getCreatedDatetime()));
-                    tv_minago.setText(DateUtils.getTimeAgo(getjobAd.getData().get(0).getCreatedDatetime()));
+//                    tv_createddateTime.setText(DateUtils.getFormattedDateTime(getjobAd.getData().get(0).getCreatedDatetime()));
+//                    tv_minago.setText(DateUtils.getTimeAgo(getjobAd.getData().get(0).getCreatedDatetime()));
                     if (getjobAd.getData().get(0).getIsJobLike() != null && getjobAd.getData().get(0).getIsJobLike() > 0) {
-                        img_like.setBackground(getActivity().getDrawable(R.mipmap.ic_like_selected));
+                        img_like.setBackground(getActivity().getDrawable(R.drawable.ic_like));
                     } else {
-                        img_like.setBackground(getActivity().getDrawable(R.mipmap.ic_like));
+                        img_like.setBackground(getActivity().getDrawable(R.drawable.ic_like));
                     }
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
@@ -199,7 +199,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
                     Toast.makeText(getContext(), "You have already applied to this job", Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case R.id.tv_goback:
+            case R.id.img_backarrow:
                 getActivity().onBackPressed();
                 break;
             case R.id.img_like:
