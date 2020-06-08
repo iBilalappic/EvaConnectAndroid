@@ -133,7 +133,7 @@ public class ShareConnectionFragment extends BaseFragment implements ShareConnec
         for (User inviteConnections : shareConnections_user) {
             share_users.add(inviteConnections.getId());
         }
-        ShareConnection shareConnection = new ShareConnection( LoginUtils.getUser().getId(), share_users);
+        ShareConnection shareConnection = new ShareConnection(LoginUtils.getUser().getId(), share_users);
         shareConnection.setJob_id(id);
         connectionViewModel.share_connection(shareConnection).observe(this, new Observer<BaseModel<List<Object>>>() {
             @Override
@@ -173,7 +173,7 @@ public class ShareConnectionFragment extends BaseFragment implements ShareConnec
         for (User inviteConnections : shareConnections_user) {
             share_users.add(inviteConnections.getId());
         }
-        ShareConnection shareConnection = new ShareConnection( LoginUtils.getUser().getId(), share_users);
+        ShareConnection shareConnection = new ShareConnection(LoginUtils.getUser().getId(), share_users);
         shareConnection.setPost_id(id);
         connectionViewModel.share_connection_post(shareConnection).observe(this, new Observer<BaseModel<List<Object>>>() {
             @Override
@@ -220,13 +220,19 @@ public class ShareConnectionFragment extends BaseFragment implements ShareConnec
 
                         if (connectionList.size() > 0) {
                             rc_connections.setVisibility(View.VISIBLE);
+                            isLastPage = false;
+                            isLoading = true;
                             empty.setVisibility(View.GONE);
                         }
 
                         isLoading = false;
                     } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
-                        rc_connections.setVisibility(View.GONE);
-                        empty.setVisibility(View.VISIBLE);
+                        if (listBaseModel.getData().size() == 0 && currentPage == 0) {
+                            rc_connections.setVisibility(View.GONE);
+                            empty.setVisibility(View.VISIBLE);
+                        }
+//                        rc_connections.setVisibility(View.GONE);
+//                        empty.setVisibility(View.VISIBLE);
                         isLastPage = true;
                         isLoading = false;
                     } else {
@@ -309,11 +315,13 @@ public class ShareConnectionFragment extends BaseFragment implements ShareConnec
 
         @Override
         public void afterTextChanged(Editable s) {
-            currentPage = PAGE_START;
+            //  currentPage = PAGE_START;
             if (s.length() > 0) {
                 isSearchFlag = true;
             } else {
                 isSearchFlag = false;
+                currentPage = 0;
+                PAGE_START = 0;
             }
 
             connectionList.clear();
