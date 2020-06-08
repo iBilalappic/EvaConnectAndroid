@@ -26,6 +26,16 @@ public class User implements Serializable {
     private String field;
     private String address;
     private String company_name;
+
+    public String getConnection_status() {
+        return connection_status;
+    }
+
+    public void setConnection_status(String connection_status) {
+        this.connection_status = connection_status;
+    }
+
+    private String connection_status;
     private Integer total_connection;
 
     public Integer getIs_notifications() {

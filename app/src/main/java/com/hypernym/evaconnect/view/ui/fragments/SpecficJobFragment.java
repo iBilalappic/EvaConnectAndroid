@@ -24,6 +24,7 @@ import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
@@ -213,6 +214,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
                 ShareDialog shareDialog;
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("specficJob",specficJobAd);
+                bundle.putString(Constants.FRAGMENT_NAME,"JOB_FRAGMENT");
                 shareDialog = new ShareDialog(getContext(),bundle);
                 shareDialog.show();
                 break;

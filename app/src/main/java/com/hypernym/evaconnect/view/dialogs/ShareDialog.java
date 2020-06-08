@@ -13,12 +13,20 @@ import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.hypernym.evaconnect.BuildConfig;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.SpecficJobAd;
+import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.GsonUtils;
+import com.hypernym.evaconnect.view.ui.fragments.EventDetailFragment;
+import com.hypernym.evaconnect.view.ui.fragments.ShareConnectionFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +42,7 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
     Post post = new Post();
     JobAd jobAd = new JobAd();
     SpecficJobAd specficJobAd = new SpecficJobAd();
+    String fragment_name;
 
     public ShareDialog(Context context, Bundle bundle) {
         super(context);
@@ -81,6 +90,7 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
         post = (Post) bundle.getSerializable("PostData");
 
         specficJobAd = (SpecficJobAd) bundle.getSerializable("specficJob");
+        fragment_name = bundle.getString(Constants.FRAGMENT_NAME);
         Log.d("TAAAG", "" + GsonUtils.toJson(post));
     }
 
@@ -165,9 +175,29 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
                 }
 
             case R.id.layoutconnection:
-
-                Toast.makeText(getContext(), "need screen for this....", Toast.LENGTH_LONG).show();
-
+                ShareConnectionFragment shareConnectionFragment = new ShareConnectionFragment();
+                FragmentTransaction transaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+                transaction.replace(R.id.framelayout, shareConnectionFragment);
+                Bundle bundle = new Bundle();
+                if (jobAd != null) {
+                    bundle.putInt(Constants.DATA, jobAd.getId());
+                    bundle.putString(Constants.TYPE, jobAd.getType());
+                    bundle.putString(Constants.FRAGMENT_NAME, "JOB_FRAGMENT");
+                } else if (specficJobAd != null) {
+                    bundle.putInt(Constants.DATA, specficJobAd.getId());
+                    bundle.putString(Constants.TYPE, specficJobAd.getType());
+                    bundle.putString(Constants.FRAGMENT_NAME, "JOB_FRAGMENT");
+                } else {
+                    bundle.putInt(Constants.DATA, post.getId());
+                    bundle.putString(Constants.TYPE, post.getType());
+                }
+                shareConnectionFragment.setArguments(bundle);
+                if (true) {
+                    transaction.addToBackStack(null);
+                }
+                transaction.commit();
+                dismiss();
                 break;
 
             case R.id.copylink:

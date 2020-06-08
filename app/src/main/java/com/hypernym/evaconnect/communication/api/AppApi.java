@@ -16,6 +16,7 @@ import com.hypernym.evaconnect.models.NetworkConnection;
 import com.hypernym.evaconnect.models.NewSources;
 import com.hypernym.evaconnect.models.Notification_onesignal;
 import com.hypernym.evaconnect.models.Post;
+import com.hypernym.evaconnect.models.ShareConnection;
 import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.User;
 
@@ -289,5 +290,14 @@ public interface AppApi {
 
     @GET(APIConstants.DECLINE_APPLICATION)
     Call<BaseModel<List<AppliedApplicants>>> getApplicant(@Path("job_application_id") int job_id);
+
+    @POST(APIConstants.SHARE_JOB)
+    Call<BaseModel<List<Object>>> share_connection(@Body ShareConnection shareConnection);
+
+    @POST(APIConstants.SHARE_EVENT)
+    Call<BaseModel<List<Object>>> share_connection_event(@Body ShareConnection shareConnection);
+
+    @POST(APIConstants.SHARE_POST)
+    Call<BaseModel<List<Object>>> share_connection_post(@Body ShareConnection shareConnection);
 
 }
