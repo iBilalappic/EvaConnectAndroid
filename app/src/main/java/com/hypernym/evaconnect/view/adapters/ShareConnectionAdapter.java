@@ -57,14 +57,23 @@ public class ShareConnectionAdapter extends RecyclerView.Adapter<ShareConnection
         } else {
             holder.tv_field.setText("--");
         }
-
+//
+//        if (connections.get(position).isIs_shared()) {
+//            holder.tv_invite.setVisibility(View.GONE);
+//            holder.cancel_invite.setVisibility(View.VISIBLE);
+//        } else {
+//            holder.tv_invite.setVisibility(View.VISIBLE);
+//            holder.cancel_invite.setVisibility(View.GONE);
+//        }
         holder.tv_invite.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 holder.tv_invite.setVisibility(View.GONE);
                 holder.cancel_invite.setVisibility(View.VISIBLE);
 
                 if (onItemClickListener != null)
+                    // connections.get(position).setIs_shared(true);
                     onItemClickListener.onItemClick(v, connections.indexOf(connections.get(position)), connections.get(position));
             }
         });

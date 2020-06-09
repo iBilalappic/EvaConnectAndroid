@@ -295,7 +295,8 @@ public class ShareConnectionFragment extends BaseFragment implements ShareConnec
 
     private void addConnection(User data) {
         shareConnections_user.add(data);
-        Log.e("TAAAG", "" + GsonUtils.toJson(shareConnections_user));
+        shareConnectionAdapter.notifyDataSetChanged();
+        Log.d("TAAAG", "" + GsonUtils.toJson(shareConnections_user));
     }
 
 

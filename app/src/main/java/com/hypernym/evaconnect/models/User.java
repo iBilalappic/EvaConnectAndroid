@@ -27,6 +27,15 @@ public class User implements Serializable {
     private String address;
     private String company_name;
 
+    public boolean isIs_shared() {
+        return is_shared;
+    }
+
+    public void setIs_shared(boolean is_shared) {
+        this.is_shared = is_shared;
+    }
+
+    private boolean is_shared=false;
     public String getConnection_status() {
         return connection_status;
     }
