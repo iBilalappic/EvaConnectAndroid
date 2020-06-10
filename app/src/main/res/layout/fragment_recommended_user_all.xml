@@ -32,59 +32,38 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <LinearLayout
-        android:id="@+id/layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/lighter_gray_2"
+        android:id="@+id/layout_header"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:gravity="start|center"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edt_search">
 
+
+        <ImageView
+            android:id="@+id/img_backarrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:src="@drawable/ic_arrow_left" />
+
         <TextView
-            android:id="@+id/tv_recommended"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
             android:layout_weight="1"
             android:fontFamily="@font/nunitosansbold"
-            android:text="Recommended"
+            android:gravity="center"
+            android:text="Viewing all Recommended"
             android:textColor="@color/black"
             android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edt_search" />
-
-        <TextView
-            android:id="@+id/tv_seeAll"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/spacing_medium"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_weight="1"
-            android:fontFamily="@font/nunitosansregular"
-            android:text="See All..."
-            android:textAlignment="textEnd"
-            android:textColor="@color/gray_1"
-            android:textSize="10sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edt_search" />
-
+            android:textStyle="bold" />
 
     </LinearLayout>
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rc_maincategories"
-        android:layout_width="match_parent"
-        android:layout_height="140dp"
-        android:background="@color/lighter_gray_2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
@@ -94,7 +73,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/empty">
+        app:layout_constraintTop_toBottomOf="@+id/layout_header">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rc_connections"

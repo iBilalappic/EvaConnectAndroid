@@ -103,6 +103,23 @@ public class ConnectionRepository implements IConnectionRespository {
     }
 
     @Override
+    public LiveData<BaseModel<List<User>>> getConnectionByRecommendedUser(User userData,int total,int current) {
+        userMutableLiveData=new MutableLiveData<>();
+
+        RestClient.get().appApi().getConnectionByRecommendedUser(userData,total,current).enqueue(new Callback<BaseModel<List<User>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
+                userMutableLiveData.setValue(response.body());
+            }
+            @Override
+            public void onFailure(Call<BaseModel<List<User>>> call, Throwable t) {
+                userMutableLiveData.setValue(null);
+            }
+        });
+        return userMutableLiveData;
+    }
+
+    @Override
     public LiveData<BaseModel<User>> getConnectionCount(User userData) {
         connectionCountMutableLiveData=new MutableLiveData<>();
 

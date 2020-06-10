@@ -300,4 +300,7 @@ public interface AppApi {
     @POST(APIConstants.SHARE_POST)
     Call<BaseModel<List<Object>>> share_connection_post(@Body ShareConnection shareConnection);
 
+    @POST(APIConstants.GET_CONNECTION_BY_RECOMMENDED_USER)
+    Call<BaseModel<List<User>>> getConnectionByRecommendedUser(@Body User user,@Query("limit") int limit, @Query("offset") int offset);
+
 }

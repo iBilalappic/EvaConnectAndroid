@@ -40,6 +40,11 @@ public class ConnectionViewModel extends AndroidViewModel {
     {
         return iConnectionRepository.getConnectionByFilter(user,total,current);
     }
+    public LiveData<BaseModel<List<User>>> getConnectionByRecommendedUser(User user,int total,int current)
+    {
+        return iConnectionRepository.getConnectionByRecommendedUser(user,total,current);
+    }
+
 
     public LiveData<BaseModel<User>> getConnectionCount(User user)
     {

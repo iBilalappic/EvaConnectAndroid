@@ -64,11 +64,11 @@ public class BaseFragment extends Fragment {
         return false;
     }
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        connectionViewModel= ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
-//    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        connectionViewModel= ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
+    }
 
     public void showDialog() {
 
