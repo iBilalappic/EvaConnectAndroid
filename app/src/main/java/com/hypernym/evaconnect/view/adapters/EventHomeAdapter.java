@@ -222,7 +222,7 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
 
                     ((EventHomeAdapter.EventTypeViewHolder) holder).tv_name.setText(posts.get(position).getEvent_name());
                     ((EventHomeAdapter.EventTypeViewHolder) holder).tv_location.setText(posts.get(position).getEvent_city());
-                    ((EventHomeAdapter.EventTypeViewHolder) holder).tv_eventdate.setText(DateUtils.getFormattedDateDMY(posts.get(position).getEvent_start_date()));
+                  //  ((EventHomeAdapter.EventTypeViewHolder) holder).tv_eventdate.setText(DateUtils.getFormattedDateDMY(posts.get(position).getEvent_start_date()));
 
                     if (position == 0) {
                         ((EventHomeAdapter.EventTypeViewHolder) holder).top_image.setVisibility(View.GONE);

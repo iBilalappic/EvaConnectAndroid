@@ -120,7 +120,8 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         tv_seeAll.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
-
+                RecommendedAllUserFragment recommendedAllUserFragment = new RecommendedAllUserFragment();
+                loadFragment(R.id.framelayout, recommendedAllUserFragment, getContext(), true);
             }
         });
 
