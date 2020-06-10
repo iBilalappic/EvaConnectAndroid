@@ -288,6 +288,7 @@ public interface AppApi {
     @POST(APIConstants.JOB)
     Call<BaseModel<List<Post>>> getJob(@Body User user, @Query("limit") int limit, @Query("offset") int offset);
 
-
+    @GET(APIConstants.GET_MEETING_DETAILS)
+    Call<BaseModel<List<Event>>> getMeetingDetails(@Path("meeting_id") int meeting_id);
 
 }

@@ -5,13 +5,14 @@ import java.util.List;
 
 public class Event implements Serializable {
     private Integer event_id;
-    private String event_name;
+    private String name;
     private String event_city;
-    private String event_address;
+    private String address;
     private String start_time;
     private String end_time;
-    private String event_start_date;
-    private String event_end_date;
+    private String start_date;
+    private String end_date;
+
     private List<String> event_image;
     private String content;
     private String created_datetime;
@@ -34,15 +35,8 @@ public class Event implements Serializable {
     private List<Integer> event_attendeeIDs;
     private String registration_link;
     private int is_private;
-    private List<EventAttendees> event_attendees;
+    private List<EventAttendees> attendees;
 
-    public String getEvent_name() {
-        return event_name;
-    }
-
-    public void setEvent_name(String event_name) {
-        this.event_name = event_name;
-    }
 
     public String getEvent_city() {
         return event_city;
@@ -52,13 +46,7 @@ public class Event implements Serializable {
         this.event_city = event_city;
     }
 
-    public String getEvent_address() {
-        return event_address;
-    }
 
-    public void setEvent_address(String event_address) {
-        this.event_address = event_address;
-    }
 
     public String getStart_time() {
         return start_time;
@@ -74,22 +62,6 @@ public class Event implements Serializable {
 
     public void setEnd_time(String end_time) {
         this.end_time = end_time;
-    }
-
-    public String getEvent_start_date() {
-        return event_start_date;
-    }
-
-    public void setEvent_start_date(String event_start_date) {
-        this.event_start_date = event_start_date;
-    }
-
-    public String getEvent_end_date() {
-        return event_end_date;
-    }
-
-    public void setEvent_end_date(String event_end_date) {
-        this.event_end_date = event_end_date;
     }
 
     public String getContent() {
@@ -284,11 +256,43 @@ public class Event implements Serializable {
         this.is_private = is_private;
     }
 
-    public List<EventAttendees> getEvent_attendees() {
-        return event_attendees;
+    public String getStart_date() {
+        return start_date;
     }
 
-    public void setEvent_attendees(List<EventAttendees> event_attendees) {
-        this.event_attendees = event_attendees;
+    public void setStart_date(String start_date) {
+        this.start_date = start_date;
+    }
+
+    public String getEnd_date() {
+        return end_date;
+    }
+
+    public void setEnd_date(String end_date) {
+        this.end_date = end_date;
+    }
+
+    public List<EventAttendees> getAttendees() {
+        return attendees;
+    }
+
+    public void setAttendees(List<EventAttendees> attendees) {
+        this.attendees = attendees;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

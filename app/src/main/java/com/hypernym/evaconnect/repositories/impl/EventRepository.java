@@ -58,11 +58,11 @@ public class EventRepository implements IEventRepository {
                 RequestBody.create(MediaType.parse("text/plain"),event.getContent()),
                 RequestBody.create(MediaType.parse("text/plain"), AppConstants.ACTIVE),
                 RequestBody.create(MediaType.parse("text/plain"), event.getEvent_city()),
-                RequestBody.create(MediaType.parse("text/plain"), event.getEvent_start_date()),
-                RequestBody.create(MediaType.parse("text/plain"), event.getEvent_end_date()),
+                RequestBody.create(MediaType.parse("text/plain"), event.getStart_date()),
+                RequestBody.create(MediaType.parse("text/plain"), event.getEnd_date()),
                 RequestBody.create(MediaType.parse("text/plain"), event.getStart_time()),
                 RequestBody.create(MediaType.parse("text/plain"), event.getEnd_time()),
-                RequestBody.create(MediaType.parse("text/plain"), event.getEvent_name()),
+                RequestBody.create(MediaType.parse("text/plain"), event.getName()),
                 RequestBody.create(MediaType.parse("text/plain"), event.getRegistration_link()),
                 event.getIs_private(),  event.getEvent_attendeeIDs(),user_image)
                 .enqueue(new Callback<BaseModel<List<Event>>>() {

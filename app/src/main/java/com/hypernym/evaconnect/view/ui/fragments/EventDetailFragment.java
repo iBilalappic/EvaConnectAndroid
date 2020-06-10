@@ -211,6 +211,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
             invite_people.setAdapter(usersAdapter);
     }
 
+
     private void getEventComments(int event_id) {
         eventViewModel.getEventComments(event_id).observe(this, new Observer<BaseModel<List<Comment>>>() {
             @Override
@@ -236,7 +237,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
                 {
                     event=listBaseModel.getData().get(0);
                     setEventData(listBaseModel.getData().get(0));
-                    for(EventAttendees user:event.getEvent_attendees())
+                    for(EventAttendees user:event.getAttendees())
                     {
                         invitedConnections.add(user.getUser());
                     }
@@ -259,7 +260,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
             }
 
             private void setEventData(Event event) {
-                tv_name.setText(event.getEvent_name());
+                tv_name.setText(event.getName());
 
                 if(event.getEvent_image().size()>0)
                 {
@@ -272,7 +273,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
                 }
                 tv_content.setText(event.getContent());
 
-                tv_date.setText(DateUtils.getFormattedDateDMY(event.getEvent_start_date())+" - "+ DateUtils.getFormattedDateDMY(event.getEvent_end_date()) +" | "+event.getStart_time()+" - "+event.getEnd_time());
+                tv_date.setText(DateUtils.getFormattedDateDMY(event.getStart_date())+" - "+ DateUtils.getFormattedDateDMY(event.getEnd_date()) +" | "+event.getStart_time()+" - "+event.getEnd_time());
 
                 tv_location.setText(event.getEvent_city());
                 if(event.getIs_private()==0)

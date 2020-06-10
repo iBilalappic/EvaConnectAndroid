@@ -33,6 +33,7 @@ import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.EventAdapter;
 import com.hypernym.evaconnect.view.adapters.MonthAdapter;
 import com.hypernym.evaconnect.view.dialogs.EventDialog;
+import com.hypernym.evaconnect.view.dialogs.MeetingDialog;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.viewmodel.CalendarViewModel;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -441,6 +442,14 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
 
     @Override
     public void onItemClick(View view, int position) {
-       new EventDialog(eventList.get(position),getContext()).show();
+       if( eventList.get(position).getObject_type().equalsIgnoreCase("meeting"))
+       {
+           new MeetingDialog(eventList.get(position),getContext()).show();
+       }
+       else
+       {
+           new EventDialog(eventList.get(position),getContext()).show();
+       }
+
     }
 }

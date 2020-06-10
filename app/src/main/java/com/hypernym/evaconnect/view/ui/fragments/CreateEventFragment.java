@@ -209,13 +209,13 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
         if(getArguments()!=null)
         {
             Event event=(Event) getArguments().getSerializable("event");
-            edt_eventname.setText(event.getEvent_name());
+            edt_eventname.setText(event.getName());
             edt_description.setText(event.getContent());
             edt_eventCity.setText(event.getEvent_city());
             edt_link.setText(event.getRegistration_link());
-            tv_startdate.setText(event.getEvent_start_date());
+            tv_startdate.setText(event.getStart_date());
             tv_startTime.setText(event.getStart_time());
-            tv_enddate.setText(event.getEvent_end_date());
+            tv_enddate.setText(event.getEnd_date());
             tv_endTime.setText(event.getEnd_time());
             event_type_spinner.setSelection(event.getIs_private());
             if(event.getIs_private()==1)
@@ -226,7 +226,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
             {
                 invite_layout.setVisibility(View.GONE);
             }
-            for(EventAttendees eventAttendees:event.getEvent_attendees())
+            for(EventAttendees eventAttendees:event.getAttendees())
             {
                 invitedConnections.add(eventAttendees.getUser());
             }
@@ -336,9 +336,9 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
         if (NetworkUtils.isNetworkConnected(getContext())) {
             showDialog();
             Event event = new Event();
-            event.setEvent_name(edt_eventname.getText().toString());
-            event.setEvent_start_date(DateUtils.getFormattedEventDate(tv_startdate.getText().toString()));
-            event.setEvent_end_date(DateUtils.getFormattedEventDate(tv_enddate.getText().toString()));
+            event.setName(edt_eventname.getText().toString());
+            event.setStart_date(DateUtils.getFormattedEventDate(tv_startdate.getText().toString()));
+            event.setEnd_date(DateUtils.getFormattedEventDate(tv_enddate.getText().toString()));
             Log.d("TAAAG", tv_startTime.getText().toString());
             event.setStart_time(DateUtils.getTime_utc(tv_startTime.getText().toString()));
             event.setEnd_time(DateUtils.getTime_utc(tv_endTime.getText().toString()));
