@@ -64,5 +64,6 @@ public interface APIConstants {
     public static String GET_CONNECTION_BY_RECOMMENDED_USER="user/network/connection/recommendations/?";
 
 
+    public static String GET_MEETING_DETAILS="meeting/details/{meeting_id}/";
 
 }

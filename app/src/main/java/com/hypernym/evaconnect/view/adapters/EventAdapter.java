@@ -2,7 +2,6 @@ package com.hypernym.evaconnect.view.adapters;
 
 import android.content.Context;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.CalendarModel;
-import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.DateUtils;
 
 import java.util.List;
@@ -49,8 +47,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             holder.eventTitle.setText("Job Interview at "+events.get(position).getObject_details().getCompany_name()+" - "+events.get(position).getObject_details().getPosition()
                     +" | "+ events.get(position).getObject_details().getAddress());
             holder.time.setText(DateUtils.getFormattedEventTime(events.get(position).getObject_details().getInterview_time()));
-            if (events.get(position).getObject_details().getEvent_start_date() != null)
-                holder.month.setText(DateUtils.extractMonth(events.get(position).getObject_details().getEvent_start_date()));
+            if (events.get(position).getObject_details().getStart_date() != null)
+                holder.month.setText(DateUtils.extractMonth(events.get(position).getObject_details().getStart_date()));
             holder.type.setText(events.get(position).getObject_type());
             holder.type.setTextColor(context.getResources().getColor(R.color.red_2));
 
@@ -60,10 +58,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         {
             holder.itemView.setVisibility(View.VISIBLE);
 
-            holder.eventTitle.setText(events.get(position).getObject_details().getEvent_name() + " | " + events.get(position).getObject_details().getEvent_city());
+            holder.eventTitle.setText(events.get(position).getObject_details().getName() + " | " + events.get(position).getObject_details().getEvent_city());
             holder.time.setText(DateUtils.get12formant(events.get(position).getObject_details().getStart_time())+" - "+DateUtils.get12formant(events.get(position).getObject_details().getEnd_time()));
-            if (events.get(position).getObject_details().getEvent_start_date() != null)
-                holder.month.setText(DateUtils.extractMonth(events.get(position).getObject_details().getEvent_start_date()));
+            if (events.get(position).getObject_details().getStart_date() != null)
+                holder.month.setText(DateUtils.extractMonth(events.get(position).getObject_details().getStart_date()));
             holder.type.setText(events.get(position).getObject_type());
             holder.type.setTextColor(context.getResources().getColor(R.color.red_2));
 
@@ -73,7 +71,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         {
             holder.itemView.setVisibility(View.VISIBLE);
 
-            holder.eventTitle.setText(events.get(position).getObject_details().getSubject() + " | " + events.get(position).getObject_details().getAddress());
+            holder.eventTitle.setText(events.get(position).getObject_details().getName() + " | " + events.get(position).getObject_details().getAddress());
             holder.time.setText(DateUtils.get12formant(events.get(position).getObject_details().getStart_time())+" - "+DateUtils.get12formant(events.get(position).getObject_details().getEnd_time()));
             if (events.get(position).getObject_details().getStart_date() != null)
                 holder.month.setText(DateUtils.extractMonth(events.get(position).getObject_details().getStart_date()));
@@ -93,7 +91,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
         if (events.get(position).getObject_type().equalsIgnoreCase("event"))
         {
-            date = DateUtils.extractDay(events.get(position).getObject_details().getEvent_start_date());
+            date = DateUtils.extractDay(events.get(position).getObject_details().getStart_date());
         }
         else{
             date = DateUtils.extractDay(events.get(position).getObject_details().getStart_date());

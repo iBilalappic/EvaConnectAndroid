@@ -17,15 +17,8 @@ public class Post implements Serializable {
     private Integer id;
     private Integer object_id;
     private Integer is_applied;
-    private String subject;
+    private String name;
 
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
 
     public String getStart_date() {
         return start_date;
@@ -85,15 +78,13 @@ public class Post implements Serializable {
     private Integer applicant_count;
     private Integer is_job_like;
     private List<String> event_image;
-    private String event_name;
+
     private String event_city;
-    private String event_start_date;
     private Integer event_id;
     private Integer is_event_like;
     private String start_time;
     private String end_time;
     private String address;
-    private String notes;
     private int is_private;
 
 
@@ -395,14 +386,6 @@ public class Post implements Serializable {
         this.event_image = event_image;
     }
 
-    public String getEvent_name() {
-        return event_name;
-    }
-
-    public void setEvent_name(String event_name) {
-        this.event_name = event_name;
-    }
-
     public String getEvent_city() {
         return event_city;
     }
@@ -411,13 +394,6 @@ public class Post implements Serializable {
         this.event_city = event_city;
     }
 
-    public String getEvent_start_date() {
-        return event_start_date;
-    }
-
-    public void setEvent_start_date(String event_start_date) {
-        this.event_start_date = event_start_date;
-    }
 
     public Integer getEvent_id() {
         return event_id;
@@ -475,13 +451,7 @@ public class Post implements Serializable {
         this.address = address;
     }
 
-    public String getNotes() {
-        return notes;
-    }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
 
     public Integer getConnection_id() {
         return connection_id;
@@ -497,6 +467,14 @@ public class Post implements Serializable {
 
     public void setIs_private(int is_private) {
         this.is_private = is_private;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
 

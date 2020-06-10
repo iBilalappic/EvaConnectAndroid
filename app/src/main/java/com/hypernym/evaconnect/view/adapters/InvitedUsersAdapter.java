@@ -40,11 +40,11 @@ public class InvitedUsersAdapter extends RecyclerView.Adapter<InvitedUsersAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         User user = invitedUsers.get(position);
 
-        if (user.getIs_linkedin() == 1 && !TextUtils.isEmpty(user.getLinkedin_image_url())) {
+        if (user.getIs_linkedin()!=null && user.getIs_linkedin() == 1 && !TextUtils.isEmpty(user.getLinkedin_image_url())) {
             AppUtils.setGlideImage(context, holder.invitedUserImage, user.getLinkedin_image_url());
 
         }
-        else if (user.getIs_facebook() == 1 && !TextUtils.isEmpty(user.getFacebook_image_url())){
+        else if (user.getIs_facebook()!=null && user.getIs_facebook() == 1 && !TextUtils.isEmpty(user.getFacebook_image_url())){
             AppUtils.setGlideImage(context, holder.invitedUserImage, user.getFacebook_image_url());
         }
         else {

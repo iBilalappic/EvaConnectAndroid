@@ -1,13 +1,6 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,12 +10,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.dateTimePicker.DateTime;
 import com.hypernym.evaconnect.dateTimePicker.DateTimePicker;
 import com.hypernym.evaconnect.dateTimePicker.SimpleDateTimePicker;
-import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.CreateMeeting;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
@@ -50,7 +46,6 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnTouch;
 
 public class CreateMeetingFragment extends BaseFragment implements Validator.ValidationListener, DateTimePicker.OnDateTimeSetListener {
 
@@ -145,7 +140,7 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
             event_attendees.clear();
             for(User inviteConnections:invitedConnections)
             {
-                event_attendees.add(inviteConnections.getUser_id());
+                event_attendees.add(inviteConnections.getId());
             }
 
             CreateMeeting meeting = new CreateMeeting(
@@ -165,7 +160,7 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
             eventViewModel.createMeeting(meeting).observe(this, listBaseModel -> {
                 if (listBaseModel != null && !listBaseModel.isError())
                 {
-                    simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_event_created), null, getString(R.string.ok), new View.OnClickListener() {
+                    simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_meeting_created), null, getString(R.string.ok), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             // when meeting is successfully created remove the saved connections

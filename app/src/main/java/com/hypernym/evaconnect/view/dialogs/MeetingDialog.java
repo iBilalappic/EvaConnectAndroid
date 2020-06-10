@@ -14,16 +14,16 @@ import androidx.fragment.app.FragmentTransaction;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.CalendarModel;
 import com.hypernym.evaconnect.utils.DateUtils;
-import com.hypernym.evaconnect.view.ui.fragments.EventDetailFragment;
+import com.hypernym.evaconnect.view.ui.fragments.MeetingDetailFragment;
 
-public class EventDialog extends Dialog {
+public class MeetingDialog extends Dialog {
     private Context context;
     private CalendarModel event;
-    private TextView tv_title,tv_createdby,tv_location,tv_createdDate,tv_description,tv_event_type;
+    private TextView tv_title,tv_location,tv_createdDate,tv_description;
     private TextView btn_viewEvent;
     private ImageView img_close;
 
-    public EventDialog(CalendarModel event, Context context) {
+    public MeetingDialog(CalendarModel event, Context context) {
         super(context);
         this.context = context;
         this.event=event;
@@ -33,49 +33,21 @@ public class EventDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_event);
+        setContentView(R.layout.dialog_meeting);
         tv_title=findViewById(R.id.tv_title);
-        tv_createdby=findViewById(R.id.tv_createdby);
         tv_createdDate=findViewById(R.id.tv_createdDate);
         tv_description=findViewById(R.id.tv_description);
         img_close = findViewById(R.id.img_close);
         tv_location=findViewById(R.id.tv_createdLocation);
-        tv_event_type=findViewById(R.id.tv_event_type);
         btn_viewEvent=findViewById(R.id.btn_viewEvent);
         setCanceledOnTouchOutside(true);
         setCancelable(true);
         getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
-        if (event.getObject_type().equalsIgnoreCase("event")) {
-            tv_title.setText(event.getObject_details().getName());
-            tv_location.setText(event.getObject_details().getEvent_city());
-            tv_description.setText(event.getObject_details().getContent());
-            tv_createdby.setText("Created By "+event.getObject_details().getUser().getFirst_name());
-            tv_event_type.setVisibility(View.VISIBLE);
-            if(event.getObject_details().getIs_private()==0)
-            {
-                tv_event_type.setText("Open to the public");
-            }
-            else
-            {
-                tv_event_type.setText("Private to the public");
-            }
-            tv_createdDate.setText(DateUtils.getFormattedDateDMY(event.getObject_details().getStart_date()));
-
-          //  btn_viewEvent.setText("View Event");
-        }
-        else if (event.getObject_type().equalsIgnoreCase("meeting"))
-        {
-            tv_title.setText(event.getObject_details().getName());
-            tv_location.setText(event.getObject_details().getAddress());
-            tv_description.setText(event.getObject_details().getContent());
-            tv_createdby.setText("Created By "+event.getObject_details().getUser().getFirst_name());
-            tv_event_type.setVisibility(View.GONE);
-            tv_createdDate.setText(DateUtils.getFormattedDateDMY(event.getObject_details().getStart_date()));
-
-          //  btn_viewEvent.setText("View Meeting");
-        }
-
+        tv_title.setText(event.getObject_details().getName());
+        tv_location.setText(event.getObject_details().getAddress());
+        tv_description.setText(event.getObject_details().getContent());
+        tv_createdDate.setText(DateUtils.getFormattedDateDMY(event.getObject_details().getStart_date()));
         img_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,11 +61,11 @@ public class EventDialog extends Dialog {
                 dismiss();
                 FragmentTransaction transaction =((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
                 transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
-                EventDetailFragment eventDetailFragment=new EventDetailFragment();
+                MeetingDetailFragment meetingDetailFragment=new MeetingDetailFragment();
                 Bundle bundle=new Bundle();
                 bundle.putInt("id",event.getObject_id());
-                eventDetailFragment.setArguments(bundle);
-                transaction.replace(R.id.framelayout,eventDetailFragment);
+                meetingDetailFragment.setArguments(bundle);
+                transaction.replace(R.id.framelayout,meetingDetailFragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
