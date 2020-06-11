@@ -20,8 +20,10 @@ import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
+import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.ConnectionsAdapter;
@@ -64,7 +66,7 @@ public class RecommendedAllUserFragment extends BaseFragment implements Connecti
     private boolean isLoading = false;
     private boolean isSearchFlag = false;
     private boolean isFirstload=false;
-
+    String type = "user";
     public RecommendedAllUserFragment() {
         // Required empty public constructor
     }
@@ -187,12 +189,57 @@ public class RecommendedAllUserFragment extends BaseFragment implements Connecti
     @Override
     public void onItemClick(View view, int position) {
         if (NetworkUtils.isNetworkConnected(getContext())) {
-            TextView textView = (TextView) view;
-            callConnectApi(textView, connectionList.get(position));
-            GetUserDetails();
+            switch (view.getId()) {
+                case R.id.tv_decline:
+                    SettingDeclineData(connectionList.get(position));
+                    break;
+
+                case R.id.tv_connect:
+                    TextView textView = (TextView) view;
+                    callConnectApi(textView, connectionList.get(position));
+                    if(textView.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_ACCEPT)){
+                        Connection connection = new Connection();
+                        User user = LoginUtils.getLoggedinUser();
+                        connection.setStatus(AppConstants.ACTIVE);
+                        connection.setId(connectionList.get(position).getConnection_id());
+                        connection.setModified_by_id(user.getId());
+                        connection.setModified_datetime(DateUtils.GetCurrentdatetime());
+                        callDeclineConnectApi(connection);
+                    }
+                    break;
+
+            }
         } else {
             networkErrorDialog();
         }
+    }
+
+    private void SettingDeclineData(User connectionItem) {
+        Connection connection = new Connection();
+        User user = LoginUtils.getLoggedinUser();
+        connection.setStatus(AppConstants.REQUEST_DECLINE);
+        connection.setId(connectionItem.getConnection_id());
+        connection.setModified_by_id(user.getId());
+        connection.setModified_datetime(DateUtils.GetCurrentdatetime());
+        callDeclineConnectApi(connection);
+    }
+
+    private void callDeclineConnectApi(Connection connection) {
+
+        connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Connection>> listBaseModel) {
+                if (listBaseModel != null && !listBaseModel.isError()) {
+
+                    connectionList.clear();
+                    connectionsAdapter.notifyDataSetChanged();
+                    getConnectionByFilter(PAGE_START, true);
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+                hideDialog();
+            }
+        });
     }
 
     @Override

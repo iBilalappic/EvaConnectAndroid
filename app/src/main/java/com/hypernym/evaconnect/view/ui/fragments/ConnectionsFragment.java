@@ -267,12 +267,59 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
     @Override
     public void onItemClick(View view, int position) {
         if (NetworkUtils.isNetworkConnected(getContext())) {
-            TextView textView = (TextView) view;
-            callConnectApi(textView, connectionList.get(position));
-            GetUserDetails();
+            switch (view.getId()) {
+                case R.id.tv_decline:
+                    SettingDeclineData(connectionList.get(position));
+                    break;
+
+                case R.id.tv_connect:
+                    TextView textView = (TextView) view;
+                    callConnectApi(textView, connectionList.get(position));
+                    //GetUserDetails();
+                    if(textView.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_ACCEPT)){
+                        Connection connection = new Connection();
+                        User user = LoginUtils.getLoggedinUser();
+                        connection.setStatus(AppConstants.ACTIVE);
+                        connection.setId(connectionList.get(position).getConnection_id());
+                        connection.setModified_by_id(user.getId());
+                        connection.setModified_datetime(DateUtils.GetCurrentdatetime());
+                        callDeclineConnectApi(connection);
+                    }
+                    break;
+
+            }
+
         } else {
             networkErrorDialog();
         }
+    }
+
+    private void SettingDeclineData(User connectionItem) {
+        Connection connection = new Connection();
+        User user = LoginUtils.getLoggedinUser();
+        connection.setStatus(AppConstants.REQUEST_DECLINE);
+        connection.setId(connectionItem.getConnection_id());
+        connection.setModified_by_id(user.getId());
+        connection.setModified_datetime(DateUtils.GetCurrentdatetime());
+        callDeclineConnectApi(connection);
+    }
+
+    private void callDeclineConnectApi(Connection connection) {
+
+        connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Connection>> listBaseModel) {
+                if (listBaseModel != null && !listBaseModel.isError()) {
+
+                    connectionList.clear();
+                    connectionsAdapter.notifyDataSetChanged();
+                    getConnectionByFilter(type, PAGE_START, true);
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+                hideDialog();
+            }
+        });
     }
 
     @Override

@@ -319,6 +319,7 @@ public class BaseFragment extends Fragment {
                         tv_connect.setText(AppConstants.CONNECTED);
                     }
                     connectionItem.setIs_connected(AppConstants.ACTIVE);
+
                 }
                 else
                 {
