@@ -21,4 +21,5 @@ public class Constants {
     public static final String FRAGMENT_NAME_2 = "events";
     public static final String LINKEDIN_TYPE = "linkedin";
     public static final String FACEBOOK_TYPE = "facebook";
+    public static final String TYPE = "type";
 }

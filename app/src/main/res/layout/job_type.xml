@@ -223,7 +223,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-
             android:layout_marginTop="@dimen/spacing_medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -268,6 +267,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/spacing_medium"
                 android:layout_weight="1.2">
 
                 <TextView
@@ -282,9 +282,9 @@
                     android:id="@+id/img_comment"
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    android:layout_gravity="center"
                     android:layout_marginEnd="@dimen/spacing_medium"
                     android:layout_weight="0"
+                    android:layout_gravity="center"
                     android:background="@drawable/ic_comment" />
 
                 <TextView
@@ -302,6 +302,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="16dp"
+                android:layout_marginBottom="@dimen/spacing_medium"
                 android:layout_weight="1">
 
                 <TextView

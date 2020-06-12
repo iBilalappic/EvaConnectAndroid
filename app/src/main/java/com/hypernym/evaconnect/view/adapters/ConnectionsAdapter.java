@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,11 +50,9 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
     public void onBindViewHolder(@NonNull ConnectionsAdapter.ViewHolder holder, int position) {
         if (connections.get(position).getIs_linkedin() == 1 && !TextUtils.isEmpty(connections.get(position).getLinkedin_image_url())) {
             AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getLinkedin_image_url());
-        }
-        else if (connections.get(position).getIs_facebook() == 1 && !TextUtils.isEmpty(connections.get(position).getFacebook_image_url())){
+        } else if (connections.get(position).getIs_facebook() == 1 && !TextUtils.isEmpty(connections.get(position).getFacebook_image_url())) {
             AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getFacebook_image_url());
-        }
-        else {
+        } else {
             AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getUser_image());
         }
         holder.tv_name.setText(connections.get(position).getFirst_name());
@@ -70,8 +69,21 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
             holder.tv_connect.setVisibility(View.GONE);
         } else {
             holder.tv_connect.setVisibility(View.VISIBLE);
-            holder.tv_connect.setText(AppUtils.getConnectionStatus(context, connections.get(position).getIs_connected(), connections.get(position).isIs_receiver()));
             String connectionstatus = AppUtils.getConnectionStatus(context, connections.get(position).getIs_connected(), connections.get(position).isIs_receiver());
+            holder.tv_connect.setText(AppUtils.getConnectionStatus(context, connections.get(position).getIs_connected(), connections.get(position).isIs_receiver()));
+            if (connectionstatus.equals(AppConstants.REQUEST_ACCEPT)) {
+                holder.tv_connect.setBackgroundResource(R.drawable.rounded_button_border_green);
+                holder.tv_connect.setTextColor(context.getResources().getColor(R.color.light_green));
+                holder.tv_decline.setVisibility(View.VISIBLE);
+            } else {
+                holder.tv_decline.setVisibility(View.GONE);
+                holder.tv_connect.setBackgroundResource(R.drawable.rounded_button_border_blue);
+                holder.tv_connect.setTextColor(context.getResources().getColor(R.color.skyblue));
+            }
+            if (connectionstatus.equals(AppConstants.CONNECTED)) {
+                holder.tv_decline.setVisibility(View.GONE);
+            }
+
         }
 
     }
@@ -95,16 +107,32 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
         @BindView(R.id.tv_connect)
         TextView tv_connect;
 
+        @BindView(R.id.tv_decline)
+        TextView tv_decline;
+
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             tv_connect.setOnClickListener(this);
+            tv_decline.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            if (onItemClickListener != null)
-                onItemClickListener.onItemClick(v, originalConnections.indexOf(connections.get(getAdapterPosition())));
+            switch (v.getId()) {
+                case R.id.tv_connect:
+                    if (onItemClickListener != null)
+                        onItemClickListener.onItemClick(v, originalConnections.indexOf(connections.get(getAdapterPosition())));
+                    break;
+                case R.id.tv_decline:
+                    if (onItemClickListener != null)
+                        onItemClickListener.onItemClick(v, originalConnections.indexOf(connections.get(getAdapterPosition())));
+                    break;
+            }
+
+//            if (onItemClickListener != null)
+//                onItemClickListener.onItemClick(v, originalConnections.indexOf(connections.get(getAdapterPosition())));
         }
     }
 

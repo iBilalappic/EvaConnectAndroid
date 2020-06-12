@@ -37,6 +37,26 @@ public class AppliedApplicants implements Serializable {
 
     private Integer modified_by_id;
 
+    @SerializedName("is_hidden")
+    @Expose
+    private Integer is_hidden;
+
+    public String getApplication_attachment() {
+        return application_attachment;
+    }
+
+    public void setApplication_attachment(String application_attachment) {
+        this.application_attachment = application_attachment;
+    }
+
+    public Integer getIs_hidden() {
+        return is_hidden;
+    }
+
+    public void setIs_hidden(Integer is_hidden) {
+        this.is_hidden = is_hidden;
+    }
+
     private String modified_datetime;
 
     private String message_key;

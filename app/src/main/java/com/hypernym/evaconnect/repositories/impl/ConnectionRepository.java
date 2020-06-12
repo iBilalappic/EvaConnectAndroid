@@ -8,6 +8,7 @@ import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.Post;
+import com.hypernym.evaconnect.models.ShareConnection;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IConnectionRespository;
 import com.hypernym.evaconnect.utils.DateUtils;
@@ -28,6 +29,7 @@ public class ConnectionRepository implements IConnectionRespository {
     private MutableLiveData<BaseModel<User>> connectionCountMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> remove_userMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> block_userMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Object>>> share_connection = new MutableLiveData<>();
 
     @Override
     public LiveData<BaseModel<List<Connection>>> connect(Connection connection) {
@@ -101,6 +103,23 @@ public class ConnectionRepository implements IConnectionRespository {
     }
 
     @Override
+    public LiveData<BaseModel<List<User>>> getConnectionByRecommendedUser(User userData,int total,int current) {
+        userMutableLiveData=new MutableLiveData<>();
+
+        RestClient.get().appApi().getConnectionByRecommendedUser(userData,total,current).enqueue(new Callback<BaseModel<List<User>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
+                userMutableLiveData.setValue(response.body());
+            }
+            @Override
+            public void onFailure(Call<BaseModel<List<User>>> call, Throwable t) {
+                userMutableLiveData.setValue(null);
+            }
+        });
+        return userMutableLiveData;
+    }
+
+    @Override
     public LiveData<BaseModel<User>> getConnectionCount(User userData) {
         connectionCountMutableLiveData=new MutableLiveData<>();
 
@@ -151,5 +170,56 @@ public class ConnectionRepository implements IConnectionRespository {
             }
         });
         return block_userMutableLiveData;
+    }
+    @Override
+    public LiveData<BaseModel<List<Object>>> share_connection(ShareConnection shareConnection) {
+
+        share_connection=new MutableLiveData<>();
+
+        RestClient.get().appApi().share_connection(shareConnection).enqueue(new Callback<BaseModel<List<Object>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+                share_connection.setValue(response.body());
+            }
+            @Override
+            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+                share_connection.setValue(null);
+            }
+        });
+        return share_connection;
+    }
+    @Override
+    public LiveData<BaseModel<List<Object>>> share_connection_post(ShareConnection shareConnection) {
+
+        share_connection=new MutableLiveData<>();
+
+        RestClient.get().appApi().share_connection_post(shareConnection).enqueue(new Callback<BaseModel<List<Object>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+                share_connection.setValue(response.body());
+            }
+            @Override
+            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+                share_connection.setValue(null);
+            }
+        });
+        return share_connection;
+    }
+    @Override
+    public LiveData<BaseModel<List<Object>>> share_connection_event(ShareConnection shareConnection) {
+
+        share_connection=new MutableLiveData<>();
+
+        RestClient.get().appApi().share_connection_event(shareConnection).enqueue(new Callback<BaseModel<List<Object>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+                share_connection.setValue(response.body());
+            }
+            @Override
+            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+                share_connection.setValue(null);
+            }
+        });
+        return share_connection;
     }
 }

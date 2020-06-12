@@ -32,6 +32,8 @@ public class AppConstants {
     public static final String LIKE= "like";
     public static final String UNLIKE= "unlike";
     public static final int TOTAL_PAGES = 10;
+    public static final int TOTAL_NEW_PAGES = 10;
+
     public static final String NOT_CONNECTED = "not_connected";
     public static final String PENDING = "pending";
     public static final String ACTIVE = "active";
@@ -39,6 +41,7 @@ public class AppConstants {
     public static final String CONNECTED = "Connected";
     public static final String REQUEST_SENT = "Pending";
     public static final String REQUEST_ACCEPT = "Accept";
+    public static final String REQUEST_DECLINE = "decline";
     public static final String SIMPLE_BASEURL = "simple base url";
     public static final String ONESIGNAL_BASEURL = "one signal url";
     public static final String FIREASE_CHAT_ENDPOINT = "development_interview";

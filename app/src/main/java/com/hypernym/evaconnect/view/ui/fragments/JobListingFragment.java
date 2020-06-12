@@ -6,7 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,6 +21,7 @@ import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
+import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
@@ -190,9 +193,9 @@ public class JobListingFragment extends BaseFragment implements View.OnClickList
                 ShareDialog shareDialog;
                 Bundle bundle_share = new Bundle();
                 bundle_share.putSerializable("JobData",jobAdList.get(position));
+                bundle_share.putString(Constants.FRAGMENT_NAME,"JOB_FRAGMENT");
                 shareDialog = new ShareDialog(getContext(),bundle_share);
                 shareDialog.show();
-//                Toast.makeText(getContext(), "goto" + position, Toast.LENGTH_SHORT).show();
                 break;
         }
     }

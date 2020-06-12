@@ -39,37 +39,41 @@
         <TextView
             android:id="@+id/tv_name"
             style="@style/TextStyle"
-            android:layout_width="170dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:layout_marginTop="30dp"
             android:ellipsize="end"
+            android:fontFamily="@font/nunitosansbold"
             android:maxLines="1"
             android:text="Derek J. Sine"
             android:textColor="@color/black"
-            android:textStyle="bold"
+            android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@+id/profile_image"
             app:layout_constraintTop_toBottomOf="@+id/view5" />
 
         <TextView
             android:id="@+id/tv_field"
-            style="@style/TextStyle"
-            android:layout_width="140dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:ellipsize="end"
+            android:fontFamily="@font/nunitosansregular"
             android:maxLines="2"
             android:text="--"
             android:textColor="@color/colorAccent"
+            android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@+id/profile_image"
             app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
         <TextView
             android:id="@+id/tv_connect"
             style="@style/Button_border_light_blue"
-            android:layout_width="112dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="8dp"
+            android:layout_width="77dp"
+            android:layout_height="27dp"
+            android:layout_marginEnd="@dimen/spacing_medium"
+            android:layout_marginBottom="@dimen/spacing_large"
+            android:fontFamily="@font/nunitosansregular"
             android:gravity="center"
             android:paddingLeft="15dp"
             android:paddingTop="5dp"
@@ -77,9 +81,32 @@
             android:paddingBottom="5dp"
             android:text="Connected"
             android:textColor="@color/skyblue"
+            android:textSize="9sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_view"
+            app:layout_constraintEnd_toStartOf="@+id/tv_decline"
+            app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+
+
+        <TextView
+            android:id="@+id/tv_decline"
+            style="@style/Button_border_light_red"
+            android:layout_width="80dp"
+            android:layout_height="27dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="@dimen/spacing_large"
+            android:fontFamily="@font/nunitosansregular"
+            android:gravity="center"
+            android:text="Decline"
+            android:paddingLeft="15dp"
+            android:paddingTop="5dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="5dp"
+            android:textColor="@color/red"
+            android:textSize="9sp"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/tv_view"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
 
         <TextView

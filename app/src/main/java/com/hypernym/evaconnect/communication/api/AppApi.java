@@ -16,6 +16,7 @@ import com.hypernym.evaconnect.models.NetworkConnection;
 import com.hypernym.evaconnect.models.NewSources;
 import com.hypernym.evaconnect.models.Notification_onesignal;
 import com.hypernym.evaconnect.models.Post;
+import com.hypernym.evaconnect.models.ShareConnection;
 import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.User;
 
@@ -91,15 +92,14 @@ public interface AppApi {
             @Path("job_id") int job_id,
             @Part("status") RequestBody status,
             @Part("job_title") RequestBody job_title,
-            @Part("job_nature") RequestBody job_nature,
             @Part("job_sector") RequestBody job_sector,
             @Part("position") RequestBody position,
             @Part("content") RequestBody content,
-            @Part("weekly_hours") RequestBody weekly_hours,
             @Part("location") RequestBody location,
             @Part("salary") int salary,
             @Part("modified_by_id") int modified_by_id,
             @Part("modified_datetime") RequestBody modified_datetime,
+            @Part("active_hours ") int active_hours ,
             @Part MultipartBody.Part job_image);
 
     @POST(APIConstants.GET_JOB_AD_BY_ID)
@@ -290,5 +290,19 @@ public interface AppApi {
 
     @POST(APIConstants.GET_MEETING_DETAILS)
     Call<BaseModel<List<Event>>> getMeetingDetails(@Body HashMap<String,Integer> user);
+    @GET(APIConstants.DECLINE_APPLICATION)
+    Call<BaseModel<List<AppliedApplicants>>> getApplicant(@Path("job_application_id") int job_id);
+
+    @POST(APIConstants.SHARE_JOB)
+    Call<BaseModel<List<Object>>> share_connection(@Body ShareConnection shareConnection);
+
+    @POST(APIConstants.SHARE_EVENT)
+    Call<BaseModel<List<Object>>> share_connection_event(@Body ShareConnection shareConnection);
+
+    @POST(APIConstants.SHARE_POST)
+    Call<BaseModel<List<Object>>> share_connection_post(@Body ShareConnection shareConnection);
+
+    @POST(APIConstants.GET_CONNECTION_BY_RECOMMENDED_USER)
+    Call<BaseModel<List<User>>> getConnectionByRecommendedUser(@Body User user,@Query("limit") int limit, @Query("offset") int offset);
 
 }

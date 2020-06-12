@@ -14,7 +14,7 @@
     <color name="calendar_meetings_button">#5BD78F</color>
     <color name="calendar_selection_arrows">#707070</color>
     <color name="gray_1">#B4B4B4</color>
-
+    <color name="lite_black">#80000000</color>
     <color name="lighter_gray">#F0F0F0</color>
     <color name="lighter_gray_1">#8DF0F0F0</color>
     <color name="lighter_gray_2">#37F0F0F0</color>
@@ -25,6 +25,7 @@
     <color name="dark_gray_2">#545454</color>
     <color name="dark_gray_3">#707070</color>
     <color name="unselected_option">#808080</color>
+    <color name="unselected_grey">#B4B4B4</color>
     <!--Simple Dialog-->
     <color name="colorSimpleDialogTitleText">#ffffff</color>
     <color name="colorSimpleDialogBackground">#EA5454</color>

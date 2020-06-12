@@ -109,20 +109,16 @@ public class InviteConnections extends BaseFragment implements InviteConnections
         // avoid double click
         inviteButton.setOnClickListener(new OnOneOffClickListener() {
             @Override
-            public void onSingleClick(View v)
-            {
+            public void onSingleClick(View v) {
                 Log.e(TAG, "onSingleClick: " + GsonUtils.toJson(invitedConnections));
 
-                if (fragment_type.equals(Constants.FRAGMENT_NAME_2))
-                {
+                if (fragment_type.equals(Constants.FRAGMENT_NAME_2)) {
                     PrefUtils.persistConnections(getContext(), invitedConnections);
-                }
-                else if (fragment_type.equals(Constants.FRAGMENT_NAME_1))
-                {
+                } else if (fragment_type.equals(Constants.FRAGMENT_NAME_1)) {
                     PrefUtils.persistConnectionsMeeting(getContext(), invitedConnections);
                 }
 
-                if (invitedConnections!=null && invitedConnections.size() > 0){
+                if (invitedConnections != null && invitedConnections.size() > 0) {
                     // go back
                     if (getFragmentManager().getBackStackEntryCount() != 0) {
                         getFragmentManager().popBackStack();
@@ -148,8 +144,7 @@ public class InviteConnections extends BaseFragment implements InviteConnections
         connectionViewModel.getConnectionByFilter(userData, AppConstants.TOTAL_PAGES, currentPage)
                 .observe(this, listBaseModel ->
                 {
-                    if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0)
-                    {
+                    if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
                         if (currentPage == PAGE_START) {
                             connectionList.clear();
                             inviteConnectionsAdapter.notifyDataSetChanged();
@@ -164,15 +159,12 @@ public class InviteConnections extends BaseFragment implements InviteConnections
                         }
 
                         isLoading = false;
-                    }
-                    else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0)
-                    {
+                    } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
                         rc_connections.setVisibility(View.GONE);
                         empty.setVisibility(View.VISIBLE);
                         isLastPage = true;
                         isLoading = false;
-                    }
-                    else {
+                    } else {
                         networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                     }
                 });
@@ -215,14 +207,12 @@ public class InviteConnections extends BaseFragment implements InviteConnections
         setPageTitle("Invite Connections");
 
         Bundle bundle = getArguments();
-        if (bundle!=null)
-        {
+        if (bundle != null) {
             fragment_type = bundle.getString(Constants.FRAGMENT_TYPE);
 
-            if (fragment_type.equals(Constants.FRAGMENT_NAME_1)){
+            if (fragment_type.equals(Constants.FRAGMENT_NAME_1)) {
                 inviteButton.setText("Invite Connections to Meeting");
-            }
-            else{
+            } else {
 
                 inviteButton.setText("Invite Connections to Event");
             }
@@ -231,8 +221,7 @@ public class InviteConnections extends BaseFragment implements InviteConnections
 
     @Override
     public void onItemClick(View view, int position, User data) {
-        switch (view.getId())
-        {
+        switch (view.getId()) {
             case R.id.tv_invite:
                 addConnection(data);
                 break;
@@ -246,14 +235,12 @@ public class InviteConnections extends BaseFragment implements InviteConnections
         invitedConnections.add(data);
         Log.e(TAG, "onItemClick: " + GsonUtils.toJson(invitedConnections));
 
-        if (fragment_type.equals(Constants.FRAGMENT_NAME_2))
-        {
+        if (fragment_type.equals(Constants.FRAGMENT_NAME_2)) {
             if (invitedConnections.size() > 0)
                 inviteButton.setText("Invite (" + invitedConnections.size() + ")" + " Connections to Event");
             else
                 inviteButton.setText("Invite Connections to Event");
-        }
-        else{
+        } else {
             if (invitedConnections.size() > 0)
                 inviteButton.setText("Invite (" + invitedConnections.size() + ")" + " Connections to Meeting");
             else
@@ -262,22 +249,19 @@ public class InviteConnections extends BaseFragment implements InviteConnections
     }
 
     private void removeConnection(User data) {
-        for (User connection: invitedConnections)
-        {
-            if (connection.getId()==data.getId())
+        for (User connection : invitedConnections) {
+            if (connection.getId() == data.getId())
                 invitedConnections.remove(connection);
         }
 
         Log.e(TAG, "onItemClick: " + GsonUtils.toJson(invitedConnections));
 
-        if (fragment_type.equals(Constants.FRAGMENT_NAME_2))
-        {
+        if (fragment_type.equals(Constants.FRAGMENT_NAME_2)) {
             if (invitedConnections.size() > 0)
                 inviteButton.setText("Invite (" + invitedConnections.size() + ")" + " Connections to Event");
             else
                 inviteButton.setText("Invite Connections to Event");
-        }
-        else{
+        } else {
             if (invitedConnections.size() > 0)
                 inviteButton.setText("Invite (" + invitedConnections.size() + ")" + " Connections to Meeting");
             else

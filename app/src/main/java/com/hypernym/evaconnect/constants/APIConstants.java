@@ -59,5 +59,10 @@ public interface APIConstants {
     public static String SETTING_UPDATE="user/details/{user_id}/";
     public static String UPDATE_PASSWORD="user/changepassword/";
     public static String GET_MEETING_DETAILS="meeting/details/";
+    public static String SHARE_JOB="job/share/";
+    public static String SHARE_EVENT="event/share/";
+    public static String SHARE_POST="post/share/";
+    public static String GET_CONNECTION_BY_RECOMMENDED_USER="user/network/connection/recommendations/?";
+
 
 }
