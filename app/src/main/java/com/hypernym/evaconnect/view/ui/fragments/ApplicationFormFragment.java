@@ -27,7 +27,6 @@ import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
-import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
@@ -174,7 +173,7 @@ public class ApplicationFormFragment extends BaseFragment implements View.OnClic
         });
     }
 
-    private void LaunchGallery() {
+    public void LaunchGallery() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("application/msword");
         intent.setType("application/pdf");

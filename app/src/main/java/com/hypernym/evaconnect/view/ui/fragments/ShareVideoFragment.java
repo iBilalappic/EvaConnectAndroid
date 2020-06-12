@@ -21,8 +21,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
@@ -60,22 +58,17 @@ import static android.app.Activity.RESULT_OK;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.ItemClickListener {
+public class ShareVideoFragment extends BaseFragment implements AttachmentsAdapter.ItemClickListener {
 
-    @BindView(R.id.rc_attachments)
-    RecyclerView rc_attachments;
-
-    @BindView(R.id.browsefiles)
-    TextView browsefiles;
-
-    @BindView(R.id.camera)
-    TextView camera;
 
     @BindView(R.id.post)
     TextView post;
 
     @BindView(R.id.edt_content)
     EditText edt_content;
+
+    @BindView(R.id.edt_description)
+    EditText edt_description;
 
     @BindView(R.id.profile_image)
     ImageView profile_image;
@@ -120,35 +113,15 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
     private SimpleDialog simpleDialog;
     private ConnectionViewModel connectionViewModel;
 
-    public NewPostFragment() {
-        // Required empty public constructor
-    }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_new_post, container, false);
+        View view = inflater.inflate(R.layout.fragment_share_video, container, false);
         ButterKnife.bind(this, view);
         postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(PostViewModel.class);
         connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
         init();
-        initRecyclerView();
-        browsefiles.setOnClickListener(new OnOneOffClickListener() {
-            @Override
-            public void onSingleClick(View v) {
-                LaunchGallery();
-            }
-        });
-
-        camera.setOnClickListener(new OnOneOffClickListener() {
-            @Override
-            public void onSingleClick(View v) {
-                takePhotoFromCamera();
-            }
-        });
-
         post.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
@@ -184,10 +157,10 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
         tv_designation.setText(user.getDesignation()+" at ");
         tv_company.setText(user.getCompany_name());
         tv_address.setText(user.getCity()+" , "+user.getCountry());
-       // getConnectionCount();
+        // getConnectionCount();
 
         showBackButton();
-        setPageTitle(getString(R.string.What_will_you_write_about));
+        setPageTitle(getString(R.string.menu2));
         edt_content.addTextChangedListener(new URLTextWatcher(getActivity(), edt_content, urlEmbeddedView));
         edt_content.addTextChangedListener(new TextWatcher() {
             @Override
@@ -215,7 +188,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
             postModel.setIs_url(false);
         }
         postModel.setAttachments(part_images);
-        postModel.setContent(edt_content.getText().toString());
+        postModel.setContent(edt_content.getText().toString()+" "+edt_description.getText().toString() );
         postModel.setVideo(video);
         postViewModel.createPost(postModel).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
@@ -234,12 +207,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
         });
     }
 
-    private void initRecyclerView() {
-        attachmentsAdapter = new AttachmentsAdapter(getContext(), attachments, this);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        rc_attachments.setLayoutManager(linearLayoutManager);
-        rc_attachments.setAdapter(attachmentsAdapter);
-    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -276,7 +244,6 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                                 } else {
                                     attachments.add(currentPhotoPath);
                                     attachmentsAdapter.notifyDataSetChanged();
-                                    rc_attachments.setVisibility(View.VISIBLE);
                                     img_video.setVisibility(View.GONE);
                                     img_play.setVisibility(View.GONE);
                                     part_images.add(MultipartBody.Part.createFormData("post_image", file_name.getName(), reqFile));
@@ -352,7 +319,6 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
 
                         attachments.add(globalImagePath);
                         attachmentsAdapter.notifyDataSetChanged();
-                        rc_attachments.setVisibility(View.VISIBLE);
                         img_video.setVisibility(View.GONE);
                         img_play.setVisibility(View.GONE);
                         part_images.add(MultipartBody.Part.createFormData("post_image", file.getName(), reqFile));

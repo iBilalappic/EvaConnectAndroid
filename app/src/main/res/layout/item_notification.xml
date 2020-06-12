@@ -10,59 +10,27 @@
         android:id="@+id/profile_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/profile"
-        app:civ_border_color="@color/colorwhite"
-        app:civ_border_width="2dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_name"
-        style="@style/TextStyle.Bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:text="Ed Hunter"
-        android:textSize="18dp"
-        app:layout_constraintBottom_toTopOf="@+id/tv_status"
-        app:layout_constraintStart_toEndOf="@+id/profile_image"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/profile"
+        app:civ_border_color="@color/skyblue"
+        app:civ_border_width="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_status"
-        style="@style/TextStyle"
+        style="@style/TextStyle.Black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp"
+        android:textStyle="normal"
         android:text="Liked your post (36 mins ago)"
-        app:layout_constraintBottom_toTopOf="@+id/tv_content"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
-        app:layout_constraintTop_toBottomOf="@+id/tv_name" />
-
-    <ImageView
-        android:id="@+id/img_type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:src="@drawable/like_selected"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_status"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <TextView
-        style="@style/TextStyle"
-        android:id="@+id/tv_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="Things you’d never hear in a ticket office” … Let’s play a game of
-        mock the week, or the LinkedIn version of Mock the Week. I’ll
-        Start: https://lnkd.in… see more"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_image" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.395" />
 
     <View
         android:layout_width="match_parent"
@@ -71,5 +39,17 @@
         android:background="@color/gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_content" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_image" />
+
+    <TextView
+        style="@style/TextStyle"
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/profile_image"
+        app:layout_constraintTop_toBottomOf="@+id/tv_status" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

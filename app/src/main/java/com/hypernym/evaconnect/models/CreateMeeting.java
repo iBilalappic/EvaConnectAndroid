@@ -12,11 +12,11 @@ public class CreateMeeting {
     @SerializedName("created_by_id")
     private int created_by_id;
 
-    @SerializedName("subject")
-    private String subject;
+    @SerializedName("name")
+    private String name;
 
-    @SerializedName("notes")
-    private String notes;
+    @SerializedName("content")
+    private String content;
 
     @SerializedName("address")
     private String address;
@@ -36,20 +36,20 @@ public class CreateMeeting {
     @SerializedName("status")
     private String status;
 
-    @SerializedName("meeting_attendees")
-    private List<Integer> event_attendees;
+    @SerializedName("attendees")
+    private List<Integer> attendees;
 
     public CreateMeeting(int user_id, int created_by_id, String subject, String notes, String address, String start_date, String end_date, String start_time, String end_time, String status, List<Integer> event_attendees) {
         this.user_id = user_id;
         this.created_by_id = created_by_id;
-        this.subject = subject;
-        this.notes = notes;
+        this.name = subject;
+        this.content = notes;
         this.address = address;
         this.start_date = start_date;
         this.end_date = end_date;
         this.start_time = start_time;
         this.end_time = end_time;
         this.status = status;
-        this.event_attendees = event_attendees;
+        this.attendees = event_attendees;
     }
 }

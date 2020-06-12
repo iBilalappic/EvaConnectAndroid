@@ -1,7 +1,6 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -101,7 +100,6 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     }
 
     private void init() {
-        setPageTitle(getString(R.string.home));
         homeViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(HomeViewModel.class);
         postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(PostViewModel.class);
         connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
@@ -562,11 +560,17 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
             public boolean onMenuItemClick(MenuItem item) {
 
                 //    Toast.makeText(getContext(), item.getGroupId()+"You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
-//                if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.action1))) {
-//                    loadFragment(R.id.framelayout, new CreateEventFragment(), getContext(), true);
-//                } else {
-//                    loadFragment(R.id.framelayout, new CreateMeetingFragment(), getContext(), true);
-//                }
+                if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu1))) {
+                    loadFragment(R.id.framelayout, new NewPostFragment(), getContext(), true);
+                }  else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu2))) {
+                    loadFragment(R.id.framelayout, new ShareVideoFragment(), getContext(), true);
+                }
+                else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu3))) {
+                    loadFragment(R.id.framelayout, new CreateEventFragment(), getContext(), true);
+                } else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu3))) {
+                    loadFragment(R.id.framelayout, new ShareVideoFragment(), getContext(), true);
+                }
+
 
                 return true;
             }

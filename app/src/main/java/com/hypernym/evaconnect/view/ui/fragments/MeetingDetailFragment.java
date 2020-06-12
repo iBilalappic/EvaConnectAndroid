@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -59,10 +60,9 @@ public class MeetingDetailFragment extends BaseFragment {
     TextView tv_createdLocation;
 
     @BindView(R.id.attending_layout)
-    TextView attending_layout;
+    ConstraintLayout attending_layout;
 
     private Event event;
-
 
     public MeetingDetailFragment() {
         // Required empty public constructor
@@ -79,7 +79,8 @@ public class MeetingDetailFragment extends BaseFragment {
         return view;
     }
     private void init() {
-      //  showBackButton();
+        showBackButton();
+        setPageTitle("Meeting");
         meeting_id=getArguments().getInt("id");
         meetingViewModel = ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(MeetingViewModel.class);
         setAttendeesAdapter();
@@ -117,11 +118,13 @@ public class MeetingDetailFragment extends BaseFragment {
                 if(event.getCreated_by_id()== LoginUtils.getLoggedinUser().getId())
                 {
                     modify_event.setVisibility(View.VISIBLE);
+                    attending_layout.setVisibility(View.GONE);
 
                 }
                 else
                 {
                     modify_event.setVisibility(View.GONE);
+                    attending_layout.setVisibility(View.VISIBLE);
                   //  accept_invite.setVisibility(View.VISIBLE);
                 }
             }
