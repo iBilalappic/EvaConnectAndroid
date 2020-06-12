@@ -37,6 +37,7 @@ import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.utils.PrefUtils;
 import com.hypernym.evaconnect.view.adapters.NotificationsAdapter;
 import com.hypernym.evaconnect.view.dialogs.NavigationDialog;
+import com.hypernym.evaconnect.view.dialogs.SearchDialog;
 import com.hypernym.evaconnect.view.ui.fragments.BaseFragment;
 import com.hypernym.evaconnect.view.ui.fragments.ConnectionsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.EditProfileFragment;
@@ -79,6 +80,10 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
 
     @BindView(R.id.toolbarlayout)
     LinearLayout toolbarlayout;
+
+    @BindView(R.id.toolbarSearch)
+    LinearLayout toolbarSearch;
+
 
     @BindView(R.id.img_home)
     ImageView img_home;
@@ -123,6 +128,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     TextView badge_notification;
 
     NavigationDialog navigationDialog;
+    SearchDialog searchDialog;
     private boolean notificationflag = false;
     private HomeViewModel homeViewModel;
     private NotificationsAdapter notificationsAdapter;
@@ -390,6 +396,15 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     public void openDrawer(View view) {
         navigationDialog = new NavigationDialog(this);
         navigationDialog.show();
+    }
+
+    @OnClick(R.id.toolbarSearch)
+    public void openDialog(View view) {
+        searchDialog = new SearchDialog(this);
+        searchDialog.show();
+        searchDialog.setCanceledOnTouchOutside(true);
+        searchDialog.setCancelable(true);
+
     }
 
     @OnClick(R.id.tv_back)
