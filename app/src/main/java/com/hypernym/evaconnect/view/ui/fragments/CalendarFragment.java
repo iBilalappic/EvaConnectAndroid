@@ -125,6 +125,7 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
         rc_events.setLayoutManager(linearLayoutManager);
         rc_events.setAdapter(eventAdapter);
         showDialog();
+        hideBackButton();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

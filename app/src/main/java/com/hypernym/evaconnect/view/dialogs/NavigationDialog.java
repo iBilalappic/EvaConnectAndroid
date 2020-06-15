@@ -20,6 +20,7 @@ import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.PrefUtils;
+import com.hypernym.evaconnect.view.ui.fragments.ActivityFragment;
 import com.hypernym.evaconnect.view.ui.fragments.CalendarFragment;
 import com.hypernym.evaconnect.view.ui.fragments.JobListingFragment;
 
@@ -91,7 +92,15 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 dismiss();
-
+                FragmentTransaction transaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+                ActivityFragment activityFragment=new ActivityFragment();
+                Bundle bundle=new Bundle();
+                bundle.putBoolean("isActivity",true);
+                activityFragment.setArguments(bundle);
+                transaction.replace(R.id.framelayout, activityFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
         logout.setOnClickListener(new View.OnClickListener() {

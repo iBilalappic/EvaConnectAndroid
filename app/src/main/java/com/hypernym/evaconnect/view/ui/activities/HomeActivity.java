@@ -1,16 +1,6 @@
 package com.hypernym.evaconnect.view.ui.activities;
 
-import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -21,23 +11,28 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
-import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.NotifyEvent;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
-import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.Constants;
-import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.utils.PrefUtils;
 import com.hypernym.evaconnect.view.adapters.NotificationsAdapter;
 import com.hypernym.evaconnect.view.dialogs.NavigationDialog;
 import com.hypernym.evaconnect.view.dialogs.SearchDialog;
+import com.hypernym.evaconnect.view.ui.fragments.ActivityFragment;
 import com.hypernym.evaconnect.view.ui.fragments.BaseFragment;
 import com.hypernym.evaconnect.view.ui.fragments.ConnectionsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.EditProfileFragment;
@@ -47,20 +42,16 @@ import com.hypernym.evaconnect.view.ui.fragments.MainViewPagerFragment;
 import com.hypernym.evaconnect.view.ui.fragments.MessageFragment;
 import com.hypernym.evaconnect.view.ui.fragments.MyLikesFragment;
 import com.hypernym.evaconnect.view.ui.fragments.NotificationsFragment;
-import com.hypernym.evaconnect.view.ui.fragments.PersonDetailFragment;
 import com.hypernym.evaconnect.view.ui.fragments.PersonProfileFragment;
 import com.hypernym.evaconnect.view.ui.fragments.PostDetailsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.SpecficJobFragment;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
 import com.onesignal.OneSignal;
 
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -103,12 +94,6 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     @BindView(R.id.img_uparrow)
     ImageView img_uparrow;
 
-    @BindView(R.id.img_reddot)
-    ImageView img_reddot;
-
-    @BindView(R.id.tv_back)
-    TextView tv_back;
-
     @BindView(R.id.tv_home)
     TextView tv_home;
 
@@ -121,8 +106,8 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     @BindView(R.id.tv_profile)
     TextView tv_profile;
 
-    @BindView(R.id.tv_pagetitle)
-    ConstraintLayout titleLayout;
+//    @BindView(R.id.tv_back)
+//    ConstraintLayout tv_back;
 
     @BindView(R.id.badge_notification)
     TextView badge_notification;
@@ -221,7 +206,6 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
             @Override
             public void onClick(View v) {
                 hideNotificationPanel();
-                img_reddot.setVisibility(View.GONE);
             }
         });
 
@@ -274,7 +258,6 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
 
     public void showNotificationPanel() {
         rc_notifications.setVisibility(View.VISIBLE);
-        titleLayout.setVisibility(View.GONE);
         img_uparrow.setVisibility(View.VISIBLE);
     }
 
@@ -296,9 +279,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
             networkErrorDialog();
         }
         rc_notifications.setVisibility(View.GONE);
-        titleLayout.setVisibility(View.GONE);
         img_uparrow.setVisibility(View.GONE);
-        img_reddot.setVisibility(View.GONE);
         tv_pagetitle.setText(BaseFragment.pageTitle);
     }
 
@@ -323,8 +304,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         } else {
             loadFragment(R.id.framelayout, new MainViewPagerFragment(), this, false);
         }
-        tv_back.setVisibility(View.GONE);
-        BaseFragment.pageTitle = getString(R.string.home);
+     //   tv_back.setVisibility(View.GONE);
 
     }
 
@@ -347,7 +327,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
             ConnectionsFragment fragment = new ConnectionsFragment();
             loadFragment(R.id.framelayout, fragment, this, true);
         }
-        tv_back.setVisibility(View.GONE);
+     //   tv_back.setVisibility(View.GONE);
         BaseFragment.pageTitle = getString(R.string.connections);
     }
 
@@ -367,7 +347,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
 
         PrefUtils.saveMessageCount(getApplicationContext(), 0);
         badge_notification.setVisibility(View.GONE);
-        MessageFragment fragment = new MessageFragment();
+        ActivityFragment fragment = new ActivityFragment();
         loadFragment(R.id.framelayout, fragment, this, true);
         BaseFragment.pageTitle = getString(R.string.messages);
     }
@@ -406,11 +386,11 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         searchDialog.setCancelable(true);
 
     }
-
-    @OnClick(R.id.tv_back)
-    public void back() {
-        super.onBackPressed();
-    }
+//
+//    @OnClick(R.id.tv_back)
+//    public void back() {
+//        super.onBackPressed();
+//    }
 
     @Override
     public void onItemClick(View view, int position) {

@@ -34,7 +34,6 @@ import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.view.bottomsheets.BottomSheetPictureSelection;
 import com.hypernym.evaconnect.view.dialogs.CustomProgressBar;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
-import com.hypernym.evaconnect.view.ui.activities.BaseActivity;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 
 import java.io.File;
@@ -175,7 +174,7 @@ public class BaseFragment extends Fragment {
                         CAMERA
                 }, RequestPermissionCode);
     }
-    private void LaunchGallery() {
+    public void LaunchGallery() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("image/* video/*");
@@ -207,7 +206,7 @@ public class BaseFragment extends Fragment {
             return null;
         }
     }
-    private void takePhotoFromCamera() {
+    public void takePhotoFromCamera() {
         Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 //
         // Ensure that there's a camera activity to handle the intent
@@ -258,21 +257,19 @@ public class BaseFragment extends Fragment {
     {
         List<Fragment> f = getActivity().getSupportFragmentManager().getFragments();
         if(f.size()>1) {
-            getActivity().findViewById(R.id.tv_back).setVisibility(View.GONE);
+            getActivity().findViewById(R.id.tv_back).setVisibility(View.VISIBLE);
         }
     }
     public void hideBackButton()
     {
         getActivity().findViewById(R.id.tv_back).setVisibility(View.GONE);
     }
+
     public void setPageTitle(String title)
     {
-        if(BaseActivity.getNotificationCount()==0)
-        {
-            TextView textView=getActivity().findViewById(R.id.tv_title);
-            textView.setText(title);
-            pageTitle=title;
-        }
+       TextView textView=getActivity().findViewById(R.id.tv_title);
+        textView.setText(title);
+        pageTitle=title;
     }
 
     public String getPageTitle()

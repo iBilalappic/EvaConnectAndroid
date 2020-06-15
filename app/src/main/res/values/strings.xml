@@ -17,7 +17,7 @@
     <string name="email">Email</string>
     <string name="upload_an_image_of_you">Upload image</string>
     <string name="desc_forgot_password">Once you have submitted the detials of the desired account, please check your email to reset your password</string>
-    <string name="home">Home</string>
+
     <string name="createJoblist">Create Job Listing</string>
     <string name="joblist">Job Listing</string>
     <string name="messages">Message</string>
@@ -134,7 +134,8 @@
     <string name="menu1">Publish a message</string>
     <string name="menu2">Share a video</string>
     <string name="menu3">Post an event</string>
-    <string name="menu4">Share an article</string>
+    <string name="menu4">Share an Article</string>
+    <string name="What_will_you_write_about">What will you write about?</string>
 
 </resources>
 

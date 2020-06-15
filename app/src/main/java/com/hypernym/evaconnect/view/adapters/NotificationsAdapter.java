@@ -1,12 +1,10 @@
 package com.hypernym.evaconnect.view.adapters;
 
 import android.content.Context;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,10 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
-import com.hypernym.evaconnect.models.MyLikesModel;
-import com.hypernym.evaconnect.models.Notification;
 import com.hypernym.evaconnect.models.Post;
-import com.hypernym.evaconnect.toolbar.OnItemClickListener;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
 
@@ -49,15 +44,20 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     @Override
     public void onBindViewHolder(@NonNull NotificationsAdapter.ViewHolder holder, int position) {
         AppUtils.setGlideImage(context, holder.profile_image, notificationsList.get(position).getUser().getUser_image());
-        holder.tv_name.setText(notificationsList.get(position).getUser().getFirst_name());
-        if (notificationsList.get(position).getIs_like()!=0) {
-            holder.tv_status.setText("Liked your post " + DateUtils.getTimeAgo(notificationsList.get(position).getCreated_datetime()));
-            holder.img_type.setImageDrawable(context.getDrawable(R.drawable.like_selected));
-        } else {
-            holder.tv_status.setText("Commented your post " + DateUtils.getTimeAgo(notificationsList.get(position).getCreated_datetime()));
-            holder.img_type.setImageDrawable(context.getDrawable(R.drawable.comment));
+
+        if(notificationsList.get(position).getObject_type().equalsIgnoreCase("meeting") ||
+                notificationsList.get(position).getObject_type().equalsIgnoreCase("event"))
+        {
+            holder.tv_status.setText(notificationsList.get(position).getContent());
         }
-        AppUtils.makeTextViewResizable(holder.tv_content, 3, notificationsList.get(position).getDetails());
+        else if (notificationsList.get(position).getIs_like()!=0) {
+            holder.tv_status.setText(notificationsList.get(position).getName()+" "+"liked your post ");
+
+        } else {
+            holder.tv_status.setText(notificationsList.get(position).getName()+" "+"commented your post");
+
+        }
+      holder.tv_date.setText(DateUtils.formatToYesterdayOrToday(notificationsList.get(position).getCreated_datetime()));
 //        holder.linearLayout10.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -73,8 +73,6 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @BindView(R.id.tv_name)
-        TextView tv_name;
 
         @BindView(R.id.profile_image)
         ImageView profile_image;
@@ -82,13 +80,10 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         @BindView(R.id.tv_status)
         TextView tv_status;
 
-        @BindView(R.id.tv_content)
-        TextView tv_content;
+        @BindView(R.id.tv_date)
+        TextView tv_date;
 
-        @BindView(R.id.img_type)
-        ImageView img_type;
-
-        @BindView(R.id.linearLayout10)
+         @BindView(R.id.linearLayout10)
         ConstraintLayout linearLayout10;
 
 

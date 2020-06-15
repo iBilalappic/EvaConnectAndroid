@@ -92,7 +92,7 @@ public final class DateUtils {
         return mOutputTimeString;
     }
 
-    public static String extractMonth(String date){
+    public static String extractMonth(String date) {
         Date mParsedDate;
         String mOutputDateString = "";
         String mOutputTimeString = "";
@@ -113,7 +113,7 @@ public final class DateUtils {
         return mOutputTimeString;
     }
 
-    public static String extractDay(String date){
+    public static String extractDay(String date) {
         Date mParsedDate;
         String mOutputDateString = "";
         String mOutputTimeString = "";
@@ -497,5 +497,27 @@ public final class DateUtils {
 
     }
 
+    public static String formatToYesterdayOrToday(String date) {
+        try {
+            Date dateTime = new SimpleDateFormat(DATE_INPUT_FORMAT).parse(date);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(dateTime);
+            Calendar today = Calendar.getInstance();
+            Calendar yesterday = Calendar.getInstance();
+            yesterday.add(Calendar.DATE, -1);
+            SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mma");
 
+            if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
+                return "Today at " + timeFormatter.format(dateTime);
+            }  else {
+                SimpleDateFormat  mInputDateFormat= new SimpleDateFormat("EEEE, hh:mm aa");
+                return mInputDateFormat.format(dateTime);
+
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "Just Now";
+    }
 }

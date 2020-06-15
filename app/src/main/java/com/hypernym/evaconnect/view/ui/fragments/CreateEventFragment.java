@@ -206,6 +206,8 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
         eventViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(EventViewModel.class);
         invitedConnections.clear();
         event_type_spinner.setOnItemSelectedListener(this);
+        showBackButton();
+        setPageTitle(getString(R.string.action1));
         if(getArguments()!=null)
         {
             Event event=(Event) getArguments().getSerializable("event");
@@ -419,14 +421,14 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
                 }, RequestPermissionCode);
     }
 
-    private void LaunchGallery() {
+    public void LaunchGallery() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("image/*");
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_PHOTO_GALLERY);
     }
 
-    private void takePhotoFromCamera() {
+    public void takePhotoFromCamera() {
         Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         // Create the File where the photo should go

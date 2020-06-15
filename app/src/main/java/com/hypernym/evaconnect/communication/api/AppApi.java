@@ -199,15 +199,15 @@ public interface AppApi {
                                              @Part("created_by_id") int created_by_id,
                                              @Part("content") RequestBody content,
                                              @Part("status") RequestBody status,
-                                             @Part("event_city") RequestBody event_city,
-                                             @Part("event_start_date") RequestBody start_date,
-                                             @Part("event_end_date") RequestBody end_date,
+                                             @Part("address") RequestBody event_city,
+                                             @Part("start_date") RequestBody start_date,
+                                             @Part("end_date") RequestBody end_date,
                                              @Part("start_time") RequestBody start_time,
                                              @Part("end_time") RequestBody end_time,
-                                             @Part("event_name") RequestBody event_name,
+                                             @Part("name") RequestBody event_name,
                                              @Part("registration_link") RequestBody registration_link,
                                              @Part("is_private") int is_private,
-                                             @Part("event_attendees") List<Integer> event_attendees,
+                                             @Part("attendees") List<Integer> event_attendees,
                                              @Part MultipartBody.Part event_image);
 
     @POST(APIConstants.ADD_MEETING)
@@ -288,6 +288,8 @@ public interface AppApi {
     @POST(APIConstants.JOB)
     Call<BaseModel<List<Post>>> getJob(@Body User user, @Query("limit") int limit, @Query("offset") int offset);
 
+    @POST(APIConstants.GET_MEETING_DETAILS)
+    Call<BaseModel<List<Event>>> getMeetingDetails(@Body HashMap<String,Integer> user);
     @GET(APIConstants.DECLINE_APPLICATION)
     Call<BaseModel<List<AppliedApplicants>>> getApplicant(@Path("job_application_id") int job_id);
 
@@ -302,7 +304,5 @@ public interface AppApi {
 
     @POST(APIConstants.GET_CONNECTION_BY_RECOMMENDED_USER)
     Call<BaseModel<List<User>>> getConnectionByRecommendedUser(@Body User user,@Query("limit") int limit, @Query("offset") int offset);
-    @GET(APIConstants.GET_MEETING_DETAILS)
-    Call<BaseModel<List<Event>>> getMeetingDetails(@Path("meeting_id") int meeting_id);
 
 }
