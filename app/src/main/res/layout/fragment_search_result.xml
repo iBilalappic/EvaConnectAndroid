@@ -92,7 +92,7 @@
             android:fontFamily="@font/nunitosansbold"
             android:text="Found 4 results in"
             android:textColor="@color/gray_1"
-            android:textSize="8sp"
+            android:textSize="10sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_filter_by"></TextView>
 
@@ -105,7 +105,7 @@
             android:fontFamily="@font/nunitosansbold"
             android:text="post"
             android:textColor="@color/skyblue"
-            android:textSize="8sp"
+            android:textSize="10sp"
             app:layout_constraintStart_toEndOf="@+id/tv_total_result"
             app:layout_constraintTop_toBottomOf="@+id/tv_filter_by"></TextView>
 
@@ -117,7 +117,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:fontFamily="@font/nunitosansregular"
-            android:text="Events:"
+            android:text="Events"
             android:textColor="@color/gray_1"
             android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@+id/tv_posts"
@@ -131,7 +131,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:fontFamily="@font/nunitosansregular"
-            android:text="Post"
+            android:text="Posts"
             android:textColor="@color/gray_1"
             android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@+id/tv_job"

@@ -44,6 +44,27 @@ public class HomeRepository implements IHomeRepository {
     }
 
     @Override
+    public LiveData<BaseModel<List<Post>>> getDashboardSearch(User user, int total, int current, String filter) {
+        dashboardMutableLiveData = new MutableLiveData<>();
+        HashMap<String, Object> data = new HashMap<String, Object>();
+        data.put("user_id", user.getId());
+        data.put("filter", filter);
+        data.put("search_key", user.getSearch_key());
+        RestClient.get().appApi().getDashboardSearch(data, total, current).enqueue(new Callback<BaseModel<List<Post>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
+                dashboardMutableLiveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Post>>> call, Throwable t) {
+                dashboardMutableLiveData.setValue(null);
+            }
+        });
+        return dashboardMutableLiveData;
+    }
+
+    @Override
     public LiveData<BaseModel<List<Post>>> getAllNotifications(int totalpages, int currentPage) {
         notificationMutableLiveData = new MutableLiveData<>();
         User user = LoginUtils.getLoggedinUser();

@@ -26,6 +26,25 @@ public class User implements Serializable {
     private String field;
     private String address;
     private String company_name;
+    private String filter;
+
+    public String getSearch_key() {
+        return search_key;
+    }
+
+    public void setSearch_key(String search_key) {
+        this.search_key = search_key;
+    }
+
+    private String search_key;
+
+    public String getFilter() {
+        return filter;
+    }
+
+    public void setFilter(String filter) {
+        this.filter = filter;
+    }
 
     public boolean isIs_shared() {
         return is_shared;
