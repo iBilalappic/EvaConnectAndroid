@@ -142,6 +142,9 @@ public interface AppApi {
     @POST(APIConstants.DASHBOARD)
     Call<BaseModel<List<Post>>> getDashboard(@Body User user, @Query("limit") int limit, @Query("offset") int offset);
 
+    @POST(APIConstants.DASHBOARD_SEARCH)
+    Call<BaseModel<List<Post>>> getDashboardSearch(@Body Object user, @Query("limit") int limit, @Query("offset") int offset);
+
     @GET(APIConstants.FRIENDCONNECTION)
     Call<BaseModel<List<NetworkConnection>>> getFriendDetails(@Path("id") int id);
 

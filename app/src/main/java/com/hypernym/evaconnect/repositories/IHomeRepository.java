@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface IHomeRepository {
     LiveData<BaseModel<List<Post>>> getDashboard(User user,int total,int current);
+    LiveData<BaseModel<List<Post>>> getDashboardSearch(User user,int total,int current,String filter);
     LiveData<BaseModel<List<Post>>> getAllNotifications(int totalpages,int currentPage);
     LiveData<BaseModel<List<Post>>> notificationMarkAsRead(int id);
     LiveData<BaseModel<List<Post>>> getAllUnReadNotifications();

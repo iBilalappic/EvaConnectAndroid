@@ -199,22 +199,22 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
                 }
 
                 break;
-            case R.id.tv_download_cv:
-                if (appliedApplicants.getApplicationAttachment() != null) {
-                    try {
-                        uri = Uri.parse("googlechrome://navigate?url=" + appliedApplicants.getApplicationAttachment());
-                        Intent i = new Intent(Intent.ACTION_VIEW, uri);
-                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(i);
-                    } catch (ActivityNotFoundException e) {
-                        Intent i = new Intent(Intent.ACTION_VIEW, uri);
-                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(i);
-                    }
-                } else {
-                    Toast.makeText(getActivity(), "No File to Download", Toast.LENGTH_SHORT).show();
-                }
-                break;
+//            case R.id.tv_download_cv:
+//                if (appliedApplicants.getApplicationAttachment() != null) {
+//                    try {
+//                        uri = Uri.parse("googlechrome://navigate?url=" + appliedApplicants.getApplicationAttachment());
+//                        Intent i = new Intent(Intent.ACTION_VIEW, uri);
+//                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                        startActivity(i);
+//                    } catch (ActivityNotFoundException e) {
+//                        Intent i = new Intent(Intent.ACTION_VIEW, uri);
+//                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                        startActivity(i);
+//                    }
+//                } else {
+//                    Toast.makeText(getActivity(), "No File to Download", Toast.LENGTH_SHORT).show();
+//                }
+//                break;
             case R.id.tv_edit:
                 CreateJobFragment createJobFragment = new CreateJobFragment();
                 Bundle bundle = new Bundle();

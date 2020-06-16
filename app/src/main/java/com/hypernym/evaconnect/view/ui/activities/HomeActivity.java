@@ -31,6 +31,7 @@ import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.utils.PrefUtils;
 import com.hypernym.evaconnect.view.adapters.NotificationsAdapter;
 import com.hypernym.evaconnect.view.dialogs.NavigationDialog;
+import com.hypernym.evaconnect.view.dialogs.SearchDialog;
 import com.hypernym.evaconnect.view.ui.fragments.ActivityFragment;
 import com.hypernym.evaconnect.view.ui.fragments.BaseFragment;
 import com.hypernym.evaconnect.view.ui.fragments.ConnectionsFragment;
@@ -71,6 +72,10 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     @BindView(R.id.toolbarlayout)
     LinearLayout toolbarlayout;
 
+    @BindView(R.id.toolbarSearch)
+    LinearLayout toolbarSearch;
+
+
     @BindView(R.id.img_home)
     ImageView img_home;
 
@@ -101,13 +106,14 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     @BindView(R.id.tv_profile)
     TextView tv_profile;
 
-    @BindView(R.id.tv_back)
-    ConstraintLayout tv_back;
+//    @BindView(R.id.tv_back)
+//    ConstraintLayout tv_back;
 
     @BindView(R.id.badge_notification)
     TextView badge_notification;
 
     NavigationDialog navigationDialog;
+    SearchDialog searchDialog;
     private boolean notificationflag = false;
     private HomeViewModel homeViewModel;
     private NotificationsAdapter notificationsAdapter;
@@ -298,7 +304,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         } else {
             loadFragment(R.id.framelayout, new MainViewPagerFragment(), this, false);
         }
-        tv_back.setVisibility(View.GONE);
+     //   tv_back.setVisibility(View.GONE);
 
     }
 
@@ -321,7 +327,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
             ConnectionsFragment fragment = new ConnectionsFragment();
             loadFragment(R.id.framelayout, fragment, this, true);
         }
-        tv_back.setVisibility(View.GONE);
+     //   tv_back.setVisibility(View.GONE);
         BaseFragment.pageTitle = getString(R.string.connections);
     }
 
@@ -372,10 +378,19 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         navigationDialog.show();
     }
 
-    @OnClick(R.id.tv_back)
-    public void back() {
-        super.onBackPressed();
+    @OnClick(R.id.toolbarSearch)
+    public void openDialog(View view) {
+        searchDialog = new SearchDialog(this);
+        searchDialog.show();
+        searchDialog.setCanceledOnTouchOutside(true);
+        searchDialog.setCancelable(true);
+
     }
+//
+//    @OnClick(R.id.tv_back)
+//    public void back() {
+//        super.onBackPressed();
+//    }
 
     @Override
     public void onItemClick(View view, int position) {

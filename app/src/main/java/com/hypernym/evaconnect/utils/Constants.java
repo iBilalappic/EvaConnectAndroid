@@ -22,4 +22,5 @@ public class Constants {
     public static final String LINKEDIN_TYPE = "linkedin";
     public static final String FACEBOOK_TYPE = "facebook";
     public static final String TYPE = "type";
+    public static final String SEARCH = "search";
 }

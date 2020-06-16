@@ -9,6 +9,7 @@ public interface APIConstants {
     public static String GET_POSTS="post/";
     public static String CHECK_EMAIL_EXIST="user/account/check/";
     public static String DASHBOARD="dashboard/android/?";
+    public static String DASHBOARD_SEARCH="dashboard/search/?";
     public static String POST="dashboard/post/?";
     public static String EVENT="dashboard/event/?";
     public static String JOB="dashboard/job/?";

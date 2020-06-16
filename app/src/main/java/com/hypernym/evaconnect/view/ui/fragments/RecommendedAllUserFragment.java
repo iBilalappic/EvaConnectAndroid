@@ -95,7 +95,7 @@ public class RecommendedAllUserFragment extends BaseFragment implements Connecti
         } else {
             networkErrorDialog();
         }
-        edt_search.addTextChangedListener(new RecommendedAllUserFragment.TextWatcher());
+        edt_search.addTextChangedListener(new TextWatcher());
         return view;
     }
 
