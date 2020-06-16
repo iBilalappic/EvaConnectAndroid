@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -13,7 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,36 +25,27 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.firebase.client.Firebase;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.Message;
 import com.hypernym.evaconnect.models.NetworkConnection;
-import com.hypernym.evaconnect.models.Receiver;
-import com.hypernym.evaconnect.models.Sender;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.toolbar.OnItemClickListener;
-import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.DateTimeComparator;
-import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
-import com.hypernym.evaconnect.view.adapters.AttachmentsAdapter;
 import com.hypernym.evaconnect.utils.NetworkUtils;
+import com.hypernym.evaconnect.view.adapters.AttachmentsAdapter;
 import com.hypernym.evaconnect.view.adapters.HorizontalMessageAdapter;
 import com.hypernym.evaconnect.view.adapters.MessageAdapter;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
@@ -64,22 +53,14 @@ import com.hypernym.evaconnect.viewmodel.MessageViewModel;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-
 
 import static android.app.Activity.RESULT_OK;
 
@@ -88,8 +69,8 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     @BindView(R.id.rc_message)
     RecyclerView re_message;
 
-    @BindView(R.id.newmessage)
-    TextView newmessage;
+    @BindView(R.id.fab)
+    FloatingActionButton newmessage;
 
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
@@ -311,9 +292,10 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.newmessage:
+            case R.id.fab:
                 if (newNetworkConnectionList.size() > 0 && NetworkUtils.isNetworkConnected(getContext())) {
-                    showMesssageDialog();
+                    //showMesssageDialog();
+                    loadFragment(R.id.framelayout, new MessageConnectionFragment(), getContext(), true);
                 } else {
                     Toast.makeText(getContext(), "You haven't any friends to chat", Toast.LENGTH_SHORT).show();
                 }

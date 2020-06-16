@@ -264,7 +264,14 @@ public class BaseFragment extends Fragment {
     {
         getActivity().findViewById(R.id.tv_back).setVisibility(View.GONE);
     }
-
+    public void showChatPerson()
+    {
+      getActivity().findViewById(R.id.img_chatperson).setVisibility(View.VISIBLE);
+    }
+    public void hideChatPerson()
+    {
+        getActivity().findViewById(R.id.img_chatperson).setVisibility(View.GONE);
+    }
     public void setPageTitle(String title)
     {
        TextView textView=getActivity().findViewById(R.id.tv_title);
