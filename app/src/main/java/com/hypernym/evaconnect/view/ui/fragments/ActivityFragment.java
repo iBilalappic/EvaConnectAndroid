@@ -38,8 +38,14 @@ public class ActivityFragment extends BaseFragment {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_activity, container, false);
         ButterKnife.bind(this,view);
-        init();
+
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        init();
     }
 
     private void init() {
@@ -49,15 +55,19 @@ public class ActivityFragment extends BaseFragment {
         viewPager.setAdapter(adapter);
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        viewPager.setCurrentItem(0);
        if(getArguments() !=null && getArguments().getBoolean("isActivity"))
        {
            viewPager.setCurrentItem(1);
        }
 
+
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
+
+
             }
 
             @Override

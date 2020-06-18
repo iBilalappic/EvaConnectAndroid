@@ -308,4 +308,9 @@ public interface AppApi {
     @POST(APIConstants.GET_CONNECTION_BY_RECOMMENDED_USER)
     Call<BaseModel<List<User>>> getConnectionByRecommendedUser(@Body User user,@Query("limit") int limit, @Query("offset") int offset);
 
+    @Multipart
+    @POST(APIConstants.CHAT_IMAGE)
+    Call<BaseModel<List<String>>> uploadAttachment(@Part("created_by_id") int user_id,
+                                                               @Part("status") RequestBody status ,
+                                                               @Part MultipartBody.Part Chat_image);
 }

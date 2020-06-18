@@ -27,6 +27,7 @@ public class User implements Serializable {
     private String address;
     private String company_name;
     private String filter;
+    private String chatID;
 
     public String getSearch_key() {
         return search_key;
@@ -345,5 +346,13 @@ public class User implements Serializable {
 
     public void setReceiver_id(Integer receiver_id) {
         this.receiver_id = receiver_id;
+    }
+
+    public String getChatID() {
+        return chatID;
+    }
+
+    public void setChatID(String chatID) {
+        this.chatID = chatID;
     }
 }

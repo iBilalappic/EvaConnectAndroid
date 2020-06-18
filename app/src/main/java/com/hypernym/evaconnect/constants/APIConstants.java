@@ -64,6 +64,5 @@ public interface APIConstants {
     public static String SHARE_EVENT="event/share/";
     public static String SHARE_POST="post/share/";
     public static String GET_CONNECTION_BY_RECOMMENDED_USER="user/network/connection/recommendations/?";
-
-
+    public static String CHAT_IMAGE="chat/";
 }

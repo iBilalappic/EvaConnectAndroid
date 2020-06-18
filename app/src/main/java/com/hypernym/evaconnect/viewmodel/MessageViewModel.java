@@ -7,12 +7,10 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.ChatAttachment;
 import com.hypernym.evaconnect.models.NetworkConnection;
-import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
-import com.hypernym.evaconnect.repositories.IHomeRepository;
 import com.hypernym.evaconnect.repositories.IMessageRepository;
-import com.hypernym.evaconnect.repositories.impl.HomeRepository;
 import com.hypernym.evaconnect.repositories.impl.MessageRepository;
 
 import java.util.List;
@@ -27,5 +25,9 @@ public class MessageViewModel extends AndroidViewModel {
 
     public LiveData<BaseModel<List<NetworkConnection>>> SetUser(User user) {
         return iMessageRepository.getFriendList(user);
+    }
+
+    public LiveData<BaseModel<List<String>>> uploadAttachment(ChatAttachment attachment) {
+        return iMessageRepository.uploadAttachment(attachment);
     }
 }

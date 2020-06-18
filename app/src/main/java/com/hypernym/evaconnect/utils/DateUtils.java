@@ -508,6 +508,7 @@ public final class DateUtils {
             SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mma");
 
             if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
+                timeFormatter.setTimeZone(TimeZone.getTimeZone("GMT"));
                 return "Today at " + timeFormatter.format(dateTime);
             }  else {
                 SimpleDateFormat  mInputDateFormat= new SimpleDateFormat("EEEE, hh:mm aa");
@@ -519,5 +520,11 @@ public final class DateUtils {
             e.printStackTrace();
         }
         return "Just Now";
+    }
+    public static String getDateTimeFromTimestamp(String time) {
+        Long longTime=Long.getLong(time);
+        Date date = new Date(longTime*1000L); // *1000 is to convert seconds to milliseconds
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, hh:mm aa"); // the format of your date
+       return sdf.format(date);
     }
 }

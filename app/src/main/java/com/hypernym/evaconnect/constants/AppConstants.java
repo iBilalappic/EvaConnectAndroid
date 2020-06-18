@@ -44,7 +44,9 @@ public class AppConstants {
     public static final String REQUEST_DECLINE = "decline";
     public static final String SIMPLE_BASEURL = "simple base url";
     public static final String ONESIGNAL_BASEURL = "one signal url";
-    public static final String FIREASE_CHAT_ENDPOINT = "development_interview";
+    public static final String FIREASE_CHAT_ENDPOINT = "chats";
+    public static final String FIREASE_USER_ENDPOINT = "users";
+    public static final String FIREASE_MESSAGES_ENDPOINT = "messages";
     public static final String CHAT_FRAGMENT = "chat_fragment";
     public static final String APPLICANT_FRAGMENT = "applicant_fragment";
 

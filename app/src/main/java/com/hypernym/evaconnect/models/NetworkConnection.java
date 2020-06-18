@@ -12,7 +12,7 @@ public class NetworkConnection implements Serializable {
     private Integer id;
     @SerializedName("sender_id")
     @Expose
-    private Integer senderId;
+    private String senderId;
     @SerializedName("sender")
     @Expose
     private Sender sender;
@@ -42,6 +42,10 @@ public class NetworkConnection implements Serializable {
     @Expose
     private String message;
 
+    private String chatID;
+
+    private String name;
+
     private String message_key;
 
     private int unread_msg_count;
@@ -54,13 +58,6 @@ public class NetworkConnection implements Serializable {
         this.id = id;
     }
 
-    public Integer getSenderId() {
-        return senderId;
-    }
-
-    public void setSenderId(Integer senderId) {
-        this.senderId = senderId;
-    }
 
     public Sender getSender() {
         return sender;
@@ -148,5 +145,29 @@ public class NetworkConnection implements Serializable {
 
     public void setMessage_key(String message_key) {
         this.message_key = message_key;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getChatID() {
+        return chatID;
+    }
+
+    public void setChatID(String chatID) {
+        this.chatID = chatID;
+    }
+
+    public String getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
     }
 }
