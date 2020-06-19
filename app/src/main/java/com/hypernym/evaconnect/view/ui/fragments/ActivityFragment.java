@@ -1,12 +1,15 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
@@ -21,65 +24,64 @@ import butterknife.ButterKnife;
  */
 public class ActivityFragment extends BaseFragment {
 
-    @BindView(R.id.tabLayout)
-    TabLayout tabLayout;
-
-    @BindView(R.id.viewPager)
-    ViewPager viewPager;
-
-
-    public ActivityFragment() {
-        // Required empty public constructor
-    }
+    private ViewPager mViewPager;
+    private SectionsPagerAdapter sectionsPagerAdapter;
+    Context mContext;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_activity, container, false);
-        ButterKnife.bind(this,view);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_activity, container, false);
+        sectionsPagerAdapter = new ActivityFragment.SectionsPagerAdapter(getChildFragmentManager());
+        mViewPager = (ViewPager) view.findViewById(R.id.container);
+        mViewPager.setAdapter(sectionsPagerAdapter);
+        mViewPager.setCurrentItem(0);
+        TabLayout tabLayout = view.findViewById(R.id.tabLayout);
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.setupWithViewPager(mViewPager);
+
 
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        init();
+
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return new MessageFragment();
+                case 1:
+                    return new NotificationsFragment();
+            }
+            return null;
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "Messages";
+                case 1:
+                    return "Notifications";
+            }
+            return null;
+        }
+
     }
-
-    private void init() {
-        tabLayout.addTab(tabLayout.newTab().setText("Messages"));
-        tabLayout.addTab(tabLayout.newTab().setText("Notifications"));
-        final ActivityAdapter adapter = new ActivityAdapter(getContext(),getFragmentManager(), tabLayout.getTabCount());
-        viewPager.setAdapter(adapter);
-
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        viewPager.setCurrentItem(0);
-       if(getArguments() !=null && getArguments().getBoolean("isActivity"))
-       {
-           viewPager.setCurrentItem(1);
-       }
-
-
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-
-
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-    }
-
 }
