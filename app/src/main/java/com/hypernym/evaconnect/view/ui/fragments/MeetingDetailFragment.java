@@ -31,6 +31,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,8 +45,8 @@ public class MeetingDetailFragment extends BaseFragment {
     @BindView(R.id.invite_people)
     RecyclerView invite_people;
 
-    @BindView(R.id.btn_viewEvent)
-    TextView modify_event;
+    @BindView(R.id.btn_modifymeeting)
+    TextView btn_modifymeeting;
 
     @BindView(R.id.tv_title)
     TextView tv_name;
@@ -61,6 +62,8 @@ public class MeetingDetailFragment extends BaseFragment {
 
     @BindView(R.id.attending_layout)
     ConstraintLayout attending_layout;
+
+
 
     private Event event;
 
@@ -93,8 +96,15 @@ public class MeetingDetailFragment extends BaseFragment {
         {
             networkErrorDialog();
         }
-
-
+    }
+    @OnClick(R.id.btn_modifymeeting)
+    public void modify_meeting()
+    {
+        CreateMeetingFragment createMeetingFragment=new CreateMeetingFragment();
+        Bundle bundle=new Bundle();
+        bundle.putSerializable("meeting",event);
+        createMeetingFragment.setArguments(bundle);
+        loadFragment(R.id.framelayout,createMeetingFragment,getContext(),true);
     }
     private void getMeetingDetails(int meeting_id) {
         meetingViewModel.getMeetingDetails(meeting_id).observe(this, new Observer<BaseModel<List<Event>>>() {
@@ -117,13 +127,13 @@ public class MeetingDetailFragment extends BaseFragment {
                 }
                 if(event.getCreated_by_id()== LoginUtils.getLoggedinUser().getId())
                 {
-                    modify_event.setVisibility(View.VISIBLE);
+                    btn_modifymeeting.setVisibility(View.VISIBLE);
                     attending_layout.setVisibility(View.GONE);
 
                 }
                 else
                 {
-                    modify_event.setVisibility(View.GONE);
+                    btn_modifymeeting.setVisibility(View.GONE);
                     attending_layout.setVisibility(View.VISIBLE);
                   //  accept_invite.setVisibility(View.VISIBLE);
                 }

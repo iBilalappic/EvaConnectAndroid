@@ -250,12 +250,20 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
                 if(event.getCreated_by_id()== LoginUtils.getLoggedinUser().getId())
                 {
                     modify_event.setVisibility(View.VISIBLE);
-
                 }
                 else
                 {
                     modify_event.setVisibility(View.GONE);
-                    accept_invite.setVisibility(View.VISIBLE);
+                    if(event.getIs_attending().equalsIgnoreCase("Pending"))
+                    {
+                        accept_invite.setVisibility(View.VISIBLE);
+                        interested.setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                        accept_invite.setVisibility(View.GONE);
+                        interested.setVisibility(View.VISIBLE);
+                    }
                 }
             }
 
@@ -265,11 +273,9 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
                 if(event.getEvent_image().size()>0)
                 {
                     AppUtils.setGlideImageUrl(getContext(),img_event,event.getEvent_image().get(0));
-
                 }
               else {
                     img_event.setBackground(getContext().getDrawable(R.drawable.no_thumbnail));
-
                 }
                 tv_content.setText(event.getContent());
 
@@ -306,7 +312,8 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
             public void onChanged(BaseModel<List<Event>> listBaseModel) {
                 if(listBaseModel!=null && listBaseModel.getData()!=null)
                 {
-
+                    accept_invite.setVisibility(View.GONE);
+                    interested.setVisibility(View.VISIBLE);
                 }
                 else
                 {
@@ -337,6 +344,13 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
     public void addComment()
     {
         validator.validate();
+    }
+
+    @OnClick(R.id.accept_invite)
+    public void accept_invite()
+    {
+        event.setAttendance_status("Going");
+        updateAttendance(event);
     }
 
     @Override

@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +21,8 @@ import com.hypernym.evaconnect.dateTimePicker.DateTime;
 import com.hypernym.evaconnect.dateTimePicker.DateTimePicker;
 import com.hypernym.evaconnect.dateTimePicker.SimpleDateTimePicker;
 import com.hypernym.evaconnect.models.CreateMeeting;
+import com.hypernym.evaconnect.models.Event;
+import com.hypernym.evaconnect.models.EventAttendees;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.Constants;
@@ -78,6 +81,9 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
 
     @BindView(R.id.post)
     TextView post;
+
+    @BindView(R.id.attending_layout)
+    ConstraintLayout attending_layout;
 
     private static final String TAG = CreateMeetingFragment.class.getSimpleName();
 
@@ -225,6 +231,31 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
         validator = new Validator(this);
         validator.setValidationListener(this);
         eventViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(EventViewModel.class);
+        if(getArguments()!=null)
+        {
+            Event event=(Event) getArguments().getSerializable("meeting");
+            edt_eventname.setText(event.getName());
+            edt_description.setText(event.getContent());
+            edt_eventCity.setText(event.getEvent_city());
+            tv_startdate.setText(event.getStart_date());
+            tv_startTime.setText(event.getStart_time());
+            tv_enddate.setText(event.getEnd_date());
+            tv_endTime.setText(event.getEnd_time());
+            if(event.getIs_private()==1)
+            {
+                attending_layout.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                attending_layout.setVisibility(View.GONE);
+            }
+            for(EventAttendees eventAttendees:event.getAttendees())
+            {
+                invitedConnections.add(eventAttendees.getUser());
+            }
+            usersAdapter.notifyDataSetChanged();
+        }
+
     }
 
     @OnClick({R.id.tv_startdate, R.id.tv_startTime})

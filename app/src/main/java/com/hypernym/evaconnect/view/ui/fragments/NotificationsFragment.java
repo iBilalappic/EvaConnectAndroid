@@ -2,6 +2,10 @@ package com.hypernym.evaconnect.view.ui.fragments;
 
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -10,18 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.JobAd;
-import com.hypernym.evaconnect.models.Notification;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.GsonUtils;
@@ -32,7 +28,6 @@ import com.hypernym.evaconnect.view.ui.activities.BaseActivity;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -176,13 +171,21 @@ public class NotificationsFragment extends BaseFragment implements Notifications
             postDetailsFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, postDetailsFragment, getContext(), true);
         }
-        else if (notifications.get(position).getObject_type().equals("post")) {
+        else if (notifications.get(position).getObject_type().equals("event")) {
             EventDetailFragment eventDetailsFragment = new EventDetailFragment();
             Bundle bundle = new Bundle();
             bundle.putInt("id", notifications.get(position).getObject_id());
             eventDetailsFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, eventDetailsFragment, getContext(), true);
         }
+        else if (notifications.get(position).getObject_type().equals("meeting")) {
+            MeetingDetailFragment meetingDetailFragment = new MeetingDetailFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("id", notifications.get(position).getObject_id());
+            meetingDetailFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, meetingDetailFragment, getContext(), true);
+        }
+
     }
 
     @Override
