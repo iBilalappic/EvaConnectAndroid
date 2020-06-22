@@ -49,6 +49,7 @@ import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
+import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.utils.PrefUtils;
 import com.hypernym.evaconnect.view.adapters.InvitedUsersAdapter;
@@ -154,6 +155,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
     private EventViewModel eventViewModel;
     private Validator validator;
     private SimpleDialog simpleDialog;
+    Event event=new Event();
 
     public CreateEventFragment() {
         // Required empty public constructor
@@ -194,7 +196,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
     }
 
     private void init() {
-        setPageTitle("Create Event");
+
         tv_startdate.setInputType(InputType.TYPE_NULL);
         tv_startdate.setText(dateformat.format(new Date()));
 
@@ -210,16 +212,25 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
         setPageTitle(getString(R.string.action1));
         if(getArguments()!=null)
         {
-            Event event=(Event) getArguments().getSerializable("event");
+            setPageTitle("Update Event");
+            post.setText("Update Event");
+            event=(Event) getArguments().getSerializable("event");
             edt_eventname.setText(event.getName());
             edt_description.setText(event.getContent());
-            edt_eventCity.setText(event.getEvent_city());
+            edt_eventCity.setText(event.getAddress());
             edt_link.setText(event.getRegistration_link());
-            tv_startdate.setText(event.getStart_date());
-            tv_startTime.setText(event.getStart_time());
-            tv_enddate.setText(event.getEnd_date());
-            tv_endTime.setText(event.getEnd_time());
+
             event_type_spinner.setSelection(event.getIs_private());
+            try {
+                tv_startdate.setText(dateformat.format(DateUtils.formattedDateWithoutTime(event.getStart_date())));
+                tv_startTime.setText(time.format(DateUtils.formattedDateTime(event.getStart_time())));
+                tv_enddate.setText(dateformat.format(DateUtils.formattedDateWithoutTime(event.getEnd_date())));
+                tv_endTime.setText(time.format(DateUtils.formattedDateTime(event.getEnd_time())));
+            }
+            catch (Exception ex)
+            {
+                Log.d("exception",ex.getMessage());
+            }
             if(event.getIs_private()==1)
             {
                 invite_layout.setVisibility(View.VISIBLE);
@@ -337,50 +348,77 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
     public void onValidationSucceeded() {
         if (NetworkUtils.isNetworkConnected(getContext())) {
             showDialog();
-            Event event = new Event();
-            event.setName(edt_eventname.getText().toString());
-            event.setStart_date(DateUtils.getFormattedEventDate(tv_startdate.getText().toString()));
-            event.setEnd_date(DateUtils.getFormattedEventDate(tv_enddate.getText().toString()));
+            Event eventObj = new Event();
+            eventObj.setName(edt_eventname.getText().toString());
+            eventObj.setStart_date(DateUtils.getFormattedEventDate(tv_startdate.getText().toString()));
+            eventObj.setEnd_date(DateUtils.getFormattedEventDate(tv_enddate.getText().toString()));
             Log.d("TAAAG", tv_startTime.getText().toString());
-            event.setStart_time(DateUtils.getTime_utc(tv_startTime.getText().toString()));
-            event.setEnd_time(DateUtils.getTime_utc(tv_endTime.getText().toString()));
-            event.setContent(edt_description.getText().toString());
-            event.setEvent_city(edt_eventCity.getText().toString());
-            event.setIs_private(event_type_spinner.getSelectedItemPosition());
+            eventObj.setStart_time(DateUtils.getTime_utc(tv_startTime.getText().toString()));
+            eventObj.setEnd_time(DateUtils.getTime_utc(tv_endTime.getText().toString()));
+            eventObj.setContent(edt_description.getText().toString());
+            eventObj.setEvent_city(edt_eventCity.getText().toString());
+            eventObj.setIs_private(event_type_spinner.getSelectedItemPosition());
 
-            List<Integer> event_attendees=new ArrayList<>();
-            for(User inviteConnections:invitedConnections)
-            {
+            List<Integer> event_attendees = new ArrayList<>();
+            for (User inviteConnections : invitedConnections) {
                 event_attendees.add(inviteConnections.getId());
             }
-            event.setEvent_attendeeIDs(event_attendees);
-            event.setRegistration_link(edt_link.getText().toString());
+            eventObj.setEvent_attendeeIDs(event_attendees);
+            eventObj.setRegistration_link(edt_link.getText().toString());
 
-            eventViewModel.createEvent(event, partImage).observe(this, new Observer<BaseModel<List<Event>>>() {
-                @Override
-                public void onChanged(BaseModel<List<Event>> listBaseModel) {
-                    if (listBaseModel != null && !listBaseModel.isError()) {
-                        simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_event_created), null, getString(R.string.ok), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                PrefUtils.remove(getContext(), Constants.PERSIST_CONNECTIONS);
+            if (getArguments() != null) {
+                eventObj.setId(event.getId());
+                eventObj.setModified_by_id(LoginUtils.getLoggedinUser().getId());
+                eventObj.setModified_datetime(DateUtils.GetCurrentdatetime());
+                eventViewModel.updateEvent(eventObj).observe(this, new Observer<BaseModel<List<Event>>>() {
+                    @Override
+                    public void onChanged(BaseModel<List<Event>> listBaseModel) {
+                        if (listBaseModel != null && !listBaseModel.isError()) {
+                            simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_event_updated), null, getString(R.string.ok), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    PrefUtils.remove(getContext(), Constants.PERSIST_CONNECTIONS);
 
-                                if (getFragmentManager().getBackStackEntryCount() != 0) {
-                                    getFragmentManager().popBackStack();
+                                    if (getFragmentManager().getBackStackEntryCount() != 0) {
+                                        getFragmentManager().popBackStack();
+                                    }
+                                    simpleDialog.dismiss();
                                 }
-                                simpleDialog.dismiss();
-                            }
-                        });
-                        simpleDialog.show();
-                    } else {
-                        networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                            });
+                            simpleDialog.show();
+                        } else {
+                            networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                        }
+                        hideDialog();
                     }
-                    hideDialog();
-                }
-            });
-        } else {
-            networkErrorDialog();
+                });
+            } else {
+                eventViewModel.createEvent(eventObj, partImage).observe(this, new Observer<BaseModel<List<Event>>>() {
+                    @Override
+                    public void onChanged(BaseModel<List<Event>> listBaseModel) {
+                        if (listBaseModel != null && !listBaseModel.isError()) {
+                            simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_event_created), null, getString(R.string.ok), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    PrefUtils.remove(getContext(), Constants.PERSIST_CONNECTIONS);
+
+                                    if (getFragmentManager().getBackStackEntryCount() != 0) {
+                                        getFragmentManager().popBackStack();
+                                    }
+                                    simpleDialog.dismiss();
+                                }
+                            });
+                            simpleDialog.show();
+                        } else {
+                            networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                        }
+                        hideDialog();
+                    }
+                });
+
+            }
         }
+
 
     }
 
@@ -567,8 +605,10 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
     {
         event_type = parent.getItemAtPosition(position).toString();
+        event.setIs_private(position);
         if(position==1)
         {
+
             invite_layout.setVisibility(View.VISIBLE);
         }
         else

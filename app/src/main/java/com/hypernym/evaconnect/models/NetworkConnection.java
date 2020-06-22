@@ -49,6 +49,7 @@ public class NetworkConnection implements Serializable {
     private String message_key;
 
     private int unread_msg_count;
+    private String userImage;
 
     public Integer getId() {
         return id;
@@ -169,5 +170,13 @@ public class NetworkConnection implements Serializable {
 
     public void setSenderId(String senderId) {
         this.senderId = senderId;
+    }
+
+    public String getUserImage() {
+        return userImage;
+    }
+
+    public void setUserImage(String userImage) {
+        this.userImage = userImage;
     }
 }

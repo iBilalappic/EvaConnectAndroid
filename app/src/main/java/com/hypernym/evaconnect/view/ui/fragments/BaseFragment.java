@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +30,7 @@ import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
+import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.view.bottomsheets.BottomSheetPictureSelection;
@@ -67,6 +69,7 @@ public class BaseFragment extends Fragment {
     public void onResume() {
         super.onResume();
         connectionViewModel= ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
+
     }
 
     public void showDialog() {
@@ -113,6 +116,7 @@ public class BaseFragment extends Fragment {
     }
     public void loadFragment(int id, Fragment fragment, Context context, boolean isBack)
     {
+        hideChatPerson();
         FragmentTransaction transaction =((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
         transaction.replace(id, fragment);
@@ -121,9 +125,11 @@ public class BaseFragment extends Fragment {
             transaction.addToBackStack(null);
         }
         transaction.commit();
+
     }
     public void loadFragment_bundle(int id, Fragment fragment, Context context, boolean isBack, Bundle bundle)
     {
+        hideChatPerson();
         FragmentTransaction transaction =((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
 
@@ -135,6 +141,7 @@ public class BaseFragment extends Fragment {
             transaction.addToBackStack(null);
         }
         transaction.commit();
+
     }
 
     public void openPictureDialog()
@@ -259,14 +266,24 @@ public class BaseFragment extends Fragment {
         if(f.size()>1) {
             getActivity().findViewById(R.id.tv_back).setVisibility(View.VISIBLE);
         }
+        hideChatPerson();
     }
     public void hideBackButton()
     {
         getActivity().findViewById(R.id.tv_back).setVisibility(View.GONE);
     }
-    public void showChatPerson()
+    public void setChatPerson(Context context,String image)
     {
-      getActivity().findViewById(R.id.img_chatperson).setVisibility(View.VISIBLE);
+
+        Fragment currentFragment = getFragmentManager().findFragmentById(R.id.framelayout);
+        if (currentFragment instanceof ChatFragment) {
+            //do your stuff here
+            ImageView imageView=getActivity().findViewById(R.id.img_chatperson);
+            imageView.setVisibility(View.VISIBLE);
+            AppUtils.setGlideImage(context,imageView,image);
+        }
+
+
     }
     public void hideChatPerson()
     {

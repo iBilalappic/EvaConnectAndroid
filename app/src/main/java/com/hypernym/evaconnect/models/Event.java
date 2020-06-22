@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public class Event implements Serializable {
+    private Integer id;
     private Integer event_id;
     private String name;
     private String event_city;
@@ -294,5 +295,13 @@ public class Event implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

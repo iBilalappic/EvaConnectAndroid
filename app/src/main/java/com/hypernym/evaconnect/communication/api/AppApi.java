@@ -8,7 +8,7 @@ import com.hypernym.evaconnect.models.CalendarModel;
 import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.Connection;
-import com.hypernym.evaconnect.models.CreateMeeting;
+import com.hypernym.evaconnect.models.Meeting;
 import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.MyLikesModel;
@@ -214,8 +214,13 @@ public interface AppApi {
                                              @Part MultipartBody.Part event_image);
 
     @POST(APIConstants.ADD_MEETING)
-    Call<BaseModel<List<CreateMeeting>>> createMeeting(@Body CreateMeeting meeting);
+    Call<BaseModel<List<Meeting>>> createMeeting(@Body Meeting meeting);
 
+    @PATCH(APIConstants.UPDATE_MEETING)
+    Call<BaseModel<List<Meeting>>> updateMeeting(@Body Meeting meeting,@Path("id") int id);
+
+    @PATCH(APIConstants.UPDATE_MEETING_ATTENDENCE)
+    Call<BaseModel<List<Meeting>>> updateMeetingAttendence(@Body Meeting meeting);
 
     @POST(APIConstants.GET_EVENT_DETAILS)
     Call<BaseModel<List<Event>>> getEventDetails(@Body Event event);
@@ -313,4 +318,6 @@ public interface AppApi {
     Call<BaseModel<List<String>>> uploadAttachment(@Part("created_by_id") int user_id,
                                                                @Part("status") RequestBody status ,
                                                                @Part MultipartBody.Part Chat_image);
+    @PATCH(APIConstants.UPDATE_EVENT)
+    Call<BaseModel<List<Event>>> updateEvent(@Body Event meeting,@Path("id") int id);
 }

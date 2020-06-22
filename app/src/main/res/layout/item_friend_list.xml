@@ -37,10 +37,11 @@
     <TextView
         android:id="@+id/tv_name"
         style="@style/TextStyle.Title"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:ellipsize="end"
         android:text="Derek J. Sine"
         app:layout_constraintStart_toEndOf="@+id/imageView6"
         app:layout_constraintTop_toTopOf="parent" />
@@ -51,13 +52,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="2dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:ellipsize="end"
         android:maxLines="2"
         android:text="Flight attendent London, UK Flight attendent London, UKFlight attendent London, UKFlight attendent London, UKFlight attendent London, UKFlight attendent London, UKFlight attendent London, UKFlight attendent London, UKFlight attendent London, UKFlight attendent London, UKFlight attendent London, UKFlight attendent London, UK"
-        app:layout_constraintBottom_toTopOf="@+id/view5"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/imageView6"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
@@ -89,14 +90,14 @@
         style="@style/TextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:drawableLeft="@drawable/clock"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="2dp"
         android:drawablePadding="5dp"
         android:gravity="center_vertical"
         android:text="(33m ago)"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/imageView6"
+        app:layout_constraintTop_toBottomOf="@+id/tv_lastmsg" />
+
     <View
         android:id="@+id/view5"
         android:layout_width="0dp"
@@ -106,5 +107,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_minago" />
 </androidx.constraintlayout.widget.ConstraintLayout>

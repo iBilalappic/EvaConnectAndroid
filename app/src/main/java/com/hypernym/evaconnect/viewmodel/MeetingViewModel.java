@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Event;
+import com.hypernym.evaconnect.models.Meeting;
 import com.hypernym.evaconnect.repositories.IMeetingRepository;
 import com.hypernym.evaconnect.repositories.impl.MeetingRepository;
 
@@ -24,6 +25,11 @@ public class MeetingViewModel extends AndroidViewModel {
     public LiveData<BaseModel<List<Event>>> getMeetingDetails(int event_id)
     {
         return iMeetingRepository.getMeetingDetails(event_id);
+    }
+
+    public LiveData<BaseModel<List<Meeting>>> updateMeetingAttendance(Meeting meeting)
+    {
+        return iMeetingRepository.updateMeetingAttendance(meeting);
     }
 
 }

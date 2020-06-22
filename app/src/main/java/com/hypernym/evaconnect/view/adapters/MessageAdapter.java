@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.NetworkConnection;
 import com.hypernym.evaconnect.toolbar.OnItemClickListener;
+import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
 
 import java.util.ArrayList;
@@ -48,8 +49,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         } else {
             holder.tv_lastmsg.setText(Html.fromHtml(networkConnectionList.get(position).getMessage()));
         }
-       // AppUtils.setGlideImage(context, (holder).mImageview6, networkConnectionList.get(position).getReceiver().getUserImage());
-        holder.tv_minago.setText(DateUtils.getTimeAgo(networkConnectionList.get(position).getCreatedDatetime()));
+       AppUtils.setGlideImage(context, (holder).mImageview6, networkConnectionList.get(position).getUserImage());
+        holder.tv_minago.setText(DateUtils.getDateTimeFromTimestamp(networkConnectionList.get(position).getCreatedDatetime()));
 
         holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override

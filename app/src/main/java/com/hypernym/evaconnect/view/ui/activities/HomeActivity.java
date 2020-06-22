@@ -387,10 +387,10 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
 
     }
 //
-//    @OnClick(R.id.tv_back)
-//    public void back() {
-//        super.onBackPressed();
-//    }
+    @OnClick(R.id.tv_back)
+    public void back() {
+        super.onBackPressed();
+    }
 
     @Override
     public void onItemClick(View view, int position) {

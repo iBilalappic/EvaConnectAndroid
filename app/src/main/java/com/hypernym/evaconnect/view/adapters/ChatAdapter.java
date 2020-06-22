@@ -54,7 +54,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             if(chatMessageList.get(position).getSenderID().equalsIgnoreCase(LoginUtils.getLoggedinUser().getId().toString()))
             {
                 //  holder.tv_receivertime.setText(DateUtils.getTimeAgo(chatMessageList.get(position).getCreated_datetime()));
-                holder.tv_sendertime.setText(DateUtils.formatToYesterdayOrToday(chatMessageList.get(position).getCreated_datetime()));
+                holder.tv_sendertime.setText(DateUtils.getDateTimeFromTimestamp(chatMessageList.get(position).getCreated_datetime()));
                 holder.mlayout2.setVisibility(View.VISIBLE);
                 holder.tv_sendertime.setVisibility(View.VISIBLE);
                 holder.mlayout1.setVisibility(View.GONE);
@@ -63,7 +63,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             }
             else
             {
-                holder.tv_receivertime.setText(DateUtils.formatToYesterdayOrToday(chatMessageList.get(position).getCreated_datetime()));
+                holder.tv_receivertime.setText(DateUtils.getDateTimeFromTimestamp(chatMessageList.get(position).getCreated_datetime()));
                 holder.mlayout2.setVisibility(View.GONE);
                 holder.tv_sendertime.setVisibility(View.GONE);
                 holder.mlayout1.setVisibility(View.VISIBLE);

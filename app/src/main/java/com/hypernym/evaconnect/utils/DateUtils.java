@@ -8,6 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public final class DateUtils {
@@ -175,6 +176,27 @@ public final class DateUtils {
 
         return formatedDate;
     }
+    public static boolean isValidDate(String inDate) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_INPUT_FORMAT_WITHOUTTIME);
+        dateFormat.setLenient(false);
+        try {
+            dateFormat.parse(inDate.trim());
+        } catch (ParseException pe) {
+            return false;
+        }
+        return true;
+    }
+    public static boolean isValidTime(String time) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT_1);
+        dateFormat.setLenient(false);
+        try {
+            dateFormat.parse(time.trim());
+        } catch (ParseException pe) {
+            return false;
+        }
+        return true;
+    }
+
 
     public static String getFormattedEventDateDMY(String datetime) {
         String formatedDate = null;
@@ -522,9 +544,36 @@ public final class DateUtils {
         return "Just Now";
     }
     public static String getDateTimeFromTimestamp(String time) {
-        Long longTime=Long.getLong(time);
+        long longTime = Long.parseLong(time);
+
         Date date = new Date(longTime*1000L); // *1000 is to convert seconds to milliseconds
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE, hh:mm aa"); // the format of your date
        return sdf.format(date);
+    }
+
+    public static Date formattedDateWithoutTime(String date)
+    {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_INPUT_FORMAT_WITHOUTTIME, Locale.US);
+            Date newdate = dateFormat.parse(date);
+            return newdate;
+        }
+        catch(ParseException pe ) {
+            // handle the failure
+        }
+        return new Date();
+    }
+
+    public static Date formattedDateTime(String time)
+    {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat(TIME_FORMAT_1, Locale.US);
+            Date newdate = dateFormat.parse(time);
+            return newdate;
+        }
+        catch(ParseException pe ) {
+            // handle the failure
+        }
+        return new Date();
     }
 }

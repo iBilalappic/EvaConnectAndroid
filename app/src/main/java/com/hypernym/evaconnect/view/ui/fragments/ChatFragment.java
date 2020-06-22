@@ -169,17 +169,20 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         {
             user=(User) getArguments().getSerializable("user");
             setPageTitle(user.getFirst_name());
+            setChatPerson(getContext(),user.getUser_image());
         }
         else
         {
             NetworkConnection networkConnection=(NetworkConnection) getArguments().getSerializable(Constants.DATA);
             setPageTitle(networkConnection.getName());
-            settingFireBaseChat(networkConnection);
             user.setEmail(networkConnection.getName());
             user.setId(networkConnection.getId());
             user.setChatID(networkConnection.getChatID());
-
+            user.setUser_image(networkConnection.getUserImage());
+            setChatPerson(getContext(),networkConnection.getUserImage());
+            settingFireBaseChat(networkConnection);
         }
+
     }
 
     private void settingFireBaseChat(NetworkConnection message) {
@@ -196,7 +199,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         chatMessage.setMessage(child.child("message").getValue().toString());
                         chatMessage.setName(child.child("name").getValue().toString());
                         chatMessage.setSenderID(child.child("senderID").getValue().toString());
-                        chatMessage.setCreated_datetime(child.child("timestamp").toString());
+                        chatMessage.setCreated_datetime(child.child("timestamp").getValue().toString());
                         if(child.child("images").getValue()!=null)
                         {
                             DataSnapshot images=child.child("images");
@@ -320,13 +323,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
             ChatMessage chatMessage=new ChatMessage();
             chatMessage.setSenderID(LoginUtils.getLoggedinUser().getId().toString());
-            chatMessage.setCreated_datetime(DateUtils.GetCurrentdatetime());
+            chatMessage.setCreated_datetime(String.valueOf(new Date().getTime()));
             chatMessage.setMessage(messageText);
             chatMessage.setName(LoginUtils.getLoggedinUser().getEmail());
             chatMessageList.add(chatMessage);
             chatAdapter.notifyDataSetChanged();
 
-            sendNotification();
+            sendNotification(user.getEmail());
             messageArea.setText("");
             messageArea.requestFocus();
 
@@ -338,7 +341,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
 
-    public void sendNotification() {
+    public void sendNotification(String email) {
         Notification_onesignal request = new Notification_onesignal();
         request.app_id = "44bb428a-54f5-4155-bea3-c0ac2d0b3c1a";
         request.contents = new Contents();
@@ -359,7 +362,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 //        } else {
 //            filter.value = networkConnection.getSender().getEmail();
 //        }
-        filter.value=LoginUtils.getLoggedinUser().getEmail();
+        filter.value=email;
         //filter.value = networkConnection.getReceiver().getEmail();
         request.filters = new ArrayList<>();
         request.filters.add(filter);
@@ -400,10 +403,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         if (listBaseModel != null && !listBaseModel.isError()) {
                             if (count == MultiplePhoto.size() - 1) {
                                 uploadedImages.add(listBaseModel.getData().get(0));
-
                                 updateFirebase(uploadedImages);
-
-
                             } else {
                                 networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                             }
@@ -484,7 +484,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 chatMessageList.add(chatMessage);
                 chatAdapter.notifyDataSetChanged();
 
-                sendNotification();
+                sendNotification(user.getEmail());
                 messageArea.setText("");
                 messageArea.requestFocus();
 

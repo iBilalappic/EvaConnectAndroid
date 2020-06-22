@@ -162,7 +162,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
          {
              networkErrorDialog();
          }
-
+            setPageTitle("Event Details");
         img_like.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
@@ -281,7 +281,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
 
                 tv_date.setText(DateUtils.getFormattedDateDMY(event.getStart_date())+" - "+ DateUtils.getFormattedDateDMY(event.getEnd_date()) +" | "+event.getStart_time()+" - "+event.getEnd_time());
 
-                tv_location.setText(event.getEvent_city());
+                tv_location.setText(event.getAddress());
                 if(event.getIs_private()==0)
                 {
                     tv_event_type.setText("Open to the public");
@@ -307,6 +307,13 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
 
 
     private void updateAttendance(Event event) {
+        event.setEvent_id(event_id);
+        event.setModified_by_id(LoginUtils.getLoggedinUser().getId());
+        event.setModified_datetime(DateUtils.GetCurrentdatetime());
+        event.setStatus(AppConstants.ACTIVE);
+        event.setUser_id(LoginUtils.getLoggedinUser().getId());
+        event.setAttendance_status("Going");
+
         eventViewModel.updateEventAttendance(event).observe(this, new Observer<BaseModel<List<Event>>>() {
             @Override
             public void onChanged(BaseModel<List<Event>> listBaseModel) {
@@ -349,7 +356,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
     @OnClick(R.id.accept_invite)
     public void accept_invite()
     {
-        event.setAttendance_status("Going");
+
         updateAttendance(event);
     }
 

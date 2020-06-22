@@ -1,16 +1,7 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,13 +9,17 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
-import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.Constants;
@@ -32,7 +27,6 @@ import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.utils.PrefUtils;
-import com.hypernym.evaconnect.view.adapters.ConnectionsAdapter;
 import com.hypernym.evaconnect.view.adapters.InviteConnectionsAdapter;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 
@@ -41,7 +35,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
 
@@ -205,7 +198,7 @@ public class InviteConnections extends BaseFragment implements InviteConnections
 
     private void init() {
         setPageTitle("Invite Connections");
-
+        PrefUtils.persistConnectionsMeeting(getContext(),new ArrayList<>());
         Bundle bundle = getArguments();
         if (bundle != null) {
             fragment_type = bundle.getString(Constants.FRAGMENT_TYPE);

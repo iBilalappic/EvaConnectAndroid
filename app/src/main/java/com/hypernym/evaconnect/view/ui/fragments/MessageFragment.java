@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -168,12 +169,33 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                                    networkConnection.setMessage("image");
                                 }
                                 networkConnection.setId(Integer.parseInt(lastMessage .child("senderID").getValue().toString()));
-                                networkConnection.setCreatedDatetime(lastMessage .child("timestamp").getValue().toString());
+                                networkConnection.setCreatedDatetime(lastMessage.child("timestamp").getValue().toString());
                                 networkConnection.setChatID(child.getKey());
                                 networkConnection.setName(lastMessage .child("name").getValue().toString());
+                                Query userQuery = databaseReference.child(AppConstants.FIREASE_USER_ENDPOINT);
+                                userQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.getValue() != null)
+                                        {
+                                            for (DataSnapshot users : dataSnapshot.getChildren()) {
+                                                if(users.getKey().equalsIgnoreCase(lastMessage.child("senderID").getValue().toString()))
+                                                {
+                                                    networkConnection.setUserImage(users.child("imageName").getValue().toString());
+                                                }
+                                           }
+                                            networkConnectionList.add(networkConnection);
+                                            messageAdapter.notifyDataSetChanged();
 
+                                        }
+                                    }
 
-                                networkConnectionList.add(networkConnection);
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+
                             }
                         }
                         setupRecyclerview();

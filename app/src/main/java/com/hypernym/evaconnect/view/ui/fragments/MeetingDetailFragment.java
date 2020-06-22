@@ -18,6 +18,7 @@ import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.EventAttendees;
+import com.hypernym.evaconnect.models.Meeting;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.DateUtils;
@@ -63,8 +64,14 @@ public class MeetingDetailFragment extends BaseFragment {
     @BindView(R.id.attending_layout)
     ConstraintLayout attending_layout;
 
+    @BindView(R.id.tv_updated)
+    TextView tv_updated;
 
+    @BindView(R.id.btn_attending)
+    TextView btn_attending;
 
+    @BindView(R.id.btn_notattending)
+    TextView btn_notattending;
     private Event event;
 
     public MeetingDetailFragment() {
@@ -81,9 +88,17 @@ public class MeetingDetailFragment extends BaseFragment {
         init();
         return view;
     }
+
+    @Override
+    public void onResume() {
+        invitedConnections.clear();
+        usersAdapter.notifyDataSetChanged();
+        super.onResume();
+    }
+
     private void init() {
         showBackButton();
-        setPageTitle("Meeting");
+        setPageTitle("Meeting Details");
         meeting_id=getArguments().getInt("id");
         meetingViewModel = ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(MeetingViewModel.class);
         setAttendeesAdapter();
@@ -147,9 +162,62 @@ public class MeetingDetailFragment extends BaseFragment {
                 tv_createdDate.setText(DateUtils.getFormattedDateDMY(event.getStart_date()));
 
                 tv_createdLocation.setText(event.getAddress());
+                if(event.getIs_attending().equalsIgnoreCase("Going"))
+                {
+                    btn_notattending.setBackground(getResources().getDrawable(R.drawable.notattending_disable));
+                    btn_attending.setBackground(getResources().getDrawable(R.drawable.attending_enable));
+                }
+                else
+                {
+                    btn_notattending.setBackground(getResources().getDrawable(R.drawable.notattending_enable));
+                    btn_attending.setBackground(getResources().getDrawable(R.drawable.attending_disable));
+                }
 
             }
         });
+    }
+    @OnClick(R.id.btn_notattending)
+    public void notAttending()
+    {
+      btn_notattending.setBackground(getResources().getDrawable(R.drawable.notattending_enable));
+      btn_attending.setBackground(getResources().getDrawable(R.drawable.attending_disable));
+        Meeting meeting=new Meeting();
+        meeting.setUser_id(LoginUtils.getLoggedinUser().getId());
+        meeting.setMeeting_id(event.getId());
+        meeting.setAttendance_status("Not Going");
+        meeting.setModified_by_id(LoginUtils.getLoggedinUser().getId());
+        meeting.setModified_datetime(DateUtils.GetCurrentdatetime());
+        updateMeetingAttendence(meeting);
+
+    }
+
+    private void updateMeetingAttendence(Meeting meeting) {
+        meetingViewModel.updateMeetingAttendance(meeting).observe(this, new Observer<BaseModel<List<Meeting>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Meeting>> listBaseModel) {
+                if (listBaseModel != null && !listBaseModel.isError())
+                {
+                    tv_updated.setVisibility(View.VISIBLE);
+                }
+                else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+            }
+        });
+    }
+
+    @OnClick(R.id.btn_attending)
+    public void attending()
+    {
+        btn_notattending.setBackground(getResources().getDrawable(R.drawable.notattending_disable));
+        btn_attending.setBackground(getResources().getDrawable(R.drawable.attending_enable));
+        Meeting meeting=new Meeting();
+        meeting.setUser_id(LoginUtils.getLoggedinUser().getId());
+        meeting.setMeeting_id(event.getId());
+        meeting.setAttendance_status("Going");
+        meeting.setModified_by_id(LoginUtils.getLoggedinUser().getId());
+        meeting.setModified_datetime(DateUtils.GetCurrentdatetime());
+        updateMeetingAttendence(meeting);
     }
     private void setAttendeesAdapter() {
         usersAdapter = new InvitedUsersAdapter(getContext(), invitedConnections);

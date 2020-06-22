@@ -48,7 +48,7 @@ public class EventDialog extends Dialog {
 
         if (event.getObject_type().equalsIgnoreCase("event")) {
             tv_title.setText(event.getObject_details().getName());
-            tv_location.setText(event.getObject_details().getEvent_city());
+            tv_location.setText(event.getObject_details().getAddress());
             tv_description.setText(event.getObject_details().getContent());
             tv_createdby.setText("Created By "+event.getObject_details().getUser().getFirst_name());
             tv_event_type.setVisibility(View.VISIBLE);

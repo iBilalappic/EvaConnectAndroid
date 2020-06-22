@@ -14,10 +14,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.hypernym.evaconnect.R;
-import com.hypernym.evaconnect.view.adapters.ActivityAdapter;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,8 +40,7 @@ public class ActivityFragment extends BaseFragment {
         TabLayout tabLayout = view.findViewById(R.id.tabLayout);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setupWithViewPager(mViewPager);
-
-
+        hideBackButton();
         return view;
     }
 

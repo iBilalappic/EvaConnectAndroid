@@ -37,6 +37,7 @@ public interface APIConstants {
     public static String GET_APPLICANTS="job/application/filter/";
     public static String ADD_EVENT="event/";
     public static String ADD_MEETING="meeting/";
+    public static String UPDATE_MEETING="meeting/details/{id}/";
     public static String GET_CALENDAR_MARKS="user/calendar/";
     public static String GET_EVENT_DETAILS="event/details/";
     public static String GET_EVENT_COMMENTS="event/comment/filter/";
@@ -65,4 +66,6 @@ public interface APIConstants {
     public static String SHARE_POST="post/share/";
     public static String GET_CONNECTION_BY_RECOMMENDED_USER="user/network/connection/recommendations/?";
     public static String CHAT_IMAGE="chat/";
+    public static String UPDATE_MEETING_ATTENDENCE="meeting/attendee/";
+    public static String UPDATE_EVENT="event/details/{id}/";
 }

@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +20,8 @@ import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.dateTimePicker.DateTime;
 import com.hypernym.evaconnect.dateTimePicker.DateTimePicker;
 import com.hypernym.evaconnect.dateTimePicker.SimpleDateTimePicker;
-import com.hypernym.evaconnect.models.CreateMeeting;
+import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.Meeting;
 import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.EventAttendees;
 import com.hypernym.evaconnect.models.User;
@@ -82,8 +83,6 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
     @BindView(R.id.post)
     TextView post;
 
-    @BindView(R.id.attending_layout)
-    ConstraintLayout attending_layout;
 
     private static final String TAG = CreateMeetingFragment.class.getSimpleName();
 
@@ -103,13 +102,22 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
     private Validator validator;
     private SimpleDialog simpleDialog;
     private EventViewModel eventViewModel;
+    private  Event event=new Event();
 
 
     @Override
     public void onResume() {
         if (PrefUtils.getConnectionsMeeting(getContext()) != null)
         {
+
             invitedConnections.clear();
+            if(event.getAttendees()!=null)
+                for(EventAttendees eventAttendees:event.getAttendees())
+                {
+                    invitedConnections.add(eventAttendees.getUser());
+                }
+
+
             invitedConnections.addAll(PrefUtils.getConnectionsMeeting(getContext()));
 
             Log.e(TAG, "onResume: " + GsonUtils.toJson(invitedConnections));
@@ -133,7 +141,7 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
 
         ButterKnife.bind(this, view);
         init();
-        initRecyclerview();
+       // initRecyclerview();
 
         return view;
     }
@@ -148,43 +156,104 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
             {
                 event_attendees.add(inviteConnections.getId());
             }
+            Meeting meeting=new Meeting();
+            meeting.setUser_id( LoginUtils.getLoggedinUser().getId());
 
-            CreateMeeting meeting = new CreateMeeting(
-                    LoginUtils.getLoggedinUser().getId(),
-                    LoginUtils.getLoggedinUser().getId(),
-                    edt_eventname.getText().toString(),
-                    edt_description.getText().toString(),
-                    edt_eventCity.getText().toString(),
-                    DateUtils.getFormattedEventDate(tv_startdate.getText().toString()),
-                    DateUtils.getFormattedEventDate(tv_enddate.getText().toString()),
-                    DateUtils.getTime_utc(tv_startTime.getText().toString()),
-                    DateUtils.getTime_utc(tv_endTime.getText().toString()),
-                    AppConstants.USER_STATUS,
-                    event_attendees
-            );
+            meeting.setModified_by_id( LoginUtils.getLoggedinUser().getId());
+            meeting.setModified_datetime(DateUtils.GetCurrentdatetime());
+            meeting.setCreated_by_id(LoginUtils.getLoggedinUser().getId());
+            meeting.setName(edt_eventname.getText().toString());
+            meeting.setContent(edt_description.getText().toString());
+            meeting.setAddress(edt_eventCity.getText().toString());
+            if(DateUtils.isValidDate(tv_startdate.getText().toString()))
+            {
+                meeting.setStart_date(tv_startdate.getText().toString());
+            }
+            else {
+                meeting.setStart_date(DateUtils.getFormattedEventDate(tv_startdate.getText().toString()));
+            }
+            if(DateUtils.isValidDate(tv_enddate.getText().toString()))
+            {
+                meeting.setEnd_date(tv_enddate.getText().toString());
+            }
+            else {
+                meeting.setEnd_date( DateUtils.getFormattedEventDate(tv_enddate.getText().toString()));
+            }
+            if(DateUtils.isValidTime(tv_startTime.getText().toString()))
+            {
+                meeting.setStart_time(tv_startTime.getText().toString());
+            }
+            else {
+                meeting.setStart_time( DateUtils.getFormattedTime(tv_startTime.getText().toString()));
+            }
 
-            eventViewModel.createMeeting(meeting).observe(this, listBaseModel -> {
-                if (listBaseModel != null && !listBaseModel.isError())
-                {
-                    simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_meeting_created), null, getString(R.string.ok), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // when meeting is successfully created remove the saved connections
-                            PrefUtils.remove(getContext(), Constants.PERSIST_CONNECTIONS_MEETING);
+            if(DateUtils.isValidTime(tv_startTime.getText().toString()))
+            {
+                meeting.setEnd_time(tv_endTime.getText().toString());
+            }
+            else {
+                meeting.setEnd_time( DateUtils.getFormattedTime(tv_endTime.getText().toString()));
+            }
 
-                            if (getFragmentManager().getBackStackEntryCount() != 0) {
-                                getFragmentManager().popBackStack();
+             meeting.setStatus(AppConstants.USER_STATUS);
+             meeting.setAttendees(event_attendees);
+
+            if(getArguments()!=null)
+            {
+                 meeting.setId(event.getId());
+                 eventViewModel.updateMeeting(meeting).observe(this, new Observer<BaseModel<List<Meeting>>>() {
+                     @Override
+                     public void onChanged(BaseModel<List<Meeting>> listBaseModel) {
+                         if (listBaseModel != null && !listBaseModel.isError())
+                         {
+                             simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_meeting_updated), null, getString(R.string.ok), new View.OnClickListener() {
+                                 @Override
+                                 public void onClick(View v) {
+                                     // when meeting is successfully created remove the saved connections
+                                     PrefUtils.remove(getContext(), Constants.PERSIST_CONNECTIONS_MEETING);
+
+                                     if (getFragmentManager().getBackStackEntryCount() != 0) {
+                                         getFragmentManager().popBackStack();
+                                     }
+                                     simpleDialog.dismiss();
+                                 }
+                             });
+                             simpleDialog.show();
+                         }
+                         else {
+                             networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                         }
+                         hideDialog();
+                     }
+                 });
+            }
+            else
+            {
+                eventViewModel.createMeeting(meeting).observe(this, listBaseModel -> {
+                    if (listBaseModel != null && !listBaseModel.isError())
+                    {
+                        simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_meeting_created), null, getString(R.string.ok), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                // when meeting is successfully created remove the saved connections
+                                PrefUtils.remove(getContext(), Constants.PERSIST_CONNECTIONS_MEETING);
+
+                                if (getFragmentManager().getBackStackEntryCount() != 0) {
+                                    getFragmentManager().popBackStack();
+                                }
+                                simpleDialog.dismiss();
                             }
-                            simpleDialog.dismiss();
-                        }
-                    });
-                    simpleDialog.show();
-                }
-                else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
-            });
+                        });
+                        simpleDialog.show();
+                    }
+                    else {
+                        networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                    }
+                    hideDialog();
+                });
+            }
+
+
         }
         else{
             networkErrorDialog();
@@ -219,6 +288,7 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
 
     private void init() {
         setPageTitle("Create a Meeting Schedule");
+
         tv_startdate.setInputType(InputType.TYPE_NULL);
         tv_startdate.setText(dateformat.format(new Date()));
 
@@ -231,29 +301,32 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
         validator = new Validator(this);
         validator.setValidationListener(this);
         eventViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(EventViewModel.class);
+        initRecyclerview();
         if(getArguments()!=null)
         {
-            Event event=(Event) getArguments().getSerializable("meeting");
+            setPageTitle("Update Meeting Schedule");
+            event=(Event) getArguments().getSerializable("meeting");
             edt_eventname.setText(event.getName());
             edt_description.setText(event.getContent());
-            edt_eventCity.setText(event.getEvent_city());
-            tv_startdate.setText(event.getStart_date());
-            tv_startTime.setText(event.getStart_time());
-            tv_enddate.setText(event.getEnd_date());
-            tv_endTime.setText(event.getEnd_time());
-            if(event.getIs_private()==1)
-            {
-                attending_layout.setVisibility(View.VISIBLE);
+            edt_eventCity.setText(event.getAddress());
+            try {
+                tv_startdate.setText(dateformat.format(DateUtils.formattedDateWithoutTime(event.getStart_date())));
+                tv_startTime.setText(time.format(DateUtils.formattedDateTime(event.getStart_time())));
+                tv_enddate.setText(dateformat.format(DateUtils.formattedDateWithoutTime(event.getEnd_date())));
+                tv_endTime.setText(time.format(DateUtils.formattedDateTime(event.getEnd_time())));
             }
-            else
+            catch (Exception ex)
             {
-                attending_layout.setVisibility(View.GONE);
+                Log.d("exception",ex.getMessage());
             }
+
+
             for(EventAttendees eventAttendees:event.getAttendees())
             {
                 invitedConnections.add(eventAttendees.getUser());
             }
             usersAdapter.notifyDataSetChanged();
+            post.setText("Update Meeting");
         }
 
     }
@@ -285,7 +358,6 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
     public void addConnections(){
         Bundle bundle = new Bundle();
         bundle.putString(Constants.FRAGMENT_TYPE, Constants.FRAGMENT_NAME_1);
-
         loadFragment_bundle(R.id.framelayout, new InviteConnections(), getContext(), true, bundle);
     }
 
@@ -312,6 +384,8 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
             tv_startdate.setText(dateformat.format(mDateTime.getDate()));
             tv_startTime.setText(time.format(mDateTime.getDate()));
             startDate = mDateTime.getDate();
+            tv_enddate.setText("");
+            tv_endTime.setText("");
             /*tv_enddate.setText(dateformat.format(mDateTime.getDate()));
             tv_endTime.setText(time.format(mDateTime.getDate()));*/
         }
