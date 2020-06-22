@@ -7,19 +7,24 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.view.ViewCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.client.Firebase;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -85,7 +90,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     TextView sendButton;
 
     @BindView(R.id.browsefiles)
-    TextView browsefiles;
+    FloatingActionButton browsefiles;
 
 
     @BindView(R.id.rc_attachments)
@@ -251,10 +256,56 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
             case R.id.browsefiles:
                 //   openPictureDialog();
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("image/*");
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_PHOTO_GALLERY);
+                final OvershootInterpolator interpolator = new OvershootInterpolator();
+                ViewCompat.animate(browsefiles).
+                        rotation(135f).
+                        withLayer().
+                        setDuration(300).
+                        setInterpolator(interpolator).
+                        start();
+                /** Instantiating PopupMenu class */
+                PopupMenu popup = new PopupMenu(getContext(), v);
+
+                /** Adding menu items to the popumenu */
+                popup.getMenuInflater().inflate(R.menu.chat_options, popup.getMenu());
+
+                popup.setOnDismissListener(new PopupMenu.OnDismissListener() {
+                    @Override
+                    public void onDismiss(PopupMenu menu) {
+                        ViewCompat.animate(browsefiles).
+                                rotation(0f).
+                                withLayer().
+                                setDuration(300).
+                                setInterpolator(interpolator).
+                                start();
+                    }
+                });
+                /** Defining menu item click listener for the popup menu */
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+
+                        //    Toast.makeText(getContext(), item.getGroupId()+"You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                        if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.images))) {
+                            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                            intent.addCategory(Intent.CATEGORY_OPENABLE);
+                            intent.setType("image/*");
+                            startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_PHOTO_GALLERY);
+                        }  else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.camera))) {
+                            loadFragment(R.id.framelayout, new ShareVideoFragment(), getContext(), true);
+                        }
+                        else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.document))) {
+                            loadFragment(R.id.framelayout, new CreateEventFragment(), getContext(), true);
+                        }
+
+                        return true;
+                    }
+                });
+
+                /** Showing the popup menu */
+                popup.show();
+
                 break;
 
         }

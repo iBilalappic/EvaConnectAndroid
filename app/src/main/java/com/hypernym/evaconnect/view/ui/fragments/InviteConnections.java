@@ -129,9 +129,7 @@ public class InviteConnections extends BaseFragment implements InviteConnections
 
         return view;
     }
-    public void setCustomEventListener(InvitedConnectionListener eventListener) {
-        mListener = eventListener;
-    }
+
     private void getConnectionByFilter(String type, int currentPage, boolean b) {
         User userData = new User();
         User user = LoginUtils.getLoggedinUser();
@@ -151,7 +149,26 @@ public class InviteConnections extends BaseFragment implements InviteConnections
                             connectionList.clear();
                             inviteConnectionsAdapter.notifyDataSetChanged();
                         }
-                        connectionList.addAll(listBaseModel.getData());
+                        if(users.size()>0)
+                        {
+                            for (User user1:users)
+                            {
+                                connectionList.addAll(listBaseModel.getData());
+                                for(User user2:listBaseModel.getData())
+                                {
+                                    if(user2.getId()==user1.getId())
+                                    {
+                                        connectionList.remove(user2);
+                                    }
+                                }
+                            }
+                           // connectionList.addAll(listBaseModel.getData());
+                        }
+                        else
+                        {
+                            connectionList.addAll(listBaseModel.getData());
+                        }
+
                         inviteConnectionsAdapter.notifyDataSetChanged();
                        // PrefUtils.persistConnectionsMeeting(getContext(),new ArrayList<>());
                         //PrefUtils.persistConnections(getContext(),new ArrayList<>());

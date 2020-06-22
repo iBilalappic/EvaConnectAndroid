@@ -138,6 +138,9 @@
     <string name="menu3">Post an event</string>
     <string name="menu4">Share an Article</string>
     <string name="What_will_you_write_about">What will you write about?</string>
+    <string name="images">Images</string>
+    <string name="camera">Camera</string>
+    <string name="document">Document</string>
 
 </resources>
 

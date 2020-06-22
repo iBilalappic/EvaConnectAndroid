@@ -185,6 +185,7 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
             if(getArguments()!=null)
             {
                  meeting.setId(event.getId());
+                 meeting.setMeeting_id(event.getId());
                  eventViewModel.updateMeeting(meeting).observe(this, new Observer<BaseModel<List<Meeting>>>() {
                      @Override
                      public void onChanged(BaseModel<List<Meeting>> listBaseModel) {
@@ -304,12 +305,15 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
             {
                 Log.d("exception",ex.getMessage());
             }
-
-
-            for(EventAttendees eventAttendees:event.getAttendees())
+            if(invitedConnections.size()==0)
             {
-                invitedConnections.add(eventAttendees.getUser());
+                for(EventAttendees eventAttendees:event.getAttendees())
+                {
+                    invitedConnections.add(eventAttendees.getUser());
+                }
             }
+            //invitedConnections.clear();
+
             usersAdapter.notifyDataSetChanged();
             post.setText("Update Meeting");
         }
@@ -411,7 +415,7 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
 
     @Override
     public void invitedConnections(List<User> connections) {
-        invitedConnections.clear();
+     //   invitedConnections.clear();
         invitedConnections.addAll(connections);
         Log.e(TAG, "onResume: " + GsonUtils.toJson(invitedConnections));
         usersAdapter.notifyDataSetChanged();
