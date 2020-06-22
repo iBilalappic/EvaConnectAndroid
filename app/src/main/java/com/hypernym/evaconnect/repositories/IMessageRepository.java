@@ -11,5 +11,5 @@ import java.util.List;
 
 public interface IMessageRepository {
     LiveData<BaseModel<List<NetworkConnection>>> getFriendList(User user);
-    LiveData<BaseModel<List<String>>> uploadAttachment(ChatAttachment attachment);
+    LiveData<BaseModel<ChatAttachment>> uploadAttachment(ChatAttachment attachment);
 }

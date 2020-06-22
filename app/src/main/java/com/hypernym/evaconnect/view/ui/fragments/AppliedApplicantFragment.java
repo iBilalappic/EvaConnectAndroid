@@ -136,7 +136,7 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
     private void init() {
         if ((getArguments() != null)) {
             setPageTitle("");
-            showBackButton();
+         //   showBackButton();
             connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
             appliedApplicantViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(AppliedApplicantViewModel.class);
             appliedApplicants = (AppliedApplicants) getArguments().getSerializable(Constants.DATA);

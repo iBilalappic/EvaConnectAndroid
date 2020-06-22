@@ -360,7 +360,7 @@ public class ShareVideoFragment extends BaseFragment implements AttachmentsAdapt
 
     public void setPostButton() {
         if (edt_content.getText().length() > 0 || part_images.size() > 0 || video != null) {
-            post.setBackground(getResources().getDrawable(R.drawable.rounded_button));
+            post.setBackground(getResources().getDrawable(R.drawable.button_bg));
         } else {
             post.setBackground(getResources().getDrawable(R.drawable.button_unfocused));
         }

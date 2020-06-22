@@ -18,6 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
+import com.hypernym.evaconnect.listeners.InvitedConnectionListener;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.User;
@@ -73,11 +74,17 @@ public class InviteConnections extends BaseFragment implements InviteConnections
     private boolean isSearchFlag = false;
     private final String TAG = InviteConnections.class.getSimpleName();
     private String fragment_type = "";
+    List<User> users=new ArrayList<>();
+    InvitedConnectionListener mListener;
+
+    public InviteConnections(InvitedConnectionListener eventListener) {
+        this.mListener=eventListener;
+        // Required empty public constructor
+    }
 
     public InviteConnections() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -104,7 +111,7 @@ public class InviteConnections extends BaseFragment implements InviteConnections
             @Override
             public void onSingleClick(View v) {
                 Log.e(TAG, "onSingleClick: " + GsonUtils.toJson(invitedConnections));
-
+                mListener.invitedConnections(invitedConnections);
                 if (fragment_type.equals(Constants.FRAGMENT_NAME_2)) {
                     PrefUtils.persistConnections(getContext(), invitedConnections);
                 } else if (fragment_type.equals(Constants.FRAGMENT_NAME_1)) {
@@ -122,7 +129,9 @@ public class InviteConnections extends BaseFragment implements InviteConnections
 
         return view;
     }
-
+    public void setCustomEventListener(InvitedConnectionListener eventListener) {
+        mListener = eventListener;
+    }
     private void getConnectionByFilter(String type, int currentPage, boolean b) {
         User userData = new User();
         User user = LoginUtils.getLoggedinUser();
@@ -142,10 +151,10 @@ public class InviteConnections extends BaseFragment implements InviteConnections
                             connectionList.clear();
                             inviteConnectionsAdapter.notifyDataSetChanged();
                         }
-
                         connectionList.addAll(listBaseModel.getData());
                         inviteConnectionsAdapter.notifyDataSetChanged();
-
+                       // PrefUtils.persistConnectionsMeeting(getContext(),new ArrayList<>());
+                        //PrefUtils.persistConnections(getContext(),new ArrayList<>());
                         if (connectionList.size() > 0) {
                             rc_connections.setVisibility(View.VISIBLE);
                             empty.setVisibility(View.GONE);
@@ -198,16 +207,19 @@ public class InviteConnections extends BaseFragment implements InviteConnections
 
     private void init() {
         setPageTitle("Invite Connections");
-        PrefUtils.persistConnectionsMeeting(getContext(),new ArrayList<>());
+        //
         Bundle bundle = getArguments();
         if (bundle != null) {
             fragment_type = bundle.getString(Constants.FRAGMENT_TYPE);
 
             if (fragment_type.equals(Constants.FRAGMENT_NAME_1)) {
                 inviteButton.setText("Invite Connections to Meeting");
+                users=bundle.getParcelableArrayList("connections");
+                //users=PrefUtils.getConnectionsMeeting(getContext());
             } else {
 
                 inviteButton.setText("Invite Connections to Event");
+                users=PrefUtils.getConnections(getContext());
             }
         }
     }

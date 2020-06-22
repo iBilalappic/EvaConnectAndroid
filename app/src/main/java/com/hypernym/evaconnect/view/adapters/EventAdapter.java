@@ -57,8 +57,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         else if(events.get(position).getObject_type().equalsIgnoreCase("event"))
         {
             holder.itemView.setVisibility(View.VISIBLE);
-
-            holder.eventTitle.setText(events.get(position).getObject_details().getName() + " | " + events.get(position).getObject_details().getAddress());
+            if(events.get(position).getObject_details().getName()!=null){
+                holder.eventTitle.setText(events.get(position).getObject_details().getName() + " | " + events.get(position).getObject_details().getAddress());
+            }
             holder.time.setText(DateUtils.get12formant(events.get(position).getObject_details().getStart_time())+" - "+DateUtils.get12formant(events.get(position).getObject_details().getEnd_time()));
             if (events.get(position).getObject_details().getStart_date() != null)
                 holder.month.setText(DateUtils.extractMonth(events.get(position).getObject_details().getStart_date()));

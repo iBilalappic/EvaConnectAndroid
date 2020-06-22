@@ -179,16 +179,17 @@ public class EventFragment extends BaseFragment implements View.OnClickListener,
 
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
+                        if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu1))) {
+                            loadFragment(R.id.framelayout, new NewPostFragment(), getContext(), true);
+                        }  else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu2))) {
+                            loadFragment(R.id.framelayout, new ShareVideoFragment(), getContext(), true);
+                        }
+                        else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu3))) {
+                            loadFragment(R.id.framelayout, new CreateEventFragment(), getContext(), true);
+                        } else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu3))) {
+                            loadFragment(R.id.framelayout, new ShareVideoFragment(), getContext(), true);
+                        }
 
-                        //    Toast.makeText(getContext(), item.getGroupId()+"You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
-//                        if(item.getTitle().toString().equalsIgnoreCase(getString(R.string.action1)))
-//                        {
-//                            loadFragment(R.id.framelayout,new CreateEventFragment(),getContext(),true);
-//                        }
-//                        else
-//                        {
-//                            loadFragment(R.id.framelayout,new CreateMeetingFragment(), getContext(),true);
-//                        }
 
                         return true;
                     }

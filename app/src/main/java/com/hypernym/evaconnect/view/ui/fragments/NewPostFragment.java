@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,11 +35,13 @@ import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
+import com.hypernym.evaconnect.utils.URLTextWatcher;
 import com.hypernym.evaconnect.view.adapters.AttachmentsAdapter;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
 import com.mobsandgeeks.saripaar.Validator;
+import com.nguyencse.URLEmbeddedView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -46,6 +50,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -83,6 +88,15 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
 
     @BindView(R.id.tv_company)
     TextView tv_company;
+
+    @BindView(R.id.img_video)
+    ImageView img_video;
+
+    @BindView(R.id.img_play)
+    ImageView img_play;
+
+    @BindView(R.id.uev)
+    URLEmbeddedView urlEmbeddedView;
 
     @BindView(R.id.tv_address)
     TextView tv_address;
@@ -174,7 +188,23 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
 
         showBackButton();
         setPageTitle(getString(R.string.What_will_you_write_about));
+        edt_content.addTextChangedListener(new URLTextWatcher(getActivity(), edt_content, urlEmbeddedView));
+        edt_content.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                setPostButton();
+            }
+        });
     }
     private void createPost() {
         showDialog();
@@ -238,16 +268,19 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
 
                             if (!TextUtils.isEmpty(currentPhotoPath) || currentPhotoPath != null) {
                                 if (currentPhotoPath.toString().endsWith(".mp4")) {
-
+                                    img_video.setVisibility(View.VISIBLE);
+                                    img_play.setVisibility(View.VISIBLE);
+                                    AppUtils.setGlideVideoThumbnail(getContext(), img_video, currentPhotoPath);
                                     video = MultipartBody.Part.createFormData("post_video", file_name.getName(), reqFile);
-
+                                    setPostButton();
                                 } else {
                                     attachments.add(currentPhotoPath);
                                     attachmentsAdapter.notifyDataSetChanged();
                                     rc_attachments.setVisibility(View.VISIBLE);
-
+                                    img_video.setVisibility(View.GONE);
+                                    img_play.setVisibility(View.GONE);
                                     part_images.add(MultipartBody.Part.createFormData("post_image", file_name.getName(), reqFile));
-
+                                    setPostButton();
                                 }
 
                             } else {
@@ -310,16 +343,20 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                 }
                 if (!TextUtils.isEmpty(globalImagePath) || globalImagePath != null) {
                     if (globalImagePath.toString().endsWith(".mp4")) {
-
+                        img_video.setVisibility(View.VISIBLE);
+                        img_play.setVisibility(View.VISIBLE);
+                        AppUtils.setGlideVideoThumbnail(getContext(), img_video, globalImagePath);
                         video = MultipartBody.Part.createFormData("post_video", file_name.getName(), reqFile);
-
+                        setPostButton();
                     } else {
 
                         attachments.add(globalImagePath);
                         attachmentsAdapter.notifyDataSetChanged();
                         rc_attachments.setVisibility(View.VISIBLE);
+                        img_video.setVisibility(View.GONE);
+                        img_play.setVisibility(View.GONE);
                         part_images.add(MultipartBody.Part.createFormData("post_image", file.getName(), reqFile));
-
+                        setPostButton();
                     }
 
                 }
@@ -327,6 +364,11 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
         }
     }
 
+
+    @OnClick(R.id.img_video)
+    public void playVideo() {
+        AppUtils.playVideo(getActivity(), currentPhotoPath);
+    }
 
     @Override
     public void onItemClick(View view, int position) {
@@ -338,7 +380,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                         attachments.remove(position);
                         attachmentsAdapter.notifyDataSetChanged();
                         part_images.remove(position);
-
+                      //  setPostButton();
                         break;
                     case R.id.button_negative:
                         break;
@@ -350,6 +392,13 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
         simpleDialog.show();
     }
 
+    public void setPostButton() {
+        if (edt_content.getText().length() > 0 || part_images.size() > 0 || video != null) {
+            post.setBackground(getResources().getDrawable(R.drawable.button_bg));
+        } else {
+            post.setBackground(getResources().getDrawable(R.drawable.button_unfocused));
+        }
+    }
 
 
 }

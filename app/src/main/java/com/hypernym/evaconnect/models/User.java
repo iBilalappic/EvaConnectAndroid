@@ -1,8 +1,11 @@
 package com.hypernym.evaconnect.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
-public class User implements Serializable {
+public class User implements Serializable, Parcelable {
 
     private Integer id;
     private String email;
@@ -354,5 +357,15 @@ public class User implements Serializable {
 
     public void setChatID(String chatID) {
         this.chatID = chatID;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
     }
 }

@@ -20,6 +20,7 @@ import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.dateTimePicker.DateTime;
 import com.hypernym.evaconnect.dateTimePicker.DateTimePicker;
 import com.hypernym.evaconnect.dateTimePicker.SimpleDateTimePicker;
+import com.hypernym.evaconnect.listeners.InvitedConnectionListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Meeting;
 import com.hypernym.evaconnect.models.Event;
@@ -51,7 +52,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CreateMeetingFragment extends BaseFragment implements Validator.ValidationListener, DateTimePicker.OnDateTimeSetListener {
+public class CreateMeetingFragment extends BaseFragment implements Validator.ValidationListener, DateTimePicker.OnDateTimeSetListener, InvitedConnectionListener {
 
     @BindView(R.id.tv_startdate)
     EditText tv_startdate;
@@ -95,7 +96,7 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
     SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
     private static final String TAG_DATETIME_FRAGMENT = "TAG_DATETIME_FRAGMENT";
 
-    private List<User> invitedConnections = new ArrayList<>();
+    private ArrayList<User> invitedConnections = new ArrayList<>();
     private List<Integer> event_attendees=new ArrayList<>();
     private InvitedUsersAdapter usersAdapter;
 
@@ -107,23 +108,6 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
 
     @Override
     public void onResume() {
-        if (PrefUtils.getConnectionsMeeting(getContext()) != null)
-        {
-
-            invitedConnections.clear();
-            if(event.getAttendees()!=null)
-                for(EventAttendees eventAttendees:event.getAttendees())
-                {
-                    invitedConnections.add(eventAttendees.getUser());
-                }
-
-
-            invitedConnections.addAll(PrefUtils.getConnectionsMeeting(getContext()));
-
-            Log.e(TAG, "onResume: " + GsonUtils.toJson(invitedConnections));
-
-            usersAdapter.notifyDataSetChanged();
-        }
 
         super.onResume();
     }
@@ -287,6 +271,7 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
     }
 
     private void init() {
+
         setPageTitle("Create a Meeting Schedule");
 
         tv_startdate.setInputType(InputType.TYPE_NULL);
@@ -329,6 +314,7 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
             post.setText("Update Meeting");
         }
 
+
     }
 
     @OnClick({R.id.tv_startdate, R.id.tv_startTime})
@@ -358,7 +344,8 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
     public void addConnections(){
         Bundle bundle = new Bundle();
         bundle.putString(Constants.FRAGMENT_TYPE, Constants.FRAGMENT_NAME_1);
-        loadFragment_bundle(R.id.framelayout, new InviteConnections(), getContext(), true, bundle);
+        bundle.putParcelableArrayList("connections",invitedConnections);
+        loadFragment_bundle(R.id.framelayout, new InviteConnections(this), getContext(), true, bundle);
     }
 
     private void showDateTimePicker(String title) {
@@ -420,5 +407,13 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
         }
 
         Log.v("TEST_TAG", "Date and Time selected: " + mDateTime.getDateString());
+    }
+
+    @Override
+    public void invitedConnections(List<User> connections) {
+        invitedConnections.clear();
+        invitedConnections.addAll(connections);
+        Log.e(TAG, "onResume: " + GsonUtils.toJson(invitedConnections));
+        usersAdapter.notifyDataSetChanged();
     }
 }

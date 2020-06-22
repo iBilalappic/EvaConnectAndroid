@@ -116,7 +116,7 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
         setPageTitle("Profile");
         user = LoginUtils.getLoggedinUser();
         if ((getArguments() != null)) {
-            showBackButton();
+           // showBackButton();
             post = (Post) getArguments().getSerializable("PostData");
             if (post.getUser().getIs_linkedin() == 1 && !TextUtils.isEmpty(post.getUser().getLinkedin_image_url()))
             {

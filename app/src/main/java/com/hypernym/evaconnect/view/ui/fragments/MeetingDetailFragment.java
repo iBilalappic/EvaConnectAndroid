@@ -162,7 +162,7 @@ public class MeetingDetailFragment extends BaseFragment {
                 tv_createdDate.setText(DateUtils.getFormattedDateDMY(event.getStart_date()));
 
                 tv_createdLocation.setText(event.getAddress());
-                if(event.getIs_attending().equalsIgnoreCase("Going"))
+                if(event.getIs_attending()!=null && event.getIs_attending().equalsIgnoreCase("Going"))
                 {
                     btn_notattending.setBackground(getResources().getDrawable(R.drawable.notattending_disable));
                     btn_attending.setBackground(getResources().getDrawable(R.drawable.attending_enable));

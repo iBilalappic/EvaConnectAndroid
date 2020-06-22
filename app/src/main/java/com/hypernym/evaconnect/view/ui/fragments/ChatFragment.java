@@ -397,12 +397,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 chatAttachment.setChat_image(MultiplePhoto.get(i));
                 chatAttachment.setStatus(AppConstants.ACTIVE);
 
-                messageViewModel.uploadAttachment(chatAttachment).observe(this, new Observer<BaseModel<List<String>>>() {
+                messageViewModel.uploadAttachment(chatAttachment).observe(this, new Observer<BaseModel<ChatAttachment>>() {
                     @Override
-                    public void onChanged(BaseModel<List<String>> listBaseModel) {
+                    public void onChanged(BaseModel<ChatAttachment> listBaseModel) {
                         if (listBaseModel != null && !listBaseModel.isError()) {
                             if (count == MultiplePhoto.size() - 1) {
-                                uploadedImages.add(listBaseModel.getData().get(0));
+                                uploadedImages.add(listBaseModel.getData().getImages().get(0));
                                 updateFirebase(uploadedImages);
                             } else {
                                 networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));

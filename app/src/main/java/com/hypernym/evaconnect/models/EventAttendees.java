@@ -1,6 +1,8 @@
 package com.hypernym.evaconnect.models;
 
-public class EventAttendees {
+import java.io.Serializable;
+
+public class EventAttendees implements Serializable {
   private User user;
 
     public User getUser() {

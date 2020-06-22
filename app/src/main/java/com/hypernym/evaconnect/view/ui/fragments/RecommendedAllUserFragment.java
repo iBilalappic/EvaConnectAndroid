@@ -174,12 +174,14 @@ public class RecommendedAllUserFragment extends BaseFragment implements Connecti
                     }
                     isLoading = false;
                 } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
-                    rc_connections.setVisibility(View.GONE);
+                    rc_connections.setVisibility(View.VISIBLE);
                     empty.setVisibility(View.VISIBLE);
                     isLastPage = true;
                     // homePostsAdapter.removeLoading();
                     isLoading = false;
                 } else {
+                    rc_connections.setVisibility(View.GONE);
+                    empty.setVisibility(View.VISIBLE);
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
             }

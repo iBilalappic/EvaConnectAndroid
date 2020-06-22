@@ -104,7 +104,7 @@ public class CompanyApplicantFragment extends BaseFragment implements View.OnCli
 
         if ((getArguments() != null)) {
             setPageTitle("");
-            showBackButton();
+          //  showBackButton();
             companyJobAdModel = (CompanyJobAdModel) getArguments().getSerializable("COMPANY_AD");
             AppUtils.setGlideImage(getContext(), profile_image, companyJobAdModel.getJobImage());
             tv_name.setText(companyJobAdModel.getJobTitle());
