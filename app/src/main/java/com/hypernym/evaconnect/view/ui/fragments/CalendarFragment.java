@@ -1,6 +1,7 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 
+import android.app.Application;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,6 +29,7 @@ import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.CalendarMarks;
 import com.hypernym.evaconnect.models.CalendarModel;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
+import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.EventAdapter;
@@ -131,7 +133,7 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
             public void run() {
                 hideDialog();
                 getCalendarMarksByDate(calendarView.getCurrentDate().getYear(),calendarView.getCurrentDate().getMonth(),calendarView.getCurrentDate().getDay());
-                if(NetworkUtils.isNetworkConnected(getContext()))
+                if(NetworkUtils.isNetworkConnected(AppUtils.getApplicationContext()))
                 {
                     getAllCalendarMarks(calendarView.getCurrentDate().getMonth(),calendarView.getCurrentDate().getYear());
                 }

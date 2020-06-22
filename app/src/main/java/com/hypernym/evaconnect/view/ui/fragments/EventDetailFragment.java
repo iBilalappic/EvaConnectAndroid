@@ -230,6 +230,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
     }
 
     private void getEventDetails(int event_id) {
+        invitedConnections.clear();
         eventViewModel.getEventDetails(event_id).observe(this, new Observer<BaseModel<List<Event>>>() {
             @Override
             public void onChanged(BaseModel<List<Event>> listBaseModel) {
@@ -254,7 +255,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
                 else
                 {
                     modify_event.setVisibility(View.GONE);
-                    if(event.getIs_attending().equalsIgnoreCase("Pending"))
+                    if(event.getIs_attending()!=null&&event.getIs_attending().equalsIgnoreCase("Pending"))
                     {
                         accept_invite.setVisibility(View.VISIBLE);
                         interested.setVisibility(View.GONE);

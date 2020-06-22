@@ -380,7 +380,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                         attachments.remove(position);
                         attachmentsAdapter.notifyDataSetChanged();
                         part_images.remove(position);
-                        setPostButton();
+                      //  setPostButton();
                         break;
                     case R.id.button_negative:
                         break;
@@ -394,7 +394,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
 
     public void setPostButton() {
         if (edt_content.getText().length() > 0 || part_images.size() > 0 || video != null) {
-            post.setBackground(getResources().getDrawable(R.drawable.rounded_button));
+            post.setBackground(getResources().getDrawable(R.drawable.button_bg));
         } else {
             post.setBackground(getResources().getDrawable(R.drawable.button_unfocused));
         }

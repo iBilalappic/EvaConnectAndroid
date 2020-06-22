@@ -113,6 +113,7 @@ public class JobFragment extends BaseFragment implements View.OnClickListener, S
 
         rc_job.setLayoutManager(linearLayoutManager);
         rc_job.setAdapter(postAdapter);
+
         RecyclerView.ItemAnimator animator = rc_job.getItemAnimator();
         if (animator instanceof SimpleItemAnimator) {
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
@@ -176,15 +177,16 @@ public class JobFragment extends BaseFragment implements View.OnClickListener, S
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
 
-                        //    Toast.makeText(getContext(), item.getGroupId()+"You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
-//                        if(item.getTitle().toString().equalsIgnoreCase(getString(R.string.action1)))
-//                        {
-//                            loadFragment(R.id.framelayout,new CreateEventFragment(),getContext(),true);
-//                        }
-//                        else
-//                        {
-//                            loadFragment(R.id.framelayout,new CreateMeetingFragment(), getContext(),true);
-//                        }
+                        if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu1))) {
+                            loadFragment(R.id.framelayout, new NewPostFragment(), getContext(), true);
+                        }  else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu2))) {
+                            loadFragment(R.id.framelayout, new ShareVideoFragment(), getContext(), true);
+                        }
+                        else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu3))) {
+                            loadFragment(R.id.framelayout, new CreateEventFragment(), getContext(), true);
+                        } else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu3))) {
+                            loadFragment(R.id.framelayout, new ShareVideoFragment(), getContext(), true);
+                        }
 
                         return true;
                     }
@@ -234,11 +236,11 @@ public class JobFragment extends BaseFragment implements View.OnClickListener, S
                     posts.addAll(dashboardBaseModel.getData());
                     postAdapter.notifyDataSetChanged();
                     swipeRefresh.setRefreshing(false);
-                    postAdapter.removeLoading();
+                  //  postAdapter.removeLoading();
                     isLoading = false;
                 } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
                     isLastPage = true;
-                    postAdapter.removeLoading();
+                   // postAdapter.removeLoading();
                     isLoading = false;
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
