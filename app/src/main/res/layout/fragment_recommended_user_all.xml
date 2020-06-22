@@ -69,9 +69,10 @@
         android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/empty"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginBottom="@dimen/spacing_medium"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout_header">
 
@@ -89,13 +90,12 @@
         android:layout_gravity="center"
         android:drawablePadding="5dp"
         android:gravity="center"
-        android:text="No Result Found"
+        android:text="No More Result Found"
         android:textColor="@android:color/black"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_header"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteY="242dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

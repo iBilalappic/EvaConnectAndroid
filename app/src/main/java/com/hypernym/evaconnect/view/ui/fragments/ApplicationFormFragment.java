@@ -111,7 +111,7 @@ public class ApplicationFormFragment extends BaseFragment implements View.OnClic
     private void init() {
         if ((getArguments() != null)) {
             setPageTitle("");
-            showBackButton();
+           // showBackButton();
             jobAd = (JobAd) getArguments().getSerializable("JOB_AD");
             AppUtils.setGlideImage(getContext(), profile_image, jobAd.getJobImage());
             tv_name.setText(jobAd.getJobTitle());

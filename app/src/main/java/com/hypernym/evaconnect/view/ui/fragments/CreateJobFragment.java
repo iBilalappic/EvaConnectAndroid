@@ -160,7 +160,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
         if ((getArguments() != null)) {
             setPageTitle("");
             postAd.setText("Update Job Listing");
-            showBackButton();
+          //  showBackButton();
             companyJobAdModel = (CompanyJobAdModel) getArguments().getSerializable("COMPANY_AD");
             Log.d("TAAAG", GsonUtils.toJson(companyJobAdModel));
             AppUtils.setGlideImage(getContext(), profile_image, companyJobAdModel.getJobImage());

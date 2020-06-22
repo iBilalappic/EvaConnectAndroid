@@ -115,7 +115,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
         user = LoginUtils.getUser();
         if ((getArguments() != null)) {
             setPageTitle("");
-            showBackButton();
+         //   showBackButton();
           //  jobAd = (JobAd) getArguments().getSerializable("JOB_AD");
             job_id = getArguments().getInt("job_id");
             if (job_id != 0) {

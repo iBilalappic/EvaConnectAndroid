@@ -121,7 +121,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
         setPageTitle("Profile");
         user = LoginUtils.getLoggedinUser();
         if ((getArguments() != null)) {
-            showBackButton();
+          //  showBackButton();
             post = (Post) getArguments().getSerializable("PostData");
             Log.d("TAAAG", GsonUtils.toJson(post));
 
