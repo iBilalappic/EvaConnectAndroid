@@ -48,7 +48,6 @@ import com.hypernym.evaconnect.models.Notification_onesignal;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.Constants;
-import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
@@ -528,7 +527,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
                 ChatMessage chatMessage=new ChatMessage();
                 chatMessage.setSenderID(LoginUtils.getLoggedinUser().getId().toString());
-                chatMessage.setCreated_datetime(DateUtils.GetCurrentdatetime());
+                chatMessage.setCreated_datetime(String.valueOf(new Date().getTime()));
                 chatMessage.setMessage("");
                 chatMessage.setChatImages(uploadedImages);
                 chatMessage.setName(LoginUtils.getLoggedinUser().getEmail());
