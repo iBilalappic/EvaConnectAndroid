@@ -47,7 +47,7 @@ public class AttachmentsAdapter extends RecyclerView.Adapter<AttachmentsAdapter.
     public void onBindViewHolder(@NonNull AttachmentsAdapter.ViewHolder holder, int position) {
 
         Glide.with(context)
-                .load(images.get(position))
+                .load(images.get(position)).placeholder(R.drawable.ic_document)
                 .transform(new RoundedCornersTransformation(radius, margin))
                 .into(holder.img_attach);
 
