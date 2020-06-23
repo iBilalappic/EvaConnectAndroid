@@ -240,10 +240,14 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
             {
                 invite_layout.setVisibility(View.GONE);
             }
-            for(EventAttendees eventAttendees:event.getAttendees())
+            if(invitedConnections.size()==0)
             {
-                invitedConnections.add(eventAttendees.getUser());
+                for(EventAttendees eventAttendees:event.getAttendees())
+                {
+                    invitedConnections.add(eventAttendees.getUser());
+                }
             }
+
             usersAdapter.notifyDataSetChanged();
             if(event.getEvent_image().size()>0)
               AppUtils.setGlideUrlThumbnail(getContext(),img_event,event.getEvent_image().get(0));

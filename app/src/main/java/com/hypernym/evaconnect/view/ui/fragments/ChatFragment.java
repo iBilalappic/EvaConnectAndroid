@@ -533,11 +533,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 chatMessage.setName(LoginUtils.getLoggedinUser().getEmail());
                 chatMessageList.add(chatMessage);
                 chatAdapter.notifyDataSetChanged();
-
                 sendNotification(user.getEmail());
                 messageArea.setText("");
                 messageArea.requestFocus();
-
 
     }
 

@@ -159,19 +159,30 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                     swipeRefresh.setRefreshing(true);
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
                         DataSnapshot members = child.child("members");
+                        NetworkConnection networkConnection=new NetworkConnection();
                         for (DataSnapshot member : members.getChildren()) {
                             if(member.getKey().equalsIgnoreCase(LoginUtils.getLoggedinUser().getId().toString()))
                             {
                                 DataSnapshot lastMessage = child.child("lastMessage");
-                                NetworkConnection networkConnection=new NetworkConnection();
                                 networkConnection.setMessage(lastMessage.child("message").getValue().toString());
-                                if (child.child("image").getValue() != null) {
+                                if (lastMessage.child("images").getValue() != null) {
                                    networkConnection.setMessage("image");
                                 }
-                                networkConnection.setId(Integer.parseInt(lastMessage .child("senderID").getValue().toString()));
+                                networkConnection.setId(Integer.parseInt(lastMessage.child("senderID").getValue().toString()));
                                 networkConnection.setCreatedDatetime(lastMessage.child("timestamp").getValue().toString());
                                 networkConnection.setChatID(child.getKey());
-                                networkConnection.setName(lastMessage .child("name").getValue().toString());
+                                if(networkConnection.getName()!=null)
+                                {
+                                    networkConnectionList.add(networkConnection);
+                                    setupRecyclerview();
+                                    Collections.sort(networkConnectionList, new DateTimeComparator());
+                                    Collections.reverse(networkConnectionList);
+                                    messageAdapter.notifyDataSetChanged();
+                                    swipeRefresh.setRefreshing(false);
+                                }
+                            }
+                            else
+                            {
                                 Query userQuery = databaseReference.child(AppConstants.FIREASE_USER_ENDPOINT);
                                 userQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
@@ -179,30 +190,33 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                                         if (dataSnapshot.getValue() != null)
                                         {
                                             for (DataSnapshot users : dataSnapshot.getChildren()) {
-                                                if(users.getKey().equalsIgnoreCase(lastMessage.child("senderID").getValue().toString()))
+                                                if(users.getKey().equalsIgnoreCase(member.getKey()))
                                                 {
+                                                    networkConnection.setName(users.child("name").getValue().toString());
                                                     networkConnection.setUserImage(users.child("imageName").getValue().toString());
+                                                    if(networkConnection.getChatID()!=null)
+                                                    {
+                                                        networkConnectionList.add(networkConnection);
+                                                        setupRecyclerview();
+                                                        Collections.sort(networkConnectionList, new DateTimeComparator());
+                                                        Collections.reverse(networkConnectionList);
+                                                        messageAdapter.notifyDataSetChanged();
+                                                        swipeRefresh.setRefreshing(false);
+                                                    }
                                                 }
-                                           }
-                                            networkConnectionList.add(networkConnection);
-                                            messageAdapter.notifyDataSetChanged();
-
+                                            }
                                         }
                                     }
-
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                     }
                                 });
-
                             }
+
+                            //messageAdapter.notifyDataSetChanged();
                         }
-                        setupRecyclerview();
-                        Collections.sort(networkConnectionList, new DateTimeComparator());
-                        Collections.reverse(networkConnectionList);
-                        messageAdapter.notifyDataSetChanged();
-                        swipeRefresh.setRefreshing(false);
+
                     }
 
                      hideDialog();
