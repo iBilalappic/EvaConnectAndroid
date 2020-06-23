@@ -89,6 +89,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                         holder.recycler_viewSender.setAdapter(ServicesInnerAdapter);
                         holder.recycler_viewReceiver.setVisibility(View.GONE);
                         holder.recycler_viewSender.setVisibility(View.VISIBLE);
+                        holder.tv_sendertime.setVisibility(View.VISIBLE);
+                        holder.tv_receivertime.setVisibility(View.GONE);
+                        holder.tv_sendertime.setText(DateUtils.getDateTimeFromTimestamp(chatMessageList.get(position).getCreated_datetime()));
             }
             else
             {
@@ -101,6 +104,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 holder.recycler_viewReceiver.setAdapter(ServicesInnerAdapter);
                 holder.recycler_viewReceiver.setVisibility(View.VISIBLE);
                 holder.recycler_viewSender.setVisibility(View.GONE);
+                holder.tv_sendertime.setVisibility(View.GONE);
+                holder.tv_receivertime.setVisibility(View.VISIBLE);
+                holder.tv_receivertime.setText(DateUtils.getDateTimeFromTimestamp(chatMessageList.get(position).getCreated_datetime()));
             }
 
         }

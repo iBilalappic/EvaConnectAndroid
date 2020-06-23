@@ -570,8 +570,6 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
                 } else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu3))) {
                     loadFragment(R.id.framelayout, new ShareVideoFragment(), getContext(), true);
                 }
-
-
                 return true;
             }
         });
