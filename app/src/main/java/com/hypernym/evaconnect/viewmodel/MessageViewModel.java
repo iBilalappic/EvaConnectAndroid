@@ -27,7 +27,7 @@ public class MessageViewModel extends AndroidViewModel {
         return iMessageRepository.getFriendList(user);
     }
 
-    public LiveData<BaseModel<List<String>>> uploadAttachment(ChatAttachment attachment) {
+    public LiveData<BaseModel<ChatAttachment>> uploadAttachment(ChatAttachment attachment) {
         return iMessageRepository.uploadAttachment(attachment);
     }
 }

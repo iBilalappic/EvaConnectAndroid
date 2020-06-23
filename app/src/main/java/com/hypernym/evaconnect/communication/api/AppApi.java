@@ -5,12 +5,13 @@ import com.hypernym.evaconnect.models.AccountCheck;
 import com.hypernym.evaconnect.models.AppliedApplicants;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.CalendarModel;
+import com.hypernym.evaconnect.models.ChatAttachment;
 import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.Connection;
-import com.hypernym.evaconnect.models.Meeting;
 import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.JobAd;
+import com.hypernym.evaconnect.models.Meeting;
 import com.hypernym.evaconnect.models.MyLikesModel;
 import com.hypernym.evaconnect.models.NetworkConnection;
 import com.hypernym.evaconnect.models.NewSources;
@@ -315,9 +316,26 @@ public interface AppApi {
 
     @Multipart
     @POST(APIConstants.CHAT_IMAGE)
-    Call<BaseModel<List<String>>> uploadAttachment(@Part("created_by_id") int user_id,
-                                                               @Part("status") RequestBody status ,
-                                                               @Part MultipartBody.Part Chat_image);
+    Call<BaseModel<ChatAttachment>> uploadAttachment(@Part("created_by_id") int user_id,
+                                                           @Part("status") RequestBody status ,
+                                                           @Part MultipartBody.Part Chat_image);
+
+    @Multipart
     @PATCH(APIConstants.UPDATE_EVENT)
-    Call<BaseModel<List<Event>>> updateEvent(@Body Event meeting,@Path("id") int id);
+    Call<BaseModel<List<Event>>> updateEvent(@Path("id") int id,@Part("user_id") int user_id,
+                                             @Part("created_by_id") int created_by_id,
+                                             @Part("content") RequestBody content,
+                                             @Part("status") RequestBody status,
+                                             @Part("address") RequestBody event_city,
+                                             @Part("start_date") RequestBody start_date,
+                                             @Part("end_date") RequestBody end_date,
+                                             @Part("start_time") RequestBody start_time,
+                                             @Part("end_time") RequestBody end_time,
+                                             @Part("name") RequestBody event_name,
+                                             @Part("registration_link") RequestBody registration_link,
+                                             @Part("is_private") int is_private,
+                                             @Part("attendees") List<Integer> event_attendees,
+                                             @Part MultipartBody.Part event_image,
+                                             @Part("modified_by_id") int modify_by_id,
+                                             @Part("modified_datetime") RequestBody modify_datetime);
 }

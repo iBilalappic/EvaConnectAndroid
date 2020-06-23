@@ -370,7 +370,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
                 eventObj.setId(event.getId());
                 eventObj.setModified_by_id(LoginUtils.getLoggedinUser().getId());
                 eventObj.setModified_datetime(DateUtils.GetCurrentdatetime());
-                eventViewModel.updateEvent(eventObj).observe(this, new Observer<BaseModel<List<Event>>>() {
+                eventViewModel.updateEvent(eventObj,partImage).observe(this, new Observer<BaseModel<List<Event>>>() {
                     @Override
                     public void onChanged(BaseModel<List<Event>> listBaseModel) {
                         if (listBaseModel != null && !listBaseModel.isError()) {

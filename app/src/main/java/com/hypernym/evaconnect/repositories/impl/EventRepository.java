@@ -250,9 +250,20 @@ public class EventRepository implements IEventRepository {
     }
 
     @Override
-    public LiveData<BaseModel<List<Event>>> updateEvent(Event event) {
+    public LiveData<BaseModel<List<Event>>> updateEvent(Event event,MultipartBody.Part user_image) {
         eventMutableLiveData=new MutableLiveData<>();
-        RestClient.get().appApi().updateEvent(event,event.getId()).enqueue(new Callback<BaseModel<List<Event>>>() {
+        RestClient.get().appApi().updateEvent(event.getId(),LoginUtils.getLoggedinUser().getId(),LoginUtils.getLoggedinUser().getId(),
+                RequestBody.create(MediaType.parse("text/plain"),event.getContent()),
+                RequestBody.create(MediaType.parse("text/plain"), AppConstants.ACTIVE),
+                RequestBody.create(MediaType.parse("text/plain"), event.getEvent_city()),
+                RequestBody.create(MediaType.parse("text/plain"), event.getStart_date()),
+                RequestBody.create(MediaType.parse("text/plain"), event.getEnd_date()),
+                RequestBody.create(MediaType.parse("text/plain"), event.getStart_time()),
+                RequestBody.create(MediaType.parse("text/plain"), event.getEnd_time()),
+                RequestBody.create(MediaType.parse("text/plain"), event.getName()),
+                RequestBody.create(MediaType.parse("text/plain"), event.getRegistration_link()),
+                event.getIs_private(),  event.getEvent_attendeeIDs(),user_image,event.getModified_by_id(),
+                RequestBody.create(MediaType.parse("text/plain"), event.getModified_datetime())).enqueue(new Callback<BaseModel<List<Event>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Event>>> call, Response<BaseModel<List<Event>>> response) {
                 if(response.body()!=null)

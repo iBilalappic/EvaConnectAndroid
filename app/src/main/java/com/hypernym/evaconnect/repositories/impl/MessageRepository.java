@@ -23,7 +23,7 @@ public class MessageRepository implements IMessageRepository {
 
     private MutableLiveData<BaseModel<List<NetworkConnection>>> MessageMutableLiveData = new MutableLiveData<>();
 
-    private MutableLiveData<BaseModel<List<String>>> attachmentMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<ChatAttachment>> attachmentMutableLiveData = new MutableLiveData<>();
 
     @Override
     public LiveData<BaseModel<List<NetworkConnection>>> getFriendList(User user) {
@@ -48,13 +48,13 @@ public class MessageRepository implements IMessageRepository {
     }
 
     @Override
-    public LiveData<BaseModel<List<String>>> uploadAttachment(ChatAttachment attachment) {
+    public LiveData<BaseModel<ChatAttachment>> uploadAttachment(ChatAttachment attachment) {
          attachmentMutableLiveData= new MutableLiveData<>();
 
         RestClient.get().appApi().uploadAttachment(attachment.getCreated_by_id(), RequestBody.create(MediaType.parse("text/plain"), AppConstants.ACTIVE),attachment.getChat_image())
-                .enqueue(new Callback<BaseModel<List<String>>>() {
+                .enqueue(new Callback<BaseModel<ChatAttachment>>() {
             @Override
-            public void onResponse(Call<BaseModel<List<String>>> call, Response<BaseModel<List<String>>> response) {
+            public void onResponse(Call<BaseModel<ChatAttachment>> call, Response<BaseModel<ChatAttachment>> response) {
                 if (response.isSuccessful() && !response.body().isError())
                     attachmentMutableLiveData.setValue(response.body());
 //                if (response.code() == 500) {
@@ -63,7 +63,7 @@ public class MessageRepository implements IMessageRepository {
             }
 
             @Override
-            public void onFailure(Call<BaseModel<List<String>>> call, Throwable t) {
+            public void onFailure(Call<BaseModel<ChatAttachment>> call, Throwable t) {
                 attachmentMutableLiveData.setValue(null);
             }
         });
