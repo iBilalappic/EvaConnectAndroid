@@ -324,8 +324,12 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         isLastPage = false;
         homePostsAdapter.clear();
         if (NetworkUtils.isNetworkConnected(getContext())) {
+            if(edt_search.length()>0){
+                callPostsApi();
+            }else{
+                swipeRefresh.setRefreshing(false);
+            }
 
-            callPostsApi();
         } else {
             networkErrorDialog();
         }
