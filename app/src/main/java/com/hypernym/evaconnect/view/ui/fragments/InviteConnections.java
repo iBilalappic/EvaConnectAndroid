@@ -112,11 +112,11 @@ public class InviteConnections extends BaseFragment implements InviteConnections
             public void onSingleClick(View v) {
                 Log.e(TAG, "onSingleClick: " + GsonUtils.toJson(invitedConnections));
                 mListener.invitedConnections(invitedConnections);
-                if (fragment_type.equals(Constants.FRAGMENT_NAME_2)) {
-                    PrefUtils.persistConnections(getContext(), invitedConnections);
-                } else if (fragment_type.equals(Constants.FRAGMENT_NAME_1)) {
-                    PrefUtils.persistConnectionsMeeting(getContext(), invitedConnections);
-                }
+//                if (fragment_type.equals(Constants.FRAGMENT_NAME_2)) {
+//                    PrefUtils.persistConnections(getContext(), invitedConnections);
+//                } else if (fragment_type.equals(Constants.FRAGMENT_NAME_1)) {
+//                    PrefUtils.persistConnectionsMeeting(getContext(), invitedConnections);
+//                }
 
                 if (invitedConnections != null && invitedConnections.size() > 0) {
                     // go back
@@ -236,7 +236,8 @@ public class InviteConnections extends BaseFragment implements InviteConnections
             } else {
 
                 inviteButton.setText("Invite Connections to Event");
-                users=PrefUtils.getConnections(getContext());
+                users=bundle.getParcelableArrayList("connections");
+             //   users=PrefUtils.getConnections(getContext());
             }
         }
     }
