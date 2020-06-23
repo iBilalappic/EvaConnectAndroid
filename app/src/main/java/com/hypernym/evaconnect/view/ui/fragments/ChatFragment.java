@@ -1,6 +1,7 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -74,6 +76,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.app.Activity.RESULT_OK;
 
 public class ChatFragment extends BaseFragment implements View.OnClickListener, AttachmentsAdapter.ItemClickListener, ChatAdapter.OnItemClickListener {
@@ -295,7 +299,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                             takePhotoFromCamera();
                         }
                         else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.document))) {
-                            loadFragment(R.id.framelayout, new CreateEventFragment(), getContext(), true);
+                            if (Checkpermission()) {
+                                LaunchGallery();
+                            } else {
+                                requestpermission();
+                            }
                         }
 
                         return true;
@@ -310,6 +318,45 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
 
     }
+
+
+    public void LaunchGallery() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("application/msword");
+        intent.setType("application/pdf");
+        startActivityForResult(Intent.createChooser(intent, "Select File"), REQUEST_PHOTO_GALLERY);
+    }
+
+    private void requestpermission() {
+        ActivityCompat.requestPermissions(getActivity(), new String[]
+                {
+                        READ_EXTERNAL_STORAGE,
+                        CAMERA
+                }, RequestPermissionCode);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+
+            case RequestPermissionCode:
+
+                if (grantResults.length > 0) {
+
+                    boolean ReadPermission = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    boolean CameraPermission = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+
+                    if (ReadPermission && CameraPermission) {
+                        // Toast.makeText(HomeActivity.this, "Permission Granted", Toast.LENGTH_LONG).show();
+                    } else {
+                        //Toast.makeText(HomeActivity.this,"Permission Denied",Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                break;
+        }
+    }
+
 
     private void sendtofirebase_chat() {
         messageText = messageArea.getText().toString();
