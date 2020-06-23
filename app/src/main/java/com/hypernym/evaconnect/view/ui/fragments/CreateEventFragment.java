@@ -39,6 +39,7 @@ import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.dateTimePicker.DateTime;
 import com.hypernym.evaconnect.dateTimePicker.DateTimePicker;
 import com.hypernym.evaconnect.dateTimePicker.SimpleDateTimePicker;
+import com.hypernym.evaconnect.listeners.InvitedConnectionListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.EventAttendees;
@@ -85,7 +86,7 @@ import static android.app.Activity.RESULT_OK;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CreateEventFragment extends BaseFragment implements DateTimePicker.OnDateTimeSetListener, Validator.ValidationListener, AdapterView.OnItemSelectedListener {
+public class CreateEventFragment extends BaseFragment implements DateTimePicker.OnDateTimeSetListener, Validator.ValidationListener, AdapterView.OnItemSelectedListener, InvitedConnectionListener {
     private static final String TAG = CreateEventFragment.class.getSimpleName();
     @BindView(R.id.tv_startdate)
     EditText tv_startdate;
@@ -143,7 +144,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
     private static final int CAMERAA = 1;
     public static final int RequestPermissionCode = 1;
     private String GalleryImage, mCurrentPhotoPath, globalImagePath;
-    private List<User> invitedConnections = new ArrayList<>();
+    private ArrayList<User> invitedConnections = new ArrayList<>();
     private InvitedUsersAdapter usersAdapter;
     private String mProfileImageDecodableString;
     private File tempFile, file_name;
@@ -163,16 +164,16 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
 
     @Override
     public void onResume() {
-        if (PrefUtils.getConnections(getContext()) != null)
-        {
-            invitedConnections.clear();
-            invitedConnections.addAll(PrefUtils.getConnections(getContext()));
-
-            Log.e(TAG, "onResume: " + GsonUtils.toJson(invitedConnections));
-
-            usersAdapter.notifyDataSetChanged();
-        }
-
+//        if (PrefUtils.getConnections(getContext()) != null)
+//        {
+//            invitedConnections.clear();
+//            invitedConnections.addAll(PrefUtils.getConnections(getContext()));
+//
+//            Log.e(TAG, "onResume: " + GsonUtils.toJson(invitedConnections));
+//
+//            usersAdapter.notifyDataSetChanged();
+//        }
+//
         super.onResume();
     }
 
@@ -182,7 +183,6 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_create_event, container, false);
         ButterKnife.bind(this, view);
-        initRecyclerview();
         init();
 
         return view;
@@ -206,7 +206,8 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
         validator = new Validator(this);
         validator.setValidationListener(this);
         eventViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(EventViewModel.class);
-        invitedConnections.clear();
+      //  invitedConnections.clear();
+        initRecyclerview();
         event_type_spinner.setOnItemSelectedListener(this);
         showBackButton();
         setPageTitle(getString(R.string.action1));
@@ -279,9 +280,11 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
 
     @OnClick(R.id.add1)
     public void addConnections(){
+
         Bundle bundle = new Bundle();
         bundle.putString(Constants.FRAGMENT_TYPE, Constants.FRAGMENT_NAME_2);
-        loadFragment_bundle(R.id.framelayout, new InviteConnections(), getContext(), true, bundle);
+        bundle.putParcelableArrayList("connections",invitedConnections);
+        loadFragment_bundle(R.id.framelayout, new InviteConnections(this), getContext(), true, bundle);
     }
 
     private void showDateTimePicker(String title) {
@@ -621,6 +624,13 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Override
+    public void invitedConnections(List<User> connections) {
+        invitedConnections.addAll(connections);
+        Log.e(TAG, "onResume: " + GsonUtils.toJson(invitedConnections));
+        usersAdapter.notifyDataSetChanged();
     }
 
 
