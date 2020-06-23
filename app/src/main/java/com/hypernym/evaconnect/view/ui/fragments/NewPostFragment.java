@@ -292,27 +292,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                         }
                     }
                 }
-//                else if(data.getClipData() != null && data.getClipData().getItemCount()<3)
-//                {
-//                    ClipData mClipData = data.getClipData();
-//
-//                    for (int i = 0; i < mClipData.getItemCount(); i++) {
-//                        ClipData.Item item = mClipData.getItemAt(i);
-//                        Uri uri = item.getUri();
-//                        file_name = new File(ImageFilePathUtil.getPath(getActivity(), uri));
-//                        attachments.add( ImageFilePathUtil.getPath(getActivity(), uri));
-//                        RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file_name);
-//                        part_images.add(MultipartBody.Part.createFormData("post_image", file_name.getName(), reqFile));
-//                    }
-//                    attachmentsAdapter.notifyDataSetChanged();
-//                    rc_attachments.setVisibility(View.VISIBLE);
-//                    img_video.setVisibility(View.GONE);
-//                    img_play.setVisibility(View.GONE);
-//                    setPostButton();
-//                }
-//                else {
-//                    Toast.makeText(getActivity(), "You haven't picked image", Toast.LENGTH_SHORT).show();
-//                }
+
             } catch (Exception exc) {
                 exc.printStackTrace();
                 Log.e(getClass().getName(), "exc: " + exc.getMessage());

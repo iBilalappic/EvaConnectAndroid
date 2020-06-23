@@ -293,7 +293,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                             intent.setType("image/*");
                             startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_PHOTO_GALLERY);
                         }  else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.camera))) {
-                            loadFragment(R.id.framelayout, new ShareVideoFragment(), getContext(), true);
+                            takePhotoFromCamera();
                         }
                         else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.document))) {
                             loadFragment(R.id.framelayout, new CreateEventFragment(), getContext(), true);
@@ -600,6 +600,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 //mIsProfileImageAdded = true;
                 File file = galleryAddPic();
                 RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+
+                MultipartBody.Part partImage = MultipartBody.Part.createFormData("chat_file", file.getName(), reqFile);
+                MultiplePhoto.add(partImage);
                 // imgName = file_name.getName();
                 globalImagePath = file.getAbsolutePath();
                 if (file.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.IMAGE_SIZE_IN_KB) {
