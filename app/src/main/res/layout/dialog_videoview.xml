@@ -22,6 +22,7 @@
             android:layout_width="24dp"
             android:layout_height="23dp"
             android:layout_gravity="end"
+            android:layout_margin="10dp"
             app:srcCompat="@drawable/ic_close" />
 
         <com.google.android.exoplayer2.ui.SimpleExoPlayerView

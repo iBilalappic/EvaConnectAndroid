@@ -32,7 +32,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PersonProfileFragment extends BaseFragment implements View.OnClickListener {
 
@@ -111,6 +110,8 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
         layout_block.setOnClickListener(this);
         layout_EditDetail.setOnClickListener(this);
         layout_settings.setOnClickListener(this);
+        layout_notification.setOnClickListener(this);
+        layout_message.setOnClickListener(this);
         init();
         return view;
     }
@@ -141,6 +142,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
             if (post.getUser().getDesignation() != null) {
                 tv_profession.setText(post.getUser().getDesignation());
             }
+
 
 
             tv_location.setText(post.getUser().getCountry() + "," + post.getUser().getCity());
@@ -174,6 +176,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
 
                 layout_disconnect.setVisibility(View.VISIBLE);
                 view4.setVisibility(View.VISIBLE);
+
                 layout_block.setVisibility(View.VISIBLE);
 
                 layout_settings.setVisibility(View.GONE);
@@ -192,7 +195,16 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                 } else {
                     tv_connect.setVisibility(View.VISIBLE);
                     tv_connect.setText(AppUtils.getConnectionStatus(getContext(), post.getIs_connected(), post.isIs_receiver()));
-
+                    if(AppUtils.getConnectionStatus(getContext(), post.getIs_connected(), post.isIs_receiver()).equalsIgnoreCase(AppConstants.CONNECTED))
+                    {
+                        layout_disconnect.setVisibility(View.VISIBLE);
+                        layout_block.setVisibility(View.VISIBLE);
+                    }
+                    else
+                    {
+                        layout_disconnect.setVisibility(View.GONE);
+                        layout_block.setVisibility(View.GONE);
+                    }
                 }
             }
             tv_connect.setOnClickListener(new OnOneOffClickListener() {
@@ -260,12 +272,22 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                 BlockUserApiCall();
                 break;
             case R.id.layout_message:
+                ChatFragment chatFragment=new ChatFragment();
+                Bundle bundlemessage=new Bundle();
+                bundlemessage.putSerializable("user",post.getUser());
+                chatFragment.setArguments(bundlemessage);
+                loadFragment(R.id.framelayout, chatFragment, getContext(), true);
                 break;
             case R.id.layout_EditDetail:
                 EditProfileFragment editProfileFragment = new EditProfileFragment();
                 loadFragment(R.id.framelayout, editProfileFragment, getContext(), true);
                 break;
             case R.id.layout_notification:
+                ActivityFragment activityFragment=new ActivityFragment();
+                Bundle bundle=new Bundle();
+                bundle.putBoolean("isNotification",true);
+                activityFragment.setArguments(bundle);
+                loadFragment(R.id.framelayout, activityFragment, getContext(), true);
                 break;
             case R.id.layout_settings:
                 SettingsFragment settingsFragment = new SettingsFragment();

@@ -39,7 +39,6 @@ import com.facebook.login.LoginManager;
 import com.google.android.material.snackbar.Snackbar;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
-import com.hypernym.evaconnect.view.adapters.HomePostsAdapter;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.view.dialogs.VideoViewDialog;
 import com.hypernym.evaconnect.view.ui.activities.LoginActivity;
@@ -181,7 +180,7 @@ public final class AppUtils {
         }
         else
         {
-            img_like.setBackground(context.getDrawable(R.drawable.ic_like));
+            img_like.setBackground(context.getDrawable(R.drawable.like_selected));
             int likes=Integer.parseInt(likeCount.getText().toString());
             likeCount.setText(String.valueOf(likes+1));
         }

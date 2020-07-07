@@ -187,6 +187,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
        // getConnectionCount();
 
         showBackButton();
+        setPostButton();
         setPageTitle(getString(R.string.What_will_you_write_about));
         edt_content.addTextChangedListener(new URLTextWatcher(getActivity(), edt_content, urlEmbeddedView));
         edt_content.addTextChangedListener(new TextWatcher() {

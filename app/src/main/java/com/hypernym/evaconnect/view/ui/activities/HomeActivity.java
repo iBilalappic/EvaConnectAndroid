@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -20,14 +19,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.hypernym.evaconnect.R;
-import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.NotifyEvent;
 import com.hypernym.evaconnect.models.Post;
@@ -59,9 +51,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -226,33 +216,9 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
                 }
             }
         });
-        createUserOnFirebase();
-    }
-    public void createUserOnFirebase()
-    {
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            //To do//
-                            return;
-                        }
-                        // Get the Instance ID token//
-                        String token = task.getResult().getToken();
-
-                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                        DatabaseReference userRef = databaseReference.child(AppConstants.FIREASE_USER_ENDPOINT);
-                        DatabaseReference userRefByID=userRef.child(LoginUtils.getLoggedinUser().getId().toString());
-                        Map<String, Object> map = new HashMap<String, Object>();
-                        map.put("imageName", LoginUtils.getLoggedinUser().getUser_image());
-                        map.put("name", LoginUtils.getLoggedinUser().getEmail());
-                        map.put("fcm-token", token);
-                        userRefByID.setValue(map);
-                    }
-                });
 
     }
+
 
     private void setMessageNotificationCount() {
         int count = PrefUtils.getMessageCount(getApplicationContext());

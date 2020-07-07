@@ -91,7 +91,7 @@
     <string name="msg_no_sender">No friend found.</string>
 
     <string name="msg_firstname">Please enter first name.</string>
-    <string name="msg_surname">Please enter sur name.</string>
+    <string name="msg_surname">Please enter surname.</string>
     <string name="msg_country">Please wait for getting country from your current location.</string>
     <string name="msg_city">Please wait for getting country from your current location.</string>
 
@@ -101,6 +101,7 @@
     <string name="err_email_already_exist">An account already exists with that email. Please try another one.</string>
     <string name="err_password">Your password cannot be empty and requires a length of between 8-30 characters.</string>
     <string name="err_image_size_large">The file exceeded the maximum size required by Aviation Connect. Recommended maximum size is 4MB, please try again.</string>
+    <string name="err_internal_storage">This file is not present in your internal storage</string>
     <string name="err_signup">This email already exist.</string>
     <string name="err_login">Username or password combination was not recognised. Please try again or click the forgotten username/password link</string>
     <string name="network_error">Please check your internet connection and try again.</string>

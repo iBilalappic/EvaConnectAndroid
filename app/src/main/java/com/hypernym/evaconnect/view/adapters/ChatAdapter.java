@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.models.AttachmentType;
 import com.hypernym.evaconnect.models.ChatMessage;
 import com.hypernym.evaconnect.models.NetworkConnection;
 import com.hypernym.evaconnect.utils.DateUtils;
@@ -47,7 +48,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ChatAdapter.ViewHolder holder, int position) {
              //   AppUtils.setGlideImage(context, (holder).imageView6, networkConnection.getSender().getUserImage());
-        if(chatMessageList.get(position).getChatImages()==null)
+        if(chatMessageList.get(position).getChatImages()==null && chatMessageList.get(position).getChatDocuments()==null)
         {
             holder.recycler_viewReceiver.setVisibility(View.GONE);
             holder.recycler_viewSender.setVisibility(View.GONE);
@@ -77,10 +78,32 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             holder.mlayout2.setVisibility(View.GONE);
             holder.tv_sendertime.setVisibility(View.GONE);
             holder.tv_receivertime.setVisibility(View.GONE);
+            List<AttachmentType> attachmentTypes=new ArrayList<>();
+            if(chatMessageList.get(position).getChatImages()!=null && chatMessageList.get(position).getChatImages().size()>0)
+            {
+                for(String image:chatMessageList.get(position).getChatImages())
+                {
+                    AttachmentType attachmentType=new AttachmentType();
+                    attachmentType.setUrl(image);
+                    attachmentType.setType("image");
+                    attachmentTypes.add(attachmentType);
+                }
+            }
+         if(chatMessageList.get(position).getChatDocuments()!=null && chatMessageList.get(position).getChatDocuments().size()>0)
+         {
+             for(String image:chatMessageList.get(position).getChatDocuments())
+             {
+                 AttachmentType attachmentType=new AttachmentType();
+                 attachmentType.setUrl(image);
+                 attachmentType.setType("document");
+                 attachmentTypes.add(attachmentType);
+             }
+         }
+
             if(chatMessageList.get(position).getSenderID().equalsIgnoreCase(LoginUtils.getLoggedinUser().getId().toString()))
             {
 
-                        ImageAdapter ServicesInnerAdapter = new ImageAdapter(context, chatMessageList.get(position).getChatImages());
+                        ImageAdapter ServicesInnerAdapter = new ImageAdapter(context, attachmentTypes);
                         holder.recycler_viewSender.setHasFixedSize(true);
                         holder.recycler_viewSender.setDrawingCacheEnabled(true);
                         holder.recycler_viewSender.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
@@ -95,7 +118,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             }
             else
             {
-                ImageAdapter ServicesInnerAdapter = new ImageAdapter(context, chatMessageList.get(position).getChatImages());
+                ImageAdapter ServicesInnerAdapter = new ImageAdapter(context, attachmentTypes);
                 holder.recycler_viewReceiver.setHasFixedSize(true);
                 holder.recycler_viewReceiver.setDrawingCacheEnabled(true);
                 holder.recycler_viewReceiver.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);

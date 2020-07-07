@@ -3,28 +3,6 @@ package com.hypernym.evaconnect.view.ui.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.facebook.FacebookSdk;
-import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.Profile;
-import com.facebook.login.LoginBehavior;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
-import com.facebook.appevents.AppEventsLogger;
-import com.facebook.login.widget.LoginButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,25 +10,37 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.login.LoginBehavior;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
-import com.hypernym.evaconnect.models.AccountCheck;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.models.UserDetails;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
-import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.Constants;
-import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
-import com.hypernym.evaconnect.utils.PrefUtils;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
@@ -61,14 +51,12 @@ import com.mobsandgeeks.saripaar.annotation.Password;
 import com.onesignal.OneSignal;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class LoginActivity extends BaseActivity implements Validator.ValidationListener {
     @BindView(R.id.tv_signup)
@@ -274,14 +262,36 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
             if (value.equals("login")) {
                 showDialog();
                 callLoginApi();
+
+
             } else {
-                Intent intent = new Intent(getBaseContext(), CreateAccount_1_Activity.class);
-                intent.putExtra("Email", edt_email.getText().toString());
-                startActivity(intent);
+                isEmailExist();
+
             }
         } else {
             networkErrorDialog();
         }
+
+    }
+
+    private void isEmailExist() {
+
+        userViewModel.isEmailExist(user.getUsername()).observe(this, new Observer<BaseModel<List<User>>>() {
+            @Override
+            public void onChanged(BaseModel<List<User>> listBaseModel) {
+                if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().get(0) != null) {
+                    networkResponseDialog(getString(R.string.error),listBaseModel.getMessage());
+                      //  callLoginApi();
+                } else {
+                    hideDialog();
+
+                    Intent intent = new Intent(getBaseContext(), CreateAccount_1_Activity.class);
+                    intent.putExtra("Email", edt_email.getText().toString());
+                    startActivity(intent);
+                }
+            }
+
+        });
 
     }
 
@@ -300,13 +310,14 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
                     if (user.getData().get(0) != null) {
                         LoginUtils.saveUserToken(user.getData().get(0).getToken());
                     }
+                    createUserOnFirebase();
                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     // set the new task and clear flags
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 } else if (user != null && user.isError()) {
                     hideDialog();
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_login));
+                    networkResponseDialog(getString(R.string.error), user.getMessage());
                 } else if (user == null) {
                     hideDialog();
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
@@ -314,7 +325,29 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
             }
         });
     }
+    public void createUserOnFirebase()
+    {
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            //To do//
+                            return;
+                        }
+                        // Get the Instance ID token//
+                        String token = task.getResult().getToken();
 
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                        DatabaseReference userRef = databaseReference.child(AppConstants.FIREASE_USER_ENDPOINT);
+                        DatabaseReference userRefByID=userRef.child(LoginUtils.getLoggedinUser().getId().toString());
+                        userRefByID.child("imageName").setValue(LoginUtils.getLoggedinUser().getUser_image());
+                        userRefByID.child("name").setValue(LoginUtils.getLoggedinUser().getEmail());
+                        userRefByID.child("fcm-token").setValue(token);
+                    }
+                });
+
+    }
     @Override
     public void onValidationFailed(List<ValidationError> errors) {
         for (ValidationError error : errors) {

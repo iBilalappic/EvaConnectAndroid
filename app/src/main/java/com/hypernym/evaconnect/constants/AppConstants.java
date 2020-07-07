@@ -29,6 +29,7 @@ public class AppConstants {
     public static final int LOADING_TYPE=5;
     public static final int LINK_POST=6;
     public static final int JOB_TYPE=4;
+    public static final int NEWS_TYPE=7;
     public static final String LIKE= "like";
     public static final String UNLIKE= "unlike";
     public static final int TOTAL_PAGES = 10;

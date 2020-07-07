@@ -62,10 +62,12 @@ import com.hypernym.evaconnect.viewmodel.MessageViewModel;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -129,7 +131,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private JobListViewModel jobListViewModel;
     private MessageViewModel messageViewModel;
     private ChatAttachment chatAttachment=new ChatAttachment();
-    User user=new User();
+    List<String> uploadedImages = new ArrayList<>();
+    List<String> uploadedDocuments = new ArrayList<>();
+    User user =new User();
 
     public ChatFragment() {
         // Required empty public constructor
@@ -175,16 +179,22 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         rc_attachments.setAdapter(attachmentsAdapter);
         if(getArguments()!=null && getArguments().getSerializable("user")!=null)
         {
-            user=(User) getArguments().getSerializable("user");
+            user =(User) getArguments().getSerializable("user");
             setPageTitle(user.getFirst_name());
-            setChatPerson(getContext(),user.getUser_image());
+            user.setReceiver_id(user.getId());
+            if(user.getId()==null)
+            {
+                user.setId(LoginUtils.getLoggedinUser().getId());
+            }
+            setChatPerson(getContext(), user.getUser_image());
         }
         else
         {
             NetworkConnection networkConnection=(NetworkConnection) getArguments().getSerializable(Constants.DATA);
             setPageTitle(networkConnection.getName());
             user.setEmail(networkConnection.getName());
-            user.setId(networkConnection.getId());
+            user.setId(networkConnection.getReceiverId());
+            user.setReceiver_id(networkConnection.getReceiverId());
             user.setChatID(networkConnection.getChatID());
             user.setUser_image(networkConnection.getUserImage());
             setChatPerson(getContext(),networkConnection.getUserImage());
@@ -217,6 +227,16 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                                 imageList.add(image.getValue().toString());
                             }
                             chatMessage.setChatImages(imageList);
+                        }
+                        if(child.child("documents").getValue()!=null)
+                        {
+                            DataSnapshot documents=child.child("documents");
+                            List<String> documentList=new ArrayList<>();
+                            for(DataSnapshot image: documents.getChildren())
+                            {
+                                documentList.add(image.getValue().toString());
+                            }
+                            chatMessage.setChatDocuments(documentList);
                         }
                         chatMessageList.add(chatMessage);
                     }
@@ -254,7 +274,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
         switch (v.getId()) {
             case R.id.sendButton:
-                sendtofirebase_chat();
+                if(attachments.size()>0)
+                {
+                    UploadImageToFirebase();
+                }
+                else
+                {
+                    sendtofirebase_chat(uploadedImages,uploadedDocuments);
+                }
+
                 break;
 
             case R.id.browsefiles:
@@ -358,34 +386,30 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
 
-    private void sendtofirebase_chat() {
+    private void sendtofirebase_chat(List<String> uploadedImages,List<String> uploadedDocuments) {
         messageText = messageArea.getText().toString();
 
-        if (attachments.size() == 0 && messageText.length() > 0) {
+        if (uploadedImages.size() > 0 || uploadedDocuments.size()>0|| messageText.length() > 0) {
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-            //Insertion in user node
+            //Insertion in chats node
+            DatabaseReference chatRef = databaseReference.child(AppConstants.FIREASE_CHAT_ENDPOINT);
+            Map<String, Object> chatMap = new HashMap<String, Object>();
+            Map<String, Object> lastMessageMap = new HashMap<String, Object>();
+            lastMessageMap.put("message", messageText);
+            lastMessageMap.put("name", LoginUtils.getLoggedinUser().getEmail());
+            lastMessageMap.put("senderID", LoginUtils.getLoggedinUser().getId());
+            lastMessageMap.put("timestamp", Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis());
+            lastMessageMap.put("images", uploadedImages);
+            lastMessageMap.put("documents", uploadedDocuments);
             if(chatMessageList.size()==0)
             {
-                DatabaseReference userRef = databaseReference.child(AppConstants.FIREASE_USER_ENDPOINT);
-                DatabaseReference userRefByID=userRef.child(LoginUtils.getLoggedinUser().getId().toString());
-                Map<String, Object> map = new HashMap<String, Object>();
-                map.put("imageName", LoginUtils.getLoggedinUser().getUser_image());
-                map.put("name", LoginUtils.getLoggedinUser().getEmail());
-                userRefByID.setValue(map);
-
-                //Insertion in chats node
-                DatabaseReference chatRef = databaseReference.child(AppConstants.FIREASE_CHAT_ENDPOINT);
-                Map<String, Object> chatMap = new HashMap<String, Object>();
-                Map<String, Object> lastMessageMap = new HashMap<String, Object>();
-                lastMessageMap.put("message", messageText);
-                lastMessageMap.put("name", LoginUtils.getLoggedinUser().getEmail());
-                lastMessageMap.put("senderID", LoginUtils.getLoggedinUser().getId());
-                lastMessageMap.put("timestamp",new Date().getTime());
                 chatMap.put("lastMessage",lastMessageMap);
+                //ADD members if it is first message
                 Map<String, Object> membersMap = new HashMap<String, Object>();
-                membersMap.put(LoginUtils.getLoggedinUser().getId().toString(),LoginUtils.getLoggedinUser().getEmail());
-                membersMap.put(user.getId().toString(),user.getEmail());
+                membersMap.put(LoginUtils.getLoggedinUser().getId().toString(),LoginUtils.getLoggedinUser().getFirst_name());
+                membersMap.put(user.getReceiver_id().toString(), user.getFirst_name());
                 chatMap.put("members",membersMap);
+
                 String key =  chatRef.push().getKey();
                 user.setChatID(key);
                 chatRef.child(key).setValue(chatMap);
@@ -395,43 +419,58 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
                 Log.d("KEY IS....",key);
                 messagesRef.child(key).push().setValue(lastMessageMap);
+
+                DatabaseReference userRef = databaseReference.child(AppConstants.FIREASE_USER_ENDPOINT);
+                DatabaseReference userRefByID=userRef.child(LoginUtils.getLoggedinUser().getId().toString());
+                DatabaseReference otheruserRefByID=userRef.child(user.getReceiver_id().toString());
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("last_update_time", new Date().getTime());
+                map.put("unread","false");
+
+                Map<String, Object> receivermap = new HashMap<String, Object>();
+                receivermap.put("last_update_time", new Date().getTime());
+                receivermap.put("unread","true");
+
+                userRefByID.child("chats").child(key).setValue(map);
+                otheruserRefByID.child("chats").child(key).setValue(receivermap);
+                otheruserRefByID.child("name").setValue(user.getFirst_name());
+                otheruserRefByID.child("imageName").setValue(user.getUser_image());
             }
             else
             {
-                //Insertion in chats node
-                DatabaseReference chatRef = databaseReference.child(AppConstants.FIREASE_CHAT_ENDPOINT);
-                Map<String, Object> chatMap = new HashMap<String, Object>();
-                Map<String, Object> lastMessageMap = new HashMap<String, Object>();
-                lastMessageMap.put("message", messageText);
-                lastMessageMap.put("name", LoginUtils.getLoggedinUser().getEmail());
-                lastMessageMap.put("senderID", LoginUtils.getLoggedinUser().getId());
-                lastMessageMap.put("timestamp",new Date().getTime());
-              //  chatMap.put("lastMessage",lastMessageMap);
-
-//                Map<String, Object> membersMap = new HashMap<String, Object>();
-//                membersMap.put(LoginUtils.getLoggedinUser().getId().toString(),LoginUtils.getLoggedinUser().getEmail());
-//                membersMap.put(user.getId().toString(),user.getEmail());
-//                chatMap.put("members",membersMap);
 
                 chatRef.child(user.getChatID()).child("lastMessage").setValue(lastMessageMap);
                 //Insertion in Messages node
                 DatabaseReference messagesRef = databaseReference.child(AppConstants.FIREASE_MESSAGES_ENDPOINT);
                 messagesRef.child(user.getChatID()).push().setValue(lastMessageMap);
+
+                DatabaseReference userRef = databaseReference.child(AppConstants.FIREASE_USER_ENDPOINT);
+                DatabaseReference userRefByID=userRef.child(LoginUtils.getLoggedinUser().getId().toString());
+                DatabaseReference otheruserRefByID=userRef.child(user.getReceiver_id().toString());
+                Map<String, Object> map = new HashMap<String, Object>();
+
+                map.put("last_update_time", new Date().getTime());
+                map.put("unread","false");
+
+                Map<String, Object> receivermap = new HashMap<String, Object>();
+                receivermap.put("last_update_time", new Date().getTime());
+                receivermap.put("unread","true");
+
+                userRefByID.child("chats").child(user.getChatID()).setValue(map);
+                otheruserRefByID.child("chats").child(user.getChatID()).setValue(receivermap);
             }
             ChatMessage chatMessage=new ChatMessage();
             chatMessage.setSenderID(LoginUtils.getLoggedinUser().getId().toString());
             chatMessage.setCreated_datetime(String.valueOf(new Date().getTime()));
             chatMessage.setMessage(messageText);
-            chatMessage.setName(LoginUtils.getLoggedinUser().getEmail());
+            chatMessage.setName(LoginUtils.getLoggedinUser().getFirst_name());
             chatMessageList.add(chatMessage);
             chatAdapter.notifyDataSetChanged();
 
-            sendNotification(user.getEmail());
+          //  sendNotification(user.getEmail());
             messageArea.setText("");
             messageArea.requestFocus();
 
-        } else if (attachments.size() > 0) {
-            UploadImageToFirebase();
         } else {
             Toast.makeText(getContext(), "Please type message...", Toast.LENGTH_SHORT).show();
         }
@@ -486,105 +525,37 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
         // pd.show();
         if (MultiplePhoto.size() > 0) {
-            List<String> uploadedImages = new ArrayList<>();
-            for (int i = 0; i < MultiplePhoto.size(); i++) {
+            uploadedImages = new ArrayList<>();
+            uploadedDocuments = new ArrayList<>();
+            //for (int i = 0; i < MultiplePhoto.size(); i++) {
                 // MultiplePhoto.add(Uri.parse(String.valueOf(attachments)));
+                attachments.clear();
                 rc_attachments.setVisibility(View.GONE);
                 chatAttachment.setCreated_by_id(LoginUtils.getLoggedinUser().getId());
-                chatAttachment.setChat_image(MultiplePhoto.get(i));
+                chatAttachment.setChat_image(MultiplePhoto);
                 chatAttachment.setStatus(AppConstants.ACTIVE);
 
                 messageViewModel.uploadAttachment(chatAttachment).observe(this, new Observer<BaseModel<ChatAttachment>>() {
                     @Override
                     public void onChanged(BaseModel<ChatAttachment> listBaseModel) {
                         if (listBaseModel != null && !listBaseModel.isError()) {
-                            if (count == MultiplePhoto.size() - 1) {
-                                uploadedImages.add(listBaseModel.getData().getImages().get(0));
-                                updateFirebase(uploadedImages);
-                            } else {
-                                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                            }
+                                uploadedImages.addAll(listBaseModel.getData().getImages());
+                                uploadedDocuments.addAll(listBaseModel.getData().getDocuments());
+                                sendtofirebase_chat(uploadedImages,uploadedDocuments);
+                        }
+                        else {
+                            networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                         }
                     }
 
 
                 });
-            }
+          //  }
+
         }
 
     }
-    private void updateFirebase(List<String> uploadedImages) {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-            if(chatMessageList.size()==0 ) {
-                if (MultiplePhoto.size() == uploadedImages.size()) {
-                    DatabaseReference userRef = databaseReference.child(AppConstants.FIREASE_USER_ENDPOINT);
-                    DatabaseReference userRefByID = userRef.child(LoginUtils.getLoggedinUser().getId().toString());
-                    Map<String, Object> map = new HashMap<String, Object>();
-                    map.put("imageName", LoginUtils.getLoggedinUser().getUser_image());
-                    map.put("name", LoginUtils.getLoggedinUser().getEmail());
-                    userRefByID.setValue(map);
 
-                    //Insertion in chats node
-                    DatabaseReference chatRef = databaseReference.child(AppConstants.FIREASE_CHAT_ENDPOINT);
-                    Map<String, Object> chatMap = new HashMap<String, Object>();
-                    Map<String, Object> lastMessageMap = new HashMap<String, Object>();
-                    lastMessageMap.put("message", messageText);
-                    lastMessageMap.put("name", LoginUtils.getLoggedinUser().getEmail());
-                    lastMessageMap.put("senderID", LoginUtils.getLoggedinUser().getId());
-                    lastMessageMap.put("timestamp", new Date().getTime());
-                    lastMessageMap.put("images", uploadedImages);
-                    chatMap.put("lastMessage", lastMessageMap);
-                    Map<String, Object> membersMap = new HashMap<String, Object>();
-                    membersMap.put(LoginUtils.getLoggedinUser().getId().toString(), LoginUtils.getLoggedinUser().getEmail());
-                    membersMap.put(user.getId().toString(), user.getEmail());
-                    chatMap.put("members", membersMap);
-                    String key = chatRef.push().getKey();
-                    user.setChatID(key);
-                    chatRef.child(key).setValue(chatMap);
-
-                    //Insertion in Messages node
-                    DatabaseReference messagesRef = databaseReference.child(AppConstants.FIREASE_MESSAGES_ENDPOINT);
-
-                    Log.d("KEY IS....", key);
-                    messagesRef.child(key).push().setValue(lastMessageMap);
-                }
-            }else {
-                if (MultiplePhoto.size() == uploadedImages.size()) {
-                    //Insertion in chats node
-                    DatabaseReference chatRef = databaseReference.child(AppConstants.FIREASE_CHAT_ENDPOINT);
-                    Map<String, Object> chatMap = new HashMap<String, Object>();
-                    Map<String, Object> lastMessageMap = new HashMap<String, Object>();
-                    lastMessageMap.put("message", messageText);
-                    lastMessageMap.put("name", LoginUtils.getLoggedinUser().getEmail());
-                    lastMessageMap.put("senderID", LoginUtils.getLoggedinUser().getId());
-                    lastMessageMap.put("timestamp", new Date().getTime());
-                    lastMessageMap.put("images", uploadedImages);
-                  //  chatMap.put("lastMessage", lastMessageMap);
-
-//                    Map<String, Object> membersMap = new HashMap<String, Object>();
-//                    membersMap.put(LoginUtils.getLoggedinUser().getId().toString(), LoginUtils.getLoggedinUser().getEmail());
-//                    membersMap.put(user.getId().toString(), user.getEmail());
-//                    chatMap.put("members", membersMap);
-
-                    chatRef.child(user.getChatID()).child("lastMessage").setValue(lastMessageMap);
-                    //Insertion in Messages node
-                    DatabaseReference messagesRef = databaseReference.child(AppConstants.FIREASE_MESSAGES_ENDPOINT);
-                    messagesRef.child(user.getChatID()).push().setValue(lastMessageMap);
-                }
-                }
-                ChatMessage chatMessage=new ChatMessage();
-                chatMessage.setSenderID(LoginUtils.getLoggedinUser().getId().toString());
-                chatMessage.setCreated_datetime(String.valueOf(new Date().getTime()));
-                chatMessage.setMessage("");
-                chatMessage.setChatImages(uploadedImages);
-                chatMessage.setName(LoginUtils.getLoggedinUser().getEmail());
-                chatMessageList.add(chatMessage);
-                chatAdapter.notifyDataSetChanged();
-                sendNotification(user.getEmail());
-                messageArea.setText("");
-                messageArea.requestFocus();
-
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -603,34 +574,41 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
                     currentPhotoPath = GalleryImage;
 
-
-                    if (tempFile.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.FILE_SIZE_LIMIT_IN_KB) {
-                        networkResponseDialog(getString(R.string.error), getString(R.string.err_image_size_large));
-                        return;
-                    } else {
-                        if (photoVar == null) {
-                            MultipleFile.add(tempFile);
-                            Log.e(getClass().getName(), "file path details: " + tempFile.getName() + " " + tempFile.getAbsolutePath() + "length" + tempFile.length());
-
-                            // photoVar = GalleryImage;
-                            file_name = new File(ImageFilePathUtil.getPath(getActivity(), SelectedImageUri));
-                            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file_name);
-
-                             MultipartBody.Part partImage = MultipartBody.Part.createFormData("chat_file", file_name.getName(), reqFile);
-                            MultiplePhoto.add(partImage);
-                            if (!TextUtils.isEmpty(currentPhotoPath) || currentPhotoPath != null) {
-                                attachments.add(currentPhotoPath);
-                                Log.d("ATTACHMENT", GsonUtils.toJson(attachments));
-                                attachmentsAdapter.notifyDataSetChanged();
-                                rc_attachments.setVisibility(View.VISIBLE);
-                            } else {
-                                networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
-                            }
-                        } else {
-                            networkResponseDialog(getString(R.string.error), getString(R.string.err_one_file_at_a_time));
+                    if(tempFile.toString().equalsIgnoreCase("File path not found"))
+                    {
+                        networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_storage));
+                    }
+                    else
+                    {
+                        if (tempFile.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.FILE_SIZE_LIMIT_IN_KB) {
+                            networkResponseDialog(getString(R.string.error), getString(R.string.err_image_size_large));
                             return;
+                        } else {
+                            if (photoVar == null) {
+                                MultipleFile.add(tempFile);
+                                Log.e(getClass().getName(), "file path details: " + tempFile.getName() + " " + tempFile.getAbsolutePath() + "length" + tempFile.length());
+
+                                // photoVar = GalleryImage;
+                                file_name = new File(ImageFilePathUtil.getPath(getActivity(), SelectedImageUri));
+                                RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file_name);
+
+                                MultipartBody.Part partImage = MultipartBody.Part.createFormData("chat_file", file_name.getName(), reqFile);
+                                MultiplePhoto.add(partImage);
+                                if (!TextUtils.isEmpty(currentPhotoPath) || currentPhotoPath != null) {
+                                    attachments.add(currentPhotoPath);
+                                    Log.d("ATTACHMENT", GsonUtils.toJson(attachments));
+                                    attachmentsAdapter.notifyDataSetChanged();
+                                    rc_attachments.setVisibility(View.VISIBLE);
+                                } else {
+                                    networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
+                                }
+                            } else {
+                                networkResponseDialog(getString(R.string.error), getString(R.string.err_one_file_at_a_time));
+                                return;
+                            }
                         }
                     }
+
                 } else {
                     Toast.makeText(getActivity(), "Something went wrong while retrieving image", Toast.LENGTH_SHORT).show();
                 }

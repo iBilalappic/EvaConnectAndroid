@@ -1,6 +1,7 @@
 package com.hypernym.evaconnect.view.adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -61,6 +62,18 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         if (networkConnectionList.get(position).getCreatedDatetime() != null) {
             holder.mtextview22.setText(DateUtils.getTimeAgo(networkConnectionList.get(position).getCreatedDatetime()));
         }
+        if(networkConnectionList.get(position).getUnread_msg_count()!=0)
+        {
+            holder.tv_count.setVisibility(View.VISIBLE);
+            holder.tv_count.setText(String.valueOf(networkConnectionList.get(position).getUnread_msg_count()));
+            holder.tv_lastmsg.setTextColor(context.getResources().getColor(R.color.black));
+            holder.tv_lastmsg.setTypeface(holder.tv_lastmsg.getTypeface(), Typeface.BOLD);
+        }
+        else
+        {
+            holder.tv_count.setVisibility(View.GONE);
+            holder.tv_lastmsg.setTextColor(context.getResources().getColor(R.color.gray));
+        }
        // holder.tv_name.setText(String.valueOf(networkConnectionList.get(position).getReceiverId()));
     }
 
@@ -70,7 +83,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_name, tv_lastmsg, mtextview22,tv_minago;
+        TextView tv_name, tv_lastmsg, mtextview22,tv_minago,tv_count;
         CircleImageView mImageview6;
         ConstraintLayout constraintLayout;
 
@@ -82,6 +95,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             mImageview6 = (CircleImageView) itemView.findViewById(R.id.imageView6);
             constraintLayout = (ConstraintLayout) itemView.findViewById(R.id.linearLayout6);
             tv_minago=itemView.findViewById(R.id.tv_minago);
+            tv_count=itemView.findViewById(R.id.tv_count);
         }
     }
 }

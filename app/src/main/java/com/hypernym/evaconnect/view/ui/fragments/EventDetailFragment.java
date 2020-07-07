@@ -295,7 +295,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
                 tv_likecount.setText(String.valueOf(event.getLike_count()));
                 tv_comcount.setText(String.valueOf(event.getComment_count()));
                 if (event.getIs_event_like() != null && event.getIs_event_like() > 0) {
-                    img_like.setBackground(getContext().getDrawable(R.drawable.ic_like));
+                    img_like.setBackground(getContext().getDrawable(R.drawable.like_selected));
                 } else {
                     img_like.setBackground(getContext().getDrawable(R.drawable.ic_like));
                 }

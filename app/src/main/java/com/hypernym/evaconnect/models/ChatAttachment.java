@@ -8,7 +8,7 @@ import okhttp3.MultipartBody;
 public class ChatAttachment implements Serializable {
     private int created_by_id;
     private String status;
-    private MultipartBody.Part chat_image;
+    private List<MultipartBody.Part> chat_image;
     private List<String> images;
     private List<String> documents;
 
@@ -28,14 +28,6 @@ public class ChatAttachment implements Serializable {
         this.status = status;
     }
 
-    public MultipartBody.Part getChat_image() {
-        return chat_image;
-    }
-
-    public void setChat_image(MultipartBody.Part chat_image) {
-        this.chat_image = chat_image;
-    }
-
     public List<String> getImages() {
         return images;
     }
@@ -50,5 +42,13 @@ public class ChatAttachment implements Serializable {
 
     public void setDocuments(List<String> documents) {
         this.documents = documents;
+    }
+
+    public List<MultipartBody.Part> getChat_image() {
+        return chat_image;
+    }
+
+    public void setChat_image(List<MultipartBody.Part> chat_image) {
+        this.chat_image = chat_image;
     }
 }

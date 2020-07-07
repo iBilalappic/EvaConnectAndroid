@@ -632,11 +632,33 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
 
     @Override
     public void invitedConnections(List<User> connections) {
-        invitedConnections.addAll(connections);
+
+        for(User user:connections)
+        {
+            if(!checkUserExist(user))
+            {
+                invitedConnections.add(user);
+            }
+        }
+
+       //invitedConnections.addAll(connections);
+           // invitedConnections.retainAll(connections);
+           //
         Log.e(TAG, "onResume: " + GsonUtils.toJson(invitedConnections));
         usersAdapter.notifyDataSetChanged();
     }
+    private boolean checkUserExist(User user)
+    {
 
+        for (User user1: invitedConnections)
+        {
+            if(user1.getId()==user.getId())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
     protected class YourDialogFragmentDismissHandler extends Handler {
         @Override

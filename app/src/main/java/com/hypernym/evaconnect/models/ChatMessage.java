@@ -8,6 +8,7 @@ public class ChatMessage {
     private String name;
     private String created_datetime;
     private List<String> chatImages;
+    private List<String> chatDocuments;
 
     public String getMessage() {
         return Message;
@@ -47,5 +48,13 @@ public class ChatMessage {
 
     public void setChatImages(List<String> chatImages) {
         this.chatImages = chatImages;
+    }
+
+    public List<String> getChatDocuments() {
+        return chatDocuments;
+    }
+
+    public void setChatDocuments(List<String> chatDocuments) {
+        this.chatDocuments = chatDocuments;
     }
 }

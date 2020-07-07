@@ -297,6 +297,9 @@ public interface AppApi {
     @POST(APIConstants.JOB)
     Call<BaseModel<List<Post>>> getJob(@Body User user, @Query("limit") int limit, @Query("offset") int offset);
 
+    @POST(APIConstants.NEWS)
+    Call<BaseModel<List<Post>>> getNews(@Body User user, @Query("limit") int limit, @Query("offset") int offset);
+
     @POST(APIConstants.GET_MEETING_DETAILS)
     Call<BaseModel<List<Event>>> getMeetingDetails(@Body HashMap<String,Integer> user);
     @GET(APIConstants.DECLINE_APPLICATION)
@@ -318,7 +321,7 @@ public interface AppApi {
     @POST(APIConstants.CHAT_IMAGE)
     Call<BaseModel<ChatAttachment>> uploadAttachment(@Part("created_by_id") int user_id,
                                                            @Part("status") RequestBody status ,
-                                                           @Part MultipartBody.Part Chat_image);
+                                                           @Part List<MultipartBody.Part> Chat_image);
 
     @Multipart
     @PATCH(APIConstants.UPDATE_EVENT)
@@ -338,4 +341,16 @@ public interface AppApi {
                                              @Part MultipartBody.Part event_image,
                                              @Part("modified_by_id") int modify_by_id,
                                              @Part("modified_datetime") RequestBody modify_datetime);
+
+    @POST(APIConstants.GET_NEWS_COMMENTS)
+    Call<BaseModel<List<Comment>>> getNewsComments(@Body Post news);
+
+    @POST(APIConstants.ADD_NEWS_COMMENT)
+    Call<BaseModel<List<Comment>>> addNewsComment(@Body Comment comment);
+
+    @POST(APIConstants.LIKE_NEWS)
+    Call<BaseModel<List<Post>>> likeNews(@Body Post post);
+
+    @POST(APIConstants.GET_NEWS_BY_ID)
+    Call<BaseModel<List<Post>>> getNewsByID(@Body Object user);
 }

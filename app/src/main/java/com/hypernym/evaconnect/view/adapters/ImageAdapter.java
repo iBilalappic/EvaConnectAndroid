@@ -1,6 +1,8 @@
 package com.hypernym.evaconnect.view.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,24 +11,20 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.models.AttachmentType;
 import com.hypernym.evaconnect.utils.AppUtils;
-import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
     private Context context;
-    private List<String> images = new ArrayList<>();
+    private List<AttachmentType> images = new ArrayList<>();
 
 
-    public ImageAdapter(Context context, List<String> images) {
+
+    public ImageAdapter(Context context, List<AttachmentType> images) {
         this.context = context;
         this.images = images;
 
@@ -41,7 +39,24 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ImageAdapter.ViewHolder holder, int position) {
-        AppUtils.setGlideUrlThumbnail(context, holder.imageSender, images.get(position));
+        if(images.get(position).getType().equalsIgnoreCase("image"))
+        {
+            AppUtils.setGlideUrlThumbnail(context, holder.imageSender, images.get(position).getUrl());
+        }
+        else
+        {
+           holder.imageSender.setImageResource(R.drawable.ic_document);
+        }
+        holder.imageSender.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent browserIntent =
+                        new Intent(Intent.ACTION_VIEW, Uri.parse(images.get(position).getUrl()));
+                context.startActivity(browserIntent);
+            }
+        });
+
 
     }
 
@@ -55,7 +70,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
             imageSender = itemView.findViewById(R.id.senderimage);
         }
 

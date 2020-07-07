@@ -42,6 +42,7 @@ import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.EventViewModel;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
 import com.hypernym.evaconnect.viewmodel.JobListViewModel;
+import com.hypernym.evaconnect.viewmodel.NewsViewModel;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 
@@ -76,6 +77,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     private LinearLayoutManager linearLayoutManager;
     private HomeViewModel homeViewModel;
     private PostViewModel postViewModel;
+    private NewsViewModel newsViewModel;
     private ConnectionViewModel connectionViewModel;
     private EventViewModel eventViewModel;
     private int currentPage = PAGE_START;
@@ -106,7 +108,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         jobListViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(JobListViewModel.class);
         eventViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(EventViewModel.class);
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(UserViewModel.class);
-
+        newsViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(NewsViewModel.class);
         //   currentPage = PAGE_START;
         homePostsAdapter = new HomePostsAdapter(getContext(), posts, this);
         linearLayoutManager = new LinearLayoutManager(getContext());
@@ -192,7 +194,11 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
                             post.setPost_type(AppConstants.EVENT_TYPE);
                         } else if (post.getType().equalsIgnoreCase("job")) {
                             post.setPost_type(AppConstants.JOB_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("post") && post.isIs_url()) {
+                        }
+                     else if (post.getType().equalsIgnoreCase("news")) {
+                        post.setPost_type(AppConstants.NEWS_TYPE);
+                    }
+                        else if (post.getType().equalsIgnoreCase("post") && post.isIs_url()) {
                             post.setPost_type(AppConstants.LINK_POST);
                         }
                     }
@@ -221,12 +227,25 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
 
     @Override
     public void onItemClick(View view, int position) {
-        PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("post", posts.get(position).getId());
-        Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
-        postDetailsFragment.setArguments(bundle);
-        loadFragment(R.id.framelayout, postDetailsFragment, getContext(), true);
+        if(!posts.get(position).getType().equalsIgnoreCase("news"))
+        {
+            PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("post", posts.get(position).getId());
+            Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
+            postDetailsFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, postDetailsFragment, getContext(), true);
+        }
+        else
+        {
+            NewsDetailsFragment postDetailsFragment = new NewsDetailsFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("post", posts.get(position).getId());
+            Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
+            postDetailsFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, postDetailsFragment, getContext(), true);
+        }
+
     }
 
     @Override
@@ -266,10 +285,54 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         if (NetworkUtils.isNetworkConnected(getContext())) {
 
             likePost(post, position);
+
         } else {
             networkErrorDialog();
         }
 
+    }
+
+    @Override
+    public void onNewsLikeClick(View view, int position, TextView likeCount) {
+        //showDialog();
+        Post post = posts.get(position);
+        User user = LoginUtils.getLoggedinUser();
+        post.setRss_news_id(post.getId());
+        post.setCreated_by_id(user.getId());
+        if (post.getIs_news_like() == null || post.getIs_news_like() < 1) {
+            post.setAction(AppConstants.LIKE);
+            if (post.getIs_news_like() == null) {
+                post.setIs_news_like(1);
+                if (post.getLike_count() == null)
+                    post.setLike_count(0);
+                else
+                    post.setLike_count(post.getLike_count() + 1);
+            } else {
+                post.setIs_news_like(post.getIs_news_like() + 1);
+                if (post.getLike_count() == null)
+                    post.setLike_count(0);
+                else
+                    post.setLike_count(post.getLike_count() + 1);
+            }
+        } else {
+            post.setAction(AppConstants.UNLIKE);
+            if (post.getIs_news_like() > 0) {
+                post.setIs_news_like(post.getIs_news_like() - 1);
+                post.setLike_count(post.getLike_count() - 1);
+            } else {
+                post.setIs_news_like(0);
+                post.setLike_count(0);
+            }
+
+        }
+        Log.d("Listing status", post.getAction() + " count" + post.getIs_post_like());
+        if (NetworkUtils.isNetworkConnected(getContext())) {
+
+            likeNews(post, position);
+
+        } else {
+            networkErrorDialog();
+        }
     }
 
     @Override
@@ -349,6 +412,20 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         });
     }
 
+    private void likeNews(Post post, int position) {
+        newsViewModel.likePost(post).observe(this, new Observer<BaseModel<List<Post>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Post>> listBaseModel) {
+                if (listBaseModel != null && !listBaseModel.isError()) {
+                    homePostsAdapter.notifyItemChanged(position);
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+                hideDialog();
+            }
+        });
+    }
+
     @Override
     public void onShareClick(View view, int position) {
 //       Intent intent=new Intent(getContext(), SharePostActivity.class);
@@ -379,21 +456,37 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     }
 
     @Override
-    public void onURLClick(View view, int position) {
-        LoadUrlFragment loadUrlFragment = new LoadUrlFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("url", posts.get(position).getContent());
-        loadUrlFragment.setArguments(bundle);
-        loadFragment(R.id.framelayout, loadUrlFragment, getContext(), true);
+    public void onURLClick(View view, int position,String type) {
+        if(type.equalsIgnoreCase("news"))
+        {
+            LoadUrlFragment loadUrlFragment = new LoadUrlFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("url", posts.get(position).getLink());
+            loadUrlFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, loadUrlFragment, getContext(), true);
+        }
+        else
+        {
+            LoadUrlFragment loadUrlFragment = new LoadUrlFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("url", posts.get(position).getContent());
+            loadUrlFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, loadUrlFragment, getContext(), true);
+        }
+
     }
 
     @Override
     public void onProfileClick(View view, int position) {
-        PersonProfileFragment personDetailFragment = new PersonProfileFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("PostData", posts.get(position));
-        personDetailFragment.setArguments(bundle);
-        loadFragment(R.id.framelayout, personDetailFragment, getContext(), true);
+        if(!posts.get(position).getType().equalsIgnoreCase("news"))
+        {
+            PersonProfileFragment personDetailFragment = new PersonProfileFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("PostData", posts.get(position));
+            personDetailFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, personDetailFragment, getContext(), true);
+        }
+
     }
 
     @Override
@@ -567,7 +660,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
                 }
                 else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu3))) {
                     loadFragment(R.id.framelayout, new CreateEventFragment(), getContext(), true);
-                } else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu3))) {
+                } else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu4))) {
                     loadFragment(R.id.framelayout, new ShareVideoFragment(), getContext(), true);
                 }
                 return true;

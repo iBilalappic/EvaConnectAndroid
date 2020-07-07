@@ -36,7 +36,15 @@ public class ActivityFragment extends BaseFragment {
         sectionsPagerAdapter = new ActivityFragment.SectionsPagerAdapter(getChildFragmentManager());
         mViewPager = (ViewPager) view.findViewById(R.id.container);
         mViewPager.setAdapter(sectionsPagerAdapter);
-        mViewPager.setCurrentItem(0);
+        if(getArguments()!=null && getArguments().getBoolean("isNotification"))
+        {
+            mViewPager.setCurrentItem(1);
+        }
+        else
+        {
+            mViewPager.setCurrentItem(0);
+        }
+
         TabLayout tabLayout = view.findViewById(R.id.tabLayout);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setupWithViewPager(mViewPager);

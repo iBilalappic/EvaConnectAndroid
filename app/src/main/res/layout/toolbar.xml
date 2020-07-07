@@ -114,6 +114,8 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
+                app:civ_border_color="@color/skyblue"
+                app:civ_border_width="2dp"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

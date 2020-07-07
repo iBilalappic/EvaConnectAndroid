@@ -52,7 +52,7 @@ public class JobAdAdapter extends RecyclerView.Adapter<JobAdAdapter.ViewHolder> 
         AppUtils.setGlideImage(context, (holder).profile_image, jobAdList.get(position).getJobImage());
 
         if (jobAdList.get(position).getIs_job_like() != null && jobAdList.get(position).getIs_job_like() > 0) {
-            holder.img_like.setBackground(context.getDrawable(R.drawable.ic_like));
+            holder.img_like.setBackground(context.getDrawable(R.drawable.like_selected));
         } else {
             holder.img_like.setBackground(context.getDrawable(R.drawable.ic_like));
         }

@@ -261,6 +261,12 @@ public final class DateUtils {
         String completetime = df.format(Calendar.getInstance().getTime());
         return completetime;
     }
+    public static String GetCurrentUTCTime() {
+        SimpleDateFormat df = new SimpleDateFormat("hh:mm a");
+        df.setTimeZone(TimeZone.getTimeZone("gmt"));
+        String completetime = df.format(Calendar.getInstance().getTime());
+        return completetime;
+    }
 
     public static String Gettime_UTC() {
         SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
@@ -534,6 +540,8 @@ public final class DateUtils {
                 return "Today at " + timeFormatter.format(dateTime);
             }  else {
                 SimpleDateFormat  mInputDateFormat= new SimpleDateFormat("EEEE, hh:mm aa");
+                mInputDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+                mInputDateFormat.setTimeZone(TimeZone.getDefault());
                 return mInputDateFormat.format(dateTime);
 
             }
@@ -546,8 +554,10 @@ public final class DateUtils {
     public static String getDateTimeFromTimestamp(String time) {
         long longTime = Long.parseLong(time);
 
-        Date date = new Date(longTime*1000L); // *1000 is to convert seconds to milliseconds
+        Date date = new Date(longTime); // *1000 is to convert seconds to milliseconds
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE, hh:mm aa"); // the format of your date
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        sdf.setTimeZone(TimeZone.getDefault());
        return sdf.format(date);
     }
 

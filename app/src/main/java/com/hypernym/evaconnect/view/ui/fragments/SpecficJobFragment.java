@@ -1,7 +1,6 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,31 +10,23 @@ import android.widget.Toast;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.JobAd;
-import com.hypernym.evaconnect.models.MyLikesModel;
-import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.Constants;
-import com.hypernym.evaconnect.utils.DateUtils;
-import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.MyLikeAdapter;
 import com.hypernym.evaconnect.view.dialogs.ShareDialog;
 import com.hypernym.evaconnect.viewmodel.JobListViewModel;
-import com.hypernym.evaconnect.viewmodel.MylikesViewModel;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -151,7 +142,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
 //                    tv_createddateTime.setText(DateUtils.getFormattedDateTime(getjobAd.getData().get(0).getCreatedDatetime()));
 //                    tv_minago.setText(DateUtils.getTimeAgo(getjobAd.getData().get(0).getCreatedDatetime()));
                     if (getjobAd.getData().get(0).getIsJobLike() != null && getjobAd.getData().get(0).getIsJobLike() > 0) {
-                        img_like.setBackground(getActivity().getDrawable(R.drawable.ic_like));
+                        img_like.setBackground(getActivity().getDrawable(R.drawable.like_selected));
                     } else {
                         img_like.setBackground(getActivity().getDrawable(R.drawable.ic_like));
                     }

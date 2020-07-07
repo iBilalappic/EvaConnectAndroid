@@ -15,12 +15,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
-import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
@@ -38,9 +36,9 @@ import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.EventViewModel;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
 import com.hypernym.evaconnect.viewmodel.JobListViewModel;
+import com.hypernym.evaconnect.viewmodel.NewsViewModel;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
-import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +89,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     private PostViewModel postViewModel;
     private ConnectionViewModel connectionViewModel;
     private EventViewModel eventViewModel;
+    private NewsViewModel newsViewModel;
     private int currentPage = PAGE_START;
     private boolean isLastPage = false;
     private boolean isLoading = false;
@@ -129,7 +128,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         jobListViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(JobListViewModel.class);
         eventViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(EventViewModel.class);
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(UserViewModel.class);
-
+        newsViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(NewsViewModel.class);
         //   currentPage = PAGE_START;
         swipeRefresh.setOnRefreshListener(this);
         img_backarrow.setOnClickListener(this);
@@ -338,12 +337,25 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
     @Override
     public void onItemClick(View view, int position) {
-        PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("post", posts.get(position).getId());
-        Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
-        postDetailsFragment.setArguments(bundle);
-        loadFragment(R.id.framelayout, postDetailsFragment, getContext(), true);
+        if(!posts.get(position).getType().equalsIgnoreCase("news"))
+        {
+            PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("post", posts.get(position).getId());
+            Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
+            postDetailsFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, postDetailsFragment, getContext(), true);
+        }
+        else
+        {
+            NewsDetailsFragment postDetailsFragment = new NewsDetailsFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("post", posts.get(position).getId());
+            Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
+            postDetailsFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, postDetailsFragment, getContext(), true);
+        }
+
     }
 
     @Override
@@ -387,6 +399,61 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         }
     }
 
+    @Override
+    public void onNewsLikeClick(View view, int position, TextView likeCount) {
+        //showDialog();
+        Post post = posts.get(position);
+        User user = LoginUtils.getLoggedinUser();
+        post.setRss_news_id(post.getId());
+        post.setCreated_by_id(user.getId());
+        if (post.getIs_news_like() == null || post.getIs_news_like() < 1) {
+            post.setAction(AppConstants.LIKE);
+            if (post.getIs_news_like() == null) {
+                post.setIs_news_like(1);
+                if (post.getLike_count() == null)
+                    post.setLike_count(0);
+                else
+                    post.setLike_count(post.getLike_count() + 1);
+            } else {
+                post.setIs_news_like(post.getIs_news_like() + 1);
+                if (post.getLike_count() == null)
+                    post.setLike_count(0);
+                else
+                    post.setLike_count(post.getLike_count() + 1);
+            }
+        } else {
+            post.setAction(AppConstants.UNLIKE);
+            if (post.getIs_news_like() > 0) {
+                post.setIs_news_like(post.getIs_news_like() - 1);
+                post.setLike_count(post.getLike_count() - 1);
+            } else {
+                post.setIs_news_like(0);
+                post.setLike_count(0);
+            }
+
+        }
+        Log.d("Listing status", post.getAction() + " count" + post.getIs_post_like());
+        if (NetworkUtils.isNetworkConnected(getContext())) {
+
+            likeNews(post, position);
+
+        } else {
+            networkErrorDialog();
+        }
+    }
+    private void likeNews(Post post, int position) {
+        newsViewModel.likePost(post).observe(this, new Observer<BaseModel<List<Post>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Post>> listBaseModel) {
+                if (listBaseModel != null && !listBaseModel.isError()) {
+                    homePostsAdapter.notifyItemChanged(position);
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+                hideDialog();
+            }
+        });
+    }
     @Override
     public void onJobLikeClick(View view, int position, TextView likeCount) {
         if (posts.get(position).getIs_job_like() != null && posts.get(position).getIs_job_like() > 0) {
@@ -490,12 +557,23 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     }
 
     @Override
-    public void onURLClick(View view, int position) {
-        LoadUrlFragment loadUrlFragment = new LoadUrlFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("url", posts.get(position).getContent());
-        loadUrlFragment.setArguments(bundle);
-        loadFragment(R.id.framelayout, loadUrlFragment, getContext(), true);
+    public void onURLClick(View view, int position,String type) {
+        if(type.equalsIgnoreCase("news"))
+        {
+            LoadUrlFragment loadUrlFragment = new LoadUrlFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("url", posts.get(position).getLink());
+            loadUrlFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, loadUrlFragment, getContext(), true);
+        }
+        else
+        {
+            LoadUrlFragment loadUrlFragment = new LoadUrlFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("url", posts.get(position).getContent());
+            loadUrlFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, loadUrlFragment, getContext(), true);
+        }
     }
 
     @Override

@@ -12,6 +12,7 @@ public interface APIConstants {
     public static String DASHBOARD_SEARCH="dashboard/search/?";
     public static String POST="dashboard/post/?";
     public static String EVENT="dashboard/event/?";
+    public static String NEWS="dashboard/news/?";
     public static String JOB="dashboard/job/?";
     public static String FRIENDCONNECTION="user/network/connection/details/{id}/";
     public static String ADD_COMMENT="post/comment/";
@@ -68,4 +69,8 @@ public interface APIConstants {
     public static String CHAT_IMAGE="chat/";
     public static String UPDATE_MEETING_ATTENDENCE="meeting/attendee/";
     public static String UPDATE_EVENT="event/details/{id}/";
+    public static String LIKE_NEWS="news/like/";
+    public static String GET_NEWS_COMMENTS="news/comment/filter/";
+    public static String ADD_NEWS_COMMENT="news/comment/";
+    public static String GET_NEWS_BY_ID="news/rss/";
 }

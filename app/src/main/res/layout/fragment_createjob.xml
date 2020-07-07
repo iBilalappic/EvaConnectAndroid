@@ -219,7 +219,7 @@
                     android:layout_marginEnd="20dp"
                     android:fontFamily="@font/nunitosansregular"
                     android:gravity="start|center"
-                    android:hint="Salary"
+                    android:hint="Salary per annum"
                     android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="9"

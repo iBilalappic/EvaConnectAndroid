@@ -96,7 +96,7 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
                 transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
                 ActivityFragment activityFragment=new ActivityFragment();
                 Bundle bundle=new Bundle();
-                bundle.putBoolean("isActivity",true);
+                bundle.putBoolean("isNotification",true);
                 activityFragment.setArguments(bundle);
                 transaction.replace(R.id.framelayout, activityFragment);
                 transaction.addToBackStack(null);

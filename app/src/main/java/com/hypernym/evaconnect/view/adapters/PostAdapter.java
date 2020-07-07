@@ -18,12 +18,10 @@ import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
-import com.hypernym.evaconnect.utils.LoginUtils;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -533,7 +531,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     AppUtils.makeTextViewResizable(((PostAdapter.TextTypeViewHolder) holder).tv_content, 3, posts.get(position).getContent());
                     ((PostAdapter.TextTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
                     if (posts.get(position).getIs_post_like() != null && posts.get(position).getIs_post_like() > 0) {
-                        ((PostAdapter.TextTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
+                        ((PostAdapter.TextTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.like_selected));
                     } else {
                         ((PostAdapter.TextTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }
@@ -577,7 +575,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     AppUtils.makeTextViewResizable(((PostAdapter.ImageTypeViewHolder) holder).tv_content, 3, posts.get(position).getContent());
                     ((PostAdapter.ImageTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
                     if (posts.get(position).getIs_post_like() != null && posts.get(position).getIs_post_like() > 0) {
-                        ((PostAdapter.ImageTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
+                        ((PostAdapter.ImageTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.like_selected));
                     } else {
                         ((PostAdapter.ImageTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }
@@ -611,7 +609,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     AppUtils.makeTextViewResizable(((PostAdapter.VideoTypeViewHolder) holder).tv_content, 3, posts.get(position).getContent());
                     ((PostAdapter.VideoTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
                     if (posts.get(position).getIs_post_like() != null && posts.get(position).getIs_post_like() > 0) {
-                        ((PostAdapter.VideoTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
+                        ((PostAdapter.VideoTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.like_selected));
                     } else {
                         ((PostAdapter.VideoTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }
@@ -663,7 +661,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     // ((LinkTypeViewHolder) holder).tv_content.setText(posts.get(position).getContent());
                     ((PostAdapter.LinkTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
                     if (posts.get(position).getIs_post_like() != null && posts.get(position).getIs_post_like() > 0) {
-                        ((PostAdapter.LinkTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
+                        ((PostAdapter.LinkTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.like_selected));
                     } else {
                         ((PostAdapter.LinkTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }

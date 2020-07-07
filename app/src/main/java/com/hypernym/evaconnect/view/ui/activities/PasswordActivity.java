@@ -232,17 +232,11 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
                         loginWithFacebook();
                     }
                     else {
-                        simpleDialog = new SimpleDialog(PasswordActivity.this, getString(R.string.success), getString(R.string.msg_signup), null, getString(R.string.ok), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                callLoginApi();
-
-                            }
-                        });
-                        simpleDialog.show();
+                        callLoginApi();
                     }
 
                 } else {
+                    hideDialog();
                     simpleDialog = networkResponseDialog(getString(R.string.error), logins.getMessage());
                 }
             }
@@ -333,6 +327,9 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
         for (ValidationError error : errors) {
             View view = error.getView();
             String message = error.getCollatedErrorMessage(this);
+            if (view.getId() == R.id.edt_password) {
+                message = getString(R.string.err_password);
+            }
             // Display error messages
             if (view instanceof EditText) {
                 ((EditText) view).setError(message);

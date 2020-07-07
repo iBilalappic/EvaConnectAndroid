@@ -44,19 +44,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     @Override
     public void onBindViewHolder(@NonNull NotificationsAdapter.ViewHolder holder, int position) {
         AppUtils.setGlideImage(context, holder.profile_image, notificationsList.get(position).getUser().getUser_image());
-
-        if(notificationsList.get(position).getObject_type().equalsIgnoreCase("meeting") ||
-                notificationsList.get(position).getObject_type().equalsIgnoreCase("event"))
-        {
-            holder.tv_status.setText(notificationsList.get(position).getContent());
-        }
-        else if (notificationsList.get(position).getIs_like()!=0) {
-            holder.tv_status.setText(notificationsList.get(position).getName()+" "+"liked your post ");
-
-        } else {
-            holder.tv_status.setText(notificationsList.get(position).getName()+" "+"commented your post");
-
-        }
+        holder.tv_status.setText(notificationsList.get(position).getContent());
       holder.tv_date.setText(DateUtils.formatToYesterdayOrToday(notificationsList.get(position).getCreated_datetime()));
 //        holder.linearLayout10.setOnClickListener(new View.OnClickListener() {
 //            @Override

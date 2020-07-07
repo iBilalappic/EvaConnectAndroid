@@ -26,13 +26,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class EventHomeAdapter extends RecyclerView.Adapter {
+public class NewsHomeAdapter extends RecyclerView.Adapter {
 
     private List<Post> posts = new ArrayList<>();
     private Context mContext;
     int total_types;
     private boolean fabStateVolume = false;
-    private EventHomeAdapter.ItemClickListener mClickListener;
+    private NewsHomeAdapter.ItemClickListener mClickListener;
     private SliderImageAdapter sliderImageAdapter;
     // flag for footer ProgressBar (i.e. last item of list)
     private boolean isLoadingAdded = false;
@@ -144,7 +144,7 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
 
 
 
-    public EventHomeAdapter(Context context, List<Post> data, EventHomeAdapter.ItemClickListener mClickListener) {
+    public NewsHomeAdapter(Context context, List<Post> data, NewsHomeAdapter.ItemClickListener mClickListener) {
         this.posts = data;
         this.mContext = context;
         total_types = posts.size();
@@ -159,7 +159,7 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
 
             case AppConstants.EVENT_TYPE:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_type, parent, false);
-                return new EventHomeAdapter.EventTypeViewHolder(view);
+                return new NewsHomeAdapter.EventTypeViewHolder(view);
 
         }
         return null;
@@ -204,30 +204,30 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
 
                 case AppConstants.EVENT_TYPE:
                     if (String.valueOf(posts.get(position).getComment_count()).equals("0")) {
-                        ((EventHomeAdapter.EventTypeViewHolder) holder).tv_viewcomments.setVisibility(View.GONE);
+                        ((NewsHomeAdapter.EventTypeViewHolder) holder).tv_viewcomments.setVisibility(View.GONE);
                     }
-                    ((EventHomeAdapter.EventTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
-                    ((EventHomeAdapter.EventTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
+                    ((NewsHomeAdapter.EventTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
+                    ((NewsHomeAdapter.EventTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
 
                     if (posts.get(position).getIs_event_like() != null && posts.get(position).getIs_event_like() > 0) {
-                        ((EventHomeAdapter.EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.like_selected));
+                        ((NewsHomeAdapter.EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.like_selected));
                     } else {
-                        ((EventHomeAdapter.EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
+                        ((NewsHomeAdapter.EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }
                     if (posts.get(position).getEvent_image().size() > 0) {
-                        AppUtils.setGlideVideoThumbnail(mContext, ((EventHomeAdapter.EventTypeViewHolder) holder).profile_image, posts.get(position).getEvent_image().get(0));
+                        AppUtils.setGlideVideoThumbnail(mContext, ((NewsHomeAdapter.EventTypeViewHolder) holder).profile_image, posts.get(position).getEvent_image().get(0));
                     } else {
-                        ((EventHomeAdapter.EventTypeViewHolder) holder).profile_image.setBackground(mContext.getDrawable(R.drawable.no_thumbnail));
+                        ((NewsHomeAdapter.EventTypeViewHolder) holder).profile_image.setBackground(mContext.getDrawable(R.drawable.no_thumbnail));
                     }
 
-                    ((EventHomeAdapter.EventTypeViewHolder) holder).tv_name.setText(posts.get(position).getName());
-                    ((EventHomeAdapter.EventTypeViewHolder) holder).tv_location.setText(posts.get(position).getEvent_city());
-                    ((EventHomeAdapter.EventTypeViewHolder) holder).tv_eventdate.setText(DateUtils.getFormattedDateDMY(posts.get(position).getStart_date()));
+                    ((NewsHomeAdapter.EventTypeViewHolder) holder).tv_name.setText(posts.get(position).getName());
+                    ((NewsHomeAdapter.EventTypeViewHolder) holder).tv_location.setText(posts.get(position).getEvent_city());
+                    ((NewsHomeAdapter.EventTypeViewHolder) holder).tv_eventdate.setText(DateUtils.getFormattedDateDMY(posts.get(position).getStart_date()));
 
                     if (position == 0) {
-                        ((EventHomeAdapter.EventTypeViewHolder) holder).top_image.setVisibility(View.GONE);
+                        ((NewsHomeAdapter.EventTypeViewHolder) holder).top_image.setVisibility(View.GONE);
                     } else {
-                        ((EventHomeAdapter.EventTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
+                        ((NewsHomeAdapter.EventTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
 
                     break;

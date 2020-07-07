@@ -27,7 +27,6 @@ import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
-import com.hypernym.evaconnect.utils.PrefUtils;
 import com.hypernym.evaconnect.view.adapters.InviteConnectionsAdapter;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 
@@ -131,6 +130,7 @@ public class InviteConnections extends BaseFragment implements InviteConnections
     }
 
     private void getConnectionByFilter(String type, int currentPage, boolean b) {
+       // showDialog();
         User userData = new User();
         User user = LoginUtils.getLoggedinUser();
         userData.setType(type);
@@ -147,7 +147,7 @@ public class InviteConnections extends BaseFragment implements InviteConnections
                     if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
                         if (currentPage == PAGE_START) {
                             connectionList.clear();
-                            inviteConnectionsAdapter.notifyDataSetChanged();
+                          //  inviteConnectionsAdapter.notifyDataSetChanged();
                         }
                         if(users.size()>0)
                         {
@@ -159,6 +159,7 @@ public class InviteConnections extends BaseFragment implements InviteConnections
                                     if(user2.getId()==user1.getId())
                                     {
                                         connectionList.remove(user2);
+                                        inviteConnectionsAdapter.notifyDataSetChanged();
                                     }
                                 }
                             }
@@ -167,9 +168,12 @@ public class InviteConnections extends BaseFragment implements InviteConnections
                         else
                         {
                             connectionList.addAll(listBaseModel.getData());
+                            inviteConnectionsAdapter.notifyDataSetChanged();
                         }
 
-                        inviteConnectionsAdapter.notifyDataSetChanged();
+
+
+
                        // PrefUtils.persistConnectionsMeeting(getContext(),new ArrayList<>());
                         //PrefUtils.persistConnections(getContext(),new ArrayList<>());
                         if (connectionList.size() > 0) {
@@ -186,6 +190,7 @@ public class InviteConnections extends BaseFragment implements InviteConnections
                     } else {
                         networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                     }
+                    //hideDialog();
                 });
     }
 

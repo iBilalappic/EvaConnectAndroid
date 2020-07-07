@@ -2,6 +2,13 @@ package com.hypernym.evaconnect.view.ui.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -9,32 +16,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.text.Editable;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
-import com.hypernym.evaconnect.models.Options;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
-import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
-import com.hypernym.evaconnect.utils.TextWatcher;
 import com.hypernym.evaconnect.view.adapters.ConnectionsAdapter;
-import com.hypernym.evaconnect.view.adapters.HorizontalMessageAdapter;
 import com.hypernym.evaconnect.view.adapters.OptionsAdapter;
 import com.hypernym.evaconnect.view.adapters.RecommendedUser_HorizontalAdapter;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
@@ -229,7 +222,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         // showDialog();
         User userData = new User();
         User user = LoginUtils.getLoggedinUser();
-        userData.setType(mtype);
+       // userData.setType(mtype);
         userData.setUser_id(user.getId());
         if (edt_search.getText().toString().length() > 0)
             userData.setFirst_name(edt_search.getText().toString());

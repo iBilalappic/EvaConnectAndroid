@@ -18,6 +18,10 @@ public class Post implements Serializable {
     private Integer object_id;
     private Integer is_applied;
     private String name;
+    private News news_source;
+    private String title;
+    private String link;
+    private int rss_news_id;
 
 
     public String getStart_date() {
@@ -42,6 +46,7 @@ public class Post implements Serializable {
     private String interview_time;
     private Integer connection_id;
 
+
     public Integer getObject_id() {
         return object_id;
     }
@@ -55,6 +60,7 @@ public class Post implements Serializable {
     private Integer post_type;
     private Integer post_id;
     private Integer is_post_like;
+    private Integer is_news_like;
     private Integer total_connection;
     private String action;
     private String type;
@@ -86,6 +92,7 @@ public class Post implements Serializable {
     private String end_time;
     private String address;
     private int is_private;
+    private String image;
 
 
 
@@ -475,6 +482,54 @@ public class Post implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public News getNews_source() {
+        return news_source;
+    }
+
+    public void setNews_source(News news_source) {
+        this.news_source = news_source;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public int getRss_news_id() {
+        return rss_news_id;
+    }
+
+    public void setRss_news_id(int rss_news_id) {
+        this.rss_news_id = rss_news_id;
+    }
+
+    public Integer getIs_news_like() {
+        return is_news_like;
+    }
+
+    public void setIs_news_like(Integer is_news_like) {
+        this.is_news_like = is_news_like;
     }
 }
 

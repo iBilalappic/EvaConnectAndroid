@@ -15,7 +15,6 @@ import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.utils.AppUtils;
-import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
@@ -209,7 +208,7 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
                     ((JobHomeAdapter.JobTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
 
                     if (posts.get(position).getIs_job_like() != null && posts.get(position).getIs_job_like() > 0) {
-                        ((JobHomeAdapter.JobTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
+                        ((JobHomeAdapter.JobTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.like_selected));
                     } else {
                         ((JobHomeAdapter.JobTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }

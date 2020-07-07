@@ -12,6 +12,8 @@ public class Comment implements Serializable {
     private String created_datetime;
     private User user;
     private Integer event_id;
+    private Integer rss_news_id;
+
 
 
 
@@ -72,5 +74,13 @@ public class Comment implements Serializable {
 
     public void setEvent_id(Integer event_id) {
         this.event_id = event_id;
+    }
+
+    public Integer getRss_news_id() {
+        return rss_news_id;
+    }
+
+    public void setRss_news_id(Integer rss_news_id) {
+        this.rss_news_id = rss_news_id;
     }
 }

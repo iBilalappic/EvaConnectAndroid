@@ -2,7 +2,6 @@ package com.hypernym.evaconnect.view.ui.fragments;
 
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,18 +28,14 @@ import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
-import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.CommentsAdapter;
 import com.hypernym.evaconnect.view.adapters.SliderImageAdapter;
 import com.hypernym.evaconnect.view.dialogs.ShareDialog;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
-import com.hypernym.evaconnect.viewmodel.PostViewModel;
+import com.hypernym.evaconnect.viewmodel.NewsViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
-import com.smarteist.autoimageslider.IndicatorAnimations;
-import com.smarteist.autoimageslider.SliderAnimations;
-import com.smarteist.autoimageslider.SliderView;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -55,7 +50,7 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PostDetailsFragment extends BaseFragment implements Validator.ValidationListener {
+public class NewsDetailsFragment extends BaseFragment implements Validator.ValidationListener {
 
     @BindView(R.id.rc_comments)
     RecyclerView rc_comments;
@@ -70,26 +65,17 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     @BindView(R.id.tv_name)
     TextView tv_name;
 
-    @BindView(R.id.tv_connections)
-    TextView tv_connections;
-
     @BindView(R.id.tv_minago)
     TextView tv_minago;
 
     @BindView(R.id.tv_createddateTime)
     TextView tv_createddateTime;
 
-    @BindView(R.id.tv_content)
-    TextView tv_content;
-
     @BindView(R.id.tv_likecount)
     TextView tv_likecount;
 
     @BindView(R.id.tv_comcount)
     TextView tv_comcount;
-
-    @BindView(R.id.slider_images_detail)
-    SliderView slider_images_detail;
 
     @BindView(R.id.img_user)
     ImageView img_user;
@@ -105,32 +91,37 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     @BindView(R.id.profile_image)
     ImageView profile_image;
 
-    @BindView(R.id.tv_connect)
-    TextView tv_connect;
 
     @BindView(R.id.img_video)
     ImageView img_video;
 
-    @BindView(R.id.img_play)
-    ImageView img_play;
-
-    @BindView(R.id.link)
-    TextView link;
 
     @BindView(R.id.tv_goback)
     TextView tv_goback;
 
+    @BindView(R.id.channelname)
+    TextView tv_channelName;
+
+    @BindView(R.id.tv_newstitle)
+    TextView tv_newstitle;
+
+    @BindView(R.id.tv_url)
+    TextView tv_url;
+
+    @BindView(R.id.tv_visit)
+    TextView tv_visit;
+
     private CommentsAdapter commentsAdapter;
     private SliderImageAdapter sliderImageAdapter;
     private List<Comment> comments = new ArrayList<>();
-    private PostViewModel postViewModel;
+    private NewsViewModel newsViewModel;
 
     Post post = new Post();
     int post_id;
     private Validator validator;
     private ConnectionViewModel connectionViewModel;
 
-    public PostDetailsFragment() {
+    public NewsDetailsFragment() {
         // Required empty public constructor
     }
 
@@ -139,11 +130,11 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_post_details, container, false);
+        View view = inflater.inflate(R.layout.fragment_news_details, container, false);
         ButterKnife.bind(this, view);
         init();
 
-        postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(PostViewModel.class);
+        newsViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(NewsViewModel.class);
         if (getArguments() != null) {
             post_id = getArguments().getInt("post");
             getPostDetails(post_id);
@@ -172,7 +163,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     }
 
     private void getPostDetails(int id) {
-        postViewModel.getPostByID(id).observe(this, new Observer<BaseModel<List<Post>>>() {
+        newsViewModel.getNewsByID(id).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError()) {
@@ -190,96 +181,41 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     }
 
     private void settingpostType() {
-        if (post.getContent() == null) {
-            post.setContent("");
-        }
-        if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() > 0) {
-            post.setPost_type(AppConstants.IMAGE_TYPE);
-        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_video() != null) {
-            post.setPost_type(AppConstants.VIDEO_TYPE);
-        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() == 0 && AppUtils.containsURL(post.getContent()).size() == 0) {
-            post.setPost_type(AppConstants.TEXT_TYPE);
-        } else if (post.getType().equalsIgnoreCase("event")) {
-            post.setPost_type(AppConstants.EVENT_TYPE);
-        }
-        else if (post.getType().equalsIgnoreCase("news")) {
-            post.setPost_type(AppConstants.NEWS_TYPE);
-        }
-        else if (post.getType().equalsIgnoreCase("post") && AppUtils.containsURL(post.getContent()).size() > 0) {
-            post.setPost_type(AppConstants.LINK_POST);
-        }
+
+        post.setPost_type(AppConstants.NEWS_TYPE);
     }
 
     private void init() {
         validator = new Validator(this);
         validator.setValidationListener(this);
         showBackButton();
+        setPageTitle("News Details");
     }
 
     private void setPostData(Post post) {
-        initializeSlider(post);
+
         tv_comcount.setText(String.valueOf(post.getComment_count()));
         tv_likecount.setText(String.valueOf(post.getLike_count()));
-        tv_connections.setText(AppUtils.getConnectionsCount(post.getUser().getTotal_connection()));
+      //  tv_connections.setText(AppUtils.getConnectionsCount(post.getUser().getTotal_connection()));
         tv_createddateTime.setText(DateUtils.getFormattedDateTime(post.getCreated_datetime()));
         tv_minago.setText(DateUtils.getTimeAgo(post.getCreated_datetime()));
-        tv_name.setText(post.getUser().getFirst_name());
-        tv_content.setText(post.getContent());
-        //Hide connect option if post is from logged in user
-        User user = LoginUtils.getLoggedinUser();
-        if (post.getUser().getId() == user.getId()) {
-            tv_connect.setVisibility(View.GONE);
-        } else {
-            tv_connect.setVisibility(View.GONE);
-            tv_connect.setText(AppUtils.getConnectionStatus(getContext(), post.getIs_connected(), post.isIs_receiver()));
-        }
-        if (post.getUser().getIs_linkedin() == 1 && !TextUtils.isEmpty(post.getUser().getLinkedin_image_url())) {
-            AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getLinkedin_image_url());
-        }
-        else if (post.getUser().getIs_facebook() == 1 && !TextUtils.isEmpty(post.getUser().getFacebook_image_url()))
-        {
-            AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getFacebook_image_url());
-        }
-        else {
-            AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getUser_image());
-        }
+        tv_name.setText(post.getNews_source().getName());
+        tv_channelName.setText(post.getNews_source().getName());
+        tv_newstitle.setText(post.getTitle());
+        tv_url.setText(post.getNews_source().getUrl());
 
-        if (LoginUtils.getUser().getIs_linkedin() == 1 && !TextUtils.isEmpty(user.getLinkedin_image_url())) {
-            AppUtils.setGlideImage(getContext(), img_user, user.getLinkedin_image_url());
-        }
-        else if (user.getIs_facebook() == 1 && !TextUtils.isEmpty(user.getFacebook_image_url())){
-            AppUtils.setGlideImage(getContext(), img_user, user.getFacebook_image_url());
-        }
-        else {
-            AppUtils.setGlideImage(getContext(), img_user, user.getUser_image());
-        }
+        AppUtils.setGlideImage(getContext(), profile_image, post.getNews_source().getImage());
 
+        AppUtils.setGlideUrlThumbnail(getContext(),img_video,post.getImage());
 
         if (post.getIs_post_like() != null && post.getIs_post_like() > 0) {
             img_like.setBackground(getContext().getDrawable(R.drawable.like_selected));
         } else {
             img_like.setBackground(getContext().getDrawable(R.drawable.ic_like));
         }
-        slider_images_detail.setVisibility(View.GONE);
-        img_video.setVisibility(View.GONE);
-        img_play.setVisibility(View.GONE);
-        link.setVisibility(View.GONE);
-        if (post.getPost_type() == AppConstants.IMAGE_TYPE) {
-            slider_images_detail.setVisibility(View.VISIBLE);
-        } else if (post.getPost_type() == AppConstants.VIDEO_TYPE) {
-            img_video.setVisibility(View.VISIBLE);
-            img_play.setVisibility(View.VISIBLE);
-            AppUtils.setGlideVideoThumbnail(getContext(), img_video, post.getPost_video());
-        } else if (post.getPost_type() == AppConstants.LINK_POST) {
-            img_video.setVisibility(View.VISIBLE);
-            ArrayList<String> URLs = AppUtils.containsURL(post.getContent().toString());
-            if (URLs.size() > 0) {
-                AppUtils.customUrlEmbeddedView(getContext(), URLs.get(0), img_video);
-                link.setText(URLs.get(0));
-                link.setVisibility(View.VISIBLE);
-            }
 
-        }
+
+
     }
 
     private void addComment(int postID) {
@@ -292,7 +228,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         comment.setCreated_by_id(user.getId());
         comment.setStatus(AppConstants.STATUS_ACTIVE);
         comment.setPost_id(postID);
-        postViewModel.addComment(comment).observe(this, new Observer<BaseModel<List<Comment>>>() {
+        newsViewModel.addComment(comment).observe(this, new Observer<BaseModel<List<Comment>>>() {
             @Override
             public void onChanged(BaseModel<List<Comment>> listBaseModel) {
                 if (!listBaseModel.isError()) {
@@ -311,7 +247,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
 
     private void getComments() {
         showDialog();
-        postViewModel.getComments(post).observe(this, new Observer<BaseModel<List<Comment>>>() {
+        newsViewModel.getComments(post).observe(this, new Observer<BaseModel<List<Comment>>>() {
             @Override
             public void onChanged(BaseModel<List<Comment>> listBaseModel) {
                 comments.clear();
@@ -329,15 +265,6 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         });
     }
 
-    private void initializeSlider(Post post) {
-        sliderImageAdapter = new SliderImageAdapter(getContext(), post.getPost_image(), slider_images_detail);
-        slider_images_detail.setSliderAdapter(sliderImageAdapter);
-        slider_images_detail.setIndicatorAnimation(IndicatorAnimations.WORM); //set indicator animation by using SliderLayout.IndicatorAnimations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
-        slider_images_detail.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
-        slider_images_detail.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
-        slider_images_detail.setScrollTimeInSec(4); //set scroll delay in seconds :
-        slider_images_detail.startAutoCycle();
-    }
 
     private void initRecyclerView() {
         commentsAdapter = new CommentsAdapter(getContext(), comments);
@@ -369,7 +296,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
                     //  post.setLike_count(post.getLike_count()-1);
                 }
                 Log.d("Detail status", post.getAction() + " count" + post.getIs_post_like());
-                postViewModel.likePost(post).observe(getActivity(), new Observer<BaseModel<List<Post>>>() {
+                newsViewModel.likePost(post).observe(getActivity(), new Observer<BaseModel<List<Post>>>() {
                     @Override
                     public void onChanged(BaseModel<List<Post>> listBaseModel) {
                         if (listBaseModel != null && !listBaseModel.isError()) {
@@ -386,17 +313,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
             }
         });
 
-        tv_connect.setOnClickListener(new OnOneOffClickListener() {
-            @Override
-            public void onSingleClick(View v) {
-                if (NetworkUtils.isNetworkConnected(getContext())) {
-                    post.getUser().setConnection_id(post.getConnection_id());
-                    callConnectApi(tv_connect, post.getUser());
-                } else {
-                    networkErrorDialog();
-                }
-            }
-        });
+
 
     }
 
@@ -419,10 +336,16 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         }
     }
 
-    @OnClick(R.id.img_video)
+
+
+    @OnClick(R.id.tv_visit)
     public void playVideo() {
 
-        AppUtils.playVideo(getContext(), post.getPost_video());
+        LoadUrlFragment loadUrlFragment = new LoadUrlFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("url", post.getLink());
+        loadUrlFragment.setArguments(bundle);
+        loadFragment(R.id.framelayout, loadUrlFragment, getContext(), true);
     }
 
     @OnClick(R.id.tv_goback)
@@ -430,13 +353,6 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         getActivity().onBackPressed();
     }
 
-    @OnClick(R.id.link)
-    public void openUrl() {
-        LoadUrlFragment loadUrlFragment = new LoadUrlFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("url", post.getContent());
-        loadUrlFragment.setArguments(bundle);
-        loadFragment(R.id.framelayout, loadUrlFragment, getContext(), true);
-    }
+
 
 }
