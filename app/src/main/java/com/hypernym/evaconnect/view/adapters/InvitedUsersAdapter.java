@@ -11,8 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 
 import java.util.List;
 
@@ -23,10 +25,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class InvitedUsersAdapter extends RecyclerView.Adapter<InvitedUsersAdapter.ViewHolder> {
     private List<User> invitedUsers;
     private Context context;
+    private boolean isRemoveable;
+    SimpleDialog simpleDialog;
 
-    public InvitedUsersAdapter(Context context, List<User> invitedUsers) {
+    public InvitedUsersAdapter(Context context, List<User> invitedUsers,boolean isRemoveable) {
         this.context = context;
         this.invitedUsers = invitedUsers;
+        this.isRemoveable=isRemoveable;
     }
 
     @NonNull
@@ -68,6 +73,35 @@ public class InvitedUsersAdapter extends RecyclerView.Adapter<InvitedUsersAdapte
                 holder.tv_designation_title.setText(user.getBio_data());
             }
         }
+        if(isRemoveable)
+        {
+            holder.remove.setVisibility(View.VISIBLE);
+            holder.remove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                  simpleDialog = new SimpleDialog(context, context.getString(R.string.confirmation), context.getString(R.string.msg_remove_invite), context.getString(R.string.button_no), context.getString(R.string.button_yes), new OnOneOffClickListener() {
+                        @Override
+                        public void onSingleClick(View v) {
+                            switch (v.getId()) {
+                                case R.id.button_positive:
+                                    invitedUsers.remove(position);
+                                    notifyDataSetChanged();
+                                    //  SelectedImageUri = null;
+                                    break;
+                                case R.id.button_negative:
+                                    break;
+                            }
+                            simpleDialog.dismiss();
+                        }
+                    });
+                    simpleDialog.show();
+                }
+            });
+        }
+        else
+        {
+            holder.remove.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -91,6 +125,9 @@ public class InvitedUsersAdapter extends RecyclerView.Adapter<InvitedUsersAdapte
 
         @BindView(R.id.tv_designation_title)
         TextView tv_designation_title;
+
+        @BindView(R.id.remove)
+        TextView remove;
 
         @BindView(R.id.firstName)
         TextView firstName;

@@ -15,6 +15,7 @@
         android:background="@color/lighter_gray_2"
         android:elevation="2dp"
         android:gravity="start|center"
+        android:visibility="gone"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,7 +49,7 @@
 
         <TextView
             android:id="@+id/tv_name"
-            android:layout_width="180dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="25dp"

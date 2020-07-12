@@ -179,9 +179,13 @@
             <LinearLayout
                 android:id="@+id/layout_notification"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:gravity="start|center">
-
+               android:layout_height="wrap_content"
+                android:orientation="vertical">
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="30dp"
+    android:orientation="horizontal"
+    android:gravity="start|center">
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
@@ -196,54 +200,66 @@
                     android:textSize="12sp"
                     android:fontFamily="@font/nunitosansbold"
                     android:textStyle="bold" />
-
+</LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:id="@+id/view0"
+                    android:layout_marginTop="@dimen/spacing_large"
+                    android:background="@color/gray_1" />
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:id="@+id/view0"
-                android:layout_marginTop="@dimen/spacing_large"
-                android:background="@color/gray_1" />
+
 
 
             <LinearLayout
                 android:id="@+id/layout_EditDetail"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginTop="15dp"
-                android:gravity="start|center">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_edit" />
-
-                <TextView
-                    android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:text="Edit Details"
-                    android:textColor="@color/black"
-                    android:textSize="12sp"
-                    android:fontFamily="@font/nunitosansbold"
-                    android:textStyle="bold" />
+                    android:layout_marginTop="15dp"
+                    android:gravity="start|center">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_edit" />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:text="Edit Details"
+                        android:textColor="@color/black"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/nunitosansbold"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:id="@+id/view1"
+                    android:layout_marginTop="@dimen/spacing_large"
+                    android:background="@color/gray_1" />
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:id="@+id/view1"
-                android:layout_marginTop="@dimen/spacing_large"
-                android:background="@color/gray_1" />
+
 
             <LinearLayout
                 android:id="@+id/layout_settings"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginTop="15dp"
-                android:gravity="start|center">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:gravity="start|center">
 
                 <ImageView
                     android:layout_width="20dp"
@@ -259,23 +275,30 @@
                     android:textSize="12sp"
                     android:fontFamily="@font/nunitosansbold"
                     android:textStyle="bold" />
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="@dimen/spacing_large"
+                    android:id="@+id/view2"
+                    android:background="@color/gray_1" />
 
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="@dimen/spacing_large"
-                android:id="@+id/view2"
-                android:background="@color/gray_1" />
 
 
             <LinearLayout
                 android:id="@+id/layout_message"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginTop="15dp"
-                android:gravity="start|center">
+             android:layout_height="wrap_content"
+                android:orientation="vertical"
+               >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:gravity="start|center">
 
                 <ImageView
                     android:layout_width="20dp"
@@ -291,48 +314,54 @@
                     android:textSize="12sp"
                     android:fontFamily="@font/nunitosansbold"
                     android:textStyle="bold" />
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:id="@+id/view3"
+                    android:layout_marginTop="@dimen/spacing_large"
+                    android:background="@color/gray_1" />
 
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:id="@+id/view3"
-                android:layout_marginTop="@dimen/spacing_large"
-                android:background="@color/gray_1" />
 
 
             <LinearLayout
                 android:id="@+id/layout_disconnect"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginTop="15dp"
-                android:gravity="start|center">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="15dp"
+    android:gravity="start|center">
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_edit" />
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_edit" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="Disconnect"
+        android:fontFamily="@font/nunitosansbold"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+</LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:text="Disconnect"
-
-                    android:fontFamily="@font/nunitosansbold"
-                    android:textColor="@color/black"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:id="@+id/view4"
+                    android:layout_marginTop="@dimen/spacing_large"
+                    android:background="@color/gray_1" />
 
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:id="@+id/view4"
-                android:layout_marginTop="@dimen/spacing_large"
-                android:background="@color/gray_1" />
+
 
             <LinearLayout
                 android:id="@+id/layout_block"

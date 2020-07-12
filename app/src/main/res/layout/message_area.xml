@@ -8,16 +8,15 @@
     android:background="@color/colorwhite"
     android:gravity="center_vertical">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <ImageView
         android:id="@+id/browsefiles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:src="@android:drawable/ic_input_add"
-        app:backgroundTint="@color/light_blue"
-        app:tint="@android:color/white"
+        android:padding="10dp"
+        android:background="@drawable/browse"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

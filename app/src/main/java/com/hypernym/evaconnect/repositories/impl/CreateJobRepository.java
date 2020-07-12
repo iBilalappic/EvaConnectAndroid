@@ -5,17 +5,11 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.MyLikesModel;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.ICreateJobAdRepository;
-import com.hypernym.evaconnect.repositories.ILikeRepository;
-import com.hypernym.evaconnect.utils.AppUtils;
-import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.DateUtils;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -28,12 +22,13 @@ public class CreateJobRepository implements ICreateJobAdRepository {
 
     private MutableLiveData<BaseModel<List<Object>>> MessageMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> UpdateMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<String>>> JobTypeMutableLiveData = new MutableLiveData<>();
 
     @Override
     public LiveData<BaseModel<List<Object>>> createJobAd(User user, MultipartBody.Part partImage,
                                                          String jobSector, int amount,
                                                          String companyName, String jobDescription,
-                                                         String Location, String jobtitle, String postion,int duration) {
+                                                         String Location, String jobtitle, String postion,String jobtype) {
         MessageMutableLiveData = new MutableLiveData<>();
 //        HashMap<String, Object> body = new HashMap<>();
 //        body.put("user_id",user_id);
@@ -48,7 +43,7 @@ public class CreateJobRepository implements ICreateJobAdRepository {
                 amount,
                 user.getId(),
                 RequestBody.create(MediaType.parse("text/plain"), DateUtils.GetCurrentdate()),
-                duration,
+                RequestBody.create(MediaType.parse("text/plain"), jobtype),21,
                 partImage).enqueue(new Callback<BaseModel<List<Object>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
@@ -71,7 +66,7 @@ public class CreateJobRepository implements ICreateJobAdRepository {
     public LiveData<BaseModel<List<Object>>> UpdateJobAd(int job_id, User user, MultipartBody.Part partImage,
                                                          String jobSector, int amount,
                                                          String companyName, String jobDescription,
-                                                         String Location, String jobtitle, String postion,int duration) {
+                                                         String Location, String jobtitle, String postion,String jobtype) {
         UpdateMutableLiveData = new MutableLiveData<>();
 //        HashMap<String, Object> body = new HashMap<>();
 //        body.put("user_id",user_id);
@@ -83,7 +78,7 @@ public class CreateJobRepository implements ICreateJobAdRepository {
                 RequestBody.create(MediaType.parse("text/plain"), jobDescription),
                 RequestBody.create(MediaType.parse("text/plain"), Location), amount, user.getId(),
                 RequestBody.create(MediaType.parse("text/plain"), DateUtils.GetCurrentdatetime()),
-                duration,
+                RequestBody.create(MediaType.parse("text/plain"), jobtype),21,
                 partImage).enqueue(new Callback<BaseModel<List<Object>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
@@ -100,5 +95,26 @@ public class CreateJobRepository implements ICreateJobAdRepository {
             }
         });
         return UpdateMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<String>>> getJobType() {
+        JobTypeMutableLiveData=new MutableLiveData<>();
+        RestClient.get().appApi().getJobType().enqueue(new Callback<BaseModel<List<String>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<String>>> call, Response<BaseModel<List<String>>> response) {
+                if (response.isSuccessful() && !response.body().isError())
+                    JobTypeMutableLiveData.setValue(response.body());
+                if (response.code() == 500) {
+                    JobTypeMutableLiveData.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<String>>> call, Throwable t) {
+                JobTypeMutableLiveData.setValue(null);
+            }
+        });
+        return JobTypeMutableLiveData;
     }
 }

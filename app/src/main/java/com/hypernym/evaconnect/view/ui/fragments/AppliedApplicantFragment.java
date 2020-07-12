@@ -1,20 +1,16 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -31,16 +27,11 @@ import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
-import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
-import com.hypernym.evaconnect.view.ui.activities.LoginActivity;
 import com.hypernym.evaconnect.viewmodel.AppliedApplicantViewModel;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
-import com.onesignal.OneSignal;
 
 import java.io.File;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -99,6 +90,9 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
     @BindView(R.id.tv_date)
     TextView tv_date;
 
+    @BindView(R.id.hidden_layout)
+    LinearLayout hidden_layout;
+
 
     Uri uri;
     User user = new User();
@@ -125,6 +119,7 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
         tv_view_cv.setOnClickListener(this);
         tv_edit.setOnClickListener(this);
         tv_hide.setOnClickListener(this);
+        tv_message.setOnClickListener(this);
 
         //   tv_declineApplicant.setOnClickListener(this);
         //  timePicker.setIs24HourView(true);
@@ -135,7 +130,7 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
 
     private void init() {
         if ((getArguments() != null)) {
-            setPageTitle("");
+            setPageTitle("Applicant Details");
          //   showBackButton();
             connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
             appliedApplicantViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(AppliedApplicantViewModel.class);
@@ -176,9 +171,20 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
         if (appliedApplicants.getIs_hidden() == 0) {
             tv_hide.setText("Hide");
             hidden_value = 1;
+            hidden_layout.setVisibility(View.GONE);
+            tv_message.setVisibility(View.VISIBLE);
+            tv_view_cv.setEnabled(true);
+            tv_view_cv.setTextColor(Color.BLACK);
+            tv_description.setTextColor(Color.BLACK);
         } else {
             tv_hide.setText("Hidden");
             hidden_value = 0;
+            hidden_layout.setVisibility(View.VISIBLE);
+            tv_message.setVisibility(View.GONE);
+            tv_view_cv.setEnabled(false);
+            tv_view_cv.setTextColor(Color.GRAY);
+            tv_description.setTextColor(Color.GRAY);
+
         }
     }
 
@@ -198,6 +204,13 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
                     Toast.makeText(getActivity(), "No File to View", Toast.LENGTH_SHORT).show();
                 }
 
+                break;
+            case R.id.tv_message:
+                ChatFragment chatFragment=new ChatFragment();
+                Bundle bundlemessage=new Bundle();
+                bundlemessage.putSerializable("applicant",appliedApplicants.getUser());
+                chatFragment.setArguments(bundlemessage);
+                loadFragment(R.id.framelayout, chatFragment, getContext(), true);
                 break;
 //            case R.id.tv_download_cv:
 //                if (appliedApplicants.getApplicationAttachment() != null) {
@@ -290,7 +303,9 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
 //                    if (getFragmentManager().getBackStackEntryCount() != 0) {
 //                        getFragmentManager().popBackStack();
 //                    }
+                  //  hidden_layout.setForeground(R.drawable.layout_overlay);
                     hideDialog();
+
                     getAppicantDetail();
                 }else{
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));

@@ -3,23 +3,18 @@ package com.hypernym.evaconnect.view.ui.fragments;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.google.android.material.textfield.TextInputEditText;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
@@ -28,10 +23,8 @@ import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
-import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
-import com.mobsandgeeks.saripaar.annotation.Password;
 
 import java.util.List;
 
@@ -91,6 +84,8 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
         ButterKnife.bind(this, view);
         img_backarrow.setOnClickListener(this);
+        showBackButton();
+        setPageTitle("Edit Settings");
 //        switch_push.setOnClickListener(this);
 //
 //        switch_push.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -194,14 +189,33 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                         }
 
                     } else {
-                        editText_old_password.setError(getString(R.string.err_password));
-                        editText_newpassword.setError(getString(R.string.err_password));
-                        editText_confirmpassword.setError(getString(R.string.err_password));
+                        if(editText_old_password.length()< 8)
+                        {
+                            editText_old_password.setError(getString(R.string.err_password));
+                        }
+                        if(editText_newpassword.length()<8)
+                        {
+                            editText_newpassword.setError(getString(R.string.err_password));
+                        }
+                      if(editText_confirmpassword.length()<8)
+                        {
+                            editText_confirmpassword.setError(getString(R.string.err_password));
+                        }
+
                     }
                 } else {
-                    editText_old_password.setError(getString(R.string.err_password));
-                    editText_newpassword.setError(getString(R.string.err_password));
-                    editText_confirmpassword.setError(getString(R.string.err_password));
+                    if(editText_old_password.length()< 8)
+                    {
+                        editText_old_password.setError(getString(R.string.err_password));
+                    }
+                     if(editText_newpassword.length()<8)
+                    {
+                        editText_newpassword.setError(getString(R.string.err_password));
+                    }
+                    if(editText_confirmpassword.length()<8)
+                    {
+                        editText_confirmpassword.setError(getString(R.string.err_password));
+                    }
 
                 }
             }

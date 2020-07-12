@@ -160,7 +160,19 @@ public class ShareVideoFragment extends BaseFragment implements AttachmentsAdapt
         // getConnectionCount();
 
         showBackButton();
-        setPageTitle(getString(R.string.menu2));
+        if(getArguments().getBoolean("isVideo"))
+        {
+            setPageTitle(getString(R.string.menu2));
+            post.setText(getString(R.string.menu2));
+            edt_content.setHint("Share URL/embed of video");
+        }
+        else
+        {
+            setPageTitle(getString(R.string.menu4));
+            post.setText(getString(R.string.menu4));
+            edt_content.setHint("Share URL");
+        }
+
         edt_content.addTextChangedListener(new URLTextWatcher(getActivity(), edt_content, urlEmbeddedView));
         edt_content.addTextChangedListener(new TextWatcher() {
             @Override

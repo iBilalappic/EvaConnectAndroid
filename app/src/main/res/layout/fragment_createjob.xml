@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -32,6 +33,7 @@
                     android:background="@color/lighter_gray_2"
                     android:elevation="2dp"
                     android:gravity="start|center"
+                    android:visibility="gone"
                     android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -233,12 +235,25 @@
 
                 </EditText>
 
+                <TextView
+                    style="@style/TextStyle.Black"
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Active for 21 Days"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_amount" />
+
                 <Spinner
                     android:id="@+id/spinner_jobtype"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="25dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="20dp"
                     android:gravity="start|center"
                     android:hint="Job Type"
@@ -247,29 +262,10 @@
                     android:textColorHint="@color/lighter_gray"
                     android:textSize="12sp"
                     android:theme="@style/MyEditTextTheme"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/edit_amount" />
-
-
-                <Spinner
-                    android:id="@+id/spinner_jobduration"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginEnd="20dp"
-                    android:gravity="start|center"
-                    android:hint="How long would you like this listing"
-                    android:spinnerMode="dropdown"
-                    android:textColor="@color/dark_gray"
-                    android:textColorHint="@color/lighter_gray"
-                    android:textSize="12sp"
-                    android:theme="@style/Spinner"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/spinner_jobtype" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
 
                 <EditText
@@ -277,8 +273,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="25dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="@dimen/spacing_medium"
                     android:fontFamily="@font/nunitosansregular"
                     android:gravity="start|center"
                     android:hint="Describe the role"
@@ -289,7 +285,7 @@
                     android:theme="@style/MyEditTextTheme"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/spinner_jobduration">
+                    app:layout_constraintTop_toBottomOf="@+id/spinner_jobtype">
 
                 </EditText>
 

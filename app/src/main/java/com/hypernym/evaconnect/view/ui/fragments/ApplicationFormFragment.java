@@ -109,9 +109,10 @@ public class ApplicationFormFragment extends BaseFragment implements View.OnClic
     }
 
     private void init() {
+        setPageTitle("Job Details");
+         showBackButton();
         if ((getArguments() != null)) {
-            setPageTitle("");
-           // showBackButton();
+
             jobAd = (JobAd) getArguments().getSerializable("JOB_AD");
             AppUtils.setGlideImage(getContext(), profile_image, jobAd.getJobImage());
             tv_name.setText(jobAd.getJobTitle());
@@ -241,7 +242,8 @@ public class ApplicationFormFragment extends BaseFragment implements View.OnClic
                     }
                     else if(tempFile.toString().equalsIgnoreCase("File path not found"))
                     {
-                        tv_cvname.setText(tempFile.toString());
+                        networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_storage));
+                       // tv_cvname.setText(tempFile.toString());
                         partImage=null;
                         return;
                     }

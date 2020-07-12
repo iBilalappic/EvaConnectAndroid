@@ -14,19 +14,14 @@ import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
-import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.NotifyEvent;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.LoginUtils;
-import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.utils.PrefUtils;
 import com.hypernym.evaconnect.view.adapters.NotificationsAdapter;
 import com.hypernym.evaconnect.view.dialogs.NavigationDialog;
@@ -86,12 +81,6 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
 
     @BindView(R.id.img_logout)
     ImageView img_logout;
-
-    @BindView(R.id.rc_notifications)
-    RecyclerView rc_notifications;
-
-    @BindView(R.id.img_uparrow)
-    ImageView img_uparrow;
 
     @BindView(R.id.tv_home)
     TextView tv_home;
@@ -190,7 +179,6 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
-        setRecyclerView();
 
 
         // img_home.setImageDrawable(getDrawable(R.drawable.home_selected));
@@ -200,13 +188,6 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         img_messages.setImageDrawable(getDrawable(R.drawable.ic_message_1));
         img_logout.setImageDrawable(getDrawable(R.drawable.ic_profile_1));
 
-
-        img_uparrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hideNotificationPanel();
-            }
-        });
 
         tv_pagetitle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -226,67 +207,11 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         badge_notification.setVisibility(View.GONE);
     }
 
-    private void setRecyclerView() {
-        notificationsAdapter = new NotificationsAdapter(this, notifications, this);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        rc_notifications.setLayoutManager(linearLayoutManager);
-        rc_notifications.setAdapter(notificationsAdapter);
-    }
-
-    private void getAllNotifications() {
-        if (NetworkUtils.isNetworkConnected(this)) {
-
-            homeViewModel.getAllUnReadNotifications().observe(this, new Observer<BaseModel<List<Post>>>() {
-                @Override
-                public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                    if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
-                        notifications.clear();
-                        notificationsAdapter.notifyDataSetChanged();
-                        notifications.addAll(listBaseModel.getData());
-                        //   Collections.reverse(notifications);
-                        notificationsAdapter.notifyDataSetChanged();
-                      //  tv_pagetitle.setText(notifications.size() + " New Notifications");
-                     //   img_reddot.setVisibility(View.VISIBLE);
-                    }
-                    setNotificationCount(notifications.size());
-                }
-            });
-        } else {
-            networkErrorDialog();
-        }
-
-    }
-
-    public void showNotificationPanel() {
-        rc_notifications.setVisibility(View.VISIBLE);
-        img_uparrow.setVisibility(View.VISIBLE);
-    }
-
-    public void hideNotificationPanel() {
-        List<Post> postNotifications = new ArrayList();
-        if (NetworkUtils.isNetworkConnected(this)) {
-
-            homeViewModel.notificationMarkAsRead(LoginUtils.getLoggedinUser().getId()).observe(this, new Observer<BaseModel<List<Post>>>() {
-                @Override
-                public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                    if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
-                        postNotifications.addAll(listBaseModel.getData());
-                        notifications = postNotifications;
-                        notificationsAdapter.notifyDataSetChanged();
-                    }
-                }
-            });
-        } else {
-            networkErrorDialog();
-        }
-        rc_notifications.setVisibility(View.GONE);
-        img_uparrow.setVisibility(View.GONE);
-        tv_pagetitle.setText(BaseFragment.pageTitle);
-    }
 
 
     @OnClick(R.id.img_home)
     public void home() {
+
         img_home.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
         tv_home.setTextColor(ContextCompat.getColor(this, R.color.skyblue));
         tv_connections.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
@@ -383,8 +308,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     public void openDialog(View view) {
         searchDialog = new SearchDialog(this);
         searchDialog.show();
-        searchDialog.setCanceledOnTouchOutside(true);
-        searchDialog.setCancelable(true);
+
 
     }
 //
@@ -403,21 +327,21 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
             bundle.putInt("job_id", notifications.get(position).getObject_id());
             specficJobFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, specficJobFragment, this, true);
-            hideNotificationPanel();
+
         } else if (notifications.get(position).getObject_type().equals("post")) {
             PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
             Bundle bundle = new Bundle();
             bundle.putInt("post", notifications.get(position).getObject_id());
             postDetailsFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, postDetailsFragment, this, true);
-            hideNotificationPanel();
+
         } else if (notifications.get(position).getObject_type().equals("event")) {
             EventDetailFragment eventDetailsFragment = new EventDetailFragment();
             Bundle bundle = new Bundle();
             bundle.putInt("id", notifications.get(position).getObject_id());
             eventDetailsFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, eventDetailsFragment, this, true);
-            hideNotificationPanel();
+
         }
     }
 
@@ -441,7 +365,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
                 .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
                 .unsubscribeWhenNotificationsAreDisabled(true)
                 .init();
-        getAllNotifications();
+
 
         //  hideNotificationPanel();
     }
@@ -471,7 +395,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
                     if (event.getMessage().equalsIgnoreCase("notifcation")) {
                         Log.e("TAAAF", "notify");
                         // Toast.makeText(this, "Hey, my message", Toast.LENGTH_SHORT).show();
-                        getAllNotifications();
+
                     } else {
                         Log.e("TAAAF", "message notification");
                         setMessageNotificationCount();

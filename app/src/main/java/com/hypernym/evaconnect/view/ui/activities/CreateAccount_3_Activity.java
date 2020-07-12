@@ -262,17 +262,19 @@ public class CreateAccount_3_Activity extends BaseActivity implements View.OnCli
 
     @Override
     public void onClick(View v) {
+        Intent intent = new Intent(CreateAccount_3_Activity.this, LoginActivity.class);
         switch (v.getId()) {
             case R.id.img_backarrow:
                 this.finish();
                 break;
 
             case R.id.img_cross:
-                this.finish();
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
                 break;
 
             case R.id.tv_already_account:
-                Intent intent = new Intent(CreateAccount_3_Activity.this, LoginActivity.class);
+
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 break;

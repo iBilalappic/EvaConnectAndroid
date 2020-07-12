@@ -53,7 +53,7 @@ public interface APIConstants {
     public static String GETUSER_FROM_LINKEDIN="user/linkedin/login/";
     public static String FACEBOOK_LOGIN="/eva/user/facebook/login/";
     public static String REMOVE_USER="user/connection/delete/{id}/";
-    public static String BLOCK_USER="user/connection/details/{connection_id}/";
+    public static String BLOCK_USER="user/connection/block/";
     public static String PROFILE_UPDATE="user/details/{userid}/";
     public static String GET_USER_DETAILS="user/details/{id}/";
     public static String GET_SECTOR="user/sector/";
@@ -73,4 +73,6 @@ public interface APIConstants {
     public static String GET_NEWS_COMMENTS="news/comment/filter/";
     public static String ADD_NEWS_COMMENT="news/comment/";
     public static String GET_NEWS_BY_ID="news/rss/";
+    public static String GET_JOB_TYPE="job/type/";
+
 }

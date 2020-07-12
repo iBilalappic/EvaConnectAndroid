@@ -21,13 +21,29 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="visible"
+        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-
+    <TextView
+        android:id="@+id/no_messages"
+        style="@style/TextStyle.Bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Messages"
+        android:textColor="@color/gray"
+        android:textSize="28sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"

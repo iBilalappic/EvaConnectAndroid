@@ -4,37 +4,31 @@ package com.hypernym.evaconnect.view.ui.fragments;
 import android.app.Application;
 import android.app.Dialog;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
-import com.hypernym.evaconnect.view.adapters.HomePostsAdapter;
-import com.hypernym.evaconnect.view.dialogs.Remove_block_dialog;
-import com.hypernym.evaconnect.view.dialogs.ShareDialog;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 
@@ -304,8 +298,8 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
     }
 
     private void BlockUserApiCall() {
-        if (post.getConnection_id() != null) {
-            connectionViewModel.block_user(post.getConnection_id(), user).observe(this, new Observer<BaseModel<List<Object>>>() {
+
+            connectionViewModel.block_user(post.getConnection_id(), post.getUser()).observe(this, new Observer<BaseModel<List<Object>>>() {
                 @Override
                 public void onChanged(BaseModel<List<Object>> listBaseModel) {
                     if (!listBaseModel.isError()) {
@@ -333,9 +327,7 @@ public class PersonDetailFragment extends BaseFragment implements View.OnClickLi
                     simpleDialog.setCancelable(false);
                 }
             });
-        } else {
-            Toast.makeText(getActivity(), "connection not exsist", Toast.LENGTH_SHORT).show();
-        }
+
 
     }
 

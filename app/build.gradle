@@ -129,6 +129,4 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.android.support:design:29.0.0'
     implementation 'com.android.support:appcompat-v7:29.0.0' // appcompat library
-
-
 }

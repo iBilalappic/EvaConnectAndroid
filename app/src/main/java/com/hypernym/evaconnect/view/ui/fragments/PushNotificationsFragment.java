@@ -6,9 +6,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -26,7 +24,6 @@ import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import com.mobsandgeeks.saripaar.Validator;
-import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
 import java.util.List;
 
@@ -76,7 +73,8 @@ public class PushNotificationsFragment extends BaseFragment implements View.OnCl
         ButterKnife.bind(this, view);
         img_backarrow.setOnClickListener(this);
         switch_push.setOnClickListener(this);
-
+showBackButton();
+setPageTitle("Edit Settings");
         switch_push.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

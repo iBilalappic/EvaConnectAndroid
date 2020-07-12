@@ -2,7 +2,6 @@ package com.hypernym.evaconnect.view.ui.fragments;
 
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.facebook.share.Share;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
@@ -27,13 +25,10 @@ import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.ShareConnection;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
-import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
-import com.hypernym.evaconnect.utils.PrefUtils;
-import com.hypernym.evaconnect.view.adapters.InviteConnectionsAdapter;
 import com.hypernym.evaconnect.view.adapters.ShareConnectionAdapter;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 
@@ -287,7 +282,9 @@ public class ShareConnectionFragment extends BaseFragment implements ShareConnec
     }
 
     private void removeConnection(User data) {
-        for (User connection : shareConnections_user) {
+        List<User> newshareConnections_user=new ArrayList<>();
+        newshareConnections_user.addAll(shareConnections_user);
+        for (User connection : newshareConnections_user) {
             if (connection.getId() == data.getId())
                 shareConnections_user.remove(connection);
         }

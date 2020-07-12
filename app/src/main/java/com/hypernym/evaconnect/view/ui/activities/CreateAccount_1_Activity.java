@@ -23,29 +23,18 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
-import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.User;
-import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
-import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.bottomsheets.BottomSheetPictureSelection;
-import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
-import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
-import com.mobsandgeeks.saripaar.annotation.Password;
-
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -60,7 +49,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import retrofit2.http.Multipart;
 
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
@@ -243,13 +231,16 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
 
     @Override
     public void onClick(View v) {
+        Intent intent = new Intent(CreateAccount_1_Activity.this, LoginActivity.class);
         switch (v.getId()) {
             case R.id.img_backarrow:
                 this.finish();
                 break;
 
             case R.id.img_cross:
-                this.finish();
+
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
                 break;
 
             case R.id.tv_upload_image:
@@ -278,7 +269,6 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
                 break;
 
             case R.id.tv_already_account:
-                Intent intent = new Intent(CreateAccount_1_Activity.this, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 break;

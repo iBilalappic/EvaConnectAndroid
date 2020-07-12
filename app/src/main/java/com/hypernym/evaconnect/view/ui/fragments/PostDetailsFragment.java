@@ -213,6 +213,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     private void init() {
         validator = new Validator(this);
         validator.setValidationListener(this);
+        setPageTitle("Post Details");
         showBackButton();
     }
 

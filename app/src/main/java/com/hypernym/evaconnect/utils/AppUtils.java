@@ -348,6 +348,7 @@ public final class AppUtils {
                         LoginUtils.removeAuthToken(getApplicationContext());
                         AppUtils.facebookLogout();
                         OneSignal.sendTag("email","null");
+
                         break;
                     case R.id.button_negative:
                         simpleDialog.dismiss();

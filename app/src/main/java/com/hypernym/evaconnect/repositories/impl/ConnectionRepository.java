@@ -7,11 +7,9 @@ import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
-import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.ShareConnection;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IConnectionRespository;
-import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 
 import java.util.HashMap;
@@ -154,12 +152,12 @@ public class ConnectionRepository implements IConnectionRespository {
     @Override
     public LiveData<BaseModel<List<Object>>> block_user(Integer connection_id,User user) {
         HashMap<String, Object> body = new HashMap<>();
-        body.put("modified_by_id",user.getId());
-        body.put("modified_datetime", DateUtils.GetCurrentdatetime());
+        body.put("receiver_id",user.getId());
+        body.put("sender_id", LoginUtils.getLoggedinUser().getId());
         body.put("status", AppConstants.DELETED);
         block_userMutableLiveData=new MutableLiveData<>();
 
-        RestClient.get().appApi().block_user(connection_id,body).enqueue(new Callback<BaseModel<List<Object>>>() {
+        RestClient.get().appApi().block_user(body).enqueue(new Callback<BaseModel<List<Object>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
                 block_userMutableLiveData.setValue(response.body());

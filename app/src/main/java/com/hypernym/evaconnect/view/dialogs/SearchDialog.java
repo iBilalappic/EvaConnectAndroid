@@ -5,9 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,14 +39,7 @@ public class SearchDialog extends Dialog implements View.OnClickListener {
         btn_next.setOnClickListener(this);
         setCanceledOnTouchOutside(true);
         setCancelable(true);
-        Window window = getWindow();
-        WindowManager.LayoutParams wlp = window.getAttributes();
-        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-        window.setAttributes(wlp);
-        WindowManager.LayoutParams params = this.getWindow().getAttributes();
-        params.y = 50;
-        window.setLayout(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
-        this.getWindow().setAttributes(params);
+
         getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
 

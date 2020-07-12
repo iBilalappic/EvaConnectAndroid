@@ -145,21 +145,22 @@ public class InviteConnections extends BaseFragment implements InviteConnections
                 .observe(this, listBaseModel ->
                 {
                     if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
-                        if (currentPage == PAGE_START) {
+                        if (currentPage == PAGE_START ) {
                             connectionList.clear();
-                          //  inviteConnectionsAdapter.notifyDataSetChanged();
+                           inviteConnectionsAdapter.notifyDataSetChanged();
                         }
                         if(users.size()>0)
                         {
+                            connectionList.addAll(listBaseModel.getData());
                             for (User user1:users)
                             {
-                                connectionList.addAll(listBaseModel.getData());
+
                                 for(User user2:listBaseModel.getData())
                                 {
                                     if(user2.getId()==user1.getId())
                                     {
                                         connectionList.remove(user2);
-                                        inviteConnectionsAdapter.notifyDataSetChanged();
+                                       // inviteConnectionsAdapter.notifyDataSetChanged();
                                     }
                                 }
                             }
@@ -168,11 +169,11 @@ public class InviteConnections extends BaseFragment implements InviteConnections
                         else
                         {
                             connectionList.addAll(listBaseModel.getData());
-                            inviteConnectionsAdapter.notifyDataSetChanged();
+                            //inviteConnectionsAdapter.notifyDataSetChanged();
                         }
 
 
-
+                        inviteConnectionsAdapter.notifyDataSetChanged();
 
                        // PrefUtils.persistConnectionsMeeting(getContext(),new ArrayList<>());
                         //PrefUtils.persistConnections(getContext(),new ArrayList<>());
@@ -183,8 +184,12 @@ public class InviteConnections extends BaseFragment implements InviteConnections
 
                         isLoading = false;
                     } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
-                        rc_connections.setVisibility(View.GONE);
-                        empty.setVisibility(View.VISIBLE);
+                        if(connectionList.size()==0)
+                        {
+                            rc_connections.setVisibility(View.GONE);
+                            empty.setVisibility(View.VISIBLE);
+                        }
+                        inviteConnectionsAdapter.notifyDataSetChanged();
                         isLastPage = true;
                         isLoading = false;
                     } else {
@@ -260,24 +265,43 @@ public class InviteConnections extends BaseFragment implements InviteConnections
     }
 
     private void addConnection(User data) {
-        invitedConnections.add(data);
+inviteButton.setVisibility(View.GONE);
+invitedConnections.add(data);
         Log.e(TAG, "onItemClick: " + GsonUtils.toJson(invitedConnections));
 
         if (fragment_type.equals(Constants.FRAGMENT_NAME_2)) {
             if (invitedConnections.size() > 0)
+            {
                 inviteButton.setText("Invite (" + invitedConnections.size() + ")" + " Connections to Event");
+                inviteButton.setVisibility(View.VISIBLE);
+            }
             else
+            {
                 inviteButton.setText("Invite Connections to Event");
+                inviteButton.setVisibility(View.GONE);
+            }
+
+
         } else {
             if (invitedConnections.size() > 0)
+            {
                 inviteButton.setText("Invite (" + invitedConnections.size() + ")" + " Connections to Meeting");
+                inviteButton.setVisibility(View.VISIBLE);
+            }
             else
+            {
                 inviteButton.setText("Invite Connections to Meeting");
+                inviteButton.setVisibility(View.GONE);
+            }
+
+
         }
     }
 
     private void removeConnection(User data) {
-        for (User connection : invitedConnections) {
+        List<User> newInvitedConnections=new ArrayList<>();
+        newInvitedConnections.addAll(invitedConnections);
+        for (User connection : newInvitedConnections) {
             if (connection.getId() == data.getId())
                 invitedConnections.remove(connection);
         }
@@ -285,15 +309,27 @@ public class InviteConnections extends BaseFragment implements InviteConnections
         Log.e(TAG, "onItemClick: " + GsonUtils.toJson(invitedConnections));
 
         if (fragment_type.equals(Constants.FRAGMENT_NAME_2)) {
-            if (invitedConnections.size() > 0)
+            if (invitedConnections.size() > 0) {
                 inviteButton.setText("Invite (" + invitedConnections.size() + ")" + " Connections to Event");
-            else
+                inviteButton.setVisibility(View.VISIBLE);
+            } else
+            {
                 inviteButton.setText("Invite Connections to Event");
+                inviteButton.setVisibility(View.GONE);
+            }
+
         } else {
             if (invitedConnections.size() > 0)
+            {
                 inviteButton.setText("Invite (" + invitedConnections.size() + ")" + " Connections to Meeting");
+                inviteButton.setVisibility(View.VISIBLE);
+            }
             else
+            {
                 inviteButton.setText("Invite Connections to Meeting");
+                inviteButton.setVisibility(View.GONE);
+            }
+
         }
     }
 

@@ -205,7 +205,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
     }
 
     private void setAttendeesAdapter() {
-            usersAdapter = new InvitedUsersAdapter(getContext(), invitedConnections);
+            usersAdapter = new InvitedUsersAdapter(getContext(), invitedConnections,false);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
             invite_people.setLayoutManager(linearLayoutManager);
             invite_people.setAdapter(usersAdapter);

@@ -69,6 +69,7 @@ public class NotificationsFragment extends BaseFragment implements Notifications
         homeViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(HomeViewModel.class);
         swipeRefreshLayout.setOnRefreshListener(this);
         initRecyclerView();
+        showDialog();
         getAllNotifications();
         //  readAllNotifications();
         return view;
@@ -95,7 +96,7 @@ public class NotificationsFragment extends BaseFragment implements Notifications
 
     private void getAllNotifications() {
        // notifications.clear();
-        showDialog();
+
         homeViewModel.getAllNotifications(AppConstants.TOTAL_PAGES,currentPage).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> listBaseModel) {
@@ -115,6 +116,7 @@ public class NotificationsFragment extends BaseFragment implements Notifications
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
                 hideDialog();
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }

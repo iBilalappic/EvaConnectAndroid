@@ -6,9 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -188,6 +186,13 @@ public class JobListingFragment extends BaseFragment implements View.OnClickList
                 bundle_0.putSerializable("COMPANY_AD", companyJobAdModelList.get(position));
                 companyApplicantFragment.setArguments(bundle_0);
                 loadFragment(R.id.framelayout, companyApplicantFragment, getContext(), true);
+                break;
+            case R.id.tv_edit:
+                CreateJobFragment createJobFragment = new CreateJobFragment();
+                Bundle bundle1 = new Bundle();
+                bundle1.putSerializable("COMPANY_AD", companyJobAdModelList.get(position));
+                createJobFragment.setArguments(bundle1);
+                loadFragment(R.id.framelayout, createJobFragment, getContext(), true);
                 break;
             case R.id.img_share:
                 ShareDialog shareDialog;

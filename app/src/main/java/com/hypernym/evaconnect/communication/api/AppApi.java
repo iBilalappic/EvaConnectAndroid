@@ -84,7 +84,7 @@ public interface AppApi {
                                               @Part("salary") int salary,
                                               @Part("created_by_id") int created_by_id,
                                               @Part("published_date") RequestBody published_date,
-                                              @Part("active_hours ") int active_hours ,
+                                              @Part("job_type ") RequestBody job_type ,@Part("active_hours ") int active_hours,
                                               @Part MultipartBody.Part job_image);
 
     @Multipart
@@ -100,7 +100,8 @@ public interface AppApi {
             @Part("salary") int salary,
             @Part("modified_by_id") int modified_by_id,
             @Part("modified_datetime") RequestBody modified_datetime,
-            @Part("active_hours ") int active_hours ,
+            @Part("job_type ") RequestBody job_type ,
+            @Part("active_hours ") int active_hours,
             @Part MultipartBody.Part job_image);
 
     @POST(APIConstants.GET_JOB_AD_BY_ID)
@@ -256,8 +257,8 @@ public interface AppApi {
     @DELETE(APIConstants.REMOVE_USER)
     Call<BaseModel<List<Object>>> remove_user(@Path("id") int id);
 
-    @PATCH(APIConstants.BLOCK_USER)
-    Call<BaseModel<List<Object>>> block_user(@Path("connection_id") int connection_id,@Body HashMap<String, Object> body);
+    @POST(APIConstants.BLOCK_USER)
+    Call<BaseModel<List<Object>>> block_user(@Body HashMap<String, Object> body);
 
     @Multipart
     @PATCH(APIConstants.PROFILE_UPDATE)
@@ -353,4 +354,7 @@ public interface AppApi {
 
     @POST(APIConstants.GET_NEWS_BY_ID)
     Call<BaseModel<List<Post>>> getNewsByID(@Body Object user);
+
+    @GET(APIConstants.GET_JOB_TYPE)
+    Call<BaseModel<List<String>>> getJobType();
 }

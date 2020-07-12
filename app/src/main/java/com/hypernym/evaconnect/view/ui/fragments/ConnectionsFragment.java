@@ -245,8 +245,12 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
                     }
                     isLoading = false;
                 } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
-                    rc_connections.setVisibility(View.GONE);
-                    empty.setVisibility(View.VISIBLE);
+
+                    if(connectionList.size()==0)
+                    {
+                        rc_connections.setVisibility(View.GONE);
+                        empty.setVisibility(View.VISIBLE);
+                    }
                     isLastPage = true;
                     // homePostsAdapter.removeLoading();
                     isLoading = false;

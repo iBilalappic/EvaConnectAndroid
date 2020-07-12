@@ -10,31 +10,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
-import com.bumptech.glide.Glide;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
-import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.User;
-import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.Constants;
-import com.hypernym.evaconnect.utils.NetworkUtils;
-import com.hypernym.evaconnect.view.bottomsheets.BottomSheetPictureSelection;
-import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
-import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
-import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class CreateAccount_4_Activity extends BaseActivity implements Validator.ValidationListener, View.OnClickListener {
 
@@ -227,17 +214,18 @@ public class CreateAccount_4_Activity extends BaseActivity implements Validator.
 
     @Override
     public void onClick(View v) {
+        Intent intent = new Intent(CreateAccount_4_Activity.this, LoginActivity.class);
         switch (v.getId()) {
             case R.id.img_backarrow:
                 this.finish();
                 break;
 
             case R.id.img_cross:
-                this.finish();
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
                 break;
 
             case R.id.tv_already_account:
-                Intent intent = new Intent(CreateAccount_4_Activity.this, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 break;

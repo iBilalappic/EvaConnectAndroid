@@ -213,6 +213,7 @@ public class BaseFragment extends Fragment {
             return null;
         }
     }
+
     public void takePhotoFromCamera() {
         Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 //

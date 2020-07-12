@@ -188,8 +188,8 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
         return view;
     }
 
-    private void initRecyclerview() {
-        usersAdapter = new InvitedUsersAdapter(getContext(), invitedConnections);
+    private void initRecyclerview(boolean isRemovable) {
+        usersAdapter = new InvitedUsersAdapter(getContext(), invitedConnections,isRemovable);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         invite_people.setLayoutManager(linearLayoutManager);
         invite_people.setAdapter(usersAdapter);
@@ -207,12 +207,13 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
         validator.setValidationListener(this);
         eventViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(EventViewModel.class);
       //  invitedConnections.clear();
-        initRecyclerview();
+
         event_type_spinner.setOnItemSelectedListener(this);
         showBackButton();
         setPageTitle(getString(R.string.action1));
         if(getArguments()!=null)
         {
+            initRecyclerview(false);
             setPageTitle("Update Event");
             post.setText("Update Event");
             event=(Event) getArguments().getSerializable("event");
@@ -252,8 +253,10 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
             if(event.getEvent_image().size()>0)
               AppUtils.setGlideUrlThumbnail(getContext(),img_event,event.getEvent_image().get(0));
         }
-
-
+        else
+        {
+            initRecyclerview(true);
+        }
 
     }
 
@@ -652,7 +655,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
 
         for (User user1: invitedConnections)
         {
-            if(user1.getId()==user.getId())
+            if(user1.getId().equals(user.getId()))
             {
                 return true;
             }

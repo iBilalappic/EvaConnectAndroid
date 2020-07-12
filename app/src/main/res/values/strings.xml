@@ -74,12 +74,13 @@
     <string name="msg_post_created">Your post has been created successfully!</string>
     <string name="msg_comment_created">Comment has been created successfully.</string>
     <string name="msg_remove_attachment">Are you sure you want to remove this attachment?</string>
+    <string name="msg_remove_invite">Are you sure you want to remove this user?</string>
     <string name="msg_forgotpass">An email has been sent to your email address. Follow the instruction in the email to reset your password. </string>
-    <string name="msg_signup">You have signed up successfully! Thank you for choosing Aviation Connect, please check your email to activate your account.</string>
+
     <string name="msg_jobAd">Your Job Ad has been created successfully.</string>
     <string name="msg_jobAd_update">Your Job Ad has been Updated successfully.</string>
     <string name="msg_remove_user">Your connection has been removed successfully.</string>
-    <string name="msg_block_user">Your connection has been block successfully.</string>
+    <string name="msg_block_user">This user has been block successfully.</string>
     <string name="msg_event_created">Your Event has been created successfully.</string>
     <string name="msg_event_updated">Your Event has been updated successfully.</string>
     <string name="msg_meeting_created">Your Meeting has been created successfully.</string>

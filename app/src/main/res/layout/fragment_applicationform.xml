@@ -20,6 +20,7 @@
             android:layout_height="55dp"
             android:background="@color/white"
             android:gravity="start|center"
+            android:visibility="gone"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

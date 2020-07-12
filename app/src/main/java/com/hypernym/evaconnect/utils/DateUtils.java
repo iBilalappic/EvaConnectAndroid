@@ -533,16 +533,20 @@ public final class DateUtils {
             Calendar today = Calendar.getInstance();
             Calendar yesterday = Calendar.getInstance();
             yesterday.add(Calendar.DATE, -1);
-            SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mma");
+            SimpleDateFormat timeFormatter = new SimpleDateFormat(DATE_INPUT_FORMAT);
 
             if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
-                timeFormatter.setTimeZone(TimeZone.getTimeZone("GMT"));
-                return "Today at " + timeFormatter.format(dateTime);
+                timeFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+                Date newdate = timeFormatter.parse(date);
+                timeFormatter.setTimeZone(TimeZone.getDefault());
+                SimpleDateFormat newtimeFormatter = new SimpleDateFormat("hh:mm aa");
+                return "Today at " + newtimeFormatter.format(newdate);
             }  else {
+                timeFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+                Date newdate = timeFormatter.parse(date);
+                timeFormatter.setTimeZone(TimeZone.getDefault());
                 SimpleDateFormat  mInputDateFormat= new SimpleDateFormat("EEEE, hh:mm aa");
-                mInputDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-                mInputDateFormat.setTimeZone(TimeZone.getDefault());
-                return mInputDateFormat.format(dateTime);
+                return mInputDateFormat.format(newdate);
 
             }
 

@@ -265,7 +265,7 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
     }
 
     private void initRecyclerview() {
-        usersAdapter = new InvitedUsersAdapter(getContext(), invitedConnections);
+        usersAdapter = new InvitedUsersAdapter(getContext(), invitedConnections,true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         invite_people.setLayoutManager(linearLayoutManager);
         invite_people.setAdapter(usersAdapter);

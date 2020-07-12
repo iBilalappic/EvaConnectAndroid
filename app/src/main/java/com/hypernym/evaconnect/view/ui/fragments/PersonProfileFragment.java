@@ -18,10 +18,12 @@ import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
@@ -118,7 +120,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
 
     private void init() {
         connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
-
+        hideChatPerson();
         setPageTitle("Profile");
         user = LoginUtils.getLoggedinUser();
         if ((getArguments() != null)) {
@@ -203,7 +205,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                     else
                     {
                         layout_disconnect.setVisibility(View.GONE);
-                        layout_block.setVisibility(View.GONE);
+                        layout_block.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -261,7 +263,56 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
             });
         }
     }
+    public void callConnectApi(TextView tv_connect,User connectionItem) {
+        Connection connection=new Connection();
+        User user= LoginUtils.getLoggedinUser();
+        connection.setReceiver_id(connectionItem.getId());
+        connection.setSender_id(user.getId());
 
+        if(!tv_connect.getText().toString().equalsIgnoreCase(AppConstants.CONNECTED) && post.getConnection_id()==null && !tv_connect.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_SENT))
+        {
+            connection.setStatus(AppConstants.STATUS_PENDING);
+            showDialog();
+            callApi(tv_connect,connection,connectionItem);
+        }
+        else if (!tv_connect.getText().toString().equalsIgnoreCase(AppConstants.CONNECTED) && post.getConnection_id()!=null && !tv_connect.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_SENT))
+        {
+            connection.setStatus(AppConstants.ACTIVE);
+            connection.setId(post.getConnection_id());
+            connection.setModified_by_id(user.getId());
+            connection.setModified_datetime(DateUtils.GetCurrentdatetime());
+            callApi(tv_connect,connection,connectionItem);
+        }
+    }
+
+    private void callApi(TextView tv_connect,Connection connection,User connectionItem )
+    {
+
+        connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Connection>> listBaseModel) {
+                if(listBaseModel!=null && !listBaseModel.isError())
+                {
+                    if(tv_connect.getText().toString().equalsIgnoreCase(getString(R.string.connect)))
+                    {
+                        tv_connect.setText(AppConstants.REQUEST_SENT);
+
+                    }
+                    else
+                    {
+                        tv_connect.setText(AppConstants.CONNECTED);
+                    }
+                    connectionItem.setIs_connected(AppConstants.ACTIVE);
+
+                }
+                else
+                {
+                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                }
+                hideDialog();
+            }
+        });
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -297,8 +348,8 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
     }
 
     private void BlockUserApiCall() {
-        if (post.getConnection_id() != null) {
-            connectionViewModel.block_user(post.getConnection_id(), user).observe(this, new Observer<BaseModel<List<Object>>>() {
+
+            connectionViewModel.block_user(post.getConnection_id(), post.getUser()).observe(this, new Observer<BaseModel<List<Object>>>() {
                 @Override
                 public void onChanged(BaseModel<List<Object>> listBaseModel) {
                     if (!listBaseModel.isError()) {
@@ -324,9 +375,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                     simpleDialog.setCancelable(false);
                 }
             });
-        } else {
-            Toast.makeText(getActivity(), "Your connection with user does not exist!", Toast.LENGTH_SHORT).show();
-        }
+
 
     }
 

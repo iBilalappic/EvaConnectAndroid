@@ -62,10 +62,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         if (networkConnectionList.get(position).getCreatedDatetime() != null) {
             holder.mtextview22.setText(DateUtils.getTimeAgo(networkConnectionList.get(position).getCreatedDatetime()));
         }
-        if(networkConnectionList.get(position).getUnread_msg_count()!=0)
+        if(networkConnectionList.get(position).isUnread())
         {
             holder.tv_count.setVisibility(View.VISIBLE);
-            holder.tv_count.setText(String.valueOf(networkConnectionList.get(position).getUnread_msg_count()));
+            holder.tv_count.setText(String.valueOf(networkConnectionList.get(position).getMessageCount()));
             holder.tv_lastmsg.setTextColor(context.getResources().getColor(R.color.black));
             holder.tv_lastmsg.setTypeface(holder.tv_lastmsg.getTypeface(), Typeface.BOLD);
         }

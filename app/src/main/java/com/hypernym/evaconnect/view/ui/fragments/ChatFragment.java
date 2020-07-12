@@ -13,10 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.ViewCompat;
@@ -26,7 +28,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.client.Firebase;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -48,6 +49,7 @@ import com.hypernym.evaconnect.models.Filter;
 import com.hypernym.evaconnect.models.NetworkConnection;
 import com.hypernym.evaconnect.models.Notification_onesignal;
 import com.hypernym.evaconnect.models.User;
+import com.hypernym.evaconnect.models.User_applicants;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.GsonUtils;
@@ -95,7 +97,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     TextView sendButton;
 
     @BindView(R.id.browsefiles)
-    FloatingActionButton browsefiles;
+    ImageView browsefiles;
 
 
     @BindView(R.id.rc_attachments)
@@ -186,7 +188,29 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             {
                 user.setId(LoginUtils.getLoggedinUser().getId());
             }
+            user.setEmail(user.getFirst_name());
             setChatPerson(getContext(), user.getUser_image());
+            findFirebaseChats(user.getId());
+        }
+        else if(getArguments().getSerializable("applicant")!=null)
+        {
+            User_applicants appliedApplicants=(User_applicants) getArguments().getSerializable("applicant");
+            setPageTitle(appliedApplicants.getFirstName());
+            user.setReceiver_id(appliedApplicants.getId());
+            user.setId(appliedApplicants.getId());
+            user.setUser_image(appliedApplicants.getUserImage());
+            if(appliedApplicants.getId()==null)
+            {
+                user.setId(LoginUtils.getLoggedinUser().getId());
+            }
+            user.setEmail(appliedApplicants.getFirstName());
+            user.setFirst_name(appliedApplicants.getFirstName());
+            setChatPerson(getContext(), appliedApplicants.getUserImage());
+            findFirebaseChats(appliedApplicants.getId());
+        }
+        else if(getArguments().getSerializable("chat_room_id")!=null)
+        {
+
         }
         else
         {
@@ -203,8 +227,75 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     }
 
+    private void findFirebaseChats(int id) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        ////////////////////////////////////////////////////////
+        DatabaseReference userRef = databaseReference.child(AppConstants.FIREASE_USER_ENDPOINT);
+
+        userRef.child(String.valueOf(id)).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.getValue() != null && dataSnapshot.hasChild("chats")) {
+                    for (DataSnapshot childSnapshot: dataSnapshot.child("chats").getChildren()) {
+                        NetworkConnection networkConnection=new NetworkConnection();
+                        String key=childSnapshot.getKey();
+                        DatabaseReference chats = databaseReference.child(AppConstants.FIREASE_CHAT_ENDPOINT);
+                        chats.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.getValue() != null) {
+                                    String otherMember=null;
+                                    DataSnapshot members=dataSnapshot.child("members");
+                                    for (DataSnapshot member : members.getChildren()) {
+                                        if(member.getKey().equalsIgnoreCase(LoginUtils.getLoggedinUser().getId().toString())) {
+                                            networkConnection.setChatID(key);
+                                            user.setChatID(key);
+                                            settingFireBaseChat(networkConnection);
+                                        }
+                                    }
+
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     private void settingFireBaseChat(NetworkConnection message) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference user = databaseReference.child(AppConstants.FIREASE_USER_ENDPOINT);
+        user.child(LoginUtils.getLoggedinUser().getId().toString()).child("chats").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    user.child(LoginUtils.getLoggedinUser().getId().toString()).child("chats").child(message.getChatID()).child("unread").setValue(false);
+                    user.child(LoginUtils.getLoggedinUser().getId().toString()).child("chats").child(message.getChatID()).child("unread_count").setValue(0);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
         DatabaseReference userRef = databaseReference.child(AppConstants.FIREASE_MESSAGES_ENDPOINT);
         DatabaseReference roomChats=userRef.child(message.getChatID());
         roomChats.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -274,12 +365,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
         switch (v.getId()) {
             case R.id.sendButton:
-                if(attachments.size()>0)
+                if(attachments.size()>0 && messageArea.getText().length()==0)
                 {
                     UploadImageToFirebase();
                 }
                 else
                 {
+                    uploadedImages = new ArrayList<>();
+                    uploadedDocuments = new ArrayList<>();
                     sendtofirebase_chat(uploadedImages,uploadedDocuments);
                 }
 
@@ -287,6 +380,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
             case R.id.browsefiles:
                 //   openPictureDialog();
+                attachments.clear();
+               // uploadedImages.clear();
+                //uploadedDocuments.clear();
+                MultiplePhoto.clear();
                 final OvershootInterpolator interpolator = new OvershootInterpolator();
                 ViewCompat.animate(browsefiles).
                         rotation(135f).
@@ -350,7 +447,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     public void LaunchGallery() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("application/msword");
+        intent.setType("file/*");
         intent.setType("application/pdf");
         startActivityForResult(Intent.createChooser(intent, "Select File"), REQUEST_PHOTO_GALLERY);
     }
@@ -425,14 +522,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 DatabaseReference otheruserRefByID=userRef.child(user.getReceiver_id().toString());
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("last_update_time", new Date().getTime());
-                map.put("unread","false");
+               // map.put("unread",false);
 
                 Map<String, Object> receivermap = new HashMap<String, Object>();
                 receivermap.put("last_update_time", new Date().getTime());
-                receivermap.put("unread","true");
+               // receivermap.put("unread",true);
 
-                userRefByID.child("chats").child(key).setValue(map);
-                otheruserRefByID.child("chats").child(key).setValue(receivermap);
+              //  userRefByID.child("chats").child(key).setValue(map);
+
+              //  otheruserRefByID.child("chats").child(key).setValue(receivermap);
                 otheruserRefByID.child("name").setValue(user.getFirst_name());
                 otheruserRefByID.child("imageName").setValue(user.getUser_image());
             }
@@ -448,21 +546,24 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 DatabaseReference userRefByID=userRef.child(LoginUtils.getLoggedinUser().getId().toString());
                 DatabaseReference otheruserRefByID=userRef.child(user.getReceiver_id().toString());
                 Map<String, Object> map = new HashMap<String, Object>();
-
                 map.put("last_update_time", new Date().getTime());
-                map.put("unread","false");
+              //  map.put("unread",false);
 
                 Map<String, Object> receivermap = new HashMap<String, Object>();
                 receivermap.put("last_update_time", new Date().getTime());
-                receivermap.put("unread","true");
+                receivermap.put("unread",true);
 
-                userRefByID.child("chats").child(user.getChatID()).setValue(map);
-                otheruserRefByID.child("chats").child(user.getChatID()).setValue(receivermap);
+
+                //otheruserRefByID.child("chats").child(user.getChatID()).setValue(receivermap);
+               // userRefByID.child("chats").child(user.getChatID()).setValue(map);
+
             }
             ChatMessage chatMessage=new ChatMessage();
             chatMessage.setSenderID(LoginUtils.getLoggedinUser().getId().toString());
             chatMessage.setCreated_datetime(String.valueOf(new Date().getTime()));
             chatMessage.setMessage(messageText);
+            chatMessage.setChatImages(uploadedImages);
+            chatMessage.setChatDocuments(uploadedDocuments);
             chatMessage.setName(LoginUtils.getLoggedinUser().getFirst_name());
             chatMessageList.add(chatMessage);
             chatAdapter.notifyDataSetChanged();

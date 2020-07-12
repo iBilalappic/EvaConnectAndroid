@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,9 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.CompanyJobAdModel;
-import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.utils.AppUtils;
-import com.hypernym.evaconnect.utils.DateUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,6 +76,7 @@ public class CompanyJobAdAdapter extends RecyclerView.Adapter<CompanyJobAdAdapte
             tv_activehour = itemView.findViewById(R.id.tv_activehour);
             contraintlayout = itemView.findViewById(R.id.contraintlayout);
             itemView.setOnClickListener(this);
+            tv_edit.setOnClickListener(this);
         }
 
         @Override

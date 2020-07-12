@@ -22,6 +22,11 @@ public class CompanyJobAdModel implements Serializable {
     @SerializedName("job_sector")
     @Expose
     private String jobSector;
+
+    @SerializedName("job_type")
+    @Expose
+    private String jobType;
+
     @SerializedName("position")
     @Expose
     private String position;
@@ -253,4 +258,11 @@ public class CompanyJobAdModel implements Serializable {
         this.status = status;
     }
 
+    public String getJobType() {
+        return jobType;
+    }
+
+    public void setJobType(String jobType) {
+        this.jobType = jobType;
+    }
 }

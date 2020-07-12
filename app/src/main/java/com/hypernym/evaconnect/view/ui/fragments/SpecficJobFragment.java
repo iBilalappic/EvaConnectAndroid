@@ -104,8 +104,10 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
     private void init() {
         jobListViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(JobListViewModel.class);
         user = LoginUtils.getUser();
+        showBackButton();
+        setPageTitle("Job Details");
         if ((getArguments() != null)) {
-            setPageTitle("");
+        //    setPageTitle("");
          //   showBackButton();
           //  jobAd = (JobAd) getArguments().getSerializable("JOB_AD");
             job_id = getArguments().getInt("job_id");

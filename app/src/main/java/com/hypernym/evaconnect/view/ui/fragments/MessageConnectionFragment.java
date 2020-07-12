@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
@@ -44,8 +43,6 @@ public class MessageConnectionFragment extends BaseFragment implements MessageCo
     @BindView(R.id.edt_search)
     EditText edt_search;
 
-    @BindView(R.id.swipeRefresh)
-    SwipeRefreshLayout swipeRefresh;
 
     @BindView(R.id.rc_connections)
     RecyclerView rc_connections;
@@ -96,8 +93,9 @@ public class MessageConnectionFragment extends BaseFragment implements MessageCo
     private void getConnectionByFilter(String type, int currentPage, boolean b) {
         User userData = new User();
         User user = LoginUtils.getLoggedinUser();
-        userData.setType(type);
+
         userData.setUser_id(user.getId());
+        userData.setConnection_status("active");
 
         if (edt_search.getText().toString().length() > 0)
             userData.setFirst_name(edt_search.getText().toString());
@@ -123,14 +121,19 @@ public class MessageConnectionFragment extends BaseFragment implements MessageCo
 
                         isLoading = false;
                     } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
-                        rc_connections.setVisibility(View.GONE);
-                        empty.setVisibility(View.VISIBLE);
+                        if(connectionList.size()==0)
+                        {
+                            rc_connections.setVisibility(View.GONE);
+                            messageConnectionsAdapter.notifyDataSetChanged();
+                            empty.setVisibility(View.VISIBLE);
+                        }
                         isLastPage = true;
                         isLoading = false;
                     } else {
                         networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                     }
                 });
+
     }
 
     private void initRecyclerView() {

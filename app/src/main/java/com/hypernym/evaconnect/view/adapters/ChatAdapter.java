@@ -48,7 +48,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ChatAdapter.ViewHolder holder, int position) {
              //   AppUtils.setGlideImage(context, (holder).imageView6, networkConnection.getSender().getUserImage());
-        if(chatMessageList.get(position).getChatImages()==null && chatMessageList.get(position).getChatDocuments()==null)
+        if((chatMessageList.get(position).getChatImages()==null || chatMessageList.get(position).getChatImages().size()==0) && (chatMessageList.get(position).getChatDocuments()==null|| chatMessageList.get(position).getChatDocuments().size()==0))
         {
             holder.recycler_viewReceiver.setVisibility(View.GONE);
             holder.recycler_viewSender.setVisibility(View.GONE);
@@ -108,6 +108,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                         holder.recycler_viewSender.setDrawingCacheEnabled(true);
                         holder.recycler_viewSender.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
                         LinearLayoutManager linearLayout = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+                        linearLayout.setReverseLayout(true);
                         holder.recycler_viewSender.setLayoutManager(linearLayout);
                         holder.recycler_viewSender.setAdapter(ServicesInnerAdapter);
                         holder.recycler_viewReceiver.setVisibility(View.GONE);

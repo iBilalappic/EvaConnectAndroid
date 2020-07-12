@@ -259,7 +259,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
                     if (user.getData().get(0) != null) {
                         LoginUtils.saveUserToken(user.getData().get(0).getToken());
                     }
-                    simpleDialog.dismiss();
+                  //  simpleDialog.dismiss();
                     Intent intent = new Intent(PasswordActivity.this, NewsActivity.class);
                     // set the new task and clear flags
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
