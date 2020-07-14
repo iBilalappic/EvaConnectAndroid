@@ -10,7 +10,12 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.util.Log;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 
 public class ImageFilePathUtil {
     /**
@@ -81,13 +86,25 @@ public class ImageFilePathUtil {
                     return getDataColumn(context, contentUri, selection,
                             selectionArgs);
                 }
+                // MediaStore (and general)
+                else if ("content".equalsIgnoreCase(uri.getScheme())) {
+
+                    // Return the remote address
+                    if (isGooglePhotosUri(uri))
+                        return getDriveFilePath(uri, context);
+
+                    return getDataColumn(context, uri, null, null);
+                }
+                // File
+                else if ("file".equalsIgnoreCase(uri.getScheme())) {
+                    return uri.getPath();
+                }
             }
-            // MediaStore (and general)
             else if ("content".equalsIgnoreCase(uri.getScheme())) {
 
                 // Return the remote address
                 if (isGooglePhotosUri(uri))
-                    return uri.getLastPathSegment();
+                    return getDriveFilePath(uri, context);
 
                 return getDataColumn(context, uri, null, null);
             }
@@ -95,12 +112,51 @@ public class ImageFilePathUtil {
             else if ("file".equalsIgnoreCase(uri.getScheme())) {
                 return uri.getPath();
             }
+
         }
         catch (Exception ex)
         {
             return nopath;
         }
         return nopath;
+    }
+    private static String getDriveFilePath(Uri uri, Context context) {
+        Uri returnUri = uri;
+        Cursor returnCursor = context.getContentResolver().query(returnUri, null, null, null, null);
+        /*
+         * Get the column indexes of the data in the Cursor,
+         *     * move to the first row in the Cursor, get the data,
+         *     * and display it.
+         * */
+        int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+        int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
+        returnCursor.moveToFirst();
+
+        String name = (returnCursor.getString(nameIndex));
+        String size = (Long.toString(returnCursor.getLong(sizeIndex)));
+        File file = new File(context.getCacheDir(), name);
+        try {
+            InputStream inputStream = context.getContentResolver().openInputStream(uri);
+            FileOutputStream outputStream = new FileOutputStream(file);
+            int read = 0;
+            int maxBufferSize = 1 * 1024 * 1024;
+            int bytesAvailable = inputStream.available();
+
+            //int bufferSize = 1024;
+            int bufferSize = Math.min(bytesAvailable, maxBufferSize);
+
+            final byte[] buffers = new byte[bufferSize];
+            while ((read = inputStream.read(buffers)) != -1) {
+                outputStream.write(buffers, 0, read);
+            }
+            Log.e("File Size", "Size " + file.length());
+            inputStream.close();
+            outputStream.close();
+            Log.e("File Path", "Path " + file.getPath());
+        } catch (Exception e) {
+            Log.e("Exception", e.getMessage());
+        }
+        return file.getPath();
     }
 
     public static String getFilePath(final Context context, final Uri imageuri) {
@@ -160,10 +216,9 @@ public class ImageFilePathUtil {
         String colunm = "_data";
         String[] projection = {colunm};
         cursor =  context.getContentResolver().query( uri, projection, selection, selectarg, null);
-        if (cursor!= null){
-            cursor.moveToFirst();
-          //  Log.e(TAG, " file path is "+  cursor.getString(cursor.getColumnIndex(colunm)));
-            filepath = cursor.getString(cursor.getColumnIndex(colunm));
+        if (cursor != null && cursor.moveToFirst()) {
+            final int index = cursor.getColumnIndexOrThrow(colunm);
+            return cursor.getString(index);
         }
         if (cursor!= null)
             cursor.close();
@@ -241,7 +296,6 @@ public class ImageFilePathUtil {
      * @return Whether the Uri authority is Google Photos.
      */
     public static boolean isGooglePhotosUri(Uri uri) {
-        return "com.google.android.apps.photos.content".equals(uri
-                .getAuthority());
+        return "com.google.android.apps.docs.storage".equals(uri.getAuthority()) || "com.google.android.apps.docs.storage.legacy".equals(uri.getAuthority());
     }
 }

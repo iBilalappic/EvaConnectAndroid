@@ -74,5 +74,6 @@ public interface APIConstants {
     public static String ADD_NEWS_COMMENT="news/comment/";
     public static String GET_NEWS_BY_ID="news/rss/";
     public static String GET_JOB_TYPE="job/type/";
+    public static String USER_ONLINE="user/details/{id}/";
 
 }

@@ -159,7 +159,6 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
             user.child(LoginUtils.getLoggedinUser().getId().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-
                     if (dataSnapshot.getValue() != null && dataSnapshot.hasChild("chats")) {
                         for (DataSnapshot childSnapshot: dataSnapshot.child("chats").getChildren()) {
                             NetworkConnection networkConnection=new NetworkConnection();
@@ -274,7 +273,6 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
 
                 }
             });
-
 
 
 

@@ -31,6 +31,8 @@ public class User implements Serializable, Parcelable {
     private String company_name;
     private String filter;
     private String chatID;
+    private boolean is_online;
+    private String last_online_datetime;
 
     public String getSearch_key() {
         return search_key;
@@ -367,5 +369,21 @@ public class User implements Serializable, Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 
+    }
+
+    public boolean isIs_online() {
+        return is_online;
+    }
+
+    public void setIs_online(boolean is_online) {
+        this.is_online = is_online;
+    }
+
+    public String getLast_online_datetime() {
+        return last_online_datetime;
+    }
+
+    public void setLast_online_datetime(String last_online_datetime) {
+        this.last_online_datetime = last_online_datetime;
     }
 }

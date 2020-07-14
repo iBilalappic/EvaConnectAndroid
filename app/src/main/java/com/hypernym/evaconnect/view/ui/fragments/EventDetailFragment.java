@@ -255,15 +255,20 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
                 else
                 {
                     modify_event.setVisibility(View.GONE);
-                    if(event.getIs_attending()!=null&&event.getIs_attending().equalsIgnoreCase("Pending"))
+                    if(event.getIs_attending()!=null && event.getIs_attending().equalsIgnoreCase("Pending"))
                     {
                         accept_invite.setVisibility(View.VISIBLE);
                         interested.setVisibility(View.GONE);
                     }
-                    else
+                    else if(event.getIs_attending()!=null && !event.getIs_attending().equalsIgnoreCase("Pending"))
                     {
                         accept_invite.setVisibility(View.GONE);
                         interested.setVisibility(View.VISIBLE);
+                    }
+                    else
+                    {
+                        accept_invite.setVisibility(View.VISIBLE);
+                        interested.setVisibility(View.GONE);
                     }
                 }
             }

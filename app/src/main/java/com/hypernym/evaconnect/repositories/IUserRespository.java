@@ -28,4 +28,5 @@ public interface IUserRespository {
     LiveData<BaseModel<List<String>>> getSector(String name);
     LiveData<BaseModel<List<User>>> setting_update(Integer notification, Integer id);
     LiveData<BaseModel<List<User>>> update_password(String Oldpassword, String Newpassword);
+    LiveData<BaseModel<List<User>>> userOnline( boolean is_active);
 }

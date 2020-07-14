@@ -12,9 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
-import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.utils.DateUtils;
 
 import java.util.List;
 
@@ -84,6 +84,21 @@ public class InviteConnectionsAdapter extends RecyclerView.Adapter<InviteConnect
                     onItemClickListener.onItemClick(v, connections.indexOf(connections.get(position)), connections.get(position));
             }
         });
+
+        if(connections.get(position).isIs_online())
+        {
+            holder.tv_connection_status.setText("Online");
+            holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.skyblue));
+        }
+        else
+        {
+            if(connections.get(position).getLast_online_datetime()!=null)
+            {
+                holder.tv_connection_status.setText("Last Online "+ DateUtils.formatToYesterdayOrToday(connections.get(position).getLast_online_datetime()));
+                holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.gray));
+            }
+
+        }
     }
 
     @Override

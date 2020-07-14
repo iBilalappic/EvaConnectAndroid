@@ -25,7 +25,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:mcv_headerTextAppearance="@style/CalendarWidgetHeader"
             app:mcv_selectionColor="@color/light_blue"
-            app:mcv_showOtherDates="all"
+            app:mcv_showOtherDates="none"
             app:mcv_tileHeight="30dp" />
 
         <ImageView

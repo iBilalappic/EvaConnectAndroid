@@ -39,6 +39,7 @@ public class MainViewPagerFragment extends BaseFragment implements FloatingActio
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_viewpager, container, false);
         ButterKnife.bind(this,view);
+        hideBackButton();
         sectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
         mViewPager = (ViewPager) view.findViewById(R.id.container);
         mViewPager.setAdapter(sectionsPagerAdapter);
@@ -48,7 +49,6 @@ public class MainViewPagerFragment extends BaseFragment implements FloatingActio
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(mViewPager);
         fab.setOnClickListener(this);
-
         return view;
     }
 
@@ -62,7 +62,7 @@ public class MainViewPagerFragment extends BaseFragment implements FloatingActio
 
         @Override
         public Fragment getItem(int position) {
-            hideBackButton();
+
             switch (position) {
                 case 0:
                      return new PostFragment();

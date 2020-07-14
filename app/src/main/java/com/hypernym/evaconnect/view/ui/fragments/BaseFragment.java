@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -53,6 +54,7 @@ public class BaseFragment extends Fragment {
     public static final int RequestPermissionCode = 1;
     private static final int REQUEST_PHOTO_GALLERY = 4;
     private static final int CAMERAA = 1;
+    private static final int VIDEO_CAPTURE = 101;
     private String mCurrentPhotoPath;
     private File tempFile,file_name;
     private ConnectionViewModel connectionViewModel;
@@ -242,6 +244,20 @@ public class BaseFragment extends Fragment {
 
     }
 
+    public void recodeVideoFromCamera() {
+
+        if (Checkpermission()) {
+            Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+            intent.putExtra(android.provider.MediaStore.EXTRA_VIDEO_QUALITY, 1);
+            intent.putExtra(MediaStore.EXTRA_SIZE_LIMIT, 4491520L);
+            startActivityForResult(intent, VIDEO_CAPTURE);
+        } else {
+            // AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 11));
+            requestpermission();
+        }
+
+    }
+
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -265,13 +281,19 @@ public class BaseFragment extends Fragment {
     {
         List<Fragment> f = getActivity().getSupportFragmentManager().getFragments();
         if(f.size()>1) {
-            getActivity().findViewById(R.id.tv_back).setVisibility(View.VISIBLE);
+            getActivity().findViewById(R.id.back).setVisibility(View.VISIBLE);
         }
+        getActivity().findViewById(R.id.tv_back).setVisibility(View.VISIBLE);
+
         hideChatPerson();
     }
     public void hideBackButton()
     {
+
         getActivity().findViewById(R.id.tv_back).setVisibility(View.GONE);
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+        getActivity().findViewById(R.id.toolbar).setLayoutParams(params);
+        getActivity().findViewById(R.id.toolbar).requestLayout();
     }
     public void setChatPerson(Context context,String image)
     {

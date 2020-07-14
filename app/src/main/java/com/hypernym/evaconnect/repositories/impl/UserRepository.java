@@ -133,6 +133,28 @@ public class UserRepository implements IUserRespository {
     }
 
     @Override
+    public LiveData<BaseModel<List<User>>> userOnline(boolean is_active) {
+        userMutableLiveData=new MutableLiveData<>();
+        HashMap<String,Object> body=new HashMap<>();
+        body.put("is_online",is_active);
+        body.put("modified_by_id",LoginUtils.getLoggedinUser().getId());
+        body.put("last_online_datetime",DateUtils.GetCurrentdatetime());
+        RestClient.get().appApi().userOnline(LoginUtils.getLoggedinUser().getId(),body).enqueue(new Callback<BaseModel<List<User>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
+                if (response.body() != null) {
+                    userMutableLiveData.setValue(response.body());
+                }
+            }
+            @Override
+            public void onFailure(Call<BaseModel<List<User>>> call, Throwable t) {
+                userMutableLiveData.setValue(null);
+            }
+        });
+        return userMutableLiveData;
+    }
+
+    @Override
     public LiveData<BaseModel<List<User>>> forgotPassword(String email) {
         userMutableLiveData = new MutableLiveData<>();
         User user = new User();

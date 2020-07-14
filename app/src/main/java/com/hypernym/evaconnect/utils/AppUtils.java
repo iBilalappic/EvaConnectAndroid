@@ -299,6 +299,34 @@ public final class AppUtils {
 
     }
 
+    public static void makeNotification_activity(Context context, Class<?> class_,String chat_id, String message, boolean isUpdateCurrent,
+                                                int requestCode) {
+        Intent intent = new Intent(context, class_);
+        if (isUpdateCurrent) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        } else {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        intent.putExtra("chat_room_id",chat_id);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT
+        );
+        Notification notification = new NotificationCompat.Builder(context)
+                .setSmallIcon(getNotificationIcon())
+                .setTicker(message)
+                // .setColor(ContextCompat.getColor(context, R.color.colorNotificationIcon))
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setContentTitle(context.getString(R.string.app_name))
+                .setContentText(message)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
+                .build();
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.notify(requestCode, notification);
+    }
+
     public static void makeNotification_default(Context context, Class<?> class_, String fragmentName,
                                                 Bundle bundle, String message, boolean isUpdateCurrent,
                                                 int requestCode) {
@@ -330,7 +358,7 @@ public final class AppUtils {
     }
     private static int getNotificationIcon() {
         boolean useWhiteIcon = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP);
-        return useWhiteIcon ? R.drawable.logo : R.mipmap.logo;
+        return useWhiteIcon ? R.drawable.ic_launcher : R.mipmap.ic_launcher;
     }
     public static void logout(Context context)
     {
@@ -357,7 +385,6 @@ public final class AppUtils {
             }
         });
         simpleDialog.show();
-
     }
 
     public static Bitmap getVideoThumbnail(String url)    {
@@ -369,4 +396,6 @@ public final class AppUtils {
             LoginManager.getInstance().logOut();
         }
     }
+
+
 }

@@ -16,15 +16,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.communication.RestClient;
+import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.PrefUtils;
 import com.hypernym.evaconnect.view.ui.fragments.ActivityFragment;
 import com.hypernym.evaconnect.view.ui.fragments.CalendarFragment;
 import com.hypernym.evaconnect.view.ui.fragments.JobListingFragment;
+import com.hypernym.evaconnect.viewmodel.UserViewModel;
+
+import java.util.HashMap;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class NavigationDialog extends Dialog implements View.OnClickListener {
 
@@ -35,12 +45,12 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
     private Context context;
     private CircleImageView profile_image;
     User user = new User();
+    UserViewModel userViewModel;
 
     public NavigationDialog(Context context) {
         super(context);
         this.context = context;
         user = LoginUtils.getUser();
-
     }
 
     @Override
@@ -48,6 +58,8 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation_menu);
+    //    userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getApplication(), this)).get(UserViewModel.class);
+
         img_close = findViewById(R.id.img_close);
 //        editProfile=findViewById(R.id.editProfile);
         logout = findViewById(R.id.tv_logout);
@@ -107,6 +119,22 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 dismiss();
+                HashMap<String,Object> body=new HashMap<>();
+
+                body.put("modified_by_id",LoginUtils.getLoggedinUser().getId());
+                body.put("last_online_datetime", DateUtils.GetCurrentdatetime());
+                body.put("is_online",false);
+                RestClient.get().appApi().userOnline(LoginUtils.getLoggedinUser().getId(),body).enqueue(new Callback<BaseModel<List<User>>>() {
+                    @Override
+                    public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<BaseModel<List<User>>> call, Throwable t) {
+
+                    }
+                });
                 AppUtils.logout(context);
             }
         });
@@ -121,6 +149,7 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
 //                transaction.commit();
 //            }
 //        });
+
         calendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

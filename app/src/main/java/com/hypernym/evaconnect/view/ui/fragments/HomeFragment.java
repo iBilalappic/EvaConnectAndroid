@@ -604,7 +604,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         ).observe(this, new Observer<BaseModel<List<User>>>() {
             @Override
             public void onChanged(BaseModel<List<User>> listBaseModel) {
-                if (listBaseModel.getData() != null && !listBaseModel.isError()) {
+                if (listBaseModel!=null && listBaseModel.getData() != null && !listBaseModel.isError()) {
                     swipeRefresh.setRefreshing(false);
                     LoginUtils.saveUser(listBaseModel.getData().get(0));
                 } else {

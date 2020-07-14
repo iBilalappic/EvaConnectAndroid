@@ -7,17 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
-import com.hypernym.evaconnect.models.Connection;
-import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 
 import java.util.List;
@@ -85,6 +83,24 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
             }
 
         }
+        if(connections.get(position).isIs_online())
+        {
+            holder.tv_connection_status.setText("Online");
+            holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.skyblue));
+        }
+        else
+        {
+            if(connections.get(position).getLast_online_datetime()!=null)
+            {
+                holder.tv_connection_status.setText("Last Online "+ DateUtils.formatToYesterdayOrToday(connections.get(position).getLast_online_datetime()));
+                holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.gray));
+            }
+            else
+            {
+                holder.tv_connection_status.setText("-");
+            }
+
+        }
 
     }
 
@@ -109,6 +125,9 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
 
         @BindView(R.id.tv_decline)
         TextView tv_decline;
+
+        @BindView(R.id.tv_connection_status)
+        TextView tv_connection_status;
 
 
         public ViewHolder(@NonNull View itemView) {

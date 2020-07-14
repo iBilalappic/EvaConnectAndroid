@@ -14,11 +14,14 @@ import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.NotifyEvent;
 import com.hypernym.evaconnect.models.Post;
+import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.LoginUtils;
@@ -28,6 +31,7 @@ import com.hypernym.evaconnect.view.dialogs.NavigationDialog;
 import com.hypernym.evaconnect.view.dialogs.SearchDialog;
 import com.hypernym.evaconnect.view.ui.fragments.ActivityFragment;
 import com.hypernym.evaconnect.view.ui.fragments.BaseFragment;
+import com.hypernym.evaconnect.view.ui.fragments.ChatFragment;
 import com.hypernym.evaconnect.view.ui.fragments.ConnectionsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.EditProfileFragment;
 import com.hypernym.evaconnect.view.ui.fragments.EventDetailFragment;
@@ -40,6 +44,7 @@ import com.hypernym.evaconnect.view.ui.fragments.PersonProfileFragment;
 import com.hypernym.evaconnect.view.ui.fragments.PostDetailsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.SpecficJobFragment;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
+import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import com.onesignal.OneSignal;
 
 import org.greenrobot.eventbus.EventBus;
@@ -106,6 +111,8 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     private HomeViewModel homeViewModel;
     private NotificationsAdapter notificationsAdapter;
     private List<Post> notifications = new ArrayList<>();
+    UserViewModel userViewModel;
+
 
 
     @Override
@@ -113,6 +120,35 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+
+
+        userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getApplication(), this)).get(UserViewModel.class);
+        if(getIntent().getExtras()!=null && getIntent().getExtras().getString("chat_room_id")!=null)
+        {
+            img_home.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+            img_connections.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+            img_messages.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
+            img_logout.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+
+            tv_home.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+            tv_connections.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+            tv_message.setTextColor(ContextCompat.getColor(this, R.color.skyblue));
+            tv_profile.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+            ChatFragment chatFragment = new ChatFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("chat_room_id", getIntent().getExtras().getString("chat_room_id"));
+            chatFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, chatFragment, this, false);
+        }
+        else
+        {
+            // img_home.setImageDrawable(getDrawable(R.drawable.home_selected));
+            img_home.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
+            tv_home.setTextColor(ContextCompat.getColor(this, R.color.skyblue));
+            img_connections.setImageDrawable(getDrawable(R.drawable.ic_connection_1));
+            img_messages.setImageDrawable(getDrawable(R.drawable.ic_message_1));
+            img_logout.setImageDrawable(getDrawable(R.drawable.ic_profile_1));
+        }
 
         if (LoginUtils.isUserLogin()) {
             Intent intent = getIntent();
@@ -161,7 +197,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
 
     private void init() {
         homeViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getApplication(), this)).get(HomeViewModel.class);
-        if (getIntent().getExtras() != null) {
+        if (getIntent().getExtras() != null && getIntent().getExtras().getString("chat_room_id")!=null) {
             String fragment_name = getIntent().getStringExtra(Constants.FRAGMENT_NAME);
             String fragmentName = getIntent().getStringExtra(Constants.FRAGMENT_NAME);
             Bundle bundle = getIntent().getBundleExtra(Constants.DATA);
@@ -172,6 +208,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
                 loadFragment(R.id.framelayout, fragment, this, false);
             }
         } else {
+
             loadFragment(R.id.framelayout, new MainViewPagerFragment(), this, false);
             //  getAllNotifications();
         }
@@ -181,12 +218,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         getSupportActionBar().setHomeButtonEnabled(true);
 
 
-        // img_home.setImageDrawable(getDrawable(R.drawable.home_selected));
-        img_home.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
-        tv_home.setTextColor(ContextCompat.getColor(this, R.color.skyblue));
-        img_connections.setImageDrawable(getDrawable(R.drawable.ic_connection_1));
-        img_messages.setImageDrawable(getDrawable(R.drawable.ic_message_1));
-        img_logout.setImageDrawable(getDrawable(R.drawable.ic_profile_1));
+
 
 
         tv_pagetitle.setOnClickListener(new View.OnClickListener() {
@@ -198,7 +230,19 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
             }
         });
 
+
     }
+
+    private void setUserOnline() {
+        Log.d("APPLICATION","APPLICATION ONLINE");
+        userViewModel.userOnline(true).observe(this, new Observer<BaseModel<List<User>>>() {
+            @Override
+            public void onChanged(BaseModel<List<User>> listBaseModel) {
+
+            }
+        });
+    }
+
 
 
     private void setMessageNotificationCount() {
@@ -349,6 +393,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
+        setUserOnline();
     }
 
     @Override

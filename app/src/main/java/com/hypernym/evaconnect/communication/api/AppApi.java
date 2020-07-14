@@ -357,4 +357,7 @@ public interface AppApi {
 
     @GET(APIConstants.GET_JOB_TYPE)
     Call<BaseModel<List<String>>> getJobType();
+
+    @PATCH(APIConstants.USER_ONLINE)
+    Call<BaseModel<List<User>>> userOnline(@Path("id") int id,@Body HashMap<String,Object> user);
 }

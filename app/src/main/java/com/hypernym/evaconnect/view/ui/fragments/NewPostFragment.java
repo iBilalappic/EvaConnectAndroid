@@ -37,6 +37,7 @@ import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.utils.URLTextWatcher;
 import com.hypernym.evaconnect.view.adapters.AttachmentsAdapter;
+import com.hypernym.evaconnect.view.dialogs.LocalVideoViewDialog;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
@@ -101,12 +102,16 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
     @BindView(R.id.tv_address)
     TextView tv_address;
 
+    @BindView(R.id.tv_recordvideo)
+    TextView tv_recordvideo;
+
 
     private AttachmentsAdapter attachmentsAdapter;
     private List<String> attachments = new ArrayList<>();
     private List<MultipartBody.Part> part_images = new ArrayList<>();
     private MultipartBody.Part video = null;
     private static final int REQUEST_PHOTO_GALLERY = 4;
+    private static final int VIDEO_CAPTURE = 101;
     private static final int CAMERAA = 1;
 
     private String GalleryImage, mCurrentPhotoPath, globalImagePath;
@@ -160,6 +165,12 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                     }
                 }
 
+            }
+        });
+        tv_recordvideo.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                recodeVideoFromCamera();
             }
         });
 
@@ -298,6 +309,48 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                 exc.printStackTrace();
                 Log.e(getClass().getName(), "exc: " + exc.getMessage());
             }
+        }else if (requestCode == VIDEO_CAPTURE && resultCode == RESULT_OK) {
+            try {
+                if (data != null && data.getData() != null) {
+                    Uri SelectedImageUri = data.getData();
+                    GalleryImage = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
+                    mProfileImageDecodableString = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
+                    Log.e(getClass().getName(), "image file path: " + GalleryImage);
+                    tempFile = new File(GalleryImage);
+                    Log.e(getClass().getName(), "file path details: " + tempFile.getName() + " " + tempFile.getAbsolutePath() + "length" + tempFile.length());
+                    if (tempFile.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.FILE_SIZE_LIMIT_IN_KB) {
+                        networkResponseDialog(getString(R.string.error), getString(R.string.err_image_size_large));
+                        return;
+                    } else {
+                        if (photoVar == null) {
+                            currentPhotoPath = GalleryImage;
+                            // photoVar = GalleryImage;
+                            file_name = new File(ImageFilePathUtil.getPath(getActivity(), SelectedImageUri));
+                            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file_name);
+
+                            // partImage = MultipartBody.Part.createFormData("user_image", file_name.getName(), reqFile);
+
+                            if (!TextUtils.isEmpty(currentPhotoPath) || currentPhotoPath != null) {
+                                img_video.setVisibility(View.VISIBLE);
+                                img_play.setVisibility(View.VISIBLE);
+                                AppUtils.setGlideVideoThumbnail(getContext(), img_video, currentPhotoPath);
+                                video = MultipartBody.Part.createFormData("post_video", file_name.getName(), reqFile);
+                                setPostButton();
+
+                            } else {
+                                networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
+                            }
+                        } else {
+                            networkResponseDialog(getString(R.string.error), getString(R.string.err_one_file_at_a_time));
+                            return;
+                        }
+                    }
+                }
+
+            } catch (Exception exc) {
+                exc.printStackTrace();
+                Log.e(getClass().getName(), "exc: " + exc.getMessage());
+            }
         } else {
             if (requestCode == CAMERAA && resultCode == RESULT_OK) {
 
@@ -348,7 +401,8 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
 
     @OnClick(R.id.img_video)
     public void playVideo() {
-        AppUtils.playVideo(getActivity(), currentPhotoPath);
+        LocalVideoViewDialog videoViewDialog=new LocalVideoViewDialog(getContext(),currentPhotoPath);
+        videoViewDialog.show();
     }
 
     @Override

@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.client.Firebase;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -113,6 +114,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     ChatAdapter chatAdapter;
     String messageText, ChatTime;
     private static final int REQUEST_PHOTO_GALLERY = 4;
+    private static final int REQUEST_DOCUMENTS = 5;
     private static final int CAMERAA = 1;
     private String GalleryImage, globalImagePath, FileName;
     public String mProfileImageDecodableString;
@@ -210,7 +212,63 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
         else if(getArguments().getSerializable("chat_room_id")!=null)
         {
+            String chat_id=(String) getArguments().getSerializable("chat_room_id");
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+            ////////////////////////GET USER DATA////////////////////////////////
+            DatabaseReference chatRef = databaseReference.child(AppConstants.FIREASE_CHAT_ENDPOINT);
+            chatRef.child(chat_id).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(dataSnapshot!=null)
+                    {
+                        for(DataSnapshot dataSnapshot1: dataSnapshot.child("members").getChildren())
+                        {
+                            if(dataSnapshot1.getKey().equalsIgnoreCase(LoginUtils.getLoggedinUser().getId().toString()))
+                            {
+                               // findFirebaseChats(LoginUtils.getLoggedinUser().getId());
+                            }
+                            else
+                            {
+                                setPageTitle(dataSnapshot1.getValue().toString());
+                                user.setEmail(dataSnapshot1.getValue().toString());
+                                user.setId(Integer.parseInt(dataSnapshot1.getKey()));
+                                user.setReceiver_id(Integer.parseInt(dataSnapshot1.getKey()));
+                                user.setChatID(chat_id);
+                                DatabaseReference otheruser = databaseReference.child(AppConstants.FIREASE_USER_ENDPOINT);
+                                otheruser.child(dataSnapshot1.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.getValue() != null) {
 
+                                          //  networkConnection.setUserImage(dataSnapshot.child("imageName").getValue().toString());
+
+                                            user.setUser_image(dataSnapshot.child("imageName").getValue().toString());
+
+                                            showBackButton();
+
+                                            setChatPerson(getContext(),user.getUser_image());
+                                            findFirebaseChats(user.getId());
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+
+
+                            }
+                        }
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
         }
         else
         {
@@ -298,51 +356,67 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
         DatabaseReference userRef = databaseReference.child(AppConstants.FIREASE_MESSAGES_ENDPOINT);
         DatabaseReference roomChats=userRef.child(message.getChatID());
-        roomChats.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() != null) {
-                    //  networkConnectionList.clear();
-                    for (DataSnapshot child : dataSnapshot.getChildren()) {
-                        ChatMessage chatMessage =new ChatMessage();
-                        chatMessage.setMessage(child.child("message").getValue().toString());
-                        chatMessage.setName(child.child("name").getValue().toString());
-                        chatMessage.setSenderID(child.child("senderID").getValue().toString());
-                        chatMessage.setCreated_datetime(child.child("timestamp").getValue().toString());
-                        if(child.child("images").getValue()!=null)
-                        {
-                            DataSnapshot images=child.child("images");
-                            List<String> imageList=new ArrayList<>();
-                            for(DataSnapshot image: images.getChildren())
-                            {
-                                imageList.add(image.getValue().toString());
-                            }
-                            chatMessage.setChatImages(imageList);
-                        }
-                        if(child.child("documents").getValue()!=null)
-                        {
-                            DataSnapshot documents=child.child("documents");
-                            List<String> documentList=new ArrayList<>();
-                            for(DataSnapshot image: documents.getChildren())
-                            {
-                                documentList.add(image.getValue().toString());
-                            }
-                            chatMessage.setChatDocuments(documentList);
-                        }
-                        chatMessageList.add(chatMessage);
+
+roomChats.addChildEventListener(new ChildEventListener() {
+    @Override
+    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        if (dataSnapshot.getValue() != null) {
+            //  networkConnectionList.clear();
+
+                ChatMessage chatMessage =new ChatMessage();
+                chatMessage.setMessage(dataSnapshot.child("message").getValue().toString());
+                chatMessage.setName(dataSnapshot.child("name").getValue().toString());
+                chatMessage.setSenderID(dataSnapshot.child("senderID").getValue().toString());
+                chatMessage.setCreated_datetime(dataSnapshot.child("timestamp").getValue().toString());
+                if(dataSnapshot.child("images").getValue()!=null)
+                {
+                    DataSnapshot images=dataSnapshot.child("images");
+                    List<String> imageList=new ArrayList<>();
+                    for(DataSnapshot image: images.getChildren())
+                    {
+                        imageList.add(image.getValue().toString());
                     }
-                    hideDialog();
-                    chatAdapter.notifyDataSetChanged();
+                    chatMessage.setChatImages(imageList);
                 }
+                if(dataSnapshot.child("documents").getValue()!=null)
+                {
+                    DataSnapshot documents=dataSnapshot.child("documents");
+                    List<String> documentList=new ArrayList<>();
+                    for(DataSnapshot image: documents.getChildren())
+                    {
+                        documentList.add(image.getValue().toString());
+                    }
+                    chatMessage.setChatDocuments(documentList);
+                }
+                chatMessageList.add(chatMessage);
             }
+            hideDialog();
+            chatAdapter.notifyDataSetChanged();
+        if (chatMessageList.size() > 0) {
+            rc_chat.smoothScrollToPosition(chatMessageList.size() - 1);
+        }
+    }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Handle possible errors.
-                hideDialog();
-            }
-        });
+    @Override
+    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
+    }
+
+    @Override
+    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+    }
+
+    @Override
+    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+    }
+
+    @Override
+    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+    }
+});
 
 
     }
@@ -446,10 +520,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
 
     public void LaunchGallery() {
+
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("file/*");
         intent.setType("application/pdf");
-        startActivityForResult(Intent.createChooser(intent, "Select File"), REQUEST_PHOTO_GALLERY);
+        startActivityForResult(Intent.createChooser(intent, "Select File"), REQUEST_DOCUMENTS);
     }
 
     private void requestpermission() {
@@ -558,15 +633,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                // userRefByID.child("chats").child(user.getChatID()).setValue(map);
 
             }
-            ChatMessage chatMessage=new ChatMessage();
-            chatMessage.setSenderID(LoginUtils.getLoggedinUser().getId().toString());
-            chatMessage.setCreated_datetime(String.valueOf(new Date().getTime()));
-            chatMessage.setMessage(messageText);
-            chatMessage.setChatImages(uploadedImages);
-            chatMessage.setChatDocuments(uploadedDocuments);
-            chatMessage.setName(LoginUtils.getLoggedinUser().getFirst_name());
-            chatMessageList.add(chatMessage);
-            chatAdapter.notifyDataSetChanged();
+//            ChatMessage chatMessage=new ChatMessage();
+//            chatMessage.setSenderID(LoginUtils.getLoggedinUser().getId().toString());
+//            chatMessage.setCreated_datetime(String.valueOf(new Date().getTime()));
+//            chatMessage.setMessage(messageText);
+//            chatMessage.setChatImages(uploadedImages);
+//            chatMessage.setChatDocuments(uploadedDocuments);
+//            chatMessage.setName(LoginUtils.getLoggedinUser().getFirst_name());
+//            chatMessageList.add(chatMessage);
+//            chatAdapter.notifyDataSetChanged();
 
           //  sendNotification(user.getEmail());
             messageArea.setText("");
@@ -717,7 +792,66 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 exc.printStackTrace();
                 Log.e(getClass().getName(), "exc: " + exc.getMessage());
             }
-        } else {
+        }
+        else if(requestCode == REQUEST_DOCUMENTS && resultCode == RESULT_OK)
+        {
+            try {
+                if (data != null && data.getData() != null) {
+
+                    SelectedImageUri = data.getData();
+
+                    GalleryImage = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
+                    mProfileImageDecodableString = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
+                    Log.e(getClass().getName(), "image file path: " + GalleryImage);
+
+                    tempFile = new File(GalleryImage);
+
+                    currentPhotoPath = GalleryImage;
+
+                    if(tempFile.toString().equalsIgnoreCase("File path not found"))
+                    {
+                        networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_storage));
+                    }
+                    else
+                    {
+                        if (tempFile.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.FILE_SIZE_LIMIT_IN_KB) {
+                            networkResponseDialog(getString(R.string.error), getString(R.string.err_image_size_large));
+                            return;
+                        } else {
+                            if (photoVar == null) {
+                                MultipleFile.add(tempFile);
+                                Log.e(getClass().getName(), "file path details: " + tempFile.getName() + " " + tempFile.getAbsolutePath() + "length" + tempFile.length());
+
+                                // photoVar = GalleryImage;
+                                file_name = new File(ImageFilePathUtil.getPath(getActivity(), SelectedImageUri));
+                                RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file_name);
+
+                                MultipartBody.Part partImage = MultipartBody.Part.createFormData("chat_file", file_name.getName(), reqFile);
+                                MultiplePhoto.add(partImage);
+                                if (!TextUtils.isEmpty(currentPhotoPath) || currentPhotoPath != null) {
+                                    attachments.add(currentPhotoPath);
+                                    Log.d("ATTACHMENT", GsonUtils.toJson(attachments));
+                                    attachmentsAdapter.notifyDataSetChanged();
+                                    rc_attachments.setVisibility(View.VISIBLE);
+                                } else {
+                                    networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
+                                }
+                            } else {
+                                networkResponseDialog(getString(R.string.error), getString(R.string.err_one_file_at_a_time));
+                                return;
+                            }
+                        }
+                    }
+
+                } else {
+                    Toast.makeText(getActivity(), "Something went wrong while retrieving image", Toast.LENGTH_SHORT).show();
+                }
+            } catch (Exception exc) {
+                exc.printStackTrace();
+                Log.e(getClass().getName(), "exc: " + exc.getMessage());
+            }
+        }
+            else {
             if (requestCode == CAMERAA && resultCode == RESULT_OK) {
 
                 //mIsProfileImageAdded = true;

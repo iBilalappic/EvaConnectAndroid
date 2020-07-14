@@ -78,4 +78,9 @@ public class UserViewModel extends AndroidViewModel {
     {
         return iUserRespository.update_password(Oldpassword,Newpassword);
     }
+
+    public LiveData<BaseModel<List<User>>> userOnline(boolean isactive)
+    {
+        return iUserRespository.userOnline(isactive);
+    }
 }

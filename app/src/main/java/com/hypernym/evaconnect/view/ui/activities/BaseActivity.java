@@ -1,46 +1,30 @@
 package com.hypernym.evaconnect.view.ui.activities;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.os.PersistableBundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.Notification;
-import com.hypernym.evaconnect.models.Post;
+import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.LoginUtils;
-import com.hypernym.evaconnect.utils.NetworkUtils;
-import com.hypernym.evaconnect.view.adapters.NotificationsAdapter;
 import com.hypernym.evaconnect.view.dialogs.CustomProgressBar;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
-import com.hypernym.evaconnect.view.ui.fragments.BaseFragment;
-import com.hypernym.evaconnect.view.ui.fragments.ConnectionsFragment;
-import com.hypernym.evaconnect.view.ui.fragments.EditProfileFragment;
-import com.hypernym.evaconnect.view.ui.fragments.HomeFragment;
-import com.hypernym.evaconnect.view.ui.fragments.MessageFragment;
-import com.hypernym.evaconnect.view.ui.fragments.NotificationsFragment;
-import com.hypernym.evaconnect.view.ui.fragments.MyLikesFragment;
-import com.hypernym.evaconnect.view.ui.fragments.PostDetailsFragment;
-import com.hypernym.evaconnect.viewmodel.HomeViewModel;
-import com.onesignal.OneSignal;
+import com.hypernym.evaconnect.viewmodel.UserViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BaseActivity extends AppCompatActivity  {
@@ -50,6 +34,7 @@ public class BaseActivity extends AppCompatActivity  {
     private TextView tv_pagetitle;
     private ImageView img_uparrow;
     private static int count=0;
+    private UserViewModel userViewModel;
 
 
     public void showDialog() {
@@ -119,5 +104,34 @@ public class BaseActivity extends AppCompatActivity  {
     {
       count=mcount;
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        setUserOffline();
+    }
+
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
+
+    }
+
+    private void setUserOffline() {
+        Log.d("APPLICATION","APPLICATION OFFLINE");
+        userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getApplication(), this)).get(UserViewModel.class);
+if(LoginUtils.getLoggedinUser()!=null)
+{
+    userViewModel.userOnline(false).observe(this, new Observer<BaseModel<List<User>>>() {
+        @Override
+        public void onChanged(BaseModel<List<User>> listBaseModel) {
+            //Toast.makeText(BaseActivity.this, "offline", Toast.LENGTH_SHORT).show();
+        }
+    });
+}
+}
+
 
 }

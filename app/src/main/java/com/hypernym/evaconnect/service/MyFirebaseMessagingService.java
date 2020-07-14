@@ -5,7 +5,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
@@ -16,6 +15,7 @@ import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.view.ui.activities.HomeActivity;
+import com.hypernym.evaconnect.view.ui.activities.SplashActivity;
 import com.hypernym.evaconnect.view.ui.fragments.ChatFragment;
 
 import java.util.Random;
@@ -64,11 +64,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
            // sendNotification(remoteMessage.getNotification().getBody());
-            Bundle bundle=new Bundle();
-            bundle.putString("chat_room_id",remoteMessage.toIntent().getExtras().get("gcm.notification.chat_room_id").toString());
+
+
+           // Bundle bundle=new Bundle();
+            //bundle.putString("chat_room_id",remoteMessage.toIntent().getExtras().get("gcm.notification.chat_room_id").toString());
             Random random = new Random();
             int m = random.nextInt(9999 - 1000) + 1000;
-            AppUtils.makeNotification(getApplication(), HomeActivity.class, ChatFragment.class.getName(), bundle, remoteMessage.getNotification().getBody(), true, m);
+            AppUtils.makeNotification_activity(getApplication(), SplashActivity.class,remoteMessage.toIntent().getExtras().get("gcm.notification.chat_room_id").toString() , remoteMessage.getNotification().getBody(), true, m);
         }
 
         // Also if you intend on generating your own notifications as a result of a received FCM

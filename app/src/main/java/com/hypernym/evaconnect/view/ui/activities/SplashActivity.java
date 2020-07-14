@@ -1,17 +1,15 @@
 package com.hypernym.evaconnect.view.ui.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.hypernym.evaconnect.R;
-import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.onesignal.OneSignal;
 
@@ -19,12 +17,13 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity {
     public static final int RequestPermissionCode = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
         if(!Checkpermission())
         {
             requestpermission();
@@ -63,6 +62,10 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 if (LoginUtils.isUserLogin()) {
                     Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
+                    if(getIntent().getExtras()!=null)
+                    {
+                    intent.putExtra("chat_room_id",getIntent().getStringExtra("chat_room_id"));
+                    }
                     startActivity(intent);
                     finish();
                 } else {
