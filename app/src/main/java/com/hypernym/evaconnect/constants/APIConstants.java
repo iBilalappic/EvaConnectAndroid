@@ -1,7 +1,8 @@
 package com.hypernym.evaconnect.constants;
 
 public interface APIConstants {
-    public static String BASE_SERVER_URL="http://168.63.140.202:8003/eva/";
+    public static String BASE_SERVER_URL="http:/67.205.178.219:8000/eva/";
+   // public static String BASE_SERVER_URL="http://168.63.140.202:8003/eva/";
     public static String ONESINGAL_BASE_URL ="https://onesignal.com/";
     public static String SIGNUP="user/signup/";
     public static String LOGIN="user/login/";

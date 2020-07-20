@@ -8,11 +8,8 @@ import androidx.lifecycle.LiveData;
 
 import com.hypernym.evaconnect.models.AppliedApplicants;
 import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.MyLikesModel;
 import com.hypernym.evaconnect.repositories.IApplicantRepository;
-import com.hypernym.evaconnect.repositories.ILikeRepository;
 import com.hypernym.evaconnect.repositories.impl.ApplicantsRepository;
-import com.hypernym.evaconnect.repositories.impl.LikeRepository;
 
 import java.util.List;
 

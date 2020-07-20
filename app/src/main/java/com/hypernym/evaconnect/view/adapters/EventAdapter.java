@@ -55,7 +55,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                         holder.month.setText(DateUtils.extractMonth(events.get(position).getObject_details().getStart_date()));
                     holder.type.setText(events.get(position).getObject_type());
                     holder.type.setTextColor(context.getResources().getColor(R.color.red_2));
-
                     setDayTextWithSuperScript(holder, position);
                 }
 

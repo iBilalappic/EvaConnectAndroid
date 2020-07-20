@@ -75,13 +75,11 @@ public class BaseFragment extends Fragment {
     }
 
     public void showDialog() {
-
         if(customProgressBar != null && !customProgressBar.isShowing())
             customProgressBar.showProgress(getContext(),true);
     }
 
     public void hideDialog() {
-
         if(customProgressBar != null && customProgressBar.isShowing())
             customProgressBar.hideProgress();
     }

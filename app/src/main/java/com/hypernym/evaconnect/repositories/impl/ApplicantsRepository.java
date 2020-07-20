@@ -6,10 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.models.AppliedApplicants;
 import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.MyLikesModel;
 import com.hypernym.evaconnect.repositories.IApplicantRepository;
-import com.hypernym.evaconnect.repositories.ILikeRepository;
-import com.hypernym.evaconnect.viewmodel.AppliedApplicantViewModel;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +27,7 @@ public class ApplicantsRepository implements IApplicantRepository {
         RestClient.get().appApi().getApplicants(body).enqueue(new Callback<BaseModel<List<AppliedApplicants>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<AppliedApplicants>>> call, Response<BaseModel<List<AppliedApplicants>>> response) {
+
                 if (response.isSuccessful() && !response.body().isError())
                     ApplicantsMutableLiveData.setValue(response.body());
                 if (response.code() == 500) {

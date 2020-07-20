@@ -35,7 +35,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.constants.AppConstants;
@@ -144,7 +143,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference storageRef = storage.getReferenceFromUrl("gs://evaconnect-df08d.appspot.com");    //change the url according to your firebase app
+  //  StorageReference storageRef = storage.getReferenceFromUrl("gs://evaconnect-df08d.appspot.com");    //change the url according to your firebase app
 
 
     @Override
@@ -332,6 +331,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
             }
         });
+
     }
 
     private void settingFireBaseChat(NetworkConnection message) {
@@ -352,17 +352,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
         });
 
-
-
         DatabaseReference userRef = databaseReference.child(AppConstants.FIREASE_MESSAGES_ENDPOINT);
         DatabaseReference roomChats=userRef.child(message.getChatID());
 
-roomChats.addChildEventListener(new ChildEventListener() {
-    @Override
-    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        if (dataSnapshot.getValue() != null) {
-            //  networkConnectionList.clear();
-
+        roomChats.addChildEventListener(new ChildEventListener() {
+         @Override
+          public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+              if (dataSnapshot.getValue() != null) {
                 ChatMessage chatMessage =new ChatMessage();
                 chatMessage.setMessage(dataSnapshot.child("message").getValue().toString());
                 chatMessage.setName(dataSnapshot.child("name").getValue().toString());
@@ -603,11 +599,13 @@ roomChats.addChildEventListener(new ChildEventListener() {
                 receivermap.put("last_update_time", new Date().getTime());
                // receivermap.put("unread",true);
 
-              //  userRefByID.child("chats").child(key).setValue(map);
+                userRefByID.child("chats").child(key).setValue(map);
 
-              //  otheruserRefByID.child("chats").child(key).setValue(receivermap);
+                otheruserRefByID.child("chats").child(key).setValue(receivermap);
                 otheruserRefByID.child("name").setValue(user.getFirst_name());
                 otheruserRefByID.child("imageName").setValue(user.getUser_image());
+                networkConnection.setChatID(key);
+                settingFireBaseChat(networkConnection);
             }
             else
             {
@@ -629,10 +627,12 @@ roomChats.addChildEventListener(new ChildEventListener() {
                 receivermap.put("unread",true);
 
 
-                //otheruserRefByID.child("chats").child(user.getChatID()).setValue(receivermap);
-               // userRefByID.child("chats").child(user.getChatID()).setValue(map);
+                otheruserRefByID.child("chats").child(user.getChatID()).setValue(receivermap);
+               userRefByID.child("chats").child(user.getChatID()).setValue(map);
+                networkConnection.setChatID(user.getChatID());
 
             }
+
 //            ChatMessage chatMessage=new ChatMessage();
 //            chatMessage.setSenderID(LoginUtils.getLoggedinUser().getId().toString());
 //            chatMessage.setCreated_datetime(String.valueOf(new Date().getTime()));
@@ -644,6 +644,7 @@ roomChats.addChildEventListener(new ChildEventListener() {
 //            chatAdapter.notifyDataSetChanged();
 
           //  sendNotification(user.getEmail());
+
             messageArea.setText("");
             messageArea.requestFocus();
 
