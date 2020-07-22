@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.models.AccountCheck;
 import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.Stats;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IUserRespository;
 import com.hypernym.evaconnect.utils.DateUtils;
@@ -28,7 +29,7 @@ public class UserRepository implements IUserRespository {
     private MutableLiveData<BaseModel<List<User>>> facebookLoginMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> ProfileUpdateMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<String>>> SectorMutableLiveData = new MutableLiveData<>();
-
+    private MutableLiveData<BaseModel<List<Stats>>> statMutableLiveData = new MutableLiveData<>();
 
     @Override
     public LiveData<BaseModel<List<User>>> signup(User user, MultipartBody.Part partImage) {
@@ -152,6 +153,25 @@ public class UserRepository implements IUserRespository {
             }
         });
         return userMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<Stats>>> getUserStats() {
+        statMutableLiveData=new MutableLiveData<>();
+
+        RestClient.get().appApi().getUserStats(LoginUtils.getLoggedinUser().getId()).enqueue(new Callback<BaseModel<List<Stats>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Stats>>> call, Response<BaseModel<List<Stats>>> response) {
+                if (response.body() != null) {
+                    statMutableLiveData.setValue(response.body());
+                }
+            }
+            @Override
+            public void onFailure(Call<BaseModel<List<Stats>>> call, Throwable t) {
+                statMutableLiveData.setValue(null);
+            }
+        });
+        return statMutableLiveData;
     }
 
     @Override

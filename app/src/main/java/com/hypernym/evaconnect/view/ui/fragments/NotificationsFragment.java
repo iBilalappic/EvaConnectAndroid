@@ -71,7 +71,7 @@ public class NotificationsFragment extends BaseFragment implements Notifications
         initRecyclerView();
         showDialog();
         getAllNotifications();
-        //  readAllNotifications();
+        readAllNotifications();
         return view;
     }
     private void readAllNotifications() {

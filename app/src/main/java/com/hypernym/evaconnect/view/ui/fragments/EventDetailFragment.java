@@ -337,13 +337,19 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
     }
 
     private void addAttendance(Event event) {
-
+        event.setEvent_id(event_id);
+        event.setModified_by_id(LoginUtils.getLoggedinUser().getId());
+        event.setModified_datetime(DateUtils.GetCurrentdatetime());
+        event.setStatus(AppConstants.ACTIVE);
+        event.setUser_id(LoginUtils.getLoggedinUser().getId());
+        event.setAttendance_status("Going");
         eventViewModel.addEventAttendance(event).observe(this, new Observer<BaseModel<List<Event>>>() {
             @Override
             public void onChanged(BaseModel<List<Event>> listBaseModel) {
                 if(listBaseModel!=null && listBaseModel.getData()!=null)
                 {
-
+                    accept_invite.setVisibility(View.GONE);
+                    interested.setVisibility(View.VISIBLE);
                 }
                 else
                 {
@@ -362,8 +368,16 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
     @OnClick(R.id.accept_invite)
     public void accept_invite()
     {
+       // updateAttendance(event);
+        if(event.getIs_private()==0)
+        {
+            addAttendance(event);
+        }
+        else
+        {
+            updateAttendance(event);
+        }
 
-        updateAttendance(event);
     }
 
     @Override

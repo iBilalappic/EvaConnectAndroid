@@ -19,6 +19,7 @@ import com.hypernym.evaconnect.models.Notification_onesignal;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.ShareConnection;
 import com.hypernym.evaconnect.models.SpecficJobAd;
+import com.hypernym.evaconnect.models.Stats;
 import com.hypernym.evaconnect.models.User;
 
 import java.util.HashMap;
@@ -360,4 +361,7 @@ public interface AppApi {
 
     @PATCH(APIConstants.USER_ONLINE)
     Call<BaseModel<List<User>>> userOnline(@Path("id") int id,@Body HashMap<String,Object> user);
+
+    @GET(APIConstants.USER_STATS)
+    Call<BaseModel<List<Stats>>> getUserStats(@Path("id") int id);
 }

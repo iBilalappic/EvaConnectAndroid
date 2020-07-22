@@ -106,6 +106,7 @@
             android:drawablePadding="8dp"
             android:backgroundTint="#F6F6F6"
             android:textSize="14sp"
+            android:focusable="false"
             android:textAppearance="@style/TextAppearance.Text.Regular"
             app:layout_constraintEnd_toStartOf="@id/tv_endTime"
             app:layout_constraintStart_toStartOf="@id/tv_startdate"

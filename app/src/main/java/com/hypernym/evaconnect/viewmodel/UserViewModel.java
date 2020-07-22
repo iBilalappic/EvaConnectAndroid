@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 
 import com.hypernym.evaconnect.models.AccountCheck;
 import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.Stats;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IUserRespository;
 import com.hypernym.evaconnect.repositories.impl.UserRepository;
@@ -82,5 +83,10 @@ public class UserViewModel extends AndroidViewModel {
     public LiveData<BaseModel<List<User>>> userOnline(boolean isactive)
     {
         return iUserRespository.userOnline(isactive);
+    }
+
+    public LiveData<BaseModel<List<Stats>>> getUserStats()
+    {
+        return iUserRespository.getUserStats();
     }
 }

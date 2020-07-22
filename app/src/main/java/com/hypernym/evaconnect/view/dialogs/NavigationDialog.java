@@ -18,11 +18,11 @@ import androidx.fragment.app.FragmentTransaction;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.Stats;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
-import com.hypernym.evaconnect.utils.PrefUtils;
 import com.hypernym.evaconnect.view.ui.fragments.ActivityFragment;
 import com.hypernym.evaconnect.view.ui.fragments.CalendarFragment;
 import com.hypernym.evaconnect.view.ui.fragments.JobListingFragment;
@@ -76,7 +76,7 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
         mJoblisting=findViewById(R.id.joblisting);
         calendar = findViewById(R.id.calendar);
         myactivity = findViewById(R.id.layout_myactivity);
-           mJoblisting.setOnClickListener(this);
+        mJoblisting.setOnClickListener(this);
         // mLike.setOnClickListener(this);
         setCanceledOnTouchOutside(true);
         setCancelable(true);
@@ -90,7 +90,7 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
         window.setLayout(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
         this.getWindow().setAttributes(params);
         getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
+        gettingUserStats();
         SettingUserData();
 
         img_close.setOnClickListener(new View.OnClickListener() {
@@ -163,6 +163,26 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
         });
     }
 
+    private void gettingUserStats() {
+
+        RestClient.get().appApi().getUserStats(LoginUtils.getLoggedinUser().getId()).enqueue(new Callback<BaseModel<List<Stats>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Stats>>> call, Response<BaseModel<List<Stats>>> response) {
+                if(response.body()!=null)
+                {
+                    tv_connections_count.setText(String.valueOf(response.body().getData().get(0).getConnection_count()));
+                    tv_notication_count.setText(String.valueOf(response.body().getData().get(0).getNotification_count()));
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Stats>>> call, Throwable t) {
+
+            }
+        });
+    }
+
     private void SettingUserData() {
         if (user != null && user.getType().equals("company")) {
             tv_calender_event.setText("Calendar and Events");
@@ -176,8 +196,7 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
         tv_designation.setText(user.getDesignation());
         tv_company.setText(user.getCompany_name());
         tv_location.setText(user.getCountry() + "," + user.getCity());
-        tv_connections_count.setText(String.valueOf(user.getConnection_count()));
-        tv_notication_count.setText(String.valueOf(PrefUtils.getMessageCount(getContext())));
+
         if (user.getIs_linkedin() == 1 && !TextUtils.isEmpty(user.getLinkedin_image_url())) {
             AppUtils.setGlideImage(getContext(), profile_image, user.getLinkedin_image_url());
 

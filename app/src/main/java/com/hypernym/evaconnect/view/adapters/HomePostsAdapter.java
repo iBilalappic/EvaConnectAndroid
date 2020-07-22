@@ -84,6 +84,15 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.view6)
         View top_image;
 
+        @BindView(R.id.tv_designation)
+        TextView tv_designation;
+
+        @BindView(R.id.tv_company)
+        TextView tv_company;
+
+        @BindView(R.id.tv_connect)
+        TextView tv_connect;
+
         public TextTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -170,6 +179,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.tv_eventdate)
         TextView tv_eventdate;
 
+
         public EventTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -252,6 +262,8 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
         @BindView(R.id.view6)
         View top_image;
+
+
 
         public JobTypeViewHolder(View itemView) {
             super(itemView);
@@ -362,6 +374,15 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.post_image)
         ImageView post_image;
 
+        @BindView(R.id.tv_designation)
+        TextView tv_designation;
+
+        @BindView(R.id.tv_company)
+        TextView tv_company;
+
+        @BindView(R.id.tv_connect)
+        TextView tv_connect;
+
 
         public ImageTypeViewHolder(View itemView) {
             super(itemView);
@@ -467,6 +488,16 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.view6)
         View top_image;
 
+        @BindView(R.id.tv_designation)
+        TextView tv_designation;
+
+        @BindView(R.id.tv_company)
+        TextView tv_company;
+
+        @BindView(R.id.tv_connect)
+        TextView tv_connect;
+
+
 
         public VideoTypeViewHolder(View itemView) {
             super(itemView);
@@ -567,6 +598,16 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
         @BindView(R.id.link)
         TextView link;
+
+        @BindView(R.id.tv_designation)
+        TextView tv_designation;
+
+        @BindView(R.id.tv_company)
+        TextView tv_company;
+
+        @BindView(R.id.tv_connect)
+        TextView tv_connect;
+
 
         public LinkTypeViewHolder(View itemView) {
             super(itemView);
@@ -845,7 +886,28 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     } else {
                         ((TextTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
+                    ((TextTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name() +" at ");
+                    ((TextTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation());
+                    if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
+                        ((TextTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
+                    } else {
+                        ((TextTypeViewHolder) holder).tv_connect.setVisibility(View.VISIBLE);
+                        String connectionstatus = AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver());
+                        ((TextTypeViewHolder) holder).tv_connect.setText(AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver()));
+                        if (connectionstatus.equals(AppConstants.REQUEST_ACCEPT)) {
+                            ((TextTypeViewHolder) holder).tv_connect.setBackgroundResource(R.drawable.rounded_button_border_green);
+                            ((TextTypeViewHolder) holder).tv_connect.setTextColor(mContext.getResources().getColor(R.color.light_green));
+                            //  holder.tv_decline.setVisibility(View.VISIBLE);
+                        } else {
+                            //  holder.tv_decline.setVisibility(View.GONE);
+                            ((TextTypeViewHolder) holder).tv_connect.setBackgroundResource(R.drawable.rounded_button_border_blue);
+                            ((TextTypeViewHolder) holder).tv_connect.setTextColor(mContext.getResources().getColor(R.color.skyblue));
+                        }
+                        if (connectionstatus.equals(AppConstants.CONNECTED)) {
+                            // holder.tv_decline.setVisibility(View.GONE);
+                        }
 
+                    }
                     break;
                 case AppConstants.IMAGE_TYPE:
                     if (String.valueOf(posts.get(position).getComment_count()).equals("0")) {
@@ -889,6 +951,27 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         ((ImageTypeViewHolder) holder).top_image.setVisibility(View.GONE);
                     } else {
                         ((ImageTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
+                    }
+                    ((ImageTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name() +" at ");
+                    ((ImageTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation());
+
+                    if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
+                        ((ImageTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
+                    } else {
+                        ((ImageTypeViewHolder) holder).tv_connect.setVisibility(View.VISIBLE);
+                        String connectionstatus = AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver());
+                        ((ImageTypeViewHolder) holder).tv_connect.setText(AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver()));
+                        if (connectionstatus.equals(AppConstants.REQUEST_ACCEPT)) {
+                            ((ImageTypeViewHolder) holder).tv_connect.setBackgroundResource(R.drawable.rounded_button_border_green);
+                            ((ImageTypeViewHolder) holder).tv_connect.setTextColor(mContext.getResources().getColor(R.color.light_green));
+                            //  holder.tv_decline.setVisibility(View.VISIBLE);
+                        } else {
+                            //  holder.tv_decline.setVisibility(View.GONE);
+                            ((ImageTypeViewHolder) holder).tv_connect.setBackgroundResource(R.drawable.rounded_button_border_blue);
+                            ((ImageTypeViewHolder) holder).tv_connect.setTextColor(mContext.getResources().getColor(R.color.skyblue));
+                        }
+
+
                     }
                     break;
                 case AppConstants.EVENT_TYPE:
@@ -987,6 +1070,25 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         ((VideoTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
                     AppUtils.setGlideVideoThumbnail(mContext, ((VideoTypeViewHolder) holder).img_video, posts.get(position).getPost_video());
+                    ((VideoTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name() +" at ");
+                    ((VideoTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation());
+
+                    if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
+                        ((VideoTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
+                    } else {
+                        ((VideoTypeViewHolder) holder).tv_connect.setVisibility(View.VISIBLE);
+                        String connectionstatus = AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver());
+                        ((VideoTypeViewHolder) holder).tv_connect.setText(AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver()));
+                        if (connectionstatus.equals(AppConstants.REQUEST_ACCEPT)) {
+                            ((VideoTypeViewHolder) holder).tv_connect.setBackgroundResource(R.drawable.rounded_button_border_green);
+                            ((VideoTypeViewHolder) holder).tv_connect.setTextColor(mContext.getResources().getColor(R.color.light_green));
+                            //  holder.tv_decline.setVisibility(View.VISIBLE);
+                        } else {
+                            //  holder.tv_decline.setVisibility(View.GONE);
+                            ((VideoTypeViewHolder) holder).tv_connect.setBackgroundResource(R.drawable.rounded_button_border_blue);
+                            ((VideoTypeViewHolder) holder).tv_connect.setTextColor(mContext.getResources().getColor(R.color.skyblue));
+                        }
+                    }
                     break;
                 case AppConstants.LINK_POST:
                     if (String.valueOf(posts.get(position).getComment_count()).equals("0")) {
@@ -1037,7 +1139,25 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     } else {
                         ((LinkTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
+                    ((LinkTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name() +" at ");
+                    ((LinkTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation());
 
+                    if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
+                        ((LinkTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
+                    } else {
+                        ((LinkTypeViewHolder) holder).tv_connect.setVisibility(View.VISIBLE);
+                        String connectionstatus = AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver());
+                        ((LinkTypeViewHolder) holder).tv_connect.setText(AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver()));
+                        if (connectionstatus.equals(AppConstants.REQUEST_ACCEPT)) {
+                            ((LinkTypeViewHolder) holder).tv_connect.setBackgroundResource(R.drawable.rounded_button_border_green);
+                            ((LinkTypeViewHolder) holder).tv_connect.setTextColor(mContext.getResources().getColor(R.color.light_green));
+                            //  holder.tv_decline.setVisibility(View.VISIBLE);
+                        } else {
+                            //  holder.tv_decline.setVisibility(View.GONE);
+                            ((LinkTypeViewHolder) holder).tv_connect.setBackgroundResource(R.drawable.rounded_button_border_blue);
+                            ((LinkTypeViewHolder) holder).tv_connect.setTextColor(mContext.getResources().getColor(R.color.skyblue));
+                        }
+                    }
                     break;
 
                 case AppConstants.NEWS_TYPE:

@@ -60,7 +60,6 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
             holder.tv_designation.setText("--");
         }
 
-
         //Hide connect option if post is from logged in user
         User user = LoginUtils.getLoggedinUser();
         if (connections.get(position).getId().equals(user.getId())) {

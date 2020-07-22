@@ -134,7 +134,10 @@ public class ShareConnectionFragment extends BaseFragment implements ShareConnec
             @Override
             public void onChanged(BaseModel<List<Object>> listBaseModel) {
                 if (listBaseModel.getData() != null && !listBaseModel.isError()) {
-                    Toast.makeText(getContext(), "successfully shared with desired connection", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Successfully shared with desired connection", Toast.LENGTH_SHORT).show();
+                    if (getFragmentManager().getBackStackEntryCount() != 0) {
+                        getFragmentManager().popBackStack();
+                    }
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
@@ -154,7 +157,10 @@ public class ShareConnectionFragment extends BaseFragment implements ShareConnec
             @Override
             public void onChanged(BaseModel<List<Object>> listBaseModel) {
                 if (listBaseModel.getData() != null && !listBaseModel.isError()) {
-                    Toast.makeText(getContext(), "successfully shared with desired connection", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Successfully shared with desired connection", Toast.LENGTH_SHORT).show();
+                    if (getFragmentManager().getBackStackEntryCount() != 0) {
+                        getFragmentManager().popBackStack();
+                    }
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
@@ -174,7 +180,10 @@ public class ShareConnectionFragment extends BaseFragment implements ShareConnec
             @Override
             public void onChanged(BaseModel<List<Object>> listBaseModel) {
                 if (listBaseModel.getData() != null && !listBaseModel.isError()) {
-                    Toast.makeText(getContext(), "successfully shared with desired connection", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Successfully shared with desired connection", Toast.LENGTH_SHORT).show();
+                    if (getFragmentManager().getBackStackEntryCount() != 0) {
+                        getFragmentManager().popBackStack();
+                    }
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }

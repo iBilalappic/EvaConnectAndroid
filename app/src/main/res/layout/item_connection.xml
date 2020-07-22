@@ -111,13 +111,15 @@
         <TextView
             android:id="@+id/tv_connection_status"
             style="@style/TextAppearance.Text.Regular"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
+            android:layout_marginEnd="8dp"
             android:ellipsize="end"
             android:maxLines="2"
             android:text="-"
             android:textSize="10sp"
+            app:layout_constraintEnd_toStartOf="@+id/tv_connect"
             app:layout_constraintStart_toEndOf="@+id/profile_image"
             app:layout_constraintTop_toBottomOf="@+id/tv_field" />
     </androidx.constraintlayout.widget.ConstraintLayout>

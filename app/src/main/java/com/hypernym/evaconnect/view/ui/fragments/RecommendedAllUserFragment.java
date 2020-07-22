@@ -7,8 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -35,6 +35,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
 
@@ -48,6 +49,9 @@ public class RecommendedAllUserFragment extends BaseFragment implements Connecti
 
     @BindView(R.id.empty)
     TextView empty;
+
+    @BindView(R.id.img_backarrow)
+    ImageView img_backarrow;
 
 
     @BindView(R.id.swipeRefresh)
@@ -188,6 +192,13 @@ public class RecommendedAllUserFragment extends BaseFragment implements Connecti
         });
     }
 
+    @OnClick(R.id.img_backarrow)
+    public void backarrow()
+    {
+        if (getFragmentManager().getBackStackEntryCount() != 0) {
+            getFragmentManager().popBackStack();
+        }
+    }
     @Override
     public void onItemClick(View view, int position) {
         if (NetworkUtils.isNetworkConnected(getContext())) {
