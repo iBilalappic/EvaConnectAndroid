@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -78,6 +79,15 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
         @BindView(R.id.view6)
         View top_image;
 
+        @BindView(R.id.comment_click)
+        LinearLayout comment_click;
+
+        @BindView(R.id.like_click)
+        LinearLayout like_click;
+
+        @BindView(R.id.share_click)
+        LinearLayout share_click;
+
         public JobTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -87,19 +97,19 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
                     //  mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
-            img_like.setOnClickListener(new OnOneOffClickListener() {
+            like_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onJobLikeClick(v, getAdapterPosition(), tv_likecount);
                 }
             });
-            img_comment.setOnClickListener(new OnOneOffClickListener() {
+            comment_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     // mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
-            img_share.setOnClickListener(new OnOneOffClickListener() {
+            share_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onShareClick(v, getAdapterPosition());

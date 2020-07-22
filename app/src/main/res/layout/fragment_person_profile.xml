@@ -132,7 +132,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="76dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="@color/white">
 
@@ -140,10 +140,11 @@
             <TextView
                 android:id="@+id/tv_connections_count"
                 style="@style/TextStyle"
-                android:layout_width="43dp"
-                android:layout_height="42dp"
-                android:layout_marginTop="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:fontFamily="@font/nunitosansbold"
+                android:gravity="center"
                 android:text="457"
                 android:textColor="@color/black"
                 android:textSize="20sp"
@@ -157,11 +158,13 @@
                 style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/nunitosansbold"
                 android:text="Connections"
                 android:textColor="@color/gray"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                android:fontFamily="@font/nunitosansbold"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_connections_count" />

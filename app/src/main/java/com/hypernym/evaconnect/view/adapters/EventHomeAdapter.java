@@ -91,6 +91,11 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
         @BindView(R.id.tv_eventdate)
         TextView tv_eventdate;
 
+        @BindView(R.id.post_detail)
+        TextView post_detail;
+
+
+
         public EventTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -236,9 +241,9 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
                     }
 
                     ((EventHomeAdapter.EventTypeViewHolder) holder).tv_name.setText(posts.get(position).getName());
-                    ((EventHomeAdapter.EventTypeViewHolder) holder).tv_location.setText(posts.get(position).getEvent_city());
+                    ((EventHomeAdapter.EventTypeViewHolder) holder).tv_location.setText(posts.get(position).getAddress());
                     ((EventHomeAdapter.EventTypeViewHolder) holder).tv_eventdate.setText(DateUtils.getFormattedDateDMY(posts.get(position).getStart_date()));
-
+                    ((EventTypeViewHolder) holder).post_detail.setText(posts.get(position).getContent());
                     if (position == 0) {
                         ((EventHomeAdapter.EventTypeViewHolder) holder).top_image.setVisibility(View.GONE);
                     } else {

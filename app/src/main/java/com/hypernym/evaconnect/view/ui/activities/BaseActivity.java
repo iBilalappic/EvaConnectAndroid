@@ -23,6 +23,8 @@ import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.view.dialogs.CustomProgressBar;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
+import com.hypernym.evaconnect.view.ui.fragments.ActivityFragment;
+import com.hypernym.evaconnect.view.ui.fragments.MainViewPagerFragment;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 
 import java.util.List;
@@ -88,6 +90,10 @@ public class BaseActivity extends AppCompatActivity  {
         FragmentTransaction transaction =((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
    //     transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
         transaction.replace(id, fragment);
+        findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
+        if (fragment instanceof MainViewPagerFragment || fragment instanceof ActivityFragment) {
+            findViewById(R.id.seprator_line).setVisibility(View.GONE);
+        }
         if(isBack)
         {
             transaction.addToBackStack(null);

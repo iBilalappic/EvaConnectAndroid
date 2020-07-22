@@ -39,6 +39,7 @@ public class MainViewPagerFragment extends BaseFragment implements FloatingActio
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_viewpager, container, false);
         ButterKnife.bind(this,view);
+
         hideBackButton();
         sectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
         mViewPager = (ViewPager) view.findViewById(R.id.container);

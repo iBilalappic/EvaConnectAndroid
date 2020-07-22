@@ -69,6 +69,7 @@ public class JobListingFragment extends BaseFragment implements View.OnClickList
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_joblisting, container, false);
+        getActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
         setPageTitle(getString(R.string.joblist));
         ButterKnife.bind(this, view);
         newjobAd.setOnClickListener(this);

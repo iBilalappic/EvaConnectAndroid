@@ -1,7 +1,6 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 
-import android.app.Application;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -100,6 +99,7 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_calendar, container, false);
         ButterKnife.bind(this,view);
+        getActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
         init();
         return view;
     }

@@ -57,10 +57,6 @@ public class RecommendedAllUserFragment extends BaseFragment implements Connecti
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
 
-    @BindView(R.id.img_backarrow)
-    ImageView img_backarrow;
-
-
     private ConnectionsAdapter connectionsAdapter;
     private List<User> connectionList = new ArrayList<>();
 

@@ -34,6 +34,7 @@ public class ActivityFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_activity, container, false);
         sectionsPagerAdapter = new ActivityFragment.SectionsPagerAdapter(getChildFragmentManager());
+        getActivity().findViewById(R.id.seprator_line).setVisibility(View.GONE);
         mViewPager = (ViewPager) view.findViewById(R.id.container);
         mViewPager.setAdapter(sectionsPagerAdapter);
         if(getArguments()!=null && getArguments().getBoolean("isNotification"))

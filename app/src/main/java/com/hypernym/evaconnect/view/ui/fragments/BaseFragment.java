@@ -120,6 +120,10 @@ public class BaseFragment extends Fragment {
         FragmentTransaction transaction =((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
         transaction.replace(id, fragment);
+        getActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
+        if (fragment instanceof MainViewPagerFragment || fragment instanceof ActivityFragment) {
+            getActivity().findViewById(R.id.seprator_line).setVisibility(View.GONE);
+        }
         if(isBack)
         {
             transaction.addToBackStack(null);
@@ -134,8 +138,15 @@ public class BaseFragment extends Fragment {
         transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
 
         fragment.setArguments(bundle);
-
+        getActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
+        if (fragment instanceof MainViewPagerFragment || fragment instanceof ActivityFragment) {
+            getActivity().findViewById(R.id.seprator_line).setVisibility(View.GONE);
+        }
         transaction.replace(id, fragment);
+        getActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
+        if (fragment instanceof MainViewPagerFragment) {
+            getActivity().findViewById(R.id.seprator_line).setVisibility(View.GONE);
+        }
         if(isBack)
         {
             transaction.addToBackStack(null);

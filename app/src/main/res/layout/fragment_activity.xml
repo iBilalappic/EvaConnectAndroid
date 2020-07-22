@@ -6,18 +6,18 @@
 
 
     <com.google.android.material.tabs.TabLayout
-        style="@style/TextStyle"
         android:id="@+id/tabLayout"
+        style="@style/TextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@color/lighter_gray_1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/lighter_gray_1"
         app:tabIndicatorColor="@color/white"
-        app:tabTextAppearance="@style/CustomTextAppearanceTab"
         app:tabSelectedTextColor="@color/skyblue"
-        app:tabTextColor="@color/gray"/>
+        app:tabTextAppearance="@style/CustomTextAppearanceTab"
+        app:tabTextColor="@color/gray" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/container"
@@ -26,6 +26,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
+
+    <View
+        android:id="@+id/seprator_line"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@drawable/ic_blue_red"
+        app:layout_constraintBottom_toTopOf="@+id/tv_back"
         app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
 
 

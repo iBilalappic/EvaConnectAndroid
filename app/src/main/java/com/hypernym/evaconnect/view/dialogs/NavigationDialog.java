@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -13,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -166,6 +164,7 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
                 transaction.replace(R.id.framelayout, new CalendarFragment());
                 transaction.addToBackStack(null);
                 transaction.commit();
+
             }
         });
     }

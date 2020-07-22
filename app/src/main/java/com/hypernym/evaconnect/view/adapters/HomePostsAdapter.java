@@ -199,6 +199,12 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.tv_eventdate)
         TextView tv_eventdate;
 
+        @BindView(R.id.post_image)
+        ImageView post_image;
+
+        @BindView(R.id.post_detail)
+        TextView post_detail;
+
 
 
         public EventTypeViewHolder(View itemView) {
@@ -262,7 +268,6 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
         @BindView(R.id.img_like)
         ImageView img_like;
-
 
         @BindView(R.id.img_comment)
         ImageView img_comment;
@@ -1059,14 +1064,16 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     }
                     if (posts.get(position).getEvent_image().size() > 0) {
                         AppUtils.setGlideVideoThumbnail(mContext, ((EventTypeViewHolder) holder).profile_image, posts.get(position).getEvent_image().get(0));
+                        AppUtils.setGlideVideoThumbnail(mContext, ((EventTypeViewHolder) holder).post_image, posts.get(position).getEvent_image().get(0));
                     } else {
                         ((EventTypeViewHolder) holder).profile_image.setBackground(mContext.getDrawable(R.drawable.no_thumbnail));
+                        ((EventTypeViewHolder) holder).post_image.setBackground(mContext.getDrawable(R.drawable.no_thumbnail));
                     }
 
                     ((EventTypeViewHolder) holder).tv_name.setText(posts.get(position).getName());
-                    ((EventTypeViewHolder) holder).tv_location.setText(posts.get(position).getEvent_city());
+                    ((EventTypeViewHolder) holder).tv_location.setText(posts.get(position).getAddress());
                     ((EventTypeViewHolder) holder).tv_eventdate.setText(DateUtils.getFormattedDateDMY(posts.get(position).getStart_date()));
-
+                    ((EventTypeViewHolder) holder).post_detail.setText(posts.get(position).getContent());
                     if (position == 0) {
                         ((EventTypeViewHolder) holder).top_image.setVisibility(View.GONE);
                     } else {
