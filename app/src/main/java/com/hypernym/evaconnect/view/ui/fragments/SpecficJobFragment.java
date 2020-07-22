@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -78,6 +79,15 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
     @BindView(R.id.img_share)
     ImageView img_share;
 
+    @BindView(R.id.like_click)
+    LinearLayout like_click;
+
+    @BindView(R.id.comment_click)
+    LinearLayout comment_click;
+
+    @BindView(R.id.share_click)
+    LinearLayout share_click;
+
     int job_id;
     JobAd jobAd = new JobAd();
     SpecficJobAd specficJobAd=new SpecficJobAd();
@@ -98,6 +108,9 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
         img_backarrow.setOnClickListener(this);
         img_like.setOnClickListener(this);
         img_share.setOnClickListener(this);
+        like_click.setOnClickListener(this);
+        share_click.setOnClickListener(this);
+        comment_click.setOnClickListener(this);
         return view;
     }
 
@@ -196,14 +209,14 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
             case R.id.img_backarrow:
                 getActivity().onBackPressed();
                 break;
-            case R.id.img_like:
+            case R.id.like_click:
                 if (checkLikeCount != null && checkLikeCount.getIsJobLike() > 0) {
                     SetJobUnLike(checkLikeCount.getId());
                 } else {
                     SetJobLike(checkLikeCount.getId());
                 }
                 break;
-            case R.id.img_share:
+            case R.id.share_click:
                 ShareDialog shareDialog;
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("specficJob",specficJobAd);

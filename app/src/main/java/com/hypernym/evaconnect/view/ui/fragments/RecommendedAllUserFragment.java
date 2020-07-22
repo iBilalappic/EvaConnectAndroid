@@ -57,6 +57,9 @@ public class RecommendedAllUserFragment extends BaseFragment implements Connecti
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
 
+    @BindView(R.id.img_backarrow)
+    ImageView img_backarrow;
+
 
     private ConnectionsAdapter connectionsAdapter;
     private List<User> connectionList = new ArrayList<>();
@@ -92,6 +95,8 @@ public class RecommendedAllUserFragment extends BaseFragment implements Connecti
 
         freshpage = 0;
         swipeRefresh.setOnRefreshListener(this);
+
+
         initRecyclerView();
         setPageTitle(getString(R.string.connections));
         if (NetworkUtils.isNetworkConnected(getContext())) {
@@ -101,6 +106,7 @@ public class RecommendedAllUserFragment extends BaseFragment implements Connecti
         }
         edt_search.addTextChangedListener(new TextWatcher());
         return view;
+
     }
 
 
