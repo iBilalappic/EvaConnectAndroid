@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,6 +30,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class HomePostsAdapter extends RecyclerView.Adapter {
 
@@ -84,6 +86,15 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.view6)
         View top_image;
 
+        @BindView(R.id.comment_click)
+        LinearLayout comment_click;
+
+        @BindView(R.id.share_click)
+        LinearLayout share_click;
+
+        @BindView(R.id.like_click)
+        LinearLayout like_click;
+
         public TextTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -93,19 +104,19 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
-            img_like.setOnClickListener(new OnOneOffClickListener() {
+            like_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
                 }
             });
-            img_comment.setOnClickListener(new OnOneOffClickListener() {
+            comment_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
-            img_share.setOnClickListener(new OnOneOffClickListener() {
+            share_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onShareClick(v, getAdapterPosition());
@@ -146,11 +157,21 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.img_like)
         ImageView img_like;
 
+        @BindView(R.id.like_click)
+        LinearLayout like_click;
+
+
         @BindView(R.id.img_comment)
         ImageView img_comment;
 
+        @BindView(R.id.comment_click)
+        LinearLayout comment_click;
+
         @BindView(R.id.img_share)
         ImageView img_share;
+
+        @BindView(R.id.share_click)
+        LinearLayout share_click;
 
         @BindView(R.id.tv_name)
         TextView tv_name;
@@ -170,6 +191,8 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.tv_eventdate)
         TextView tv_eventdate;
 
+
+
         public EventTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -186,19 +209,19 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     mClickListener.onEventItemClick(v, getAdapterPosition());
                 }
             });
-            img_like.setOnClickListener(new OnOneOffClickListener() {
+            like_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onEventLikeClick(v, getAdapterPosition(), tv_likecount);
                 }
             });
-            img_comment.setOnClickListener(new OnOneOffClickListener() {
+            comment_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onEventItemClick(v, getAdapterPosition());
                 }
             });
-            img_share.setOnClickListener(new OnOneOffClickListener() {
+            share_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                      mClickListener.onShareClick(v, getAdapterPosition());
@@ -232,11 +255,24 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.img_like)
         ImageView img_like;
 
+
         @BindView(R.id.img_comment)
         ImageView img_comment;
 
+        @BindView(R.id.comment_click)
+        LinearLayout comment_click;
+
+        @BindView(R.id.share_click)
+        LinearLayout share_click;
+
+        @BindView(R.id.like_click)
+        LinearLayout like_click;
+
+
         @BindView(R.id.img_share)
         ImageView img_share;
+
+
 
         @BindView(R.id.tv_name)
         TextView tv_name;
@@ -253,6 +289,8 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.view6)
         View top_image;
 
+
+
         public JobTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -262,19 +300,19 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     //  mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
-            img_like.setOnClickListener(new OnOneOffClickListener() {
+            like_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onJobLikeClick(v, getAdapterPosition(), tv_likecount);
                 }
             });
-            img_comment.setOnClickListener(new OnOneOffClickListener() {
+            comment_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     // mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
-            img_share.setOnClickListener(new OnOneOffClickListener() {
+            share_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                      mClickListener.onShareClick(v, getAdapterPosition());
@@ -363,6 +401,16 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         ImageView post_image;
 
 
+        @BindView(R.id.comment_click)
+        LinearLayout comment_click;
+
+        @BindView(R.id.share_click)
+        LinearLayout share_click;
+
+        @BindView(R.id.like_click)
+        LinearLayout like_click;
+
+
         public ImageTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -372,19 +420,21 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
-            img_like.setOnClickListener(new OnOneOffClickListener() {
+
+
+            like_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
                 }
             });
-            img_comment.setOnClickListener(new OnOneOffClickListener() {
+            comment_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
-            img_share.setOnClickListener(new OnOneOffClickListener() {
+            share_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onShareClick(v, getAdapterPosition());
@@ -467,6 +517,15 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.view6)
         View top_image;
 
+        @BindView(R.id.like_click)
+        LinearLayout like_click;
+
+        @BindView(R.id.comment_click)
+        LinearLayout comment_click;
+
+        @BindView(R.id.share_click)
+        LinearLayout share_click;
+
 
         public VideoTypeViewHolder(View itemView) {
             super(itemView);
@@ -477,19 +536,19 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
-            img_like.setOnClickListener(new OnOneOffClickListener() {
+            like_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
                 }
             });
-            img_comment.setOnClickListener(new OnOneOffClickListener() {
+            comment_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
-            img_share.setOnClickListener(new OnOneOffClickListener() {
+            share_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onShareClick(v, getAdapterPosition());
@@ -568,6 +627,15 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.link)
         TextView link;
 
+        @BindView(R.id.comment_click)
+        LinearLayout comment_click;
+
+        @BindView(R.id.share_click)
+        LinearLayout share_click;
+
+        @BindView(R.id.like_click)
+        LinearLayout like_click;
+
         public LinkTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -577,19 +645,19 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
-            img_like.setOnClickListener(new OnOneOffClickListener() {
+            like_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
                 }
             });
-            img_comment.setOnClickListener(new OnOneOffClickListener() {
+            comment_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
-            img_share.setOnClickListener(new OnOneOffClickListener() {
+            share_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onShareClick(v, getAdapterPosition());
@@ -678,6 +746,15 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.tv_visit)
         TextView tv_visit;
 
+        @BindView(R.id.comment_click)
+        LinearLayout comment_click;
+
+        @BindView(R.id.share_click)
+        LinearLayout share_click;
+
+        @BindView(R.id.like_click)
+        LinearLayout like_click;
+
 
         public NewsTypeViewHolder(View itemView) {
             super(itemView);
@@ -688,19 +765,19 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
-            img_like.setOnClickListener(new OnOneOffClickListener() {
+            like_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onNewsLikeClick(v, getAdapterPosition(), tv_likecount);
                 }
             });
-            img_comment.setOnClickListener(new OnOneOffClickListener() {
+            comment_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
-            img_share.setOnClickListener(new OnOneOffClickListener() {
+            share_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onShareClick(v, getAdapterPosition());

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
 
@@ -52,6 +54,9 @@ public class RecommendedAllUserFragment extends BaseFragment implements Connecti
 
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
+
+    @BindView(R.id.img_backarrow)
+    ImageView img_backarrow;
 
 
     private ConnectionsAdapter connectionsAdapter;
@@ -88,6 +93,8 @@ public class RecommendedAllUserFragment extends BaseFragment implements Connecti
 
         freshpage = 0;
         swipeRefresh.setOnRefreshListener(this);
+
+
         initRecyclerView();
         setPageTitle(getString(R.string.connections));
         if (NetworkUtils.isNetworkConnected(getContext())) {
@@ -97,6 +104,7 @@ public class RecommendedAllUserFragment extends BaseFragment implements Connecti
         }
         edt_search.addTextChangedListener(new TextWatcher());
         return view;
+
     }
 
 

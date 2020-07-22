@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -77,7 +78,6 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
     @BindView(R.id.img_user)
     ImageView img_user;
 
-
     @BindView(R.id.btn_addcomment)
     ImageView btn_addcomment;
 
@@ -111,6 +111,15 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
 
     @BindView(R.id.register)
     ImageButton register;
+
+    @BindView(R.id.like_click)
+    LinearLayout like_click;
+
+    @BindView(R.id.comment_click)
+    LinearLayout comment_click;
+
+    @BindView(R.id.share_click)
+    LinearLayout share_click;
 
     private List<Comment> comments=new ArrayList<>();
     private List<EventAttendees> eventAttendees=new ArrayList<>();
@@ -163,7 +172,8 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
              networkErrorDialog();
          }
             setPageTitle("Event Details");
-        img_like.setOnClickListener(new OnOneOffClickListener() {
+
+        like_click.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
                 //   showDialog();

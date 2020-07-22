@@ -56,6 +56,8 @@
 <!--                    android:host="gizmos"-->
 <!--                    android:scheme="example" />-->
 <!--            </intent-filter>-->
+
+<!--            android:windowSoftInputMode="stateHidden|adjustPan"-->
         </activity>
         <activity
             android:name=".view.ui.activities.ForgotPassword"
@@ -66,37 +68,39 @@
         <activity
             android:name=".view.ui.activities.LoginActivity"
             android:theme="@style/AppTheme.FullScreen"
-            android:windowSoftInputMode="stateHidden|adjustPan">
+           >
 
         </activity>
 
         <activity
             android:name=".view.ui.activities.CreateAccount_1_Activity"
             android:theme="@style/AppTheme.FullScreen"
-            android:windowSoftInputMode="stateHidden|adjustPan">
+
+
+            >
         </activity>
 
         <activity
             android:name=".view.ui.activities.CreateAccount_2_Activity"
             android:theme="@style/AppTheme.FullScreen"
-            android:windowSoftInputMode="stateHidden|adjustPan">
+            >
         </activity>
         <activity
             android:name=".view.ui.activities.CreateAccount_4_Activity"
             android:theme="@style/AppTheme.FullScreen"
-            android:windowSoftInputMode="stateHidden|adjustPan">
+            >
         </activity>
 
         <activity
             android:name=".view.ui.activities.NewsActivity"
             android:theme="@style/AppTheme.FullScreen"
-            android:windowSoftInputMode="stateHidden|adjustPan">
+           >
         </activity>
 
         <activity
             android:name=".view.ui.activities.PasswordActivity"
             android:theme="@style/AppTheme.FullScreen"
-            android:windowSoftInputMode="stateHidden|adjustPan">
+            >
         </activity>
         <activity
             android:name=".view.ui.activities.SplashActivity"

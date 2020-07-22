@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -54,17 +55,29 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
         @BindView(R.id.img_like)
         ImageView img_like;
 
+        @BindView(R.id.like_click)
+        LinearLayout like_click;
+
         @BindView(R.id.img_comment)
         ImageView img_comment;
 
+        @BindView(R.id.comment_click)
+        LinearLayout comment_click;
+
         @BindView(R.id.img_share)
         ImageView img_share;
+
+        @BindView(R.id.share_click)
+        LinearLayout share_click;
 
         @BindView(R.id.tv_name)
         TextView tv_name;
 
         @BindView(R.id.profile_image)
         ImageView profile_image;
+
+        @BindView(R.id.post_image)
+        ImageView post_image;
 
         @BindView(R.id.view6)
         View top_image;
@@ -94,19 +107,19 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
                     mClickListener.onEventItemClick(v, getAdapterPosition());
                 }
             });
-            img_like.setOnClickListener(new OnOneOffClickListener() {
+            like_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onEventLikeClick(v, getAdapterPosition(), tv_likecount);
                 }
             });
-            img_comment.setOnClickListener(new OnOneOffClickListener() {
+            comment_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onEventItemClick(v, getAdapterPosition());
                 }
             });
-            img_share.setOnClickListener(new OnOneOffClickListener() {
+            share_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onShareClick(v, getAdapterPosition());
@@ -215,9 +228,11 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
                         ((EventHomeAdapter.EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }
                     if (posts.get(position).getEvent_image().size() > 0) {
-                        AppUtils.setGlideVideoThumbnail(mContext, ((EventHomeAdapter.EventTypeViewHolder) holder).profile_image, posts.get(position).getEvent_image().get(0));
+                        AppUtils.setGlideUrlThumbnail(mContext, ((EventHomeAdapter.EventTypeViewHolder) holder).profile_image, posts.get(position).getEvent_image().get(0));
+                        AppUtils.setGlideVideoThumbnail(mContext, ((EventTypeViewHolder) holder).post_image, posts.get(position).getEvent_image().get(0));
                     } else {
                         ((EventHomeAdapter.EventTypeViewHolder) holder).profile_image.setBackground(mContext.getDrawable(R.drawable.no_thumbnail));
+                        ((EventTypeViewHolder) holder).post_image.setBackground(mContext.getDrawable(R.drawable.no_thumbnail));
                     }
 
                     ((EventHomeAdapter.EventTypeViewHolder) holder).tv_name.setText(posts.get(position).getName());

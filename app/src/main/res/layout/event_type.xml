@@ -26,13 +26,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/view6" />
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
         android:layout_width="70dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/no_thumbnail"
+        android:src="@drawable/no_thumbnail"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,7 +42,7 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="20dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:fontFamily="@font/nunitosansbold"
@@ -63,7 +64,34 @@
         android:maxLines="1"
         app:layout_constraintStart_toEndOf="@+id/profile_image"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+    <TextView
+        app:layout_constraintStart_toStartOf="@id/tv_location"
+        android:id="@+id/tv_eventdate"
+        style="@style/TextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="3dp"
+        android:text="23 Aug 19"
+        android:fontFamily="@font/nunitosansregular"
+        app:layout_constraintTop_toBottomOf="@id/tv_location"
+        />
 
+    <ImageView
+        android:id="@+id/post_image"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/no_thumbnail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/view3"
+        app:layout_constraintTop_toBottomOf="@+id/tv_eventdate" />
+    
+    <TextView
+        app:layout_constraintTop_toBottomOf="@id/post_image"
+        android:id="@+id/post_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 
 
@@ -99,13 +127,14 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+
         android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_image">
+        app:layout_constraintTop_toBottomOf="@+id/post_detail">
 
 
         <View
@@ -192,19 +221,7 @@
             app:layout_constraintStart_toEndOf="@+id/tv_comcount"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_eventdate"
-            style="@style/TextStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="8dp"
-            android:text="23 Aug 19"
-            android:fontFamily="@font/nunitosansregular"
 
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <View
             android:id="@+id/view4"
@@ -217,26 +234,27 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="@dimen/spacing_medium"
+            android:layout_marginTop="1dp"
+            android:baselineAligned="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view4"
-            android:baselineAligned="false">
+            app:layout_constraintTop_toBottomOf="@+id/view4">
 
             <LinearLayout
+                android:id="@+id/like_click"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/spacing_medium"
                 android:layout_weight="1">
 
                 <TextView
+                    android:gravity="center_vertical"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:layout_weight="1"
-                    android:text="Like"
                     android:fontFamily="@font/nunitosansregular"
+                    android:text="Like"
                     android:textColor="@color/gray_1" />
 
                 <ImageView
@@ -248,63 +266,64 @@
                     android:layout_weight="0"
                     android:background="@drawable/ic_like" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="30dp"
                     android:layout_marginEnd="@dimen/spacing_medium"
-                    android:text="|"
-                    android:textColor="@color/gray_1" />
+                    android:background="@color/gray_light" />
 
 
             </LinearLayout>
 
 
             <LinearLayout
+                android:id="@+id/comment_click"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/spacing_medium"
                 android:layout_weight="1.2">
 
                 <TextView
+                    android:gravity="center_vertical"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:layout_weight="1"
-                    android:text="Comment"
                     android:fontFamily="@font/nunitosansregular"
+                    android:text="Comment"
                     android:textColor="@color/gray_1" />
 
                 <ImageView
                     android:id="@+id/img_comment"
                     android:layout_width="18dp"
                     android:layout_height="18dp"
+                    android:layout_gravity="center"
                     android:layout_marginEnd="@dimen/spacing_medium"
                     android:layout_weight="0"
                     android:background="@drawable/ic_comment" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="30dp"
                     android:layout_marginEnd="@dimen/spacing_medium"
-                    android:text="|"
-                    android:textColor="@color/gray_1" />
+                    android:background="@color/gray_light" />
 
 
             </LinearLayout>
 
 
             <LinearLayout
+                android:id="@+id/share_click"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="@dimen/spacing_medium"
                 android:layout_weight="1">
 
                 <TextView
+                    android:gravity="center_vertical"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:layout_weight="1"
-                    android:text="Share"
                     android:fontFamily="@font/nunitosansregular"
+                    android:text="Share"
                     android:textColor="@color/gray_1" />
 
                 <ImageView
@@ -315,7 +334,6 @@
                     android:layout_marginEnd="@dimen/spacing_medium"
                     android:layout_weight="0"
                     android:background="@drawable/ic_share" />
-
 
 
             </LinearLayout>

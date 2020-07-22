@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -81,13 +83,18 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
         setCanceledOnTouchOutside(true);
         setCancelable(true);
         Window window = getWindow();
+
+
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.gravity = Gravity.TOP | Gravity.RIGHT;
-        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND ;
         window.setAttributes(wlp);
         WindowManager.LayoutParams params = this.getWindow().getAttributes();
+
+
+
         params.y = 50;
-        window.setLayout(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
+        window.setLayout(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
         this.getWindow().setAttributes(params);
         getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
@@ -210,4 +217,5 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
 //                break;
         }
     }
+
 }

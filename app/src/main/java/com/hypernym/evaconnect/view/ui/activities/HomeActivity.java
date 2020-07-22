@@ -78,11 +78,21 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     @BindView(R.id.img_home)
     ImageView img_home;
 
+    @BindView(R.id.home_click)
+    LinearLayout home_click;
+
+
     @BindView(R.id.img_connections)
     ImageView img_connections;
 
+    @BindView(R.id.connections_click)
+    LinearLayout connections_click;
+
     @BindView(R.id.img_messages)
     ImageView img_messages;
+
+    @BindView(R.id.message_click)
+    LinearLayout message_click;
 
     @BindView(R.id.img_logout)
     ImageView img_logout;
@@ -105,6 +115,18 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     @BindView(R.id.badge_notification)
     TextView badge_notification;
 
+    @BindView(R.id.home_selector)
+    ImageView home_selector;
+
+    @BindView(R.id.messages_selector)
+    ImageView messages_selector;
+
+    @BindView(R.id.connections_selector)
+    ImageView connections_selector;
+
+    @BindView(R.id.profile_selector)
+    ImageView profile_selector;
+
     NavigationDialog navigationDialog;
     SearchDialog searchDialog;
     private boolean notificationflag = false;
@@ -120,6 +142,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+        home_selector.setImageResource(R.drawable.bottomline);
 
 
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getApplication(), this)).get(UserViewModel.class);
@@ -253,8 +276,13 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
 
 
 
-    @OnClick(R.id.img_home)
+    @OnClick(R.id.home_click)
     public void home() {
+
+        home_selector.setImageResource(R.drawable.bottomline);
+        connections_selector.setImageResource(0);
+        messages_selector.setImageResource(0);
+        profile_selector.setImageResource(0);
 
         img_home.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
         tv_home.setTextColor(ContextCompat.getColor(this, R.color.skyblue));
@@ -278,8 +306,14 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
 
     }
 
-    @OnClick(R.id.img_connections)
+    @OnClick(R.id.connections_click)
     public void connections() {
+
+        home_selector.setImageResource(0);
+        connections_selector.setImageResource(R.drawable.bottomline);
+        messages_selector.setImageResource(0);
+        profile_selector.setImageResource(0);
+
 
         img_home.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
         img_connections.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
@@ -301,8 +335,14 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         BaseFragment.pageTitle = getString(R.string.connections);
     }
 
-    @OnClick(R.id.img_messages)
+    @OnClick(R.id.message_click)
     public void messages() {
+
+        home_selector.setImageResource(0);
+        connections_selector.setImageResource(0);
+        messages_selector.setImageResource(R.drawable.bottomline);
+        profile_selector.setImageResource(0);
+
 
         img_home.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
         img_connections.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
@@ -322,9 +362,16 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         BaseFragment.pageTitle = getString(R.string.messages);
     }
 
-    @OnClick(R.id.img_logout)
+    @OnClick(R.id.profile_click)
     public void signout() {
        // AppUtils.logout(this);
+
+
+        home_selector.setImageResource(0);
+        connections_selector.setImageResource(0);
+        messages_selector.setImageResource(0);
+        profile_selector.setImageResource(R.drawable.bottomline);
+
         img_home.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
         img_connections.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
         img_messages.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
