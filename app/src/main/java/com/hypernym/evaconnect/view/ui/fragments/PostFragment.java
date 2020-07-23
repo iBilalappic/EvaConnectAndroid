@@ -1,6 +1,5 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,37 +11,29 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.core.view.ViewCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
-import com.hypernym.evaconnect.view.adapters.HomePostsAdapter;
 import com.hypernym.evaconnect.view.adapters.PostAdapter;
 import com.hypernym.evaconnect.view.dialogs.ShareDialog;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
-import com.hypernym.evaconnect.viewmodel.EventViewModel;
-import com.hypernym.evaconnect.viewmodel.HomeViewModel;
-import com.hypernym.evaconnect.viewmodel.JobListViewModel;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
 
 import java.util.ArrayList;
@@ -74,6 +65,7 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
     private int currentPage = PAGE_START;
     private boolean isLastPage = false;
     private boolean isLoading = false;
+    private ConnectionViewModel connectionViewModel;
 
     public PostFragment() {
     }
@@ -116,6 +108,7 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
     private void init() {
         postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(PostViewModel.class);
         //   currentPage = PAGE_START;
+       connectionViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
         postAdapter = new PostAdapter(getContext(), posts, this);
         linearLayoutManager = new LinearLayoutManager(getContext());
 
@@ -318,6 +311,21 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
         loadFragment(R.id.framelayout, personDetailFragment, getContext(), true);
     }
 
+
+    private void callDeclineConnectApi(Connection connection) {
+
+        connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Connection>> listBaseModel) {
+                if (listBaseModel != null && !listBaseModel.isError()) {
+
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+                hideDialog();
+            }
+        });
+    }
     private void callPostsApi() {
         User user = LoginUtils.getLoggedinUser();
 
