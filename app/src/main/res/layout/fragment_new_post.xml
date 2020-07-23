@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+   >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/frameLayout"
@@ -59,12 +60,13 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
         <EditText
+            android:textSize="13sp"
             android:id="@+id/edt_content"
             style="@style/TextStyle"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_marginTop="24dp"
-            android:background="@color/white"
+            android:background="@null"
             android:elevation="2dp"
             android:gravity="top|left"
             android:hint="Type something..."

@@ -5,9 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:contentInsetLeft="0dp"
-    app:contentInsetStart="0dp">
+    app:contentInsetStart="0dp"
+    android:minHeight="58dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:minHeight="58dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -72,7 +74,6 @@
             android:id="@+id/tv_back"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:visibility="gone"
             android:background="@color/title_bg"
             app:layout_constraintEnd_toEndOf="parent"

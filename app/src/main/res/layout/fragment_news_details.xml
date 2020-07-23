@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lighter_gray">
+    android:background="@color/lighter_gray"
+ >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout2"
@@ -417,11 +418,11 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
+            android:paddingTop="20dp"
             android:id="@+id/edt_comment"
             style="@style/EditText.Comments"
             android:layout_width="0dp"
             android:layout_height="60dp"
-            android:layout_marginTop="38dp"
             android:hint="@string/tap_here_to_comment"
             android:inputType="textPersonName"
             android:textColor="@color/black"
@@ -431,6 +432,8 @@
             app:layout_constraintStart_toEndOf="@+id/img_user" />
 
         <ImageView
+            android:layout_marginTop="13dp"
+            app:layout_constraintTop_toTopOf="@+id/edt_comment"
             android:id="@+id/btn_addcomment"
             android:layout_width="25dp"
             android:layout_height="21dp"
