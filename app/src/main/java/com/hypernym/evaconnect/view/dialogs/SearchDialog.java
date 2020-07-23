@@ -34,6 +34,7 @@ public class SearchDialog extends Dialog implements View.OnClickListener {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_search);
+
         btn_next = findViewById(R.id.btn_next);
         edt_keyword = findViewById(R.id.edt_keyword);
         btn_next.setOnClickListener(this);

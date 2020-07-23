@@ -113,6 +113,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search_result, container, false);
         ButterKnife.bind(this, view);
+        getActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
         tv_events.setTextColor(getContext().getResources().getColor(R.color.skyblue));
         tv_posts.setTextColor(getContext().getResources().getColor(R.color.gray_1));
         tv_job.setTextColor(getContext().getResources().getColor(R.color.gray_1));

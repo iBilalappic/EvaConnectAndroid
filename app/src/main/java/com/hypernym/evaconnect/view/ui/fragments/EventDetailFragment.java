@@ -144,6 +144,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_event_detail, container, false);
         ButterKnife.bind(this,view);
+        getActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
         init();
         return view;
     }

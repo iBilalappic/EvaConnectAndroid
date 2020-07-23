@@ -87,6 +87,7 @@ public class ShareConnectionFragment extends BaseFragment implements ShareConnec
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_share_connection, container, false);
         ButterKnife.bind(this, view);
+        getActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
         connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
         currentPage = PAGE_START;
 
