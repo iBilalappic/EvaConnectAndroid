@@ -54,18 +54,35 @@
             app:layout_constraintStart_toEndOf="@+id/profile_image"
             app:layout_constraintTop_toBottomOf="@+id/view5" />
 
+
+
         <TextView
-            android:id="@+id/tv_field"
-            android:layout_width="100dp"
+            android:textColor="@color/black"
+            android:id="@+id/location"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:ellipsize="end"
             android:fontFamily="@font/nunitosansregular"
             android:maxLines="2"
-            android:text="--"
-            android:textColor="@color/colorAccent"
+            android:text=""
             android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@+id/profile_image"
+            app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+
+
+        <TextView
+            android:gravity="start"
+            android:textColor="@color/colorAccent"
+            android:id="@+id/tv_field"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="@font/nunitosansregular"
+            android:maxLines="2"
+            android:text="--"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/location"
             app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
         <TextView
