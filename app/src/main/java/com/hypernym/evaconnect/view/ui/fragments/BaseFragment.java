@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
@@ -72,6 +73,7 @@ public class BaseFragment extends Fragment {
         super.onResume();
         connectionViewModel= ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
 
+
     }
 
     public void showDialog() {
@@ -94,6 +96,13 @@ public class BaseFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         hideDialog();
+
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
     }
 
     public void networkErrorDialog() {
@@ -332,6 +341,7 @@ public class BaseFragment extends Fragment {
     {
         return pageTitle;
     }
+
 
     public void callConnectApi(TextView tv_connect, User connectionItem) {
         Connection connection=new Connection();

@@ -406,6 +406,14 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     @OnClick(R.id.tv_back)
     public void back() {
         super.onBackPressed();
+        findViewById(R.id.seprator_line).setVisibility(View.GONE);
+        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            Fragment f = getSupportFragmentManager().findFragmentById(R.id.frameLayout);
+            if (f instanceof MainViewPagerFragment || f instanceof ActivityFragment) {
+                // Do something
+                findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     @Override

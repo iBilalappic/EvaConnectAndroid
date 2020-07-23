@@ -149,6 +149,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     mClickListener.onProfileClick(v, getAdapterPosition());
                 }
             });
+
         }
     }
 
@@ -276,6 +277,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     mClickListener.onProfileClick(v, getAdapterPosition());
                 }
             });
+
             post_image.setOnClickListener(new OnDoubleTapClickListner() {
                 @Override
                 public void onSingleClick(View v) {
@@ -407,6 +409,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     mClickListener.onProfileClick(v, getAdapterPosition());
                 }
             });
+
         }
     }
 
@@ -629,8 +632,8 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     } else {
                         ((PostAdapter.TextTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
-                    ((PostAdapter.TextTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name() +" at ");
-                    ((PostAdapter.TextTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation());
+                    ((PostAdapter.TextTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name());
+                    ((PostAdapter.TextTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation() +" at ");
                     if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
                         ((TextTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
                     } else {
@@ -696,8 +699,8 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     } else {
                         ((PostAdapter.ImageTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
-                    ((PostAdapter.ImageTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name() +" at ");
-                    ((PostAdapter.ImageTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation());
+                    ((PostAdapter.ImageTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name());
+                    ((PostAdapter.ImageTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation() +" at ");
                     if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
                         ((ImageTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
                     } else {
@@ -754,8 +757,8 @@ public class PostAdapter  extends RecyclerView.Adapter {
                         ((PostAdapter.VideoTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
                     AppUtils.setGlideVideoThumbnail(mContext, ((PostAdapter.VideoTypeViewHolder) holder).img_video, posts.get(position).getPost_video());
-                    ((PostAdapter.VideoTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name() +" at ");
-                    ((PostAdapter.VideoTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation());
+                    ((PostAdapter.VideoTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name());
+                    ((PostAdapter.VideoTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation()+" at ");
                     if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
                         ((VideoTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
                     } else {
@@ -827,8 +830,8 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     } else {
                         ((PostAdapter.LinkTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
-                    ((PostAdapter.LinkTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name() +" at ");
-                    ((PostAdapter.LinkTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation());
+                    ((PostAdapter.LinkTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name());
+                    ((PostAdapter.LinkTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation()+" at");
                     if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
                         ((LinkTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
                     } else {
@@ -874,6 +877,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
         void onURLClick(View view, int position);
 
         void onProfileClick(View view, int position);
+
 
 
     }
