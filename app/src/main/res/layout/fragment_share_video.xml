@@ -59,6 +59,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
         <EditText
+
             android:id="@+id/edt_content"
             style="@style/TextStyle"
             android:layout_width="match_parent"
@@ -66,7 +67,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:background="@color/white"
+            android:background="@null"
             android:elevation="2dp"
             android:gravity="top|left"
             android:hint="Share URL/embed of video"
@@ -76,7 +77,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_address" />
 
+        <View
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/edt_content"
+            android:id="@+id/line"
+            android:background="@color/skyblue"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
         <EditText
+android:textSize="13sp"
             android:id="@+id/edt_description"
             style="@style/TextStyle"
             android:layout_width="match_parent"
@@ -84,7 +94,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:background="@color/white"
+            android:background="@null"
             android:elevation="2dp"
             android:gravity="top|left"
             android:hint="Type Something..."
@@ -92,7 +102,7 @@
             android:padding="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edt_content" />
+            app:layout_constraintTop_toBottomOf="@+id/line" />
 
 
         <TextView
@@ -101,9 +111,9 @@
             android:layout_height="wrap_content"
             android:background="@drawable/button_bg"
             android:gravity="center|center_vertical"
-            android:paddingLeft="30dp"
+
             android:paddingTop="15dp"
-            android:paddingRight="30dp"
+
             android:paddingBottom="15dp"
             android:text="Share Video"
             android:textColor="@color/colorwhite"

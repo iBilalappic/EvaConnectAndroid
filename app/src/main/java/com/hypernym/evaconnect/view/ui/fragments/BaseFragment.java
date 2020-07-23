@@ -309,9 +309,9 @@ public class BaseFragment extends Fragment {
     {
 
         getActivity().findViewById(R.id.tv_back).setVisibility(View.GONE);
-        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
-        getActivity().findViewById(R.id.toolbar).setLayoutParams(params);
-        getActivity().findViewById(R.id.toolbar).requestLayout();
+//        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+//        getActivity().findViewById(R.id.toolbar).setLayoutParams(params);
+//        getActivity().findViewById(R.id.toolbar).requestLayout();
     }
     public void setChatPerson(Context context,String image)
     {

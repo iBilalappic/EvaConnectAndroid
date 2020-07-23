@@ -60,6 +60,10 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
             holder.tv_designation.setText("--");
         }
 
+
+
+holder.location.setText(connections.get(position).getDesignation()+" at ");
+        holder.tv_designation.setText(connections.get(position).getCompany_name());
         //Hide connect option if post is from logged in user
         User user = LoginUtils.getLoggedinUser();
         if (connections.get(position).getId().equals(user.getId())) {
@@ -127,6 +131,9 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
 
         @BindView(R.id.tv_connection_status)
         TextView tv_connection_status;
+
+        @BindView(R.id.location)
+        TextView location;
 
 
         public ViewHolder(@NonNull View itemView) {
