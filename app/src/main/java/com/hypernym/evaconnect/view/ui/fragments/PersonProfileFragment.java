@@ -107,6 +107,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_person_profile, container, false);
+        getActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
         ButterKnife.bind(this, view);
         layout_disconnect.setOnClickListener(this);
         layout_block.setOnClickListener(this);

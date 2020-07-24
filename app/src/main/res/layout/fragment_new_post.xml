@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-   >
+    android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/frameLayout"
@@ -60,7 +59,6 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
         <EditText
-            android:textSize="13sp"
             android:id="@+id/edt_content"
             style="@style/TextStyle"
             android:layout_width="match_parent"
@@ -72,6 +70,7 @@
             android:hint="Type something..."
             android:inputType="textMultiLine"
             android:padding="10dp"
+            android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profile_image" />
@@ -100,13 +99,15 @@
             android:id="@+id/camera"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/gallery"
+            android:layout_marginTop="2dp"
+            android:drawableLeft="@drawable/camera"
             android:drawablePadding="5dp"
+            android:gravity="center"
             android:paddingLeft="10dp"
             android:paddingTop="15dp"
             android:paddingRight="10dp"
             android:paddingBottom="15dp"
-            android:text="Take Photo"
+            android:text="Camera"
             android:textColor="@color/light_black"
             android:textSize="12sp"
             app:layout_constraintBottom_toTopOf="@+id/post"
@@ -115,22 +116,24 @@
             app:layout_constraintStart_toEndOf="@+id/browsefiles" />
 
         <TextView
+
             android:id="@+id/tv_recordvideo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:drawableLeft="@drawable/gallery"
+            android:drawableLeft="@drawable/ic_baseline_ondemand_video_24"
             android:drawablePadding="5dp"
             android:paddingLeft="10dp"
-            android:paddingTop="15dp"
+            android:paddingTop="18dp"
             android:paddingRight="10dp"
             android:paddingBottom="15dp"
-            android:text="Record Video"
+            android:text="Video"
             android:textColor="@color/light_black"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@+id/camera"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/camera" />
+            app:layout_constraintStart_toEndOf="@+id/camera"
+            app:layout_constraintTop_toTopOf="@+id/camera" />
 
         <TextView
             android:id="@+id/post"
@@ -198,14 +201,17 @@
                 app:srcCompat="@drawable/play" />
 
             <androidx.recyclerview.widget.RecyclerView
+
                 android:id="@+id/rc_attachments"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="parent" />
+                app:layout_constraintTop_toBottomOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView

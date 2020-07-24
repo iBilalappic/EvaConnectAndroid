@@ -22,6 +22,7 @@ public class Post implements Serializable {
     private String title;
     private String link;
     private int rss_news_id;
+    private Integer receiver_id;
 
 
     public String getStart_date() {
@@ -530,6 +531,14 @@ public class Post implements Serializable {
 
     public void setIs_news_like(Integer is_news_like) {
         this.is_news_like = is_news_like;
+    }
+
+    public Integer getReceiver_id() {
+        return receiver_id;
+    }
+
+    public void setReceiver_id(Integer receiver_id) {
+        this.receiver_id = receiver_id;
     }
 }
 

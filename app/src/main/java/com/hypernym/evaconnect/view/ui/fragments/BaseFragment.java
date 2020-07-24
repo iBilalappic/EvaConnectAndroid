@@ -65,6 +65,16 @@ public class BaseFragment extends Fragment {
      * @return true if back press was handled
      */
     public boolean onBackPressed() {
+
+        requireActivity().findViewById(R.id.seprator_line).setVisibility(View.GONE);
+        if (requireActivity().getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            Fragment f = requireActivity().getSupportFragmentManager().findFragmentById(R.id.frameLayout);
+            if (f instanceof MainViewPagerFragment || f instanceof ActivityFragment) {
+                // Do something
+                requireActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
+            }
+        }
+
         return false;
     }
 
@@ -101,6 +111,17 @@ public class BaseFragment extends Fragment {
 
     @Override
     public void onAttach(@NonNull Context context) {
+
+
+        requireActivity().findViewById(R.id.seprator_line).setVisibility(View.GONE);
+        if (requireActivity().getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            Fragment f = requireActivity().getSupportFragmentManager().findFragmentById(R.id.frameLayout);
+            if (f instanceof MainViewPagerFragment || f instanceof ActivityFragment) {
+                // Do something
+                requireActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
+            }
+        }
+
         super.onAttach(context);
 
     }
@@ -392,6 +413,8 @@ public class BaseFragment extends Fragment {
             }
         });
     }
+
+
 
 
 }

@@ -94,6 +94,7 @@ public class BaseActivity extends AppCompatActivity  {
         if (fragment instanceof MainViewPagerFragment || fragment instanceof ActivityFragment) {
             findViewById(R.id.seprator_line).setVisibility(View.GONE);
         }
+
         if(isBack)
         {
             transaction.addToBackStack(null);
@@ -140,4 +141,23 @@ if(LoginUtils.getLoggedinUser()!=null)
 }
 
 
+    @Override
+    public void onBackPressed() {
+
+
+        findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
+        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            Fragment f = getSupportFragmentManager().findFragmentById(R.id.frameLayout);
+            if (f instanceof MainViewPagerFragment || f instanceof ActivityFragment) {
+                // Do something
+                findViewById(R.id.seprator_line).setVisibility(View.GONE);
+            }
+
+        }
+
+
+        super.onBackPressed();
+
+
+    }
 }

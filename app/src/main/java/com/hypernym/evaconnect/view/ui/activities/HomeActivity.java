@@ -57,7 +57,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class HomeActivity extends BaseActivity implements NotificationsAdapter.OnItemClickListener {
+public class HomeActivity extends BaseActivity {
 
     @BindView(R.id.tv_title)
     TextView tv_pagetitle;
@@ -406,43 +406,16 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     @OnClick(R.id.tv_back)
     public void back() {
         super.onBackPressed();
-        findViewById(R.id.seprator_line).setVisibility(View.GONE);
+        findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
         if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
             Fragment f = getSupportFragmentManager().findFragmentById(R.id.frameLayout);
             if (f instanceof MainViewPagerFragment || f instanceof ActivityFragment) {
                 // Do something
-                findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
+                findViewById(R.id.seprator_line).setVisibility(View.GONE);
             }
         }
     }
 
-    @Override
-    public void onItemClick(View view, int position) {
-        if (notifications.get(position).getObject_type().equals("job")) {
-            SpecficJobFragment specficJobFragment = new SpecficJobFragment();
-            Bundle bundle = new Bundle();
-//            JobAd jobAd = new JobAd();
-//            jobAd.setId(notifications.get(position).getObject_id());
-            bundle.putInt("job_id", notifications.get(position).getObject_id());
-            specficJobFragment.setArguments(bundle);
-            loadFragment(R.id.framelayout, specficJobFragment, this, true);
-
-        } else if (notifications.get(position).getObject_type().equals("post")) {
-            PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
-            Bundle bundle = new Bundle();
-            bundle.putInt("post", notifications.get(position).getObject_id());
-            postDetailsFragment.setArguments(bundle);
-            loadFragment(R.id.framelayout, postDetailsFragment, this, true);
-
-        } else if (notifications.get(position).getObject_type().equals("event")) {
-            EventDetailFragment eventDetailsFragment = new EventDetailFragment();
-            Bundle bundle = new Bundle();
-            bundle.putInt("id", notifications.get(position).getObject_id());
-            eventDetailsFragment.setArguments(bundle);
-            loadFragment(R.id.framelayout, eventDetailsFragment, this, true);
-
-        }
-    }
 
     @Override
     public void onStart() {

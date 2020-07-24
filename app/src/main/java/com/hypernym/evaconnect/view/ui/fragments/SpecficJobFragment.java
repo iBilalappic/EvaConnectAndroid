@@ -104,6 +104,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_specfic_job_ad, container, false);
         ButterKnife.bind(this, view);
+        getActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
         tv_apply.setOnClickListener(this);
         img_backarrow.setOnClickListener(this);
         img_like.setOnClickListener(this);

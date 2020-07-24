@@ -18,13 +18,17 @@ import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.Post;
+import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
+import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.NotificationsAdapter;
 import com.hypernym.evaconnect.view.ui.activities.BaseActivity;
+import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
 
 import java.util.ArrayList;
@@ -49,6 +53,7 @@ public class NotificationsFragment extends BaseFragment implements Notifications
     NotificationsAdapter notificationsAdapter;
     private List<Post> notifications = new ArrayList<>();
     private HomeViewModel homeViewModel;
+    private ConnectionViewModel connectionViewModel;
     private List<Post> posts=new ArrayList<>();
     private int currentPage = PAGE_START;
     private boolean isLastPage = false;
@@ -67,6 +72,7 @@ public class NotificationsFragment extends BaseFragment implements Notifications
         ButterKnife.bind(this, view);
         setPageTitle(getString(R.string.notifications));
         homeViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(HomeViewModel.class);
+       connectionViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
         swipeRefreshLayout.setOnRefreshListener(this);
         initRecyclerView();
         showDialog();
@@ -100,7 +106,7 @@ public class NotificationsFragment extends BaseFragment implements Notifications
         homeViewModel.getAllNotifications(AppConstants.TOTAL_PAGES,currentPage).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0 && listBaseModel.getData().get(0) != null) {
+                if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() >0 && listBaseModel.getData().get(0) != null) {
                     //  myLikesModelList.clear();
                     notifications.addAll(listBaseModel.getData());
                     notificationsAdapter.notifyDataSetChanged();
@@ -188,6 +194,48 @@ public class NotificationsFragment extends BaseFragment implements Notifications
             loadFragment(R.id.framelayout, meetingDetailFragment, getContext(), true);
         }
 
+    }
+
+    @Override
+    public void onAcceptClick(View view, int position) {
+        Connection connection = new Connection();
+        User user = LoginUtils.getLoggedinUser();
+        connection.setStatus(AppConstants.ACTIVE);
+        connection.setId(notifications.get(position).getConnection_id());
+        connection.setModified_by_id(user.getId());
+        connection.setModified_datetime(DateUtils.GetCurrentdatetime());
+        connection.setSender_id(LoginUtils.getLoggedinUser().getId());
+        connection.setId(notifications.get(position).getObject_id());
+        connection.setReceiver_id(notifications.get(position).getReceiver_id());
+        callDeclineConnectApi(connection);
+    }
+
+    private void callDeclineConnectApi(Connection connection) {
+
+        showDialog();
+        connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Connection>> listBaseModel) {
+
+                hideDialog();
+                if (listBaseModel != null && !listBaseModel.isError()) {
+
+                    notifications.clear();
+notificationsAdapter.notifyDataSetChanged();
+                    if(NetworkUtils.isNetworkConnected(getContext())) {
+                        getAllNotifications();
+                    }
+                    else
+                    {
+                        networkErrorDialog();
+                    }
+                    //getConnectionByFilter(type, PAGE_START, true);
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+                hideDialog();
+            }
+        });
     }
 
     @Override
