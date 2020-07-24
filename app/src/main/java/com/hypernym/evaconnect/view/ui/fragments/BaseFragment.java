@@ -112,6 +112,7 @@ public class BaseFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
 
+        super.onAttach(context);
 
         requireActivity().findViewById(R.id.seprator_line).setVisibility(View.GONE);
         if (requireActivity().getSupportFragmentManager().getBackStackEntryCount() > 1) {
@@ -122,7 +123,7 @@ public class BaseFragment extends Fragment {
             }
         }
 
-        super.onAttach(context);
+
 
     }
 
@@ -413,7 +414,6 @@ public class BaseFragment extends Fragment {
             }
         });
     }
-
 
 
 

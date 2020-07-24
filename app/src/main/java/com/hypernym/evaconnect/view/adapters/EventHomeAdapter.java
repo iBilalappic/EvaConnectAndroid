@@ -236,7 +236,7 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
                         AppUtils.setGlideUrlThumbnail(mContext, ((EventHomeAdapter.EventTypeViewHolder) holder).profile_image, posts.get(position).getEvent_image().get(0));
                         AppUtils.setGlideVideoThumbnail(mContext, ((EventTypeViewHolder) holder).post_image, posts.get(position).getEvent_image().get(0));
                     } else {
-                        ((EventHomeAdapter.EventTypeViewHolder) holder).profile_image.setBackground(mContext.getDrawable(R.drawable.no_thumbnail));
+//                        ((EventHomeAdapter.EventTypeViewHolder) holder).profile_image.setBackground(mContext.getDrawable(R.drawable.no_thumbnail));
                         ((EventTypeViewHolder) holder).post_image.setBackground(mContext.getDrawable(R.drawable.no_thumbnail));
                     }
 
