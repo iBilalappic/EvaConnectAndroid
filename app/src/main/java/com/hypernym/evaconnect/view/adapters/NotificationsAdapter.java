@@ -45,7 +45,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     public void onBindViewHolder(@NonNull NotificationsAdapter.ViewHolder holder, int position) {
         AppUtils.setGlideImage(context, holder.profile_image, notificationsList.get(position).getUser().getUser_image());
         holder.tv_status.setText(notificationsList.get(position).getContent());
-      holder.tv_date.setText(DateUtils.formatToYesterdayOrToday(notificationsList.get(position).getCreated_datetime()));
+        holder.tv_date.setText(DateUtils.formatToYesterdayOrToday(notificationsList.get(position).getCreated_datetime()));
 //        holder.linearLayout10.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {

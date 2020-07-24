@@ -201,7 +201,6 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
                     @Override
                     public void onChanged(BaseModel<List<Event>> listBaseModel) {
                         if (listBaseModel != null && !listBaseModel.isError()) {
-
                             AppUtils.setLikeCount(getContext(), tv_likecount, event.getAction(), img_like);
                             event.setLike_count(Integer.parseInt(tv_likecount.getText().toString()));
 

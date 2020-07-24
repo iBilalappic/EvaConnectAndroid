@@ -1113,6 +1113,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         ((JobTypeViewHolder) holder).tv_apply.setVisibility(View.GONE);
                     } else {
                         ((JobTypeViewHolder) holder).tv_apply.setVisibility(View.VISIBLE);
+                       // ((JobTypeViewHolder) holder).tv_apply.setText(posts.get(position).);
                     }
 
 
