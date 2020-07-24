@@ -1066,10 +1066,10 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         ((EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }
                     if (posts.get(position).getEvent_image().size() > 0) {
-                        AppUtils.setGlideVideoThumbnail(mContext, ((EventTypeViewHolder) holder).profile_image, posts.get(position).getEvent_image().get(0));
+                        AppUtils.setGlideImageUrl(mContext, ((EventTypeViewHolder) holder).profile_image, posts.get(position).getEvent_image().get(0));
                         AppUtils.setGlideVideoThumbnail(mContext, ((EventTypeViewHolder) holder).post_image, posts.get(position).getEvent_image().get(0));
                     } else {
-                        ((EventTypeViewHolder) holder).profile_image.setBackground(mContext.getDrawable(R.drawable.no_thumbnail));
+//                        ((EventTypeViewHolder) holder).profile_image.setBackground(mContext.getDrawable(R.drawable.no_thumbnail));
                         ((EventTypeViewHolder) holder).post_image.setBackground(mContext.getDrawable(R.drawable.no_thumbnail));
                     }
 
