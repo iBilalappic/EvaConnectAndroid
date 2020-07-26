@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "1005117578208",
-    "firebase_url": "https://evaconnect-staging.firebaseio.com",
-    "project_id": "evaconnect-staging",
-    "storage_bucket": "evaconnect-staging.appspot.com"
+    "project_number": "603575791294",
+    "firebase_url": "https://evaconnect-df08d.firebaseio.com",
+    "project_id": "evaconnect-df08d",
+    "storage_bucket": "evaconnect-df08d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1005117578208:android:166d372ea9367862146985",
+        "mobilesdk_app_id": "1:603575791294:android:355048ecee09e8ed44b8ef",
         "android_client_info": {
           "package_name": "com.hypernym.evaconnect"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1005117578208-dn68uq4d5rmv6v6rtu51l7mm6ilc017b.apps.googleusercontent.com",
+          "client_id": "603575791294-vjhrpf18l94vseon9ccqb70hjno3h6te.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBmfwEXvEa3RqYPwkC6XZ3I1KIxPyEZs5E"
+          "current_key": "AIzaSyBLM48fNg1Zd-5opqqHIC0Kvehz_Bj1WjM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1005117578208-dn68uq4d5rmv6v6rtu51l7mm6ilc017b.apps.googleusercontent.com",
+              "client_id": "603575791294-vjhrpf18l94vseon9ccqb70hjno3h6te.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

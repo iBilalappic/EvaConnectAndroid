@@ -11,13 +11,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.NotifyEvent;
 import com.hypernym.evaconnect.models.Post;
@@ -57,7 +65,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class HomeActivity extends BaseActivity implements NotificationsAdapter.OnItemClickListener {
+public class HomeActivity extends BaseActivity {
 
     @BindView(R.id.tv_title)
     TextView tv_pagetitle;
@@ -143,6 +151,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         home_selector.setImageResource(R.drawable.bottomline);
+        createUserOnFirebase();
 
 
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getApplication(), this)).get(UserViewModel.class);
@@ -248,7 +257,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
             @Override
             public void onClick(View v) {
                 if (notifications.size() > 0) {
-                  //  showNotificationPanel();
+                    //  showNotificationPanel();
                 }
             }
         });
@@ -302,7 +311,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
         } else {
             loadFragment(R.id.framelayout, new MainViewPagerFragment(), this, false);
         }
-     //   tv_back.setVisibility(View.GONE);
+        //   tv_back.setVisibility(View.GONE);
 
     }
 
@@ -331,7 +340,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
             ConnectionsFragment fragment = new ConnectionsFragment();
             loadFragment(R.id.framelayout, fragment, this, true);
         }
-     //   tv_back.setVisibility(View.GONE);
+        //   tv_back.setVisibility(View.GONE);
         BaseFragment.pageTitle = getString(R.string.connections);
     }
 
@@ -364,7 +373,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
 
     @OnClick(R.id.profile_click)
     public void signout() {
-       // AppUtils.logout(this);
+        // AppUtils.logout(this);
 
 
         home_selector.setImageResource(0);
@@ -385,7 +394,7 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
 
         PersonProfileFragment fragment = new PersonProfileFragment();
         loadFragment(R.id.framelayout, fragment, this, true);
-      //  BaseFragment.pageTitle = "Profile";
+        //  BaseFragment.pageTitle = "Profile";
 
     }
 
@@ -393,6 +402,29 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
     public void openDrawer(View view) {
         navigationDialog = new NavigationDialog(this);
         navigationDialog.show();
+    }
+    public void createUserOnFirebase()
+    {
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            //To do//
+                            return;
+                        }
+                        // Get the Instance ID token//
+                        String token = task.getResult().getToken();
+
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                        DatabaseReference userRef = databaseReference.child(AppConstants.FIREASE_USER_ENDPOINT);
+                        DatabaseReference userRefByID=userRef.child(LoginUtils.getLoggedinUser().getId().toString());
+                        userRefByID.child("imageName").setValue(LoginUtils.getLoggedinUser().getUser_image());
+                        userRefByID.child("name").setValue(LoginUtils.getLoggedinUser().getEmail());
+                        userRefByID.child("fcm-token").setValue(token);
+                    }
+                });
+
     }
 
     @OnClick(R.id.toolbarSearch)
@@ -402,47 +434,20 @@ public class HomeActivity extends BaseActivity implements NotificationsAdapter.O
 
 
     }
-//
+    //
     @OnClick(R.id.tv_back)
     public void back() {
         super.onBackPressed();
-        findViewById(R.id.seprator_line).setVisibility(View.GONE);
-        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
-            Fragment f = getSupportFragmentManager().findFragmentById(R.id.frameLayout);
-            if (f instanceof MainViewPagerFragment || f instanceof ActivityFragment) {
-                // Do something
-                findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
-            }
-        }
+//        findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
+//        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+//            Fragment f = getSupportFragmentManager().findFragmentById(R.id.frameLayout);
+//            if (f instanceof MainViewPagerFragment || f instanceof ActivityFragment) {
+//                // Do something
+//                findViewById(R.id.seprator_line).setVisibility(View.GONE);
+//            }
+//        }
     }
 
-    @Override
-    public void onItemClick(View view, int position) {
-        if (notifications.get(position).getObject_type().equals("job")) {
-            SpecficJobFragment specficJobFragment = new SpecficJobFragment();
-            Bundle bundle = new Bundle();
-//            JobAd jobAd = new JobAd();
-//            jobAd.setId(notifications.get(position).getObject_id());
-            bundle.putInt("job_id", notifications.get(position).getObject_id());
-            specficJobFragment.setArguments(bundle);
-            loadFragment(R.id.framelayout, specficJobFragment, this, true);
-
-        } else if (notifications.get(position).getObject_type().equals("post")) {
-            PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
-            Bundle bundle = new Bundle();
-            bundle.putInt("post", notifications.get(position).getObject_id());
-            postDetailsFragment.setArguments(bundle);
-            loadFragment(R.id.framelayout, postDetailsFragment, this, true);
-
-        } else if (notifications.get(position).getObject_type().equals("event")) {
-            EventDetailFragment eventDetailsFragment = new EventDetailFragment();
-            Bundle bundle = new Bundle();
-            bundle.putInt("id", notifications.get(position).getObject_id());
-            eventDetailsFragment.setArguments(bundle);
-            loadFragment(R.id.framelayout, eventDetailsFragment, this, true);
-
-        }
-    }
 
     @Override
     public void onStart() {

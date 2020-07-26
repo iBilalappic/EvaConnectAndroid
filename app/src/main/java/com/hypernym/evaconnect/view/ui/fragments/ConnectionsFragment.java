@@ -95,6 +95,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_connections, container, false);
         ButterKnife.bind(this, view);
+        requireActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
         connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(UserViewModel.class);
 

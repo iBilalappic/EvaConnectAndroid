@@ -17,6 +17,7 @@ public class EvaconnectApplication extends Application  {
         CalligraphyConfig.initDefault(mCalligraphyConfig);
 
         AppUtils.setApplicationContext(getApplicationContext());
+
     }
 
 }

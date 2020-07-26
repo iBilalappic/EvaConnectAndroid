@@ -62,7 +62,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         if (networkConnectionList.get(position).getCreatedDatetime() != null) {
             holder.mtextview22.setText(DateUtils.getTimeAgo(networkConnectionList.get(position).getCreatedDatetime()));
         }
-        if(networkConnectionList.get(position).isUnread())
+        if(networkConnectionList.get(position).isUnread() && networkConnectionList.get(position).getMessageCount()>0)
         {
             holder.tv_count.setVisibility(View.VISIBLE);
             holder.tv_count.setText(String.valueOf(networkConnectionList.get(position).getMessageCount()));

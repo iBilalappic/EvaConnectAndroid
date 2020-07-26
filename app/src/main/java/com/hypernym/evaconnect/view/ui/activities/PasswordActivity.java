@@ -225,6 +225,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             public void onChanged(BaseModel<List<User>> logins) {
                 if (logins != null && !logins.isError()) {
                     LoginUtils.saveUser(user);
+
                     if ("LinkedinActivity".equals(getIntent().getStringExtra(Constants.ACTIVITY_NAME))) {
                           JustLoginApiCall();
                     }
@@ -288,6 +289,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
                     LoginUtils.saveUser(listBaseModel.getData().get(0));
                     OneSignal.sendTag("email", userData.getEmail());
                     UserDetails.username = userData.getFirst_name();
+
                     if (listBaseModel.getData().get(0) != null) {
                         LoginUtils.saveUserToken(listBaseModel.getData().get(0).getToken());
                     }

@@ -118,9 +118,9 @@ public class CreateAccount_3_Activity extends BaseActivity implements View.OnCli
             activity_type = "normal_type";
         }
 
-        tv_general_business.setOnClickListener(new View.OnClickListener() {
+        tv_general_business.setOnClickListener(new OnOneOffClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onSingleClick(View v) {
                 tv_commercial_aviation.setBackground(getDrawable(R.drawable.rounded_button_border));
                 tv_general_business.setBackground(getDrawable(R.drawable.rounded_button_selected));
                 tv_commercial_aviation.setTextColor(getResources().getColor(R.color.gray));
@@ -129,11 +129,12 @@ public class CreateAccount_3_Activity extends BaseActivity implements View.OnCli
                 jobsector.clear();
                 getSectorFromApi(aviation_type);
             }
+
         });
 
-        tv_commercial_aviation.setOnClickListener(new View.OnClickListener() {
+        tv_commercial_aviation.setOnClickListener(new OnOneOffClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onSingleClick(View v) {
                 tv_commercial_aviation.setBackground(getDrawable(R.drawable.rounded_button_selected));
                 tv_commercial_aviation.setTextColor(getResources().getColor(R.color.white));
                 tv_general_business.setBackground(getDrawable(R.drawable.rounded_button_border));
@@ -142,6 +143,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements View.OnCli
                 jobsector.clear();
                 getSectorFromApi(aviation_type);
             }
+
         });
 
         btn_next.setOnClickListener(new OnOneOffClickListener() {
@@ -240,7 +242,9 @@ public class CreateAccount_3_Activity extends BaseActivity implements View.OnCli
         spinner_sector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+              //  JobSector=jobsector.get(position).toString();
                 JobSector = parent.getItemAtPosition(position).toString();
+
             }
 
             @Override

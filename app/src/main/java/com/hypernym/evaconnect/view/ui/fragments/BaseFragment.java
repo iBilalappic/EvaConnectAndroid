@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -66,14 +65,14 @@ public class BaseFragment extends Fragment {
      */
     public boolean onBackPressed() {
 
-        requireActivity().findViewById(R.id.seprator_line).setVisibility(View.GONE);
-        if (requireActivity().getSupportFragmentManager().getBackStackEntryCount() > 1) {
-            Fragment f = requireActivity().getSupportFragmentManager().findFragmentById(R.id.frameLayout);
-            if (f instanceof MainViewPagerFragment || f instanceof ActivityFragment) {
-                // Do something
-                requireActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
-            }
-        }
+//        requireActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
+//        if (requireActivity().getSupportFragmentManager().getBackStackEntryCount() > 1) {
+//            Fragment f = requireActivity().getSupportFragmentManager().findFragmentById(R.id.frameLayout);
+//            if (f instanceof MainViewPagerFragment || f instanceof ActivityFragment) {
+//                // Do something
+//                requireActivity().findViewById(R.id.seprator_line).setVisibility(View.GONE);
+//            }
+//        }
 
         return false;
     }
@@ -111,18 +110,17 @@ public class BaseFragment extends Fragment {
 
     @Override
     public void onAttach(@NonNull Context context) {
+//        requireActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
+//        if (requireActivity().getSupportFragmentManager().getBackStackEntryCount() > 1) {
+//            Fragment f = requireActivity().getSupportFragmentManager().findFragmentById(R.id.frameLayout);
+//            if (f instanceof MainViewPagerFragment || f instanceof ActivityFragment) {
+//                // Do something
+//                requireActivity().findViewById(R.id.seprator_line).setVisibility(View.GONE);
+//            }
+//        }
+
 
         super.onAttach(context);
-
-        requireActivity().findViewById(R.id.seprator_line).setVisibility(View.GONE);
-        if (requireActivity().getSupportFragmentManager().getBackStackEntryCount() > 1) {
-            Fragment f = requireActivity().getSupportFragmentManager().findFragmentById(R.id.frameLayout);
-            if (f instanceof MainViewPagerFragment || f instanceof ActivityFragment) {
-                // Do something
-                requireActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
-            }
-        }
-
 
 
     }
@@ -174,10 +172,7 @@ public class BaseFragment extends Fragment {
             getActivity().findViewById(R.id.seprator_line).setVisibility(View.GONE);
         }
         transaction.replace(id, fragment);
-        getActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
-        if (fragment instanceof MainViewPagerFragment) {
-            getActivity().findViewById(R.id.seprator_line).setVisibility(View.GONE);
-        }
+
         if(isBack)
         {
             transaction.addToBackStack(null);

@@ -15,6 +15,7 @@ import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
+import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     private List<Post> notificationsList = new ArrayList<>();
     private OnItemClickListener onItemClickListener;
     private boolean isLoaderVisible = false;
+    private ConnectionViewModel connectionViewModel;
 
     public NotificationsAdapter(Context context, List<Post> notifications, OnItemClickListener itemClickListener) {
         this.context = context;
@@ -46,13 +48,32 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         AppUtils.setGlideImage(context, holder.profile_image, notificationsList.get(position).getUser().getUser_image());
         holder.tv_status.setText(notificationsList.get(position).getContent());
         holder.tv_date.setText(DateUtils.formatToYesterdayOrToday(notificationsList.get(position).getCreated_datetime()));
-//        holder.linearLayout10.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                onItemClickListener.onItemClick(v, position);
-//            }
-//        });
-        //holder.tv_content.setText(notificationsList.get(position).getDetails());
+
+        if(notificationsList.get(position).getObject_type().equalsIgnoreCase("connection"))
+        {
+            holder.tv_connect.setVisibility(View.VISIBLE);
+
+        }
+        else
+        {
+            holder.tv_connect.setVisibility(View.GONE);
+        }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!notificationsList.get(position).getObject_type().equalsIgnoreCase("connection"))
+                {
+                    onItemClickListener.onItemClick(v, position);
+                }
+            }
+        });
+
+        holder.tv_connect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onItemClickListener.onAcceptClick(v, position);
+            }
+        });
     }
 
     @Override
@@ -60,7 +81,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         return notificationsList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.profile_image)
         ImageView profile_image;
@@ -71,32 +92,38 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         @BindView(R.id.tv_date)
         TextView tv_date;
 
-         @BindView(R.id.linearLayout10)
+        @BindView(R.id.linearLayout10)
         ConstraintLayout linearLayout10;
+
+        @BindView(R.id.tv_connect)
+        TextView tv_connect;
 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(this);
-        }
 
-        @Override
-        public void onClick(View v) {
-            onItemClickListener.onItemClick(v, getAdapterPosition());
+
         }
+//
+//        @Override
+//        public void onClick(View v) {
+//            if(v.getId()==R.id.tv_connect)
+//            onItemClickListener.onItemClick(v, getAdapterPosition());
+//        }
     }
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
+        void onAcceptClick(View view,int position);
     }
     public void removeLoading() {
         isLoaderVisible = false;
         int position = notificationsList.size() - 1;
         Post item = getItem(position);
         if (item != null) {
-           // notificationsList.remove(position);
-           // notifyItemRemoved(position);
+            // notificationsList.remove(position);
+            // notifyItemRemoved(position);
         }
     }
     Post getItem(int position) {
