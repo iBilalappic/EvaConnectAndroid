@@ -26,16 +26,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/view6" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profile_image"
-        android:layout_width="70dp"
-        android:layout_height="50dp"
+    <RelativeLayout
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:src="@drawable/no_thumbnail"
-
+        android:id="@+id/profile_layout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="53dp"
+        android:layout_height="53dp">
+
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:background="@android:color/transparent"
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/white_chatbg"
+            app:civ_border_color="@color/skyblue"
+            app:civ_border_width="2dp"
+            />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:padding="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/profile_image"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="2dp"
+            />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/tv_name"
@@ -49,7 +69,7 @@
         android:textColor="@color/black"
         android:textStyle="bold"
         android:text="Networth And Vibe"
-        app:layout_constraintStart_toEndOf="@+id/profile_image"
+        app:layout_constraintStart_toEndOf="@+id/profile_layout"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -62,7 +82,7 @@
         android:fontFamily="@font/nunitosansregular"
         android:ellipsize="end"
         android:maxLines="1"
-        app:layout_constraintStart_toEndOf="@+id/profile_image"
+        app:layout_constraintStart_toEndOf="@+id/profile_layout"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
     <TextView
         app:layout_constraintStart_toStartOf="@id/tv_location"

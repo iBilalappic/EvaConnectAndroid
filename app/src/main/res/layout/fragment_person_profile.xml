@@ -25,18 +25,38 @@
             android:layout_height="178dp"
             android:background="@color/white">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profile_image"
-                android:layout_width="91dp"
-                android:layout_height="91dp"
+            <RelativeLayout
+                android:layout_marginTop="20dp"
                 android:layout_marginStart="20dp"
-                android:src="@drawable/profile"
-                app:civ_border_color="@color/skyblue"
-                app:civ_border_overlay="true"
-                app:civ_border_width="2dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+
+                android:id="@+id/profile_layout"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_width="91dp"
+                android:layout_height="91dp">
+
+
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:background="@android:color/transparent"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/white_chatbg"
+                    app:civ_border_color="@color/skyblue"
+                    app:civ_border_width="2dp"
+                    />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:padding="2dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/profile_image"
+                    android:src="@drawable/no_thumbnail"
+                    app:civ_border_color="@color/white"
+                    app:civ_border_width="2dp"
+                    />
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/tv_name"
@@ -50,8 +70,8 @@
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/profile_image"
-                app:layout_constraintTop_toTopOf="@+id/profile_image" />
+                app:layout_constraintStart_toEndOf="@+id/profile_layout"
+                app:layout_constraintTop_toTopOf="@+id/profile_layout" />
 
             <TextView
                 android:id="@+id/tv_location"
@@ -64,7 +84,7 @@
                 android:textSize="14sp"
                 android:fontFamily="@font/nunitosansbold"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/profile_image"
+                app:layout_constraintStart_toEndOf="@+id/profile_layout"
                 app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
 
@@ -83,7 +103,7 @@
                 android:paddingBottom="5dp"
                 android:text="Connect"
                 android:textColor="@color/skyblue"
-                app:layout_constraintStart_toEndOf="@+id/profile_image"
+                app:layout_constraintStart_toEndOf="@+id/profile_layout"
                 app:layout_constraintTop_toBottomOf="@+id/tv_location" />
 
 

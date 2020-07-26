@@ -31,17 +31,37 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profile_image"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+    <RelativeLayout
         android:layout_marginStart="10dp"
         android:layout_marginTop="16dp"
-        android:src="@drawable/ic_user_profile"
-        app:civ_border_color="@color/skyblue"
-        app:civ_border_width="2dp"
+        android:id="@+id/profile_layout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="53dp"
+        android:layout_height="53dp">
+
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:background="@android:color/transparent"
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/white_chatbg"
+            app:civ_border_color="@color/skyblue"
+            app:civ_border_width="2dp"
+            />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:padding="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/profile_image"
+            android:src="@drawable/no_thumbnail"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="2dp"
+            />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/tv_name"
@@ -56,7 +76,7 @@
         android:textColor="@color/black"
         android:textSize="12sp"
         app:layout_constraintHorizontal_bias="0.131"
-        app:layout_constraintStart_toEndOf="@+id/profile_image"
+        app:layout_constraintStart_toEndOf="@+id/profile_layout"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -69,7 +89,7 @@
         android:maxLines="1"
         android:text="Aviation international"
         android:textSize="10sp"
-        app:layout_constraintStart_toEndOf="@+id/profile_image"
+        app:layout_constraintStart_toEndOf="@+id/profile_layout"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
     <TextView
@@ -82,7 +102,7 @@
         android:maxLines="1"
         android:text="$97,000 pa"
         android:visibility="gone"
-        app:layout_constraintStart_toEndOf="@+id/profile_image"
+        app:layout_constraintStart_toEndOf="@+id/profile_layout"
         app:layout_constraintTop_toBottomOf="@+id/tv_connections" />
 
     <TextView
@@ -116,7 +136,7 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_image" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_layout" />
 
 
     <View

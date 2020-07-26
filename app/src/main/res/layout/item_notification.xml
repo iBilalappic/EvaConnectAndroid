@@ -6,18 +6,40 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profile_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:src="@drawable/profile"
-        app:civ_border_color="@color/skyblue"
-        app:civ_border_width="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <RelativeLayout
+
+        android:id="@+id/profile_layout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="53dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp">
+
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:background="@android:color/transparent"
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/no_thumbnail"
+            app:civ_border_color="@color/skyblue"
+            app:civ_border_width="2dp"
+            />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:padding="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/profile_image"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="2dp"
+            />
+    </RelativeLayout>
+
+
+
 
     <TextView
         android:visibility="gone"
@@ -49,7 +71,7 @@
         android:textStyle="normal"
         android:text="Liked your post (36 mins ago)"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/profile_image"
+        app:layout_constraintStart_toEndOf="@+id/profile_layout"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.395" />
 
@@ -60,7 +82,7 @@
         android:background="@color/gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_image" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_layout" />
 
     <TextView
         style="@style/TextStyle"
@@ -69,7 +91,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="TextView"
-        app:layout_constraintStart_toEndOf="@+id/profile_image"
+        app:layout_constraintStart_toEndOf="@+id/profile_layout"
         app:layout_constraintTop_toBottomOf="@+id/tv_status" />
 
 

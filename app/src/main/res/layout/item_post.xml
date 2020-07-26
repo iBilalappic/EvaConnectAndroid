@@ -28,17 +28,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view6" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profile_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <RelativeLayout
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:src="@drawable/profile"
-        app:civ_border_color="@color/skyblue"
-        app:civ_border_width="2dp"
+        android:id="@+id/profile_layout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="53dp"
+        android:layout_height="53dp">
+
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:background="@android:color/transparent"
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/no_thumbnail"
+            app:civ_border_color="@color/skyblue"
+            app:civ_border_width="2dp"
+            />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:padding="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/profile_image"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="2dp"
+            />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/tv_name"
@@ -53,8 +72,8 @@
         android:textColor="@color/black"
         android:textSize="12sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/profile_image"
-        app:layout_constraintTop_toTopOf="@+id/profile_image" />
+        app:layout_constraintStart_toEndOf="@+id/profile_layout"
+        app:layout_constraintTop_toTopOf="@+id/profile_layout" />
 
     <TextView
         android:id="@+id/tv_connect"
@@ -73,7 +92,7 @@
         android:textColor="@color/skyblue"
         android:textSize="9sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/profile_image" />
+        app:layout_constraintTop_toTopOf="@+id/profile_layout" />
 
     <TextView
         android:id="@+id/tv_connections"
@@ -83,7 +102,7 @@
         android:layout_marginStart="8dp"
         android:text="465,345 connections"
         android:visibility="gone"
-        app:layout_constraintStart_toEndOf="@+id/profile_image"
+        app:layout_constraintStart_toEndOf="@+id/profile_layout"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
     <TextView
         android:id="@+id/tv_designation"
@@ -92,7 +111,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="Recruitment officer"
-        app:layout_constraintStart_toEndOf="@+id/profile_image"
+        app:layout_constraintStart_toEndOf="@+id/profile_layout"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
     <TextView
@@ -453,6 +472,6 @@
         android:text="“Things you’d never hear in a ticket office” … Let’s play a game of mock the week, or the LinkedIn version of Mock the Week. I’ll Start: https://lnkd.in… see more"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_image" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

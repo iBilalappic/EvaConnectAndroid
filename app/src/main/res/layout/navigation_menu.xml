@@ -20,18 +20,43 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
 
-        android:id="@+id/profile_image"
+
+
+    <RelativeLayout
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:id="@+id/profile_layout"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="91dp"
         android:layout_height="91dp"
-        android:src="@drawable/profile"
-        app:civ_border_color="@color/skyblue"
-        app:civ_border_overlay="true"
-        app:civ_border_width="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/img_close" />
+        app:layout_constraintTop_toBottomOf="@+id/img_close" >
+
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:background="@android:color/transparent"
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/white_chatbg"
+            app:civ_border_color="@color/skyblue"
+            app:civ_border_width="2dp"
+            />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:padding="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/profile_image"
+            android:src="@drawable/no_thumbnail"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="2dp"
+            />
+    </RelativeLayout>
+
 
 
     <TextView
@@ -49,7 +74,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_image">
+        app:layout_constraintTop_toBottomOf="@+id/profile_layout">
 
     </TextView>
 
