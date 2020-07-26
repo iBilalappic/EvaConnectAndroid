@@ -60,17 +60,43 @@
 
                 </LinearLayout>
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/profile_image"
+
+
+                <RelativeLayout
+
+                    android:id="@+id/profile_layout"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
-                    android:src="@drawable/no_thumbnail"
-                    app:civ_border_color="@color/skyblue"
-                    app:civ_border_width="2dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/layout_header" />
+                    app:layout_constraintTop_toBottomOf="@+id/layout_header">
+
+
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:background="@android:color/transparent"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/white_chatbg"
+                        app:civ_border_color="@color/skyblue"
+                        app:civ_border_width="2dp"
+                        />
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:padding="2dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/profile_image"
+                        android:src="@drawable/no_thumbnail"
+                        app:civ_border_color="@color/white"
+                        app:civ_border_width="2dp"
+                        />
+                </RelativeLayout>
+
+
+
 
                 <TextView
                     android:id="@+id/tv_name"
@@ -84,7 +110,7 @@
                     android:text="Add an image"
                     android:textColor="@color/black"
                     android:textSize="12sp"
-                    app:layout_constraintStart_toEndOf="@+id/profile_image"
+                    app:layout_constraintStart_toEndOf="@+id/profile_layout"
                     app:layout_constraintTop_toBottomOf="@+id/layout_header" />
 
 
@@ -123,7 +149,7 @@
                     android:theme="@style/MyEditTextTheme"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/profile_image">
+                    app:layout_constraintTop_toBottomOf="@+id/profile_layout">
 
                 </EditText>
 

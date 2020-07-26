@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lighter_gray">
+    android:background="@color/lighter_gray"
+
+   >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout2"
@@ -12,7 +14,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorwhite"
         android:clipToPadding="false"
-        android:paddingBottom="10dp">
+        android:paddingBottom="5dp">
 
         <TextView
             android:id="@+id/tv_name"
@@ -377,11 +379,11 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
+
             android:id="@+id/edt_comment"
             style="@style/EditText.Comments"
             android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="38dp"
+            android:layout_height="match_parent"
             android:hint="@string/tap_here_to_comment"
             android:inputType="textPersonName"
             android:textColor="@color/gray_1"
@@ -390,6 +392,7 @@
             app:layout_constraintStart_toEndOf="@+id/img_user" />
 
         <ImageView
+           app:layout_constraintTop_toTopOf="@+id/edt_comment"
             android:id="@+id/btn_addcomment"
             android:layout_width="25dp"
             android:layout_height="21dp"
