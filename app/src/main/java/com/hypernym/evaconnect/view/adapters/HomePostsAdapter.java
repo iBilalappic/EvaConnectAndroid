@@ -1183,6 +1183,21 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         ((JobTypeViewHolder) holder).tv_apply.setVisibility(View.GONE);
                     } else {
                         ((JobTypeViewHolder) holder).tv_apply.setVisibility(View.VISIBLE);
+                        if(posts.get(position).getIs_applied()==1)
+                        {
+                            ((JobTypeViewHolder) holder).tv_apply.setText("Applied");
+                        }
+                        else
+                        {
+                            ((JobTypeViewHolder) holder).tv_apply.setText("Apply");
+                            ((JobTypeViewHolder) holder).tv_apply.setOnClickListener(new OnOneOffClickListener() {
+                                @Override
+                                public void onSingleClick(View v) {
+
+                                    mClickListener.onApplyClick(v, position);
+                                }
+                            });
+                        }
                        // ((JobTypeViewHolder) holder).tv_apply.setText(posts.get(position).);
                     }
 
