@@ -229,7 +229,8 @@ public class HomeActivity extends BaseActivity {
 
     private void init() {
         homeViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getApplication(), this)).get(HomeViewModel.class);
-        if (getIntent().getExtras() != null) {
+        if (getIntent().getExtras() != null && (getIntent().getExtras().getString("chat_room_id")!=null ||
+                getIntent().getBundleExtra(Constants.DATA)!=null)) {
             String fragment_name = getIntent().getStringExtra(Constants.FRAGMENT_NAME);
             String fragmentName = getIntent().getStringExtra(Constants.FRAGMENT_NAME);
             Bundle bundle = getIntent().getBundleExtra(Constants.DATA);
