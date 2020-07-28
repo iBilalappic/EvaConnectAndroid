@@ -66,6 +66,8 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
 
 
 
+
+
     private List<Post> posts = new ArrayList<>();
     private HomePostsAdapter homePostsAdapter;
     private LinearLayoutManager linearLayoutManager;
@@ -92,6 +94,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
+
         return view;
     }
 
@@ -439,6 +442,8 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         TextView text = (TextView) view;
         if (NetworkUtils.isNetworkConnected(getContext())) {
             callConnectApi(text, position);
+            callPostsApi();
+
         } else {
             networkErrorDialog();
         }

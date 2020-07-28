@@ -42,10 +42,9 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:background="@android:color/transparent"
-
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/no_thumbnail"
+            android:src="@drawable/white_chatbg"
             app:civ_border_color="@color/skyblue"
             app:civ_border_width="2dp"
             />
@@ -56,6 +55,7 @@
             android:layout_height="match_parent"
             android:id="@+id/profile_image"
             app:civ_border_color="@color/white"
+            android:src="@drawable/no_thumbnail"
             app:civ_border_width="2dp"
             />
     </RelativeLayout>

@@ -150,6 +150,20 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                 }
             });
 
+            tv_name.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onProfileClick(v, getAdapterPosition());
+                }
+            });
+
+            tv_connect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mClickListener.onConnectClick(v,getAdapterPosition());
+                }
+            });
+
         }
     }
 
@@ -348,6 +362,13 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     mClickListener.onApplyClick(v, getAdapterPosition());
                 }
             });
+
+            tv_name.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onProfileClick(v, getAdapterPosition());
+                }
+            });
         }
 
     }
@@ -480,6 +501,13 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                 }
             });
 
+            tv_name.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onProfileClick(v, getAdapterPosition());
+                }
+            });
+
             post_image.setOnClickListener(new OnDoubleTapClickListner() {
                 @Override
                 public void onSingleClick(View v) {
@@ -488,6 +516,13 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onDoubleClick(View v) {
                     mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
+                }
+            });
+
+            tv_connect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mClickListener.onConnectClick(v,getAdapterPosition());
                 }
             });
 
@@ -611,6 +646,20 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                 }
             });
 
+            tv_name.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onProfileClick(v, getAdapterPosition());
+                }
+            });
+
+            tv_connect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mClickListener.onConnectClick(v,getAdapterPosition());
+                }
+            });
+
         }
     }
 
@@ -731,6 +780,20 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                 }
             });
 
+            tv_name.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onProfileClick(v, getAdapterPosition());
+                }
+            });
+
+            tv_connect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mClickListener.onConnectClick(v,getAdapterPosition());
+                }
+            });
+
         }
 
     }
@@ -834,6 +897,13 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             });
 
             profile_image.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onProfileClick(v, getAdapterPosition());
+                }
+            });
+
+            tv_name.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onProfileClick(v, getAdapterPosition());

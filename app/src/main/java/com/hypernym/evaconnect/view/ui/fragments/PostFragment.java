@@ -311,6 +311,17 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
         loadFragment(R.id.framelayout, personDetailFragment, getContext(), true);
     }
 
+    @Override
+    public void onConnectClick(View view, int position) {
+        TextView text = (TextView) view;
+        if (NetworkUtils.isNetworkConnected(getContext())) {
+            callConnectApi(text, position);
+
+        } else {
+            networkErrorDialog();
+        }
+    }
+
 
     private void callDeclineConnectApi(Connection connection) {
 
@@ -364,6 +375,31 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
 
             }
         });
+    }
+
+
+
+
+    private void callConnectApi(TextView text, int position) {
+        if (text.getText().toString().equalsIgnoreCase(getString(R.string.connect))) {
+            showDialog();
+            User user = LoginUtils.getLoggedinUser();
+            Connection connection = new Connection();
+            connection.setReceiver_id(posts.get(position).getUser().getId());
+            connection.setSender_id(user.getId());
+            connection.setStatus(AppConstants.STATUS_PENDING);
+            connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
+                @Override
+                public void onChanged(BaseModel<List<Connection>> listBaseModel) {
+                    if (listBaseModel != null && !listBaseModel.isError()) {
+                        text.setText("Request Sent");
+                    } else {
+                        networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                    }
+                    hideDialog();
+                }
+            });
+        }
     }
 
 }

@@ -21,13 +21,23 @@
         app:tabTextAppearance="@style/CustomTextAppearanceTab"
         app:tabTextColor="@color/gray" />
 
-
     <View
         android:id="@+id/line"
         app:layout_constraintTop_toBottomOf="@+id/tabs"
         android:background="@drawable/ic_blue_red"
         android:layout_width="match_parent"
         android:layout_height="2dp"/>
+
+    <TextView
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/line"
+        android:gravity="center"
+        android:textColor="@color/light_green"
+        android:text="@string/new_post"
+        android:id="@+id/newpostcheck"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"/>
+
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/container"
@@ -37,7 +47,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/line" />
+        app:layout_constraintTop_toBottomOf="@+id/newpostcheck" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

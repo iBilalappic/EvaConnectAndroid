@@ -271,8 +271,10 @@ public class NewsActivity extends BaseActivity implements Validator.ValidationLi
                 break;
 
             case R.id.img_cross:
-                NewsSelectedids.clear();
-                this.finish();
+                CheckSelectedNews();
+
+//                NewsSelectedids.clear();
+//                this.finish();
                 break;
             case R.id.btn_next:
                 CheckSelectedNews();

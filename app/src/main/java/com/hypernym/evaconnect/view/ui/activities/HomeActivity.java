@@ -364,11 +364,18 @@ public class HomeActivity extends BaseActivity {
         tv_profile.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
 
 
-        PrefUtils.saveMessageCount(getApplicationContext(), 0);
-        badge_notification.setVisibility(View.GONE);
-        ActivityFragment fragment = new ActivityFragment();
-        loadFragment(R.id.framelayout, fragment, this, true);
-        BaseFragment.pageTitle = getString(R.string.messages);
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.framelayout);
+        if (f instanceof ActivityFragment) {
+        } else {
+            PrefUtils.saveMessageCount(getApplicationContext(), 0);
+            badge_notification.setVisibility(View.GONE);
+            ActivityFragment fragment = new ActivityFragment();
+            loadFragment(R.id.framelayout, fragment, this, true);
+            BaseFragment.pageTitle = getString(R.string.messages);
+        }
+
+
+
     }
 
     @OnClick(R.id.profile_click)
@@ -392,8 +399,14 @@ public class HomeActivity extends BaseActivity {
         tv_profile.setTextColor(ContextCompat.getColor(this, R.color.skyblue));
 
 
-        PersonProfileFragment fragment = new PersonProfileFragment();
-        loadFragment(R.id.framelayout, fragment, this, true);
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.framelayout);
+        if (f instanceof PersonProfileFragment) {
+        } else {
+            PersonProfileFragment fragment = new PersonProfileFragment();
+            loadFragment(R.id.framelayout, fragment, this, true);
+        }
+
+
         //  BaseFragment.pageTitle = "Profile";
 
     }

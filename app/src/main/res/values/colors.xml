@@ -17,8 +17,12 @@
     <color name="gray_light">#F8F7F7</color>
     <color name="lite_black">#80000000</color>
     <color name="lighter_gray">#F0F0F0</color>
-    <color name="lighter_gray_1">#8DF0F0F0</color>
-    <color name="lighter_gray_2">#37F0F0F0</color>
+    <color name="lighter_gray_1">#FBFBFB</color>
+    <color name="lighter_gray_2">#FBFBFB</color>
+
+<!--    <color name="lighter_gray_1">#8DF0F0F0</color>-->
+<!--    <color name="lighter_gray_2">#37F0F0F0</color>-->
+
     <color name="title_bg">#FCFBFF</color>
     <color name="page_title">#66697E</color>
     <color name="page_bg">#EAEAE8</color>

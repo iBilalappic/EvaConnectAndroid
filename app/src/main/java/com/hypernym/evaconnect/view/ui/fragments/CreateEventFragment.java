@@ -458,6 +458,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
 
     @OnClick(R.id.post)
     public void post() {
+
         validator.validate();
     }
 

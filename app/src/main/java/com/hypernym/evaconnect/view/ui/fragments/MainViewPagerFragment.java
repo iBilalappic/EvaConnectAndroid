@@ -2,12 +2,15 @@ package com.hypernym.evaconnect.view.ui.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
@@ -29,6 +32,9 @@ public class MainViewPagerFragment extends BaseFragment implements FloatingActio
 
     @BindView(R.id.fab)
     FloatingActionButton fab;
+    @BindView(R.id.newpostcheck)
+    TextView newpostcheck;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +56,27 @@ public class MainViewPagerFragment extends BaseFragment implements FloatingActio
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(mViewPager);
         fab.setOnClickListener(this);
+
+        if(getnewPost())
+        {
+            newpostcheck.setVisibility(View.VISIBLE);
+
+            newpostcheck.postDelayed(new Runnable() {
+                public void run() {
+                    newpostcheck.setVisibility(View.GONE);
+                    hidePostText();
+                }
+            }, 3000);
+
+        }
+        else
+        {
+            newpostcheck.setVisibility(View.GONE);
+        }
+
+
+
+
         return view;
     }
 
@@ -66,6 +93,7 @@ public class MainViewPagerFragment extends BaseFragment implements FloatingActio
 
             switch (position) {
                 case 0:
+
                      return new PostFragment();
                 case 1:
                      return new EventFragment();

@@ -136,7 +136,7 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
         tv_upload_image.setOnClickListener(this);
         tv_already_account.setOnClickListener(this);
         tv_company.setBackground(getDrawable(R.drawable.rounded_button_border));
-        tv_individual.setBackground(getDrawable(R.drawable.rounded_button_selected));
+        tv_individual.setBackground(getDrawable(R.drawable.rounded_button_red));
 
         String type = getIntent().getStringExtra(Constants.ACTIVITY_NAME);
 
@@ -254,14 +254,14 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
 
             case R.id.tv_individual:
                 tv_company.setBackground(getDrawable(R.drawable.rounded_button_border));
-                tv_individual.setBackground(getDrawable(R.drawable.rounded_button_selected));
+                tv_individual.setBackground(getDrawable(R.drawable.rounded_button_red));
                 tv_company.setTextColor(getResources().getColor(R.color.gray));
                 tv_individual.setTextColor(getResources().getColor(R.color.white));
                 userType = "user";
                 break;
 
             case R.id.tv_company:
-                tv_company.setBackground(getDrawable(R.drawable.rounded_button_selected));
+                tv_company.setBackground(getDrawable(R.drawable.rounded_button_red));
                 tv_company.setTextColor(getResources().getColor(R.color.white));
                 tv_individual.setBackground(getDrawable(R.drawable.rounded_button_border));
                 tv_individual.setTextColor(getResources().getColor(R.color.gray));

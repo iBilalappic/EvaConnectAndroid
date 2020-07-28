@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -149,68 +150,74 @@ public class CreateAccount_3_Activity extends BaseActivity implements View.OnCli
         btn_next.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
-                if (activity_type.equals("LinkedinActivity")) {
-                    Intent intent = new Intent(CreateAccount_3_Activity.this, CreateAccount_4_Activity.class);
-                    intent.putExtra("Email", email);
-                    intent.putExtra("Photo", photourl);
-                    intent.putExtra("userType", user_type);
-                    intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-                    intent.putExtra("aviation_type", aviation_type);
-                    intent.putExtra("job_sector", JobSector);
-                    intent.putExtra("username", username);
-                    intent.putExtra("FirstName",firstname);
-                    intent.putExtra("SurName", surname);
-                    intent.putExtra("city", city);
-                    intent.putExtra("country", country);
-                    startActivity(intent);
 
-                }
-                else if (activity_type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)){
-                    Intent intent = new Intent(CreateAccount_3_Activity.this, CreateAccount_4_Activity.class);
-                    intent.putExtra("Email", email);
-                    intent.putExtra("Photo", photourl);
-                    intent.putExtra("userType", user_type);
-                    intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-                    intent.putExtra("aviation_type", aviation_type);
-                    intent.putExtra("job_sector", JobSector);
-                    intent.putExtra("username", username);
-                    intent.putExtra("FirstName",firstname);
-                    intent.putExtra("SurName", surname);
-                    intent.putExtra("city", city);
-                    intent.putExtra("country", country);
-                    startActivity(intent);
-                }
-                else {
+                if((!spinner_sector.getSelectedItem().equals("Choose"))) {
 
-                    Intent intent = new Intent(CreateAccount_3_Activity.this, CreateAccount_4_Activity.class);
-                    if (filepath != null) {
-
+                    if (activity_type.equals("LinkedinActivity")) {
+                        Intent intent = new Intent(CreateAccount_3_Activity.this, CreateAccount_4_Activity.class);
                         intent.putExtra("Email", email);
+                        intent.putExtra("Photo", photourl);
                         intent.putExtra("userType", user_type);
                         intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
                         intent.putExtra("aviation_type", aviation_type);
                         intent.putExtra("job_sector", JobSector);
                         intent.putExtra("username", username);
-                        intent.putExtra("FirstName",firstname);
+                        intent.putExtra("FirstName", firstname);
                         intent.putExtra("SurName", surname);
                         intent.putExtra("city", city);
                         intent.putExtra("country", country);
-                        intent.putExtra("FilePath", filepath);
+                        startActivity(intent);
+
+                    } else if (activity_type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)) {
+                        Intent intent = new Intent(CreateAccount_3_Activity.this, CreateAccount_4_Activity.class);
+                        intent.putExtra("Email", email);
+                        intent.putExtra("Photo", photourl);
+                        intent.putExtra("userType", user_type);
+                        intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+                        intent.putExtra("aviation_type", aviation_type);
+                        intent.putExtra("job_sector", JobSector);
+                        intent.putExtra("username", username);
+                        intent.putExtra("FirstName", firstname);
+                        intent.putExtra("SurName", surname);
+                        intent.putExtra("city", city);
+                        intent.putExtra("country", country);
                         startActivity(intent);
                     } else {
-                        intent.putExtra("Email", email);
-                        intent.putExtra("userType", user_type);
-                        intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-                        intent.putExtra("aviation_type", aviation_type);
-                        intent.putExtra("job_sector", JobSector);
-                        intent.putExtra("username", username);
-                        intent.putExtra("FirstName",firstname);
-                        intent.putExtra("SurName", surname);
-                        intent.putExtra("city", city);
-                        intent.putExtra("country", country);
-                        startActivity(intent);
-                    }
 
+                        Intent intent = new Intent(CreateAccount_3_Activity.this, CreateAccount_4_Activity.class);
+                        if (filepath != null) {
+
+                            intent.putExtra("Email", email);
+                            intent.putExtra("userType", user_type);
+                            intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+                            intent.putExtra("aviation_type", aviation_type);
+                            intent.putExtra("job_sector", JobSector);
+                            intent.putExtra("username", username);
+                            intent.putExtra("FirstName", firstname);
+                            intent.putExtra("SurName", surname);
+                            intent.putExtra("city", city);
+                            intent.putExtra("country", country);
+                            intent.putExtra("FilePath", filepath);
+                            startActivity(intent);
+                        } else {
+                            intent.putExtra("Email", email);
+                            intent.putExtra("userType", user_type);
+                            intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+                            intent.putExtra("aviation_type", aviation_type);
+                            intent.putExtra("job_sector", JobSector);
+                            intent.putExtra("username", username);
+                            intent.putExtra("FirstName", firstname);
+                            intent.putExtra("SurName", surname);
+                            intent.putExtra("city", city);
+                            intent.putExtra("country", country);
+                            startActivity(intent);
+                        }
+
+                    }
+                }
+                else
+                {
+                    Toast.makeText(CreateAccount_3_Activity.this, "Kindly Choose the Sector first", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -222,6 +229,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements View.OnCli
             @Override
             public void onChanged(BaseModel<List<String>> listBaseModel) {
                 if (listBaseModel.getData() != null && !listBaseModel.isError()) {
+                    jobsector.add("Choose");
                     jobsector.addAll(listBaseModel.getData());
                     SettingJobSectorSpinner();
                     Log.d("TAAAG", "" + jobsector);
@@ -243,6 +251,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements View.OnCli
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
               //  JobSector=jobsector.get(position).toString();
+
                 JobSector = parent.getItemAtPosition(position).toString();
 
             }

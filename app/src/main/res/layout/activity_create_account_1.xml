@@ -180,18 +180,43 @@
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/img_profile"
+
+        <RelativeLayout
             android:layout_width="111dp"
             android:layout_height="111dp"
             android:layout_marginTop="40dp"
-            android:background="@drawable/ic_user_profile"
-            app:civ_border_color="@color/skyblue"
-            app:civ_border_overlay="true"
-            app:civ_border_width="3dp"
+            android:layout_marginStart="8dp"
+            android:id="@+id/profile_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_individual" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_individual">
+
+
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:background="@android:color/transparent"
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/white_chatbg"
+                app:civ_border_color="@color/skyblue"
+                app:civ_border_width="2dp"
+                />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:padding="2dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/img_profile"
+                android:src="@drawable/ic_user_profile"
+                app:civ_border_color="@color/white"
+                app:civ_border_width="2dp"
+                />
+        </RelativeLayout>
+
+
+
+
 
 
         <TextView
@@ -205,7 +230,7 @@
             android:textColor="#3C3F5C"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_profile" />
+            app:layout_constraintTop_toBottomOf="@+id/profile_layout" />
 
 
         <Button
@@ -226,7 +251,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="15dp"
             android:gravity="center"
             android:text="Already have an account?"
             android:textColor="@color/colorAccent"

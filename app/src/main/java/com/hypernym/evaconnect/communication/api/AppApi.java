@@ -86,7 +86,7 @@ public interface AppApi {
                                               @Part("created_by_id") int created_by_id,
                                               @Part("published_date") RequestBody published_date,
                                               @Part("job_type ") RequestBody job_type ,@Part("active_hours ") int active_hours,
-                                              @Part MultipartBody.Part job_image);
+                                              @Part MultipartBody.Part job_image,@Part("job_nature ") RequestBody job_nature);
 
     @Multipart
     @PATCH(APIConstants.UPDATE_JOB_AD)

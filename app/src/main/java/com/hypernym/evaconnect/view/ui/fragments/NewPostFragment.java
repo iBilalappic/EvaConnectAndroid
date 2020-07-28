@@ -160,6 +160,8 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                 if (edt_content.getText().length() > 0 || part_images.size() > 0 || video != null) {
                     if (NetworkUtils.isNetworkConnected(getContext())) {
                         createPost();
+
+
                     } else {
                         networkErrorDialog();
                     }
@@ -233,6 +235,9 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
             @Override
             public void onChanged(BaseModel<List<Post>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError()) {
+
+                    newPost();
+
                     Toast.makeText(getContext(), getString(R.string.msg_post_created), Toast.LENGTH_LONG).show();
                     // networkResponseDialog(getString(R.string.success),getString(R.string.msg_post_created));
                     if (getFragmentManager().getBackStackEntryCount() != 0) {

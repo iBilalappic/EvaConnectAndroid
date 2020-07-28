@@ -206,6 +206,8 @@ public class ShareVideoFragment extends BaseFragment implements AttachmentsAdapt
             @Override
             public void onChanged(BaseModel<List<Post>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError()) {
+                    newPost();
+
                     Toast.makeText(getContext(), getString(R.string.msg_post_created), Toast.LENGTH_LONG).show();
                     // networkResponseDialog(getString(R.string.success),getString(R.string.msg_post_created));
                     if (getFragmentManager().getBackStackEntryCount() != 0) {

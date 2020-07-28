@@ -37,7 +37,6 @@ public class PostAdapter  extends RecyclerView.Adapter {
     int total_types;
     private boolean fabStateVolume = false;
     private PostAdapter.ItemClickListener mClickListener;
-    private SliderImageAdapter sliderImageAdapter;
 
     // flag for footer ProgressBar (i.e. last item of list)
     private boolean isLoadingAdded = false;
@@ -147,6 +146,20 @@ public class PostAdapter  extends RecyclerView.Adapter {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onProfileClick(v, getAdapterPosition());
+                }
+            });
+
+            tv_name.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onProfileClick(v, getAdapterPosition());
+                }
+            });
+
+            tv_connect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mClickListener.onConnectClick(v, getAdapterPosition());
                 }
             });
 
@@ -278,6 +291,13 @@ public class PostAdapter  extends RecyclerView.Adapter {
                 }
             });
 
+            tv_name.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onProfileClick(v, getAdapterPosition());
+                }
+            });
+
             post_image.setOnClickListener(new OnDoubleTapClickListner() {
                 @Override
                 public void onSingleClick(View v) {
@@ -286,6 +306,13 @@ public class PostAdapter  extends RecyclerView.Adapter {
                 @Override
                 public void onDoubleClick(View v) {
                     mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
+                }
+            });
+
+            tv_connect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mClickListener.onConnectClick(v, getAdapterPosition());
                 }
             });
 
@@ -410,6 +437,20 @@ public class PostAdapter  extends RecyclerView.Adapter {
                 }
             });
 
+            tv_name.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onProfileClick(v, getAdapterPosition());
+                }
+            });
+
+            tv_connect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mClickListener.onConnectClick(v, getAdapterPosition());
+                }
+            });
+
         }
     }
 
@@ -526,6 +567,20 @@ public class PostAdapter  extends RecyclerView.Adapter {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onProfileClick(v, getAdapterPosition());
+                }
+            });
+
+            tv_name.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onProfileClick(v, getAdapterPosition());
+                }
+            });
+
+            tv_connect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mClickListener.onConnectClick(v, getAdapterPosition());
                 }
             });
 
@@ -878,13 +933,15 @@ public class PostAdapter  extends RecyclerView.Adapter {
 
         void onProfileClick(View view, int position);
 
+        void onConnectClick(View view, int position);
+
 
 
     }
 
     private void initializeSlider(SliderView imageSlider, int position) {
 
-        sliderImageAdapter = new SliderImageAdapter(mContext, posts.get(position).getPost_image(), imageSlider);
+        SliderImageAdapter sliderImageAdapter = new SliderImageAdapter(mContext, posts.get(position).getPost_image(), imageSlider);
         imageSlider.setSliderAdapter(sliderImageAdapter);
         imageSlider.setIndicatorAnimation(IndicatorAnimations.WORM); //set indicator animation by using SliderLayout.IndicatorAnimations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
         imageSlider.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);

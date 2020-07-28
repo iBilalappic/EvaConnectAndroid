@@ -1,5 +1,6 @@
 <resources>
 
+    <string name="new_post">Your Post have been submitted to feeds</string>
     <string name="app_version">Ver.No.1.4</string>
     <string name="app_name">Aviation Connect</string>
     <string name="errorString">Something went wrong, Please try again.</string>

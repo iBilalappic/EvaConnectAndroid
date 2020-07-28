@@ -133,6 +133,13 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
                     mClickListener.onApplyClick(v, getAdapterPosition());
                 }
             });
+
+            tv_name.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onApplyClick(v, getAdapterPosition());
+                }
+            });
         }
 
     }

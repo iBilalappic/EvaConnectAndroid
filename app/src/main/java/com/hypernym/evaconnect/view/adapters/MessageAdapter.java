@@ -7,6 +7,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -64,6 +65,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         }
         if(networkConnectionList.get(position).isUnread() && networkConnectionList.get(position).getMessageCount()>0)
         {
+            holder.notification.setVisibility(View.VISIBLE);
             holder.tv_count.setVisibility(View.VISIBLE);
             holder.tv_count.setText(String.valueOf(networkConnectionList.get(position).getMessageCount()));
             holder.tv_lastmsg.setTextColor(context.getResources().getColor(R.color.black));
@@ -71,6 +73,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         }
         else
         {
+            holder.notification.setVisibility(View.GONE);
             holder.tv_count.setVisibility(View.GONE);
             holder.tv_lastmsg.setTextColor(context.getResources().getColor(R.color.gray));
         }
@@ -86,6 +89,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         TextView tv_name, tv_lastmsg, mtextview22,tv_minago,tv_count;
         CircleImageView mImageview6;
         ConstraintLayout constraintLayout;
+        ImageView notification;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -96,6 +100,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             constraintLayout = (ConstraintLayout) itemView.findViewById(R.id.linearLayout6);
             tv_minago=itemView.findViewById(R.id.tv_minago);
             tv_count=itemView.findViewById(R.id.tv_count);
+            notification=itemView.findViewById(R.id.notification);
         }
     }
 }

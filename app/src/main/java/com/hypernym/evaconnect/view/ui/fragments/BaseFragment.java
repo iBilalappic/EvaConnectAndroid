@@ -59,6 +59,7 @@ public class BaseFragment extends Fragment {
     private File tempFile,file_name;
     private ConnectionViewModel connectionViewModel;
     public static String pageTitle;
+    public static boolean newPost=false;
     /**
      * Could handle back press.
      * @return true if back press was handled
@@ -410,7 +411,18 @@ public class BaseFragment extends Fragment {
         });
     }
 
+public void newPost()
+{
+    newPost=true;
+}
 
+public boolean getnewPost()
+{
+    return newPost;
+}
 
-
+    public void hidePostText()
+    {
+        newPost=false;
+    }
 }
