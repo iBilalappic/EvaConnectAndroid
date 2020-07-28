@@ -589,11 +589,15 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
     @Override
     public void onApplyClick(View view, int position) {
-        SpecficJobFragment specficJobFragment = new SpecficJobFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("job_id", posts.get(position).getId());
-        specficJobFragment.setArguments(bundle);
-        loadFragment(R.id.framelayout, specficJobFragment, getContext(), true);
+        if(posts.get(position).getIs_applied()==0)
+        {
+            SpecficJobFragment specficJobFragment = new SpecficJobFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("job_id", posts.get(position).getId());
+            specficJobFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, specficJobFragment, getContext(), true);
+        }
+
     }
 
     @Override

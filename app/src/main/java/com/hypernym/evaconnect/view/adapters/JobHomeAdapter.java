@@ -121,12 +121,7 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
                     //mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
-            tv_apply.setOnClickListener(new OnOneOffClickListener() {
-                @Override
-                public void onSingleClick(View v) {
-                    mClickListener.onApplyClick(v, getAdapterPosition());
-                }
-            });
+
             profile_image.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
@@ -239,7 +234,23 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
                         ((JobHomeAdapter.JobTypeViewHolder) holder).tv_apply.setVisibility(View.GONE);
                     } else {
                         ((JobHomeAdapter.JobTypeViewHolder) holder).tv_apply.setVisibility(View.VISIBLE);
+                        if(posts.get(position).getIs_applied()==1)
+                        {
+                            ((JobHomeAdapter.JobTypeViewHolder) holder).tv_apply.setText("Applied");
+                        }
+                        else
+                        {
+                            ((JobHomeAdapter.JobTypeViewHolder) holder).tv_apply.setText("Apply");
+                            ((JobHomeAdapter.JobTypeViewHolder) holder).tv_apply.setOnClickListener(new OnOneOffClickListener() {
+                                @Override
+                                public void onSingleClick(View v) {
+
+                                    mClickListener.onApplyClick(v, position);
+                                }
+                            });
+                        }
                     }
+
 
 
                     break;
