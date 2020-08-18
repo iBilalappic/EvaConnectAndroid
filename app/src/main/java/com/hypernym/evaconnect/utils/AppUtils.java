@@ -92,6 +92,7 @@ public final class AppUtils {
         Glide.with(context) //1
                 .load(url)
                 .placeholder(R.mipmap.ic_default)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .apply(RequestOptions.circleCropTransform())
                 .into(imageView);
     }
@@ -106,6 +107,7 @@ public final class AppUtils {
         Glide
                 .with(imageView.getContext())
                 .load(getImg(url))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(imageView);
     }
     public static void setGlideVideoThumbnail(Context context, ImageView imageView,String url)

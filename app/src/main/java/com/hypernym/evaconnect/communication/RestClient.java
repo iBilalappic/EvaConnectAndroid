@@ -5,6 +5,8 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.hypernym.evaconnect.BuildConfig;
+import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.communication.api.AppApi;
 import com.hypernym.evaconnect.constants.APIConstants;
 import com.hypernym.evaconnect.constants.AppConstants;
@@ -56,6 +58,8 @@ public class RestClient {
         return clientInstance;
     }
 
+//       .baseUrl(BuildConfig.BASE_SERVER_URL)
+
     private synchronized Retrofit retrofit() {
         if (retrofit == null || reset.get()) {
 //            OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
@@ -66,7 +70,7 @@ public class RestClient {
 
             Retrofit.Builder retrofitBuilder =
                     new Retrofit.Builder()
-                            .baseUrl(APIConstants.BASE_SERVER_URL)
+                            .baseUrl(BuildConfig.BASE_SERVER_URL)
                             .client(getUnsafeOkHttpClient(AppUtils.getApplicationContext(),AppConstants.SIMPLE_BASEURL))
                             .addConverterFactory(GsonConverterFactory.create(gson));
 
@@ -86,7 +90,7 @@ public class RestClient {
 
             Retrofit.Builder retrofitBuilder =
                     new Retrofit.Builder()
-                            .baseUrl(APIConstants.ONESINGAL_BASE_URL)
+                            .baseUrl(BuildConfig.BASE_SERVER_URL)
                             .client(getUnsafeOkHttpClient(AppUtils.getApplicationContext(), AppConstants.ONESIGNAL_BASEURL))
                             .addConverterFactory(GsonConverterFactory.create(gson));
 

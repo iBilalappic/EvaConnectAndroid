@@ -336,4 +336,12 @@ public class JobFragment extends BaseFragment implements View.OnClickListener, S
         loadFragment(R.id.framelayout, specficJobFragment, getContext(), true);
     }
 
+    @Override
+    public void onApplyCommentClick(View view, int position) {
+        SpecficJobComments specficJobComment = new SpecficJobComments();
+                Bundle bundlecomment = new Bundle();
+                bundlecomment.putInt("job_id", posts.get(position).getId());
+                specficJobComment.setArguments(bundlecomment);
+                loadFragment(R.id.framelayout, specficJobComment, getContext(), true);
+    }
 }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -68,11 +69,14 @@ public class JobAdAdapter extends RecyclerView.Adapter<JobAdAdapter.ViewHolder> 
         TextView tv_name, tv_postion, tv_salary, tv_gotoadd,tv_content;
         CircleImageView profile_image;
         ImageView img_like, img_comment, img_share;
+        LinearLayout comment_click;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_name = itemView.findViewById(R.id.tv_name);
             tv_postion = itemView.findViewById(R.id.tv_connections);
+            comment_click=itemView.findViewById(R.id.comment_click);
+
             tv_salary = itemView.findViewById(R.id.tv_salary);
             tv_gotoadd = itemView.findViewById(R.id.tv_gotoadd);
             profile_image = itemView.findViewById(R.id.profile_image);
@@ -84,6 +88,8 @@ public class JobAdAdapter extends RecyclerView.Adapter<JobAdAdapter.ViewHolder> 
             img_like.setOnClickListener(this);
             img_share.setOnClickListener(this);
             tv_gotoadd.setOnClickListener(this);
+//            img_comment.setOnClickListener(this);
+            comment_click.setOnClickListener(this);
         }
 
 
@@ -98,6 +104,12 @@ public class JobAdAdapter extends RecyclerView.Adapter<JobAdAdapter.ViewHolder> 
                     break;
                 case R.id.img_share:
                     onItemClickListener.onItemClick(v, getAdapterPosition());
+                    break;
+                case R.id.like_click:
+                    onItemClickListener.onItemClick(v,getAdapterPosition());
+                    break;
+                case R.id.comment_click:
+                    onItemClickListener.onItemClick(v,getAdapterPosition());
                     break;
             }
 

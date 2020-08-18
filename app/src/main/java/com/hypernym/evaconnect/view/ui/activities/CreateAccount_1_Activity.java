@@ -107,7 +107,7 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
 
     private String userType = "user";
 
-    String email, password, photourl, activity_type;
+    String email, password, photourl, activity_type,path;
 
 
     @Override
@@ -143,6 +143,7 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
         if ("LinkedinActivity".equals(getIntent().getStringExtra(Constants.ACTIVITY_NAME))) {
             email = getIntent().getStringExtra("Email");
             photourl = getIntent().getStringExtra("Photo");
+            path = getIntent().getStringExtra("Path");
             activity_type = "LinkedinActivity";
             Glide.with(this).load(photourl).into(img_profile);
             tv_upload_image.setEnabled(false);
@@ -151,6 +152,7 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
         else if (!TextUtils.isEmpty(type) && type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)){
             email = getIntent().getStringExtra("Email");
             photourl = getIntent().getStringExtra("Photo");
+            path = getIntent().getStringExtra("Path");
             activity_type = AppConstants.FACEBOOK_LOGIN_TYPE;
             Glide.with(this).load(photourl).into(img_profile);
             tv_upload_image.setEnabled(false);
@@ -169,6 +171,7 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
             Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
             intent.putExtra("Email", email);
             intent.putExtra("Photo", photourl);
+            intent.putExtra("Path", path);
             intent.putExtra("userType", userType);
             intent.putExtra("FirstName", edt_firstname.getText().toString());
             intent.putExtra("SurName", edt_surname.getText().toString());
@@ -180,6 +183,8 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
             Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
             intent.putExtra("Email", email);
             intent.putExtra("Photo", photourl);
+            intent.putExtra("Path", path);
+
             intent.putExtra("userType", userType);
             intent.putExtra("FirstName", edt_firstname.getText().toString());
             intent.putExtra("SurName", edt_surname.getText().toString());

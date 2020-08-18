@@ -143,16 +143,16 @@ public class ShareVideoFragment extends BaseFragment implements AttachmentsAdapt
         User user = LoginUtils.getLoggedinUser();
         AppUtils.setGlideImage(getContext(), profile_image, user.getUser_image());
 
-        if (user.getIs_linkedin() == 1 && !TextUtils.isEmpty(user.getLinkedin_image_url())) {
-            AppUtils.setGlideImage(getContext(), profile_image, user.getLinkedin_image_url());
+        if ( !TextUtils.isEmpty(user.getUser_image())) {
+            AppUtils.setGlideImage(getContext(), profile_image, user.getUser_image());
 
         }
-        else if (user.getIs_facebook() == 1 && !TextUtils.isEmpty(user.getFacebook_image_url())){
-            AppUtils.setGlideImage(getContext(), profile_image, user.getFacebook_image_url());
-        }
-        else {
-            AppUtils.setGlideImage(getContext(), profile_image, user.getUser_image());
-        }
+//        else if (user.getIs_facebook() == 1 && !TextUtils.isEmpty(user.getFacebook_image_url())){
+//            AppUtils.setGlideImage(getContext(), profile_image, user.getFacebook_image_url());
+//        }
+//        else {
+//            AppUtils.setGlideImage(getContext(), profile_image, user.getUser_image());
+//        }
         tv_name.setText(user.getFirst_name());
         tv_designation.setText(user.getDesignation()+" at ");
         tv_company.setText(user.getCompany_name());

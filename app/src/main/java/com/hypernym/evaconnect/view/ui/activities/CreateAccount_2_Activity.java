@@ -77,7 +77,7 @@ public class CreateAccount_2_Activity extends BaseActivity implements Validator.
     @BindView(R.id.tv_already_account)
     TextView tv_already_account;
 
-    String email, photourl, activity_type, user_type, firstname, surname, file_name;
+    String email, photourl, activity_type, user_type, firstname, surname, file_name,path;
 
     public static final int RequestPermissionCode = 1;
     LatLng mLastLocation;
@@ -136,6 +136,7 @@ public class CreateAccount_2_Activity extends BaseActivity implements Validator.
             email = getIntent().getStringExtra("Email");
             photourl = getIntent().getStringExtra("Photo");
             user_type = getIntent().getStringExtra("userType");
+            path = getIntent().getStringExtra("Path");
             activity_type = "LinkedinActivity";
             firstname = getIntent().getStringExtra("FirstName");
             surname = getIntent().getStringExtra("SurName");
@@ -144,6 +145,7 @@ public class CreateAccount_2_Activity extends BaseActivity implements Validator.
         } else if (!TextUtils.isEmpty(type) && type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)) {
             email = getIntent().getStringExtra("Email");
             photourl = getIntent().getStringExtra("Photo");
+            path = getIntent().getStringExtra("Path");
             user_type = getIntent().getStringExtra("userType");
             activity_type = AppConstants.FACEBOOK_LOGIN_TYPE;
             firstname = getIntent().getStringExtra("FirstName");
@@ -192,6 +194,7 @@ public class CreateAccount_2_Activity extends BaseActivity implements Validator.
             Intent intent = new Intent(CreateAccount_2_Activity.this, CreateAccount_3_Activity.class);
             intent.putExtra("Email", email);
             intent.putExtra("Photo", photourl);
+            intent.putExtra("Path", path);
             intent.putExtra("userType", user_type);
             intent.putExtra("FirstName", firstname);
             intent.putExtra("SurName", surname);
@@ -204,6 +207,7 @@ public class CreateAccount_2_Activity extends BaseActivity implements Validator.
             Intent intent = new Intent(CreateAccount_2_Activity.this, CreateAccount_3_Activity.class);
             intent.putExtra("Email", email);
             intent.putExtra("Photo", photourl);
+            intent.putExtra("Path", path);
             intent.putExtra("userType", user_type);
             intent.putExtra("FirstName", firstname);
             intent.putExtra("SurName", surname);

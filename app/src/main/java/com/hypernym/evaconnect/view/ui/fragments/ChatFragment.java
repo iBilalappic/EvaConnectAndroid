@@ -742,8 +742,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             try {
                 if (data != null && data.getData() != null) {
                     SelectedImageUri = data.getData();
-
+                    ImageFilePathUtil.checkFileType(".jpg");
                     GalleryImage = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
+
                     mProfileImageDecodableString = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
                     Log.e(getClass().getName(), "image file path: " + GalleryImage);
 
@@ -801,6 +802,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
                     SelectedImageUri = data.getData();
 
+                    ImageFilePathUtil.checkFileType(".pdf");
                     GalleryImage = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
                     mProfileImageDecodableString = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
                     Log.e(getClass().getName(), "image file path: " + GalleryImage);

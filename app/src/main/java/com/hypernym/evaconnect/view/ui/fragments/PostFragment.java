@@ -29,6 +29,7 @@ import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.PostAdapter;
@@ -315,7 +316,22 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
     public void onConnectClick(View view, int position) {
         TextView text = (TextView) view;
         if (NetworkUtils.isNetworkConnected(getContext())) {
-            callConnectApi(text, position);
+
+            if(text.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_ACCEPT)){
+                Connection connection = new Connection();
+                User user = LoginUtils.getLoggedinUser();
+                connection.setStatus(AppConstants.ACTIVE);
+                connection.setId(posts.get(position).getConnection_id());
+                connection.setModified_by_id(user.getId());
+                connection.setModified_datetime(DateUtils.GetCurrentdatetime());
+                callDeclineConnectApi(connection);
+            }
+            else
+            {
+                callConnectApi(text, position);
+            }
+
+
 
         } else {
             networkErrorDialog();
@@ -330,6 +346,7 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
             public void onChanged(BaseModel<List<Connection>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError()) {
 
+                    onRefresh();
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
@@ -392,7 +409,8 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
                 @Override
                 public void onChanged(BaseModel<List<Connection>> listBaseModel) {
                     if (listBaseModel != null && !listBaseModel.isError()) {
-                        text.setText("Request Sent");
+                        text.setText("Pending");
+                        onRefresh();
                     } else {
                         networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                     }

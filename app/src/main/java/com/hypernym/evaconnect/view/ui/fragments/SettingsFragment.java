@@ -137,15 +137,16 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
             @Override
             public void onChanged(BaseModel<List<User>> listBaseModel) {
                 if (listBaseModel.getData() != null && !listBaseModel.isError()) {
-                    if (listBaseModel.getData().get(0).getIs_linkedin() == 1 && !TextUtils.isEmpty(listBaseModel.getData().get(0).getLinkedin_image_url())) {
-                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getLinkedin_image_url());
-                        tv_password.setEnabled(false);
-                    } else if (listBaseModel.getData().get(0).getIs_facebook() == 1 && !TextUtils.isEmpty(listBaseModel.getData().get(0).getFacebook_image_url())) {
-                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getFacebook_image_url());
-                        tv_password.setEnabled(false);
-                    } else {
+                    if (!TextUtils.isEmpty(listBaseModel.getData().get(0).getUser_image())) {
                         AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getUser_image());
+                        tv_password.setEnabled(false);
                     }
+//                    else if (listBaseModel.getData().get(0).getIs_facebook() == 1 && !TextUtils.isEmpty(listBaseModel.getData().get(0).getFacebook_image_url())) {
+//                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getFacebook_image_url());
+//                        tv_password.setEnabled(false);
+//                    } else {
+//                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getUser_image());
+//                    }
 
                     edt_email.setText(listBaseModel.getData().get(0).getEmail());
                     tv_location.setText(listBaseModel.getData().get(0).getCountry() + "," + listBaseModel.getData().get(0).getCity());

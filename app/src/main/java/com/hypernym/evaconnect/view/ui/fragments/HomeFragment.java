@@ -29,6 +29,7 @@ import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.HomePostsAdapter;
@@ -441,8 +442,18 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
 
         TextView text = (TextView) view;
         if (NetworkUtils.isNetworkConnected(getContext())) {
-            callConnectApi(text, position);
-            callPostsApi();
+            if(text.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_ACCEPT)){
+                Connection connection = new Connection();
+                User user = LoginUtils.getLoggedinUser();
+                connection.setStatus(AppConstants.ACTIVE);
+                connection.setId(posts.get(position).getConnection_id());
+                connection.setModified_by_id(user.getId());
+                connection.setModified_datetime(DateUtils.GetCurrentdatetime());
+                callDeclineConnectApi(connection);
+            }
+            else {
+                callConnectApi(text, position);
+            }
 
         } else {
             networkErrorDialog();
@@ -579,7 +590,9 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
                 @Override
                 public void onChanged(BaseModel<List<Connection>> listBaseModel) {
                     if (listBaseModel != null && !listBaseModel.isError()) {
-                        text.setText("Request Sent");
+                        text.setText("Pending");
+                        onRefresh();
+
                     } else {
                         networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                     }
@@ -612,6 +625,24 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
                 if (listBaseModel!=null && listBaseModel.getData() != null && !listBaseModel.isError()) {
                     swipeRefresh.setRefreshing(false);
                     LoginUtils.saveUser(listBaseModel.getData().get(0));
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+                hideDialog();
+            }
+        });
+    }
+
+
+
+    private void callDeclineConnectApi(Connection connection) {
+
+        connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Connection>> listBaseModel) {
+                if (listBaseModel != null && !listBaseModel.isError()) {
+
+                    onRefresh();
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }

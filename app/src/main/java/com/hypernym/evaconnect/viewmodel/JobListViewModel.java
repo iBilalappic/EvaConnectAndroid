@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.MyLikesModel;
@@ -51,5 +52,18 @@ public class JobListViewModel extends AndroidViewModel {
     {
         return iJobAdRepository.getJob(user,totalpages,currentPage);
     }
+
+
+    public LiveData<BaseModel<List<Object>>> setComment(User user,int application_id,String comment)
+    {
+        return iJobAdRepository.setComment(user,application_id,comment);
+    }
+
+
+    public LiveData<BaseModel<List<Comment>>>  getComments(int application_id)
+    {
+        return iJobAdRepository.getJobComments(application_id);
+    }
+
 
 }

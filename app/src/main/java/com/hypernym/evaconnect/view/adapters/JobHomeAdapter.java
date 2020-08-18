@@ -106,7 +106,7 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
             comment_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    // mClickListener.onItemClick(v, getAdapterPosition());
+                     mClickListener.onApplyCommentClick(v, getAdapterPosition());
                 }
             });
             share_click.setOnClickListener(new OnOneOffClickListener() {
@@ -281,6 +281,8 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
         void onShareClick(View view, int position);
 
         void onApplyClick(View view, int position);
+
+        void onApplyCommentClick(View view, int position);
 
 
     }

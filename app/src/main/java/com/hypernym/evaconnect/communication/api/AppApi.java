@@ -125,6 +125,16 @@ public interface AppApi {
         // Call<BaseModel<List<Object>>> setLikeJob();
     Call<BaseModel<List<Object>>> setLikeJob(@Body HashMap<String, Object> body);
 
+    @POST(APIConstants.JOB_COMMENT)
+        // Call<BaseModel<List<Object>>> setLikeJob();
+    Call<BaseModel<List<Object>>> setJobComment(@Body HashMap<String, Object> body);
+
+    @POST(APIConstants.GET_JOB_COMMENTS)
+        // Call<BaseModel<List<Object>>> setLikeJob();
+    Call<BaseModel<List<Comment>>> getJobComments(@Body HashMap<String, Object> body);
+
+
+
     @POST(APIConstants.APPLY_INTERVIEW)
         // Call<BaseModel<List<Object>>> setLikeJob();
     Call<BaseModel<List<Object>>> apply_interview(@Body HashMap<String, Object> body);

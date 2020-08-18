@@ -128,16 +128,16 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
             post = (Post) getArguments().getSerializable("PostData");
             Log.d("TAAAG", GsonUtils.toJson(post));
 
-            if (post.getUser().getIs_linkedin() == 1 && !TextUtils.isEmpty(post.getUser().getLinkedin_image_url())) {
-                AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getLinkedin_image_url());
+            if (!TextUtils.isEmpty(post.getUser().getUser_image())) {
+                AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getUser_image());
 
             }
-            else if (post.getUser().getIs_facebook() == 1 && !TextUtils.isEmpty(post.getUser().getFacebook_image_url())){
-                AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getFacebook_image_url());
-            }
-            else {
-                AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getUser_image());
-            }
+//            else if (post.getUser().getIs_facebook() == 1 && !TextUtils.isEmpty(post.getUser().getFacebook_image_url())){
+//                AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getFacebook_image_url());
+//            }
+//            else {
+//                AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getUser_image());
+//            }
 
             tv_name.setText(post.getUser().getFirst_name());
 
@@ -223,16 +223,16 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
             user = LoginUtils.getLoggedinUser();
             Log.d("TAAAG", GsonUtils.toJson(user));
 
-            if (user.getIs_linkedin() == 1 && !TextUtils.isEmpty(user.getLinkedin_image_url())) {
-                AppUtils.setGlideImage(getContext(), profile_image, user.getLinkedin_image_url());
+            if (!TextUtils.isEmpty(user.getUser_image())) {
+                AppUtils.setGlideImage(getContext(), profile_image, user.getUser_image());
 
             }
-            else if (user.getIs_facebook() == 1 && !TextUtils.isEmpty(user.getFacebook_image_url())){
-                AppUtils.setGlideImage(getContext(), profile_image, user.getFacebook_image_url());
-            }
-            else {
-                AppUtils.setGlideImage(getContext(), profile_image, user.getUser_image());
-            }
+//            else if (user.getIs_facebook() == 1 && !TextUtils.isEmpty(user.getFacebook_image_url())){
+//                AppUtils.setGlideImage(getContext(), profile_image, user.getFacebook_image_url());
+//            }
+//            else {
+//                AppUtils.setGlideImage(getContext(), profile_image, user.getUser_image());
+//            }
 
             tv_name.setText(user.getFirst_name());
 

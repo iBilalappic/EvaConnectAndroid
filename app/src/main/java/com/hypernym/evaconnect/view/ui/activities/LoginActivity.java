@@ -2,6 +2,7 @@ package com.hypernym.evaconnect.view.ui.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -17,6 +18,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -39,6 +43,7 @@ import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.models.UserDetails;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.Constants;
+import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
@@ -194,8 +199,40 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
                     String id = object.getString(AppConstants.ID);
                     String facebook_photo = AppConstants.FACEBOOK_PIC_BASE_URL + id + AppConstants.FACEBOOK_PIC_URL;
 
+//                    String image_path = null;
+
+
+
+                    Glide.with(this)
+                            .asBitmap()
+                            .load(facebook_photo)
+                            .into(new SimpleTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+
+//                                    image_path=ImageFilePathUtil.saveImage(resource);
+
+                                    checkUserExist(email, facebook_photo,ImageFilePathUtil.SaveImage(resource,"Profile.png"));
+                                }
+                            });
+
+
+//                    Glide.with(this)
+//                            .load("YOUR_URL")
+//                            .asBitmap()
+//                            .into(new SimpleTarget<Bitmap>(150,150) {
+//                                @Override
+//                                public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation)  {
+////                                    saveImage(resource);
+//
+//                                    ImageFilePathUtil.saveImage(resource);
+//                                }
+//                            });
+
+
+
                     // check whether user already exists or not
-                    checkUserExist(email, facebook_photo);
+
                 }
                 catch(JSONException exc){
                     exc.printStackTrace();
@@ -209,7 +246,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
         }
     }
 
-    private void checkUserExist(String email, String facebook_photo)
+    private void checkUserExist(String email, String facebook_photo,String path)
     {
         if (NetworkUtils.isNetworkConnected(LoginActivity.this))
         {
@@ -222,6 +259,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
                     Intent intent = new Intent(LoginActivity.this, CreateAccount_1_Activity.class);
                     intent.putExtra("Email", email);
                     intent.putExtra("Photo", facebook_photo);
+                    intent.putExtra("Path", path);
                     intent.putExtra(Constants.ACTIVITY_NAME, AppConstants.FACEBOOK_LOGIN_TYPE);
                     startActivity(intent);
                 }

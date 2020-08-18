@@ -42,15 +42,15 @@ public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 @Override
 public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        if (connections.get(position).getIs_linkedin() == 1 && !TextUtils.isEmpty(connections.get(position).getLinkedin_image_url())) {
-        AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getLinkedin_image_url());
-        }
-        else if (connections.get(position).getIs_facebook() == 1 && !TextUtils.isEmpty(connections.get(position).getFacebook_image_url())){
-        AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getFacebook_image_url());
-        }
-        else {
+        if (!TextUtils.isEmpty(connections.get(position).getUser_image())) {
         AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getUser_image());
         }
+//        else if (connections.get(position).getIs_facebook() == 1 && !TextUtils.isEmpty(connections.get(position).getFacebook_image_url())){
+//        AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getFacebook_image_url());
+//        }
+//        else {
+//        AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getUser_image());
+//        }
 
         holder.tv_name.setText(connections.get(position).getFirst_name());
         if(connections.get(position).isIs_online())

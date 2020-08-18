@@ -4,7 +4,10 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.ContextWrapper;
+import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -12,6 +15,7 @@ import android.os.ParcelFileDescriptor;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.File;
@@ -21,6 +25,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+
+import static com.facebook.FacebookSdk.getCacheDir;
+import static com.hypernym.evaconnect.utils.AppUtils.getApplicationContext;
 
 public class ImageFilePathUtil {
     /**
@@ -32,11 +41,11 @@ public class ImageFilePathUtil {
      */
     static String nopath = "File path not found";
     static Uri filePathUri;
+    static String extention = ".pdf";
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @SuppressLint("NewApi")
-    public static String getPath(final Context context, final Uri uri)
-    {
+    public static String getPath(final Context context, final Uri uri) {
         //check here to KITKAT or new version
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
         filePathUri = uri;
@@ -58,13 +67,44 @@ public class ImageFilePathUtil {
             //DownloadsProvider
             else if (isDownloadsDocument(uri)) {
 
-                final String id = DocumentsContract.getDocumentId(uri);
 
-                final Uri contentUri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+                String id = DocumentsContract.getDocumentId(uri);
 
-                //return getDataColumn(context, uri, null, null);
-                return getDataColumn(context, contentUri, null, null);
+                if (!TextUtils.isEmpty(id)) {
+                    if (id.startsWith("raw:")) {
+                        return id.replaceFirst("raw:", "");
+                    }
+                    try {
+                        final Uri contentUri = ContentUris.withAppendedId(
+                                Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+
+                        return getDataColumn(context, contentUri, null, null);
+                    } catch (NumberFormatException e) {
+
+                        id = id.replace("msf:", "");
+
+                        final Uri contentUri = ContentUris.withAppendedId(
+                                Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+
+                        return getDataColumn(context, contentUri, null, null);
+
+//                        e.printStackTrace();
+
+                    }
+                }
+
+
+//                final String id = DocumentsContract.getDocumentId(uri);
+//
+//                if (id.startsWith("raw:")) {
+//                    return id.replaceFirst("raw:", "");
+//                }
+//                final Uri contentUri = ContentUris.withAppendedId(
+//                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+//
+//
+//                //return getDataColumn(context, uri, null, null);
+//                return getDataColumn(context, contentUri, null, null);
             }
 
             // MediaProvider
@@ -83,7 +123,7 @@ public class ImageFilePathUtil {
                 }
 
                 final String selection = "_id=?";
-                final String[] selectionArgs = new String[] {
+                final String[] selectionArgs = new String[]{
                         split[1]
                 };
 
@@ -111,9 +151,9 @@ public class ImageFilePathUtil {
      * Get the value of the data column for this Uri. This is useful for
      * MediaStore Uris, and other file-based ContentProviders.
      *
-     * @param context The context.
-     * @param uri The Uri to query.
-     * @param selection (Optional) Filter used in the query.
+     * @param context       The context.
+     * @param uri           The Uri to query.
+     * @param selection     (Optional) Filter used in the query.
      * @param selectionArgs (Optional) Selection arguments used in the query.
      * @return The value of the _data column, which is typically a file path.
      */
@@ -134,11 +174,14 @@ public class ImageFilePathUtil {
                 final int index = cursor.getColumnIndexOrThrow(column);
                 return cursor.getString(index);
             }
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
 
+            String filePath;
+
             File file = new File(context.getCacheDir(), "tmp");
-            String filePath = file.getAbsolutePath();
+            filePath = file.getAbsolutePath() + extention;
+
 
             try {
                 ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(filePathUri, "r");
@@ -146,6 +189,7 @@ public class ImageFilePathUtil {
                     return null;
 
                 FileDescriptor fd = pfd.getFileDescriptor();
+
                 input = new FileInputStream(fd);
                 output = new FileOutputStream(filePath);
                 int read;
@@ -154,13 +198,14 @@ public class ImageFilePathUtil {
                     output.write(bytes, 0, read);
                 }
 
+                filePath = file.getAbsolutePath() + extention;
                 input.close();
                 output.close();
                 return new File(filePath).getAbsolutePath();
             } catch (IOException ignored) {
                 ignored.printStackTrace();
             }
-        } finally{
+        } finally {
             if (cursor != null)
                 cursor.close();
         }
@@ -198,5 +243,41 @@ public class ImageFilePathUtil {
     public static boolean isGooglePhotosUri(Uri uri) {
         return "com.google.android.apps.photos.content".equals(uri.getAuthority());
     }
+
+    public static void checkFileType(String type) {
+        extention = type;
+    }
+
+//    public void saveTempBitmap(Bitmap bitmap) {
+//        if (isExternalStorageWritable()) {
+//            saveImage(bitmap);
+//        }else{
+//            //prompt the user or do something
+//        }
+//    }
+
+    public static String SaveImage(Bitmap bitmap,String Name) {
+
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        File directory = cw.getDir("profile", Context.MODE_PRIVATE);
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
+        File mypath = new File(directory, Name);
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(mypath);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.close();
+
+            return mypath.getAbsolutePath();
+        } catch (Exception e) {
+           e.getMessage();
+        }
+
+        return null;
+    }
+
 
 }

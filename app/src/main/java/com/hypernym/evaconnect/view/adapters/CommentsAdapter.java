@@ -47,29 +47,8 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull CommentsAdapter.ViewHolder holder, int position) {
 
-        if (comments.get(position).getUser().getIs_linkedin() == 1 && !TextUtils.isEmpty(comments.get(position).getUser().getLinkedin_image_url()))
+        if (!TextUtils.isEmpty(comments.get(position).getUser().getUser_image()))
         {
-            Glide.with(context) //1
-                    .load(comments.get(position).getUser().getLinkedin_image_url())
-                    .placeholder(R.drawable.ic_default)
-                    .error(R.mipmap.ic_launcher)
-                    .skipMemoryCache(true) //2
-                    .apply(RequestOptions.circleCropTransform())
-                    .diskCacheStrategy(DiskCacheStrategy.NONE) //3
-                    .into(holder.profile_image);
-        }
-        else if (comments.get(position).getUser().getIs_facebook() == 1 && !TextUtils.isEmpty(comments.get(position).getUser().getFacebook_image_url()))
-        {
-            Glide.with(context) //1
-                    .load(comments.get(position).getUser().getFacebook_image_url())
-                    .placeholder(R.drawable.ic_default)
-                    .error(R.mipmap.ic_launcher)
-                    .skipMemoryCache(true) //2
-                    .apply(RequestOptions.circleCropTransform())
-                    .diskCacheStrategy(DiskCacheStrategy.NONE) //3
-                    .into(holder.profile_image);
-        }
-        else{
             Glide.with(context) //1
                     .load(comments.get(position).getUser().getUser_image())
                     .placeholder(R.drawable.ic_default)
@@ -79,6 +58,27 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
                     .diskCacheStrategy(DiskCacheStrategy.NONE) //3
                     .into(holder.profile_image);
         }
+//        else if (!TextUtils.isEmpty(comments.get(position).getUser().getUser_image()))
+//        {
+//            Glide.with(context) //1
+//                    .load(comments.get(position).getUser().getUser_image())
+//                    .placeholder(R.drawable.ic_default)
+//                    .error(R.mipmap.ic_launcher)
+//                    .skipMemoryCache(true) //2
+//                    .apply(RequestOptions.circleCropTransform())
+//                    .diskCacheStrategy(DiskCacheStrategy.NONE) //3
+//                    .into(holder.profile_image);
+//        }
+//        else{
+//            Glide.with(context) //1
+//                    .load(comments.get(position).getUser().getUser_image())
+//                    .placeholder(R.drawable.ic_default)
+//                    .error(R.mipmap.ic_launcher)
+//                    .skipMemoryCache(true) //2
+//                    .apply(RequestOptions.circleCropTransform())
+//                    .diskCacheStrategy(DiskCacheStrategy.NONE) //3
+//                    .into(holder.profile_image);
+//        }
 
         holder.tv_name.setText(comments.get(position).getUser().getFirst_name());
         holder.tv_content.setText(comments.get(position).getContent());

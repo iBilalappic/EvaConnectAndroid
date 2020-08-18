@@ -44,11 +44,11 @@ public class AppliedApplicantAdapter extends RecyclerView.Adapter<AppliedApplica
     @Override
     public void onBindViewHolder(@NonNull AppliedApplicantAdapter.ViewHolder holder, int position) {
 
-        if (appliedApplicantModels.get(position).getUser().getIs_linkedin() == 1) {
-            AppUtils.setGlideImage(context, (holder).mProfileImage, appliedApplicantModels.get(position).getUser().getLinkedin_image_url());
-        } else {
+//        if (appliedApplicantModels.get(position).getUser().getIs_linkedin() == 1) {
+//            AppUtils.setGlideImage(context, (holder).mProfileImage, appliedApplicantModels.get(position).getUser().getLinkedin_image_url());
+//        } else {
             AppUtils.setGlideImage(context, (holder).mProfileImage, appliedApplicantModels.get(position).getUser().getUserImage());
-        }
+//        }
         //  holder.tv_description.setText(appliedApplicantModels.get(position).getContent());
         holder.tv_name.setText(appliedApplicantModels.get(position).getUser().getFirstName());
         holder.tv_date.setText(appliedApplicantModels.get(position).getCreatedDatetime());

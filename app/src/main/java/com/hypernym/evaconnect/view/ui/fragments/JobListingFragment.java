@@ -203,6 +203,16 @@ public class JobListingFragment extends BaseFragment implements View.OnClickList
                 shareDialog = new ShareDialog(getContext(),bundle_share);
                 shareDialog.show();
                 break;
+
+//            case R.id.comment_click:
+//                SpecficJobComments specficJobComment = new SpecficJobComments();
+//                Bundle bundlecomment = new Bundle();
+//                bundlecomment.putInt("job_id", jobAdList.get(position).getId());
+//                specficJobComment.setArguments(bundlecomment);
+//                loadFragment(R.id.framelayout, specficJobComment, getContext(), true);
+//                break;
+
+
         }
     }
 

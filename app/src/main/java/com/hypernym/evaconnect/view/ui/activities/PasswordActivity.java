@@ -42,7 +42,7 @@ import okhttp3.RequestBody;
 
 public class PasswordActivity extends BaseActivity implements Validator.ValidationListener, View.OnClickListener {
 
-    String email, password, photourl, activity_type, user_type,
+    String email, password, photourl, activity_type, user_type,path,
             aviation_type, JobSector, username, firstname, surname,
             city, country, filepath, jobtitle, company_name;
 
@@ -99,6 +99,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
         if ("LinkedinActivity".equals(getIntent().getStringExtra(Constants.ACTIVITY_NAME))) {
             email = getIntent().getStringExtra("Email");
             photourl = getIntent().getStringExtra("Photo");
+            path = getIntent().getStringExtra("Path");
             user_type = getIntent().getStringExtra("userType");
             username = getIntent().getStringExtra("username");
             activity_type = "LinkedinActivity";
@@ -112,15 +113,22 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             company_name = getIntent().getStringExtra("companyname");
 
 
+            filepath = path;
+
+            if(filepath!=null){
+                File file = new File(filepath);
+
+                RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+                partImage = MultipartBody.Part.createFormData("user_image", file.getName(), reqFile);
+            }
+
+
+            user.setWork_aviation(aviation_type);
             user.setUsername(email);
             user.setEmail(email);
-            user.setPassword("hypernym");
             user.setIsLinkedin(1);
             user.setIs_facebook(0);
-            user.setLinkedin_image_url(photourl);
-            user.setFacebook_image_url("");
             user.setType(user_type);
-            user.setWork_aviation(aviation_type);
             user.setFirst_name(firstname);
             user.setSector(JobSector);
             user.setLast_name(surname);
@@ -128,6 +136,26 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             user.setCountry(country);
             user.setCompany_name(company_name);
             user.setDesignation(jobtitle);
+            user.setLinkedin_image_url("");
+            user.setFacebook_image_url("");
+
+
+//            user.setUsername(email);
+//            user.setEmail(email);
+//            user.setPassword("hypernym");
+//            user.setIsLinkedin(1);
+//            user.setIs_facebook(0);
+//            user.setLinkedin_image_url("");
+//            user.setFacebook_image_url("");
+//            user.setType(user_type);
+//            user.setWork_aviation(aviation_type);
+//            user.setFirst_name(firstname);
+//            user.setSector(JobSector);
+//            user.setLast_name(surname);
+//            user.setCity(city);
+//            user.setCountry(country);
+//            user.setCompany_name(company_name);
+//            user.setDesignation(jobtitle);
 
 
         }
@@ -135,6 +163,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
         {
             email = getIntent().getStringExtra("Email");
             photourl = getIntent().getStringExtra("Photo");
+            path = getIntent().getStringExtra("Path");
             user_type = getIntent().getStringExtra("userType");
             username = getIntent().getStringExtra("username");
             activity_type = AppConstants.FACEBOOK_LOGIN_TYPE;
@@ -146,16 +175,22 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             JobSector = getIntent().getStringExtra("job_sector");
             jobtitle = getIntent().getStringExtra("jobtitle");
             company_name = getIntent().getStringExtra("companyname");
+            filepath = path;
 
+            if(filepath!=null){
+                File file = new File(filepath);
+
+                RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+                partImage = MultipartBody.Part.createFormData("user_image", file.getName(), reqFile);
+            }
+
+
+            user.setWork_aviation(aviation_type);
             user.setUsername(email);
             user.setEmail(email);
-            user.setPassword("hypernym");
-            user.setIs_facebook(1);
             user.setIsLinkedin(0);
-            user.setFacebook_image_url(photourl);
-            user.setLinkedin_image_url("");
+            user.setIs_facebook(1);
             user.setType(user_type);
-            user.setWork_aviation(aviation_type);
             user.setFirst_name(firstname);
             user.setSector(JobSector);
             user.setLast_name(surname);
@@ -163,6 +198,11 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             user.setCountry(country);
             user.setCompany_name(company_name);
             user.setDesignation(jobtitle);
+            user.setLinkedin_image_url("");
+            user.setFacebook_image_url("");
+
+
+
         }
         else {
             email = getIntent().getStringExtra("Email");
@@ -227,10 +267,15 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
                     LoginUtils.saveUser(user);
 
                     if ("LinkedinActivity".equals(getIntent().getStringExtra(Constants.ACTIVITY_NAME))) {
-                          JustLoginApiCall();
+//                          JustLoginApiCall();
+
+                        callLoginApi();
+
                     }
                     else if (type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)){
-                        loginWithFacebook();
+//                        loginWithFacebook();
+
+                        callLoginApi();
                     }
                     else {
                         callLoginApi();
@@ -238,6 +283,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
 
                 } else {
                     hideDialog();
+                    logins.getException();
                     simpleDialog = networkResponseDialog(getString(R.string.error), logins.getMessage());
                 }
             }
@@ -250,6 +296,19 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             @Override
             public void onChanged(BaseModel<List<User>> user) {
                 if (user != null && !user.isError() && user.getData().get(0) != null) {
+
+
+//                    LoginUtils.userLoggedIn();
+//                    User userData = listBaseModel.getData().get(0);
+//                    userData.setUser_id(userData.getId());
+//                    LoginUtils.saveUser(listBaseModel.getData().get(0));
+//                    OneSignal.sendTag("email", userData.getEmail());
+//                    UserDetails.username = userData.getFirst_name();
+//                    if (listBaseModel.getData().get(0) != null) {
+//                        LoginUtils.saveUserToken(listBaseModel.getData().get(0).getToken());
+//                    }
+
+
                     LoginUtils.userLoggedIn();
 
                     User userData = user.getData().get(0);

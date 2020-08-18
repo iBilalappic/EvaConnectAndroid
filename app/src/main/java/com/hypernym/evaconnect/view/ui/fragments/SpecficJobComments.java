@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -11,10 +12,13 @@ import android.widget.Toast;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.User;
@@ -23,20 +27,26 @@ import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
+import com.hypernym.evaconnect.view.adapters.ChatAdapter;
+import com.hypernym.evaconnect.view.adapters.CommentsAdapter;
 import com.hypernym.evaconnect.view.adapters.MyLikeAdapter;
 import com.hypernym.evaconnect.view.dialogs.ShareDialog;
 import com.hypernym.evaconnect.viewmodel.JobListViewModel;
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.OnItemClickListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class SpecficJobComments extends BaseFragment implements MyLikeAdapter.OnItemClickListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener , Validator.ValidationListener {
 
-    private JobListViewModel jobListViewModel;
     @BindView(R.id.profile_image)
     CircleImageView profile_image;
 
@@ -88,13 +98,35 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
     @BindView(R.id.share_click)
     LinearLayout share_click;
 
+    @BindView(R.id.btn_addcomment)
+    ImageView btn_addcomment;
+
+    @NotEmpty
+    @BindView(R.id.edt_comment)
+    EditText edt_comment;
+
+    @BindView(R.id.job_comments)
+    RecyclerView job_comments;
+
+
+
+
+
     int job_id;
     JobAd jobAd = new JobAd();
     SpecficJobAd specficJobAd=new SpecficJobAd();
     private SpecficJobAd checkLikeCount = new SpecficJobAd();
     User user;
 
-    public SpecficJobFragment() {
+    CommentsAdapter commentsAdapter;
+
+    private Validator validator;
+
+    private JobListViewModel jobListViewModel;
+
+    private List<Comment> comments = new ArrayList<>();
+
+    public SpecficJobComments() {
         // Required empty public constructor
     }
 
@@ -102,7 +134,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_specfic_job_ad, container, false);
+        View view = inflater.inflate(R.layout.fragment_specific_job_comments, container, false);
         ButterKnife.bind(this, view);
 //        tv_apply.setOnClickListener(this);
         img_backarrow.setOnClickListener(this);
@@ -111,12 +143,14 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
         like_click.setOnClickListener(this);
         share_click.setOnClickListener(this);
         comment_click.setOnClickListener(this);
+        btn_addcomment.setOnClickListener(this);
 
+        validator = new Validator(this);
+        validator.setValidationListener(this);
         return view;
     }
 
     private void init() {
-
         jobListViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(JobListViewModel.class);
         user = LoginUtils.getUser();
         showBackButton();
@@ -129,14 +163,21 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
             if (job_id != 0) {
                 GetJob_id(job_id);
 
+                GetJobComments(job_id);
+
             } else {
                 GetJob_id(jobAd.getId());
+
+                GetJobComments(jobAd.getId());
             }
 //            if (LoginUtils.getUser().getType().equals("company")) {
 //                tv_apply.setVisibility(View.GONE);
 //            } else {
 //                tv_apply.setVisibility(View.VISIBLE);
 //            }
+
+
+
         }
     }
 
@@ -197,17 +238,17 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_apply:
-                if (checkLikeCount.getIsApplied() == 0) {
-                    ApplicationFormFragment applicationFormFragment = new ApplicationFormFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("JOB_AD", jobAd);
-                    applicationFormFragment.setArguments(bundle);
-                    loadFragment(R.id.framelayout, applicationFormFragment, getContext(), true);
-                } else {
-                    Toast.makeText(getContext(), "You have already applied to this job", Toast.LENGTH_SHORT).show();
-                }
-                break;
+//            case R.id.tv_apply:
+//                if (checkLikeCount.getIsApplied() == 0) {
+//                    ApplicationFormFragment applicationFormFragment = new ApplicationFormFragment();
+//                    Bundle bundle = new Bundle();
+//                    bundle.putSerializable("JOB_AD", jobAd);
+//                    applicationFormFragment.setArguments(bundle);
+//                    loadFragment(R.id.framelayout, applicationFormFragment, getContext(), true);
+//                } else {
+//                    Toast.makeText(getContext(), "You have already applied to this job", Toast.LENGTH_SHORT).show();
+//                }
+//                break;
             case R.id.img_backarrow:
                 getActivity().onBackPressed();
                 break;
@@ -226,6 +267,10 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
                 shareDialog = new ShareDialog(getContext(),bundle);
                 shareDialog.show();
                 break;
+
+            case R.id.btn_addcomment:
+                validator.validate();
+                break;
         }
     }
 
@@ -239,11 +284,49 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
         });
     }
 
+    private void SetJobComment(Integer id,String Comment) {
+        jobListViewModel.setComment(user, id, Comment).observe(this, new Observer<BaseModel<List<Object>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Object>> setlike) {
+                onRefresh();
+                hideDialog();
+            }
+        });
+    }
+
+
+
+
     private void SetJobUnLike(Integer id) {
         jobListViewModel.setJobLike(user, id, "unlike").observe(this, new Observer<BaseModel<List<Object>>>() {
             @Override
             public void onChanged(BaseModel<List<Object>> setlike) {
                 onRefresh();
+                hideDialog();
+            }
+        });
+    }
+
+    private void GetJobComments(Integer id) {
+        showDialog();
+
+        jobListViewModel.getComments(id).observe(this, new Observer<BaseModel<List<Comment>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Comment>> getComments) {
+
+                comments.clear();
+                if (getComments != null && !getComments.isError()) {
+                    comments.addAll(getComments.getData());
+                    Collections.reverse(comments);
+                    commentsAdapter.notifyDataSetChanged();
+//                    post.setComment_count(comments.size());
+//                    tv_comcount.setText(String.valueOf(comments.size()));
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+                hideDialog();
+
+//                onRefresh();
                 hideDialog();
             }
         });
@@ -256,8 +339,12 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
 //            } else {
             if (job_id != 0) {
                 GetJob_id(job_id);
+
+                GetJobComments(job_id);
             } else {
                 GetJob_id(jobAd.getId());
+
+                GetJobComments(jobAd.getId());
             }
 
             //  }
@@ -269,7 +356,42 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
 
     @Override
     public void onResume() {
+        initRecyclerView();
         init();
         super.onResume();
+    }
+
+    @Override
+    public void onValidationSucceeded() {
+//        addComment(post.getId());
+
+        SetJobComment(job_id,edt_comment.getText().toString());
+    }
+
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+        for (ValidationError error : errors) {
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(getContext());
+            // Display error messages
+            if (view instanceof EditText) {
+                ((EditText) view).setError(message);
+            } else {
+                Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private void initRecyclerView() {
+        commentsAdapter = new CommentsAdapter(getContext(), comments);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+//        linearLayoutManager = new LinearLayoutManager(requireActivity()) {
+//            @Override
+//            public boolean canScrollVertically() {
+//                return false;
+//            }
+//        };
+        job_comments.setLayoutManager(linearLayoutManager);
+        job_comments.setAdapter(commentsAdapter);
     }
 }

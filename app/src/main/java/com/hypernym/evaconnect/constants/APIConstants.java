@@ -2,7 +2,7 @@ package com.hypernym.evaconnect.constants;
 
 public interface APIConstants {
 //    public static String BASE_SERVER_URL="http:/67.205.178.219:8000/eva/"; //Staging
-   public static String BASE_SERVER_URL="http://168.63.140.202:8003/eva/";
+//   public static String BASE_SERVER_URL="http://168.63.140.202:8003/eva/";
     public static String ONESINGAL_BASE_URL ="https://onesignal.com/";
     public static String SIGNUP="user/signup/";
     public static String LOGIN="user/login/";
@@ -33,6 +33,9 @@ public interface APIConstants {
     public static String JOB_FILTER_AD ="job/filter/";
     public static String APPLICATION_SUBMITT ="job/application/";
     public static String JOB_LIKE =" job/like/";
+    public static String JOB_COMMENT ="job/comment/";
+    public static String GET_JOB_COMMENTS ="job/comment/filter/";
+
     public static String UPDATE_JOB_AD="job/details/{job_id}/";
     public static String SEND_NOTIFICATION="api/v1/notifications";
     public static String GET_JOB_AD_BY_ID="job/show/details/{job_id}/";

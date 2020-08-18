@@ -32,7 +32,7 @@ import butterknife.ButterKnife;
 
 public class CreateAccount_3_Activity extends BaseActivity implements View.OnClickListener {
 
-    String email, password, photourl, activity_type, user_type,
+    String email, password, photourl, activity_type, user_type,path,
             aviation_type = "Commercial Aviation", JobSector,username,firstname,surname,city,country,filepath;
 
     @BindView(R.id.tv_general_business)
@@ -88,6 +88,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements View.OnCli
             email = getIntent().getStringExtra("Email");
             photourl = getIntent().getStringExtra("Photo");
             user_type = getIntent().getStringExtra("userType");
+            path = getIntent().getStringExtra("Path");
             username = getIntent().getStringExtra("username");
             activity_type = "LinkedinActivity";
             firstname = getIntent().getStringExtra("FirstName");
@@ -99,6 +100,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements View.OnCli
         else if (!TextUtils.isEmpty(type) && type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)){
             email = getIntent().getStringExtra("Email");
             photourl = getIntent().getStringExtra("Photo");
+            path = getIntent().getStringExtra("Path");
             user_type = getIntent().getStringExtra("userType");
             username = getIntent().getStringExtra("username");
             activity_type = AppConstants.FACEBOOK_LOGIN_TYPE;
@@ -158,6 +160,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements View.OnCli
                         intent.putExtra("Email", email);
                         intent.putExtra("Photo", photourl);
                         intent.putExtra("userType", user_type);
+                        intent.putExtra("Path", path);
                         intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
                         intent.putExtra("aviation_type", aviation_type);
                         intent.putExtra("job_sector", JobSector);
@@ -172,6 +175,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements View.OnCli
                         Intent intent = new Intent(CreateAccount_3_Activity.this, CreateAccount_4_Activity.class);
                         intent.putExtra("Email", email);
                         intent.putExtra("Photo", photourl);
+                        intent.putExtra("Path", path);
                         intent.putExtra("userType", user_type);
                         intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
                         intent.putExtra("aviation_type", aviation_type);

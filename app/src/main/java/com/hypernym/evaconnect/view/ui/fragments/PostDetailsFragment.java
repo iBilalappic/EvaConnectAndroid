@@ -234,26 +234,26 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
             tv_connect.setVisibility(View.GONE);
             tv_connect.setText(AppUtils.getConnectionStatus(getContext(), post.getIs_connected(), post.isIs_receiver()));
         }
-        if (post.getUser().getIs_linkedin() == 1 && !TextUtils.isEmpty(post.getUser().getLinkedin_image_url())) {
-            AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getLinkedin_image_url());
-        }
-        else if (post.getUser().getIs_facebook() == 1 && !TextUtils.isEmpty(post.getUser().getFacebook_image_url()))
-        {
-            AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getFacebook_image_url());
-        }
-        else {
+        if ( !TextUtils.isEmpty(post.getUser().getUser_image())) {
             AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getUser_image());
         }
+//        else if (post.getUser().getIs_facebook() == 1 && !TextUtils.isEmpty(post.getUser().getFacebook_image_url()))
+//        {
+//            AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getFacebook_image_url());
+//        }
+//        else {
+//            AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getUser_image());
+//        }
 
-        if (LoginUtils.getUser().getIs_linkedin() == 1 && !TextUtils.isEmpty(user.getLinkedin_image_url())) {
-            AppUtils.setGlideImage(getContext(), img_user, user.getLinkedin_image_url());
-        }
-        else if (user.getIs_facebook() == 1 && !TextUtils.isEmpty(user.getFacebook_image_url())){
-            AppUtils.setGlideImage(getContext(), img_user, user.getFacebook_image_url());
-        }
-        else {
+        if (!TextUtils.isEmpty(user.getUser_image())) {
             AppUtils.setGlideImage(getContext(), img_user, user.getUser_image());
         }
+//        else if (user.getIs_facebook() == 1 && !TextUtils.isEmpty(user.getFacebook_image_url())){
+//            AppUtils.setGlideImage(getContext(), img_user, user.getFacebook_image_url());
+//        }
+//        else {
+//            AppUtils.setGlideImage(getContext(), img_user, user.getUser_image());
+//        }
 
 
         if (post.getIs_post_like() != null && post.getIs_post_like() > 0) {

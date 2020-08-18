@@ -1017,15 +1017,15 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     } else {
                         ((TextTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }
-                    if (posts.get(position).getUser().getIs_linkedin() == 1 && !TextUtils.isEmpty(posts.get(position).getUser().getLinkedin_image_url())) {
-                        AppUtils.setGlideImage(mContext, ((TextTypeViewHolder) holder).profile_image, posts.get(position).getUser().getLinkedin_image_url());
-                    }
-                    else if (posts.get(position).getUser().getIs_facebook() == 1 && !TextUtils.isEmpty(posts.get(position).getUser().getFacebook_image_url())){
-                        AppUtils.setGlideImage(mContext, ((TextTypeViewHolder) holder).profile_image, posts.get(position).getUser().getFacebook_image_url());
-                    }
-                    else {
+                    if (!TextUtils.isEmpty(posts.get(position).getUser().getUser_image())) {
                         AppUtils.setGlideImage(mContext, ((TextTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
                     }
+//                    else if (posts.get(position).getUser().getIs_facebook() == 1 && !TextUtils.isEmpty(posts.get(position).getUser().getFacebook_image_url())){
+//                        AppUtils.setGlideImage(mContext, ((TextTypeViewHolder) holder).profile_image, posts.get(position).getUser().getFacebook_image_url());
+//                    }
+//                    else {
+//                        AppUtils.setGlideImage(mContext, ((TextTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
+//                    }
 
                     ((TextTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
 
@@ -1083,15 +1083,15 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         ((ImageTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }
 
-                    if (posts.get(position).getUser().getIs_linkedin() == 1 && !TextUtils.isEmpty(posts.get(position).getUser().getLinkedin_image_url())) {
-                        AppUtils.setGlideImage(mContext, ((ImageTypeViewHolder) holder).profile_image, posts.get(position).getUser().getLinkedin_image_url());
-                    }
-                    else if (posts.get(position).getUser().getIs_facebook() == 1 && !TextUtils.isEmpty(posts.get(position).getUser().getFacebook_image_url())){
-                        AppUtils.setGlideImage(mContext, ((ImageTypeViewHolder) holder).profile_image, posts.get(position).getUser().getFacebook_image_url());
-                    }
-                    else {
+                    if (!TextUtils.isEmpty(posts.get(position).getUser().getUser_image())) {
                         AppUtils.setGlideImage(mContext, ((ImageTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
                     }
+//                    else if (posts.get(position).getUser().getIs_facebook() == 1 && !TextUtils.isEmpty(posts.get(position).getUser().getFacebook_image_url())){
+//                        AppUtils.setGlideImage(mContext, ((ImageTypeViewHolder) holder).profile_image, posts.get(position).getUser().getFacebook_image_url());
+//                    }
+//                    else {
+//                        AppUtils.setGlideImage(mContext, ((ImageTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
+//                    }
 
                     ((ImageTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
                     ((ImageTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getUser().getTotal_connection()));
@@ -1218,15 +1218,15 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         ((VideoTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }
 
-                    if (posts.get(position).getUser().getIs_linkedin() == 1 && !TextUtils.isEmpty(posts.get(position).getUser().getLinkedin_image_url())) {
-                        AppUtils.setGlideImage(mContext, ((VideoTypeViewHolder) holder).profile_image, posts.get(position).getUser().getLinkedin_image_url());
-                    }
-                    else if (posts.get(position).getUser().getIs_facebook() == 1 && !TextUtils.isEmpty(posts.get(position).getUser().getFacebook_image_url())){
-                        AppUtils.setGlideImage(mContext, ((VideoTypeViewHolder) holder).profile_image, posts.get(position).getUser().getFacebook_image_url());
-                    }
-                    else {
+                    if ( !TextUtils.isEmpty(posts.get(position).getUser().getUser_image())) {
                         AppUtils.setGlideImage(mContext, ((VideoTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
                     }
+//                    else if (posts.get(position).getUser().getIs_facebook() == 1 && !TextUtils.isEmpty(posts.get(position).getUser().getFacebook_image_url())){
+//                        AppUtils.setGlideImage(mContext, ((VideoTypeViewHolder) holder).profile_image, posts.get(position).getUser().getFacebook_image_url());
+//                    }
+//                    else {
+//                        AppUtils.setGlideImage(mContext, ((VideoTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
+//                    }
 
                     ((VideoTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
                     ((VideoTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getUser().getTotal_connection()));
@@ -1288,15 +1288,15 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     } else {
                         ((LinkTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }
-                    if (posts.get(position).getUser().getIs_linkedin() == 1 && !TextUtils.isEmpty(posts.get(position).getUser().getLinkedin_image_url())) {
-                        AppUtils.setGlideImage(mContext, ((LinkTypeViewHolder) holder).profile_image, posts.get(position).getUser().getLinkedin_image_url());
-                    }
-                    else if (posts.get(position).getUser().getIs_facebook() == 1 && !TextUtils.isEmpty(posts.get(position).getUser().getFacebook_image_url())) {
-                        AppUtils.setGlideImage(mContext, ((LinkTypeViewHolder) holder).profile_image, posts.get(position).getUser().getFacebook_image_url());
-                    }
-                    else {
+                    if (!TextUtils.isEmpty(posts.get(position).getUser().getUser_image())) {
                         AppUtils.setGlideImage(mContext, ((LinkTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
                     }
+//                    else if (posts.get(position).getUser().getIs_facebook() == 1 && !TextUtils.isEmpty(posts.get(position).getUser().getFacebook_image_url())) {
+//                        AppUtils.setGlideImage(mContext, ((LinkTypeViewHolder) holder).profile_image, posts.get(position).getUser().getFacebook_image_url());
+//                    }
+//                    else {
+//                        AppUtils.setGlideImage(mContext, ((LinkTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
+//                    }
 
                     ((LinkTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
                     ((LinkTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getUser().getTotal_connection()));

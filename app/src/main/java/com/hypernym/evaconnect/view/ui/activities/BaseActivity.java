@@ -1,6 +1,7 @@
 package com.hypernym.evaconnect.view.ui.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.util.Log;
@@ -29,30 +30,30 @@ import com.hypernym.evaconnect.viewmodel.UserViewModel;
 
 import java.util.List;
 
-public class BaseActivity extends AppCompatActivity  {
-    private CustomProgressBar customProgressBar=new CustomProgressBar();
+public class BaseActivity extends AppCompatActivity {
+    private CustomProgressBar customProgressBar = new CustomProgressBar();
     private SimpleDialog simpleDialog;
     private RecyclerView rc_notifications;
     private TextView tv_pagetitle;
     private ImageView img_uparrow;
-    private static int count=0;
+    private static int count = 0;
     private UserViewModel userViewModel;
 
 
     public void showDialog() {
 
-        if(customProgressBar != null && !customProgressBar.isShowing())
-            customProgressBar.showProgress(this,true);
+        if (customProgressBar != null && !customProgressBar.isShowing())
+            customProgressBar.showProgress(this, true);
     }
 
     public void hideDialog() {
 
-        if(customProgressBar != null && customProgressBar.isShowing())
+        if (customProgressBar != null && customProgressBar.isShowing())
             customProgressBar.hideProgress();
     }
 
     public SimpleDialog networkErrorDialog() {
-        simpleDialog=new SimpleDialog(BaseActivity.this,getString(R.string.error),getString(R.string.network_error),null,getString(R.string.ok), new View.OnClickListener() {
+        simpleDialog = new SimpleDialog(BaseActivity.this, getString(R.string.error), getString(R.string.network_error), null, getString(R.string.ok), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 simpleDialog.dismiss();
@@ -61,8 +62,9 @@ public class BaseActivity extends AppCompatActivity  {
         simpleDialog.show();
         return simpleDialog;
     }
-    public SimpleDialog networkResponseDialog(String title,String message) {
-        simpleDialog=new SimpleDialog(BaseActivity.this,title,message,null,getString(R.string.ok), new View.OnClickListener() {
+
+    public SimpleDialog networkResponseDialog(String title, String message) {
+        simpleDialog = new SimpleDialog(BaseActivity.this, title, message, null, getString(R.string.ok), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 simpleDialog.dismiss();
@@ -71,6 +73,22 @@ public class BaseActivity extends AppCompatActivity  {
         simpleDialog.show();
         return simpleDialog;
     }
+
+
+    public SimpleDialog UserExistFbLinkedin(String title, String message) {
+        simpleDialog = new SimpleDialog(BaseActivity.this, title, message, null, getString(R.string.ok), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                simpleDialog.dismiss();
+                startActivity(new Intent(BaseActivity.this,LoginActivity.class));
+                finishAffinity();
+            }
+        });
+        simpleDialog.show();
+        return simpleDialog;
+    }
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -84,31 +102,26 @@ public class BaseActivity extends AppCompatActivity  {
     }
 
 
-
-    public void loadFragment(int id, Fragment fragment, Context context,boolean isBack)
-    {
-        FragmentTransaction transaction =((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
-   //     transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+    public void loadFragment(int id, Fragment fragment, Context context, boolean isBack) {
+        FragmentTransaction transaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
+        //     transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
         transaction.replace(id, fragment);
         findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
         if (fragment instanceof MainViewPagerFragment || fragment instanceof ActivityFragment) {
             findViewById(R.id.seprator_line).setVisibility(View.GONE);
         }
-        if(isBack)
-        {
+        if (isBack) {
             transaction.addToBackStack(null);
         }
         transaction.commit();
     }
 
-    public static int getNotificationCount()
-    {
-    return count;
+    public static int getNotificationCount() {
+        return count;
     }
 
-    public static void setNotificationCount(int mcount)
-    {
-      count=mcount;
+    public static void setNotificationCount(int mcount) {
+        count = mcount;
     }
 
     @Override
@@ -118,7 +131,6 @@ public class BaseActivity extends AppCompatActivity  {
     }
 
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
@@ -126,18 +138,17 @@ public class BaseActivity extends AppCompatActivity  {
     }
 
     private void setUserOffline() {
-        Log.d("APPLICATION","APPLICATION OFFLINE");
+        Log.d("APPLICATION", "APPLICATION OFFLINE");
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getApplication(), this)).get(UserViewModel.class);
-if(LoginUtils.getLoggedinUser()!=null)
-{
-    userViewModel.userOnline(false).observe(this, new Observer<BaseModel<List<User>>>() {
-        @Override
-        public void onChanged(BaseModel<List<User>> listBaseModel) {
-            //Toast.makeText(BaseActivity.this, "offline", Toast.LENGTH_SHORT).show();
+        if (LoginUtils.getLoggedinUser() != null) {
+            userViewModel.userOnline(false).observe(this, new Observer<BaseModel<List<User>>>() {
+                @Override
+                public void onChanged(BaseModel<List<User>> listBaseModel) {
+                    //Toast.makeText(BaseActivity.this, "offline", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
-    });
-}
-}
+    }
 
 
 }

@@ -25,7 +25,7 @@ import butterknife.ButterKnife;
 
 public class CreateAccount_4_Activity extends BaseActivity implements Validator.ValidationListener, View.OnClickListener {
 
-    String email, password, photourl, activity_type, user_type,
+    String email, password, photourl, activity_type, user_type,path,
             aviation_type, JobSector, username, firstname, surname, city, country, filepath;
 
 
@@ -79,6 +79,7 @@ public class CreateAccount_4_Activity extends BaseActivity implements Validator.
             Intent intent = new Intent(CreateAccount_4_Activity.this, PasswordActivity.class);
             intent.putExtra("Email", email);
             intent.putExtra("Photo", photourl);
+            intent.putExtra("Path", path);
             intent.putExtra("userType", user_type);
             intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
             intent.putExtra("aviation_type", aviation_type);
@@ -97,6 +98,7 @@ public class CreateAccount_4_Activity extends BaseActivity implements Validator.
             Intent intent = new Intent(CreateAccount_4_Activity.this, PasswordActivity.class);
             intent.putExtra("Email", email);
             intent.putExtra("Photo", photourl);
+            intent.putExtra("Path", path);
             intent.putExtra("userType", user_type);
             intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
             intent.putExtra("aviation_type", aviation_type);
@@ -154,6 +156,7 @@ public class CreateAccount_4_Activity extends BaseActivity implements Validator.
         if ("LinkedinActivity".equals(getIntent().getStringExtra(Constants.ACTIVITY_NAME))) {
             email = getIntent().getStringExtra("Email");
             photourl = getIntent().getStringExtra("Photo");
+            path = getIntent().getStringExtra("Path");
             user_type = getIntent().getStringExtra("userType");
             username = getIntent().getStringExtra("username");
             activity_type = "LinkedinActivity";
@@ -168,6 +171,7 @@ public class CreateAccount_4_Activity extends BaseActivity implements Validator.
         {
             email = getIntent().getStringExtra("Email");
             photourl = getIntent().getStringExtra("Photo");
+            path = getIntent().getStringExtra("Path");
             user_type = getIntent().getStringExtra("userType");
             username = getIntent().getStringExtra("username");
             activity_type = AppConstants.FACEBOOK_LOGIN_TYPE;

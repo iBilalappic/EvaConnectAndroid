@@ -203,14 +203,15 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
         tv_company.setText(user.getCompany_name());
         tv_location.setText(user.getCountry() + "," + user.getCity());
 
-        if (user.getIs_linkedin() == 1 && !TextUtils.isEmpty(user.getLinkedin_image_url())) {
-            AppUtils.setGlideImage(getContext(), profile_image, user.getLinkedin_image_url());
-
-        } else if (user.getIs_facebook() == 1 && !TextUtils.isEmpty(user.getFacebook_image_url())) {
-            AppUtils.setGlideImage(getContext(), profile_image, user.getFacebook_image_url());
-        } else {
+        if (!TextUtils.isEmpty(user.getUser_image())) {
             AppUtils.setGlideImage(getContext(), profile_image, user.getUser_image());
+
         }
+//        else if (user.getIs_facebook() == 1 && !TextUtils.isEmpty(user.getFacebook_image_url())) {
+//            AppUtils.setGlideImage(getContext(), profile_image, user.getFacebook_image_url());
+//        } else {
+//            AppUtils.setGlideImage(getContext(), profile_image, user.getUser_image());
+//        }
     }
 
     @Override
