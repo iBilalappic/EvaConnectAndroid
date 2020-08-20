@@ -25,6 +25,7 @@ import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.Constants;
+import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.ChatAdapter;
@@ -56,8 +57,14 @@ public class SpecficJobComments extends BaseFragment implements MyLikeAdapter.On
 //    @BindView(R.id.tv_minago)
 //    TextView tv_minago;
 
-//    @BindView(R.id.tv_createddateTime)
-//    TextView tv_createddateTime;
+    @BindView(R.id.tv_createddateTime)
+    TextView tv_createddateTime;
+
+    @BindView(R.id.tv_likecount)
+    TextView tv_likecount;
+
+    @BindView(R.id.tv_comcount)
+    TextView tv_comcount;
 
     @BindView(R.id.tv_positionName)
     TextView tv_positionName;
@@ -186,6 +193,13 @@ public class SpecficJobComments extends BaseFragment implements MyLikeAdapter.On
             @Override
             public void onChanged(BaseModel<List<SpecficJobAd>> getjobAd) {
                 if (getjobAd != null && !getjobAd.isError()) {
+
+
+                    tv_comcount.setText(String.valueOf(getjobAd.getData().get(0).getCommentCount()));
+                    tv_likecount.setText(String.valueOf(getjobAd.getData().get(0).getLikeCount()));
+                    tv_createddateTime.setText(DateUtils.getFormattedDateTime(getjobAd.getData().get(0).getCreatedDatetime()));
+//                    tv_minago.setText(DateUtils.getTimeAgo(getjobAd.getData().get(0).getCreatedDatetime()));
+
                     settingData(getjobAd.getData().get(0));
                     specficJobAd=getjobAd.getData().get(0);
                     checkLikeCount = getjobAd.getData().get(0);
@@ -317,7 +331,7 @@ public class SpecficJobComments extends BaseFragment implements MyLikeAdapter.On
                 comments.clear();
                 if (getComments != null && !getComments.isError()) {
                     comments.addAll(getComments.getData());
-                    Collections.reverse(comments);
+//                    Collections.reverse(comments);
                     commentsAdapter.notifyDataSetChanged();
 //                    post.setComment_count(comments.size());
 //                    tv_comcount.setText(String.valueOf(comments.size()));
@@ -391,6 +405,8 @@ public class SpecficJobComments extends BaseFragment implements MyLikeAdapter.On
 //                return false;
 //            }
 //        };
+
+
         job_comments.setLayoutManager(linearLayoutManager);
         job_comments.setAdapter(commentsAdapter);
     }

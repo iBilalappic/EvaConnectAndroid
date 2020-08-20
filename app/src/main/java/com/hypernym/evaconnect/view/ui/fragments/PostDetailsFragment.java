@@ -318,7 +318,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
                 comments.clear();
                 if (listBaseModel != null && !listBaseModel.isError()) {
                     comments.addAll(listBaseModel.getData());
-                    Collections.reverse(comments);
+//                    Collections.reverse(comments);
                     commentsAdapter.notifyDataSetChanged();
                     post.setComment_count(comments.size());
                     tv_comcount.setText(String.valueOf(comments.size()));
