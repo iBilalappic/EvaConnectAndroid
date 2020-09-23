@@ -3,14 +3,10 @@ package com.hypernym.evaconnect.view.ui.fragments;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.OvershootInterpolator;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import androidx.core.view.ViewCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
@@ -53,8 +48,8 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
     @BindView(R.id.newpost)
     TextView newpost;
 
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
+//    @BindView(R.id.fab)
+//    FloatingActionButton fab;
 
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
@@ -146,58 +141,58 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
             }
         });
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final OvershootInterpolator interpolator = new OvershootInterpolator();
-                ViewCompat.animate(fab).
-                        rotation(135f).
-                        withLayer().
-                        setDuration(300).
-                        setInterpolator(interpolator).
-                        start();
-                /** Instantiating PopupMenu class */
-                PopupMenu popup = new PopupMenu(getContext(), v);
-
-                /** Adding menu items to the popumenu */
-                popup.getMenuInflater().inflate(R.menu.dashboard_menu, popup.getMenu());
-
-                popup.setOnDismissListener(new PopupMenu.OnDismissListener() {
-                    @Override
-                    public void onDismiss(PopupMenu menu) {
-                        ViewCompat.animate(fab).
-                                rotation(0f).
-                                withLayer().
-                                setDuration(300).
-                                setInterpolator(interpolator).
-                                start();
-                    }
-                });
-                /** Defining menu item click listener for the popup menu */
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-
-                        if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu1))) {
-                            loadFragment(R.id.framelayout, new NewPostFragment(), getContext(), true);
-                        }  else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu2))) {
-                            loadFragment(R.id.framelayout, new ShareVideoFragment(), getContext(), true);
-                        }
-                        else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu3))) {
-                            loadFragment(R.id.framelayout, new CreateEventFragment(), getContext(), true);
-                        } else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu3))) {
-                            loadFragment(R.id.framelayout, new ShareVideoFragment(), getContext(), true);
-                        }
-
-                        return true;
-                    }
-                });
-
-                /** Showing the popup menu */
-                popup.show();
-            }
-        });
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                final OvershootInterpolator interpolator = new OvershootInterpolator();
+//                ViewCompat.animate(fab).
+//                        rotation(135f).
+//                        withLayer().
+//                        setDuration(300).
+//                        setInterpolator(interpolator).
+//                        start();
+//                /** Instantiating PopupMenu class */
+//                PopupMenu popup = new PopupMenu(getContext(), v);
+//
+//                /** Adding menu items to the popumenu */
+//                popup.getMenuInflater().inflate(R.menu.dashboard_menu, popup.getMenu());
+//
+//                popup.setOnDismissListener(new PopupMenu.OnDismissListener() {
+//                    @Override
+//                    public void onDismiss(PopupMenu menu) {
+//                        ViewCompat.animate(fab).
+//                                rotation(0f).
+//                                withLayer().
+//                                setDuration(300).
+//                                setInterpolator(interpolator).
+//                                start();
+//                    }
+//                });
+//                /** Defining menu item click listener for the popup menu */
+//                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//
+//                    @Override
+//                    public boolean onMenuItemClick(MenuItem item) {
+//
+//                        if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu1))) {
+//                            loadFragment(R.id.framelayout, new NewPostFragment(), getContext(), true);
+//                        }  else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu2))) {
+//                            loadFragment(R.id.framelayout, new ShareVideoFragment(), getContext(), true);
+//                        }
+//                        else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu3))) {
+//                            loadFragment(R.id.framelayout, new CreateEventFragment(), getContext(), true);
+//                        } else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu3))) {
+//                            loadFragment(R.id.framelayout, new ShareVideoFragment(), getContext(), true);
+//                        }
+//
+//                        return true;
+//                    }
+//                });
+//
+//                /** Showing the popup menu */
+//                popup.show();
+//            }
+//        });
 
 
     }

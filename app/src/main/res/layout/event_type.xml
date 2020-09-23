@@ -60,16 +60,18 @@
 
     <TextView
         android:id="@+id/tv_name"
-        android:layout_width="150dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
         android:ellipsize="end"
-        android:maxLines="1"
         android:fontFamily="@font/nunitosansbold"
+        android:maxLines="1"
+        android:text="Networth And Vibe"
         android:textColor="@color/black"
         android:textStyle="bold"
-        android:text="Networth And Vibe"
+        app:layout_constraintEnd_toStartOf="@+id/tv_attending"
         app:layout_constraintStart_toEndOf="@+id/profile_layout"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -100,12 +102,15 @@
 
     <ImageView
         android:id="@+id/post_image"
-        android:layout_width="0dp"
-        android:layout_height="200dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:adjustViewBounds="true"
         android:background="@drawable/no_thumbnail"
+        app:layout_constraintBottom_toTopOf="@+id/post_detail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/view3"
         app:layout_constraintTop_toBottomOf="@+id/tv_eventdate" />
@@ -208,16 +213,16 @@
 
         <TextView
             android:id="@+id/textView11"
+            style="@style/TextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="8dp"
-            android:text="@string/amp"
-            android:fontFamily="@font/nunitosansbold"
 
-            style="@style/TextStyle"
-            android:textStyle="bold"
-            android:layout_marginStart="@dimen/spacing_medium"
+            android:fontFamily="@font/nunitosansbold"
+            android:text="@string/amp"
             android:textColor="@color/skyblue"
+            android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/textView10"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -225,14 +230,14 @@
             android:id="@+id/tv_comcount"
             style="@style/TextStyle"
             android:layout_width="wrap_content"
-            android:layout_marginStart="@dimen/spacing_medium"
             android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="8dp"
-            android:text="03"
             android:fontFamily="@font/nunitosansbold"
+            android:text="03"
 
-            android:textStyle="bold"
             android:textColor="@color/skyblue"
+            android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/textView11"
             app:layout_constraintTop_toTopOf="parent" />
 

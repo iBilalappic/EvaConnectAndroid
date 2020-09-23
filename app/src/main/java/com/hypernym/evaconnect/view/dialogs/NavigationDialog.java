@@ -21,14 +21,12 @@ import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Stats;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.utils.AppUtils;
-import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.view.ui.fragments.ActivityFragment;
 import com.hypernym.evaconnect.view.ui.fragments.CalendarFragment;
 import com.hypernym.evaconnect.view.ui.fragments.JobListingFragment;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 
-import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -124,22 +122,7 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 dismiss();
-                HashMap<String,Object> body=new HashMap<>();
 
-                body.put("modified_by_id",LoginUtils.getLoggedinUser().getId());
-                body.put("last_online_datetime", DateUtils.GetCurrentdatetime());
-                body.put("is_online",false);
-                RestClient.get().appApi().userOnline(LoginUtils.getLoggedinUser().getId(),body).enqueue(new Callback<BaseModel<List<User>>>() {
-                    @Override
-                    public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<BaseModel<List<User>>> call, Throwable t) {
-
-                    }
-                });
                 AppUtils.logout(context);
             }
         });

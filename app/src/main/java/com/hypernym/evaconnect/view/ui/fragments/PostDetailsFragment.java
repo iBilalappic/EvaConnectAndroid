@@ -45,7 +45,6 @@ import com.smarteist.autoimageslider.SliderView;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -322,6 +321,8 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
                     commentsAdapter.notifyDataSetChanged();
                     post.setComment_count(comments.size());
                     tv_comcount.setText(String.valueOf(comments.size()));
+                    if(comments.size()>0)
+                       rc_comments.smoothScrollToPosition(comments.size() - 1);
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }

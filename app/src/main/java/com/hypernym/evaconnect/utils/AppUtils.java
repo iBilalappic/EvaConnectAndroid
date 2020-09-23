@@ -38,7 +38,10 @@ import com.bumptech.glide.request.transition.Transition;
 import com.facebook.login.LoginManager;
 import com.google.android.material.snackbar.Snackbar;
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.constants.AppConstants;
+import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.view.dialogs.VideoViewDialog;
 import com.hypernym.evaconnect.view.ui.activities.LoginActivity;
@@ -49,8 +52,14 @@ import com.onesignal.OneSignal;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -371,6 +380,22 @@ public final class AppUtils {
                 switch (v.getId()) {
                     case R.id.button_positive:
                         simpleDialog.dismiss();
+                        HashMap<String,Object> body=new HashMap<>();
+
+                        body.put("modified_by_id",LoginUtils.getLoggedinUser().getId());
+                        body.put("last_online_datetime", DateUtils.GetCurrentdatetime());
+                        body.put("is_online",false);
+                        RestClient.get().appApi().userOnline(LoginUtils.getLoggedinUser().getId(),body).enqueue(new Callback<BaseModel<List<User>>>() {
+                            @Override
+                            public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<BaseModel<List<User>>> call, Throwable t) {
+
+                            }
+                        });
                         Intent intent = new Intent(context, LoginActivity.class);
                         activity.finish();
                         context.startActivity(intent);

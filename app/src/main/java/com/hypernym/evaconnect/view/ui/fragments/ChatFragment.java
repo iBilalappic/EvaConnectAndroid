@@ -161,15 +161,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         browsefiles.setOnClickListener(this);
         init();
         initViewModel();
-
         return view;
-
     }
 
     private void initViewModel() {
         jobListViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(JobListViewModel.class);
         messageViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(MessageViewModel.class);
-
     }
 
     private void init() {
@@ -360,7 +357,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
           public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
               if (dataSnapshot.getValue() != null) {
                 ChatMessage chatMessage =new ChatMessage();
-                chatMessage.setMessage(dataSnapshot.child("message").getValue().toString());
+
                 chatMessage.setName(dataSnapshot.child("name").getValue().toString());
                 chatMessage.setSenderID(dataSnapshot.child("senderID").getValue().toString());
                 chatMessage.setCreated_datetime(dataSnapshot.child("timestamp").getValue().toString());
@@ -373,6 +370,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         imageList.add(image.getValue().toString());
                     }
                     chatMessage.setChatImages(imageList);
+                }
+                else
+                {
+                    chatMessage.setMessage(dataSnapshot.child("message").getValue().toString());
                 }
                 if(dataSnapshot.child("documents").getValue()!=null)
                 {

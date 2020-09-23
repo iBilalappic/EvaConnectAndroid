@@ -58,8 +58,8 @@
     <string name="success">Success</string>
     <string name="error">Error</string>
     <string name="ok">OK</string>
-    <string name="button_cancel">No thanks!</string>
-    <string name="button_ok">Yes Please!</string>
+    <string name="button_cancel">No</string>
+    <string name="button_ok">Yes</string>
     <string name="confirmation">Confirmation</string>
     <string name="button_yes">YES</string>
     <string name="button_no">NO</string>

@@ -19,7 +19,10 @@ public final class DateUtils {
     public static final String DATE_FORMAT_5 = "dd";
     public static final String TIME_FORMAT_1 = "HH:mm:ss";
     public static final String DATE_INPUT_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_INPUT_FORMAT_1 = "yyyy-MM-dd HH:mm:ss";
+
     public static final String DATE_INPUT_FORMAT_WITHOUTTIME = "yyyy-MM-dd";
+    public static final String DATE_INPUT_FORMAT_WITHOUTTIME_1 = "dd-MM-yyyy";
     public static final String SERVER_DATE_INPUT_FORMAT = "yyyy-MM-dd hh:mm:ss";
     public static final String EVENT_DATE_INPUT_FORMAT = "E, dd MMM yyyy";
 
@@ -163,7 +166,7 @@ public final class DateUtils {
         try {
             datetime = convertEventDateToUserTimeZone(datetime);
 
-            SimpleDateFormat format = new SimpleDateFormat(DATE_INPUT_FORMAT);
+            SimpleDateFormat format = new SimpleDateFormat(DATE_INPUT_FORMAT_1);
             Date newDate = format.parse(datetime);
 
             format = new SimpleDateFormat(DATE_INPUT_FORMAT_WITHOUTTIME);
@@ -404,7 +407,7 @@ public final class DateUtils {
     public static String convertEventDateToUserTimeZone(String serverDate) {
         String ourdate;
         try {
-            SimpleDateFormat formatter = new SimpleDateFormat(EVENT_DATE_INPUT_FORMAT);
+            SimpleDateFormat formatter = new SimpleDateFormat(DATE_INPUT_FORMAT_WITHOUTTIME_1);
             formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
             Date value = formatter.parse(serverDate);
             SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_INPUT_FORMAT); //this format changeable

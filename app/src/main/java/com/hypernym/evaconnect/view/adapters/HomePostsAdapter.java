@@ -231,7 +231,12 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     mClickListener.onEventItemClick(v, getAdapterPosition());
                 }
             });
-
+            post_image.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onEventItemClick(v, getAdapterPosition());
+                }
+            });
             tv_attending.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {

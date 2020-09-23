@@ -149,11 +149,10 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     }
 
     private void GetFirebaseData() {
-
         networkConnectionList.clear();
         messageAdapter.notifyDataSetChanged();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        ////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////
         DatabaseReference user = databaseReference.child(AppConstants.FIREASE_USER_ENDPOINT);
 
             user.child(LoginUtils.getLoggedinUser().getId().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -177,9 +176,12 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                                             }
                                         }
                                         DataSnapshot lastMessage = dataSnapshot.child("lastMessage");
-                                        networkConnection.setMessage(lastMessage.child("message").getValue().toString());
                                         if (lastMessage.child("images").getValue() != null) {
                                             networkConnection.setMessage("image");
+                                        }
+                                        else
+                                        {
+                                            networkConnection.setMessage(lastMessage.child("message").getValue().toString());
                                         }
                                         networkConnection.setSenderId(Integer.parseInt(lastMessage.child("senderID").getValue().toString()));
                                         networkConnection.setCreatedDatetime(lastMessage.child("timestamp").getValue().toString());

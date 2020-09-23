@@ -61,11 +61,11 @@ public class CreateAccount_2_Activity extends BaseActivity implements Validator.
 
     @NotEmpty
     @BindView(R.id.tv_country)
-    TextView tv_country;
+    EditText tv_country;
 
     @NotEmpty
     @BindView(R.id.tv_city)
-    TextView tv_city;
+    EditText tv_city;
 
     @BindView(R.id.img_backarrow)
     ImageView img_backarrow;
@@ -331,6 +331,10 @@ public class CreateAccount_2_Activity extends BaseActivity implements Validator.
                     String address = addresses.get(0).getAddressLine(0);
                     // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
                     String city = addresses.get(0).getLocality();
+                    if (addresses.get(0).getLocality() != null)
+                        city=addresses.get(0).getLocality();
+                    else if (addresses.get(0).getSubAdminArea() != null)
+                        city=addresses.get(0).getSubAdminArea();
                     String state = addresses.get(0).getAdminArea();
                     String country = addresses.get(0).getCountryName();
                     String postalCode = addresses.get(0).getPostalCode();

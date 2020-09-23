@@ -136,7 +136,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
     private Date selectedDate = new Date();
     Date endselectDate;
     DateFormat time = new SimpleDateFormat("hh:mm a");
-    DateFormat dateformat = new SimpleDateFormat("E, dd MMM yyyy");
+    DateFormat dateformat = new SimpleDateFormat("dd-MM-yyyy");
     SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
 
     private static final String TAG_DATETIME_FRAGMENT = "TAG_DATETIME_FRAGMENT";

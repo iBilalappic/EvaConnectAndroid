@@ -25,8 +25,10 @@
         android:background="@color/colorwhite"
         app:layout_constraintBottom_toBottomOf="@+id/view"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view6" />
+        app:layout_constraintTop_toBottomOf="@+id/view6"
+        app:layout_constraintVertical_bias="0.0" />
 
     <RelativeLayout
         android:layout_marginStart="8dp"
@@ -115,16 +117,16 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
     <TextView
-        android:ellipsize="end"
-        android:singleLine="true"
-        app:layout_constraintEnd_toStartOf="@+id/tv_connect"
         android:id="@+id/tv_company"
         style="@style/TextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="3dp"
+        android:ellipsize="end"
+        android:singleLine="true"
         android:text="Recruitment officer "
         android:textColor="#EF8080"
+        app:layout_constraintEnd_toStartOf="@+id/tv_connect"
         app:layout_constraintStart_toEndOf="@+id/tv_designation"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 

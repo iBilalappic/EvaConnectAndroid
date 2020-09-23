@@ -60,6 +60,9 @@ public class BaseFragment extends Fragment {
     private ConnectionViewModel connectionViewModel;
     public static String pageTitle;
     public static boolean newPost=false;
+    public static final String INTENT_ASPECT_RATIO_X = "aspect_ratio_x";
+    public static final String INTENT_ASPECT_RATIO_Y = "aspect_ratio_Y";
+    public static final String INTENT_LOCK_ASPECT_RATIO = "lock_aspect_ratio";
     /**
      * Could handle back press.
      * @return true if back press was handled

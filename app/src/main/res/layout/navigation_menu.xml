@@ -58,16 +58,17 @@
     </RelativeLayout>
 
 
-
     <TextView
         android:id="@+id/tv_name"
-        android:layout_width="180dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="24dp"
         android:ellipsize="end"
+        android:fontFamily="@font/nunitosansbold"
         android:gravity="center"
         android:maxLines="2"
-        android:fontFamily="@font/nunitosansbold"
         android:text="Deinal Edwell "
         android:textColor="@color/black"
         android:textSize="20sp"
@@ -83,8 +84,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
         android:layout_marginTop="5dp"
+        android:layout_marginEnd="20dp"
+        android:gravity="center_horizontal"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -93,14 +95,12 @@
 
         <TextView
             android:id="@+id/tv_designation"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:ellipsize="end"
-            android:maxLines="1"
-            android:gravity="center|end"
-            android:text="Manager"
             android:fontFamily="@font/nunitosansbold"
+            android:gravity="center|end"
+            android:maxLines="1"
             android:textAlignment="textEnd"
             android:textSize="12sp"
             android:textStyle="bold">
@@ -112,9 +112,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
+            android:fontFamily="@font/nunitosansbold"
             android:gravity="center|end"
             android:text=" at "
-            android:fontFamily="@font/nunitosansbold"
             android:textAlignment="textEnd"
             android:textSize="12sp"
             android:textStyle="bold">
@@ -124,14 +124,12 @@
 
         <TextView
             android:id="@+id/tv_company"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_small"
-            android:layout_weight="1"
             android:ellipsize="end"
-            android:gravity="center|start"
-            android:text="Easyjet"
             android:fontFamily="@font/nunitosansbold"
+            android:gravity="center|start"
             android:maxLines="1"
             android:textColor="@color/colorAccent"
             android:textSize="12sp">

@@ -160,15 +160,13 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                 if (edt_content.getText().length() > 0 || part_images.size() > 0 || video != null) {
                     if (NetworkUtils.isNetworkConnected(getContext())) {
                         createPost();
-
-
                     } else {
                         networkErrorDialog();
                     }
                 }
-
             }
         });
+
         tv_recordvideo.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
