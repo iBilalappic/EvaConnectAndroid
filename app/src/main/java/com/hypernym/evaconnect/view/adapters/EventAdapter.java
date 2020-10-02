@@ -83,7 +83,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             {
                 if(events.get(position).getObject_details()!=null) {
                     holder.itemView.setVisibility(View.VISIBLE);
-
                     holder.eventTitle.setText(events.get(position).getObject_details().getName() + " | " + events.get(position).getObject_details().getAddress());
                     holder.time.setText(DateUtils.get12formant(events.get(position).getObject_details().getStart_time()) + " - " + DateUtils.get12formant(events.get(position).getObject_details().getEnd_time()));
                     if (events.get(position).getObject_details().getStart_date() != null)
@@ -106,7 +105,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     }
 
     private void setDayTextWithSuperScript(ViewHolder holder, int position) {
-
         String date = "";
 
         if (events.get(position).getObject_type().equalsIgnoreCase("event"))

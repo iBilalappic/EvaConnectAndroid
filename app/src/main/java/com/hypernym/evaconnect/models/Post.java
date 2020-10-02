@@ -95,6 +95,8 @@ public class Post implements Serializable {
     private int is_private;
     private String image;
 
+    private MultipartBody.Part document;
+
 
 
     public String getContent() {
@@ -539,6 +541,14 @@ public class Post implements Serializable {
 
     public void setReceiver_id(Integer receiver_id) {
         this.receiver_id = receiver_id;
+    }
+
+    public MultipartBody.Part getDocument() {
+        return document;
+    }
+
+    public void setDocument(MultipartBody.Part document) {
+        this.document = document;
     }
 }
 

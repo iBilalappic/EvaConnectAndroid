@@ -67,7 +67,7 @@
             style="@style/TextStyle.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="150dp"
+            android:layout_marginTop="113dp"
             android:text="Whats's your name?"
             android:textColor="@color/colorAccent"
             android:textStyle="bold"
@@ -115,7 +115,7 @@
             android:layout_width="250dp"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:backgroundTint="@color/colorwhite"
@@ -129,6 +129,36 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edt_firstname" />
 
+        <EditText
+            android:id="@+id/edt_email"
+            style="@style/EditText"
+            android:layout_width="250dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:backgroundTint="@color/colorwhite"
+            android:gravity="center"
+            android:hint="Email"
+            android:maxLength="100"
+            android:paddingLeft="10dp"
+            android:textColor="@color/text_color"
+            android:textColorHint="@color/gray_1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edt_surname" />
+        <ImageView
+            android:id="@+id/img_view2"
+            style="@style/EditText.LineRedBlack"
+            android:layout_width="250dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edt_email" />
 
         <ImageView
             android:id="@+id/img_view1"
@@ -148,14 +178,14 @@
             style="@style/TextStyle"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="30dp"
             android:gravity="center"
             android:text="Which of these describes you best?"
             android:textColor="@color/colorAccent"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_view1" />
+            app:layout_constraintTop_toBottomOf="@+id/img_view2" />
 
 
         <Button
@@ -195,7 +225,6 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:background="@android:color/transparent"
-
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/white_chatbg"
@@ -237,7 +266,7 @@
             android:id="@+id/btn_next"
             style="@style/Button_selected_light_blue"
             android:layout_width="250dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="24dp"
             android:text="@string/next"
             app:layout_constraintEnd_toEndOf="parent"
@@ -256,10 +285,12 @@
             android:text="Already have an account?"
             android:textColor="@color/colorAccent"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_next" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.489"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_next"
+            app:layout_constraintVertical_bias="0.0" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -85,50 +85,102 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_marginTop="24dp"
-            android:background="@color/white"
+            android:background="@null"
             android:elevation="2dp"
             android:gravity="top|left"
             android:hint="Type something..."
             android:inputType="textMultiLine"
             android:padding="10dp"
+            android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profile_layout" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/attachment"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:visibility="gone"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/layout_border"
+            app:layout_constraintBottom_toTopOf="@+id/btn_upload"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
-        <TextView
-            android:id="@+id/browsefiles"
-            android:layout_width="204dp"
+            <ImageView
+                android:id="@+id/attachment_preview"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:id="@+id/tv_filename"
+                    style="@style/TextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="TextView"
+                    android:textFontWeight="700" />
+
+                <ImageView
+                    android:id="@+id/imageView10"
+                    android:layout_width="16dp"
+                    android:layout_height="18dp"
+                    app:srcCompat="@drawable/business" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/btn_upload"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:drawableLeft="@drawable/gallery"
-            android:drawablePadding="5dp"
-            android:paddingLeft="30dp"
-            android:paddingTop="15dp"
-            android:paddingRight="30dp"
-            android:paddingBottom="15dp"
-            android:text="Images"
-            android:textColor="@color/light_black"
-            android:textSize="12sp"
+            android:gravity="center_horizontal"
+            android:padding="5dp"
             app:layout_constraintBottom_toTopOf="@+id/post"
-            app:layout_constraintEnd_toStartOf="@+id/camera"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
+            <ImageView
+                android:layout_width="13dp"
+                android:layout_height="14dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/attach_icon"
+                app:layout_constraintBottom_toBottomOf="@+id/browsefiles"
+                app:layout_constraintEnd_toStartOf="@+id/browsefiles"
+                app:layout_constraintTop_toTopOf="@+id/browsefiles" />
 
-        <TextView
-            android:id="@+id/camera"
-            android:layout_width="204dp"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/gallery"
-            android:drawablePadding="5dp"
-            android:paddingLeft="30dp"
-            android:paddingTop="15dp"
-            android:paddingRight="30dp"
-            android:paddingBottom="15dp"
-            android:text="Camera"
-            android:textColor="@color/light_black"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toTopOf="@+id/post"
-            app:layout_constraintEnd_toEndOf="parent" />
+            <TextView
+                android:id="@+id/browsefiles"
+                style="@style/TextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Upload Document"
+                android:textColor="@color/light_black"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <TextView
             android:id="@+id/post"
@@ -140,69 +192,14 @@
             android:paddingTop="15dp"
             android:paddingRight="30dp"
             android:paddingBottom="15dp"
-            android:text="Post"
+            android:text="Share An Article"
             android:textColor="@color/colorwhite"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/attachment_layout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edt_content">
 
-            <com.nguyencse.URLEmbeddedView
-                android:id="@+id/uev"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:description="Description"
-                app:favor="@drawable/ic_url"
-                app:host="abc.com"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:thumbnail="@drawable/ic_url"
-                app:title="Title" />
-
-            <ImageView
-                android:id="@+id/img_video"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:elevation="2dp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="parent" />
-
-            <ImageView
-                android:id="@+id/img_play"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:elevation="4dp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/img_video"
-                app:srcCompat="@drawable/play" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rc_attachments"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/tv_address"
@@ -214,6 +211,17 @@
             android:text="TextView"
             app:layout_constraintStart_toEndOf="@+id/profile_layout"
             app:layout_constraintTop_toBottomOf="@+id/tv_designation" />
+
+        <ImageView
+            android:id="@+id/img_removeAttachment"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
+            android:layout_marginEnd="5dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/attachment"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/attachment"
+            app:srcCompat="@drawable/icon_cross" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

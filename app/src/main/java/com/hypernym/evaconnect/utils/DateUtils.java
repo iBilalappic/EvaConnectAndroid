@@ -179,6 +179,24 @@ public final class DateUtils {
 
         return formatedDate;
     }
+    public static String getFormattedMeetingDate(String datetime) {
+        String formatedDate = null;
+        try {
+            datetime = convertMeetingDateToUserTimeZone(datetime);
+
+            SimpleDateFormat format = new SimpleDateFormat(DATE_INPUT_FORMAT_1);
+            Date newDate = format.parse(datetime);
+
+            format = new SimpleDateFormat(DATE_INPUT_FORMAT_WITHOUTTIME);
+            formatedDate = format.format(newDate);
+            return formatedDate;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return formatedDate;
+    }
     public static boolean isValidDate(String inDate) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_INPUT_FORMAT_WITHOUTTIME);
         dateFormat.setLenient(false);
@@ -408,6 +426,22 @@ public final class DateUtils {
         String ourdate;
         try {
             SimpleDateFormat formatter = new SimpleDateFormat(DATE_INPUT_FORMAT_WITHOUTTIME_1);
+            formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+            Date value = formatter.parse(serverDate);
+            SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_INPUT_FORMAT); //this format changeable
+            dateFormatter.setTimeZone(TimeZone.getDefault());
+            ourdate = dateFormatter.format(value);
+
+            Log.d("OurDate", ourdate);
+        } catch (Exception e) {
+            ourdate = "0000-00-00 00:00:00";
+        }
+        return ourdate;
+    }
+    public static String convertMeetingDateToUserTimeZone(String serverDate) {
+        String ourdate;
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat(EVENT_DATE_INPUT_FORMAT);
             formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
             Date value = formatter.parse(serverDate);
             SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_INPUT_FORMAT); //this format changeable

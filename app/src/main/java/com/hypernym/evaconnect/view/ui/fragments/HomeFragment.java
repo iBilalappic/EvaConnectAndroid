@@ -64,11 +64,6 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
 
-
-
-
-
-
     private List<Post> posts = new ArrayList<>();
     private HomePostsAdapter homePostsAdapter;
     private LinearLayoutManager linearLayoutManager;

@@ -72,7 +72,7 @@ public interface AppApi {
     @Multipart
     @POST(APIConstants.GET_POSTS)
     Call<BaseModel<List<Post>>> createPost(@Part("user_id") int user_id, @Part("content") RequestBody content,
-                                           @Part("created_by_id") int created_by_id, @Part("status") RequestBody status,@Part("is_url") boolean is_url, @Part List<MultipartBody.Part> post_image, @Part MultipartBody.Part post_video);
+                                           @Part("created_by_id") int created_by_id, @Part("status") RequestBody status,@Part("is_url") boolean is_url, @Part List<MultipartBody.Part> post_image, @Part MultipartBody.Part post_video,@Part MultipartBody.Part post_document);
     @Multipart
     @POST(APIConstants.ADD_JOB_AD)
     Call<BaseModel<List<Object>>> createJobAd(@Part("user_id") int user_id,

@@ -154,14 +154,14 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
                 meeting.setStart_date(tv_startdate.getText().toString());
             }
             else {
-                meeting.setStart_date(DateUtils.getFormattedEventDate(tv_startdate.getText().toString()));
+                meeting.setStart_date(DateUtils.getFormattedMeetingDate(tv_startdate.getText().toString()));
             }
             if(DateUtils.isValidDate(tv_enddate.getText().toString()))
             {
                 meeting.setEnd_date(tv_enddate.getText().toString());
             }
             else {
-                meeting.setEnd_date( DateUtils.getFormattedEventDate(tv_enddate.getText().toString()));
+                meeting.setEnd_date( DateUtils.getFormattedMeetingDate(tv_enddate.getText().toString()));
             }
             if(DateUtils.isValidTime(tv_startTime.getText().toString()))
             {

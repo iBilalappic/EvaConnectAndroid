@@ -2,8 +2,6 @@ package com.hypernym.evaconnect.view.ui.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,10 +48,10 @@ public class MainViewPagerFragment extends BaseFragment implements FloatingActio
         sectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
         mViewPager = (ViewPager) view.findViewById(R.id.container);
         mViewPager.setAdapter(sectionsPagerAdapter);
-        mViewPager.setCurrentItem(2);
+        mViewPager.setCurrentItem(0);
         TabLayout tabLayout = view.findViewById(R.id.tabs);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setupWithViewPager(mViewPager);
         fab.setOnClickListener(this);
 
@@ -93,15 +91,12 @@ public class MainViewPagerFragment extends BaseFragment implements FloatingActio
 
             switch (position) {
                 case 0:
-
                      return new PostFragment();
                 case 1:
                      return new EventFragment();
                 case 2:
-                    return new HomeFragment();
-                case 3:
                     return new JobFragment();
-                case 4:
+                case 3:
                     return new NewsFragment();
             }
             return null;
@@ -109,7 +104,7 @@ public class MainViewPagerFragment extends BaseFragment implements FloatingActio
 
         @Override
         public int getCount() {
-            return 5;
+            return 4;
         }
 
         @Override
@@ -120,10 +115,8 @@ public class MainViewPagerFragment extends BaseFragment implements FloatingActio
                 case 1:
                     return "Events";
                 case 2:
-                    return "Everything";
-                case 3:
                     return "Jobs";
-                case 4:
+                case 3:
                     return "News";
             }
             return null;
@@ -164,22 +157,22 @@ public class MainViewPagerFragment extends BaseFragment implements FloatingActio
 
                 //    Toast.makeText(getContext(), item.getGroupId()+"You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
                 if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu1))) {
-                    loadFragment(R.id.framelayout, new NewPostFragment(), getContext(), true);
+                    NewPostFragment newPostFragment=new NewPostFragment();
+                    Bundle bundle=new Bundle();
+                    bundle.putBoolean("isVideo",false);
+                    newPostFragment.setArguments(bundle);
+                    loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
                 }  else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu2))) {
-                    ShareVideoFragment shareVideoFragment=new ShareVideoFragment();
+                    NewPostFragment newPostFragment=new NewPostFragment();
                     Bundle bundle=new Bundle();
                     bundle.putBoolean("isVideo",true);
-                    shareVideoFragment.setArguments(bundle);
-                    loadFragment(R.id.framelayout, shareVideoFragment, getContext(), true);
+                    newPostFragment.setArguments(bundle);
+                    loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
                 }
                 else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu3))) {
                     loadFragment(R.id.framelayout, new CreateEventFragment(), getContext(), true);
                 } else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu4))) {
-                    ShareVideoFragment shareVideoFragment=new ShareVideoFragment();
-                    Bundle bundle=new Bundle();
-                    bundle.putBoolean("isVideo",false);
-                    shareVideoFragment.setArguments(bundle);
-                    loadFragment(R.id.framelayout, shareVideoFragment, getContext(), true);
+                    loadFragment(R.id.framelayout, new ShareArticleFragment(), getContext(), true);
                 }
                 return true;
             }

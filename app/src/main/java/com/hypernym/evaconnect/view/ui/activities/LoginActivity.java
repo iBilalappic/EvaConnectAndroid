@@ -124,7 +124,10 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
             @Override
             public void onSingleClick(View v) {
                 value = "signup";
-                validator.validate();
+               // validator.validate();
+                Intent intent = new Intent(getBaseContext(), CreateAccount_1_Activity.class);
+              //  intent.putExtra("Email", edt_email.getText().toString());
+                startActivity(intent);
             }
         });
 
@@ -301,10 +304,8 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
                 showDialog();
                 callLoginApi();
 
-
             } else {
                 isEmailExist();
-
             }
         } else {
             networkErrorDialog();

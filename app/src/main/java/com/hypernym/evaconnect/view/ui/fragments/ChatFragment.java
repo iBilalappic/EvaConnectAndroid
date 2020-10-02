@@ -512,9 +512,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 break;
 
         }
-
     }
-
 
     public void LaunchGallery() {
 

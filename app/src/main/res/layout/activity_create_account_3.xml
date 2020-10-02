@@ -142,16 +142,35 @@
 
         </LinearLayout>
 
+
+        <EditText
+            android:id="@+id/edt_sector"
+            style="@style/EditText"
+            android:layout_width="250dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@color/colorwhite"
+            android:gravity="center"
+            android:hint="Enter Sector"
+            android:maxLength="100"
+            android:paddingLeft="10dp"
+            android:textColor="@color/text_color"
+            android:textColorHint="@color/gray_1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.534"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout0" />
+
         <Button
             android:id="@+id/btn_next"
             style="@style/Button_selected_blue"
             android:layout_width="250dp"
             android:layout_marginTop="50dp"
-            android:layout_marginBottom="24dp"
             android:text="@string/next"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout0" />
+            app:layout_constraintTop_toBottomOf="@+id/edt_sector" />
 
         <TextView
             android:id="@+id/tv_already_account"

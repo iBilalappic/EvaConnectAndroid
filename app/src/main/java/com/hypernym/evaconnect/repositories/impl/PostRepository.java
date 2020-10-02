@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,7 +30,7 @@ public class PostRepository implements IPostRepository {
         postMutableLiveData=new MutableLiveData<>();
         User user=LoginUtils.getLoggedinUser();
         RestClient.get().appApi().createPost(user.getId(),RequestBody.create(MediaType.parse("text/plain"),
-                post.getContent()),user.getId(),RequestBody.create(MediaType.parse("text/plain"), AppConstants.STATUS_PENDING),post.isIs_url(),post.getAttachments(),post.getVideo()).enqueue(new Callback<BaseModel<List<Post>>>() {
+                post.getContent()),user.getId(),RequestBody.create(MediaType.parse("text/plain"), AppConstants.STATUS_PENDING),post.isIs_url(),post.getAttachments(),post.getVideo(),post.getDocument()).enqueue(new Callback<BaseModel<List<Post>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
                 postMutableLiveData.setValue(response.body());
