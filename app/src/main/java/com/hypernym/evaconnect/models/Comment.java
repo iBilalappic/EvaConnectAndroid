@@ -13,7 +13,10 @@ public class Comment implements Serializable {
     private User user;
     private Integer event_id;
     private Integer rss_news_id;
-
+    private Integer modified_by_id;
+    private String modified_datetime;
+    private Integer id;
+    private boolean isPostMine;
 
 
 
@@ -82,5 +85,37 @@ public class Comment implements Serializable {
 
     public void setRss_news_id(Integer rss_news_id) {
         this.rss_news_id = rss_news_id;
+    }
+
+    public Integer getModified_by_id() {
+        return modified_by_id;
+    }
+
+    public void setModified_by_id(Integer modified_by_id) {
+        this.modified_by_id = modified_by_id;
+    }
+
+    public String getModified_datetime() {
+        return modified_datetime;
+    }
+
+    public void setModified_datetime(String modified_datetime) {
+        this.modified_datetime = modified_datetime;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public boolean isPostMine() {
+        return isPostMine;
+    }
+
+    public void setPostMine(boolean postMine) {
+        isPostMine = postMine;
     }
 }

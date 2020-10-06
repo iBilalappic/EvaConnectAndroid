@@ -71,15 +71,15 @@
         android:maxLines="1"
         android:text="Ed Hunter"
         android:textColor="@color/black"
-        android:textSize="12sp"
+        android:textSize="13sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/profile_layout"
         app:layout_constraintTop_toTopOf="@+id/profile_layout" />
     <TextView
         android:id="@+id/tv_connect"
         style="@style/Button_border_light_blue"
-        android:layout_width="77dp"
-        android:layout_height="27dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/nunitosansregular"
@@ -90,9 +90,20 @@
         android:paddingBottom="5dp"
         android:text="Connected"
         android:textColor="@color/skyblue"
-        android:textSize="9sp"
+        android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/profile_layout" />
+    <ImageView
+        android:id="@+id/img_more"
+        android:layout_width="wrap_content"
+        android:layout_height="15dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/more"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/profile_layout" />
+
     <TextView
         android:id="@+id/tv_designation"
         style="@style/TextStyle"
@@ -100,6 +111,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="Recruitment officer"
+        android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/profile_layout"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
@@ -114,6 +126,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:text="Recruitment officer"
+        android:textSize="12sp"
         android:textColor="#EF8080"
         app:layout_constraintStart_toEndOf="@+id/tv_designation"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
@@ -228,9 +241,10 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="50dp"
+                android:fontFamily="@font/nunitosansbold"
                 android:text="58"
                 android:textColor="@color/skyblue"
-                android:fontFamily="@font/nunitosansbold"
+                android:textSize="11sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -245,6 +259,7 @@
                 android:layout_marginBottom="50dp"
                 android:paddingLeft="5dp"
                 android:text="@string/likes"
+                android:textSize="11sp"
                 android:fontFamily="@font/nunitosansbold"
                 android:textColor="@color/skyblue"
                 android:textStyle="bold"
@@ -260,6 +275,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="50dp"
                 android:text="@string/amp"
+                android:textSize="11sp"
                 android:fontFamily="@font/nunitosansbold"
                 style="@style/TextStyle"
                 android:textColor="@color/skyblue"
@@ -281,6 +297,7 @@
                 android:fontFamily="@font/nunitosansbold"
                 android:textColor="@color/skyblue"
                 android:textStyle="bold"
+                android:textSize="11sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView11"
                 app:layout_constraintTop_toBottomOf="@+id/img_video" />
@@ -294,6 +311,7 @@
                 android:layout_marginBottom="50dp"
                 android:paddingLeft="5dp"
                 android:text="@string/comments"
+                android:textSize="11sp"
                 android:fontFamily="@font/nunitosansbold"
                 android:textColor="@color/skyblue"
                 android:textStyle="bold"
@@ -310,6 +328,8 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="50dp"
                 android:text="12:04pm | 12 jan"
+                android:textColor="@color/black"
+                android:textSize="10sp"
                 android:fontFamily="@font/nunitosansregular"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -340,7 +360,14 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1">
-
+                    <ImageView
+                        android:id="@+id/img_like"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="@dimen/spacing_medium"
+                        android:layout_weight="0"
+                        android:background="@drawable/ic_like" />
                     <TextView
                         android:gravity="center_vertical"
                         android:layout_width="0dp"
@@ -348,16 +375,10 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/nunitosansregular"
                         android:text="Like"
+                        android:textSize="12sp"
                         android:textColor="@color/gray_1" />
 
-                    <ImageView
-                        android:id="@+id/img_like"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_gravity="center"
-                        android:layout_marginEnd="@dimen/spacing_medium"
-                        android:layout_weight="0"
-                        android:background="@drawable/ic_like" />
+
 
                     <View
                         android:layout_width="1dp"
@@ -374,7 +395,14 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1.2">
-
+                    <ImageView
+                        android:id="@+id/img_comment"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="@dimen/spacing_medium"
+                        android:layout_weight="0"
+                        android:background="@drawable/ic_comment" />
                     <TextView
                         android:gravity="center_vertical"
                         android:layout_width="0dp"
@@ -382,16 +410,10 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/nunitosansregular"
                         android:text="Comment"
+                        android:textSize="12sp"
                         android:textColor="@color/gray_1" />
 
-                    <ImageView
-                        android:id="@+id/img_comment"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_gravity="center"
-                        android:layout_marginEnd="@dimen/spacing_medium"
-                        android:layout_weight="0"
-                        android:background="@drawable/ic_comment" />
+
 
                     <View
                         android:layout_width="1dp"
@@ -409,7 +431,14 @@
                     android:layout_height="match_parent"
                     android:layout_marginEnd="16dp"
                     android:layout_weight="1">
-
+                    <ImageView
+                        android:id="@+id/img_share"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="@dimen/spacing_medium"
+                        android:layout_weight="0"
+                        android:background="@drawable/ic_share" />
                     <TextView
                         android:gravity="center_vertical"
                         android:layout_width="0dp"
@@ -417,16 +446,10 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/nunitosansregular"
                         android:text="Share"
+                        android:textSize="12sp"
                         android:textColor="@color/gray_1" />
 
-                    <ImageView
-                        android:id="@+id/img_share"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_gravity="center"
-                        android:layout_marginEnd="@dimen/spacing_medium"
-                        android:layout_weight="0"
-                        android:background="@drawable/ic_share" />
+
 
 
                 </LinearLayout>
@@ -438,19 +461,19 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
-
     <TextView
         android:id="@+id/tv_content"
         style="@style/TextStyle.Title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="12dp"
         android:ellipsize="end"
-        android:maxLines="3"
         android:fontFamily="@font/nunitosansregular"
+        android:maxLines="3"
+        android:textColor="@color/black"
         android:text="“Things you’d never hear in a ticket office” … Let’s play a game of mock the week, or the LinkedIn version of Mock the Week. I’ll Start: https://lnkd.in… see more"
+        android:textSize="13.5sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

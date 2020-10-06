@@ -1,5 +1,6 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -63,6 +64,7 @@ public class BaseFragment extends Fragment {
     public static final String INTENT_ASPECT_RATIO_X = "aspect_ratio_x";
     public static final String INTENT_ASPECT_RATIO_Y = "aspect_ratio_Y";
     public static final String INTENT_LOCK_ASPECT_RATIO = "lock_aspect_ratio";
+    Intent CropIntent ;
     /**
      * Could handle back press.
      * @return true if back press was handled
@@ -230,7 +232,6 @@ public class BaseFragment extends Fragment {
     }
 
 
-
     public File galleryAddPic() {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         mCurrentPhotoPath=getCurrentPhotoPath();
@@ -363,7 +364,48 @@ public class BaseFragment extends Fragment {
         return pageTitle;
     }
 
+    public void ImageCropFunctionForGallery(Uri uri) {
 
+        // Image Crop Code
+        try {
+            CropIntent = new Intent("com.android.camera.action.CROP");
+
+            CropIntent.setDataAndType(uri, "image/*");
+
+            CropIntent.putExtra("crop", "true");
+            CropIntent.putExtra("outputX", 180);
+            CropIntent.putExtra("outputY", 180);
+            CropIntent.putExtra("aspectX", 3);
+            CropIntent.putExtra("aspectY", 4);
+            CropIntent.putExtra("scaleUpIfNeeded", true);
+            CropIntent.putExtra("return-data", true);
+
+            startActivityForResult(CropIntent, 3);
+
+        } catch (ActivityNotFoundException e) {
+
+        }
+    }
+    public void ImageCropFunctionForCamera(Uri uri) {
+
+        // Image Crop Code
+        try {
+            CropIntent = new Intent("com.android.camera.action.CROP");
+            CropIntent.setDataAndType(uri, "image/*");
+            CropIntent.putExtra("crop", "true");
+            CropIntent.putExtra("outputX", 180);
+            CropIntent.putExtra("outputY", 180);
+            CropIntent.putExtra("aspectX", 3);
+            CropIntent.putExtra("aspectY", 4);
+            CropIntent.putExtra("scaleUpIfNeeded", true);
+            CropIntent.putExtra("return-data", true);
+            startActivityForResult(CropIntent, 5);
+
+        } catch (ActivityNotFoundException e) {
+
+        }
+    }
+    //Image Crop Code End Here
     public void callConnectApi(TextView tv_connect, User connectionItem) {
         Connection connection=new Connection();
         User user= LoginUtils.getLoggedinUser();

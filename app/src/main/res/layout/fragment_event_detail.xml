@@ -8,10 +8,9 @@
     android:background="@color/lighter_gray">
 
     <ScrollView
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/lighter_gray"
-        android:fillViewport="true"
         app:layout_constraintBottom_toTopOf="@+id/edt_comment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -248,7 +247,14 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1">
-
+                            <ImageView
+                                android:id="@+id/img_like"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:layout_marginEnd="@dimen/spacing_medium"
+                                android:layout_weight="0"
+                                android:background="@drawable/ic_like" />
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="30dp"
@@ -257,15 +263,6 @@
                                 android:gravity="center_vertical"
                                 android:text="Like"
                                 android:textColor="@color/gray_1" />
-
-                            <ImageView
-                                android:id="@+id/img_like"
-                                android:layout_width="18dp"
-                                android:layout_height="18dp"
-                                android:layout_gravity="center"
-                                android:layout_marginEnd="@dimen/spacing_medium"
-                                android:layout_weight="0"
-                                android:background="@drawable/ic_like" />
 
                             <View
                                 android:layout_width="1dp"
@@ -283,6 +280,14 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1.2">
 
+                            <ImageView
+                                android:id="@+id/img_comment"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:layout_marginEnd="@dimen/spacing_medium"
+                                android:layout_weight="0"
+                                android:background="@drawable/ic_comment" />
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="30dp"
@@ -292,14 +297,6 @@
                                 android:text="Comment"
                                 android:textColor="@color/gray_1" />
 
-                            <ImageView
-                                android:id="@+id/img_comment"
-                                android:layout_width="18dp"
-                                android:layout_height="18dp"
-                                android:layout_gravity="center"
-                                android:layout_marginEnd="@dimen/spacing_medium"
-                                android:layout_weight="0"
-                                android:background="@drawable/ic_comment" />
 
                             <View
                                 android:layout_width="1dp"
@@ -318,6 +315,15 @@
                             android:layout_marginEnd="16dp"
                             android:layout_weight="1">
 
+                            <ImageView
+                                android:id="@+id/img_share"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:layout_marginEnd="@dimen/spacing_medium"
+                                android:layout_weight="0"
+                                android:background="@drawable/ic_share" />
+
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="30dp"
@@ -326,15 +332,6 @@
                                 android:gravity="center_vertical"
                                 android:text="Share"
                                 android:textColor="@color/gray_1" />
-
-                            <ImageView
-                                android:id="@+id/img_share"
-                                android:layout_width="18dp"
-                                android:layout_height="18dp"
-                                android:layout_gravity="center"
-                                android:layout_marginEnd="@dimen/spacing_medium"
-                                android:layout_weight="0"
-                                android:background="@drawable/ic_share" />
 
 
                         </LinearLayout>
@@ -491,12 +488,34 @@
         android:layout_height="60dp"
         android:hint="@string/tap_here_to_comment"
         android:inputType="textPersonName"
-        android:textColor="@color/gray_1"
+        android:textColor="@color/black"
         android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+    <LinearLayout
+        android:id="@+id/layout_editcomment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/edt_comment">
+        <Button
+            android:id="@+id/button_cancel"
+            style="@style/simpleButton"
+            android:layout_width="wrap_content"
+            android:text="Cancel"
+            android:textColor="@color/colorAccent"
+            android:layout_weight="0.5" />
+        <Button
+            android:id="@+id/button_save"
+            style="@style/simpleButton"
+            android:layout_width="wrap_content"
+            android:text="Save"
+            android:layout_weight="0.5" />
 
+    </LinearLayout>
     <ImageView
         app:layout_constraintTop_toTopOf="@+id/edt_comment"
         android:id="@+id/btn_addcomment"
@@ -505,6 +524,7 @@
         android:layout_marginEnd="24dp"
         android:background="@drawable/ic_arrow_send"
         android:gravity="center"
+        android:visibility="visible"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         app:layout_constraintBottom_toBottomOf="parent"

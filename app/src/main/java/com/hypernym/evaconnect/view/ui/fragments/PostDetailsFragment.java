@@ -7,8 +7,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,7 +56,7 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PostDetailsFragment extends BaseFragment implements Validator.ValidationListener {
+public class PostDetailsFragment extends BaseFragment implements Validator.ValidationListener,CommentsAdapter.OnItemClickListener {
 
     @BindView(R.id.rc_comments)
     RecyclerView rc_comments;
@@ -119,15 +121,27 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     @BindView(R.id.tv_goback)
     TextView tv_goback;
 
+    @BindView(R.id.layout_editcomment)
+    LinearLayout layout_editcomment;
+
+    @BindView(R.id.button_cancel)
+    Button button_cancel;
+
+    @BindView(R.id.button_save)
+    Button button_save;
+
     private CommentsAdapter commentsAdapter;
     private SliderImageAdapter sliderImageAdapter;
     private List<Comment> comments = new ArrayList<>();
     private PostViewModel postViewModel;
 
     Post post = new Post();
-    int post_id;
+    int post_id,comment_id;
     private Validator validator;
+    private boolean isEdit=false;
     private ConnectionViewModel connectionViewModel;
+
+
 
     public PostDetailsFragment() {
         // Required empty public constructor
@@ -145,6 +159,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(PostViewModel.class);
         if (getArguments() != null) {
             post_id = getArguments().getInt("post");
+            isEdit=getArguments().getBoolean("isEdit");
             getPostDetails(post_id);
             // getPostDetails(getArguments().getInt("id"));
         }
@@ -178,9 +193,11 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
                     post = listBaseModel.getData().get(0);
                     settingpostType();
                     setPostData(listBaseModel.getData().get(0));
+
                     initRecyclerView();
                     setclickEvents();
                     getComments();
+
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
@@ -317,12 +334,23 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
                 comments.clear();
                 if (listBaseModel != null && !listBaseModel.isError()) {
                     comments.addAll(listBaseModel.getData());
+                    if(post.getUser().getId()==LoginUtils.getLoggedinUser().getId())
+                    {
+                        for (Comment comment:comments)
+                        {
+                            comment.setPostMine(true);
+                        }
+                    }
+
 //                    Collections.reverse(comments);
                     commentsAdapter.notifyDataSetChanged();
                     post.setComment_count(comments.size());
                     tv_comcount.setText(String.valueOf(comments.size()));
                     if(comments.size()>0)
                        rc_comments.smoothScrollToPosition(comments.size() - 1);
+                    layout_editcomment.setVisibility(View.GONE);
+                    btn_addcomment.setVisibility(View.VISIBLE);
+                    edt_comment.setText("");
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
@@ -342,7 +370,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     }
 
     private void initRecyclerView() {
-        commentsAdapter = new CommentsAdapter(getContext(), comments);
+        commentsAdapter = new CommentsAdapter(getContext(), comments,this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rc_comments.setLayoutManager(linearLayoutManager);
         rc_comments.setAdapter(commentsAdapter);
@@ -441,4 +469,57 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         loadFragment(R.id.framelayout, loadUrlFragment, getContext(), true);
     }
 
+    @Override
+    public void onEditComment(View view, int position,String comment) {
+        layout_editcomment.setVisibility(View.VISIBLE);
+        btn_addcomment.setVisibility(View.GONE);
+        edt_comment.setText(comment);
+        comment_id=comments.get(position).getId();
+    }
+
+    @OnClick(R.id.button_cancel)
+    public void cancel()
+    {
+        layout_editcomment.setVisibility(View.GONE);
+        btn_addcomment.setVisibility(View.VISIBLE);
+        edt_comment.setText("");
+    }
+
+    @OnClick(R.id.button_save)
+    public void saveComment()
+    {
+        Comment newcomment=new Comment();
+      // newcomment.setId(comments.get(position).getId());
+       newcomment.setContent(edt_comment.getText().toString());
+       newcomment.setModified_by_id(LoginUtils.getLoggedinUser().getId());
+       newcomment.setModified_datetime(DateUtils.GetCurrentdatetime());
+
+       postViewModel.editComment(newcomment,comment_id).observe(this, new Observer<BaseModel<List<Comment>>>() {
+           @Override
+           public void onChanged(BaseModel<List<Comment>> listBaseModel) {
+               if(NetworkUtils.isNetworkConnected(getContext()))
+               {
+                   getPostDetails(post_id);
+               }
+               else
+               {
+                   networkErrorDialog();
+               }
+           }
+       });
+    }
+
+
+
+
+    @Override
+    public void onDeleteComment(View view, int position) {
+        postViewModel.deleteComment(comments.get(position).getId()).observe(this, new Observer<BaseModel<List<Comment>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Comment>> listBaseModel) {
+                comments.remove(position);
+                commentsAdapter.notifyDataSetChanged();
+            }
+        });
+    }
 }

@@ -23,15 +23,21 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
+import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.User;
+import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.view.bottomsheets.BottomSheetPictureSelection;
+import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
@@ -68,13 +74,15 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
     @BindView(R.id.edt_firstname)
     EditText edt_firstname;
 
+    @NotEmpty
+    @BindView(R.id.edt_email)
+    EditText edt_email;
+
     @BindView(R.id.tv_upload_image)
     TextView tv_upload_image;
 
     @BindView(R.id.tv_already_account)
     TextView tv_already_account;
-
-
 
     @NotEmpty
     @BindView(R.id.edt_surname)
@@ -101,7 +109,7 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
     private String photoVar = null;
     MultipartBody.Part partImage;
     Uri SelectedUri;
-
+    private UserViewModel userViewModel;
 
     private Validator validator;
 
@@ -126,6 +134,8 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
     }
 
     private void init() {
+        userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getApplication(), this)).get(UserViewModel.class);
+
         validator = new Validator(this);
         validator.setValidationListener(this);
         img_backarrow.setOnClickListener(this);
@@ -147,6 +157,8 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
             activity_type = "LinkedinActivity";
             Glide.with(this).load(photourl).into(img_profile);
             tv_upload_image.setEnabled(false);
+            edt_email.setText(email);
+            edt_email.setEnabled(false);
 
         }
         else if (!TextUtils.isEmpty(type) && type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)){
@@ -156,9 +168,13 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
             activity_type = AppConstants.FACEBOOK_LOGIN_TYPE;
             Glide.with(this).load(photourl).into(img_profile);
             tv_upload_image.setEnabled(false);
+            edt_email.setText(email);
+            edt_email.setEnabled(false);
         }
         else {
-            email = getIntent().getStringExtra("Email");
+            edt_email.setText("");
+            edt_email.setEnabled(true);
+            //email = getIntent().getStringExtra("Email");
             activity_type = "normal_type";
         }
     }
@@ -169,7 +185,7 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
 
         if (activity_type.equals("LinkedinActivity")) {
             Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
-            intent.putExtra("Email", email);
+            intent.putExtra("Email", edt_email.getText().toString());
             intent.putExtra("Photo", photourl);
             intent.putExtra("Path", path);
             intent.putExtra("userType", userType);
@@ -181,10 +197,9 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
         }
         else if (activity_type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)){
             Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
-            intent.putExtra("Email", email);
+            intent.putExtra("Email", edt_email.getText().toString());
             intent.putExtra("Photo", photourl);
             intent.putExtra("Path", path);
-
             intent.putExtra("userType", userType);
             intent.putExtra("FirstName", edt_firstname.getText().toString());
             intent.putExtra("SurName", edt_surname.getText().toString());
@@ -192,27 +207,47 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
             startActivity(intent);
         }
         else {
-            if(file_name!=null){
-                Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
-                intent.putExtra("Email", email);
-                intent.putExtra("FirstName", edt_firstname.getText().toString());
-                intent.putExtra("SurName", edt_surname.getText().toString());
-                intent.putExtra("FilePath", file_name.toString());
-                intent.putExtra("userType", userType);
-                intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-                startActivity(intent);
-            }else{
-                Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
-                intent.putExtra("Email", email);
-                intent.putExtra("FirstName", edt_firstname.getText().toString());
-                intent.putExtra("SurName", edt_surname.getText().toString());
-                intent.putExtra("userType", userType);
-                intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-                startActivity(intent);
-            }
-
+            isEmailExist();
         }
     }
+
+    private void isEmailExist() {
+
+        userViewModel.isEmailExist(edt_email.getText().toString()).observe(this, new Observer<BaseModel<List<User>>>() {
+            @Override
+            public void onChanged(BaseModel<List<User>> listBaseModel) {
+                if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().get(0) != null) {
+                    networkResponseDialog(getString(R.string.error),listBaseModel.getMessage());
+                    //  callLoginApi();
+                } else {
+                    hideDialog();
+
+                    if(file_name!=null){
+                        Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
+                        intent.putExtra("Email", edt_email.getText().toString());
+                        intent.putExtra("FirstName", edt_firstname.getText().toString());
+                        intent.putExtra("SurName", edt_surname.getText().toString());
+                        intent.putExtra("FilePath", file_name.toString());
+                        intent.putExtra("userType", userType);
+                        intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+                        startActivity(intent);
+                    }else{
+                        Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
+                        intent.putExtra("Email", edt_email.getText().toString());
+                        intent.putExtra("FirstName", edt_firstname.getText().toString());
+                        intent.putExtra("SurName", edt_surname.getText().toString());
+                        intent.putExtra("userType", userType);
+                        intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+                        startActivity(intent);
+                    }
+                }
+            }
+
+        });
+
+    }
+
+
 
     @Override
     public void onValidationFailed(List<ValidationError> errors) {
@@ -243,7 +278,6 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
                 break;
 
             case R.id.img_cross:
-
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 break;
@@ -326,7 +360,6 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
                     tempFile = new File(GalleryImage);
 
                     Log.e(getClass().getName(), "file path details: " + tempFile.getName() + " " + tempFile.getAbsolutePath() + "length" + tempFile.length());
-
 
                     if (tempFile.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.FILE_SIZE_LIMIT_IN_KB) {
                         networkResponseDialog(getString(R.string.error), getString(R.string.err_image_size_large));
@@ -482,7 +515,6 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
                         //Toast.makeText(HomeActivity.this,"Permission Denied",Toast.LENGTH_LONG).show();
                     }
                 }
-
                 break;
         }
     }

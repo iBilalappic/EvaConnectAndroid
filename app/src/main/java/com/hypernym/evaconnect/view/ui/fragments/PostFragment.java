@@ -333,6 +333,84 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
         }
     }
 
+    @Override
+    public void onMoreClick(View view, int position) {
+
+    }
+
+    @Override
+    public void onEditClick(View view, int position) {
+//            postViewModel.editPost(posts.get(position)).observe(this, new Observer<BaseModel<List<Post>>>() {
+//                @Override
+//                public void onChanged(BaseModel<List<Post>> listBaseModel) {
+//                    if (NetworkUtils.isNetworkConnected(getContext())) {
+//                        posts.clear();
+//                        callPostsApi();
+//                    } else {
+//                        networkErrorDialog();
+//                    }
+//                }
+//            });
+        if (posts.get(position).getType().equalsIgnoreCase("post") && posts.get(position).getPost_image().size() > 0) {
+            NewPostFragment newPostFragment = new NewPostFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("post", posts.get(position).getId());
+            bundle.putBoolean("isEdit",true);
+            Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
+            newPostFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
+        } else if (posts.get(position).getType().equalsIgnoreCase("post") && posts.get(position).getPost_video() != null) {
+            ShareVideoFragment shareVideoFragment = new ShareVideoFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("post", posts.get(position).getId());
+            bundle.putBoolean("isEdit",true);
+            Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
+            shareVideoFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, shareVideoFragment, getContext(), true);
+        } else if (posts.get(position).getType().equalsIgnoreCase("post") && posts.get(position).getPost_image().size() == 0 && !posts.get(position).isIs_url()) {
+            NewPostFragment newPostFragment = new NewPostFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("post", posts.get(position).getId());
+            bundle.putBoolean("isEdit",true);
+            Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
+            newPostFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
+        } else if (posts.get(position).getType().equalsIgnoreCase("post") && posts.get(position).isIs_url()) {
+            NewPostFragment newPostFragment = new NewPostFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("post", posts.get(position).getId());
+            bundle.putBoolean("isEdit",true);
+            Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
+            newPostFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
+        }
+        else if (posts.get(position).getType().equalsIgnoreCase("post") && posts.get(position).getPost_document()!=null) {
+            ShareArticleFragment newPostFragment = new ShareArticleFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("post", posts.get(position).getId());
+            bundle.putBoolean("isEdit",true);
+            Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
+            newPostFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
+        }
+
+    }
+
+    @Override
+    public void onDeleteClick(View view, int position) {
+        postViewModel.deletePost(posts.get(position)).observe(this, new Observer<BaseModel<List<Post>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Post>> listBaseModel) {
+                if (NetworkUtils.isNetworkConnected(getContext())) {
+                    posts.clear();
+                    callPostsApi();
+                } else {
+                    networkErrorDialog();
+                }
+            }
+        });
+    }
+
 
     private void callDeclineConnectApi(Connection connection) {
 
@@ -366,10 +444,14 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
                             post.setPost_type(AppConstants.IMAGE_TYPE);
                         } else if (post.getType().equalsIgnoreCase("post") && post.getPost_video() != null) {
                             post.setPost_type(AppConstants.VIDEO_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() == 0 && !post.isIs_url()) {
+                        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() == 0 && !post.isIs_url()  && post.getPost_document() == null) {
                             post.setPost_type(AppConstants.TEXT_TYPE);
                         } else if (post.getType().equalsIgnoreCase("post") && post.isIs_url()) {
                             post.setPost_type(AppConstants.LINK_POST);
+                        }
+                        else if(post.getType().equalsIgnoreCase("post") && post.getPost_document() != null)
+                        {
+                            post.setPost_type(AppConstants.IMAGE_TYPE);
                         }
                     }
                     posts.addAll(dashboardBaseModel.getData());

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +27,7 @@ import butterknife.ButterKnife;
 public class CreateAccount_4_Activity extends BaseActivity implements Validator.ValidationListener, View.OnClickListener {
 
     String email, password, photourl, activity_type, user_type,path,
-            aviation_type, JobSector, username, firstname, surname, city, country, filepath;
+            aviation_type, JobSector, username, firstname, surname, city, country, filepath,otherJobSector;
 
 
     @NotEmpty
@@ -50,6 +51,9 @@ public class CreateAccount_4_Activity extends BaseActivity implements Validator.
 
     @BindView(R.id.tv_already_account)
     TextView tv_already_account;
+
+    @BindView(R.id.job_title)
+    LinearLayout job_title;
 
     private Validator validator;
 
@@ -84,6 +88,7 @@ public class CreateAccount_4_Activity extends BaseActivity implements Validator.
             intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
             intent.putExtra("aviation_type", aviation_type);
             intent.putExtra("job_sector", JobSector);
+            intent.putExtra("other_job_sector", otherJobSector);
             intent.putExtra("username", username);
             intent.putExtra("FirstName", firstname);
             intent.putExtra("SurName", surname);
@@ -103,6 +108,7 @@ public class CreateAccount_4_Activity extends BaseActivity implements Validator.
             intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
             intent.putExtra("aviation_type", aviation_type);
             intent.putExtra("job_sector", JobSector);
+            intent.putExtra("other_job_sector", otherJobSector);
             intent.putExtra("username", username);
             intent.putExtra("FirstName", firstname);
             intent.putExtra("SurName", surname);
@@ -121,6 +127,7 @@ public class CreateAccount_4_Activity extends BaseActivity implements Validator.
                 intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
                 intent.putExtra("aviation_type", aviation_type);
                 intent.putExtra("job_sector", JobSector);
+                intent.putExtra("other_job_sector", otherJobSector);
                 intent.putExtra("username", username);
                 intent.putExtra("FirstName", firstname);
                 intent.putExtra("SurName", surname);
@@ -136,6 +143,7 @@ public class CreateAccount_4_Activity extends BaseActivity implements Validator.
                 intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
                 intent.putExtra("aviation_type", aviation_type);
                 intent.putExtra("job_sector", JobSector);
+                intent.putExtra("other_job_sector", otherJobSector);
                 intent.putExtra("username", username);
                 intent.putExtra("FirstName", firstname);
                 intent.putExtra("SurName", surname);
@@ -166,6 +174,7 @@ public class CreateAccount_4_Activity extends BaseActivity implements Validator.
             country = getIntent().getStringExtra("country");
             aviation_type = getIntent().getStringExtra("aviation_type");
             JobSector = getIntent().getStringExtra("job_sector");
+            otherJobSector=getIntent().getStringExtra("other_job_sector");
         }
         else if (!TextUtils.isEmpty(type) && type.equals(AppConstants.FACEBOOK_LOGIN_TYPE))
         {
@@ -181,6 +190,7 @@ public class CreateAccount_4_Activity extends BaseActivity implements Validator.
             country = getIntent().getStringExtra("country");
             aviation_type = getIntent().getStringExtra("aviation_type");
             JobSector = getIntent().getStringExtra("job_sector");
+            otherJobSector=getIntent().getStringExtra("other_job_sector");
         }
         else {
             email = getIntent().getStringExtra("Email");
@@ -194,10 +204,19 @@ public class CreateAccount_4_Activity extends BaseActivity implements Validator.
             filepath = getIntent().getStringExtra("FilePath");
             aviation_type = getIntent().getStringExtra("aviation_type");
             JobSector = getIntent().getStringExtra("job_sector");
+            otherJobSector=getIntent().getStringExtra("other_job_sector");
+
             activity_type = "normal_type";
         }
 
-
+        if(user_type.equalsIgnoreCase(AppConstants.COMPANY_USER_TYPE))
+        {
+            job_title.setVisibility(View.GONE);
+        }
+        else
+        {
+            job_title.setVisibility(View.VISIBLE);
+        }
     }
 
 

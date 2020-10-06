@@ -208,7 +208,7 @@ public class JobListRepository implements IJobAdRepository {
 
     @Override
     public LiveData<BaseModel<List<Comment>>> getJobComments(int id) {
-        LikeMutableLiveData = new MutableLiveData<>();
+        commentMutableLiveData = new MutableLiveData<>();
         HashMap<String, Object> body = new HashMap<>();
         body.put("job_id", id);
 
@@ -229,4 +229,48 @@ public class JobListRepository implements IJobAdRepository {
         });
         return commentMutableLiveData;
     }
+
+    @Override
+    public LiveData<BaseModel<List<Comment>>> deleteComment(Integer id) {
+        commentMutableLiveData = new MutableLiveData<>();
+        RestClient.get().appApi().deleteJobComment(id).enqueue(new Callback<BaseModel<List<Comment>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Comment>>> call, Response<BaseModel<List<Comment>>> response) {
+                if (response.isSuccessful() && !response.body().isError())
+                    commentMutableLiveData.setValue(response.body());
+                if (response.code() == 500) {
+                    commentMutableLiveData.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Comment>>> call, Throwable t) {
+                commentMutableLiveData.setValue(null);
+            }
+        });
+        return commentMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<Comment>>> editComment(Comment comment, Integer id) {
+        commentMutableLiveData = new MutableLiveData<>();
+         RestClient.get().appApi().editJobComment(comment,id).enqueue(new Callback<BaseModel<List<Comment>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Comment>>> call, Response<BaseModel<List<Comment>>> response) {
+                if (response.isSuccessful() && !response.body().isError())
+                    commentMutableLiveData.setValue(response.body());
+                if (response.code() == 500) {
+                    commentMutableLiveData.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Comment>>> call, Throwable t) {
+                commentMutableLiveData.setValue(null);
+            }
+        });
+        return commentMutableLiveData;
+    }
+
+
 }

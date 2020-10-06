@@ -33,6 +33,7 @@ public class User implements Serializable, Parcelable {
     private String chatID;
     private boolean is_online;
     private String last_online_datetime;
+    private String other_sector;
 
     public String getSearch_key() {
         return search_key;
@@ -385,5 +386,13 @@ public class User implements Serializable, Parcelable {
 
     public void setLast_online_datetime(String last_online_datetime) {
         this.last_online_datetime = last_online_datetime;
+    }
+
+    public String getOther_sector() {
+        return other_sector;
+    }
+
+    public void setOther_sector(String other_sector) {
+        this.other_sector = other_sector;
     }
 }

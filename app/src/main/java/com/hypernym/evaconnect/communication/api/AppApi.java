@@ -72,7 +72,15 @@ public interface AppApi {
     @Multipart
     @POST(APIConstants.GET_POSTS)
     Call<BaseModel<List<Post>>> createPost(@Part("user_id") int user_id, @Part("content") RequestBody content,
-                                           @Part("created_by_id") int created_by_id, @Part("status") RequestBody status,@Part("is_url") boolean is_url, @Part List<MultipartBody.Part> post_image, @Part MultipartBody.Part post_video);
+                                           @Part("created_by_id") int created_by_id, @Part("status") RequestBody status,@Part("is_url") boolean is_url, @Part List<MultipartBody.Part> post_image, @Part MultipartBody.Part post_video,@Part MultipartBody.Part post_document);
+
+    @PATCH(APIConstants.EDIT_POST)
+    Call<BaseModel<List<Post>>> editPost(@Part("modified_by_id") int modified_by_id, @Part("content") RequestBody content,
+                                         @Part("modified_datetime") int modified_datetime, @Part("is_url") boolean is_url, @Part List<MultipartBody.Part> post_image, @Part MultipartBody.Part post_video,@Part MultipartBody.Part post_document,@Path("id") int id);
+
+    @DELETE(APIConstants.EDIT_POST)
+    Call<BaseModel<List<Post>>> deletePost(@Body Post post,@Path("id") int id);
+
     @Multipart
     @POST(APIConstants.ADD_JOB_AD)
     Call<BaseModel<List<Object>>> createJobAd(@Part("user_id") int user_id,
@@ -133,6 +141,9 @@ public interface AppApi {
         // Call<BaseModel<List<Object>>> setLikeJob();
     Call<BaseModel<List<Comment>>> getJobComments(@Body HashMap<String, Object> body);
 
+    @PATCH(APIConstants.EDIT_JOB_COMMENTS)
+        // Call<BaseModel<List<Object>>> setLikeJob();
+    Call<BaseModel<List<Comment>>> editJobComment(@Body Comment body,@Path("id") int id);
 
 
     @POST(APIConstants.APPLY_INTERVIEW)
@@ -172,6 +183,21 @@ public interface AppApi {
 
     @POST(APIConstants.ADD_COMMENT)
     Call<BaseModel<List<Comment>>> addComment(@Body Comment comment);
+
+    @PATCH(APIConstants.EDIT_COMMENT)
+    Call<BaseModel<List<Comment>>> editComment(@Body Comment comment,@Path("id") int id);
+
+    @DELETE(APIConstants.EDIT_COMMENT)
+    Call<BaseModel<List<Comment>>> deleteComment(@Path("id") int id);
+
+    @DELETE(APIConstants.EDIT_EVENT_COMMENT)
+    Call<BaseModel<List<Comment>>> deleteEventComment(@Path("id") int id);
+
+    @DELETE(APIConstants.EDIT_NEWS_COMMENT)
+    Call<BaseModel<List<Comment>>> deleteNewsComment(@Path("id") int id);
+
+    @DELETE(APIConstants.EDIT_JOB_COMMENTS)
+    Call<BaseModel<List<Comment>>> deleteJobComment(@Path("id") int id);
 
     @POST(APIConstants.LIKE_POST)
     Call<BaseModel<List<Post>>> likePost(@Body Post post);
@@ -243,6 +269,9 @@ public interface AppApi {
 
     @POST(APIConstants.ADD_EVENT_COMMENT)
     Call<BaseModel<List<Comment>>> addEventComment(@Body Comment comment);
+
+    @PATCH(APIConstants.EDIT_EVENT_COMMENT)
+    Call<BaseModel<List<Comment>>> editEventComment(@Body Comment comment,@Path("id") int id);
 
     @POST(APIConstants.ADD_EVENT_ATTENDANCE)
     Call<BaseModel<List<Event>>> addEventAttendance(@Body Event eventAttendees);
@@ -359,6 +388,9 @@ public interface AppApi {
 
     @POST(APIConstants.ADD_NEWS_COMMENT)
     Call<BaseModel<List<Comment>>> addNewsComment(@Body Comment comment);
+
+    @PATCH(APIConstants.EDIT_NEWS_COMMENT)
+    Call<BaseModel<List<Comment>>> editNewsComment(@Body Comment comment,@Path("id") int id);
 
     @POST(APIConstants.LIKE_NEWS)
     Call<BaseModel<List<Post>>> likeNews(@Body Post post);

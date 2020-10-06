@@ -168,6 +168,9 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:29.0.0' // appcompat library
     implementation 'com.onesignal:OneSignal:[3.15.0, 3.99.99]'
 
+    implementation 'com.github.yalantis:ucrop:2.2.2'
+    implementation 'com.github.barteksc:pdfium-android:1.4.0'
+
 }
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'

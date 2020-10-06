@@ -173,6 +173,26 @@ public class EventRepository implements IEventRepository {
     }
 
     @Override
+    public LiveData<BaseModel<List<Comment>>> editComment(Comment comment) {
+        commentMutableLiveData=new MutableLiveData<>();
+        RestClient.get().appApi().editEventComment(comment,comment.getId()).enqueue(new Callback<BaseModel<List<Comment>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Comment>>> call, Response<BaseModel<List<Comment>>> response) {
+                if(response.body()!=null)
+                {
+                    commentMutableLiveData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Comment>>> call, Throwable t) {
+                commentMutableLiveData.setValue(null);
+            }
+        });
+        return commentMutableLiveData;
+    }
+
+    @Override
     public LiveData<BaseModel<List<Event>>> addEventAttendance(Event event) {
         eventMutableLiveData=new MutableLiveData<>();
         RestClient.get().appApi().addEventAttendance(event).enqueue(new Callback<BaseModel<List<Event>>>() {
@@ -278,6 +298,24 @@ public class EventRepository implements IEventRepository {
             }
         });
         return eventMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<Comment>>> deleteComment(Integer id) {
+        commentMutableLiveData=new MutableLiveData<>();
+
+        RestClient.get().appApi().deleteEventComment(id).enqueue(new Callback<BaseModel<List<Comment>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Comment>>> call, Response<BaseModel<List<Comment>>> response) {
+                commentMutableLiveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Comment>>> call, Throwable t) {
+                commentMutableLiveData.setValue(null);
+            }
+        });
+        return commentMutableLiveData;
     }
 
 }

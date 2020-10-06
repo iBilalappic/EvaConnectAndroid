@@ -23,16 +23,13 @@
             android:layout_height="53dp">
 
 
-
             <de.hdodenhof.circleimageview.CircleImageView
                 android:background="@android:color/transparent"
-
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/white_chatbg"
                 app:civ_border_color="@color/skyblue"
-                app:civ_border_width="2dp"
-                />
+                app:civ_border_width="2dp"/>
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:padding="2dp"
@@ -95,65 +92,69 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profile_layout" />
 
-        <TextView
-            android:id="@+id/browsefiles"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/browse"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:drawableLeft="@drawable/gallery"
-            android:drawablePadding="5dp"
-            android:paddingLeft="10dp"
-            android:paddingTop="15dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="15dp"
-            android:text="Images"
-            android:textColor="@color/light_black"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toTopOf="@+id/post"
-            app:layout_constraintEnd_toStartOf="@+id/camera"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintBottom_toTopOf="@+id/post">
+
+            <TextView
+                android:id="@+id/browsefiles"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:drawableLeft="@drawable/gallery"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:text="Gallery"
+                android:textColor="@color/light_black"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/camera"
+                app:layout_constraintEnd_toStartOf="@+id/camera"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/camera" />
 
 
-        <TextView
-            android:id="@+id/camera"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:drawableLeft="@drawable/camera"
-            android:drawablePadding="5dp"
-            android:gravity="center"
-            android:paddingLeft="10dp"
-            android:paddingTop="15dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="15dp"
-            android:text="Camera"
-            android:textColor="@color/light_black"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toTopOf="@+id/post"
-            app:layout_constraintEnd_toStartOf="@+id/tv_recordvideo"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/browsefiles" />
+            <TextView
+                android:id="@+id/camera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:drawableLeft="@drawable/camera"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingTop="14dp"
+                android:paddingBottom="12dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="Capture Image"
+                android:textColor="@color/light_black"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toTopOf="@+id/post"
+                app:layout_constraintEnd_toStartOf="@+id/tv_recordvideo"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/browsefiles" />
 
-        <TextView
+            <TextView
+                android:id="@+id/tv_recordvideo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_baseline_ondemand_video_24"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="Capture Video"
+                android:textColor="@color/light_black"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/camera"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/camera"
+                app:layout_constraintTop_toTopOf="@+id/camera" />
+        </LinearLayout>
 
-            android:id="@+id/tv_recordvideo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:drawableLeft="@drawable/ic_baseline_ondemand_video_24"
-            android:drawablePadding="5dp"
-            android:paddingLeft="10dp"
-            android:paddingTop="18dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="15dp"
-            android:text="Video"
-            android:textColor="@color/light_black"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@+id/camera"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/camera"
-            app:layout_constraintTop_toTopOf="@+id/camera" />
 
         <TextView
             android:id="@+id/post"
@@ -178,7 +179,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:visibility="visible"
-            app:layout_constraintBottom_toTopOf="@+id/browsefiles"
+            app:layout_constraintBottom_toTopOf="@+id/browse"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edt_content">
@@ -192,6 +193,7 @@
                 app:favor="@drawable/ic_url"
                 app:host="abc.com"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:thumbnail="@drawable/ic_url"

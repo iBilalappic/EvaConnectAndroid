@@ -17,6 +17,8 @@ public interface APIConstants {
     public static String JOB="dashboard/job/?";
     public static String FRIENDCONNECTION="user/network/connection/details/{id}/";
     public static String ADD_COMMENT="post/comment/";
+    public static String EDIT_COMMENT="post/comment/details/{id}/";
+    public static String EDIT_POST="post/details/{id}/";
     public static String LIKE_POST="post/like/";
     public static String GET_POST_COMMENTS="post/comment/filter/";
     public static String CONNECT="user/connection/";
@@ -35,6 +37,7 @@ public interface APIConstants {
     public static String JOB_LIKE =" job/like/";
     public static String JOB_COMMENT ="job/comment/";
     public static String GET_JOB_COMMENTS ="job/comment/filter/";
+    public static String EDIT_JOB_COMMENTS ="job/comment/details/{id}/";
 
     public static String UPDATE_JOB_AD="job/details/{job_id}/";
     public static String SEND_NOTIFICATION="api/v1/notifications";
@@ -47,6 +50,7 @@ public interface APIConstants {
     public static String GET_EVENT_DETAILS="event/details/";
     public static String GET_EVENT_COMMENTS="event/comment/filter/";
     public static String ADD_EVENT_COMMENT="event/comment/";
+    public static String EDIT_EVENT_COMMENT="event/comment/details/{id}/";
     public static String ADD_EVENT_ATTENDANCE="event/attendee/";
     public static String UPDATE_EVENT_ATTENDANCE=" event/attendee/detail/";
     public static String LIKE_EVENT="event/like/";
@@ -76,6 +80,7 @@ public interface APIConstants {
     public static String LIKE_NEWS="news/like/";
     public static String GET_NEWS_COMMENTS="news/comment/filter/";
     public static String ADD_NEWS_COMMENT="news/comment/";
+    public static String EDIT_NEWS_COMMENT="news/comment/details/{id}/";
     public static String GET_NEWS_BY_ID="news/rss/";
     public static String GET_JOB_TYPE="job/type/";
     public static String USER_ONLINE="user/details/{id}/";

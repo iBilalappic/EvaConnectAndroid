@@ -27,10 +27,33 @@ public class PostViewModel extends AndroidViewModel {
         return iPostRepository.createPost(post);
     }
 
+    public LiveData<BaseModel<List<Post>>> editPost(Post post)
+    {
+        return iPostRepository.editPost(post);
+    }
+
+    public LiveData<BaseModel<List<Post>>> deletePost(Post post)
+    {
+        return iPostRepository.deletePost(post);
+    }
+
+
+
     public LiveData<BaseModel<List<Comment>>> addComment(Comment comment)
     {
         return iPostRepository.addComment(comment);
     }
+
+    public LiveData<BaseModel<List<Comment>>> editComment(Comment comment,Integer id)
+    {
+        return iPostRepository.editComment(comment,id);
+    }
+
+    public LiveData<BaseModel<List<Comment>>> deleteComment(Integer id)
+    {
+        return iPostRepository.deleteComment(id);
+    }
+
 
     public LiveData<BaseModel<List<Post>>> likePost(Post post)
     {

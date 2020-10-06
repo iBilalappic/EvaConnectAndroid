@@ -68,6 +68,7 @@
         android:ellipsize="end"
         android:fontFamily="@font/nunitosansbold"
         android:maxLines="1"
+        android:textSize="13sp"
         android:text="Networth And Vibe"
         android:textColor="@color/black"
         android:textStyle="bold"
@@ -82,9 +83,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="London"
+        android:textSize="12sp"
         android:fontFamily="@font/nunitosansregular"
         android:ellipsize="end"
         android:maxLines="1"
+
         app:layout_constraintStart_toEndOf="@+id/profile_layout"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
     <TextView
@@ -96,6 +99,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginTop="3dp"
         android:text="23 Aug 19"
+        android:textSize="12sp"
         android:fontFamily="@font/nunitosansregular"
         app:layout_constraintTop_toBottomOf="@id/tv_location"
         />
@@ -124,6 +128,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
+        android:textSize="13.5sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/post_image" />
@@ -140,10 +145,10 @@
         android:paddingLeft="15dp"
         android:paddingTop="5dp"
         android:paddingRight="15dp"
+        android:textSize="13sp"
         android:paddingBottom="5dp"
         android:text="@string/attending"
         android:fontFamily="@font/nunitosansregular"
-
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -171,12 +176,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/post_detail">
 
-
         <View
             android:id="@+id/view2"
             android:layout_width="0dp"
             android:layout_height="30dp"
-            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -190,6 +193,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:text="58"
+            android:textSize="11sp"
             android:fontFamily="@font/nunitosansbold"
             android:textStyle="bold"
             android:textColor="@color/skyblue"
@@ -204,6 +208,7 @@
             android:layout_marginTop="8dp"
             android:paddingLeft="5dp"
             android:text="@string/likes"
+            android:textSize="11sp"
             android:fontFamily="@font/nunitosansbold"
 
             android:textStyle="bold"
@@ -218,7 +223,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginTop="8dp"
-
+            android:textSize="11sp"
             android:fontFamily="@font/nunitosansbold"
             android:text="@string/amp"
             android:textColor="@color/skyblue"
@@ -235,7 +240,7 @@
             android:layout_marginTop="8dp"
             android:fontFamily="@font/nunitosansbold"
             android:text="03"
-
+            android:textSize="11sp"
             android:textColor="@color/skyblue"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/textView11"
@@ -250,7 +255,7 @@
             android:paddingLeft="5dp"
             android:text="@string/comments"
             android:fontFamily="@font/nunitosansbold"
-
+            android:textSize="11sp"
             android:textStyle="bold"
             android:textColor="@color/skyblue"
             app:layout_constraintStart_toEndOf="@+id/tv_comcount"
@@ -283,6 +288,14 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1">
 
+                <ImageView
+                    android:id="@+id/img_like"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:layout_weight="0"
+                    android:background="@drawable/ic_like" />
                 <TextView
                     android:gravity="center_vertical"
                     android:layout_width="0dp"
@@ -292,14 +305,6 @@
                     android:text="Like"
                     android:textColor="@color/gray_1" />
 
-                <ImageView
-                    android:id="@+id/img_like"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="@dimen/spacing_medium"
-                    android:layout_weight="0"
-                    android:background="@drawable/ic_like" />
 
                 <View
                     android:layout_width="1dp"
@@ -317,6 +322,14 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1.2">
 
+                <ImageView
+                    android:id="@+id/img_comment"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:layout_weight="0"
+                    android:background="@drawable/ic_comment" />
                 <TextView
                     android:gravity="center_vertical"
                     android:layout_width="0dp"
@@ -326,14 +339,6 @@
                     android:text="Comment"
                     android:textColor="@color/gray_1" />
 
-                <ImageView
-                    android:id="@+id/img_comment"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="@dimen/spacing_medium"
-                    android:layout_weight="0"
-                    android:background="@drawable/ic_comment" />
 
                 <View
                     android:layout_width="1dp"
@@ -351,6 +356,14 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="16dp"
                 android:layout_weight="1">
+                <ImageView
+                    android:id="@+id/img_share"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:layout_weight="0"
+                    android:background="@drawable/ic_share" />
 
                 <TextView
                     android:gravity="center_vertical"
@@ -361,14 +374,6 @@
                     android:text="Share"
                     android:textColor="@color/gray_1" />
 
-                <ImageView
-                    android:id="@+id/img_share"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="@dimen/spacing_medium"
-                    android:layout_weight="0"
-                    android:background="@drawable/ic_share" />
 
 
             </LinearLayout>

@@ -8,7 +8,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,6 +58,12 @@ public class CreateAccount_3_Activity extends BaseActivity implements View.OnCli
 
     @BindView(R.id.tv_already_account)
     TextView tv_already_account;
+
+    @BindView(R.id.edt_sector)
+    EditText edt_sector;
+
+    @BindView(R.id.othersector)
+    LinearLayout othersector;
 
 
     private List<String> jobsector = new ArrayList<>();
@@ -163,7 +171,9 @@ public class CreateAccount_3_Activity extends BaseActivity implements View.OnCli
                         intent.putExtra("Path", path);
                         intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
                         intent.putExtra("aviation_type", aviation_type);
+
                         intent.putExtra("job_sector", JobSector);
+                        intent.putExtra("other_job_sector", edt_sector.getText().toString());
                         intent.putExtra("username", username);
                         intent.putExtra("FirstName", firstname);
                         intent.putExtra("SurName", surname);
@@ -179,7 +189,9 @@ public class CreateAccount_3_Activity extends BaseActivity implements View.OnCli
                         intent.putExtra("userType", user_type);
                         intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
                         intent.putExtra("aviation_type", aviation_type);
+
                         intent.putExtra("job_sector", JobSector);
+                        intent.putExtra("other_job_sector", edt_sector.getText().toString());
                         intent.putExtra("username", username);
                         intent.putExtra("FirstName", firstname);
                         intent.putExtra("SurName", surname);
@@ -196,6 +208,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements View.OnCli
                             intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
                             intent.putExtra("aviation_type", aviation_type);
                             intent.putExtra("job_sector", JobSector);
+                            intent.putExtra("other_job_sector", edt_sector.getText().toString());
                             intent.putExtra("username", username);
                             intent.putExtra("FirstName", firstname);
                             intent.putExtra("SurName", surname);
@@ -209,6 +222,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements View.OnCli
                             intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
                             intent.putExtra("aviation_type", aviation_type);
                             intent.putExtra("job_sector", JobSector);
+                            intent.putExtra("other_job_sector", edt_sector.getText().toString());
                             intent.putExtra("username", username);
                             intent.putExtra("FirstName", firstname);
                             intent.putExtra("SurName", surname);
@@ -257,6 +271,15 @@ public class CreateAccount_3_Activity extends BaseActivity implements View.OnCli
               //  JobSector=jobsector.get(position).toString();
 
                 JobSector = parent.getItemAtPosition(position).toString();
+                if(JobSector.equalsIgnoreCase("Other"))
+                {
+                    othersector.setVisibility(View.VISIBLE);
+
+                }
+                else
+                {
+                    othersector.setVisibility(View.GONE);
+                }
 
             }
 

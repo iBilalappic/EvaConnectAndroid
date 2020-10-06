@@ -31,6 +31,12 @@ public class NewsViewModel extends AndroidViewModel {
         return iNewsRepository.addComment(comment);
     }
 
+
+    public LiveData<BaseModel<List<Comment>>> editComment(Comment comment)
+    {
+        return iNewsRepository.editComment(comment);
+    }
+
     public LiveData<BaseModel<List<Post>>> likePost(Post post)
     {
         return iNewsRepository.likePost(post);
@@ -43,4 +49,10 @@ public class NewsViewModel extends AndroidViewModel {
     {
         return iNewsRepository.getNewsByID(id);
     }
+
+    public LiveData<BaseModel<List<Comment>>> deleteComment(Integer id)
+    {
+        return iNewsRepository.deleteComment(id);
+    }
+
 }

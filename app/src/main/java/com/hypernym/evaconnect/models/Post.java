@@ -23,6 +23,10 @@ public class Post implements Serializable {
     private String link;
     private int rss_news_id;
     private Integer receiver_id;
+    private int modified_by_id;
+    private String modified_datetime;
+    private String post_document;
+
 
 
     public String getStart_date() {
@@ -94,6 +98,8 @@ public class Post implements Serializable {
     private String address;
     private int is_private;
     private String image;
+
+    private MultipartBody.Part document;
 
 
 
@@ -539,6 +545,38 @@ public class Post implements Serializable {
 
     public void setReceiver_id(Integer receiver_id) {
         this.receiver_id = receiver_id;
+    }
+
+    public MultipartBody.Part getDocument() {
+        return document;
+    }
+
+    public void setDocument(MultipartBody.Part document) {
+        this.document = document;
+    }
+
+    public int getModified_by_id() {
+        return modified_by_id;
+    }
+
+    public void setModified_by_id(int modified_by_id) {
+        this.modified_by_id = modified_by_id;
+    }
+
+    public String getModified_datetime() {
+        return modified_datetime;
+    }
+
+    public void setModified_datetime(String modified_datetime) {
+        this.modified_datetime = modified_datetime;
+    }
+
+    public String getPost_document() {
+        return post_document;
+    }
+
+    public void setPost_document(String post_document) {
+        this.post_document = post_document;
     }
 }
 

@@ -44,7 +44,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
 
     String email, password, photourl, activity_type, user_type,path,
             aviation_type, JobSector, username, firstname, surname,
-            city, country, filepath, jobtitle, company_name;
+            city, country, filepath, jobtitle, company_name,otherJobSector;
 
     private Validator validator;
 
@@ -111,6 +111,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             JobSector = getIntent().getStringExtra("job_sector");
             jobtitle = getIntent().getStringExtra("jobtitle");
             company_name = getIntent().getStringExtra("companyname");
+            otherJobSector=getIntent().getStringExtra("other_job_sector");
 
 
             filepath = path;
@@ -138,6 +139,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             user.setDesignation(jobtitle);
             user.setLinkedin_image_url("");
             user.setFacebook_image_url("");
+            user.setOther_sector(otherJobSector);
 
 
 //            user.setUsername(email);
@@ -175,6 +177,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             JobSector = getIntent().getStringExtra("job_sector");
             jobtitle = getIntent().getStringExtra("jobtitle");
             company_name = getIntent().getStringExtra("companyname");
+            otherJobSector=getIntent().getStringExtra("other_job_sector");
             filepath = path;
 
             if(filepath!=null){
@@ -200,6 +203,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             user.setDesignation(jobtitle);
             user.setLinkedin_image_url("");
             user.setFacebook_image_url("");
+            user.setOther_sector(otherJobSector);
 
 
 
@@ -217,6 +221,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             JobSector = getIntent().getStringExtra("job_sector");
             jobtitle = getIntent().getStringExtra("jobtitle");
             company_name = getIntent().getStringExtra("companyname");
+            otherJobSector=getIntent().getStringExtra("other_job_sector");
             activity_type = "normal_type";
             user.setLinkedin_image_url("");
             user.setFacebook_image_url("");
@@ -243,6 +248,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             user.setDesignation(jobtitle);
             user.setLinkedin_image_url("");
             user.setFacebook_image_url("");
+            user.setOther_sector(otherJobSector);
         }
     }
 

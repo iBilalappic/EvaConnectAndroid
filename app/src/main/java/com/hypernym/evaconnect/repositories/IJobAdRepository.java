@@ -12,9 +12,6 @@ import com.hypernym.evaconnect.models.User;
 
 import java.util.List;
 
-import okhttp3.MultipartBody;
-import retrofit2.http.Part;
-
 public interface IJobAdRepository {
     LiveData<BaseModel<List<JobAd>>> getjobAd(User user);
     LiveData<BaseModel<List<CompanyJobAdModel>>> getCompanyAd(User user);
@@ -25,6 +22,7 @@ public interface IJobAdRepository {
     LiveData<BaseModel<List<Object>>>setComment(User user ,int application_id,String comment);
     LiveData<BaseModel<List<Comment>>> getJobComments(int id);
 
-
+    LiveData<BaseModel<List<Comment>>> deleteComment(Integer id);
+    LiveData<BaseModel<List<Comment>>> editComment(Comment comment,Integer id);
 
 }

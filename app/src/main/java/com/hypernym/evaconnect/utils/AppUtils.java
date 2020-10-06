@@ -15,6 +15,8 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -49,8 +51,12 @@ import com.nguyencse.URLEmbeddedData;
 import com.nguyencse.URLEmbeddedTask;
 import com.nguyencse.URLEmbeddedView;
 import com.onesignal.OneSignal;
+import com.shockwave.pdfium.PdfDocument;
+import com.shockwave.pdfium.PdfiumCore;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -70,6 +76,7 @@ public final class AppUtils {
     public static Context applicationContext;
     public static String URL_REGEX="([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?";
     public static SimpleDialog simpleDialog;
+    public final static String FOLDER = Environment.getExternalStorageDirectory() + "/PDF";
     private AppUtils() {
         // This class is not publicly instantiable
     }
@@ -414,6 +421,50 @@ public final class AppUtils {
         simpleDialog.show();
     }
 
+    //PdfiumAndroid (https://github.com/barteksc/PdfiumAndroid)
+    //https://github.com/barteksc/AndroidPdfViewer/issues/49
+        public static Bitmap generateImageFromPdf(Uri pdfUri,Context context) {
+            int pageNumber = 0;
+            Bitmap bmp=null;
+            PdfiumCore pdfiumCore = new PdfiumCore(context);
+            try {
+                //http://www.programcreek.com/java-api-examples/index.php?api=android.os.ParcelFileDescriptor
+                ParcelFileDescriptor fd = context.getContentResolver().openFileDescriptor(pdfUri, "r");
+                PdfDocument pdfDocument = pdfiumCore.newDocument(fd);
+                pdfiumCore.openPage(pdfDocument, pageNumber);
+                int width = pdfiumCore.getPageWidthPoint(pdfDocument, pageNumber);
+                int height = pdfiumCore.getPageHeightPoint(pdfDocument, pageNumber);
+                bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+                pdfiumCore.renderPageBitmap(pdfDocument, bmp, pageNumber, 0, 0, width, height);
+               // saveImage(bmp);
+                pdfiumCore.closeDocument(pdfDocument); // important!
+
+            } catch(Exception e) {
+                //todo with exception
+            }
+            return bmp;
+        }
+
+        public static void saveImage(Bitmap bmp) {
+            FileOutputStream out = null;
+            try {
+                File folder = new File(FOLDER);
+                if(!folder.exists())
+                    folder.mkdirs();
+                File file = new File(folder, "PDF.png");
+                out = new FileOutputStream(file);
+                bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+            } catch (Exception e) {
+                //todo with exception
+            } finally {
+                try {
+                    if (out != null)
+                        out.close();
+                } catch (Exception e) {
+                    //todo with exception
+                }
+            }
+        }
     public static Bitmap getVideoThumbnail(String url)    {
        return ThumbnailUtils.createVideoThumbnail(url,MediaStore.Video.Thumbnails.MINI_KIND);
     }

@@ -114,4 +114,40 @@ public class NewsRespository implements INewsRepository {
         });
         return newsMutableLiveData;
     }
+
+    @Override
+    public LiveData<BaseModel<List<Comment>>> editComment(Comment comment) {
+        commentMutableLiveData=new MutableLiveData<>();
+        comment.setRss_news_id(comment.getPost_id());
+        RestClient.get().appApi().editNewsComment(comment,comment.getId()).enqueue(new Callback<BaseModel<List<Comment>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Comment>>> call, Response<BaseModel<List<Comment>>> response) {
+                commentMutableLiveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Comment>>> call, Throwable t) {
+                commentMutableLiveData.setValue(null);
+            }
+        });
+        return commentMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<Comment>>> deleteComment(Integer id) {
+        commentMutableLiveData=new MutableLiveData<>();
+
+        RestClient.get().appApi().deleteNewsComment(id).enqueue(new Callback<BaseModel<List<Comment>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Comment>>> call, Response<BaseModel<List<Comment>>> response) {
+                commentMutableLiveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Comment>>> call, Throwable t) {
+                commentMutableLiveData.setValue(null);
+            }
+        });
+        return commentMutableLiveData;
+    }
 }
