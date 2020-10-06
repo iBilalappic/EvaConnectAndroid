@@ -669,7 +669,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_link, parent, false);
                 return new PostAdapter.LinkTypeViewHolder(view);
             case AppConstants.DOCUMENT_TYPE:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.document_type, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
                 return new PostAdapter.ImageTypeViewHolder(view);
         }
         return null;

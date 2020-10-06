@@ -367,7 +367,7 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
             Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
             shareVideoFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, shareVideoFragment, getContext(), true);
-        } else if (posts.get(position).getType().equalsIgnoreCase("post") && posts.get(position).getPost_image().size() == 0 && !posts.get(position).isIs_url()) {
+        } else if (posts.get(position).getType().equalsIgnoreCase("post") && posts.get(position).getPost_image().size() == 0 && !posts.get(position).isIs_url() && posts.get(position).getPost_document()==null) {
             NewPostFragment newPostFragment = new NewPostFragment();
             Bundle bundle = new Bundle();
             bundle.putInt("post", posts.get(position).getId());
