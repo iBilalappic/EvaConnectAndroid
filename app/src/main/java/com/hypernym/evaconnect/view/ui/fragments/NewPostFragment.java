@@ -43,6 +43,7 @@ import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
 import com.mobsandgeeks.saripaar.Validator;
 import com.nguyencse.URLEmbeddedView;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -260,6 +261,35 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // Result code is RESULT_OK only if the user selects an Image
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE)
+        {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+
+            if (resultCode == RESULT_OK)
+            {
+                Uri resultUri = result.getUri();
+                Log.e("TAAAG", "onActivityResult: " + resultUri);
+
+                String updatedImage = ImageFilePathUtil.getPath(getActivity(), resultUri);
+                File file = new File(updatedImage);
+                RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+
+                attachments.add(updatedImage);
+                attachmentsAdapter.notifyDataSetChanged();
+                rc_attachments.setVisibility(View.VISIBLE);
+                img_video.setVisibility(View.GONE);
+                img_play.setVisibility(View.GONE);
+                part_images.add(MultipartBody.Part.createFormData("post_image", file.getName(), reqFile));
+                setPostButton();
+
+            }
+            else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+                Log.e("TAAAG", "onActivityResult: ", error);
+            }
+        }
+
         if (requestCode == REQUEST_PHOTO_GALLERY && resultCode == RESULT_OK) {
             try {
                 if (data != null && data.getData() != null) {
@@ -288,14 +318,11 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                                     AppUtils.setGlideVideoThumbnail(getContext(), img_video, currentPhotoPath);
                                     video = MultipartBody.Part.createFormData("post_video", file_name.getName(), reqFile);
                                     setPostButton();
-                                } else {
-                                    attachments.add(currentPhotoPath);
-                                    attachmentsAdapter.notifyDataSetChanged();
-                                    rc_attachments.setVisibility(View.VISIBLE);
-                                    img_video.setVisibility(View.GONE);
-                                    img_play.setVisibility(View.GONE);
-                                    part_images.add(MultipartBody.Part.createFormData("post_image", file_name.getName(), reqFile));
-                                    setPostButton();
+                                }
+                                else {
+
+                                    CropImage.activity(SelectedImageUri)
+                                            .start(getContext(), this);
                                 }
 
                             } else {

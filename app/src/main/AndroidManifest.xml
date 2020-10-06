@@ -73,6 +73,10 @@
 
         </activity>
 
+        <!-- Image cropper activity -->
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat"/>
+
         <activity
             android:name=".view.ui.activities.CreateAccount_1_Activity"
             android:theme="@style/AppTheme.FullScreen"
