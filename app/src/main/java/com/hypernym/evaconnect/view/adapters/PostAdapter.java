@@ -1,6 +1,7 @@
 package com.hypernym.evaconnect.view.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -667,7 +669,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_link, parent, false);
                 return new PostAdapter.LinkTypeViewHolder(view);
             case AppConstants.DOCUMENT_TYPE:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.document_type, parent, false);
                 return new PostAdapter.ImageTypeViewHolder(view);
         }
         return null;
@@ -688,6 +690,8 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     return (position == posts.size() - 1 && isLoadingAdded) ? AppConstants.LOADING_TYPE : AppConstants.VIDEO_TYPE;
                 case AppConstants.LINK_POST:
                     return (position == posts.size() - 1 && isLoadingAdded) ? AppConstants.LOADING_TYPE : AppConstants.LINK_POST;
+                case AppConstants.DOCUMENT_TYPE:
+                    return (position == posts.size() - 1 && isLoadingAdded) ? AppConstants.LOADING_TYPE : AppConstants.DOCUMENT_TYPE;
                 default:
                     return -1;
             }
@@ -780,6 +784,11 @@ public class PostAdapter  extends RecyclerView.Adapter {
                         ((PostAdapter.ImageTypeViewHolder) holder).post_image.setVisibility(View.VISIBLE);
                         AppUtils.setGlideImageUrl(mContext, ((PostAdapter.ImageTypeViewHolder) holder).post_image, posts.get(position).getPost_image().get(0));
                     }
+                    else
+                    {
+                        ((PostAdapter.ImageTypeViewHolder) holder).imageSlider.setVisibility(View.GONE);
+                        ((PostAdapter.ImageTypeViewHolder) holder).post_image.setVisibility(View.GONE);
+                    }
 
                     ((PostAdapter.ImageTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((PostAdapter.ImageTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
@@ -837,9 +846,118 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     if(posts.get(position).getPost_document()!=null)
                     {
                         ((ImageTypeViewHolder) holder).attachment.setVisibility(View.VISIBLE);
+                        ((ImageTypeViewHolder) holder).attachment_preview.setWebViewClient(new WebViewClient());
+                        ((ImageTypeViewHolder) holder).attachment_preview.getSettings().setSupportZoom(true);
+                        ((ImageTypeViewHolder) holder).attachment_preview.getSettings().setJavaScriptEnabled(true);
+                       // cv_url = getArguments().getString("applicant_cv");
+                        ((ImageTypeViewHolder) holder).attachment_preview.loadUrl("https://docs.google.com/gview?embedded=true&url=" + posts.get(position).getPost_document());
 
                      //   ((ImageTypeViewHolder) holder).attachment_preview.setImageBitmap(AppUtils.generateImageFromPdf(Uri.parse(posts.get(position).getPost_document()),mContext));
                         ((ImageTypeViewHolder) holder).tv_filename.setText(posts.get(position).getTitle());
+                        ((ImageTypeViewHolder) holder).attachment_preview.setWebViewClient(new WebViewClient() {
+                            @Override
+                            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                                super.onPageStarted(view, url, favicon);
+                               // pDialog.show();
+                            }
+
+                            @Override
+                            public void onPageFinished(WebView view, String url) {
+                                super.onPageFinished(view, url);
+                              //  pDialog.dismiss();
+                            }
+                        });
+                    }
+                    else
+                    {
+                        ((ImageTypeViewHolder) holder).attachment.setVisibility(View.GONE);
+                    }
+
+                    break;
+                case AppConstants.DOCUMENT_TYPE:
+                    ((PostAdapter.ImageTypeViewHolder) holder).imageSlider.setVisibility(View.GONE);
+
+                    if (String.valueOf(posts.get(position).getComment_count()).equals("0")) {
+                        ((PostAdapter.ImageTypeViewHolder) holder).tv_viewcomments.setVisibility(View.GONE);
+                    }
+
+                    ((PostAdapter.ImageTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
+                    ((PostAdapter.ImageTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
+                    ((PostAdapter.ImageTypeViewHolder) holder).tv_createdDateTime.setText(DateUtils.getFormattedDateTime(posts.get(position).getCreated_datetime()));
+                    AppUtils.makeTextViewResizable(((PostAdapter.ImageTypeViewHolder) holder).tv_content, 3, posts.get(position).getContent());
+                    ((PostAdapter.ImageTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
+                    if (posts.get(position).getIs_post_like() != null && posts.get(position).getIs_post_like() > 0) {
+                        ((PostAdapter.ImageTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.like_selected));
+                    } else {
+                        ((PostAdapter.ImageTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
+                    }
+
+                    if (!TextUtils.isEmpty(posts.get(position).getUser().getUser_image())) {
+                        AppUtils.setGlideImage(mContext, ((PostAdapter.ImageTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
+                    }
+//                    else if (posts.get(position).getUser().getIs_facebook() == 1 && !TextUtils.isEmpty(posts.get(position).getUser().getFacebook_image_url())){
+//                        AppUtils.setGlideImage(mContext, ((PostAdapter.ImageTypeViewHolder) holder).profile_image, posts.get(position).getUser().getFacebook_image_url());
+//                    }
+//                    else {
+//                        AppUtils.setGlideImage(mContext, ((PostAdapter.ImageTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
+//                    }
+
+                    ((PostAdapter.ImageTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
+                    ((PostAdapter.ImageTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getUser().getTotal_connection()));
+
+                    if (position == 0) {
+                        ((PostAdapter.ImageTypeViewHolder) holder).top_image.setVisibility(View.GONE);
+                    } else {
+                        ((PostAdapter.ImageTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
+                    }
+                    ((PostAdapter.ImageTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name());
+                    ((PostAdapter.ImageTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation() +" at ");
+                    if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
+                        ((ImageTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
+                        ((ImageTypeViewHolder) holder).img_more.setVisibility(View.VISIBLE);
+                    } else {
+                        ((ImageTypeViewHolder) holder).img_more.setVisibility(View.GONE);
+                        ((PostAdapter.ImageTypeViewHolder) holder).tv_connect.setVisibility(View.VISIBLE);
+                        String connectionstatus = AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver());
+                        ((PostAdapter.ImageTypeViewHolder) holder).tv_connect.setText(AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver()));
+                        if (connectionstatus.equals(AppConstants.REQUEST_ACCEPT)) {
+                            ((PostAdapter.ImageTypeViewHolder) holder).tv_connect.setBackgroundResource(R.drawable.rounded_button_border_green);
+                            ((PostAdapter.ImageTypeViewHolder) holder).tv_connect.setTextColor(mContext.getResources().getColor(R.color.light_green));
+                            //  holder.tv_decline.setVisibility(View.VISIBLE);
+                        } else {
+                            //  holder.tv_decline.setVisibility(View.GONE);
+                            ((PostAdapter.ImageTypeViewHolder) holder).tv_connect.setBackgroundResource(R.drawable.rounded_button_border_blue);
+                            ((PostAdapter.ImageTypeViewHolder) holder).tv_connect.setTextColor(mContext.getResources().getColor(R.color.skyblue));
+                        }
+                        if (connectionstatus.equals(AppConstants.CONNECTED)) {
+                            // holder.tv_decline.setVisibility(View.GONE);
+                        }
+
+                    }
+                    if(posts.get(position).getPost_document()!=null)
+                    {
+                        ((ImageTypeViewHolder) holder).attachment.setVisibility(View.VISIBLE);
+                        ((ImageTypeViewHolder) holder).attachment_preview.setWebViewClient(new WebViewClient());
+                        ((ImageTypeViewHolder) holder).attachment_preview.getSettings().setSupportZoom(true);
+                        ((ImageTypeViewHolder) holder).attachment_preview.getSettings().setJavaScriptEnabled(true);
+                        // cv_url = getArguments().getString("applicant_cv");
+                        ((ImageTypeViewHolder) holder).attachment_preview.loadUrl("https://docs.google.com/gview?embedded=true&url=" + posts.get(position).getPost_document());
+
+                        //   ((ImageTypeViewHolder) holder).attachment_preview.setImageBitmap(AppUtils.generateImageFromPdf(Uri.parse(posts.get(position).getPost_document()),mContext));
+                        ((ImageTypeViewHolder) holder).tv_filename.setText(posts.get(position).getTitle());
+                        ((ImageTypeViewHolder) holder).attachment_preview.setWebViewClient(new WebViewClient() {
+                            @Override
+                            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                                super.onPageStarted(view, url, favicon);
+                                // pDialog.show();
+                            }
+
+                            @Override
+                            public void onPageFinished(WebView view, String url) {
+                                super.onPageFinished(view, url);
+                                //  pDialog.dismiss();
+                            }
+                        });
                     }
                     else
                     {

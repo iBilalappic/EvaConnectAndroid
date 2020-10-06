@@ -446,12 +446,12 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
                             post.setPost_type(AppConstants.VIDEO_TYPE);
                         } else if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() == 0 && !post.isIs_url()  && post.getPost_document() == null) {
                             post.setPost_type(AppConstants.TEXT_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("post") && post.isIs_url()) {
+                        } else if (post.getType().equalsIgnoreCase("post") && post.isIs_url() && post.getPost_document() == null) {
                             post.setPost_type(AppConstants.LINK_POST);
                         }
                         else if(post.getType().equalsIgnoreCase("post") && post.getPost_document() != null)
                         {
-                            post.setPost_type(AppConstants.IMAGE_TYPE);
+                            post.setPost_type(AppConstants.DOCUMENT_TYPE);
                         }
                     }
                     posts.addAll(dashboardBaseModel.getData());
