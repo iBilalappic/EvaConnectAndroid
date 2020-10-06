@@ -1,6 +1,7 @@
 <component name="libraryTable">
   <library name="Gradle: com.github.skydoves:powermenu:2.1.2@aar">
     <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/c1e8c7b17c80b5e796bc31ffc25068c0/powermenu-2.1.2/AndroidManifest.xml" />
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/c1e8c7b17c80b5e796bc31ffc25068c0/powermenu-2.1.2/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/c1e8c7b17c80b5e796bc31ffc25068c0/powermenu-2.1.2/res" />
     </CLASSES>

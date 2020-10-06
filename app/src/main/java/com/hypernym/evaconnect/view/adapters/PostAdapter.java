@@ -669,7 +669,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_link, parent, false);
                 return new PostAdapter.LinkTypeViewHolder(view);
             case AppConstants.DOCUMENT_TYPE:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.document_type, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
                 return new PostAdapter.ImageTypeViewHolder(view);
         }
         return null;
@@ -849,6 +849,10 @@ public class PostAdapter  extends RecyclerView.Adapter {
                         ((ImageTypeViewHolder) holder).attachment_preview.setWebViewClient(new WebViewClient());
                         ((ImageTypeViewHolder) holder).attachment_preview.getSettings().setSupportZoom(true);
                         ((ImageTypeViewHolder) holder).attachment_preview.getSettings().setJavaScriptEnabled(true);
+                        ((ImageTypeViewHolder) holder).attachment_preview.getSettings().getAllowContentAccess();
+                        ((ImageTypeViewHolder) holder).attachment_preview.getSettings().getAllowFileAccessFromFileURLs();
+                        ((ImageTypeViewHolder) holder).attachment_preview.getSettings().getAllowUniversalAccessFromFileURLs();
+
                        // cv_url = getArguments().getString("applicant_cv");
                         ((ImageTypeViewHolder) holder).attachment_preview.loadUrl("https://docs.google.com/gview?embedded=true&url=" + posts.get(position).getPost_document());
 
