@@ -223,7 +223,7 @@
     <style name="TextStyle.Title">
         <item name="android:textColor">@color/light_black</item>
         <item name="android:textAppearance">@style/TextAppearance.Text.Light</item>
-         <item name="android:textSize">14sp</item>
+         <item name="android:textSize">13.5sp</item>
         <item name="android:fontFamily">@font/nunitosansbold</item>
     </style>
 

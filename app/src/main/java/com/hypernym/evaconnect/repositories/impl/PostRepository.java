@@ -10,6 +10,7 @@ import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IPostRepository;
+import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 
 import java.util.HashMap;
@@ -131,5 +132,80 @@ public class PostRepository implements IPostRepository {
             }
         });
         return dashboardMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<Comment>>> editComment(Comment comment,Integer id) {
+        commentMutableLiveData=new MutableLiveData<>();
+
+        RestClient.get().appApi().editComment(comment,id).enqueue(new Callback<BaseModel<List<Comment>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Comment>>> call, Response<BaseModel<List<Comment>>> response) {
+                commentMutableLiveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Comment>>> call, Throwable t) {
+                commentMutableLiveData.setValue(null);
+            }
+        });
+        return commentMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<Comment>>> deleteComment(Integer id) {
+        commentMutableLiveData=new MutableLiveData<>();
+
+        RestClient.get().appApi().deleteComment(id).enqueue(new Callback<BaseModel<List<Comment>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Comment>>> call, Response<BaseModel<List<Comment>>> response) {
+                commentMutableLiveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Comment>>> call, Throwable t) {
+                commentMutableLiveData.setValue(null);
+            }
+        });
+        return commentMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<Post>>> editPost(Post post) {
+        postMutableLiveData=new MutableLiveData<>();
+        post.setModified_by_id(LoginUtils.getLoggedinUser().getId());
+        post.setModified_datetime(DateUtils.GetCurrentdatetime());
+
+//        RestClient.get().appApi().editPost(LoginUtils.getLoggedinUser().getId(),post.getContent(),DateUtils.GetCurrentdatetime(),false,post.getAttachments(),post.getVideo(),post.getDocument(),post.getId()).enqueue(new Callback<BaseModel<List<Post>>>() {
+//            @Override
+//            public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
+//                postMutableLiveData.setValue(response.body());
+//            }
+//            @Override
+//            public void onFailure(Call<BaseModel<List<Post>>> call, Throwable t) {
+//                postMutableLiveData.setValue(null);
+//            }
+//        });
+        return postMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<Post>>> deletePost(Post post) {
+        postMutableLiveData=new MutableLiveData<>();
+        post.setModified_by_id(LoginUtils.getLoggedinUser().getId());
+        post.setModified_datetime(DateUtils.GetCurrentdatetime());
+        post.setStatus(AppConstants.DELETED);
+
+//        RestClient.get().appApi().editPost(post,post.getId()).enqueue(new Callback<BaseModel<List<Post>>>() {
+//            @Override
+//            public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
+//                postMutableLiveData.setValue(response.body());
+//            }
+//            @Override
+//            public void onFailure(Call<BaseModel<List<Post>>> call, Throwable t) {
+//                postMutableLiveData.setValue(null);
+//            }
+//        });
+        return postMutableLiveData;
     }
 }

@@ -265,7 +265,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="Invited"
+                android:text="Invite attendee"
                 android:textAppearance="@style/TextAppearance.Text.Bold"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"

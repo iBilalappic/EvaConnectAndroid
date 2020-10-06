@@ -142,25 +142,48 @@
 
         </LinearLayout>
 
+<LinearLayout
+    android:id="@+id/othersector"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:visibility="gone"
+    android:layout_marginTop="10dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/linearLayout0">
+    <EditText
+        android:id="@+id/edt_sector"
+        style="@style/EditText"
+        android:layout_width="250dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/colorwhite"
+        android:gravity="center"
+        android:hint="Enter Sector"
+        android:visibility="visible"
+        android:maxLength="100"
+        android:paddingLeft="10dp"
+        android:textColor="@color/text_color"
+        android:textColorHint="@color/gray_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.534"
+   />
+    <ImageView
+        android:id="@+id/img_view0"
+        style="@style/EditText.LineRedBlack"
+        android:layout_width="250dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:visibility="visible"
+        android:layout_marginRight="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edt_sector" />
+</LinearLayout>
 
-        <EditText
-            android:id="@+id/edt_sector"
-            style="@style/EditText"
-            android:layout_width="250dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="16dp"
-            android:backgroundTint="@color/colorwhite"
-            android:gravity="center"
-            android:hint="Enter Sector"
-            android:maxLength="100"
-            android:paddingLeft="10dp"
-            android:textColor="@color/text_color"
-            android:textColorHint="@color/gray_1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.534"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout0" />
 
         <Button
             android:id="@+id/btn_next"
@@ -170,7 +193,7 @@
             android:text="@string/next"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edt_sector" />
+            app:layout_constraintTop_toBottomOf="@+id/othersector" />
 
         <TextView
             android:id="@+id/tv_already_account"

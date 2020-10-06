@@ -4,12 +4,18 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
@@ -102,6 +108,9 @@ public class PostAdapter  extends RecyclerView.Adapter {
         @BindView(R.id.like_click)
         LinearLayout like_click;
 
+        @BindView(R.id.img_more)
+        ImageView img_more;
+
         public TextTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -160,6 +169,13 @@ public class PostAdapter  extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     mClickListener.onConnectClick(v, getAdapterPosition());
+                }
+            });
+
+            img_more.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                   moreOptions(v,getAdapterPosition());
                 }
             });
 
@@ -244,6 +260,17 @@ public class PostAdapter  extends RecyclerView.Adapter {
         @BindView(R.id.like_click)
         LinearLayout like_click;
 
+        @BindView(R.id.img_more)
+        ImageView img_more;
+
+        @BindView(R.id.attachment)
+        ConstraintLayout attachment;
+
+        @BindView(R.id.attachment_preview)
+        WebView attachment_preview;
+
+        @BindView(R.id.tv_filename)
+        TextView tv_filename;
 
         public ImageTypeViewHolder(View itemView) {
             super(itemView);
@@ -316,6 +343,12 @@ public class PostAdapter  extends RecyclerView.Adapter {
                 }
             });
 
+            img_more.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    moreOptions(v,getAdapterPosition());
+                }
+            });
         }
 
 
@@ -382,7 +415,8 @@ public class PostAdapter  extends RecyclerView.Adapter {
         @BindView(R.id.like_click)
         LinearLayout like_click;
 
-
+        @BindView(R.id.img_more)
+        ImageView img_more;
 
 
         public VideoTypeViewHolder(View itemView) {
@@ -448,6 +482,13 @@ public class PostAdapter  extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     mClickListener.onConnectClick(v, getAdapterPosition());
+                }
+            });
+
+            img_more.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    moreOptions(v,getAdapterPosition());
                 }
             });
 
@@ -518,6 +559,9 @@ public class PostAdapter  extends RecyclerView.Adapter {
         @BindView(R.id.like_click)
         LinearLayout like_click;
 
+        @BindView(R.id.img_more)
+        ImageView img_more;
+
         public LinkTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -584,6 +628,13 @@ public class PostAdapter  extends RecyclerView.Adapter {
                 }
             });
 
+            img_more.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    moreOptions(v,getAdapterPosition());
+                }
+            });
+
         }
 
     }
@@ -615,6 +666,9 @@ public class PostAdapter  extends RecyclerView.Adapter {
             case AppConstants.LINK_POST:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_link, parent, false);
                 return new PostAdapter.LinkTypeViewHolder(view);
+            case AppConstants.DOCUMENT_TYPE:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
+                return new PostAdapter.ImageTypeViewHolder(view);
         }
         return null;
     }
@@ -691,7 +745,9 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     ((PostAdapter.TextTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation() +" at ");
                     if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
                         ((TextTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
+                        ((TextTypeViewHolder) holder).img_more.setVisibility(View.VISIBLE);
                     } else {
+                        ((TextTypeViewHolder) holder).img_more.setVisibility(View.GONE);
                         ((PostAdapter.TextTypeViewHolder) holder).tv_connect.setVisibility(View.VISIBLE);
                         String connectionstatus = AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver());
                         ((PostAdapter.TextTypeViewHolder) holder).tv_connect.setText(AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver()));
@@ -719,7 +775,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                         ((PostAdapter.ImageTypeViewHolder) holder).imageSlider.setVisibility(View.VISIBLE);
                         ((PostAdapter.ImageTypeViewHolder) holder).post_image.setVisibility(View.GONE);
                         initializeSlider(((PostAdapter.ImageTypeViewHolder) holder).imageSlider, position);
-                    } else {
+                    } else if (posts.get(position).getPost_image().size() ==1){
                         ((PostAdapter.ImageTypeViewHolder) holder).imageSlider.setVisibility(View.GONE);
                         ((PostAdapter.ImageTypeViewHolder) holder).post_image.setVisibility(View.VISIBLE);
                         AppUtils.setGlideImageUrl(mContext, ((PostAdapter.ImageTypeViewHolder) holder).post_image, posts.get(position).getPost_image().get(0));
@@ -758,7 +814,9 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     ((PostAdapter.ImageTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation() +" at ");
                     if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
                         ((ImageTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
+                        ((ImageTypeViewHolder) holder).img_more.setVisibility(View.VISIBLE);
                     } else {
+                        ((ImageTypeViewHolder) holder).img_more.setVisibility(View.GONE);
                         ((PostAdapter.ImageTypeViewHolder) holder).tv_connect.setVisibility(View.VISIBLE);
                         String connectionstatus = AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver());
                         ((PostAdapter.ImageTypeViewHolder) holder).tv_connect.setText(AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver()));
@@ -775,6 +833,17 @@ public class PostAdapter  extends RecyclerView.Adapter {
                             // holder.tv_decline.setVisibility(View.GONE);
                         }
 
+                    }
+                    if(posts.get(position).getPost_document()!=null)
+                    {
+                        ((ImageTypeViewHolder) holder).attachment.setVisibility(View.VISIBLE);
+
+                     //   ((ImageTypeViewHolder) holder).attachment_preview.setImageBitmap(AppUtils.generateImageFromPdf(Uri.parse(posts.get(position).getPost_document()),mContext));
+                        ((ImageTypeViewHolder) holder).tv_filename.setText(posts.get(position).getTitle());
+                    }
+                    else
+                    {
+                        ((ImageTypeViewHolder) holder).attachment.setVisibility(View.GONE);
                     }
 
                     break;
@@ -816,7 +885,9 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     ((PostAdapter.VideoTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation()+" at ");
                     if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
                         ((VideoTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
+                        ((VideoTypeViewHolder) holder).img_more.setVisibility(View.VISIBLE);
                     } else {
+                        ((VideoTypeViewHolder) holder).img_more.setVisibility(View.GONE);
                         ((PostAdapter.VideoTypeViewHolder) holder).tv_connect.setVisibility(View.VISIBLE);
                         String connectionstatus = AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver());
                         ((PostAdapter.VideoTypeViewHolder) holder).tv_connect.setText(AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver()));
@@ -889,7 +960,9 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     ((PostAdapter.LinkTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation()+" at");
                     if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
                         ((LinkTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
+                        ((LinkTypeViewHolder) holder).img_more.setVisibility(View.VISIBLE);
                     } else {
+                        ((LinkTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
                         ((PostAdapter.LinkTypeViewHolder) holder).tv_connect.setVisibility(View.VISIBLE);
                         String connectionstatus = AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver());
                         ((PostAdapter.LinkTypeViewHolder) holder).tv_connect.setText(AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver()));
@@ -935,7 +1008,10 @@ public class PostAdapter  extends RecyclerView.Adapter {
 
         void onConnectClick(View view, int position);
 
+        void onMoreClick(View view, int position);
 
+        void onEditClick(View view, int position);
+        void onDeleteClick(View view, int position);
 
     }
 
@@ -975,6 +1051,41 @@ public class PostAdapter  extends RecyclerView.Adapter {
     public void addItems(List<Post> postItems) {
         posts.addAll(postItems);
         notifyDataSetChanged();
+    }
+
+    public void moreOptions(View v,int position)
+    {
+        final OvershootInterpolator interpolator = new OvershootInterpolator();
+        ViewCompat.animate(v).
+                rotation(135f).
+                withLayer().rotation(0).
+                setInterpolator(interpolator).
+                start();
+        /** Instantiating PopupMenu class */
+        PopupMenu popup = new PopupMenu(mContext, v);
+
+        /** Adding menu items to the popumenu */
+        popup.getMenuInflater().inflate(R.menu.post_menu, popup.getMenu());
+
+        /** Defining menu item click listener for the popup menu */
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getTitle().toString().equalsIgnoreCase(mContext.getString(R.string.edit_post))) {
+                    mClickListener.onEditClick(v,position);
+                }
+                else
+                {
+                    mClickListener.onDeleteClick(v,position);
+                }
+                return true;
+            }
+        });
+        popup.setForceShowIcon(true);
+
+        /** Showing the popup menu */
+        popup.show();
     }
 
 }

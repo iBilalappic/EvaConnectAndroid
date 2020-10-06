@@ -29,6 +29,8 @@ public interface IEventRepository {
 
     LiveData<BaseModel<List<Comment>>> addComment(Comment comment);
 
+    LiveData<BaseModel<List<Comment>>> editComment(Comment comment);
+
     LiveData<BaseModel<List<Event>>> addEventAttendance(Event event);
 
     LiveData<BaseModel<List<Event>>> updateEventAttendance(Event event);
@@ -38,6 +40,8 @@ public interface IEventRepository {
     LiveData<BaseModel<List<Post>>> getEvent(User user, int total, int current);
 
     LiveData<BaseModel<List<Event>>> updateEvent(Event event,@Part MultipartBody.Part user_image);
+
+    LiveData<BaseModel<List<Comment>>> deleteComment(Integer id);
 
 
 }

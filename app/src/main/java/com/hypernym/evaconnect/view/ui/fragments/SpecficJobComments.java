@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,7 +29,6 @@ import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
-import com.hypernym.evaconnect.view.adapters.ChatAdapter;
 import com.hypernym.evaconnect.view.adapters.CommentsAdapter;
 import com.hypernym.evaconnect.view.adapters.MyLikeAdapter;
 import com.hypernym.evaconnect.view.dialogs.ShareDialog;
@@ -39,14 +39,14 @@ import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class SpecficJobComments extends BaseFragment implements MyLikeAdapter.OnItemClickListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener , Validator.ValidationListener {
+public class SpecficJobComments extends BaseFragment implements MyLikeAdapter.OnItemClickListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener , Validator.ValidationListener,CommentsAdapter.OnItemClickListener {
 
     @BindView(R.id.profile_image)
     CircleImageView profile_image;
@@ -115,11 +115,19 @@ public class SpecficJobComments extends BaseFragment implements MyLikeAdapter.On
     @BindView(R.id.job_comments)
     RecyclerView job_comments;
 
+    @BindView(R.id.layout_editcomment)
+    LinearLayout layout_editcomment;
+
+    @BindView(R.id.button_cancel)
+    Button button_cancel;
+
+    @BindView(R.id.button_save)
+    Button button_save;
 
 
 
 
-    int job_id;
+    int job_id,comment_id;
     JobAd jobAd = new JobAd();
     SpecficJobAd specficJobAd=new SpecficJobAd();
     private SpecficJobAd checkLikeCount = new SpecficJobAd();
@@ -331,8 +339,18 @@ public class SpecficJobComments extends BaseFragment implements MyLikeAdapter.On
                 comments.clear();
                 if (getComments != null && !getComments.isError()) {
                     comments.addAll(getComments.getData());
+                    if(jobAd.getUserId()==LoginUtils.getLoggedinUser().getId())
+                    {
+                        for (Comment comment:comments)
+                        {
+                            comment.setPostMine(true);
+                        }
+                    }
 //                    Collections.reverse(comments);
                     commentsAdapter.notifyDataSetChanged();
+                    layout_editcomment.setVisibility(View.GONE);
+                    btn_addcomment.setVisibility(View.VISIBLE);
+                    edt_comment.setText("");
 //                    post.setComment_count(comments.size());
 //                    tv_comcount.setText(String.valueOf(comments.size()));
                 } else {
@@ -397,7 +415,7 @@ public class SpecficJobComments extends BaseFragment implements MyLikeAdapter.On
     }
 
     private void initRecyclerView() {
-        commentsAdapter = new CommentsAdapter(getContext(), comments);
+        commentsAdapter = new CommentsAdapter(getContext(), comments,this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 //        linearLayoutManager = new LinearLayoutManager(requireActivity()) {
 //            @Override
@@ -409,5 +427,56 @@ public class SpecficJobComments extends BaseFragment implements MyLikeAdapter.On
 
         job_comments.setLayoutManager(linearLayoutManager);
         job_comments.setAdapter(commentsAdapter);
+    }
+
+    @Override
+    public void onEditComment(View view, int position, String comment) {
+        layout_editcomment.setVisibility(View.VISIBLE);
+        btn_addcomment.setVisibility(View.GONE);
+        edt_comment.setText(comment);
+        comment_id=comments.get(position).getId();
+    }
+
+    @Override
+    public void onDeleteComment(View view, int position) {
+        jobListViewModel.deleteComment(comments.get(position).getId()).observe(this, new Observer<BaseModel<List<Comment>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Comment>> listBaseModel) {
+                comments.remove(position);
+                commentsAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    @OnClick(R.id.button_cancel)
+    public void cancel()
+    {
+        layout_editcomment.setVisibility(View.GONE);
+        btn_addcomment.setVisibility(View.VISIBLE);
+        edt_comment.setText("");
+    }
+
+    @OnClick(R.id.button_save)
+    public void saveComment()
+    {
+        Comment newcomment=new Comment();
+        // newcomment.setId(comments.get(position).getId());
+        newcomment.setContent(edt_comment.getText().toString());
+        newcomment.setModified_by_id(LoginUtils.getLoggedinUser().getId());
+        newcomment.setModified_datetime(DateUtils.GetCurrentdatetime());
+
+        jobListViewModel.editComment(newcomment,comment_id).observe(this, new Observer<BaseModel<List<Comment>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Comment>> listBaseModel) {
+                if(NetworkUtils.isNetworkConnected(getContext()))
+                {
+                    GetJobComments(jobAd.getId());
+                }
+                else
+                {
+                    networkErrorDialog();
+                }
+            }
+        });
     }
 }

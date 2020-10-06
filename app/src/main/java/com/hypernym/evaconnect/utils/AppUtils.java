@@ -445,7 +445,7 @@ public final class AppUtils {
             return bmp;
         }
 
-        private void saveImage(Bitmap bmp) {
+        public static void saveImage(Bitmap bmp) {
             FileOutputStream out = null;
             try {
                 File folder = new File(FOLDER);

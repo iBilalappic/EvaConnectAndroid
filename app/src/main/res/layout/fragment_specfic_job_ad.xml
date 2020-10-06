@@ -108,7 +108,7 @@
                     android:maxLines="1"
                     android:text="Ed Hunter"
                     android:textColor="@color/black"
-                    android:textSize="12sp"
+                    android:textSize="13sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@+id/profile_layout"
                     app:layout_constraintTop_toTopOf="@+id/profile_layout" />
@@ -122,7 +122,7 @@
                     android:fontFamily="@font/nunitosansregular"
                     android:text="--"
                     android:textColor="@color/black"
-                    android:textSize="10sp"
+                    android:textSize="12sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@+id/profile_layout"
                     app:layout_constraintTop_toBottomOf="@+id/tv_name" />
@@ -257,8 +257,9 @@
                     android:ellipsize="end"
                     android:fontFamily="@font/nunitosansregular"
                     android:maxLines="3"
+                    android:textColor="@color/black"
                     android:text="Things you’d never hear in a ticket office” … Let’s play a game of mock the week, or the LinkedIn version of Mock the Week. I’ll Start: https://lnkd.in… see more"
-                    android:textSize="12sp"
+                    android:textSize="13.5sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -292,7 +293,14 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1">
-
+                            <ImageView
+                                android:id="@+id/img_like"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:layout_marginEnd="@dimen/spacing_medium"
+                                android:layout_weight="0"
+                                android:background="@drawable/ic_like" />
                             <TextView
                                 android:gravity="center_vertical"
                                 android:layout_width="0dp"
@@ -302,14 +310,7 @@
                                 android:text="Like"
                                 android:textColor="@color/gray_1" />
 
-                            <ImageView
-                                android:id="@+id/img_like"
-                                android:layout_width="18dp"
-                                android:layout_height="18dp"
-                                android:layout_gravity="center"
-                                android:layout_marginEnd="@dimen/spacing_medium"
-                                android:layout_weight="0"
-                                android:background="@drawable/ic_like" />
+
 
                             <View
                                 android:layout_width="1dp"
@@ -326,7 +327,14 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1.2">
-
+                            <ImageView
+                                android:id="@+id/img_comment"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:layout_marginEnd="@dimen/spacing_medium"
+                                android:layout_weight="0"
+                                android:background="@drawable/ic_comment" />
                             <TextView
                                 android:gravity="center_vertical"
                                 android:layout_width="0dp"
@@ -336,14 +344,7 @@
                                 android:text="Comment"
                                 android:textColor="@color/gray_1" />
 
-                            <ImageView
-                                android:id="@+id/img_comment"
-                                android:layout_width="18dp"
-                                android:layout_height="18dp"
-                                android:layout_gravity="center"
-                                android:layout_marginEnd="@dimen/spacing_medium"
-                                android:layout_weight="0"
-                                android:background="@drawable/ic_comment" />
+
 
                             <View
                                 android:layout_width="1dp"
@@ -362,6 +363,14 @@
                             android:layout_marginEnd="16dp"
                             android:layout_weight="1">
 
+                            <ImageView
+                                android:id="@+id/img_share"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:layout_marginEnd="@dimen/spacing_medium"
+                                android:layout_weight="0"
+                                android:background="@drawable/ic_share" />
                             <TextView
                                 android:gravity="center_vertical"
                                 android:layout_width="0dp"
@@ -371,14 +380,6 @@
                                 android:text="Share"
                                 android:textColor="@color/gray_1" />
 
-                            <ImageView
-                                android:id="@+id/img_share"
-                                android:layout_width="18dp"
-                                android:layout_height="18dp"
-                                android:layout_gravity="center"
-                                android:layout_marginEnd="@dimen/spacing_medium"
-                                android:layout_weight="0"
-                                android:background="@drawable/ic_share" />
 
 
                         </LinearLayout>

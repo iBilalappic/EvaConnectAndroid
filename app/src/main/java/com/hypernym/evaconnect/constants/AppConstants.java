@@ -30,6 +30,7 @@ public class AppConstants {
     public static final int LINK_POST=6;
     public static final int JOB_TYPE=4;
     public static final int NEWS_TYPE=7;
+    public static final int DOCUMENT_TYPE=8;
     public static final String LIKE= "like";
     public static final String UNLIKE= "unlike";
     public static final int TOTAL_PAGES = 10;
@@ -58,4 +59,6 @@ public class AppConstants {
     public static final String RESCHEDULE = "Interview_schedule";
     public static final String INTERVIEW = "Interview";
     public static final String REQUEST_RESCHEDULE = "request_reschedule";
+    public static final String USER_TYPE = "user";
+    public static final String COMPANY_USER_TYPE = "company";
 }

@@ -6,8 +6,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +30,7 @@ import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
+import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.CommentsAdapter;
 import com.hypernym.evaconnect.view.adapters.SliderImageAdapter;
 import com.hypernym.evaconnect.view.dialogs.ShareDialog;
@@ -50,7 +53,7 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NewsDetailsFragment extends BaseFragment implements Validator.ValidationListener {
+public class NewsDetailsFragment extends BaseFragment implements Validator.ValidationListener,CommentsAdapter.OnItemClickListener {
 
     @BindView(R.id.rc_comments)
     RecyclerView rc_comments;
@@ -111,13 +114,22 @@ public class NewsDetailsFragment extends BaseFragment implements Validator.Valid
     @BindView(R.id.tv_visit)
     TextView tv_visit;
 
+    @BindView(R.id.layout_editcomment)
+    LinearLayout layout_editcomment;
+
+    @BindView(R.id.button_cancel)
+    Button button_cancel;
+
+    @BindView(R.id.button_save)
+    Button button_save;
+
     private CommentsAdapter commentsAdapter;
     private SliderImageAdapter sliderImageAdapter;
     private List<Comment> comments = new ArrayList<>();
     private NewsViewModel newsViewModel;
 
     Post post = new Post();
-    int post_id;
+    int post_id,comment_id;
     private Validator validator;
     private ConnectionViewModel connectionViewModel;
 
@@ -253,10 +265,14 @@ public class NewsDetailsFragment extends BaseFragment implements Validator.Valid
                 comments.clear();
                 if (listBaseModel != null && !listBaseModel.isError()) {
                     comments.addAll(listBaseModel.getData());
+
                     Collections.reverse(comments);
                     commentsAdapter.notifyDataSetChanged();
                     post.setComment_count(comments.size());
                     tv_comcount.setText(String.valueOf(comments.size()));
+                    layout_editcomment.setVisibility(View.GONE);
+                    btn_addcomment.setVisibility(View.VISIBLE);
+                    edt_comment.setText("");
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
@@ -267,7 +283,7 @@ public class NewsDetailsFragment extends BaseFragment implements Validator.Valid
 
 
     private void initRecyclerView() {
-        commentsAdapter = new CommentsAdapter(getContext(), comments);
+        commentsAdapter = new CommentsAdapter(getContext(), comments,this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rc_comments.setLayoutManager(linearLayoutManager);
         rc_comments.setAdapter(commentsAdapter);
@@ -354,5 +370,56 @@ public class NewsDetailsFragment extends BaseFragment implements Validator.Valid
     }
 
 
+    @Override
+    public void onEditComment(View view, int position, String comment) {
+        layout_editcomment.setVisibility(View.VISIBLE);
+        btn_addcomment.setVisibility(View.GONE);
+        edt_comment.setText(comment);
+        comment_id=comments.get(position).getId();
+    }
+
+    @Override
+    public void onDeleteComment(View view, int position) {
+        newsViewModel.deleteComment(comments.get(position).getId()).observe(this, new Observer<BaseModel<List<Comment>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Comment>> listBaseModel) {
+                comments.remove(position);
+                commentsAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    @OnClick(R.id.button_cancel)
+    public void cancel()
+    {
+        layout_editcomment.setVisibility(View.GONE);
+        btn_addcomment.setVisibility(View.VISIBLE);
+        edt_comment.setText("");
+    }
+
+    @OnClick(R.id.button_save)
+    public void saveComment()
+    {
+        Comment newcomment=new Comment();
+        newcomment.setId(comment_id);
+        newcomment.setContent(edt_comment.getText().toString());
+        newcomment.setModified_by_id(LoginUtils.getLoggedinUser().getId());
+        newcomment.setModified_datetime(DateUtils.GetCurrentdatetime());
+
+        newsViewModel.editComment(newcomment).observe(this, new Observer<BaseModel<List<Comment>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Comment>> listBaseModel) {
+                if(NetworkUtils.isNetworkConnected(getContext()))
+                {
+                   // getEventDetails(event_id);
+                    getComments();
+                }
+                else
+                {
+                    networkErrorDialog();
+                }
+            }
+        });
+    }
 
 }

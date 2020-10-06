@@ -71,15 +71,15 @@
         android:maxLines="1"
         android:text="Ed Hunter"
         android:textColor="@color/black"
-        android:textSize="12sp"
+        android:textSize="13sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/profile_layout"
         app:layout_constraintTop_toTopOf="@+id/profile_layout" />
     <TextView
         android:id="@+id/tv_connect"
         style="@style/Button_border_light_blue"
-        android:layout_width="77dp"
-        android:layout_height="27dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/nunitosansregular"
@@ -90,9 +90,21 @@
         android:paddingBottom="5dp"
         android:text="Connected"
         android:textColor="@color/skyblue"
-        android:textSize="9sp"
+        android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/profile_layout" />
+
+    <ImageView
+        android:id="@+id/img_more"
+        android:layout_width="wrap_content"
+        android:layout_height="15dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/more"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/profile_layout" />
+
     <TextView
         android:id="@+id/tv_designation"
         style="@style/TextStyle"
@@ -100,6 +112,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="Recruitment officer"
+        android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/profile_layout"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
@@ -114,6 +127,7 @@
         android:layout_marginStart="5dp"
         android:text="Recruitment officer"
         android:textColor="#EF8080"
+        android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/tv_designation"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
@@ -176,7 +190,6 @@
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_content">
@@ -185,9 +198,9 @@
             android:id="@+id/linearLayout3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginTop="@dimen/spacing_medium"
-            android:layout_marginBottom="@dimen/spacing_medium"
-            android:layout_gravity="center_vertical">
+            android:layout_marginBottom="@dimen/spacing_medium">
 
 
             <View
@@ -206,10 +219,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="4dp"
-                android:text="58"
                 android:fontFamily="@font/nunitosansbold"
-                android:textStyle="bold"
+                android:text="58"
                 android:textColor="@color/skyblue"
+                android:textSize="11sp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/view2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -219,26 +233,27 @@
                 style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="5dp"
                 android:paddingLeft="5dp"
                 android:text="@string/likes"
-                android:textStyle="bold"
                 android:textColor="@color/skyblue"
+                android:textSize="11sp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/tv_likecount"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textView11"
+                style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="37dp"
-                android:text="@string/amp"
-                style="@style/TextStyle"
-                android:textStyle="bold"
-                android:fontFamily="@font/nunitosansbold"
                 android:layout_marginStart="@dimen/spacing_small"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/nunitosansbold"
+                android:text="@string/amp"
                 android:textColor="@color/skyblue"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:textSize="11sp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/textView10"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -247,11 +262,12 @@
                 style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="03"
                 android:layout_marginStart="@dimen/spacing_small"
-                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                android:text="03"
                 android:textColor="@color/skyblue"
+                android:textSize="11sp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/textView11"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -261,13 +277,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
+                android:fontFamily="@font/nunitosansbold"
                 android:paddingLeft="5dp"
                 android:text="@string/comments"
-                android:textStyle="bold"
-                android:fontFamily="@font/nunitosansbold"
                 android:textColor="@color/skyblue"
+                android:textSize="11sp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/tv_comcount"
                 app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/tv_createddateTime"
                 style="@style/TextStyle.Title"
@@ -276,10 +294,12 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="50dp"
-                android:text="12:04pm | 12 jan"
                 android:fontFamily="@font/nunitosansregular"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:text="12:04pm | 12 jan"
+                android:textSize="10sp"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <View
                 android:id="@+id/view4"
@@ -308,16 +328,6 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1">
-
-                    <TextView
-                        android:gravity="center_vertical"
-                        android:layout_width="0dp"
-                        android:layout_height="30dp"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/nunitosansregular"
-                        android:text="Like"
-                        android:textColor="@color/gray_1" />
-
                     <ImageView
                         android:id="@+id/img_like"
                         android:layout_width="18dp"
@@ -326,6 +336,17 @@
                         android:layout_marginEnd="@dimen/spacing_medium"
                         android:layout_weight="0"
                         android:background="@drawable/ic_like" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/nunitosansregular"
+                        android:gravity="center_vertical"
+                        android:text="Like"
+                        android:textSize="12sp"
+                        android:textColor="@color/gray_1" />
+
+
 
                     <View
                         android:layout_width="1dp"
@@ -342,16 +363,6 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1.2">
-
-                    <TextView
-                        android:gravity="center_vertical"
-                        android:layout_width="0dp"
-                        android:layout_height="30dp"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/nunitosansregular"
-                        android:text="Comment"
-                        android:textColor="@color/gray_1" />
-
                     <ImageView
                         android:id="@+id/img_comment"
                         android:layout_width="18dp"
@@ -360,6 +371,17 @@
                         android:layout_marginEnd="@dimen/spacing_medium"
                         android:layout_weight="0"
                         android:background="@drawable/ic_comment" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/nunitosansregular"
+                        android:gravity="center_vertical"
+                        android:text="Comment"
+                        android:textSize="12sp"
+                        android:textColor="@color/gray_1" />
+
+
 
                     <View
                         android:layout_width="1dp"
@@ -378,15 +400,6 @@
                     android:layout_marginEnd="16dp"
                     android:layout_weight="1">
 
-                    <TextView
-                        android:gravity="center_vertical"
-                        android:layout_width="0dp"
-                        android:layout_height="30dp"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/nunitosansregular"
-                        android:text="Share"
-                        android:textColor="@color/gray_1" />
-
                     <ImageView
                         android:id="@+id/img_share"
                         android:layout_width="18dp"
@@ -395,6 +408,18 @@
                         android:layout_marginEnd="@dimen/spacing_medium"
                         android:layout_weight="0"
                         android:background="@drawable/ic_share" />
+
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/nunitosansregular"
+                        android:gravity="center_vertical"
+                        android:text="Share"
+                        android:textSize="12sp"
+                        android:textColor="@color/gray_1" />
+
 
 
                 </LinearLayout>
@@ -410,15 +435,15 @@
         android:id="@+id/tv_content"
         style="@style/TextStyle.Title"
         android:layout_width="0dp"
-        android:maxLines="3"
-        android:ellipsize="end"
-        android:textSize="12sp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:fontFamily="@font/nunitosansregular"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="12dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/nunitosansregular"
+        android:maxLines="3"
         android:text="“Things you’d never hear in a ticket office” … Let’s play a game of mock the week, or the LinkedIn version of Mock the Week. I’ll Start: https://lnkd.in… see more"
+        android:textSize="13.5sp"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_layout" />

@@ -535,7 +535,6 @@
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:hint="@string/tap_here_to_comment"
-
         android:inputType="textPersonName"
         android:textColor="@color/black"
         android:textColorHint="@color/gray_1"
@@ -543,6 +542,30 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/img_user"
         app:layout_constraintTop_toBottomOf="@id/view5" />
+
+    <LinearLayout
+        android:id="@+id/layout_editcomment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/edt_comment">
+        <Button
+            android:id="@+id/button_cancel"
+            style="@style/simpleButton"
+            android:layout_width="wrap_content"
+            android:text="Cancel"
+            android:textColor="@color/colorAccent"
+            android:layout_weight="0.5" />
+        <Button
+            android:id="@+id/button_save"
+            style="@style/simpleButton"
+            android:layout_width="wrap_content"
+            android:text="Save"
+            android:layout_weight="0.5" />
+
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/btn_addcomment"

@@ -63,7 +63,7 @@ public class ShareArticleFragment extends BaseFragment {
     ConstraintLayout attachment;
 
     @BindView(R.id.attachment_preview)
-    ImageView attachment_preview;
+    ImageView webView;
 
     @BindView(R.id.img_removeAttachment)
     ImageView img_removeAttachment;
@@ -202,10 +202,11 @@ public class ShareArticleFragment extends BaseFragment {
 
 
     public void LaunchGallery() {
-
+       // String[] supportedMimeTypes = {"application/pdf","application/msword"};
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("file/*");
+//        intent.setType("file/*");
         intent.setType("application/pdf");
+
         startActivityForResult(Intent.createChooser(intent, "Select File"), REQUEST_DOCUMENTS);
     }
 
@@ -282,7 +283,19 @@ public class ShareArticleFragment extends BaseFragment {
                                  part_images = MultipartBody.Part.createFormData("post_document", file_name.getName(), reqFile);
                               //  MultiplePhoto.add(partImage);
                                 //Drawable drawable = (Drawable)new BitmapDrawable(getResources(),);
-                                attachment_preview.setImageBitmap(AppUtils.generateImageFromPdf(SelectedImageUri,getContext()));
+                                 webView.setImageBitmap(AppUtils.generateImageFromPdf(SelectedImageUri,getContext()));
+
+
+//                                WebSettings settings = webView.getSettings();
+//                                settings.setJavaScriptEnabled(true);
+//                                settings.setAllowFileAccessFromFileURLs(true);
+//                                settings.setAllowUniversalAccessFromFileURLs(true);
+//                                settings.setBuiltInZoomControls(true);
+//                                webView.setWebChromeClient(new WebChromeClient());
+//                                String base = file_name.getAbsolutePath().toString();
+//                                String imagePath = "file:///"+ base;
+//                                webView.loadUrl(imagePath);
+                            //   webView.loadDataWithBaseURL("", html, "text/html","utf-8", "");
 
                                 tv_filename.setText(file_name.getName());
                                 img_removeAttachment.setVisibility(View.VISIBLE);

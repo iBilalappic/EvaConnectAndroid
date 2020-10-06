@@ -21,4 +21,13 @@ public interface IPostRepository {
     LiveData<BaseModel<List<Post>>> getPostById(int id);
 
     LiveData<BaseModel<List<Post>>> getPost(User user, int total, int current);
+
+    LiveData<BaseModel<List<Comment>>> editComment(Comment comment,Integer id);
+
+    LiveData<BaseModel<List<Comment>>> deleteComment(Integer id);
+
+    LiveData<BaseModel<List<Post>>> editPost(Post post);
+
+    LiveData<BaseModel<List<Post>>> deletePost(Post post);
+
 }

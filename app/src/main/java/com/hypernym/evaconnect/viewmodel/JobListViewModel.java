@@ -10,14 +10,11 @@ import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.JobAd;
-import com.hypernym.evaconnect.models.MyLikesModel;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IJobAdRepository;
-import com.hypernym.evaconnect.repositories.ILikeRepository;
 import com.hypernym.evaconnect.repositories.impl.JobListRepository;
-import com.hypernym.evaconnect.repositories.impl.LikeRepository;
 
 import java.util.List;
 
@@ -63,6 +60,16 @@ public class JobListViewModel extends AndroidViewModel {
     public LiveData<BaseModel<List<Comment>>>  getComments(int application_id)
     {
         return iJobAdRepository.getJobComments(application_id);
+    }
+
+    public LiveData<BaseModel<List<Comment>>> editComment(Comment comment,Integer id)
+    {
+        return iJobAdRepository.editComment(comment,id);
+    }
+
+    public LiveData<BaseModel<List<Comment>>> deleteComment(Integer id)
+    {
+        return iJobAdRepository.deleteComment(id);
     }
 
 

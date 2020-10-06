@@ -60,6 +60,12 @@ public class EventViewModel extends AndroidViewModel {
         return iEventRepository.addComment(comment);
     }
 
+    public LiveData<BaseModel<List<Comment>>> editComment(Comment comment)
+    {
+        return iEventRepository.editComment(comment);
+    }
+
+
     public LiveData<BaseModel<List<Event>>> addEventAttendance(Event event)
     {
         return iEventRepository.addEventAttendance(event);
@@ -83,5 +89,11 @@ public class EventViewModel extends AndroidViewModel {
     {
         return iEventRepository.updateEvent(event,event_image);
     }
+
+    public LiveData<BaseModel<List<Comment>>> deleteComment(Integer id)
+    {
+        return iEventRepository.deleteComment(id);
+    }
+
 
 }

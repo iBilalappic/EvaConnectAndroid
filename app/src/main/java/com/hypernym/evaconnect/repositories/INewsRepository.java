@@ -19,4 +19,8 @@ public interface INewsRepository {
     LiveData<BaseModel<List<Comment>>> getComments(Post post);
 
     LiveData<BaseModel<List<Post>>> getNewsByID(int id);
+
+    LiveData<BaseModel<List<Comment>>> editComment(Comment comment);
+
+    LiveData<BaseModel<List<Comment>>> deleteComment(Integer id);
 }

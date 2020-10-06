@@ -109,38 +109,47 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edt_companyname" />
+<LinearLayout
+    android:id="@+id/job_title"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    android:gravity="center"
+    app:layout_constraintTop_toBottomOf="@+id/img_view0"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/textView4"
+        style="@style/TextStyle.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Job Title"
+        android:textColor="@color/colorAccent"
+        android:textStyle="bold"
+        />
 
 
-        <TextView
-            android:id="@+id/textView4"
-            style="@style/TextStyle.Title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:text="Job Title"
-            android:textColor="@color/colorAccent"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_view0" />
+    <EditText
+        android:id="@+id/edt_jobtitle"
+        style="@style/EditText"
+        android:layout_width="250dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="16dp"
+        android:backgroundTint="@color/colorwhite"
+        android:gravity="center"
+        android:hint="e.g Manager"
+        android:maxLength="100"
+        android:paddingLeft="10dp"
+        android:textColor="@color/text_color"
+        android:textColorHint="@color/gray_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+</LinearLayout>
 
 
-        <EditText
-            android:id="@+id/edt_jobtitle"
-            style="@style/EditText"
-            android:layout_width="250dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginRight="16dp"
-            android:backgroundTint="@color/colorwhite"
-            android:gravity="center"
-            android:hint="e.g Ground Handler"
-            android:maxLength="100"
-            android:paddingLeft="10dp"
-            android:textColor="@color/text_color"
-            android:textColorHint="@color/gray_1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
         <ImageView
             android:id="@+id/img_view1"
@@ -152,7 +161,7 @@
             android:layout_marginRight="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edt_jobtitle" />
+            app:layout_constraintTop_toBottomOf="@+id/job_title" />
 
 
 
