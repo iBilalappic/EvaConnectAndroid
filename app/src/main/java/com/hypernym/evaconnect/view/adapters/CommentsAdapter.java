@@ -197,7 +197,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
                         return true;
                     }
                 });
-                popup.setForceShowIcon(true);
+              //  popup.setForceShowIcon(true);
 
                 /** Showing the popup menu */
                 popup.show();

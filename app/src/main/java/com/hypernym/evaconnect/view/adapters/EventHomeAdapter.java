@@ -401,7 +401,7 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
                 return true;
             }
         });
-        popup.setForceShowIcon(true);
+      //  popup.setForceShowIcon(true);
 
         /** Showing the popup menu */
         popup.show();

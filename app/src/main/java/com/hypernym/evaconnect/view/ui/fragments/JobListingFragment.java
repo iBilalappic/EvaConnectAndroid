@@ -216,19 +216,6 @@ public class JobListingFragment extends BaseFragment implements View.OnClickList
         }
     }
 
-    @Override
-    public void onEditClick(View view, int position) {
-        CreateJobFragment createJobFragment = new CreateJobFragment();
-        Bundle bundle1 = new Bundle();
-        bundle1.putSerializable("COMPANY_AD", companyJobAdModelList.get(position));
-        createJobFragment.setArguments(bundle1);
-        loadFragment(R.id.framelayout, createJobFragment, getContext(), true);
-    }
-
-    @Override
-    public void onDeleteClick(View view, int position) {
-
-    }
 
     private void SetJobLike(Integer id, int position) {
         jobListViewModel.setJobLike(user, id, "like").observe(this, new Observer<BaseModel<List<Object>>>() {

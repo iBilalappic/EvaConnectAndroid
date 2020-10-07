@@ -333,4 +333,31 @@ public class JobFragment extends BaseFragment implements View.OnClickListener, S
                 specficJobComment.setArguments(bundlecomment);
                 loadFragment(R.id.framelayout, specficJobComment, getContext(), true);
     }
+
+    @Override
+    public void onEditClick(View view, int position) {
+        CreateJobFragment createJobFragment = new CreateJobFragment();
+        Bundle bundle1 = new Bundle();
+        bundle1.putSerializable("COMPANY_AD", posts.get(position));
+        createJobFragment.setArguments(bundle1);
+        loadFragment(R.id.framelayout, createJobFragment, getContext(), true);
+
+    }
+
+    @Override
+    public void onDeleteClick(View view, int position) {
+        postViewModel.deleteJob(posts.get(position)).observe(this, new Observer<BaseModel<List<Post>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Post>> listBaseModel) {
+                if (NetworkUtils.isNetworkConnected(getContext())) {
+                   // posts.clear();
+                   // callPostsApi();
+                    posts.addAll(listBaseModel.getData());
+                    postAdapter.notifyDataSetChanged();
+                } else {
+                    networkErrorDialog();
+                }
+            }
+        });
+    }
 }

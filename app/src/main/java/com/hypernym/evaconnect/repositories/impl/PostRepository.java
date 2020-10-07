@@ -211,4 +211,25 @@ public class PostRepository implements IPostRepository {
         });
         return postMutableLiveData;
     }
+
+    @Override
+    public LiveData<BaseModel<List<Post>>> deleteJob(Post post) {
+        postMutableLiveData=new MutableLiveData<>();
+        Post newPost=new Post();
+        newPost.setModified_by_id(LoginUtils.getLoggedinUser().getId());
+        newPost.setModified_datetime(DateUtils.GetCurrentdatetime());
+        newPost.setStatus(AppConstants.DELETED);
+
+        RestClient.get().appApi().deleteJob(post.getId()).enqueue(new Callback<BaseModel<List<Post>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
+                postMutableLiveData.setValue(response.body());
+            }
+            @Override
+            public void onFailure(Call<BaseModel<List<Post>>> call, Throwable t) {
+                postMutableLiveData.setValue(null);
+            }
+        });
+        return postMutableLiveData;
+    }
 }

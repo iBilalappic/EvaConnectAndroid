@@ -287,6 +287,9 @@ public interface AppApi {
     @DELETE(APIConstants.UPDATE_EVENT)
     Call<BaseModel<List<Event>>> deleteEvent(@Path("id") int id);
 
+    @DELETE(APIConstants.UPDATE_JOB_AD)
+    Call<BaseModel<List<Post>>> deleteJob(@Path("job_id") int id);
+
     @POST(APIConstants.GET_CALENDAR_MARKS)
     Call<BaseModel<List<CalendarModel>>> getAllCalendarMarks(@Body CalendarModel calendarModel);
 

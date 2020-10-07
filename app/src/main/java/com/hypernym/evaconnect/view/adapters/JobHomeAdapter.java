@@ -3,10 +3,12 @@ package com.hypernym.evaconnect.view.adapters;
 import android.content.Context;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,10 +19,13 @@ import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
+import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +45,7 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
     private boolean isLoadingAdded = false;
     private boolean isLoaderVisible = false;
     GestureDetector gestureDetector;
+    SimpleDialog simpleDialog;
 
 
     public class JobTypeViewHolder extends RecyclerView.ViewHolder {
@@ -88,6 +94,9 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
         @BindView(R.id.share_click)
         LinearLayout share_click;
 
+        @BindView(R.id.img_more)
+        ImageView img_more;
+
         public JobTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -135,6 +144,75 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
                     mClickListener.onApplyClick(v, getAdapterPosition());
                 }
             });
+            img_more.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    /** Instantiating PopupMenu class */
+                    PopupMenu popup = new PopupMenu(mContext, v);
+
+                    try {
+                        Field[] fields = popup.getClass().getDeclaredFields();
+                        for (Field field : fields) {
+                            if ("mPopup".equals(field.getName())) {
+                                field.setAccessible(true);
+                                Object menuPopupHelper = field.get(popup);
+                                Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
+                                Method setForceIcons = classPopupHelper.getMethod("setForceShowIcon", boolean.class);
+                                setForceIcons.invoke(menuPopupHelper, true);
+                                break;
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    /** Adding menu items to the popumenu */
+                    popup.getMenuInflater().inflate(R.menu.job_menu, popup.getMenu());
+
+//                if(comments.get(position).isPostMine())
+//                {
+//                    holder.more.setVisibility(View.VISIBLE);
+//                }
+//                else
+//                {
+//                    holder.more.setVisibility(View.GONE);
+//                }
+                    /** Defining menu item click listener for the popup menu */
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+
+                            //    Toast.makeText(getContext(), item.getGroupId()+"You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                            if (item.getTitle().toString().equalsIgnoreCase(mContext.getString(R.string.edit_job))) {
+                                mClickListener.onEditClick(v, getAdapterPosition());
+
+                            }  else if (item.getTitle().toString().equalsIgnoreCase(mContext.getString(R.string.delete_job))) {
+                                simpleDialog = new SimpleDialog(mContext, mContext.getString(R.string.confirmation), mContext.getString(R.string.msg_remove_job), mContext.getString(R.string.button_no), mContext.getString(R.string.button_yes), new OnOneOffClickListener() {
+                                    @Override
+                                    public void onSingleClick(View v) {
+                                        switch (v.getId()) {
+                                            case R.id.button_positive:
+                                                mClickListener.onDeleteClick(v,getAdapterPosition());
+                                                break;
+                                            case R.id.button_negative:
+                                                break;
+                                        }
+                                        simpleDialog.dismiss();
+                                    }
+                                });
+                                simpleDialog.show();
+                            }
+
+                            return true;
+                        }
+                    });
+                  //  popup.setForceShowIcon(true);
+
+                    /** Showing the popup menu */
+                    popup.show();
+                }
+            });
+
         }
 
     }
@@ -258,6 +336,17 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
                         }
                     }
 
+                    if(posts.get(position).getUser().getId()== LoginUtils.getLoggedinUser().getId())
+                    {
+                        ((JobHomeAdapter.JobTypeViewHolder) holder).img_more.setVisibility(View.VISIBLE);
+                        ((JobTypeViewHolder) holder).tv_apply.setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                        ((JobHomeAdapter.JobTypeViewHolder) holder).img_more.setVisibility(View.GONE);
+                        ((JobTypeViewHolder) holder).tv_apply.setVisibility(View.VISIBLE);
+                    }
+
 
 
                     break;
@@ -284,6 +373,9 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
 
         void onApplyCommentClick(View view, int position);
 
+
+        void onEditClick(View view, int position);
+        void onDeleteClick(View view, int position);
 
     }
 

@@ -8,13 +8,13 @@
             <item
                 android:id="@+id/action_edit"
                 android:icon="@drawable/ic_editicon"
-                android:title="@string/edit_comment"
+                android:title="@string/edit_job"
                 app:showAsAction="always"
               />
             <item
                 android:id="@+id/action_delete"
                 android:icon="@drawable/ic_bin"
-                android:title="@string/delete_comment"
+                android:title="@string/delete_job"
                 app:showAsAction="always"/>
 
 </menu>

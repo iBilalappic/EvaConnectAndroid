@@ -36,7 +36,10 @@ public class PostViewModel extends AndroidViewModel {
     {
         return iPostRepository.deletePost(post);
     }
-
+    public LiveData<BaseModel<List<Post>>> deleteJob(Post post)
+    {
+        return iPostRepository.deleteJob(post);
+    }
 
 
     public LiveData<BaseModel<List<Comment>>> addComment(Comment comment)

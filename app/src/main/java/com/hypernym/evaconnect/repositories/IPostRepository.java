@@ -30,4 +30,6 @@ public interface IPostRepository {
 
     LiveData<BaseModel<List<Post>>> deletePost(Post post);
 
+    LiveData<BaseModel<List<Post>>> deleteJob(Post post);
+
 }
