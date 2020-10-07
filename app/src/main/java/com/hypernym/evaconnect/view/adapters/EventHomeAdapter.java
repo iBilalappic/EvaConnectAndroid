@@ -3,12 +3,16 @@ package com.hypernym.evaconnect.view.adapters;
 import android.content.Context;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
@@ -17,6 +21,8 @@ import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
+import com.hypernym.evaconnect.utils.LoginUtils;
+import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -39,6 +45,7 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
     private boolean isLoadingAdded = false;
     private boolean isLoaderVisible = false;
     GestureDetector gestureDetector;
+    SimpleDialog simpleDialog;
 
 
 
@@ -94,6 +101,8 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
         @BindView(R.id.post_detail)
         TextView post_detail;
 
+        @BindView(R.id.img_more)
+        ImageView img_more;
 
 
         public EventTypeViewHolder(View itemView) {
@@ -139,6 +148,12 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onSingleClick(View v) {
                     //  mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+            img_more.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    moreOptions(v,getAdapterPosition());
                 }
             });
 
@@ -254,6 +269,16 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
                     } else {
                         ((EventHomeAdapter.EventTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
+                    if(posts.get(position).getUser().getId()== LoginUtils.getLoggedinUser().getId())
+                    {
+                        ((EventTypeViewHolder) holder).tv_attending.setVisibility(View.GONE);
+                        ((EventTypeViewHolder) holder).img_more.setVisibility(View.VISIBLE);
+                    }
+                    else
+                    {
+                        ((EventTypeViewHolder) holder).tv_attending.setVisibility(View.VISIBLE);
+                        ((EventTypeViewHolder) holder).img_more.setVisibility(View.GONE);
+                    }
 
                     break;
 
@@ -289,6 +314,10 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
         void onEventItemClick(View view, int position);
 
         void onEventLikeClick(View view, int position, TextView likeCount);
+
+        void onEditClick(View view, int position);
+        void onDeleteClick(View view, int position);
+
 
     }
 
@@ -329,5 +358,52 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
         posts.addAll(postItems);
         notifyDataSetChanged();
     }
+    public void moreOptions(View v,int position)
+    {
+        final OvershootInterpolator interpolator = new OvershootInterpolator();
+        ViewCompat.animate(v).
+                rotation(135f).
+                withLayer().rotation(0).
+                setInterpolator(interpolator).
+                start();
+        /** Instantiating PopupMenu class */
+        PopupMenu popup = new PopupMenu(mContext, v);
 
+        /** Adding menu items to the popumenu */
+        popup.getMenuInflater().inflate(R.menu.event_menu, popup.getMenu());
+
+        /** Defining menu item click listener for the popup menu */
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getTitle().toString().equalsIgnoreCase(mContext.getString(R.string.edit_event))) {
+                    mClickListener.onEditClick(v,position);
+                }
+                else
+                {
+                    simpleDialog = new SimpleDialog(mContext, mContext.getString(R.string.confirmation), mContext.getString(R.string.msg_remove_event), mContext.getString(R.string.button_no), mContext.getString(R.string.button_yes), new OnOneOffClickListener() {
+                        @Override
+                        public void onSingleClick(View v) {
+                            switch (v.getId()) {
+                                case R.id.button_positive:
+                                    mClickListener.onDeleteClick(v,position);
+                                    break;
+                                case R.id.button_negative:
+                                    break;
+                            }
+                            simpleDialog.dismiss();
+                        }
+                    });
+                    simpleDialog.show();
+
+                }
+                return true;
+            }
+        });
+        popup.setForceShowIcon(true);
+
+        /** Showing the popup menu */
+        popup.show();
+    }
 }

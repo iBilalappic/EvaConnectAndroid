@@ -29,6 +29,7 @@ import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
+import com.hypernym.evaconnect.viewmodel.UserViewModel;
 
 import java.util.List;
 
@@ -96,6 +97,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
     Post post = new Post();
     User user = new User();
     private ConnectionViewModel connectionViewModel;
+    private UserViewModel userViewModel;
 
     public PersonProfileFragment() {
         // Required empty public constructor
@@ -120,6 +122,8 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
 
     private void init() {
         connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
+        userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(UserViewModel.class);
+
         hideChatPerson();
         setPageTitle("Profile");
         user = LoginUtils.getLoggedinUser();
@@ -145,10 +149,10 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                 tv_profession.setText(post.getUser().getDesignation());
             }
 
-            tv_location.setText(post.getUser().getCountry() + "," + post.getUser().getCity());
-            tv_company.setText(post.getUser().getSector() + " | " + post.getUser().getCompany_name());
-            tv_connections_count.setText(String.valueOf(post.getUser().getTotal_connection()));
-
+//            tv_location.setText(post.getUser().getCountry() + "," + post.getUser().getCity());
+//            tv_company.setText(post.getUser().getSector() + " | " + post.getUser().getCompany_name());
+//            tv_connections_count.setText(String.valueOf(post.getUser().getTotal_connection()));
+            getUserDetails();
 
             if (post.getUser().getId().equals(user.getId())) {
                 tv_connect.setVisibility(View.GONE);
@@ -260,6 +264,24 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                 }
             });
         }
+    }
+    public void getUserDetails()
+    {
+      //  User user = new User();
+       // user = LoginUtils.getUser();
+        userViewModel.getuser_details(post.getUser().getId()
+        ).observe(this, new Observer<BaseModel<List<User>>>() {
+            @Override
+            public void onChanged(BaseModel<List<User>> listBaseModel) {
+                if (listBaseModel.getData() != null && !listBaseModel.isError()) {
+                    tv_location.setText(listBaseModel.getData().get(0).getCountry() + "," + listBaseModel.getData().get(0).getCity());
+                    tv_company.setText(listBaseModel.getData().get(0).getSector() + " | " + listBaseModel.getData().get(0).getCompany_name());
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+                hideDialog();
+            }
+        });
     }
     public void callConnectApi(TextView tv_connect,User connectionItem) {
         Connection connection=new Connection();

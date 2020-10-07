@@ -28,6 +28,7 @@ import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
+import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -50,6 +51,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
     private boolean isLoadingAdded = false;
     private boolean isLoaderVisible = false;
     GestureDetector gestureDetector;
+    private SimpleDialog simpleDialog;
 
 
     public class TextTypeViewHolder extends RecyclerView.ViewHolder {
@@ -847,8 +849,14 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     {
                         ((ImageTypeViewHolder) holder).attachment.setVisibility(View.VISIBLE);
                         ((ImageTypeViewHolder) holder).attachment_preview.setWebViewClient(new WebViewClient());
-                        ((ImageTypeViewHolder) holder).attachment_preview.getSettings().setSupportZoom(true);
+                        ((ImageTypeViewHolder) holder).attachment_preview.getSettings().setSupportZoom(false);
                         ((ImageTypeViewHolder) holder).attachment_preview.getSettings().setJavaScriptEnabled(true);
+                        ((ImageTypeViewHolder) holder).attachment_preview.getSettings().getAllowFileAccess();
+                        ((ImageTypeViewHolder) holder).attachment_preview.getSettings().getAllowUniversalAccessFromFileURLs();
+                        ((ImageTypeViewHolder) holder).attachment_preview.getSettings().getAllowFileAccessFromFileURLs();
+                        ((ImageTypeViewHolder) holder).attachment_preview.setEnabled(false);
+                        ((ImageTypeViewHolder) holder).attachment_preview.setOnTouchListener(null);
+
                        // cv_url = getArguments().getString("applicant_cv");
                         ((ImageTypeViewHolder) holder).attachment_preview.loadUrl("https://docs.google.com/gview?embedded=true&url=" + posts.get(position).getPost_document());
 
@@ -1195,7 +1203,21 @@ public class PostAdapter  extends RecyclerView.Adapter {
                 }
                 else
                 {
-                    mClickListener.onDeleteClick(v,position);
+                    simpleDialog = new SimpleDialog(mContext, mContext.getString(R.string.confirmation), mContext.getString(R.string.msg_remove_post), mContext.getString(R.string.button_no), mContext.getString(R.string.button_yes), new OnOneOffClickListener() {
+                        @Override
+                        public void onSingleClick(View v) {
+                            switch (v.getId()) {
+                                case R.id.button_positive:
+                                    mClickListener.onDeleteClick(v,position);
+                                    break;
+                                case R.id.button_negative:
+                                    break;
+                            }
+                            simpleDialog.dismiss();
+                        }
+                    });
+                    simpleDialog.show();
+
                 }
                 return true;
             }
