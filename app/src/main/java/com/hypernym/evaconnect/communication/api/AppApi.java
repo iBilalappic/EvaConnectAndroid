@@ -75,9 +75,10 @@ public interface AppApi {
     Call<BaseModel<List<Post>>> createPost(@Part("user_id") int user_id, @Part("content") RequestBody content,
                                            @Part("created_by_id") int created_by_id, @Part("status") RequestBody status,@Part("is_url") boolean is_url, @Part List<MultipartBody.Part> post_image, @Part MultipartBody.Part post_video,@Part MultipartBody.Part post_document);
 
+    @Multipart
     @PATCH(APIConstants.EDIT_POST)
     Call<BaseModel<List<Post>>> editPost(@Part("modified_by_id") int modified_by_id, @Part("content") RequestBody content,
-                                         @Part("modified_datetime") int modified_datetime, @Part("is_url") boolean is_url, @Part List<MultipartBody.Part> post_image, @Part MultipartBody.Part post_video,@Part MultipartBody.Part post_document,@Path("id") int id);
+                                         @Part("modified_datetime") RequestBody modified_datetime, @Part("is_url") boolean is_url, @Part List<MultipartBody.Part> post_image, @Part MultipartBody.Part post_video,@Part MultipartBody.Part post_document,@Path("id") int id);
 
     @PATCH(APIConstants.EDIT_POST)
     Call<BaseModel<List<Post>>> deletePost(@Body Post post,@Path("id") int id);

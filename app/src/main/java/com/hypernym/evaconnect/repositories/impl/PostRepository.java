@@ -176,16 +176,18 @@ public class PostRepository implements IPostRepository {
         post.setModified_by_id(LoginUtils.getLoggedinUser().getId());
         post.setModified_datetime(DateUtils.GetCurrentdatetime());
 
-//        RestClient.get().appApi().editPost(LoginUtils.getLoggedinUser().getId(),post.getContent(),DateUtils.GetCurrentdatetime(),false,post.getAttachments(),post.getVideo(),post.getDocument(),post.getId()).enqueue(new Callback<BaseModel<List<Post>>>() {
-//            @Override
-//            public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
-//                postMutableLiveData.setValue(response.body());
-//            }
-//            @Override
-//            public void onFailure(Call<BaseModel<List<Post>>> call, Throwable t) {
-//                postMutableLiveData.setValue(null);
-//            }
-//        });
+        RestClient.get().appApi().editPost(post.getModified_by_id(),RequestBody.create(MediaType.parse("text/plain"),
+                post.getContent()),RequestBody.create(MediaType.parse("text/plain"),
+                post.getModified_datetime()),false,post.getAttachments(),post.getVideo(),post.getDocument(),post.getId()).enqueue(new Callback<BaseModel<List<Post>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
+                postMutableLiveData.setValue(response.body());
+            }
+            @Override
+            public void onFailure(Call<BaseModel<List<Post>>> call, Throwable t) {
+                postMutableLiveData.setValue(null);
+            }
+        });
         return postMutableLiveData;
     }
 
