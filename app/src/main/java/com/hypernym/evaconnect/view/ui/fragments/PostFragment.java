@@ -222,6 +222,16 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
     }
 
     @Override
+    public void onDocumentClick(View view, int position) {
+        WebviewCvFragment webviewCvFragment = new WebviewCvFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("applicant_cv", posts.get(position).getPost_document());
+        Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
+        webviewCvFragment.setArguments(bundle);
+        loadFragment(R.id.framelayout, webviewCvFragment, getContext(), true);
+    }
+
+    @Override
     public void onLikeClick(View view, int position, TextView likeCount) {
         Post post = posts.get(position);
         User user = LoginUtils.getLoggedinUser();

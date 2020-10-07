@@ -127,7 +127,6 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
     private SimpleDialog simpleDialog;
     private ConnectionViewModel connectionViewModel;
     Uri SelectedImageUri;
-
     public NewPostFragment() {
         // Required empty public constructor
     }
@@ -162,15 +161,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
             public void onSingleClick(View v) {
                 if (edt_content.getText().length() > 0 || part_images.size() > 0 || video != null) {
                     if (NetworkUtils.isNetworkConnected(getContext())) {
-
-                        if (getArguments()!=null && getArguments().getBoolean("isEdit")) {
-
-                            updatePost();
-                        }
-                        else
-                        {
-                            createPost();
-                        }
+                        createPost();
                     } else {
                         networkErrorDialog();
                     }
@@ -203,23 +194,27 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
 //            AppUtils.setGlideImage(getContext(), profile_image, user.getUser_image());
 //        }
         tv_name.setText(user.getFirst_name());
-        tv_designation.setText(user.getDesignation() + " at ");
+        tv_designation.setText(user.getDesignation()+" at ");
         tv_company.setText(user.getCompany_name());
-        tv_address.setText(user.getCity() + " , " + user.getCountry());
-        // getConnectionCount();
+        tv_address.setText(user.getCity()+" , "+user.getCountry());
+       // getConnectionCount();
 
         showBackButton();
         setPostButton();
-        if (getArguments().getBoolean("isVideo")) {
+        if(getArguments().getBoolean("isVideo"))
+        {
             setPageTitle(getString(R.string.menu2));
             post.setText(getString(R.string.menu2));
-        } else {
+        }
+       else
+        {
             setPageTitle(getString(R.string.What_will_you_write_about));
             post.setText("Create Post");
         }
-        if (getArguments().getBoolean("isEdit")) {
-            getPostDetails(getArguments().getInt("post"));
-        }
+       if(getArguments().getBoolean("isEdit"))
+       {
+           getPostDetails(getArguments().getInt("post"));
+       }
         edt_content.addTextChangedListener(new URLTextWatcher(getActivity(), edt_content, urlEmbeddedView));
         edt_content.addTextChangedListener(new TextWatcher() {
             @Override
@@ -245,7 +240,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
             public void onChanged(BaseModel<List<Post>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError()) {
                     //post = listBaseModel.getData().get(0);
-                    // settingpostType();
+                   // settingpostType();
                     setPostData(listBaseModel.getData().get(0));
 
                 } else {
@@ -255,9 +250,11 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
         });
     }
 
-    private void setPostData(Post post) {
+    private void setPostData(Post post)
+    {
         edt_content.setText(post.getContent());
-        if (post.getPost_image().size() > 0) {
+        if(post.getPost_image().size()>0)
+        {
             attachments.add(post.getPost_image().get(0));
             attachmentsAdapter.notifyDataSetChanged();
             rc_attachments.setVisibility(View.VISIBLE);
@@ -296,38 +293,6 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
         });
     }
 
-
-    private void updatePost() {
-        showDialog();
-        ArrayList<String> urlList = AppUtils.containsURL(edt_content.getText().toString());
-        if (urlList.size() > 0) {
-            postModel.setIs_url(true);
-        } else {
-            postModel.setIs_url(false);
-        }
-        postModel.setAttachments(part_images);
-        postModel.setContent(edt_content.getText().toString());
-        postModel.setVideo(video);
-        postViewModel.editPost(postModel).observe(this, new Observer<BaseModel<List<Post>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError()) {
-
-                    newPost();
-
-                    Toast.makeText(getContext(), getString(R.string.msg_post_created), Toast.LENGTH_LONG).show();
-                    // networkResponseDialog(getString(R.string.success),getString(R.string.msg_post_created));
-                    if (getFragmentManager().getBackStackEntryCount() != 0) {
-                        getFragmentManager().popBackStack();
-                    }
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
-            }
-        });
-    }
-
     private void initRecyclerView() {
         attachmentsAdapter = new AttachmentsAdapter(getContext(), attachments, this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -340,13 +305,16 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
         super.onActivityResult(requestCode, resultCode, data);
         // Result code is RESULT_OK only if the user selects an Image
 
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE)
+        {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
-            if (resultCode == RESULT_OK) {
+            if (resultCode == RESULT_OK)
+            {
                 // add updated cropped image in recyclerview.
                 addUpdatedImaged(result);
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+            }
+            else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 if (result != null) {
                     Exception error = result.getError();
                     error.printStackTrace();
@@ -360,10 +328,11 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                     Uri SelectedImageUri = data.getData();
                     GalleryImage = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
 
-                    if (TextUtils.isEmpty(GalleryImage)) {
+                    if (TextUtils.isEmpty(GalleryImage)){
                         networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
                         return;
-                    } else {
+                    }
+                    else{
                         mProfileImageDecodableString = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
                         Log.e(getClass().getName(), "image file path: " + GalleryImage);
 
@@ -388,7 +357,8 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                                         AppUtils.setGlideVideoThumbnail(getContext(), img_video, currentPhotoPath);
                                         video = MultipartBody.Part.createFormData("post_video", file_name.getName(), reqFile);
                                         setPostButton();
-                                    } else {
+                                    }
+                                    else {
                                         //Do not add getActivity instead of getContext().
                                         CropImage.activity(SelectedImageUri)
                                                 .start(getContext(), this);
@@ -451,21 +421,26 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                 exc.printStackTrace();
                 Log.e(getClass().getName(), "exc: " + exc.getMessage());
             }
-        } else if (requestCode == CAMERAA) {
+        }
+        else if (requestCode == CAMERAA)
+        {
             try {
                 SelectedImageUri = Uri.fromFile(galleryAddPic());
 
                 CropImage.activity(SelectedImageUri)
                         .start(getContext(), this);
-            } catch (Exception e) {
+            }
+            catch (Exception e){
                 e.printStackTrace();
             }
-        } else if (requestCode == 3) {
+        }
+        else if(requestCode==3)
+        {
             ///IMAGE CROPPING FROM GALLERY////////////////
-            //  SelectedImageUri = data.getParcelableExtra("path");
-            //  SelectedImageUri=(Uri) data.getExtras().get("data");
+         //  SelectedImageUri = data.getParcelableExtra("path");
+          //  SelectedImageUri=(Uri) data.getExtras().get("data");
             SelectedImageUri = getPickImageResultUri(data);
-            // SelectedImageUri= data.getParcelableExtra("path");
+           // SelectedImageUri= data.getParcelableExtra("path");
             GalleryImage = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
             mProfileImageDecodableString = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
             Log.e(getClass().getName(), "image file path: " + GalleryImage);
@@ -508,7 +483,9 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                     return;
                 }
             }
-        } else if (requestCode == 5) {
+        }
+        else if(requestCode==5)
+        {
             File file = galleryAddPic();
             RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
             // imgName = file_name.getName();
@@ -525,7 +502,8 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                 orignal.compress(Bitmap.CompressFormat.JPEG, 50, out);
                 out.flush();
                 out.close();
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 e.printStackTrace();
             }
             if (!TextUtils.isEmpty(globalImagePath) || globalImagePath != null) {
@@ -552,11 +530,12 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
     // add updated cropped image in recyclerview.
     private void addUpdatedImaged(CropImage.ActivityResult result) {
         try {
-            if (result != null) {
+            if (result != null)
+            {
                 Uri resultUri = result.getUri();
                 String updatedImage = ImageFilePathUtil.getPath(getActivity(), resultUri);
 
-                if (!TextUtils.isEmpty(updatedImage)) {
+                if (!TextUtils.isEmpty(updatedImage)){
                     File file = new File(updatedImage);
                     RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
 
@@ -569,7 +548,8 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                     setPostButton();
                 }
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e){
             e.printStackTrace();
         }
     }
@@ -597,7 +577,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
 
     @OnClick(R.id.img_video)
     public void playVideo() {
-        LocalVideoViewDialog videoViewDialog = new LocalVideoViewDialog(getContext(), currentPhotoPath);
+        LocalVideoViewDialog videoViewDialog=new LocalVideoViewDialog(getContext(),currentPhotoPath);
         videoViewDialog.show();
     }
 
@@ -611,7 +591,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                         attachments.remove(position);
                         attachmentsAdapter.notifyDataSetChanged();
                         part_images.remove(position);
-                        //  setPostButton();
+                      //  setPostButton();
                         break;
                     case R.id.button_negative:
                         break;

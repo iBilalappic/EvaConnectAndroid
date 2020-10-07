@@ -278,9 +278,20 @@ public class PostAdapter  extends RecyclerView.Adapter {
         @BindView(R.id.tv_filename)
         TextView tv_filename;
 
+        @BindView(R.id.layout)
+        LinearLayout layout;
+
         public ImageTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mClickListener.onDocumentClick(v,getAdapterPosition());
+                }
+            });
+
             tv_viewcomments.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
@@ -355,6 +366,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     moreOptions(v,getAdapterPosition());
                 }
             });
+
         }
 
 
@@ -776,6 +788,8 @@ public class PostAdapter  extends RecyclerView.Adapter {
 
                     break;
                 case AppConstants.IMAGE_TYPE:
+
+
                     if (String.valueOf(posts.get(position).getComment_count()).equals("0")) {
                         ((PostAdapter.ImageTypeViewHolder) holder).tv_viewcomments.setVisibility(View.GONE);
                     }
@@ -857,7 +871,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                         ((ImageTypeViewHolder) holder).attachment_preview.getSettings().getAllowUniversalAccessFromFileURLs();
                         ((ImageTypeViewHolder) holder).attachment_preview.getSettings().getAllowFileAccessFromFileURLs();
                         ((ImageTypeViewHolder) holder).attachment_preview.setEnabled(false);
-                        ((ImageTypeViewHolder) holder).attachment_preview.setOnTouchListener(null);
+//                        ((ImageTypeViewHolder) holder).attachment_preview.setOnTouchListener(null);
 
                        // cv_url = getArguments().getString("applicant_cv");
                         ((ImageTypeViewHolder) holder).attachment_preview.loadUrl("https://docs.google.com/gview?embedded=true&url=" + posts.get(position).getPost_document());
@@ -1134,6 +1148,9 @@ public class PostAdapter  extends RecyclerView.Adapter {
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
         void onItemClick(View view, int position);
+
+
+        void onDocumentClick(View view, int position);
 
         void onLikeClick(View view, int position, TextView likeCount);
 
