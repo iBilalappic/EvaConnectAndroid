@@ -28,6 +28,7 @@ import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.CompanyJobAdModel;
+import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
@@ -36,6 +37,7 @@ import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.viewmodel.CreateJobAdViewModel;
+import com.hypernym.evaconnect.viewmodel.JobListViewModel;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
@@ -65,7 +67,6 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
 
     @BindView(R.id.spinner_jobsector)
     Spinner spinner_jobsector;
-
 
 
     @BindView(R.id.spinner_jobtype)
@@ -106,7 +107,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
     @BindView(R.id.img_backarrow)
     ImageView img_backarrow;
 
-
+    private JobListViewModel jobListViewModel;
     private static final int REQUEST_PHOTO_GALLERY = 4;
     private static final int CAMERAA = 1;
     public static final int RequestPermissionCode = 1;
@@ -118,6 +119,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
     MultipartBody.Part partImage;
     private Validator validator, validator_update;
     SimpleDialog simpleDialog;
+    int job_id;
 
     private CreateJobAdViewModel createJobAdViewModel;
     private UserViewModel userViewModel;
@@ -130,7 +132,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
     String JobSector, JobType;
 
     private CompanyJobAdModel companyJobAdModel = new CompanyJobAdModel();
-    ArrayAdapter<String> arraySectorAdapter, arrayWeekAdapter,arrayTypeAdapter;
+    ArrayAdapter<String> arraySectorAdapter, arrayWeekAdapter, arrayTypeAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -154,28 +156,33 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
 
     @SuppressLint("SetTextI18n")
     private void init() {
+        jobListViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(JobListViewModel.class);
         createJobAdViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(CreateJobAdViewModel.class);
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(UserViewModel.class);
 
         if ((getArguments() != null)) {
             setPageTitle("");
             postAd.setText("Update Job Listing");
-          //  showBackButton();
-            companyJobAdModel = (CompanyJobAdModel) getArguments().getSerializable("COMPANY_AD");
-            Log.d("TAAAG", GsonUtils.toJson(companyJobAdModel));
-            AppUtils.setGlideImage(getContext(), profile_image, companyJobAdModel.getJobImage());
-            //   String companyname = getsplitCompanyName(companyJobAdModel.getJobTitle());
-            String jobtitle = getsplitTitle(companyJobAdModel.getJobTitle());
-            edit_companyName.setText(LoginUtils.getUser().getCompany_name());
-            edit_jobtitle.setText(jobtitle);
-            edit_jobpostion.setText(companyJobAdModel.getPosition());
-            edit_Location.setText(companyJobAdModel.getLocation());
-            //  String SalaryInt = getsplitstring(String.valueOf(companyJobAdModel.getSalary()));
-            DecimalFormat myFormatter = new DecimalFormat("############");
-            edit_amount.setText(myFormatter.format(companyJobAdModel.getSalary()));
-            edit_jobdescription.setText(companyJobAdModel.getContent());
-            getSectorFromApi(LoginUtils.getUser().getWork_aviation());
-
+            //  showBackButton();
+            job_id = getArguments().getInt("job_id");
+            if (job_id != 0) {
+                GetJob_id(job_id);
+            } else {
+                companyJobAdModel = (CompanyJobAdModel) getArguments().getSerializable("COMPANY_AD");
+                Log.d("TAAAG", GsonUtils.toJson(companyJobAdModel));
+                AppUtils.setGlideImage(getContext(), profile_image, companyJobAdModel.getJobImage());
+                //   String companyname = getsplitCompanyName(companyJobAdModel.getJobTitle());
+                String jobtitle = getsplitTitle(companyJobAdModel.getJobTitle());
+                edit_companyName.setText(LoginUtils.getUser().getCompany_name());
+                edit_jobtitle.setText(jobtitle);
+                edit_jobpostion.setText(companyJobAdModel.getPosition());
+                edit_Location.setText(companyJobAdModel.getLocation());
+                //  String SalaryInt = getsplitstring(String.valueOf(companyJobAdModel.getSalary()));
+                DecimalFormat myFormatter = new DecimalFormat("############");
+                edit_amount.setText(myFormatter.format(companyJobAdModel.getSalary()));
+                edit_jobdescription.setText(companyJobAdModel.getContent());
+               // getSectorFromApi(LoginUtils.getUser().getWork_aviation());
+            }
 //            if (companyJobAdModel.getWeeklyHours() != null) {
 //                int spinnerPosition = arraySectorAdapter.getPosition(companyJobAdModel.getWeeklyHours());
 //                spinner_week.setSelection(spinnerPosition);
@@ -185,6 +192,30 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
         getSectorFromApi(LoginUtils.getUser().getWork_aviation());
         getJobTypes();
     }
+
+    private void GetJob_id(Integer id) {
+        jobListViewModel.getJobId(id).observe(this, new Observer<BaseModel<List<SpecficJobAd>>>() {
+            @Override
+            public void onChanged(BaseModel<List<SpecficJobAd>> getjobAd) {
+                if (getjobAd != null && !getjobAd.isError()) {
+                    edit_companyName.setText(LoginUtils.getUser().getCompany_name());
+                    edit_jobtitle.setText(getjobAd.getData().get(0).getJobTitle());
+                    edit_jobpostion.setText(getjobAd.getData().get(0).getPosition());
+                    edit_Location.setText(getjobAd.getData().get(0).getLocation());
+                    //  String SalaryInt = getsplitstring(String.valueOf(companyJobAdModel.getSalary()));
+                    DecimalFormat myFormatter = new DecimalFormat("############");
+                    edit_amount.setText(myFormatter.format(getjobAd.getData().get(0).getSalary()));
+                    edit_jobdescription.setText(getjobAd.getData().get(0).getContent());
+                   // getSectorFromApi(LoginUtils.getUser().getWork_aviation());
+
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+                hideDialog();
+            }
+        });
+    }
+
 
     private void getSectorFromApi(String aviation_type) {
         userViewModel.getSector(aviation_type).observe(this, new Observer<BaseModel<List<String>>>() {
@@ -201,6 +232,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
             }
         });
     }
+
     private void getJobTypes() {
         createJobAdViewModel.getJobType().observe(this, new Observer<BaseModel<List<String>>>() {
             @Override
@@ -342,7 +374,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
     private void UpdateJobAd() {
         showDialog();
         User user = LoginUtils.getLoggedinUser();
-     //   edit_jobtitle.setText(edit_jobpostion.getText().toString() + " for " + edit_companyName.getText().toString());
+        //   edit_jobtitle.setText(edit_jobpostion.getText().toString() + " for " + edit_companyName.getText().toString());
         createJobAdViewModel.UpdateJobAd(companyJobAdModel.getId(), user, partImage, JobSector,
                 Integer.parseInt(edit_amount.getText().toString()),
                 edit_companyName.getText().toString(),
@@ -356,7 +388,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
                     simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_jobAd_update), null, getString(R.string.ok), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                             getActivity().onBackPressed();
+                            getActivity().onBackPressed();
                             //loadFragment(R.id.framelayout, new JobListingFragment(), getContext(), false);
                             simpleDialog.dismiss();
                         }

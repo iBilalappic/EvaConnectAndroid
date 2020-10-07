@@ -338,7 +338,7 @@ public class JobFragment extends BaseFragment implements View.OnClickListener, S
     public void onEditClick(View view, int position) {
         CreateJobFragment createJobFragment = new CreateJobFragment();
         Bundle bundle1 = new Bundle();
-        bundle1.putSerializable("COMPANY_AD", posts.get(position));
+        bundle1.putSerializable("job_id", posts.get(position).getId());
         createJobFragment.setArguments(bundle1);
         loadFragment(R.id.framelayout, createJobFragment, getContext(), true);
 
