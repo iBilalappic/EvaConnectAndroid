@@ -41,6 +41,7 @@ import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -348,41 +349,51 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // Result code is RESULT_OK only if the user selects an Image
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE)
+        {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+
+            if (resultCode == RESULT_OK){
+
+                if (result != null && result.getUri()!=null)
+                {
+                    setImage(result.getUri());
+                }
+
+            }
+            else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                if (result != null) {
+                    Exception error = result.getError();
+                    error.printStackTrace();
+                }
+            }
+        }
+
         if (requestCode == REQUEST_PHOTO_GALLERY && resultCode == RESULT_OK) {
+
             try {
                 if (data != null && data.getData() != null) {
-                    SelectedUri= data.getData();
+                    Uri galleryImageUri = data.getData();
 
-                    GalleryImage = ImageFilePathUtil.getPath(this, SelectedUri);
-                    mProfileImageDecodableString = ImageFilePathUtil.getPath(this, SelectedUri);
-                    Log.e(getClass().getName(), "image file path: " + GalleryImage);
+                    try {
+                        String imagePath = ImageFilePathUtil.getPath(this, galleryImageUri);
 
-                    tempFile = new File(GalleryImage);
-
-                    Log.e(getClass().getName(), "file path details: " + tempFile.getName() + " " + tempFile.getAbsolutePath() + "length" + tempFile.length());
-
-                    if (tempFile.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.FILE_SIZE_LIMIT_IN_KB) {
-                        networkResponseDialog(getString(R.string.error), getString(R.string.err_image_size_large));
-                        return;
-                    } else {
-                        if (photoVar == null) {
-                            currentPhotoPath = GalleryImage;
-                            // photoVar = GalleryImage;
-                            file_name = new File(ImageFilePathUtil.getPath(this, SelectedUri));
-                            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file_name);
-                            partImage = MultipartBody.Part.createFormData("user_image", file_name.getName(), reqFile);
-                            if (!TextUtils.isEmpty(currentPhotoPath) || currentPhotoPath != null) {
-                                Glide.with(this).load(currentPhotoPath).into(img_profile);
-
-                            } else {
-                                networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
-                            }
-                        } else {
-                            networkResponseDialog(getString(R.string.error), getString(R.string.err_one_file_at_a_time));
+                        if (TextUtils.isEmpty(imagePath)){
+                            networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
                             return;
                         }
+                        else{
+                            //Do not add getActivity instead of getContext().
+                            CropImage.activity(galleryImageUri)
+                                    .start(this);
+                        }
                     }
-                } else {
+                    catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+                else {
                     Toast.makeText(this, "Something went wrong while retrieving image", Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception exc) {
@@ -390,49 +401,79 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
                 Log.e(getClass().getName(), "exc: " + exc.getMessage());
             }
         } else {
-            if (requestCode == CAMERAA && resultCode == RESULT_OK) {
+            if (requestCode == CAMERAA&& resultCode == RESULT_OK )
+            {
+                try {
+                    Uri SelectedImageUri;
 
-                //mIsProfileImageAdded = true;
-                galleryAddPic();
-                RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file_name);
-                // imgName = file_name.getName();
-                globalImagePath = file_name.getAbsolutePath();
-                if (file_name.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.IMAGE_SIZE_IN_KB) {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_image_size_large));
-                    return;
+                    SelectedImageUri = Uri.fromFile(galleryAddPic());
+
+                    //Do not add getActivity instead of getContext().
+                    CropImage.activity(SelectedImageUri)
+                            .start(this);
                 }
-                if (!TextUtils.isEmpty(globalImagePath) || globalImagePath != null) {
-
-                    Glide.with(this).load(loadFromFile(globalImagePath))
-                            .apply(new RequestOptions())
-                            .into(img_profile);
-
-                    Bitmap orignal = loadFromFile(globalImagePath);
-                    File filenew = new File(globalImagePath);
-                    try {
-                        FileOutputStream out = new FileOutputStream(filenew);
-                        orignal.compress(Bitmap.CompressFormat.JPEG, 50, out);
-                        out.flush();
-                        out.close();
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    partImage = MultipartBody.Part.createFormData("user_image", file_name.getName(), reqFile);
-                    //AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 8));
-
+                catch (Exception e){
+                    e.printStackTrace();
                 }
             }
         }
     }
 
-    private void galleryAddPic() {
+    private void setImage(Uri uri)
+    {
+        String updatedImage = ImageFilePathUtil.getPath(this, uri);
+
+        if (!TextUtils.isEmpty(updatedImage) || updatedImage != null)
+        {
+            File file = new File(updatedImage);
+            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+
+            globalImagePath = file.getAbsolutePath();
+
+            if (file.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.IMAGE_SIZE_IN_KB) {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_image_size_large));
+                return;
+            }
+
+            if (!TextUtils.isEmpty(globalImagePath) || globalImagePath != null) {
+
+                Glide.with(this).load(loadFromFile(globalImagePath))
+                        .apply(new RequestOptions())
+                        .into(img_profile);
+
+                Bitmap orignal = loadFromFile(globalImagePath);
+                File filenew = new File(globalImagePath);
+                file_name = filenew;
+                try {
+                    FileOutputStream out = new FileOutputStream(filenew);
+                    orignal.compress(Bitmap.CompressFormat.JPEG, 50, out);
+                    out.flush();
+                    out.close();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                partImage = MultipartBody.Part.createFormData("user_image", file.getName(), reqFile);
+            }
+            else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
+            }
+        }
+        else {
+            networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
+        }
+    }
+
+    public File galleryAddPic() {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File f = new File(mCurrentPhotoPath);
         file_name = f;
         Uri contentUri = Uri.fromFile(f);
         mediaScanIntent.setData(contentUri);
         sendBroadcast(mediaScanIntent);
+        return f;
+
     }
 
     public static Bitmap loadFromFile(String filename) {

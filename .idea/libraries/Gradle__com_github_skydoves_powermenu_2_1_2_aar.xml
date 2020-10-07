@@ -1,14 +1,15 @@
 <component name="libraryTable">
   <library name="Gradle: com.github.skydoves:powermenu:2.1.2@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/c1e8c7b17c80b5e796bc31ffc25068c0/powermenu-2.1.2/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/c1e8c7b17c80b5e796bc31ffc25068c0/powermenu-2.1.2/res" />
+      <root url="file://E:/.gradle/caches/transforms-2/files-2.1/c1e8c7b17c80b5e796bc31ffc25068c0/powermenu-2.1.2/AndroidManifest.xml" />
+      <root url="jar://E:/.gradle/caches/transforms-2/files-2.1/c1e8c7b17c80b5e796bc31ffc25068c0/powermenu-2.1.2/jars/classes.jar!/" />
+      <root url="file://E:/.gradle/caches/transforms-2/files-2.1/c1e8c7b17c80b5e796bc31ffc25068c0/powermenu-2.1.2/res" />
     </CLASSES>
     <JAVADOC>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.skydoves/powermenu/2.1.2/10b1544502fda82a56cf4c90131d365629040822/powermenu-2.1.2-javadoc.jar!/" />
+      <root url="jar://E:/.gradle/caches/modules-2/files-2.1/com.github.skydoves/powermenu/2.1.2/10b1544502fda82a56cf4c90131d365629040822/powermenu-2.1.2-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.skydoves/powermenu/2.1.2/bd91c1fd8d25cc4fb081a14b485ce29344b16095/powermenu-2.1.2-sources.jar!/" />
+      <root url="jar://E:/.gradle/caches/modules-2/files-2.1/com.github.skydoves/powermenu/2.1.2/bd91c1fd8d25cc4fb081a14b485ce29344b16095/powermenu-2.1.2-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
