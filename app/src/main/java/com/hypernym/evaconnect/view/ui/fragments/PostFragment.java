@@ -474,7 +474,6 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
 
 
 
-
     private void callConnectApi(TextView text, int position) {
         if (text.getText().toString().equalsIgnoreCase(getString(R.string.connect))) {
             showDialog();

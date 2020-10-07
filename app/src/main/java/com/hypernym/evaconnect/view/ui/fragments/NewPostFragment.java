@@ -311,25 +311,14 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
 
             if (resultCode == RESULT_OK)
             {
-                Uri resultUri = result.getUri();
-                Log.e("TAAAG", "onActivityResult: " + resultUri);
-
-                String updatedImage = ImageFilePathUtil.getPath(getActivity(), resultUri);
-                File file = new File(updatedImage);
-                RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
-
-                attachments.add(updatedImage);
-                attachmentsAdapter.notifyDataSetChanged();
-                rc_attachments.setVisibility(View.VISIBLE);
-                img_video.setVisibility(View.GONE);
-                img_play.setVisibility(View.GONE);
-                part_images.add(MultipartBody.Part.createFormData("post_image", file.getName(), reqFile));
-                setPostButton();
-
+                // add updated cropped image in recyclerview.
+                addUpdatedImaged(result);
             }
             else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
-                Log.e("TAAAG", "onActivityResult: ", error);
+                if (result != null) {
+                    Exception error = result.getError();
+                    error.printStackTrace();
+                }
             }
         }
 
@@ -338,42 +327,50 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                 if (data != null && data.getData() != null) {
                     Uri SelectedImageUri = data.getData();
                     GalleryImage = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
-                    mProfileImageDecodableString = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
-                    Log.e(getClass().getName(), "image file path: " + GalleryImage);
-                    tempFile = new File(GalleryImage);
-                    Log.e(getClass().getName(), "file path details: " + tempFile.getName() + " " + tempFile.getAbsolutePath() + "length" + tempFile.length());
-                    if (tempFile.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.FILE_SIZE_LIMIT_IN_KB) {
-                        networkResponseDialog(getString(R.string.error), getString(R.string.err_image_size_large));
+
+                    if (TextUtils.isEmpty(GalleryImage)){
+                        networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
                         return;
-                    } else {
-                        if (photoVar == null) {
-                            currentPhotoPath = GalleryImage;
-                            // photoVar = GalleryImage;
-                            file_name = new File(ImageFilePathUtil.getPath(getActivity(), SelectedImageUri));
-                            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file_name);
+                    }
+                    else{
+                        mProfileImageDecodableString = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
+                        Log.e(getClass().getName(), "image file path: " + GalleryImage);
 
-                            // partImage = MultipartBody.Part.createFormData("user_image", file_name.getName(), reqFile);
+                        tempFile = new File(GalleryImage);
 
-                            if (!TextUtils.isEmpty(currentPhotoPath) || currentPhotoPath != null) {
-                                if (currentPhotoPath.toString().endsWith(".mp4")) {
-                                    img_video.setVisibility(View.VISIBLE);
-                                    img_play.setVisibility(View.VISIBLE);
-                                    AppUtils.setGlideVideoThumbnail(getContext(), img_video, currentPhotoPath);
-                                    video = MultipartBody.Part.createFormData("post_video", file_name.getName(), reqFile);
-                                    setPostButton();
-                                }
-                                else {
-
-                                    CropImage.activity(SelectedImageUri)
-                                            .start(getContext(), this);
-                                }
-
-                            } else {
-                                networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
-                            }
-                        } else {
-                            networkResponseDialog(getString(R.string.error), getString(R.string.err_one_file_at_a_time));
+                        if (tempFile.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.FILE_SIZE_LIMIT_IN_KB) {
+                            networkResponseDialog(getString(R.string.error), getString(R.string.err_image_size_large));
                             return;
+                        } else {
+                            if (photoVar == null) {
+                                currentPhotoPath = GalleryImage;
+                                // photoVar = GalleryImage;
+                                file_name = new File(ImageFilePathUtil.getPath(getActivity(), SelectedImageUri));
+                                RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file_name);
+
+                                // partImage = MultipartBody.Part.createFormData("user_image", file_name.getName(), reqFile);
+
+                                if (!TextUtils.isEmpty(currentPhotoPath) || currentPhotoPath != null) {
+                                    if (currentPhotoPath.toString().endsWith(".mp4")) {
+                                        img_video.setVisibility(View.VISIBLE);
+                                        img_play.setVisibility(View.VISIBLE);
+                                        AppUtils.setGlideVideoThumbnail(getContext(), img_video, currentPhotoPath);
+                                        video = MultipartBody.Part.createFormData("post_video", file_name.getName(), reqFile);
+                                        setPostButton();
+                                    }
+                                    else {
+                                        //Do not add getActivity instead of getContext().
+                                        CropImage.activity(SelectedImageUri)
+                                                .start(getContext(), this);
+                                    }
+
+                                } else {
+                                    networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
+                                }
+                            } else {
+                                networkResponseDialog(getString(R.string.error), getString(R.string.err_one_file_at_a_time));
+                                return;
+                            }
                         }
                     }
                 }
@@ -424,13 +421,18 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                 exc.printStackTrace();
                 Log.e(getClass().getName(), "exc: " + exc.getMessage());
             }
-        } else if (requestCode == CAMERAA && resultCode == RESULT_OK) {
+        }
+        else if (requestCode == CAMERAA)
+        {
+            try {
+                SelectedImageUri = Uri.fromFile(galleryAddPic());
 
-                //mIsProfileImageAdded = true;
-
-                SelectedImageUri = data.getData();
-               //  ImageCropFunctionForCamera(SelectedImageUri);
-
+                CropImage.activity(SelectedImageUri)
+                        .start(getContext(), this);
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
         }
         else if(requestCode==3)
         {
@@ -500,8 +502,8 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                 orignal.compress(Bitmap.CompressFormat.JPEG, 50, out);
                 out.flush();
                 out.close();
-
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 e.printStackTrace();
             }
             if (!TextUtils.isEmpty(globalImagePath) || globalImagePath != null) {
@@ -521,11 +523,35 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                     part_images.add(MultipartBody.Part.createFormData("post_image", file.getName(), reqFile));
                     setPostButton();
                 }
-
             }
-
         }
+    }
 
+    // add updated cropped image in recyclerview.
+    private void addUpdatedImaged(CropImage.ActivityResult result) {
+        try {
+            if (result != null)
+            {
+                Uri resultUri = result.getUri();
+                String updatedImage = ImageFilePathUtil.getPath(getActivity(), resultUri);
+
+                if (!TextUtils.isEmpty(updatedImage)){
+                    File file = new File(updatedImage);
+                    RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+
+                    attachments.add(updatedImage);
+                    attachmentsAdapter.notifyDataSetChanged();
+                    rc_attachments.setVisibility(View.VISIBLE);
+                    img_video.setVisibility(View.GONE);
+                    img_play.setVisibility(View.GONE);
+                    part_images.add(MultipartBody.Part.createFormData("post_image", file.getName(), reqFile));
+                    setPostButton();
+                }
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public Uri getPickImageResultUri(Intent data) {

@@ -257,31 +257,31 @@ public class BaseFragment extends Fragment {
     }
 
     public void takePhotoFromCamera() {
-        Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //
         // Ensure that there's a camera activity to handle the intent
         // Create the File where the photo should go
         File photoFile = null;
         try {
             photoFile = createImageFile();
-        } catch (IOException ex) {
-            // Error occurred while creating the File
-        }
-        if (Checkpermission()) {
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(getActivity(),
-                        "com.hypernym.evaconnect.fileprovider",
-                        photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, CAMERAA);
 
+            if (Checkpermission()) {
+                // Continue only if the File was successfully created
+                if (photoFile != null) {
+                    Uri photoURI = FileProvider.getUriForFile(getActivity(),
+                            "com.hypernym.evaconnect.fileprovider",
+                            photoFile);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    startActivityForResult(takePictureIntent, CAMERAA);
+                }
+            } else {
+                // AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 11));
+                requestpermission();
             }
-        } else {
-            // AppUtils.showSnackBar(getView(), AppUtils.getErrorMessage(getContext(), 11));
-            requestpermission();
-        }
 
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void recodeVideoFromCamera() {
@@ -312,6 +312,7 @@ public class BaseFragment extends Fragment {
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
+
     public String getCurrentPhotoPath()
     {
         return mCurrentPhotoPath;
