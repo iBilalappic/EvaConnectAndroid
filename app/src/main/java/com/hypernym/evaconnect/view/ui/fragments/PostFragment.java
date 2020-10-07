@@ -367,7 +367,7 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
             Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
             shareVideoFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, shareVideoFragment, getContext(), true);
-        } else if (posts.get(position).getType().equalsIgnoreCase("post") && posts.get(position).getPost_image().size() == 0 && !posts.get(position).isIs_url()) {
+        } else if (posts.get(position).getType().equalsIgnoreCase("post") && posts.get(position).getPost_image().size() == 0 && !posts.get(position).isIs_url() && posts.get(position).getPost_document()==null) {
             NewPostFragment newPostFragment = new NewPostFragment();
             Bundle bundle = new Bundle();
             bundle.putInt("post", posts.get(position).getId());
@@ -446,12 +446,12 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
                             post.setPost_type(AppConstants.VIDEO_TYPE);
                         } else if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() == 0 && !post.isIs_url()  && post.getPost_document() == null) {
                             post.setPost_type(AppConstants.TEXT_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("post") && post.isIs_url()) {
+                        } else if (post.getType().equalsIgnoreCase("post") && post.isIs_url() && post.getPost_document() == null) {
                             post.setPost_type(AppConstants.LINK_POST);
                         }
                         else if(post.getType().equalsIgnoreCase("post") && post.getPost_document() != null)
                         {
-                            post.setPost_type(AppConstants.IMAGE_TYPE);
+                            post.setPost_type(AppConstants.DOCUMENT_TYPE);
                         }
                     }
                     posts.addAll(dashboardBaseModel.getData());
