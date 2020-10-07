@@ -33,6 +33,8 @@ import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -861,7 +863,9 @@ public class PostAdapter  extends RecyclerView.Adapter {
                         ((ImageTypeViewHolder) holder).attachment_preview.loadUrl("https://docs.google.com/gview?embedded=true&url=" + posts.get(position).getPost_document());
 
                      //   ((ImageTypeViewHolder) holder).attachment_preview.setImageBitmap(AppUtils.generateImageFromPdf(Uri.parse(posts.get(position).getPost_document()),mContext));
-                        ((ImageTypeViewHolder) holder).tv_filename.setText(posts.get(position).getTitle());
+
+                        String fileName = posts.get(position).getPost_document().substring(posts.get(position).getPost_document().lastIndexOf('/') + 1);
+                        ((ImageTypeViewHolder) holder).tv_filename.setText(fileName);
                         ((ImageTypeViewHolder) holder).attachment_preview.setWebViewClient(new WebViewClient() {
                             @Override
                             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -946,13 +950,22 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     {
                         ((ImageTypeViewHolder) holder).attachment.setVisibility(View.VISIBLE);
                         ((ImageTypeViewHolder) holder).attachment_preview.setWebViewClient(new WebViewClient());
-                        ((ImageTypeViewHolder) holder).attachment_preview.getSettings().setSupportZoom(true);
+                        ((ImageTypeViewHolder) holder).attachment_preview.getSettings().setSupportZoom(false);
                         ((ImageTypeViewHolder) holder).attachment_preview.getSettings().setJavaScriptEnabled(true);
+                        ((ImageTypeViewHolder) holder).attachment_preview.getSettings().getAllowFileAccess();
+                        ((ImageTypeViewHolder) holder).attachment_preview.getSettings().getAllowUniversalAccessFromFileURLs();
+                        ((ImageTypeViewHolder) holder).attachment_preview.getSettings().getAllowFileAccessFromFileURLs();
+                        ((ImageTypeViewHolder) holder).attachment_preview.setEnabled(false);
+                        ((ImageTypeViewHolder) holder).attachment_preview.setOnTouchListener(null);
+
                         // cv_url = getArguments().getString("applicant_cv");
                         ((ImageTypeViewHolder) holder).attachment_preview.loadUrl("https://docs.google.com/gview?embedded=true&url=" + posts.get(position).getPost_document());
 
                         //   ((ImageTypeViewHolder) holder).attachment_preview.setImageBitmap(AppUtils.generateImageFromPdf(Uri.parse(posts.get(position).getPost_document()),mContext));
-                        ((ImageTypeViewHolder) holder).tv_filename.setText(posts.get(position).getTitle());
+
+                        String fileName = posts.get(position).getPost_document().substring(posts.get(position).getPost_document().lastIndexOf('/') + 1);
+                        ((ImageTypeViewHolder) holder).tv_filename.setText(fileName);
+
                         ((ImageTypeViewHolder) holder).attachment_preview.setWebViewClient(new WebViewClient() {
                             @Override
                             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -1189,7 +1202,21 @@ public class PostAdapter  extends RecyclerView.Adapter {
                 start();
         /** Instantiating PopupMenu class */
         PopupMenu popup = new PopupMenu(mContext, v);
-
+        try {
+            Field[] fields = popup.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                if ("mPopup".equals(field.getName())) {
+                    field.setAccessible(true);
+                    Object menuPopupHelper = field.get(popup);
+                    Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
+                    Method setForceIcons = classPopupHelper.getMethod("setForceShowIcon", boolean.class);
+                    setForceIcons.invoke(menuPopupHelper, true);
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         /** Adding menu items to the popumenu */
         popup.getMenuInflater().inflate(R.menu.post_menu, popup.getMenu());
 
@@ -1222,7 +1249,14 @@ public class PostAdapter  extends RecyclerView.Adapter {
                 return true;
             }
         });
-        popup.setForceShowIcon(true);
+        try {
+
+        }
+        catch (Exception e)
+        {
+
+        }
+
 
         /** Showing the popup menu */
         popup.show();

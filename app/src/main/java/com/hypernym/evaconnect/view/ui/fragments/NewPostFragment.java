@@ -161,7 +161,15 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
             public void onSingleClick(View v) {
                 if (edt_content.getText().length() > 0 || part_images.size() > 0 || video != null) {
                     if (NetworkUtils.isNetworkConnected(getContext())) {
-                        createPost();
+                        if(getArguments().getBoolean("isEdit"))
+                        {
+                            updatePost();
+                        }
+                        else
+                        {
+                            createPost();
+                        }
+
                     } else {
                         networkErrorDialog();
                     }
@@ -214,6 +222,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
        if(getArguments().getBoolean("isEdit"))
        {
            getPostDetails(getArguments().getInt("post"));
+           post.setText("Update Post");
        }
         edt_content.addTextChangedListener(new URLTextWatcher(getActivity(), edt_content, urlEmbeddedView));
         edt_content.addTextChangedListener(new TextWatcher() {
@@ -259,6 +268,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
             attachmentsAdapter.notifyDataSetChanged();
             rc_attachments.setVisibility(View.VISIBLE);
         }
+        postModel.setId(post.getId());
 
     }
 
@@ -274,6 +284,38 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
         postModel.setContent(edt_content.getText().toString());
         postModel.setVideo(video);
         postViewModel.createPost(postModel).observe(this, new Observer<BaseModel<List<Post>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Post>> listBaseModel) {
+                if (listBaseModel != null && !listBaseModel.isError()) {
+
+                    newPost();
+
+                    Toast.makeText(getContext(), getString(R.string.msg_post_created), Toast.LENGTH_LONG).show();
+                    // networkResponseDialog(getString(R.string.success),getString(R.string.msg_post_created));
+                    if (getFragmentManager().getBackStackEntryCount() != 0) {
+                        getFragmentManager().popBackStack();
+                    }
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+                hideDialog();
+            }
+        });
+    }
+
+    private void updatePost() {
+        showDialog();
+        ArrayList<String> urlList = AppUtils.containsURL(edt_content.getText().toString());
+        if (urlList.size() > 0) {
+            postModel.setIs_url(true);
+        } else {
+            postModel.setIs_url(false);
+        }
+        postModel.setAttachments(part_images);
+        postModel.setContent(edt_content.getText().toString());
+        postModel.setVideo(video);
+        postModel.setId(postModel.getId());
+        postViewModel.editPost(postModel).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError()) {
