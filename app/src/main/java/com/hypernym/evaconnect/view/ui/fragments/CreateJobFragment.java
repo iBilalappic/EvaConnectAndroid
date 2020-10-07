@@ -116,10 +116,11 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
     private File tempFile, file_name;
     private String currentPhotoPath = "";
     private String photoVar = null;
+    private String mJobImage;
     MultipartBody.Part partImage;
     private Validator validator, validator_update;
     SimpleDialog simpleDialog;
-    int job_id,mJob_id;
+    int job_id, mJob_id;
 
     private CreateJobAdViewModel createJobAdViewModel;
     private UserViewModel userViewModel;
@@ -167,7 +168,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
             job_id = getArguments().getInt("job_id");
             if (job_id != 0) {
                 GetJob_id(job_id);
-                mJob_id=job_id;
+                mJob_id = job_id;
             } else {
                 companyJobAdModel = (CompanyJobAdModel) getArguments().getSerializable("COMPANY_AD");
                 Log.d("TAAAG", GsonUtils.toJson(companyJobAdModel));
@@ -182,8 +183,8 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
                 DecimalFormat myFormatter = new DecimalFormat("############");
                 edit_amount.setText(myFormatter.format(companyJobAdModel.getSalary()));
                 edit_jobdescription.setText(companyJobAdModel.getContent());
-                mJob_id=companyJobAdModel.getId();
-               // getSectorFromApi(LoginUtils.getUser().getWork_aviation());
+                mJob_id = companyJobAdModel.getId();
+                // getSectorFromApi(LoginUtils.getUser().getWork_aviation());
             }
 //            if (companyJobAdModel.getWeeklyHours() != null) {
 //                int spinnerPosition = arraySectorAdapter.getPosition(companyJobAdModel.getWeeklyHours());
@@ -204,11 +205,13 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
                     edit_jobtitle.setText(getjobAd.getData().get(0).getJobTitle());
                     edit_jobpostion.setText(getjobAd.getData().get(0).getPosition());
                     edit_Location.setText(getjobAd.getData().get(0).getLocation());
+                    mJobImage = getjobAd.getData().get(0).getJobImage();
+                    AppUtils.setGlideImage(getContext(), profile_image, getjobAd.getData().get(0).getJobImage());
                     //  String SalaryInt = getsplitstring(String.valueOf(companyJobAdModel.getSalary()));
                     DecimalFormat myFormatter = new DecimalFormat("############");
                     edit_amount.setText(myFormatter.format(getjobAd.getData().get(0).getSalary()));
                     edit_jobdescription.setText(getjobAd.getData().get(0).getContent());
-                   // getSectorFromApi(LoginUtils.getUser().getWork_aviation());
+                    // getSectorFromApi(LoginUtils.getUser().getWork_aviation());
 
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
@@ -342,15 +345,29 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
         switch (v.getId()) {
             case R.id.postAd:
                 if (postAd.getText().toString().equals("Update Job Listing")) {
-                    if (JobSector == null) {
-                        Toast.makeText(getContext(), "Please select job sector", Toast.LENGTH_SHORT).show();
-                    } else if (JobType == null) {
-                        Toast.makeText(getContext(), "Please select job type", Toast.LENGTH_SHORT).show();
-                    } else if (partImage == null && companyJobAdModel.getJobImage() == null) {
-                        Toast.makeText(getContext(), "Please add image for job post", Toast.LENGTH_SHORT).show();
+                    if (job_id != 0) {
+                        if (JobSector == null) {
+                            Toast.makeText(getContext(), "Please select job sector", Toast.LENGTH_SHORT).show();
+                        } else if (JobType == null) {
+                            Toast.makeText(getContext(), "Please select job type", Toast.LENGTH_SHORT).show();
+                        } else if (partImage == null && mJobImage == null) {
+                            Toast.makeText(getContext(), "Please add image for job post", Toast.LENGTH_SHORT).show();
+                        } else {
+                            validator.validate();
+                        }
+
                     } else {
-                        validator.validate();
+                        if (JobSector == null) {
+                            Toast.makeText(getContext(), "Please select job sector", Toast.LENGTH_SHORT).show();
+                        } else if (JobType == null) {
+                            Toast.makeText(getContext(), "Please select job type", Toast.LENGTH_SHORT).show();
+                        } else if (partImage == null && companyJobAdModel.getJobImage() == null) {
+                            Toast.makeText(getContext(), "Please add image for job post", Toast.LENGTH_SHORT).show();
+                        } else {
+                            validator.validate();
+                        }
                     }
+
                 } else {
                     if (JobSector == null) {
                         Toast.makeText(getContext(), "Please select job sector", Toast.LENGTH_SHORT).show();
