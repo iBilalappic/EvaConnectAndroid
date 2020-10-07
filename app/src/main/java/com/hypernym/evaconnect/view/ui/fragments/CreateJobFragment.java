@@ -119,7 +119,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
     MultipartBody.Part partImage;
     private Validator validator, validator_update;
     SimpleDialog simpleDialog;
-    int job_id;
+    int job_id,mJob_id;
 
     private CreateJobAdViewModel createJobAdViewModel;
     private UserViewModel userViewModel;
@@ -167,6 +167,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
             job_id = getArguments().getInt("job_id");
             if (job_id != 0) {
                 GetJob_id(job_id);
+                mJob_id=job_id;
             } else {
                 companyJobAdModel = (CompanyJobAdModel) getArguments().getSerializable("COMPANY_AD");
                 Log.d("TAAAG", GsonUtils.toJson(companyJobAdModel));
@@ -181,6 +182,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
                 DecimalFormat myFormatter = new DecimalFormat("############");
                 edit_amount.setText(myFormatter.format(companyJobAdModel.getSalary()));
                 edit_jobdescription.setText(companyJobAdModel.getContent());
+                mJob_id=companyJobAdModel.getId();
                // getSectorFromApi(LoginUtils.getUser().getWork_aviation());
             }
 //            if (companyJobAdModel.getWeeklyHours() != null) {
@@ -375,7 +377,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
         showDialog();
         User user = LoginUtils.getLoggedinUser();
         //   edit_jobtitle.setText(edit_jobpostion.getText().toString() + " for " + edit_companyName.getText().toString());
-        createJobAdViewModel.UpdateJobAd(companyJobAdModel.getId(), user, partImage, JobSector,
+        createJobAdViewModel.UpdateJobAd(mJob_id, user, partImage, JobSector,
                 Integer.parseInt(edit_amount.getText().toString()),
                 edit_companyName.getText().toString(),
                 edit_jobdescription.getText().toString(),
