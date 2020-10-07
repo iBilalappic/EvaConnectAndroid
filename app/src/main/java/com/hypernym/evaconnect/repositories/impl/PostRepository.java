@@ -192,20 +192,21 @@ public class PostRepository implements IPostRepository {
     @Override
     public LiveData<BaseModel<List<Post>>> deletePost(Post post) {
         postMutableLiveData=new MutableLiveData<>();
-        post.setModified_by_id(LoginUtils.getLoggedinUser().getId());
-        post.setModified_datetime(DateUtils.GetCurrentdatetime());
-        post.setStatus(AppConstants.DELETED);
+        Post newPost=new Post();
+        newPost.setModified_by_id(LoginUtils.getLoggedinUser().getId());
+        newPost.setModified_datetime(DateUtils.GetCurrentdatetime());
+        newPost.setStatus(AppConstants.DELETED);
 
-//        RestClient.get().appApi().editPost(post,post.getId()).enqueue(new Callback<BaseModel<List<Post>>>() {
-//            @Override
-//            public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
-//                postMutableLiveData.setValue(response.body());
-//            }
-//            @Override
-//            public void onFailure(Call<BaseModel<List<Post>>> call, Throwable t) {
-//                postMutableLiveData.setValue(null);
-//            }
-//        });
+        RestClient.get().appApi().deletePost(newPost,post.getId()).enqueue(new Callback<BaseModel<List<Post>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
+                postMutableLiveData.setValue(response.body());
+            }
+            @Override
+            public void onFailure(Call<BaseModel<List<Post>>> call, Throwable t) {
+                postMutableLiveData.setValue(null);
+            }
+        });
         return postMutableLiveData;
     }
 }

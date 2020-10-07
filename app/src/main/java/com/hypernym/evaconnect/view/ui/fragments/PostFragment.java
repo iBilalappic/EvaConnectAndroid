@@ -398,6 +398,7 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
 
     @Override
     public void onDeleteClick(View view, int position) {
+
         postViewModel.deletePost(posts.get(position)).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> listBaseModel) {
@@ -470,7 +471,6 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
             }
         });
     }
-
 
 
 

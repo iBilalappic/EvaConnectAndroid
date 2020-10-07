@@ -52,6 +52,7 @@ public interface AppApi {
                                        @Part("password") RequestBody password,
                                        @Part("type") RequestBody type,
                                        @Part("sector") RequestBody sector,
+                                       @Part("other_sector") RequestBody other_sector,
                                        @Part("company_name") RequestBody company_name,
                                        @Part("designation") RequestBody designation,
                                        @Part("work_aviation") RequestBody work_aviation,
@@ -78,7 +79,7 @@ public interface AppApi {
     Call<BaseModel<List<Post>>> editPost(@Part("modified_by_id") int modified_by_id, @Part("content") RequestBody content,
                                          @Part("modified_datetime") int modified_datetime, @Part("is_url") boolean is_url, @Part List<MultipartBody.Part> post_image, @Part MultipartBody.Part post_video,@Part MultipartBody.Part post_document,@Path("id") int id);
 
-    @DELETE(APIConstants.EDIT_POST)
+    @PATCH(APIConstants.EDIT_POST)
     Call<BaseModel<List<Post>>> deletePost(@Body Post post,@Path("id") int id);
 
     @Multipart
@@ -281,6 +282,9 @@ public interface AppApi {
 
     @POST(APIConstants.LIKE_EVENT)
     Call<BaseModel<List<Event>>> likeEvent(@Body Event event);
+
+    @DELETE(APIConstants.UPDATE_EVENT)
+    Call<BaseModel<List<Event>>> deleteEvent(@Path("id") int id);
 
     @POST(APIConstants.GET_CALENDAR_MARKS)
     Call<BaseModel<List<CalendarModel>>> getAllCalendarMarks(@Body CalendarModel calendarModel);

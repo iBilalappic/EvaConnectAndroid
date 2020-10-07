@@ -7,8 +7,8 @@ import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Comment;
-import com.hypernym.evaconnect.models.Meeting;
 import com.hypernym.evaconnect.models.Event;
+import com.hypernym.evaconnect.models.Meeting;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IEventRepository;
@@ -251,6 +251,28 @@ public class EventRepository implements IEventRepository {
         });
         return eventMutableLiveData;
     }
+
+    @Override
+    public LiveData<BaseModel<List<Event>>> deleteEvent(Post post) {
+        eventMutableLiveData=new MutableLiveData<>();
+
+        RestClient.get().appApi().deleteEvent(post.getId()).enqueue(new Callback<BaseModel<List<Event>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Event>>> call, Response<BaseModel<List<Event>>> response) {
+                if(response.body()!=null)
+                {
+                    eventMutableLiveData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Event>>> call, Throwable t) {
+                eventMutableLiveData.setValue(null);
+            }
+        });
+        return eventMutableLiveData;
+    }
+
     @Override
     public LiveData<BaseModel<List<Post>>> getEvent(User user, int total, int current) {
         dashboardMutableLiveData = new MutableLiveData<>();

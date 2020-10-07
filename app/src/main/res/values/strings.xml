@@ -80,6 +80,8 @@
     <string name="msg_remove_invite">Are you sure you want to remove this user?</string>
     <string name="msg_forgotpass">An email has been sent to your email address. Follow the instruction in the email to reset your password. </string>
     <string name="msg_remove_comment">Are you sure you want to remove this comment?</string>
+    <string name="msg_remove_post">Are you sure you want to remove this post?</string>
+    <string name="msg_remove_event">Are you sure you want to remove this event?</string>
 
 
     <string name="msg_jobAd">Your Job Ad has been created successfully.</string>
@@ -152,5 +154,7 @@
     <string name="delete_comment">Delete Comment</string>
     <string name="edit_post">Edit Post</string>
     <string name="delete_post">Delete Post</string>
+    <string name="edit_event">Edit Event</string>
+    <string name="delete_event">Delete Event</string>
 </resources>
 

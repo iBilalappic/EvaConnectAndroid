@@ -45,6 +45,7 @@ public class UserRepository implements IUserRespository {
                 RequestBody.create(MediaType.parse("text/plain"), user.getPassword()),
                 RequestBody.create(MediaType.parse("text/plain"), user.getType()),
                 RequestBody.create(MediaType.parse("text/plain"), user.getSector()),
+                RequestBody.create(MediaType.parse("text/plain"), user.getOther_sector()),
                 RequestBody.create(MediaType.parse("text/plain"), user.getCompany_name()),
                 RequestBody.create(MediaType.parse("text/plain"), user.getDesignation()),
                 RequestBody.create(MediaType.parse("text/plain"), user.getWork_aviation()),

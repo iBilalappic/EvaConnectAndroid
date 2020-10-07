@@ -361,6 +361,49 @@ public class EventFragment extends BaseFragment implements View.OnClickListener,
         }
     }
 
+    @Override
+    public void onEditClick(View view, int position) {
+        getEventDetails(posts.get(position).getId());
+
+    }
+    private void getEventDetails(int event_id) {
+       // invitedConnections.clear();
+        eventViewModel.getEventDetails(event_id).observe(this, new Observer<BaseModel<List<Event>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Event>> listBaseModel) {
+                if(listBaseModel!=null && !listBaseModel.isError() && listBaseModel.getData().size()>0)
+                {
+                    CreateEventFragment createEventFragment=new CreateEventFragment();
+                    Bundle bundle=new Bundle();
+                    bundle.putSerializable("event",listBaseModel.getData().get(0));
+                    createEventFragment.setArguments(bundle);
+                    loadFragment(R.id.framelayout,createEventFragment,getContext(),true);
+                }
+                else
+                {
+                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                }
+
+            }
+
+
+        });
+    }
+    @Override
+    public void onDeleteClick(View view, int position) {
+        eventViewModel.deleteEvent(posts.get(position)).observe(this, new Observer<BaseModel<List<Event>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Event>> listBaseModel) {
+                if (NetworkUtils.isNetworkConnected(getContext())) {
+                    posts.clear();
+                    callPostsApi();
+                } else {
+                    networkErrorDialog();
+                }
+            }
+        });
+    }
+
     private void likeEvent(Post post, int position) {
         Event event = new Event();
         event.setEvent_id(post.getEvent_id());

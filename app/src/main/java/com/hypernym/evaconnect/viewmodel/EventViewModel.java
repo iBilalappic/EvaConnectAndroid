@@ -95,5 +95,11 @@ public class EventViewModel extends AndroidViewModel {
         return iEventRepository.deleteComment(id);
     }
 
+    public LiveData<BaseModel<List<Event>>> deleteEvent(Post event)
+    {
+        return iEventRepository.deleteEvent(event);
+    }
+
+
 
 }
