@@ -226,7 +226,7 @@ public class ShareArticleFragment extends BaseFragment {
         }
         postModel.setContent(edt_content.getText().toString());
         postModel.setDocument(part_images);
-        postModel.setPost_id(getArguments().getInt("post"));
+        postModel.setId(getArguments().getInt("post"));
         postViewModel.editPost(postModel).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> listBaseModel) {
