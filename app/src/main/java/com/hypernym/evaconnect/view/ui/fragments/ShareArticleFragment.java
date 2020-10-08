@@ -35,8 +35,6 @@ import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
-import com.hypernym.evaconnect.view.adapters.AttachmentsAdapter;
-import com.hypernym.evaconnect.view.adapters.PostAdapter;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
 
 import java.io.File;
@@ -135,10 +133,10 @@ public class ShareArticleFragment extends BaseFragment {
 
             getPostDetails(getArguments().getInt("post"));
 
-
             attachment.setVisibility(View.VISIBLE);
 
             post.setBackground(getResources().getDrawable(R.drawable.button_bg));
+
 
 
 //          loadimage.setVisibility(View.VISIBLE);
@@ -345,6 +343,9 @@ public class ShareArticleFragment extends BaseFragment {
                                 //  MultiplePhoto.add(partImage);
                                 //Drawable drawable = (Drawable)new BitmapDrawable(getResources(),);
                                 webView.setImageBitmap(AppUtils.generateImageFromPdf(SelectedImageUri, getContext()));
+                                loadimage.setVisibility(View.GONE);
+                                webView.setVisibility(View.VISIBLE);
+
 
 
 //                                WebSettings settings = webView.getSettings();
@@ -428,6 +429,8 @@ public class ShareArticleFragment extends BaseFragment {
 
             // cv_url = getArguments().getString("applicant_cv");
             loadimage.loadUrl("https://docs.google.com/gview?embedded=true&url=" + post.getPost_document());
+        String fileName =post.getPost_document().substring(post.getPost_document().lastIndexOf('/') + 1);
+        tv_filename.setText(fileName);
 //            attachments.add(post.getPost_image().get(0));
 //            attachmentsAdapter.notifyDataSetChanged();
 //            rc_attachments.setVisibility(View.VISIBLE);
