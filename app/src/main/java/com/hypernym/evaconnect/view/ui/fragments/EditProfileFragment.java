@@ -102,6 +102,12 @@ public class EditProfileFragment extends BaseFragment implements Validator.Valid
     @BindView(R.id.profile_image)
     CircleImageView cv_profile_image;
 
+    @BindView(R.id.lbl_title)
+    TextView lbl_title;
+
+    @BindView(R.id.img_view2)
+    View img_view2;
+
 
     private UserViewModel userViewModel;
 
@@ -188,7 +194,7 @@ public class EditProfileFragment extends BaseFragment implements Validator.Valid
                 if (!listBaseModel.isError()) {
                    tv_updated.setVisibility(View.VISIBLE);
                    initHandler();
-                    GetUserDetails();
+                   GetUserDetails();
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
@@ -239,7 +245,21 @@ public class EditProfileFragment extends BaseFragment implements Validator.Valid
                         edt_sector.setText(listBaseModel.getData().get(0).getSector());
                     }
 
-                    edt_designation.setText(listBaseModel.getData().get(0).getDesignation());
+                    if(listBaseModel.getData().get(0).getType().equalsIgnoreCase("company"))
+                    {
+                        lbl_title.setVisibility(View.GONE);
+                        edt_designation.setVisibility(View.GONE);
+                        img_view2.setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                        edt_designation.setText(listBaseModel.getData().get(0).getDesignation());
+                        lbl_title.setVisibility(View.VISIBLE);
+                        edt_designation.setVisibility(View.VISIBLE);
+                        img_view2.setVisibility(View.VISIBLE);
+                    }
+
+
                     edt_company.setText(listBaseModel.getData().get(0).getCompany_name());
                     tv_name.setText(listBaseModel.getData().get(0).getFirst_name());
                     LoginUtils.saveUser(listBaseModel.getData().get(0));

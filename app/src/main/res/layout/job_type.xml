@@ -29,35 +29,32 @@
         app:layout_constraintTop_toBottomOf="@id/view6" />
 
     <RelativeLayout
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
         android:id="@+id/profile_layout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="53dp"
-        android:layout_height="53dp">
-
+        android:layout_height="53dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:background="@android:color/transparent"
-
             android:layout_width="match_parent"
+
             android:layout_height="match_parent"
+            android:background="@android:color/transparent"
             android:src="@drawable/white_chatbg"
             app:civ_border_color="@color/skyblue"
-            app:civ_border_width="2dp"
-            />
+            app:civ_border_width="2dp" />
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:padding="2dp"
+            android:id="@+id/profile_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/profile_image"
-            app:civ_border_color="@color/white"
-            app:civ_border_width="2dp"
+            android:padding="2dp"
             android:src="@drawable/no_thumbnail"
-            />
+            app:civ_border_color="@color/white"
+            app:civ_border_width="2dp" />
     </RelativeLayout>
 
     <TextView
@@ -108,29 +105,31 @@
 
     <TextView
         android:id="@+id/tv_apply"
+        style="@style/Button_selected_light_blue"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        style="@style/Button_selected_light_blue"
-        android:paddingLeft="15dp"
-        android:paddingTop="5dp"
+        android:layout_marginEnd="16dp"
         android:fontFamily="@font/nunitosansregular"
         android:gravity="center"
-        android:textSize="13sp"
+        android:paddingLeft="15dp"
+        android:paddingTop="5dp"
         android:paddingRight="15dp"
         android:paddingBottom="5dp"
         android:text="@string/apply"
         android:textColor="@color/white"
+        android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/img_more"
         android:layout_width="wrap_content"
-        android:layout_height="15dp"
+        android:layout_height="20dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="6dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:src="@drawable/more"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
@@ -177,10 +176,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:text="58"
-            android:textSize="11sp"
             android:fontFamily="@font/nunitosansbold"
+            android:text="58"
             android:textColor="@color/skyblue"
+            android:textSize="11sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -270,6 +269,7 @@
                 android:id="@+id/like_click"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:paddingLeft="10dp"
                 android:layout_weight="1">
                 <ImageView
                     android:id="@+id/img_like"
@@ -304,6 +304,7 @@
                 android:id="@+id/comment_click"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:paddingLeft="10dp"
                 android:layout_weight="1.2">
                 <ImageView
                     android:id="@+id/img_comment"
@@ -339,6 +340,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="16dp"
+                android:paddingLeft="10dp"
                 android:layout_weight="1">
 
                 <ImageView

@@ -165,7 +165,14 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
-
+            <ImageView
+                android:id="@+id/img_like"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/spacing_medium"
+                android:layout_weight="0"
+                android:background="@drawable/ic_like" />
             <TextView
                 android:gravity="center_vertical"
                 android:layout_width="0dp"
@@ -175,14 +182,7 @@
                 android:text="Like"
                 android:textColor="@color/gray_1" />
 
-            <ImageView
-                android:id="@+id/img_like"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_gravity="center"
-                android:layout_marginEnd="@dimen/spacing_medium"
-                android:layout_weight="0"
-                android:background="@drawable/ic_like" />
+
 
             <View
                 android:layout_width="1dp"
@@ -200,6 +200,15 @@
             android:layout_height="match_parent"
             android:layout_weight="1.2">
 
+            <ImageView
+                android:id="@+id/img_comment"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/spacing_medium"
+                android:layout_weight="0"
+                android:background="@drawable/ic_comment" />
+
             <TextView
                 android:gravity="center_vertical"
                 android:layout_width="0dp"
@@ -209,14 +218,7 @@
                 android:text="Comment"
                 android:textColor="@color/gray_1" />
 
-            <ImageView
-                android:id="@+id/img_comment"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_gravity="center"
-                android:layout_marginEnd="@dimen/spacing_medium"
-                android:layout_weight="0"
-                android:background="@drawable/ic_comment" />
+
 
             <View
                 android:layout_width="1dp"
@@ -234,7 +236,14 @@
             android:layout_height="match_parent"
             android:layout_marginEnd="16dp"
             android:layout_weight="1">
-
+            <ImageView
+                android:id="@+id/img_share"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/spacing_medium"
+                android:layout_weight="0"
+                android:background="@drawable/ic_share" />
             <TextView
                 android:gravity="center_vertical"
                 android:layout_width="0dp"
@@ -244,14 +253,7 @@
                 android:text="Share"
                 android:textColor="@color/gray_1" />
 
-            <ImageView
-                android:id="@+id/img_share"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_gravity="center"
-                android:layout_marginEnd="@dimen/spacing_medium"
-                android:layout_weight="0"
-                android:background="@drawable/ic_share" />
+
 
 
         </LinearLayout>

@@ -8,6 +8,7 @@
     android:background="@color/lighter_gray">
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/lighter_gray"
@@ -28,7 +29,7 @@
                 android:id="@+id/profile_layout"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -60,8 +61,8 @@
                 android:layout_marginStart="8dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textSize="13sp"
                 android:textColor="@color/black"
+                android:textSize="13sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/profile_layout"
                 app:layout_constraintStart_toStartOf="@+id/tv_connections"
@@ -203,6 +204,59 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/img_video" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/attachment"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/layout_border"
+                            android:visibility="gone"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <WebView
+                                android:id="@+id/attachment_preview"
+                                android:layout_width="match_parent"
+                                android:layout_height="160dp"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginEnd="5dp"
+                                android:focusableInTouchMode="false"
+                                android:touchscreenBlocksFocus="false"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <LinearLayout
+                                android:id="@+id/layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:padding="10dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent">
+
+                                <TextView
+                                    android:id="@+id/tv_filename"
+                                    style="@style/TextStyle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:textFontWeight="700" />
+
+                                <ImageView
+                                    android:id="@+id/imageView10"
+                                    android:layout_width="16dp"
+                                    android:layout_height="18dp"
+                                    app:srcCompat="@drawable/business" />
+
+                            </LinearLayout>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -225,8 +279,8 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="50dp"
                         android:textColor="@color/skyblue"
-                        android:textStyle="bold"
                         android:textSize="11sp"
+                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/linearlayout" />
@@ -240,8 +294,8 @@
                         android:layout_marginBottom="50dp"
                         android:paddingLeft="5dp"
                         android:text="@string/likes"
-                        android:textSize="11sp"
                         android:textColor="@color/skyblue"
+                        android:textSize="11sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/tv_likecount"
@@ -256,8 +310,8 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="50dp"
                         android:text="@string/amp"
-                        android:textSize="11sp"
                         android:textColor="@color/skyblue"
+                        android:textSize="11sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView10"
@@ -270,9 +324,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_small"
                         android:layout_marginTop="8dp"
-                        android:textSize="11sp"
                         android:layout_marginBottom="50dp"
                         android:textColor="@color/skyblue"
+                        android:textSize="11sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView11"
@@ -287,8 +341,8 @@
                         android:layout_marginBottom="50dp"
                         android:paddingLeft="5dp"
                         android:text="@string/comments"
-                        android:textSize="11sp"
                         android:textColor="@color/skyblue"
+                        android:textSize="11sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/tv_comcount"
@@ -302,9 +356,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
-                        android:textSize="10sp"
-                        android:textColor="@color/black"
                         android:text="12:04pm | 12 jan"
+                        android:textColor="@color/black"
+                        android:textSize="10sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/linearlayout" />
 
@@ -333,7 +387,9 @@
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="1">
+                            android:layout_weight="1"
+                            android:paddingLeft="10dp">
+
                             <ImageView
                                 android:id="@+id/img_like"
                                 android:layout_width="20dp"
@@ -364,7 +420,9 @@
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="1.2">
+                            android:layout_weight="1.2"
+                            android:paddingLeft="10dp">
+
                             <ImageView
                                 android:id="@+id/img_comment"
                                 android:layout_width="20dp"
@@ -373,13 +431,13 @@
                                 android:layout_marginEnd="@dimen/spacing_medium"
                                 android:layout_weight="0"
                                 android:background="@drawable/ic_comment" />
+
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Comment"
                                 android:textColor="@color/gray_1" />
-
 
 
                             <TextView
@@ -397,7 +455,9 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_marginEnd="16dp"
-                            android:layout_weight="1">
+                            android:layout_weight="1"
+                            android:paddingLeft="10dp">
+
                             <ImageView
                                 android:id="@+id/img_share"
                                 android:layout_width="20dp"
@@ -406,14 +466,13 @@
                                 android:layout_marginEnd="@dimen/spacing_medium"
                                 android:layout_weight="0"
                                 android:background="@drawable/ic_share" />
+
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Share"
                                 android:textColor="@color/gray_1" />
-
-
 
 
                         </LinearLayout>
@@ -431,7 +490,7 @@
                 style="@style/TextStyle.Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -505,32 +564,39 @@
         android:text=""
         android:textColor="@color/black"
         android:textColorHint="@color/gray_1"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/layout_editcomment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/edt_comment"
+        android:background="@color/gray"/>
     <LinearLayout
         android:id="@+id/layout_editcomment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+          android:layout_height="wrap_content"
         android:visibility="gone"
+        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edt_comment">
+        app:layout_constraintEnd_toEndOf="parent">
+
         <Button
             android:id="@+id/button_cancel"
-            style="@style/simpleButton"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Cancel"
-            android:textColor="@color/colorAccent"
-            android:layout_weight="0.5" />
+            android:textColor="@color/colorAccent" />
+
         <Button
             android:id="@+id/button_save"
-            style="@style/simpleButton"
+            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:text="Save"
-            android:layout_weight="0.5" />
+            android:textColor="@color/black"
+            android:layout_weight="1"
+            android:text="Save Changes" />
 
     </LinearLayout>
 
@@ -538,13 +604,13 @@
         android:id="@+id/btn_addcomment"
         android:layout_width="25dp"
         android:layout_height="21dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/ic_arrow_send"
         android:gravity="center"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/edt_comment" />
 </androidx.constraintlayout.widget.ConstraintLayout>

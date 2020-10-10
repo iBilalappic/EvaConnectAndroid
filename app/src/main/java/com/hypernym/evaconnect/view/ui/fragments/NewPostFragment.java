@@ -194,7 +194,11 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
 //            AppUtils.setGlideImage(getContext(), profile_image, user.getUser_image());
 //        }
         tv_name.setText(user.getFirst_name());
-        tv_designation.setText(user.getDesignation()+" at ");
+        if(user.getDesignation()!=null)
+        {
+            tv_designation.setText(user.getDesignation()+" at ");
+        }
+
         tv_company.setText(user.getCompany_name());
         tv_address.setText(user.getCity()+" , "+user.getCountry());
        // getConnectionCount();
@@ -205,11 +209,17 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
         {
             setPageTitle(getString(R.string.menu2));
             post.setText(getString(R.string.menu2));
+            tv_recordvideo.setVisibility(View.VISIBLE);
+            camera.setVisibility(View.GONE);
+
+
         }
        else
         {
             setPageTitle(getString(R.string.What_will_you_write_about));
             post.setText("Create Post");
+            tv_recordvideo.setVisibility(View.GONE);
+            camera.setVisibility(View.VISIBLE);
         }
        if(getArguments().getBoolean("isEdit"))
        {

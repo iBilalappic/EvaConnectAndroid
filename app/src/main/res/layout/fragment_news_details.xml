@@ -4,44 +4,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lighter_gray"
- >
+    android:fillViewport="true"
+    android:background="@color/lighter_gray" >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorwhite"
-        android:clipToPadding="false">
+        android:clipToPadding="true">
 
         <RelativeLayout
+            android:id="@+id/profile_layout"
+            android:layout_width="53dp"
+            android:layout_height="53dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:id="@+id/profile_layout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_width="53dp"
-            android:layout_height="53dp">
-
+            app:layout_constraintTop_toTopOf="parent">
 
 
             <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:src="@drawable/white_chatbg"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
                 app:civ_border_color="@color/skyblue"
-                app:civ_border_width="2dp"
-                />
+                app:civ_border_width="2dp" />
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:padding="2dp"
+                android:id="@+id/profile_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/profile_image"
+                android:padding="2dp"
                 app:civ_border_color="@color/white"
-                app:civ_border_width="2dp"
-                />
+                app:civ_border_width="2dp" />
         </RelativeLayout>
 
         <TextView
@@ -164,7 +161,7 @@
                     style="@style/TextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
+                    android:layout_marginStart="40dp"
                     android:layout_marginTop="4dp"
                     android:fontFamily="@font/nunitosansbold"
                     android:text="58"
@@ -267,7 +264,17 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1">
+                        android:layout_weight="1"
+                        android:paddingLeft="10dp">
+
+                        <ImageView
+                            android:id="@+id/img_like"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:layout_marginEnd="@dimen/spacing_medium"
+                            android:layout_weight="0"
+                            android:background="@drawable/ic_like" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -277,14 +284,6 @@
                             android:text="Like"
                             android:textColor="@color/gray_1" />
 
-                        <ImageView
-                            android:id="@+id/img_like"
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:layout_gravity="center"
-                            android:layout_marginEnd="@dimen/spacing_medium"
-                            android:layout_weight="0"
-                            android:background="@drawable/ic_like" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -300,7 +299,17 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1.2">
+                        android:layout_weight="1.2"
+                        android:paddingLeft="10dp">
+
+                        <ImageView
+                            android:id="@+id/img_comment"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:layout_marginEnd="@dimen/spacing_medium"
+                            android:layout_weight="0"
+                            android:background="@drawable/ic_comment" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -310,14 +319,6 @@
                             android:text="Comment"
                             android:textColor="@color/gray_1" />
 
-                        <ImageView
-                            android:id="@+id/img_comment"
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:layout_gravity="center"
-                            android:layout_marginEnd="@dimen/spacing_medium"
-                            android:layout_weight="0"
-                            android:background="@drawable/ic_comment" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -334,7 +335,18 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginEnd="16dp"
-                        android:layout_weight="1">
+                        android:layout_weight="1"
+                        android:paddingLeft="10dp">
+
+                        <ImageView
+                            android:id="@+id/img_share"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:layout_marginEnd="@dimen/spacing_medium"
+                            android:layout_weight="0"
+                            android:background="@drawable/ic_share" />
+
 
                         <TextView
                             android:layout_width="0dp"
@@ -343,15 +355,6 @@
                             android:fontFamily="@font/nunitosansregular"
                             android:text="Share"
                             android:textColor="@color/gray_1" />
-
-                        <ImageView
-                            android:id="@+id/img_share"
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:layout_gravity="center"
-                            android:layout_marginEnd="@dimen/spacing_medium"
-                            android:layout_weight="0"
-                            android:background="@drawable/ic_share" />
 
 
                     </LinearLayout>
@@ -413,12 +416,11 @@
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="TextView"
             android:ellipsize="end"
+            android:text="TextView"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/channelname" />
-
 
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -436,64 +438,75 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
-            android:paddingTop="20dp"
             android:id="@+id/edt_comment"
             style="@style/EditText.Comments"
             android:layout_width="0dp"
             android:layout_height="60dp"
+            android:background="@color/white"
             android:hint="@string/tap_here_to_comment"
             android:inputType="textPersonName"
+            android:text=""
             android:textColor="@color/black"
             android:textColorHint="@color/gray_1"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/layout_editcomment"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/img_user" />
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/gray"
+            app:layout_constraintBottom_toBottomOf="@+id/edt_comment" />
 
         <LinearLayout
             android:id="@+id/layout_editcomment"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/edt_comment">
+            app:layout_constraintStart_toStartOf="parent">
+
             <Button
                 android:id="@+id/button_cancel"
-                style="@style/simpleButton"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Cancel"
-                android:textColor="@color/colorAccent"
-                android:layout_weight="0.5" />
+                android:textColor="@color/colorAccent" />
+
             <Button
                 android:id="@+id/button_save"
-                style="@style/simpleButton"
                 android:layout_width="wrap_content"
-                android:text="Save"
-                android:layout_weight="0.5" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Save Changes"
+                android:textColor="@color/black" />
 
         </LinearLayout>
 
         <ImageView
-            android:layout_marginTop="13dp"
-            app:layout_constraintTop_toTopOf="@+id/edt_comment"
             android:id="@+id/btn_addcomment"
             android:layout_width="25dp"
             android:layout_height="21dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="24dp"
             android:background="@drawable/ic_arrow_send"
             android:gravity="center"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rc_comments" />
+            app:layout_constraintTop_toTopOf="@+id/edt_comment" />
 
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rc_comments"
             android:layout_width="match_parent"
-            android:background="@color/lighter_gray"
             android:layout_height="wrap_content"
+            android:background="@color/lighter_gray"
             app:layout_constraintBottom_toTopOf="@+id/edt_comment"
             app:layout_constraintTop_toBottomOf="@+id/cardView"
             tools:layout_editor_absoluteX="1dp" />

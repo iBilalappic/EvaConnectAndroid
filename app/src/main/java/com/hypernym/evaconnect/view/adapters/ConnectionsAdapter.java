@@ -62,8 +62,12 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
         }
 
 
+        if(connections.get(position).getDesignation()!=null)
+        {
+            holder.location.setText(connections.get(position).getDesignation()+" at ");
+        }
 
-holder.location.setText(connections.get(position).getDesignation()+" at ");
+
         holder.tv_designation.setText(connections.get(position).getCompany_name());
         //Hide connect option if post is from logged in user
         User user = LoginUtils.getLoggedinUser();

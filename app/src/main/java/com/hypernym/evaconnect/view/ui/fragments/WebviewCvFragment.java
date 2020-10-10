@@ -8,25 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.TextView;
-
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
-import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.JobAd;
-import com.hypernym.evaconnect.models.MyLikesModel;
-import com.hypernym.evaconnect.models.User;
-import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
-import com.hypernym.evaconnect.utils.LoginUtils;
-import com.hypernym.evaconnect.view.adapters.MyLikeAdapter;
-import com.hypernym.evaconnect.viewmodel.MylikesViewModel;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,6 +34,8 @@ public class WebviewCvFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_cv_webview, container, false);
         ButterKnife.bind(this, view);
         init();
+        showBackButton();
+        setPageTitle("Preview Pdf");
         listener();
         return view;
     }
@@ -66,6 +51,7 @@ public class WebviewCvFragment extends BaseFragment {
             wv_cv.getSettings().setSupportZoom(true);
             wv_cv.getSettings().setJavaScriptEnabled(true);
             cv_url = getArguments().getString("applicant_cv");
+
             wv_cv.loadUrl("https://docs.google.com/gview?embedded=true&url=" + cv_url);
         }
     }

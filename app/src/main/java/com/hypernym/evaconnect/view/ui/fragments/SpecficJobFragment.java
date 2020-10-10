@@ -61,8 +61,8 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
     @BindView(R.id.tv_weeklyHoursNumber)
     TextView tv_weeklyHoursNumber;
 
-//    @BindView(R.id.tv_apply)
-//    TextView tv_apply;
+    @BindView(R.id.tv_apply)
+    TextView tv_apply;
 
     @BindView(R.id.tv_description)
     TextView tv_description;
@@ -104,7 +104,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_specfic_job_ad, container, false);
         ButterKnife.bind(this, view);
-//        tv_apply.setOnClickListener(this);
+        tv_apply.setOnClickListener(this);
         img_backarrow.setOnClickListener(this);
         img_like.setOnClickListener(this);
         img_share.setOnClickListener(this);
@@ -132,11 +132,11 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
             } else {
                 GetJob_id(jobAd.getId());
             }
-//            if (LoginUtils.getUser().getType().equals("company")) {
-//                tv_apply.setVisibility(View.GONE);
-//            } else {
-//                tv_apply.setVisibility(View.VISIBLE);
-//            }
+            if (LoginUtils.getUser().getType().equals("company")) {
+                tv_apply.setVisibility(View.GONE);
+            } else {
+                tv_apply.setVisibility(View.VISIBLE);
+            }
         }
     }
 

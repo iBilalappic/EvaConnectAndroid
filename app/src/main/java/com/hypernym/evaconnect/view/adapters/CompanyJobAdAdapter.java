@@ -44,7 +44,7 @@ public class CompanyJobAdAdapter extends RecyclerView.Adapter<CompanyJobAdAdapte
         holder.tv_name.setText(companyJobAdModelList.get(position).getJobTitle());
         holder.tv_sector.setText(companyJobAdModelList.get(position).getJobSector());
         holder.tv_content.setText(companyJobAdModelList.get(position).getContent());
-        holder.tv_activehour.setText("Active for "+String.valueOf(companyJobAdModelList.get(position).getActive_hours()+" hrs"));
+       holder.tv_activehour.setText("Active for "+String.valueOf(companyJobAdModelList.get(position).getActive_hours()+" days"));
      //   holder.tv_date.setText(DateUtils.getFormattedDate(companyJobAdModelList.get(position).getCreatedDatetime()));
         if (companyJobAdModelList.get(position).getApplicant_count() != null) {
             holder.tv_totalapplicant.setText(String.valueOf(companyJobAdModelList.get(position).getApplicant_count() + " Applicants"));

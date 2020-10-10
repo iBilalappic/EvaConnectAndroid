@@ -182,7 +182,10 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
             tv_joblisting.setText("Job Listings");
         }
         tv_name.setText(user.getFirst_name() + " " + user.getLast_name());
-        tv_designation.setText(user.getDesignation());
+        if(user.getDesignation()!=null)
+        {
+            tv_designation.setText(user.getDesignation());
+        }
         tv_company.setText(user.getCompany_name());
         tv_location.setText(user.getCountry() + "," + user.getCity());
 

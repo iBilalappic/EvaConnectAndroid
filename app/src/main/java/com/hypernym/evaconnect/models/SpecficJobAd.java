@@ -74,6 +74,10 @@ public class SpecficJobAd implements Serializable {
     @Expose
     private String status;
 
+    @SerializedName("job_type")
+    @Expose
+    private String jobType;
+
     public String getType() {
         return type;
     }
@@ -262,4 +266,11 @@ public class SpecficJobAd implements Serializable {
         this.status = status;
     }
 
+    public String getJobType() {
+        return jobType;
+    }
+
+    public void setJobType(String jobType) {
+        this.jobType = jobType;
+    }
 }

@@ -158,7 +158,11 @@ public class ShareArticleFragment extends BaseFragment {
         }
 
         tv_name.setText(user.getFirst_name());
-        tv_designation.setText(user.getDesignation() + " at ");
+        if(user.getDesignation()!=null)
+        {
+            tv_designation.setText(user.getDesignation() + " at ");
+        }
+
         tv_company.setText(user.getCompany_name());
         tv_address.setText(user.getCity() + " , " + user.getCountry());
         setPostButton();

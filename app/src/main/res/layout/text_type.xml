@@ -30,34 +30,31 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <RelativeLayout
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
         android:id="@+id/profile_layout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="53dp"
-        android:layout_height="53dp">
-
+        android:layout_height="53dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:background="@android:color/transparent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@android:color/transparent"
             android:src="@drawable/white_chatbg"
             app:civ_border_color="@color/skyblue"
-            app:civ_border_width="2dp"
-            />
+            app:civ_border_width="2dp" />
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:padding="2dp"
+            android:id="@+id/profile_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/profile_image"
-            app:civ_border_color="@color/white"
-            app:civ_border_width="2dp"
+            android:padding="2dp"
             android:src="@drawable/no_thumbnail"
-            />
+            app:civ_border_color="@color/white"
+            app:civ_border_width="2dp" />
     </RelativeLayout>
 
     <TextView
@@ -75,13 +72,14 @@
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/profile_layout"
         app:layout_constraintTop_toTopOf="@+id/profile_layout" />
+
     <TextView
         android:id="@+id/tv_connect"
         style="@style/Button_border_light_blue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
         android:fontFamily="@font/nunitosansregular"
         android:gravity="center"
         android:paddingLeft="15dp"
@@ -97,11 +95,14 @@
     <ImageView
         android:id="@+id/img_more"
         android:layout_width="wrap_content"
-        android:layout_height="15dp"
+        android:layout_height="20dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="6dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:src="@drawable/more"
         android:visibility="gone"
+        android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/profile_layout" />
 
@@ -111,7 +112,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="Recruitment officer"
         android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/profile_layout"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
@@ -125,7 +125,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:text="Recruitment officer"
         android:textColor="#EF8080"
         android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/tv_designation"
@@ -217,7 +216,7 @@
                 style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="42dp"
                 android:layout_marginTop="4dp"
                 android:fontFamily="@font/nunitosansbold"
                 android:text="58"
@@ -327,6 +326,7 @@
                     android:id="@+id/like_click"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:paddingLeft="10dp"
                     android:layout_weight="1">
                     <ImageView
                         android:id="@+id/img_like"
@@ -362,6 +362,7 @@
                     android:id="@+id/comment_click"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:paddingLeft="10dp"
                     android:layout_weight="1.2">
                     <ImageView
                         android:id="@+id/img_comment"
@@ -398,6 +399,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="16dp"
+                    android:paddingLeft="10dp"
                     android:layout_weight="1">
 
                     <ImageView
@@ -436,14 +438,15 @@
         style="@style/TextStyle.Title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="2dp"
         android:ellipsize="end"
         android:fontFamily="@font/nunitosansregular"
         android:maxLines="3"
         android:text="“Things you’d never hear in a ticket office” … Let’s play a game of mock the week, or the LinkedIn version of Mock the Week. I’ll Start: https://lnkd.in… see more"
-        android:textSize="13.5sp"
         android:textColor="@color/black"
+        android:textSize="13.5sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_layout" />

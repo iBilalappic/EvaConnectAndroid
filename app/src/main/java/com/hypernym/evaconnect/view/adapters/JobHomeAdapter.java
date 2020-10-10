@@ -315,6 +315,16 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
                     } else {
                         ((JobHomeAdapter.JobTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
+                    if(posts.get(position).getUser().getId()== LoginUtils.getLoggedinUser().getId())
+                    {
+                        ((JobHomeAdapter.JobTypeViewHolder) holder).img_more.setVisibility(View.VISIBLE);
+                        ((JobTypeViewHolder) holder).tv_apply.setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                        ((JobHomeAdapter.JobTypeViewHolder) holder).img_more.setVisibility(View.GONE);
+                        ((JobTypeViewHolder) holder).tv_apply.setVisibility(View.VISIBLE);
+                    }
                     if (LoginUtils.getUser() != null && LoginUtils.getUser().getType().equals("company")) {
                         ((JobHomeAdapter.JobTypeViewHolder) holder).tv_apply.setVisibility(View.GONE);
                     } else {
@@ -336,16 +346,7 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
                         }
                     }
 
-                    if(posts.get(position).getUser().getId()== LoginUtils.getLoggedinUser().getId())
-                    {
-                        ((JobHomeAdapter.JobTypeViewHolder) holder).img_more.setVisibility(View.VISIBLE);
-                        ((JobTypeViewHolder) holder).tv_apply.setVisibility(View.GONE);
-                    }
-                    else
-                    {
-                        ((JobHomeAdapter.JobTypeViewHolder) holder).img_more.setVisibility(View.GONE);
-                        ((JobTypeViewHolder) holder).tv_apply.setVisibility(View.VISIBLE);
-                    }
+
 
 
 

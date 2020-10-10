@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -14,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -130,6 +133,12 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     @BindView(R.id.button_save)
     Button button_save;
 
+    @BindView(R.id.attachment)
+    ConstraintLayout attachment;
+
+    @BindView(R.id.attachment_preview)
+    WebView attachment_preview;
+
     private CommentsAdapter commentsAdapter;
     private SliderImageAdapter sliderImageAdapter;
     private List<Comment> comments = new ArrayList<>();
@@ -213,7 +222,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
             post.setPost_type(AppConstants.IMAGE_TYPE);
         } else if (post.getType().equalsIgnoreCase("post") && post.getPost_video() != null) {
             post.setPost_type(AppConstants.VIDEO_TYPE);
-        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() == 0 && AppUtils.containsURL(post.getContent()).size() == 0) {
+        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() == 0 && AppUtils.containsURL(post.getContent()).size() == 0 && post.getPost_document()==null) {
             post.setPost_type(AppConstants.TEXT_TYPE);
         } else if (post.getType().equalsIgnoreCase("event")) {
             post.setPost_type(AppConstants.EVENT_TYPE);
@@ -223,6 +232,10 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         }
         else if (post.getType().equalsIgnoreCase("post") && AppUtils.containsURL(post.getContent()).size() > 0) {
             post.setPost_type(AppConstants.LINK_POST);
+        }
+        else if(post.getType().equalsIgnoreCase("post") && post.getPost_document()!=null)
+        {
+           post.setPost_type(AppConstants.DOCUMENT_TYPE);
         }
     }
 
@@ -241,6 +254,14 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         tv_createddateTime.setText(DateUtils.getFormattedDateTime(post.getCreated_datetime()));
         tv_minago.setText(DateUtils.getTimeAgo(post.getCreated_datetime()));
         tv_name.setText(post.getUser().getFirst_name());
+//        if(post.getContent().length()==0)
+//        {
+//            tv_content.setVisibility(View.GONE);
+//        }
+//        else
+//        {
+//            tv_content.setVisibility(View.VISIBLE);
+//        }
         tv_content.setText(post.getContent());
         //Hide connect option if post is from logged in user
         User user = LoginUtils.getLoggedinUser();
@@ -295,6 +316,19 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
                 link.setText(URLs.get(0));
                 link.setVisibility(View.VISIBLE);
             }
+
+        }
+        else if(post.getPost_type() == AppConstants.DOCUMENT_TYPE)
+        {
+            attachment.setVisibility(View.VISIBLE);
+           attachment_preview.setWebViewClient(new WebViewClient());
+           attachment_preview.getSettings().setSupportZoom(false);
+            attachment_preview.getSettings().setJavaScriptEnabled(true);
+            attachment_preview.getSettings().getAllowFileAccess();
+            attachment_preview.getSettings().getAllowUniversalAccessFromFileURLs();
+            attachment_preview.getSettings().getAllowFileAccessFromFileURLs();
+            attachment_preview.setEnabled(false);
+            attachment_preview.loadUrl("https://docs.google.com/gview?embedded=true&url=" + post.getPost_document());
 
         }
     }

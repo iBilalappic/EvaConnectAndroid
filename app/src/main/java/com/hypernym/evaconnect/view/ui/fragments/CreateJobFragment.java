@@ -151,7 +151,10 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
         postAd.setOnClickListener(this);
         tv_browsefiles.setOnClickListener(this);
         img_backarrow.setOnClickListener(this);
+
         init();
+        showBackButton();
+
         return view;
     }
 
@@ -160,10 +163,12 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
         jobListViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(JobListViewModel.class);
         createJobAdViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(CreateJobAdViewModel.class);
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(UserViewModel.class);
+        setPageTitle("Create Job");
 
         if ((getArguments() != null)) {
             setPageTitle("");
             postAd.setText("Update Job Listing");
+            setPageTitle("Update Job");
             //  showBackButton();
             job_id = getArguments().getInt("job_id");
             if (job_id != 0) {
@@ -184,6 +189,8 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
                 edit_amount.setText(myFormatter.format(companyJobAdModel.getSalary()));
                 edit_jobdescription.setText(companyJobAdModel.getContent());
                 mJob_id = companyJobAdModel.getId();
+                getSectorFromApi(LoginUtils.getUser().getWork_aviation());
+                getJobTypes();
                 // getSectorFromApi(LoginUtils.getUser().getWork_aviation());
             }
 //            if (companyJobAdModel.getWeeklyHours() != null) {
@@ -192,8 +199,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
 //            }
         }
         edit_companyName.setText(LoginUtils.getUser().getCompany_name());
-        getSectorFromApi(LoginUtils.getUser().getWork_aviation());
-        getJobTypes();
+
     }
 
     private void GetJob_id(Integer id) {
@@ -206,11 +212,16 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
                     edit_jobpostion.setText(getjobAd.getData().get(0).getPosition());
                     edit_Location.setText(getjobAd.getData().get(0).getLocation());
                     mJobImage = getjobAd.getData().get(0).getJobImage();
+                    companyJobAdModel.setJobSector(getjobAd.getData().get(0).getJobSector());
                     AppUtils.setGlideImage(getContext(), profile_image, getjobAd.getData().get(0).getJobImage());
                     //  String SalaryInt = getsplitstring(String.valueOf(companyJobAdModel.getSalary()));
                     DecimalFormat myFormatter = new DecimalFormat("############");
                     edit_amount.setText(myFormatter.format(getjobAd.getData().get(0).getSalary()));
                     edit_jobdescription.setText(getjobAd.getData().get(0).getContent());
+                    companyJobAdModel.setJobType(getjobAd.getData().get(0).getJobType());
+                    getSectorFromApi(LoginUtils.getUser().getWork_aviation());
+                    getJobTypes();
+
                     // getSectorFromApi(LoginUtils.getUser().getWork_aviation());
 
                 } else {
