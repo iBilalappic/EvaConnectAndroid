@@ -1126,10 +1126,15 @@ public class PostAdapter  extends RecyclerView.Adapter {
                         ((PostAdapter.LinkTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
                     ((PostAdapter.LinkTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name());
-                    if(posts.get(position).getUser().getType().equalsIgnoreCase("company"))
-                    {
-                        ((PostAdapter.LinkTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation()+" at");
+                    if(posts.get(position).getUser().getDesignation()!=null){
+//                        if(posts.get(position).getUser().getType().equalsIgnoreCase("company"))
+//                        {
+                            ((PostAdapter.LinkTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation()+" at");
+                       // }
+                    }else{
+                        ((PostAdapter.LinkTypeViewHolder) holder).tv_designation.setText("--");
                     }
+
 
                     if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
                         ((LinkTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
