@@ -154,7 +154,6 @@ public class MainViewPagerFragment extends BaseFragment implements FloatingActio
 
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-
                 //    Toast.makeText(getContext(), item.getGroupId()+"You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
                 if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu1))) {
                     NewPostFragment newPostFragment=new NewPostFragment();

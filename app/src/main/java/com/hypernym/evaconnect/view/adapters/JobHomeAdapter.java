@@ -315,7 +315,7 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
                     } else {
                         ((JobHomeAdapter.JobTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
-                    if(posts.get(position).getUser().getId()== LoginUtils.getLoggedinUser().getId())
+                    if(posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId()))
                     {
                         ((JobHomeAdapter.JobTypeViewHolder) holder).img_more.setVisibility(View.VISIBLE);
                         ((JobTypeViewHolder) holder).tv_apply.setVisibility(View.GONE);

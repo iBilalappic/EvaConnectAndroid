@@ -35,7 +35,7 @@ public class CreateJobRepository implements ICreateJobAdRepository {
         RestClient.get().appApi().createJobAd(
                 user.getId(),
                 RequestBody.create(MediaType.parse("text/plain"), user.getStatus()),
-                RequestBody.create(MediaType.parse("text/plain"), postion + " for " + companyName),
+                RequestBody.create(MediaType.parse("text/plain"), jobtitle),
                 RequestBody.create(MediaType.parse("text/plain"), jobSector),
                 RequestBody.create(MediaType.parse("text/plain"), postion),
                 RequestBody.create(MediaType.parse("text/plain"), jobDescription),
@@ -72,7 +72,7 @@ public class CreateJobRepository implements ICreateJobAdRepository {
 //        body.put("user_id",user_id);
         RestClient.get().appApi().UpdateJobAd(job_id,
                 RequestBody.create(MediaType.parse("text/plain"), user.getStatus()),
-                RequestBody.create(MediaType.parse("text/plain"), postion + " for " + companyName),
+                RequestBody.create(MediaType.parse("text/plain"), jobtitle),
                 RequestBody.create(MediaType.parse("text/plain"), jobSector),
                 RequestBody.create(MediaType.parse("text/plain"), postion),
                 RequestBody.create(MediaType.parse("text/plain"), jobDescription),

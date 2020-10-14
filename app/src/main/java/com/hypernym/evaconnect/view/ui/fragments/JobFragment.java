@@ -350,10 +350,9 @@ public class JobFragment extends BaseFragment implements View.OnClickListener, S
             @Override
             public void onChanged(BaseModel<List<Post>> listBaseModel) {
                 if (NetworkUtils.isNetworkConnected(getContext())) {
-                   // posts.clear();
-                   // callPostsApi();
-                    posts.addAll(listBaseModel.getData());
-                    postAdapter.notifyDataSetChanged();
+//                    posts.clear();
+//                    callPostsApi();
+                    onRefresh();
                 } else {
                     networkErrorDialog();
                 }

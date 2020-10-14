@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:background="@color/lighter_gray" >
+    android:background="@color/lighter_gray">
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/lighter_gray"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@+id/edt_comment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout2"
@@ -437,69 +447,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <EditText
-            android:id="@+id/edt_comment"
-            style="@style/EditText.Comments"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:background="@color/white"
-            android:hint="@string/tap_here_to_comment"
-            android:inputType="textPersonName"
-            android:text=""
-            android:textColor="@color/black"
-            android:textColorHint="@color/gray_1"
-            app:layout_constraintBottom_toTopOf="@+id/layout_editcomment"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/gray"
-            app:layout_constraintBottom_toBottomOf="@+id/edt_comment" />
 
-        <LinearLayout
-            android:id="@+id/layout_editcomment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <Button
-                android:id="@+id/button_cancel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Cancel"
-                android:textColor="@color/colorAccent" />
-
-            <Button
-                android:id="@+id/button_save"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Save Changes"
-                android:textColor="@color/black" />
-
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/btn_addcomment"
-            android:layout_width="25dp"
-            android:layout_height="21dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="24dp"
-            android:background="@drawable/ic_arrow_send"
-            android:gravity="center"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/edt_comment" />
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -507,21 +456,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/lighter_gray"
-            app:layout_constraintBottom_toTopOf="@+id/edt_comment"
             app:layout_constraintTop_toBottomOf="@+id/cardView"
             tools:layout_editor_absoluteX="1dp" />
 
-
-        <View
-            android:id="@+id/view5"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="1dp"
-            android:background="@drawable/ic_blue_red"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rc_comments" />
 
         <TextView
             android:id="@+id/tv_goback"
@@ -541,3 +478,74 @@
             app:layout_constraintTop_toBottomOf="@+id/view" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
+
+    <View
+        android:id="@+id/view5"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@drawable/ic_blue_red"
+        app:layout_constraintBottom_toTopOf="@+id/edt_comment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
+    <EditText
+        android:id="@+id/edt_comment"
+        style="@style/EditText.Comments"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:background="@color/white"
+        android:hint="@string/tap_here_to_comment"
+        android:inputType="textPersonName"
+        android:text=""
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray_1"
+        app:layout_constraintBottom_toTopOf="@+id/layout_editcomment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/edt_comment"
+        android:background="@color/gray"/>
+    <LinearLayout
+        android:id="@+id/layout_editcomment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Button
+            android:id="@+id/button_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cancel"
+            android:textColor="@color/colorAccent" />
+
+        <Button
+            android:id="@+id/button_save"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textColor="@color/black"
+            android:layout_weight="1"
+            android:text="Save Changes" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/btn_addcomment"
+        android:layout_width="25dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/ic_arrow_send"
+        android:gravity="center"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/edt_comment" />
+</androidx.constraintlayout.widget.ConstraintLayout>

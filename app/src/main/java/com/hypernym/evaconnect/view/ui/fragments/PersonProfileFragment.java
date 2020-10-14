@@ -145,8 +145,12 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
 
             tv_name.setText(post.getUser().getFirst_name());
 
-            if (post.getUser().getDesignation() != null) {
+            if (post.getUser().getDesignation() != null && !post.getUser().getDesignation().isEmpty()) {
                 tv_profession.setText(post.getUser().getDesignation());
+            }
+            else
+            {
+                tv_profession.setText(post.getUser().getCompany_name());
             }
 
 //            tv_location.setText(post.getUser().getCountry() + "," + post.getUser().getCity());
@@ -241,8 +245,12 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
             tv_location.setText(user.getCountry() + "," + user.getCity());
             tv_company.setText(user.getSector() + " | " + user.getCompany_name());
             tv_connections_count.setText(String.valueOf(user.getConnection_count()));
-            if (user.getDesignation() != null) {
+            if (user.getDesignation() != null && !user.getDesignation().isEmpty()) {
                 tv_profession.setText(user.getDesignation());
+            }
+            else
+            {
+                tv_profession.setText(user.getCompany_name());
             }
             tv_connect.setVisibility(View.GONE);
             layout_message.setVisibility(View.GONE);

@@ -57,7 +57,7 @@
 <!--                    android:scheme="example" />-->
 <!--            </intent-filter>-->
 
-<!--            android:windowSoftInputMode="stateHidden|adjustPan"-->
+
         </activity>
         <activity
             android:name=".view.ui.activities.ForgotPassword"

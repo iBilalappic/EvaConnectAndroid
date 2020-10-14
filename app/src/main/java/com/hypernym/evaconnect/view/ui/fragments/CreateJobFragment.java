@@ -179,9 +179,9 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
                 Log.d("TAAAG", GsonUtils.toJson(companyJobAdModel));
                 AppUtils.setGlideImage(getContext(), profile_image, companyJobAdModel.getJobImage());
                 //   String companyname = getsplitCompanyName(companyJobAdModel.getJobTitle());
-                String jobtitle = getsplitTitle(companyJobAdModel.getJobTitle());
+              //  String jobtitle = getsplitTitle(companyJobAdModel.getJobTitle());
                 edit_companyName.setText(LoginUtils.getUser().getCompany_name());
-                edit_jobtitle.setText(jobtitle);
+                edit_jobtitle.setText(companyJobAdModel.getJobTitle());
                 edit_jobpostion.setText(companyJobAdModel.getPosition());
                 edit_Location.setText(companyJobAdModel.getLocation());
                 //  String SalaryInt = getsplitstring(String.valueOf(companyJobAdModel.getSalary()));
@@ -199,7 +199,8 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
 //            }
         }
         edit_companyName.setText(LoginUtils.getUser().getCompany_name());
-
+        getSectorFromApi(LoginUtils.getUser().getWork_aviation());
+        getJobTypes();
     }
 
     private void GetJob_id(Integer id) {

@@ -226,6 +226,7 @@ public class SpecficJobComments extends BaseFragment implements MyLikeAdapter.On
                     } else {
                         img_like.setBackground(getActivity().getDrawable(R.drawable.ic_like));
                     }
+                    GetJobComments(job_id);
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
@@ -339,7 +340,7 @@ public class SpecficJobComments extends BaseFragment implements MyLikeAdapter.On
                 comments.clear();
                 if (getComments != null && !getComments.isError()) {
                     comments.addAll(getComments.getData());
-                    if(jobAd.getUserId()==LoginUtils.getLoggedinUser().getId())
+                    if(specficJobAd.getUserId().equals(LoginUtils.getLoggedinUser().getId()))
                     {
                         for (Comment comment:comments)
                         {
@@ -372,11 +373,11 @@ public class SpecficJobComments extends BaseFragment implements MyLikeAdapter.On
             if (job_id != 0) {
                 GetJob_id(job_id);
 
-                GetJobComments(job_id);
+
             } else {
                 GetJob_id(jobAd.getId());
 
-                GetJobComments(jobAd.getId());
+
             }
 
             //  }

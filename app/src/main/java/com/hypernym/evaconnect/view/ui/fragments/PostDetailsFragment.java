@@ -368,7 +368,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
                 comments.clear();
                 if (listBaseModel != null && !listBaseModel.isError()) {
                     comments.addAll(listBaseModel.getData());
-                    if(post.getUser().getId()==LoginUtils.getLoggedinUser().getId())
+                    if(post.getUser().getId().equals(LoginUtils.getLoggedinUser().getId()))
                     {
                         for (Comment comment:comments)
                         {

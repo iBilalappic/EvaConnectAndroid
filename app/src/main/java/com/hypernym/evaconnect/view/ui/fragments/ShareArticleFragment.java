@@ -123,6 +123,9 @@ public class ShareArticleFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_share_article, container, false);
         ButterKnife.bind(this, view);
         postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(PostViewModel.class);
+   //    getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+    //    edt_content.setImeOptions(EditorInfo.IME_ACTION_DONE);
+       // getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         init();
 
         if(getArguments()!=null && getArguments().getBoolean("isEdit"))

@@ -97,7 +97,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
         holder.tv_content.setText(comments.get(position).getContent());
         holder.tv_date.setText(DateUtils.getFormattedDateTime(comments.get(position).getCreated_datetime()));
 
-        if(comments.get(position).getUser().getId()==LoginUtils.getLoggedinUser().getId() || comments.get(position).isPostMine())
+        if(comments.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId()) || comments.get(position).isPostMine())
         {
             holder.more.setVisibility(View.VISIBLE);
         }
@@ -136,7 +136,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
                 popup.getMenuInflater().inflate(R.menu.comment_menu, popup.getMenu());
 
 
-                if(comments.get(position).getUser().getId()== LoginUtils.getLoggedinUser().getId())
+                if(comments.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId()))
                 {
                     popup.getMenu().findItem(R.id.action_edit).setVisible(true);
                 }

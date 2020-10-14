@@ -60,9 +60,6 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
     @BindView(R.id.calendarView)
     MaterialCalendarView calendarView;
 
-
-
-
     @BindView(R.id.rc_events)
     RecyclerView rc_events;
 
@@ -120,7 +117,6 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
 
         calendarView.setOnDateChangedListener(this);
         calendarView.setOnMonthChangedListener(this);
-
 
         eventAdapter=new EventAdapter(getContext(),eventList,this);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
@@ -210,6 +206,9 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
             public void onChanged(BaseModel<List<CalendarModel>> listBaseModel) {
                 if(!listBaseModel.isError() && listBaseModel.getData()!=null)
                 {
+                    calendarMarks=new ArrayList<>();
+                    eventList.clear();
+                    eventAdapter.notifyDataSetChanged();
                     setEvents(listBaseModel.getData());
                     // makeJsonObjectRequest(listBaseModel.getData());
                 }
@@ -235,6 +234,7 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(d);
                     CalendarDay day = CalendarDay.from(cal.get(Calendar.YEAR),cal.get(Calendar.MONTH)+1,cal.get(Calendar.DAY_OF_MONTH));
+
                     CalendarMarks calendarMark=isRecordExist(calendarMarks,day);
 
                     if(calendarMark.getDay()==null)

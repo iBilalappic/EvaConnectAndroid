@@ -171,7 +171,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
          if(NetworkUtils.isNetworkConnected(getContext()))
          {
              getEventDetails(event_id);
-             getEventComments(event_id);
+
          }
          else
          {
@@ -248,7 +248,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
                 if(listBaseModel!=null && !listBaseModel.isError())
                 {
                     comments.addAll(listBaseModel.getData());
-                    if(event.getUser_id()==LoginUtils.getLoggedinUser().getId())
+                    if(event.getUser_id().equals(LoginUtils.getLoggedinUser().getId()))
                     {
                         for (Comment comment:comments)
                         {
@@ -284,6 +284,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
                         invitedConnections.add(user.getUser());
                     }
                 usersAdapter.notifyDataSetChanged();
+                    getEventComments(event_id);
                 }
                 else
                 {

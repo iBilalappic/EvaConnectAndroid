@@ -1,7 +1,7 @@
 <resources>
 
     <string name="new_post">Your Post have been submitted to feeds</string>
-    <string name="app_version">Ver.No.1.5</string>
+    <string name="app_version">Ver.No.1.6</string>
     <string name="app_name">Aviation Connect</string>
     <string name="errorString">Something went wrong, Please try again.</string>
     <string name="title_activity_login">LoginActivity</string>
@@ -75,6 +75,7 @@
     <!--Messages-->
     <string name="msg_connect_request">Your connection request has been sent</string>
     <string name="msg_post_created">Your post has been created successfully!</string>
+    <string name="msg_post_updated">Your post has been update successfully!</string>
     <string name="msg_comment_created">Comment has been created successfully.</string>
     <string name="msg_remove_attachment">Are you sure you want to remove this attachment?</string>
     <string name="msg_remove_invite">Are you sure you want to remove this user?</string>

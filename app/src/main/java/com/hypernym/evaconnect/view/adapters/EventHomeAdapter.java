@@ -269,7 +269,7 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
                     } else {
                         ((EventHomeAdapter.EventTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
-                    if(posts.get(position).getUser().getId()== LoginUtils.getLoggedinUser().getId())
+                    if(posts.get(position).getUser().getId().equals( LoginUtils.getLoggedinUser().getId()))
                     {
                         ((EventTypeViewHolder) holder).tv_attending.setVisibility(View.GONE);
                         ((EventTypeViewHolder) holder).img_more.setVisibility(View.VISIBLE);
