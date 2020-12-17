@@ -2,10 +2,8 @@ package com.hypernym.evaconnect.view.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -25,32 +23,20 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.decorators.ItemDecorationAlbumColumns;
 import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.NewSources;
-import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
-import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.utils.RecyclerItemClickListener;
-import com.hypernym.evaconnect.view.adapters.CompanyJobAdAdapter;
-import com.hypernym.evaconnect.view.adapters.JobAdAdapter;
 import com.hypernym.evaconnect.view.adapters.NewsAdapter;
-import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
-import com.hypernym.evaconnect.viewmodel.JobListViewModel;
-import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
-import com.mobsandgeeks.saripaar.annotation.Email;
-import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class NewsActivity extends BaseActivity implements Validator.ValidationListener, NewsAdapter.OnItemClickListener, View.OnClickListener {
 
@@ -150,6 +136,20 @@ public class NewsActivity extends BaseActivity implements Validator.ValidationLi
                     }
                 }
                 multi_select(position);
+
+
+                if(MultiSelect.size()>0)
+                {
+                    btn_next.setVisibility(View.VISIBLE);
+                    textView4.setVisibility(View.GONE);
+                }
+                else
+                {
+                    btn_next.setVisibility(View.GONE);
+                    textView4.setVisibility(View.VISIBLE);
+                }
+
+
                 //      Toast.makeText(getContext(), ""+user_list.get(position).getSelected_person(), Toast.LENGTH_SHORT).show();
             }
 
