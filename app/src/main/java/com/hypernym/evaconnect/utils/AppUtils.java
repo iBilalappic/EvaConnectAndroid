@@ -475,5 +475,4 @@ public final class AppUtils {
         }
     }
 
-
 }

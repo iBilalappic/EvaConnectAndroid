@@ -1,18 +1,26 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
+import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.DownloadListener;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import com.hypernym.evaconnect.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static android.content.Context.DOWNLOAD_SERVICE;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class WebviewCvFragment extends BaseFragment {
 
@@ -53,6 +61,26 @@ public class WebviewCvFragment extends BaseFragment {
             cv_url = getArguments().getString("applicant_cv");
 
             wv_cv.loadUrl("https://docs.google.com/gview?embedded=true&url=" + cv_url);
+            wv_cv.setDownloadListener(new DownloadListener() {
+
+                @Override
+                public void onDownloadStart(String url, String userAgent,
+                                            String contentDisposition, String mimetype,
+                                            long contentLength) {
+                    DownloadManager.Request request = new DownloadManager.Request(
+                            Uri.parse(url));
+
+                    request.allowScanningByMediaScanner();
+                    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED); //Notify client once download is completed!
+                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "pdf");
+                    DownloadManager dm = (DownloadManager) getContext().getSystemService(DOWNLOAD_SERVICE);
+                    dm.enqueue(request);
+                    Toast.makeText(getApplicationContext(), "Downloading File", //To notify the Client that the file is being downloaded
+                            Toast.LENGTH_LONG).show();
+                    wv_cv.loadUrl("https://docs.google.com/gview?embedded=true&url=" + cv_url);
+                }
+            });
+
         }
     }
 

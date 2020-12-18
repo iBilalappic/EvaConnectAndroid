@@ -27,7 +27,6 @@ android {
         manifestPlaceholders = [onesignal_app_id               : '44bb428a-54f5-4155-bea3-c0ac2d0b3c1a',
                                 onesignal_google_project_number: 'REMOTE'
         ]
-
     }
     dexOptions {
         javaMaxHeapSize "4g"
