@@ -9,6 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -899,6 +901,14 @@ public class PostAdapter  extends RecyclerView.Adapter {
                             public void onPageFinished(WebView view, String url) {
                                 super.onPageFinished(view, url);
                               //  pDialog.dismiss();
+                            }
+
+                            @Override
+                            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                                super.onReceivedError(view, request, error);
+
+
+                                ((ImageTypeViewHolder) holder).attachment_preview.loadUrl("https://docs.google.com/gview?embedded=true&url=" + posts.get(position).getPost_document());
                             }
                         });
                     }

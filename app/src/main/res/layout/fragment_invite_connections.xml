@@ -10,7 +10,7 @@
     <EditText
         android:id="@+id/edt_search"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="57dp"
         android:layout_marginStart="@dimen/spacing_medium"
         android:background="@color/white"
         android:hint="Search for Connections"

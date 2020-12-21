@@ -10,9 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.DownloadListener;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.hypernym.evaconnect.R;
 
@@ -41,11 +46,22 @@ public class WebviewCvFragment extends BaseFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_cv_webview, container, false);
         ButterKnife.bind(this, view);
-        init();
+
         showBackButton();
         setPageTitle("Preview Pdf");
         listener();
+
+
         return view;
+    }
+
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+
+        init();
     }
 
     private void init() {
@@ -55,12 +71,10 @@ public class WebviewCvFragment extends BaseFragment {
             pDialog.setMessage("Loading...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
-            wv_cv.setWebViewClient(new WebViewClient());
-            wv_cv.getSettings().setSupportZoom(true);
-            wv_cv.getSettings().setJavaScriptEnabled(true);
-            cv_url = getArguments().getString("applicant_cv");
 
-            wv_cv.loadUrl("https://docs.google.com/gview?embedded=true&url=" + cv_url);
+            LoadPdf();
+
+
             wv_cv.setDownloadListener(new DownloadListener() {
 
                 @Override
@@ -97,9 +111,31 @@ public class WebviewCvFragment extends BaseFragment {
                 super.onPageFinished(view, url);
                 pDialog.dismiss();
             }
+
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+
+
+                LoadPdf();
+            }
         });
     }
 
+
+    public void LoadPdf() {
+        wv_cv.setWebViewClient(new WebViewClient());
+        wv_cv.getSettings().setSupportZoom(true);
+        wv_cv.getSettings().setJavaScriptEnabled(true);
+        wv_cv.getSettings().getAllowFileAccess();
+        wv_cv.getSettings().getAllowFileAccess();
+        wv_cv.getSettings().getAllowFileAccessFromFileURLs();
+        wv_cv.getSettings().getAllowUniversalAccessFromFileURLs();
+
+        cv_url = getArguments().getString("applicant_cv");
+
+        wv_cv.loadUrl("https://docs.google.com/gview?embedded=true&url=" + cv_url);
+    }
 
 }
 
