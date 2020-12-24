@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.NotifyEvent;
@@ -32,6 +33,7 @@ import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.Constants;
+import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.PrefUtils;
 import com.hypernym.evaconnect.view.adapters.NotificationsAdapter;
@@ -59,11 +61,15 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HomeActivity extends BaseActivity {
 
@@ -535,7 +541,27 @@ public class HomeActivity extends BaseActivity {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.framelayout);
         if (fragment instanceof HomeFragment) {
 
-            finish();
+
+
+            HashMap<String,Object> body=new HashMap<>();
+
+            body.put("modified_by_id",LoginUtils.getLoggedinUser().getId());
+            body.put("last_online_datetime", DateUtils.GetCurrentdatetime());
+            body.put("is_online",false);
+            RestClient.get().appApi().userOnline(LoginUtils.getLoggedinUser().getId(),body).enqueue(new Callback<BaseModel<List<User>>>() {
+                @Override
+                public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
+                    finish();
+                }
+
+                @Override
+                public void onFailure(Call<BaseModel<List<User>>> call, Throwable t) {
+                    finish();
+                }
+            });
+
+
+
 
         } else if (fragment instanceof MyLikesFragment || fragment instanceof ConnectionsFragment || fragment instanceof EditProfileFragment || fragment instanceof NotificationsFragment || fragment instanceof MessageFragment) {
 //            img_home.setImageDrawable(getDrawable(R.drawable.home_selected));

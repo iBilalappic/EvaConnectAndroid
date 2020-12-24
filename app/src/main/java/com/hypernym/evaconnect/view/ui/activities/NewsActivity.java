@@ -2,6 +2,8 @@ package com.hypernym.evaconnect.view.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,7 +40,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class NewsActivity extends BaseActivity implements Validator.ValidationListener, NewsAdapter.OnItemClickListener, View.OnClickListener {
+public class NewsActivity extends BaseActivity implements Validator.ValidationListener, NewsAdapter.OnItemClickListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
 
     private Validator validator;
@@ -87,6 +89,8 @@ public class NewsActivity extends BaseActivity implements Validator.ValidationLi
         img_backarrow.setOnClickListener(this);
         btn_next.setOnClickListener(this);
         init();
+
+        swipeRefresh.setOnRefreshListener(this);
     }
 
     private void init() {
@@ -304,5 +308,21 @@ public class NewsActivity extends BaseActivity implements Validator.ValidationLi
 
             }
         });
+    }
+
+    @Override
+    public void onRefresh() {
+
+         Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefresh.setRefreshing(false);
+            }
+        }, 3000);
+
+
+
+
     }
 }

@@ -139,7 +139,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                 if (listBaseModel.getData() != null && !listBaseModel.isError()) {
                     if (!TextUtils.isEmpty(listBaseModel.getData().get(0).getUser_image())) {
                         AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getUser_image());
-                        tv_password.setEnabled(false);
+//                        tv_password.setEnabled(false);
                     }
 //                    else if (listBaseModel.getData().get(0).getIs_facebook() == 1 && !TextUtils.isEmpty(listBaseModel.getData().get(0).getFacebook_image_url())) {
 //                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getFacebook_image_url());

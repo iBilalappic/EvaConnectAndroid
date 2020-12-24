@@ -3,6 +3,7 @@ package com.hypernym.evaconnect.view.adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -874,13 +875,64 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     if(posts.get(position).getPost_document()!=null)
                     {
                         ((ImageTypeViewHolder) holder).attachment.setVisibility(View.VISIBLE);
-                        ((ImageTypeViewHolder) holder).attachment_preview.setWebViewClient(new WebViewClient());
+
+
+                        ((ImageTypeViewHolder) holder).attachment_preview.setWebViewClient(new WebViewClient() {
+                            @Override
+                            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                                super.onPageStarted(view, url, favicon);
+                                // pDialog.show();
+                            }
+
+                            @Override
+                            public void onPageFinished(WebView view, String url) {
+                                super.onPageFinished(view, url);
+                                //  pDialog.dismiss();
+
+
+                                super.onPageFinished(view, url);
+
+
+
+
+
+
+
+
+
+                                if (!(((ImageTypeViewHolder) holder).attachment_preview.getContentHeight() > 0)) {
+
+                                    ((ImageTypeViewHolder) holder).attachment_preview.reload();
+
+                                }
+
+
+//                                Log.e("erroris","infinish");
+
+                            }
+
+                            @Override
+                            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                                super.onReceivedError(view, request, error);
+
+
+//                                ((ImageTypeViewHolder) holder).attachment_preview.loadUrl("https://docs.google.com/gview?embedded=true&url=" + posts.get(position).getPost_document());
+
+                                ((ImageTypeViewHolder) holder).attachment_preview.reload();
+                            }
+                        });
+
+
+
+//                        ((ImageTypeViewHolder) holder).attachment_preview.setWebViewClient(new WebViewClient());
                         ((ImageTypeViewHolder) holder).attachment_preview.getSettings().setSupportZoom(false);
                         ((ImageTypeViewHolder) holder).attachment_preview.getSettings().setJavaScriptEnabled(true);
-                        ((ImageTypeViewHolder) holder).attachment_preview.getSettings().getAllowFileAccess();
-                        ((ImageTypeViewHolder) holder).attachment_preview.getSettings().getAllowUniversalAccessFromFileURLs();
-                        ((ImageTypeViewHolder) holder).attachment_preview.getSettings().getAllowFileAccessFromFileURLs();
-                        ((ImageTypeViewHolder) holder).attachment_preview.setEnabled(false);
+                        ((ImageTypeViewHolder) holder).attachment_preview.getSettings().setAllowFileAccess(true);
+                        ((ImageTypeViewHolder) holder).attachment_preview.getSettings().setAllowFileAccessFromFileURLs(true);
+                        ((ImageTypeViewHolder) holder).attachment_preview.getSettings().setDomStorageEnabled(true);
+                        ((ImageTypeViewHolder) holder).attachment_preview.getSettings().setAllowUniversalAccessFromFileURLs(true);
+
+//                        ((ImageTypeViewHolder) holder).attachment_preview.setEnabled(false);
 //                        ((ImageTypeViewHolder) holder).attachment_preview.setOnTouchListener(null);
 
                        // cv_url = getArguments().getString("applicant_cv");
@@ -890,27 +942,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
 
                         String fileName = posts.get(position).getPost_document().substring(posts.get(position).getPost_document().lastIndexOf('/') + 1);
                         ((ImageTypeViewHolder) holder).tv_filename.setText(fileName);
-                        ((ImageTypeViewHolder) holder).attachment_preview.setWebViewClient(new WebViewClient() {
-                            @Override
-                            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                                super.onPageStarted(view, url, favicon);
-                               // pDialog.show();
-                            }
 
-                            @Override
-                            public void onPageFinished(WebView view, String url) {
-                                super.onPageFinished(view, url);
-                              //  pDialog.dismiss();
-                            }
-
-                            @Override
-                            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-                                super.onReceivedError(view, request, error);
-
-
-                                ((ImageTypeViewHolder) holder).attachment_preview.loadUrl("https://docs.google.com/gview?embedded=true&url=" + posts.get(position).getPost_document());
-                            }
-                        });
                     }
                     else
                     {
@@ -1012,6 +1044,19 @@ public class PostAdapter  extends RecyclerView.Adapter {
                             public void onPageFinished(WebView view, String url) {
                                 super.onPageFinished(view, url);
                                 //  pDialog.dismiss();
+
+
+
+
+                                if (!(((ImageTypeViewHolder) holder).attachment_preview.getContentHeight() > 0)) {
+
+                                    ((ImageTypeViewHolder) holder).attachment_preview.reload();
+
+                                }
+
+
+//                                Log.e("erroris","infinish");
+
                             }
                         });
                     }

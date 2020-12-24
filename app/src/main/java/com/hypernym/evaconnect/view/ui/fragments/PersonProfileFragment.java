@@ -41,6 +41,9 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
     @BindView(R.id.profile_image)
     ImageView profile_image;
 
+    @BindView(R.id.bell)
+    ImageView bell;
+
     @BindView(R.id.tv_name)
     TextView tv_name;
 
@@ -132,6 +135,9 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
             post = (Post) getArguments().getSerializable("PostData");
             Log.d("TAAAG", GsonUtils.toJson(post));
 
+
+
+
             if (!TextUtils.isEmpty(post.getUser().getUser_image())) {
                 AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getUser_image());
 
@@ -156,6 +162,17 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
 //            tv_location.setText(post.getUser().getCountry() + "," + post.getUser().getCity());
 //            tv_company.setText(post.getUser().getSector() + " | " + post.getUser().getCompany_name());
            tv_connections_count.setText(String.valueOf(post.getUser().getTotal_connection()));
+
+//            if(post.getUser().getIs_notifications()>0)
+//            {
+//                bell.setImageResource(R.drawable.ic_notification_bell);
+//            }
+//            else
+//            {
+//                bell.setImageResource(R.drawable.ic_bell);
+//            }
+
+
             getUserDetails();
 
             if (post.getUser().getId().equals(user.getId())) {
@@ -245,6 +262,16 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
             tv_location.setText(user.getCountry() + "," + user.getCity());
             tv_company.setText(user.getSector() + " | " + user.getCompany_name());
             tv_connections_count.setText(String.valueOf(user.getConnection_count()));
+
+
+//            if(user.getIs_notifications()>0)
+//            {
+//                bell.setImageResource(R.drawable.ic_notification_bell);
+//            }
+//            else
+//            {
+//                bell.setImageResource(R.drawable.ic_bell);
+//            }
             if (user.getDesignation() != null && !user.getDesignation().isEmpty()) {
                 tv_profession.setText(user.getDesignation());
             }
@@ -362,6 +389,8 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                 loadFragment(R.id.framelayout, editProfileFragment, getContext(), true);
                 break;
             case R.id.layout_notification:
+
+                bell.setImageResource(R.drawable.ic_bell);
                 ActivityFragment activityFragment=new ActivityFragment();
                 Bundle bundle=new Bundle();
                 bundle.putBoolean("isNotification",true);
