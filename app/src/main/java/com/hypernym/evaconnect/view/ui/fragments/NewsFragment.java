@@ -426,8 +426,10 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener, 
                 } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
                     isLastPage = true;
                     postAdapter.removeLoading();
+                    swipeRefresh.setRefreshing(false);
                     isLoading = false;
                 } else {
+                    swipeRefresh.setRefreshing(false);
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
 

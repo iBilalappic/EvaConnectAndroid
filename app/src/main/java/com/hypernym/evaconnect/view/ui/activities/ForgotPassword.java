@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.hypernym.evaconnect.R;
@@ -42,6 +43,10 @@ public class ForgotPassword extends BaseActivity implements Validator.Validation
     @BindView(R.id.btn_reset)
     Button btn_reset;
 
+    @BindView(R.id.layout_arrow)
+    LinearLayout layout_arrow;
+
+
     @BindView(R.id.img_backarrow)
     ImageView img_backarrow;
 
@@ -59,7 +64,7 @@ public class ForgotPassword extends BaseActivity implements Validator.Validation
         validator = new Validator(this);
         validator.setValidationListener(this);
 
-        img_backarrow.setOnClickListener(new View.OnClickListener() {
+        layout_arrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();

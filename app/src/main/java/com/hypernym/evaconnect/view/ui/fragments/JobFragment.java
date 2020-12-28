@@ -231,7 +231,9 @@ public class JobFragment extends BaseFragment implements View.OnClickListener, S
                     isLastPage = true;
                    // postAdapter.removeLoading();
                     isLoading = false;
+                    swipeRefresh.setRefreshing(false);
                 } else {
+                    swipeRefresh.setRefreshing(false);
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
 

@@ -184,15 +184,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_extra_large"
-        android:layout_marginEnd="@dimen/spacing_extra_extra_large"
-        android:layout_marginTop="@dimen/spacing_extra_large"
-        android:layout_marginRight="@dimen/spacing_extra_large"
-        android:layout_marginLeft="@dimen/spacing_extra_extra_large"
+        android:layout_marginEnd="@dimen/spacing_extra_large"
+        android:layout_marginTop="@dimen/spacing_medium"
         android:background="@drawable/chat_bg2"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        android:visibility="gone"
-
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_receivetime">
 
@@ -212,8 +209,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="@dimen/spacing_large"
-                    android:layout_marginEnd="@dimen/spacing_medium"
+
                     android:layout_weight="1"
                     android:gravity="start|center_vertical"
                     android:text="--"
@@ -226,6 +222,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/spacing_medium"
+                    android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
