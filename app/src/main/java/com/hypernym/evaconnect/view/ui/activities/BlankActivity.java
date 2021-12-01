@@ -29,6 +29,7 @@ import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
+import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.view.ui.activities.BaseActivity;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
@@ -48,7 +49,7 @@ public class BlankActivity extends BaseActivity {
 
 
     private UserViewModel userViewModel;
-    String email,photourl;
+    String email,photourl,path;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,7 @@ public class BlankActivity extends BaseActivity {
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getApplication(), this)).get(UserViewModel.class);
         email = getIntent().getStringExtra("Email");
         photourl = getIntent().getStringExtra("Photo");
+        path = getIntent().getStringExtra("Path");
         CheckUserExist(email);
     }
 
@@ -73,9 +75,10 @@ public class BlankActivity extends BaseActivity {
                         JustLoginApiCall();
                         //  }
                     } else {
-                        Intent intent = new Intent(BlankActivity.this, SignupActivity_0.class);
+                        Intent intent = new Intent(BlankActivity.this, CreateAccount_1_Activity.class);
                         intent.putExtra("Email", linkedInUserEmailAddress);
                         intent.putExtra("Photo", photourl);
+                        intent.putExtra("Path", path);
                         intent.putExtra(Constants.ACTIVITY_NAME,"LinkedinActivity");
                         startActivity(intent);
                     }
@@ -88,23 +91,32 @@ public class BlankActivity extends BaseActivity {
 
         if (NetworkUtils.isNetworkConnected(this)) {
 //            showDialog();
-            userViewModel.linkedin_login(email).observe(this, new Observer<BaseModel<List<User>>>() {
+            userViewModel.linkedin_login(email,Constants.LINKEDIN_TYPE).observe(this, new Observer<BaseModel<List<User>>>() {
                 @Override
                 public void onChanged(BaseModel<List<User>> listBaseModel) {
-                    LoginUtils.userLoggedIn();
-                    User userData = listBaseModel.getData().get(0);
-                    userData.setUser_id(userData.getId());
-                    LoginUtils.saveUser(listBaseModel.getData().get(0));
-                    OneSignal.sendTag("email", userData.getEmail());
-                    UserDetails.username = userData.getFirst_name();
-                    if (listBaseModel.getData().get(0) != null) {
-                        LoginUtils.saveUserToken(listBaseModel.getData().get(0).getToken());
-                    }
 
-                    Intent intent = new Intent(BlankActivity.this, HomeActivity.class);
-                    // set the new task and clear flags
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
+                    if(!listBaseModel.isError()) {
+                        LoginUtils.userLoggedIn();
+                        User userData = listBaseModel.getData().get(0);
+                        userData.setUser_id(userData.getId());
+                        LoginUtils.saveUser(listBaseModel.getData().get(0));
+                        OneSignal.sendTag("email", userData.getEmail());
+                        UserDetails.username = userData.getFirst_name();
+                        if (listBaseModel.getData().get(0) != null) {
+                            LoginUtils.saveUserToken(listBaseModel.getData().get(0).getToken());
+                        }
+
+                        Intent intent = new Intent(BlankActivity.this, HomeActivity.class);
+                        // set the new task and clear flags
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    }
+                    else
+                    {
+                        UserExistFbLinkedin(getString(R.string.error), listBaseModel.getMessage());
+
+
+                    }
                 }
             });
         }

@@ -9,19 +9,22 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
 
     <application
         android:name=".EvaconnectApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
-        android:icon="@drawable/ic_new_app_logo"
+        android:icon="@mipmap/ic_launcher"
+        android:logo="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:networkSecurityConfig="@xml/network_security_config"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
-        android:usesCleartextTraffic="true">
+        android:requestLegacyExternalStorage="true">
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
@@ -53,30 +56,55 @@
 <!--                    android:host="gizmos"-->
 <!--                    android:scheme="example" />-->
 <!--            </intent-filter>-->
+
+
         </activity>
         <activity
             android:name=".view.ui.activities.ForgotPassword"
             android:theme="@style/AppTheme.FullScreen" />
         <activity
-            android:name=".view.ui.activities.SignupDetailsActivity"
-            android:theme="@style/AppTheme.FullScreen" />
-        <activity
-            android:name=".view.ui.activities.SignupActivity"
-            android:theme="@style/AppTheme.FullScreen" />
-        <activity
-            android:name=".view.ui.activities.SignupActivity_0"
-            android:theme="@style/AppTheme.FullScreen" />
-        <activity
-            android:name=".view.ui.activities.SignupActivity_2"
-            android:theme="@style/AppTheme.FullScreen" />
-        <activity
-            android:name=".view.ui.activities.SignupActivity_1"
+            android:name=".view.ui.activities.CreateAccount_3_Activity"
             android:theme="@style/AppTheme.FullScreen" />
         <activity
             android:name=".view.ui.activities.LoginActivity"
             android:theme="@style/AppTheme.FullScreen"
-            android:windowSoftInputMode="stateHidden|adjustPan">
+           >
 
+        </activity>
+
+        <!-- Image cropper activity -->
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat"/>
+
+        <activity
+            android:name=".view.ui.activities.CreateAccount_1_Activity"
+            android:theme="@style/AppTheme.FullScreen"
+
+
+            >
+        </activity>
+
+        <activity
+            android:name=".view.ui.activities.CreateAccount_2_Activity"
+            android:theme="@style/AppTheme.FullScreen"
+            >
+        </activity>
+        <activity
+            android:name=".view.ui.activities.CreateAccount_4_Activity"
+            android:theme="@style/AppTheme.FullScreen"
+            >
+        </activity>
+
+        <activity
+            android:name=".view.ui.activities.NewsActivity"
+            android:theme="@style/AppTheme.FullScreen"
+           >
+        </activity>
+
+        <activity
+            android:name=".view.ui.activities.PasswordActivity"
+            android:theme="@style/AppTheme.FullScreen"
+            >
         </activity>
         <activity
             android:name=".view.ui.activities.SplashActivity"
@@ -105,6 +133,7 @@
             android:permission="android.permission.BIND_JOB_SERVICE">
             <intent-filter>
                 <action android:name="com.onesignal.NotificationExtender" />
+
             </intent-filter>
         </service>
 
@@ -117,6 +146,38 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_list" />
         </provider>
-    </application>
 
+        <meta-data android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
+
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
+        </activity>
+        <service
+            android:name=".service.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <receiver android:name=".service.NetworkChangeReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+    </application>
+    <meta-data
+        android:name="com.google.android.gms.version"
+        android:value="@integer/google_play_services_version" />
 </manifest>

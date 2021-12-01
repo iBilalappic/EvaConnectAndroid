@@ -1,9 +1,8 @@
 package com.hypernym.evaconnect.models;
 
-import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class CalendarModel implements Serializable {
     private int user_id;
@@ -15,7 +14,9 @@ public class CalendarModel implements Serializable {
     private String notes;
 
     private String status;
-    private String object_id;
+    private int object_id;
+
+    @SerializedName("object_details")
     private Post object_details;
 
     public int getUser_id() {
@@ -82,13 +83,7 @@ public class CalendarModel implements Serializable {
         this.status = status;
     }
 
-    public String getObject_id() {
-        return object_id;
-    }
 
-    public void setObject_id(String object_id) {
-        this.object_id = object_id;
-    }
 
     public Post getObject_details() {
         return object_details;
@@ -96,5 +91,13 @@ public class CalendarModel implements Serializable {
 
     public void setObject_details(Post object_details) {
         this.object_details = object_details;
+    }
+
+    public int getObject_id() {
+        return object_id;
+    }
+
+    public void setObject_id(int object_id) {
+        this.object_id = object_id;
     }
 }

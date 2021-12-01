@@ -9,21 +9,43 @@
     <color name="dark_black">#000</color>
     <color name="light_gray">#EBE9E9</color>
     <color name="gray">#BDBABA</color>
+    <color name="calendar_selection_colour">#5894DD</color>
+    <color name="calendar_meetings">#2ECC71</color>
+    <color name="calendar_meetings_button">#5BD78F</color>
+    <color name="calendar_selection_arrows">#707070</color>
+    <color name="gray_1">#B4B4B4</color>
+    <color name="gray_light">#F8F7F7</color>
+    <color name="lite_black">#80000000</color>
     <color name="lighter_gray">#F0F0F0</color>
-    <color name="lighter_gray_1">#8DF0F0F0</color>
-    <color name="title_bg">#EAEAE8</color>
+    <color name="lighter_gray_1">#FBFBFB</color>
+    <color name="lighter_gray_2">#FBFBFB</color>
+
+<!--    <color name="lighter_gray_1">#8DF0F0F0</color>-->
+<!--    <color name="lighter_gray_2">#37F0F0F0</color>-->
+
+    <color name="title_bg">#FCFBFF</color>
     <color name="page_title">#66697E</color>
     <color name="page_bg">#EAEAE8</color>
     <color name="dark_gray">#4B4B4B</color>
+    <color name="dark_gray_2">#545454</color>
+    <color name="dark_gray_3">#707070</color>
     <color name="unselected_option">#808080</color>
+    <color name="unselected_grey">#B4B4B4</color>
     <!--Simple Dialog-->
     <color name="colorSimpleDialogTitleText">#ffffff</color>
     <color name="colorSimpleDialogBackground">#EA5454</color>
     <color name="colorSimpleDialogText">#002256</color>
     <color name="btn_border">#3C3F5C</color>
     <color name="blue">#3140CE</color>
-    <color name="skyblue">#5180D3</color>
+    <color name="skyblue">#5894DD</color>
     <color name="red">#FD0002</color>
+    <color name="red_2">#EA5454</color>
+    <color name="blue_1">#0173B2</color>
+    <color name="blue_gradient">#599AE0</color>
+    <color name="text_color">#3C3F5C</color>
+    <color name="light_blue">#5894DD</color>
+    <color name="light_green">#2ECC71</color>
+    <color name="lighter_green">#59E098</color>
 
 
 

@@ -9,21 +9,38 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/colorwhite"
         tools:context=".view.ui.fragments.NewPostFragment">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profile_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <RelativeLayout
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:src="@drawable/profile"
-            app:civ_border_color="@color/colorwhite"
-            app:civ_border_width="2dp"
+            android:id="@+id/profile_layout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="53dp"
+            android:layout_height="53dp">
+
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:background="@android:color/transparent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/white_chatbg"
+                app:civ_border_color="@color/skyblue"
+                app:civ_border_width="2dp"/>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:padding="2dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/profile_image"
+                android:src="@drawable/no_thumbnail"
+                app:civ_border_color="@color/white"
+                app:civ_border_width="2dp"
+                />
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tv_name"
@@ -34,17 +51,26 @@
             android:layout_marginTop="16dp"
             android:text="Ed Hunter"
             android:textSize="18dp"
-            app:layout_constraintStart_toEndOf="@+id/profile_image"
+            app:layout_constraintStart_toEndOf="@+id/profile_layout"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_connections"
+            android:id="@+id/tv_designation"
             style="@style/TextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="Recruitment officer"
-            app:layout_constraintStart_toEndOf="@+id/profile_image"
+            app:layout_constraintStart_toEndOf="@+id/profile_layout"
+            app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+
+        <TextView
+            android:id="@+id/tv_company"
+            style="@style/TextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:textColor="#EF8080"
+            app:layout_constraintStart_toEndOf="@+id/tv_designation"
             app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
         <EditText
@@ -52,58 +78,113 @@
             style="@style/TextStyle"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:layout_marginTop="8dp"
-            android:background="@color/lighter_gray"
+            android:layout_marginTop="24dp"
+            android:background="@null"
             android:elevation="2dp"
             android:gravity="top|left"
+            android:hint="Type something..."
             android:inputType="textMultiLine"
             android:padding="10dp"
+            android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profile_image" />
+            app:layout_constraintTop_toBottomOf="@+id/profile_layout" />
 
-        <TextView
-            android:id="@+id/browsefiles"
-            android:layout_width="150dp"
+        <LinearLayout
+            android:id="@+id/browse"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/rounded_button_border"
-            android:drawableLeft="@drawable/attach_small"
-            android:drawablePadding="5dp"
-            android:paddingLeft="30dp"
-            android:paddingTop="15dp"
-            android:paddingRight="30dp"
-            android:paddingBottom="15dp"
-            android:text="Browse Files"
-            android:textColor="@color/light_black"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/attachment_layout" />
+            app:layout_constraintBottom_toTopOf="@+id/post">
+
+
+            <TextView
+                android:id="@+id/browsefiles"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:drawableLeft="@drawable/gallery"
+                android:gravity="left"
+                android:drawablePadding="10dp"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:text="Gallery"
+                android:textColor="@color/light_black"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/camera"
+                app:layout_constraintEnd_toStartOf="@+id/camera"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/camera" />
+
+
+            <TextView
+                android:id="@+id/camera"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:drawableLeft="@drawable/camera"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:drawablePadding="10dp"
+                android:paddingTop="14dp"
+                android:paddingBottom="12dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="Capture Image"
+                android:textColor="@color/light_black"
+                android:textSize="12sp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@+id/post"
+                app:layout_constraintEnd_toStartOf="@+id/tv_recordvideo"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/browsefiles" />
+
+            <TextView
+                android:id="@+id/tv_recordvideo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_baseline_ondemand_video_24"
+                android:gravity="left"
+                android:padding="10dp"
+                android:drawablePadding="10dp"
+
+                android:text="Video"
+
+                android:textColor="@color/light_black"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/camera"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/camera"
+                app:layout_constraintTop_toTopOf="@+id/camera" />
+        </LinearLayout>
 
 
         <TextView
             android:id="@+id/post"
-            style="@style/PostButton"
-            android:layout_width="150dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
+            android:background="@drawable/button_bg"
             android:gravity="center|center_vertical"
             android:paddingLeft="30dp"
             android:paddingTop="15dp"
             android:paddingRight="30dp"
             android:paddingBottom="15dp"
-            android:text="Post"
+            android:text="Create Post"
             android:textColor="@color/colorwhite"
             android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/attachment_layout" />
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/attachment_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/browse"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edt_content">
@@ -117,6 +198,7 @@
                 app:favor="@drawable/ic_url"
                 app:host="abc.com"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:thumbnail="@drawable/ic_url"
@@ -146,16 +228,29 @@
                 app:srcCompat="@drawable/play" />
 
             <androidx.recyclerview.widget.RecyclerView
+
                 android:id="@+id/rc_attachments"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@color/lighter_gray"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="parent" />
+                app:layout_constraintTop_toBottomOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_address"
+            style="@style/TextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
+            android:text="TextView"
+            app:layout_constraintStart_toEndOf="@+id/profile_layout"
+            app:layout_constraintTop_toBottomOf="@+id/tv_designation" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

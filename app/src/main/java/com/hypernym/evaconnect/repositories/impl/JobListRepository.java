@@ -5,8 +5,10 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.JobAd;
+import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IJobAdRepository;
@@ -26,6 +28,8 @@ public class JobListRepository implements IJobAdRepository {
     private MutableLiveData<BaseModel<List<Object>>> LikeMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<SpecficJobAd>>> JobMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> InterviewMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Post>>> dashboardMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Comment>>> commentMutableLiveData = new MutableLiveData<>();
 
     @Override
     public LiveData<BaseModel<List<JobAd>>> getjobAd(User user) {
@@ -151,4 +155,122 @@ public class JobListRepository implements IJobAdRepository {
         });
         return LikeMutableLiveData;
     }
+
+    @Override
+    public LiveData<BaseModel<List<Post>>> getJob(User user, int total, int current) {
+        dashboardMutableLiveData = new MutableLiveData<>();
+        user.setUser_id(user.getId());
+        RestClient.get().appApi().getJob(user, total, current).enqueue(new Callback<BaseModel<List<Post>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
+                dashboardMutableLiveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Post>>> call, Throwable t) {
+                dashboardMutableLiveData.setValue(null);
+            }
+        });
+        return dashboardMutableLiveData;
+    }
+
+
+
+
+
+
+
+    @Override
+    public LiveData<BaseModel<List<Object>>> setComment(User user, int application_id, String comment) {
+        LikeMutableLiveData = new MutableLiveData<>();
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("job_id", application_id);
+        body.put("created_by_id", user.getId());
+        body.put("status", user.getStatus());
+        body.put("content", comment);
+        RestClient.get().appApi().setJobComment(body).enqueue(new Callback<BaseModel<List<Object>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+                if (response.isSuccessful() && !response.body().isError())
+                    LikeMutableLiveData.setValue(response.body());
+                if (response.code() == 500) {
+                    LikeMutableLiveData.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+                LikeMutableLiveData.setValue(null);
+            }
+        });
+        return LikeMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<Comment>>> getJobComments(int id) {
+        commentMutableLiveData = new MutableLiveData<>();
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("job_id", id);
+
+        RestClient.get().appApi().getJobComments(body).enqueue(new Callback<BaseModel<List<Comment>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Comment>>> call, Response<BaseModel<List<Comment>>> response) {
+                if (response.isSuccessful() && !response.body().isError())
+                    commentMutableLiveData.setValue(response.body());
+                if (response.code() == 500) {
+                    commentMutableLiveData.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Comment>>> call, Throwable t) {
+                commentMutableLiveData.setValue(null);
+            }
+        });
+        return commentMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<Comment>>> deleteComment(Integer id) {
+        commentMutableLiveData = new MutableLiveData<>();
+        RestClient.get().appApi().deleteJobComment(id).enqueue(new Callback<BaseModel<List<Comment>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Comment>>> call, Response<BaseModel<List<Comment>>> response) {
+                if (response.isSuccessful() && !response.body().isError())
+                    commentMutableLiveData.setValue(response.body());
+                if (response.code() == 500) {
+                    commentMutableLiveData.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Comment>>> call, Throwable t) {
+                commentMutableLiveData.setValue(null);
+            }
+        });
+        return commentMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<Comment>>> editComment(Comment comment, Integer id) {
+        commentMutableLiveData = new MutableLiveData<>();
+         RestClient.get().appApi().editJobComment(comment,id).enqueue(new Callback<BaseModel<List<Comment>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Comment>>> call, Response<BaseModel<List<Comment>>> response) {
+                if (response.isSuccessful() && !response.body().isError())
+                    commentMutableLiveData.setValue(response.body());
+                if (response.code() == 500) {
+                    commentMutableLiveData.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Comment>>> call, Throwable t) {
+                commentMutableLiveData.setValue(null);
+            }
+        });
+        return commentMutableLiveData;
+    }
+
+
 }

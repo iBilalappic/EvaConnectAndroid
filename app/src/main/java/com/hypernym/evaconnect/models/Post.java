@@ -1,8 +1,5 @@
 package com.hypernym.evaconnect.models;
 
-import com.google.gson.annotations.SerializedName;
-
-import java.io.File;
 import java.io.Serializable;
 import java.util.List;
 
@@ -20,9 +17,40 @@ public class Post implements Serializable {
     private Integer id;
     private Integer object_id;
     private Integer is_applied;
+    private String name;
+    private News news_source;
+    private String title;
+    private String link;
+    private int rss_news_id;
+    private Integer receiver_id;
+    private int modified_by_id;
+    private String modified_datetime;
+    private String post_document;
+
+
+
+    public String getStart_date() {
+        return start_date;
+    }
+
+    public void setStart_date(String start_date) {
+        this.start_date = start_date;
+    }
+
+    public String getEnd_date() {
+        return end_date;
+    }
+
+    public void setEnd_date(String end_date) {
+        this.end_date = end_date;
+    }
+
+    private String start_date;
+    private String end_date;
     private String company_name;
     private String interview_time;
     private Integer connection_id;
+
 
     public Integer getObject_id() {
         return object_id;
@@ -37,6 +65,7 @@ public class Post implements Serializable {
     private Integer post_type;
     private Integer post_id;
     private Integer is_post_like;
+    private Integer is_news_like;
     private Integer total_connection;
     private String action;
     private String type;
@@ -60,15 +89,17 @@ public class Post implements Serializable {
     private Integer applicant_count;
     private Integer is_job_like;
     private List<String> event_image;
-    private String event_name;
+
     private String event_city;
-    private String event_start_date;
     private Integer event_id;
     private Integer is_event_like;
     private String start_time;
     private String end_time;
     private String address;
-    private String notes;
+    private int is_private;
+    private String image;
+
+    private MultipartBody.Part document;
 
 
 
@@ -369,14 +400,6 @@ public class Post implements Serializable {
         this.event_image = event_image;
     }
 
-    public String getEvent_name() {
-        return event_name;
-    }
-
-    public void setEvent_name(String event_name) {
-        this.event_name = event_name;
-    }
-
     public String getEvent_city() {
         return event_city;
     }
@@ -385,13 +408,6 @@ public class Post implements Serializable {
         this.event_city = event_city;
     }
 
-    public String getEvent_start_date() {
-        return event_start_date;
-    }
-
-    public void setEvent_start_date(String event_start_date) {
-        this.event_start_date = event_start_date;
-    }
 
     public Integer getEvent_id() {
         return event_id;
@@ -449,13 +465,7 @@ public class Post implements Serializable {
         this.address = address;
     }
 
-    public String getNotes() {
-        return notes;
-    }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
 
     public Integer getConnection_id() {
         return connection_id;
@@ -463,6 +473,110 @@ public class Post implements Serializable {
 
     public void setConnection_id(Integer connection_id) {
         this.connection_id = connection_id;
+    }
+
+    public int getIs_private() {
+        return is_private;
+    }
+
+    public void setIs_private(int is_private) {
+        this.is_private = is_private;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public News getNews_source() {
+        return news_source;
+    }
+
+    public void setNews_source(News news_source) {
+        this.news_source = news_source;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public int getRss_news_id() {
+        return rss_news_id;
+    }
+
+    public void setRss_news_id(int rss_news_id) {
+        this.rss_news_id = rss_news_id;
+    }
+
+    public Integer getIs_news_like() {
+        return is_news_like;
+    }
+
+    public void setIs_news_like(Integer is_news_like) {
+        this.is_news_like = is_news_like;
+    }
+
+    public Integer getReceiver_id() {
+        return receiver_id;
+    }
+
+    public void setReceiver_id(Integer receiver_id) {
+        this.receiver_id = receiver_id;
+    }
+
+    public MultipartBody.Part getDocument() {
+        return document;
+    }
+
+    public void setDocument(MultipartBody.Part document) {
+        this.document = document;
+    }
+
+    public int getModified_by_id() {
+        return modified_by_id;
+    }
+
+    public void setModified_by_id(int modified_by_id) {
+        this.modified_by_id = modified_by_id;
+    }
+
+    public String getModified_datetime() {
+        return modified_datetime;
+    }
+
+    public void setModified_datetime(String modified_datetime) {
+        this.modified_datetime = modified_datetime;
+    }
+
+    public String getPost_document() {
+        return post_document;
+    }
+
+    public void setPost_document(String post_document) {
+        this.post_document = post_document;
     }
 }
 

@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.Dashboard;
+import com.hypernym.evaconnect.models.NewSources;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IHomeRepository;
@@ -28,6 +29,12 @@ public class HomeViewModel extends AndroidViewModel {
     {
         return iHomeRepository.getDashboard(user,totalpages,currentPage);
     }
+
+    public LiveData<BaseModel<List<Post>>> getDashboardSearch(User user,int totalpages,int currentPage,String filter)
+    {
+        return iHomeRepository.getDashboardSearch(user,totalpages,currentPage,filter);
+    }
+
     public LiveData<BaseModel<List<Post>>> getAllNotifications(int totalpages,int currentPage)
     {
         return iHomeRepository.getAllNotifications(totalpages,currentPage);
@@ -40,4 +47,16 @@ public class HomeViewModel extends AndroidViewModel {
     {
         return iHomeRepository.notificationMarkAsRead(id);
     }
+
+    public LiveData<BaseModel<List<NewSources>>> getNewSources()
+    {
+        return iHomeRepository.getNewSources();
+    }
+
+    public LiveData<BaseModel<List<NewSources>>> setNewSources(List<Integer> newsSelectedids)
+    {
+        return iHomeRepository.setNewSources(newsSelectedids);
+    }
+
+
 }

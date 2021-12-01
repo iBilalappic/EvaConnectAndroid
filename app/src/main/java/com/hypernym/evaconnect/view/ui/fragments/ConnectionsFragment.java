@@ -2,12 +2,6 @@ package com.hypernym.evaconnect.view.ui.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,23 +9,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
+import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
-import com.hypernym.evaconnect.models.Options;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
-import com.hypernym.evaconnect.utils.TextWatcher;
 import com.hypernym.evaconnect.view.adapters.ConnectionsAdapter;
 import com.hypernym.evaconnect.view.adapters.OptionsAdapter;
+import com.hypernym.evaconnect.view.adapters.RecommendedUser_HorizontalAdapter;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
+import com.hypernym.evaconnect.viewmodel.UserViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,15 +41,13 @@ import butterknife.ButterKnife;
 
 import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
 
-public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.ItemClickListener, ConnectionsAdapter.OnItemClickListener {
+public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.ItemClickListener, ConnectionsAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.rc_connections)
     RecyclerView rc_connections;
 
     @BindView(R.id.rc_maincategories)
     RecyclerView rc_maincategories;
 
-    @BindView(R.id.rc_subcategories)
-    RecyclerView rc_subcategories;
 
     @BindView(R.id.edt_search)
     EditText edt_search;
@@ -57,15 +55,23 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
     @BindView(R.id.empty)
     TextView empty;
 
-    List<Options> mainCategories = new ArrayList<>();
-    List<Options> subCategories = new ArrayList<>();
+
+    @BindView(R.id.tv_seeAll)
+    TextView tv_seeAll;
+
+
+    @BindView(R.id.swipeRefresh)
+    SwipeRefreshLayout swipeRefresh;
+
 
     private ConnectionsAdapter connectionsAdapter;
+    private RecommendedUser_HorizontalAdapter recommendedUser_horizontalAdapter;
     private List<User> connectionList = new ArrayList<>();
+    private List<User> recommendeduserList = new ArrayList<>();
 
-    private OptionsAdapter optionsAdapter, subOptionsAdapter;
-    private LinearLayoutManager linearLayoutManager;
+    private LinearLayoutManager linearLayoutManager, linearLayoutManagerHorizontal;
     private ConnectionViewModel connectionViewModel;
+    private UserViewModel userViewModel;
     String type = "user";
     private int currentPage = PAGE_START;
     private boolean isLastPage = false;
@@ -89,20 +95,51 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_connections, container, false);
         ButterKnife.bind(this, view);
+        requireActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
         connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
+        userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(UserViewModel.class);
+
         currentPage = PAGE_START;
+        swipeRefresh.setOnRefreshListener(this);
         initMainOptionsRecView();
-        initSubOptionsRecView();
         initRecyclerView();
         setPageTitle(getString(R.string.connections));
         if (NetworkUtils.isNetworkConnected(getContext())) {
-            getConnectionByFilter(type, currentPage, false);
+            getConnectionByRecommendedUser();
         } else {
             networkErrorDialog();
         }
         edt_search.addTextChangedListener(new TextWatcher());
 
+        tv_seeAll.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                RecommendedAllUserFragment recommendedAllUserFragment = new RecommendedAllUserFragment();
+                loadFragment(R.id.framelayout, recommendedAllUserFragment, getContext(), true);
+            }
+        });
+
         return view;
+    }
+
+    private void getConnectionByRecommendedUser() {
+        User userData = new User();
+        User user = LoginUtils.getLoggedinUser();
+        userData.setType(type);
+        userData.setUser_id(user.getId());
+        connectionViewModel.getConnectionByRecommendedUser(userData, 6, 0).observe(this, new Observer<BaseModel<List<User>>>() {
+            @Override
+            public void onChanged(BaseModel<List<User>> listBaseModel) {
+                if (listBaseModel != null && !listBaseModel.isError()) {
+                    recommendeduserList.addAll(listBaseModel.getData());
+                    recommendedUser_horizontalAdapter.notifyDataSetChanged();
+                    getConnectionByFilter(type, currentPage, false);
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+                hideDialog();
+            }
+        });
     }
 
     private void getUserConnections() {
@@ -128,59 +165,11 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
     }
 
     private void initMainOptionsRecView() {
-//        Options option1=new Options();
-//        option1.setText(getString(R.string.everyone));
-//        option1.setColor(getContext().getResources().getColor(R.color.light_black));
-//        option1.setElevation(2);
-//        option1.setMainCategory(true);
-//        mainCategories.add(option1);
 
-        Options option2 = new Options();
-        option2.setText(getString(R.string.people));
-        option2.setColor(getContext().getResources().getColor(R.color.light_black));
-        option2.setElevation(2);
-        option2.setMainCategory(true);
-        mainCategories.add(option2);
-
-        Options option3 = new Options();
-        option3.setText(getString(R.string.companies));
-        option3.setColor(getContext().getResources().getColor(R.color.gray));
-        option3.setElevation(0);
-        option3.setMainCategory(true);
-        mainCategories.add(option3);
-
-        optionsAdapter = new OptionsAdapter(getContext(), mainCategories, this);
-        linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        rc_maincategories.setLayoutManager(linearLayoutManager);
-        rc_maincategories.setAdapter(optionsAdapter);
-    }
-
-    private void initSubOptionsRecView() {
-        Options option1 = new Options();
-        option1.setText("Piolots");
-        option1.setColor(getContext().getResources().getColor(R.color.light_black));
-        option1.setElevation(2);
-        option1.setMainCategory(false);
-        subCategories.add(option1);
-
-        Options option2 = new Options();
-        option2.setText("IT Systems");
-        option2.setColor(getContext().getResources().getColor(R.color.gray));
-        option2.setElevation(0);
-        option2.setMainCategory(false);
-        subCategories.add(option2);
-
-        Options option3 = new Options();
-        option3.setText("Security");
-        option3.setColor(getContext().getResources().getColor(R.color.gray));
-        option3.setElevation(0);
-        option3.setMainCategory(false);
-        subCategories.add(option3);
-
-        subOptionsAdapter = new OptionsAdapter(getContext(), subCategories, this);
-        linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        rc_subcategories.setLayoutManager(linearLayoutManager);
-        rc_subcategories.setAdapter(subOptionsAdapter);
+        recommendedUser_horizontalAdapter = new RecommendedUser_HorizontalAdapter(getContext(), recommendeduserList);
+        linearLayoutManagerHorizontal = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        rc_maincategories.setLayoutManager(linearLayoutManagerHorizontal);
+        rc_maincategories.setAdapter(recommendedUser_horizontalAdapter);
     }
 
     private void initRecyclerView() {
@@ -195,17 +184,12 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
             @Override
             protected void loadMoreItems() {
                 isLoading = true;
-//                if(!isSearchFlag)
-//                {
                 currentPage = AppConstants.TOTAL_PAGES + currentPage;
                 if (NetworkUtils.isNetworkConnected(getContext())) {
                     getConnectionByFilter(type, currentPage, false);
                 } else {
                     networkErrorDialog();
                 }
-                //}
-
-
             }
 
             @Override
@@ -232,44 +216,6 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
 
     @Override
     public void onItemClick(View view, int position, boolean isMainCatrgory) {
-        List<Options> categories = new ArrayList<>();
-        if (isMainCatrgory) {
-            categories.addAll(mainCategories);
-            rc_subcategories.setVisibility(View.GONE);
-            Log.e("type", "pos " + position);
-            if (position == 0) {
-                rc_subcategories.setVisibility(View.VISIBLE);
-                type = "user";
-            } else if (position == 1) {
-                rc_subcategories.setVisibility(View.GONE);
-                type = "company";
-
-            } else {
-                type = getString(R.string.everyone);
-            }
-
-        } else {
-            categories.addAll(subCategories);
-        }
-        for (Options options : categories) {
-            options.setColor(getContext().getResources().getColor(R.color.gray));
-            options.setElevation(0);
-        }
-        categories.get(position).setColor(getContext().getResources().getColor(R.color.light_black));
-        categories.get(position).setElevation(2);
-        if (isMainCatrgory) {
-            optionsAdapter.notifyDataSetChanged();
-        } else {
-            subOptionsAdapter.notifyDataSetChanged();
-        }
-        if (NetworkUtils.isNetworkConnected(getContext())) {
-            connectionList.clear();
-            connectionsAdapter.notifyDataSetChanged();
-            currentPage = PAGE_START;
-            getConnectionByFilter(type, currentPage, false);
-        } else {
-            networkErrorDialog();
-        }
     }
 
     public void getConnectionByFilter(String mtype, int currentPage, boolean isSearch) {
@@ -277,15 +223,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         // showDialog();
         User userData = new User();
         User user = LoginUtils.getLoggedinUser();
-        if (mtype.equals("company")) {
-            rc_subcategories.setVisibility(View.GONE);
-        } else {
-            rc_subcategories.setVisibility(View.VISIBLE);
-        }
-
-        // if(!mtype.equalsIgnoreCase(getString(R.string.everyone)))
-//        if(mtype.equals("user"))
-        userData.setType(mtype);
+       // userData.setType(mtype);
         userData.setUser_id(user.getId());
         if (edt_search.getText().toString().length() > 0)
             userData.setFirst_name(edt_search.getText().toString());
@@ -308,15 +246,18 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
                     }
                     isLoading = false;
                 } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
-                    rc_connections.setVisibility(View.GONE);
-                    empty.setVisibility(View.VISIBLE);
+
+                    if(connectionList.size()==0)
+                    {
+                        rc_connections.setVisibility(View.GONE);
+                        empty.setVisibility(View.VISIBLE);
+                    }
                     isLastPage = true;
                     // homePostsAdapter.removeLoading();
                     isLoading = false;
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
-                //  hideDialog();
             }
         });
     }
@@ -324,8 +265,66 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
     @Override
     public void onItemClick(View view, int position) {
         if (NetworkUtils.isNetworkConnected(getContext())) {
-            TextView textView = (TextView) view;
-            callConnectApi(textView, connectionList.get(position));
+            switch (view.getId()) {
+                case R.id.tv_decline:
+                    SettingDeclineData(connectionList.get(position));
+                    break;
+
+                case R.id.tv_connect:
+                    TextView textView = (TextView) view;
+                    callConnectApi(textView, connectionList.get(position));
+                    //GetUserDetails();
+                    if(textView.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_ACCEPT)){
+                        Connection connection = new Connection();
+                        User user = LoginUtils.getLoggedinUser();
+                        connection.setStatus(AppConstants.ACTIVE);
+                        connection.setId(connectionList.get(position).getConnection_id());
+                        connection.setModified_by_id(user.getId());
+                        connection.setModified_datetime(DateUtils.GetCurrentdatetime());
+                        callDeclineConnectApi(connection);
+                    }
+                    break;
+
+            }
+
+        } else {
+            networkErrorDialog();
+        }
+    }
+
+    private void SettingDeclineData(User connectionItem) {
+        Connection connection = new Connection();
+        User user = LoginUtils.getLoggedinUser();
+        connection.setStatus(AppConstants.REQUEST_DECLINE);
+        connection.setId(connectionItem.getConnection_id());
+        connection.setModified_by_id(user.getId());
+        connection.setModified_datetime(DateUtils.GetCurrentdatetime());
+        callDeclineConnectApi(connection);
+    }
+
+    private void callDeclineConnectApi(Connection connection) {
+
+        connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Connection>> listBaseModel) {
+                if (listBaseModel != null && !listBaseModel.isError()) {
+
+                    connectionList.clear();
+                    connectionsAdapter.notifyDataSetChanged();
+                    getConnectionByFilter(type, PAGE_START, true);
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+                hideDialog();
+            }
+        });
+    }
+
+    @Override
+    public void onRefresh() {
+        if (NetworkUtils.isNetworkConnected(getContext())) {
+            GetUserDetails();
+            getConnectionByFilter(type, currentPage, false);
         } else {
             networkErrorDialog();
         }
@@ -360,5 +359,23 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
 
         }
 
+    }
+
+    private void GetUserDetails() {
+        User user = new User();
+        user = LoginUtils.getUser();
+        userViewModel.getuser_details(user.getId()
+        ).observe(this, new Observer<BaseModel<List<User>>>() {
+            @Override
+            public void onChanged(BaseModel<List<User>> listBaseModel) {
+                if (listBaseModel.getData() != null && !listBaseModel.isError()) {
+                    swipeRefresh.setRefreshing(false);
+                    LoginUtils.saveUser(listBaseModel.getData().get(0));
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+                hideDialog();
+            }
+        });
     }
 }

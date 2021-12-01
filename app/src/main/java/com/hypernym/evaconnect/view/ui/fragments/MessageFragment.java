@@ -5,15 +5,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,42 +17,29 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.firebase.client.Firebase;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
-import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.Message;
 import com.hypernym.evaconnect.models.NetworkConnection;
-import com.hypernym.evaconnect.models.Receiver;
-import com.hypernym.evaconnect.models.Sender;
-import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.toolbar.OnItemClickListener;
-import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.DateTimeComparator;
-import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
-import com.hypernym.evaconnect.view.adapters.AttachmentsAdapter;
 import com.hypernym.evaconnect.utils.NetworkUtils;
+import com.hypernym.evaconnect.view.adapters.AttachmentsAdapter;
 import com.hypernym.evaconnect.view.adapters.HorizontalMessageAdapter;
 import com.hypernym.evaconnect.view.adapters.MessageAdapter;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
@@ -64,32 +47,24 @@ import com.hypernym.evaconnect.viewmodel.MessageViewModel;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-
 
 import static android.app.Activity.RESULT_OK;
 
-public class MessageFragment extends BaseFragment implements OnItemClickListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, TextWatcher, AttachmentsAdapter.ItemClickListener {
+public class MessageFragment extends BaseFragment implements OnItemClickListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener,  AttachmentsAdapter.ItemClickListener {
 
     @BindView(R.id.rc_message)
     RecyclerView re_message;
 
-    @BindView(R.id.newmessage)
-    TextView newmessage;
+    @BindView(R.id.fab)
+    FloatingActionButton newmessage;
 
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
@@ -99,6 +74,9 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
 
     @BindView(R.id.tv_nomail)
     TextView tv_nomail;
+
+    @BindView(R.id.no_messages)
+    TextView no_messages;
 
 
     private MessageAdapter messageAdapter, newmessageAdapter;
@@ -158,9 +136,10 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
         //
         //  setupRecyclerview();
         if (NetworkUtils.isNetworkConnected(getContext())) {
-            GetFriendDetails();
+          //  GetFriendDetails();
 
             // setupNetworkConnectionRecycler();
+            showDialog();
             GetFirebaseData();
         } else {
             networkErrorDialog();
@@ -170,128 +149,158 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     }
 
     private void GetFirebaseData() {
-        showDialog();
         networkConnectionList.clear();
-        //     messageAdapter.notifyDataSetChanged();
+        messageAdapter.notifyDataSetChanged();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        Query lastQuery = databaseReference.child(AppConstants.FIREASE_CHAT_ENDPOINT);
-        lastQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() != null) {
-                    //  networkConnectionList.clear();
-                    swipeRefresh.setRefreshing(true);
-                    for (DataSnapshot child : dataSnapshot.getChildren()) {
-                        Log.d("User key", child.getKey());
-                        String[] conversationkey = child.getKey().split("_");
-                        User user = LoginUtils.getLoggedinUser();
-                        if (user != null && user.getId() == Integer.parseInt(conversationkey[0])) {
+        //////////////////////////////////////////////////////////////////////////////////
+        DatabaseReference user = databaseReference.child(AppConstants.FIREASE_USER_ENDPOINT);
 
-                            Query lastMessage = databaseReference.child(AppConstants.FIREASE_CHAT_ENDPOINT).child(child.getKey()).orderByKey().limitToLast(1);
-                            lastMessage.addListenerForSingleValueEvent(new ValueEventListener() {
+            user.child(LoginUtils.getLoggedinUser().getId().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue() != null && dataSnapshot.hasChild("chats")) {
+                        for (DataSnapshot childSnapshot: dataSnapshot.child("chats").getChildren()) {
+                            NetworkConnection networkConnection=new NetworkConnection();
+                            String key=childSnapshot.getKey();
+                            DatabaseReference chats = databaseReference.child(AppConstants.FIREASE_CHAT_ENDPOINT);
+                            chats.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    for (DataSnapshot child : dataSnapshot.getChildren()) {
-                                        Log.d("User key", child.getKey());
-                                        Log.d("User val", child.child("message").getValue().toString());
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.getValue() != null) {
+                                        String otherMember=null;
+                                        DataSnapshot members=dataSnapshot.child("members");
+                                        for (DataSnapshot member : members.getChildren()) {
+                                            if(!member.getKey().equalsIgnoreCase(LoginUtils.getLoggedinUser().getId().toString())) {
+                                                otherMember=member.getKey();
+                                                networkConnection.setName(member.getValue().toString());
+                                            }
+                                        }
+                                        DataSnapshot lastMessage = dataSnapshot.child("lastMessage");
+                                        if (lastMessage.child("images").getValue() != null) {
+                                            networkConnection.setMessage("image");
+                                        }
+                                        else
+                                        {
+                                            networkConnection.setMessage(lastMessage.child("message").getValue().toString());
+                                        }
+                                        networkConnection.setSenderId(Integer.parseInt(lastMessage.child("senderID").getValue().toString()));
+                                        networkConnection.setCreatedDatetime(lastMessage.child("timestamp").getValue().toString());
+                                        networkConnection.setChatID(key);
+                                        networkConnection.setReceiverId(Integer.parseInt(otherMember));
+                                        DatabaseReference user = databaseReference.child(AppConstants.FIREASE_USER_ENDPOINT);
+                                        user.child(otherMember).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                if (dataSnapshot.getValue() != null) {
 
-                                        try {
+                                                    networkConnection.setUserImage(dataSnapshot.child("imageName").getValue().toString());
+                                                    user.child(LoginUtils.getLoggedinUser().getId().toString()).child("chats").addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                            if (dataSnapshot.getValue() != null) {
+                                                                if(dataSnapshot.child(key).hasChild("unread"))
+                                                                {
+                                                                    networkConnection.setUnread((Boolean)dataSnapshot.child(key).child("unread").getValue());
 
-                                            for (NetworkConnection networkConnection : newNetworkConnectionList) {
-                                                if (((conversationkey[0].equalsIgnoreCase(networkConnection.getSenderId().toString())) &&
-                                                        (conversationkey[1].equalsIgnoreCase(networkConnection.getReceiverId().toString()))) ||
-                                                        ((conversationkey[0].equalsIgnoreCase(networkConnection.getReceiverId().toString())) &&
-                                                                (conversationkey[1].equalsIgnoreCase(networkConnection.getSenderId().toString())))) {
+                                                                }
+                                                                if(dataSnapshot.child(key).hasChild("unread_count"))
+                                                                {
+                                                                    networkConnection.setMessageCount(Integer.parseInt(dataSnapshot.child(key).child("unread_count").getValue().toString()));
 
-                                                    networkConnection.setMessage(child.child("message").getValue().toString());
-                                                    if (child.child("image").getValue() != null) {
-                                                        networkConnection.setMessage("image");
+                                                                }
+                                                                messageAdapter.notifyDataSetChanged();
+                                                            }
+
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                        }
+                                                    });
+
+                                                    if (networkConnection.getChatID() != null) {
+                                                        networkConnectionList.add(networkConnection);
+                                                        //   setupRecyclerview();
+                                                        Collections.sort(networkConnectionList, new DateTimeComparator());
+                                                        Collections.reverse(networkConnectionList);
+                                                        messageAdapter.notifyDataSetChanged();
+                                                        swipeRefresh.setRefreshing(false);
+                                                        if(networkConnectionList.size()==0)
+                                                        {
+                                                            no_messages.setVisibility(View.VISIBLE);
+                                                        }
+                                                        else
+                                                        {
+                                                            no_messages.setVisibility(View.GONE);
+                                                        }
+
                                                     }
-                                                    networkConnection.setCreatedDatetime(child.child("time").getValue().toString());
-                                                    networkConnectionList.add(networkConnection);
+
                                                 }
                                             }
-                                            setupRecyclerview();
-                                            Collections.sort(networkConnectionList, new DateTimeComparator());
-                                            Collections.reverse(networkConnectionList);
-                                            messageAdapter.notifyDataSetChanged();
-                                            swipeRefresh.setRefreshing(false);
-                                            hideDialog();
-                                        } catch (Exception ex) {
-                                            hideDialog();
-                                            swipeRefresh.setRefreshing(false);
-                                        }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+
+                                        hideDialog();
+
+                                    } else {
+                                        swipeRefresh.setRefreshing(false);
                                     }
 
                                 }
 
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                                    hideDialog();
-                                    swipeRefresh.setRefreshing(false);
+
                                 }
                             });
-                        } else {
-                            swipeRefresh.setRefreshing(false);
                         }
-                    }
-                } else {
-                    swipeRefresh.setRefreshing(false);
-                }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Handle possible errors.
-                hideDialog();
-                swipeRefresh.setRefreshing(false);
-            }
-        });
-        hideDialog();
+
+                    }
+                    else
+                    {
+                        hideDialog();
+                        swipeRefresh.setRefreshing(false);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+
+
+
     }
 
 
     private void init() {
         messageViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(MessageViewModel.class);
         setPageTitle(getString(R.string.messages));
+        setupRecyclerview();
     }
 
     private void setupRecyclerview() {
-        if (networkConnectionList.size() > 0) {
-            re_message.setVisibility(View.VISIBLE);
-            img_nomail.setVisibility(View.GONE);
-            tv_nomail.setVisibility(View.GONE);
-            networkConnectionList = removeDuplicates(networkConnectionList);
-            messageAdapter = new MessageAdapter(getContext(), networkConnectionList, this);
-            linearLayoutManager = new LinearLayoutManager(getContext());
-            re_message.setLayoutManager(linearLayoutManager);
-            re_message.setAdapter(messageAdapter);
-        } else {
-            re_message.setVisibility(View.GONE);
-            img_nomail.setVisibility(View.VISIBLE);
-            tv_nomail.setVisibility(View.VISIBLE);
-        }
+        re_message.setVisibility(View.VISIBLE);
+        img_nomail.setVisibility(View.GONE);
+        tv_nomail.setVisibility(View.GONE);
+        messageAdapter = new MessageAdapter(getContext(), networkConnectionList, this);
+        linearLayoutManager = new LinearLayoutManager(getContext());
+        re_message.setLayoutManager(linearLayoutManager);
+        re_message.setAdapter(messageAdapter);
 
     }
 
 
-    private void GetFriendDetails() {
 
-        User user = LoginUtils.getLoggedinUser();
-        messageViewModel.SetUser(user).observe(this, new Observer<BaseModel<List<NetworkConnection>>>() {
-            @Override
-            public void onChanged(BaseModel<List<NetworkConnection>> getnetworkconnection) {
-                if (getnetworkconnection != null && !getnetworkconnection.isError()) {
-                    newNetworkConnectionList.clear();
-                    newNetworkConnectionList.addAll(getnetworkconnection.getData());
-                    neworiginalNetworkConnectionList.addAll(getnetworkconnection.getData());
-
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-            }
-        });
-    }
 
     @Override
     public void onItemClick(View view, Object data, int position, String adaptertype) {
@@ -311,152 +320,12 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.newmessage:
-                if (newNetworkConnectionList.size() > 0 && NetworkUtils.isNetworkConnected(getContext())) {
-                    showMesssageDialog();
-                } else {
-                    Toast.makeText(getContext(), "You haven't any friends to chat", Toast.LENGTH_SHORT).show();
-                }
+            case R.id.fab:
+                loadFragment(R.id.framelayout, new MessageConnectionFragment(), getContext(), true);
                 break;
         }
     }
 
-    private void showMesssageDialog() {
-
-        mDialogMessage = new Dialog(getContext());
-        mDialogMessage.setContentView(R.layout.dialog_message);
-        editTextSearch = mDialogMessage.findViewById(R.id.edittextSearchUser);
-        editTextMessage = mDialogMessage.findViewById(R.id.edittextMessageArea);
-        mTextviewSend = mDialogMessage.findViewById(R.id.sendButton);
-        browsefiles = mDialogMessage.findViewById(R.id.browsefiles);
-        rc_attachments = mDialogMessage.findViewById(R.id.rc_attachments);
-        empty = mDialogMessage.findViewById(R.id.empty);
-
-        attachmentsAdapter = new AttachmentsAdapter(getContext(), attachments, this);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        rc_attachments.setLayoutManager(linearLayoutManager);
-        rc_attachments.setAdapter(attachmentsAdapter);
-        editTextSearch.addTextChangedListener(this);
-        mrecyclerviewFriends = mDialogMessage.findViewById(R.id.recyclerViewNetworkConnection);
-        setupNetworkConnectionRecycler();
-
-        mTextviewSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String messageArea = editTextMessage.getText().toString();
-                if ((!messageArea.equals("") || attachments.size() > 0) && messageAdapter_horizontal.getItemCount() > 0) {
-                    Log.d("TAAAAG", "" + ItemPostionHorizontal);
-                    ChatFragment chatFragment = new ChatFragment();
-                    Bundle bundle = new Bundle();
-                    int originalPosition = neworiginalNetworkConnectionList.indexOf(newNetworkConnectionList.get(ItemPostionHorizontal));
-                    bundle.putSerializable(Constants.DATA, neworiginalNetworkConnectionList.get(originalPosition));
-                    bundle.putString("MESSAGE", messageArea);
-                    if (MultiplePhotoString != null && MultiplePhotoString.size() > 1) {
-                        bundle.putStringArrayList("IMAGEURILIST", (ArrayList<String>) MultiplePhotoString);
-                        bundle.putStringArrayList("FILENAMELIST", (ArrayList<String>) MultipleFileString);
-                    } else if (SelectedImageUri != null && attachments.size() > 0) {
-                        bundle.putString("IMAGEURI", SelectedImageUri.toString());
-                        bundle.putString("FILENAME", tempFile.toString());
-                    }
-                    chatFragment.setArguments(bundle);
-                    SelectedImageUri = null;
-                    tempFile = null;
-                    MultiplePhoto.clear();
-                    MultipleFile.clear();
-                    attachments.clear();
-                    //  Log.d("TAAAG", "" + GsonUtils.toJson(networkConnection));
-                    loadFragment(R.id.framelayout, chatFragment, getContext(), true);
-                    mDialogMessage.dismiss();
-                } else if (messageAdapter_horizontal.getItemCount() == 0) {
-                    Toast.makeText(getContext(), getString(R.string.msg_no_sender), Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), "Please type message...", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        browsefiles.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("*/*");
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_PHOTO_GALLERY);
-                //  openPictureDialog();
-            }
-        });
-        mDialogMessage.setCanceledOnTouchOutside(true);
-        mDialogMessage.show();
-        mDialogMessage.setCancelable(true);
-    }
-
-    private void setupNetworkConnectionRecycler() {
-        newNetworkConnectionList = removeDuplicates(newNetworkConnectionList);
-        messageAdapter_horizontal = new HorizontalMessageAdapter(getContext(), newNetworkConnectionList, this);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        mrecyclerviewFriends.setLayoutManager(linearLayoutManager);
-        mrecyclerviewFriends.setAdapter(messageAdapter_horizontal);
-    }
-
-    private List<NetworkConnection> removeDuplicates(List<NetworkConnection> mCollectedBin) {
-        List<NetworkConnection> newList = new ArrayList<NetworkConnection>();
-        // Traverse through the first list
-        for (NetworkConnection element : mCollectedBin) {
-            // If this element is not present in newList
-            // then add it
-            if (!newList.contains(element)) {
-                //  if (!newList.contains(element.location)) {
-                newList.add(element);
-                //   }
-            }
-        }
-
-        return newList;
-    }
-
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-
-
-        filter(s.toString());
-    }
-
-    private void filter(String text) {
-        //new array list that will hold the filtered data
-        filterdNames = new ArrayList<>();
-
-        //looping through existing elements
-        for (NetworkConnection s : newNetworkConnectionList) {
-
-            if (s.getSenderId().equals(LoginUtils.getUser().getId()) && (s.getReceiver().getFirstName().toLowerCase().contains(text.toLowerCase()) ||
-                    s.getReceiver().getFirstName().toUpperCase().contains(text.toUpperCase()))) {
-                filterdNames.add(s);
-            }
-
-            if (s.getReceiverId().equals(LoginUtils.getUser().getId()) && (s.getSender().getFirstName().toLowerCase().contains(text.toLowerCase()) ||
-                    s.getSender().getFirstName().toUpperCase().contains(text.toUpperCase()))) {
-                filterdNames.add(s);
-            }
-        }
-
-        if (filterdNames.size() > 0) {
-            empty.setVisibility(View.GONE);
-        } else {
-            empty.setVisibility(View.VISIBLE);
-        }
-        ItemPostionHorizontal = 0;
-        //calling a method of the adapter class and passing the filtered list
-        messageAdapter_horizontal.filterList(removeDuplicates(filterdNames));
-    }
 
     @Override
     public void onResume() {

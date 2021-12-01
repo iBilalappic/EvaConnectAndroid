@@ -8,15 +8,21 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public final class DateUtils {
     public static final String DATE_FORMAT_1 = "hh:mm a";
     public static final String DATE_FORMAT_2 = "d MMM";
     public static final String DATE_FORMAT_3 = "d MMM yyyy";
+    public static final String DATE_FORMAT_4 = "MMM";
+    public static final String DATE_FORMAT_5 = "dd";
     public static final String TIME_FORMAT_1 = "HH:mm:ss";
     public static final String DATE_INPUT_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_INPUT_FORMAT_1 = "yyyy-MM-dd HH:mm:ss";
+
     public static final String DATE_INPUT_FORMAT_WITHOUTTIME = "yyyy-MM-dd";
+    public static final String DATE_INPUT_FORMAT_WITHOUTTIME_1 = "dd-MM-yyyy";
     public static final String SERVER_DATE_INPUT_FORMAT = "yyyy-MM-dd hh:mm:ss";
     public static final String EVENT_DATE_INPUT_FORMAT = "E, dd MMM yyyy";
 
@@ -90,6 +96,48 @@ public final class DateUtils {
         return mOutputTimeString;
     }
 
+    public static String extractMonth(String date) {
+        Date mParsedDate;
+        String mOutputDateString = "";
+        String mOutputTimeString = "";
+        SimpleDateFormat mInputDateFormat =
+                new SimpleDateFormat(DATE_INPUT_FORMAT_WITHOUTTIME, java.util.Locale.getDefault());
+
+        SimpleDateFormat mOutputDateFormat1 =
+                new SimpleDateFormat(DATE_FORMAT_4, java.util.Locale.getDefault());
+        try {
+
+            mParsedDate = mInputDateFormat.parse(date);
+            mOutputTimeString = mOutputDateFormat1.format(mParsedDate);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return mOutputTimeString;
+    }
+
+    public static String extractDay(String date) {
+        Date mParsedDate;
+        String mOutputDateString = "";
+        String mOutputTimeString = "";
+        SimpleDateFormat mInputDateFormat =
+                new SimpleDateFormat(DATE_INPUT_FORMAT_WITHOUTTIME, java.util.Locale.getDefault());
+
+        SimpleDateFormat mOutputDateFormat1 =
+                new SimpleDateFormat(DATE_FORMAT_5, java.util.Locale.getDefault());
+        try {
+
+            mParsedDate = mInputDateFormat.parse(date);
+            mOutputTimeString = mOutputDateFormat1.format(mParsedDate);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return mOutputTimeString;
+    }
+
     public static String getFormattedDateDMY(String datetime) {
         Date mParsedDate;
         String mOutputDateString = "";
@@ -118,7 +166,7 @@ public final class DateUtils {
         try {
             datetime = convertEventDateToUserTimeZone(datetime);
 
-            SimpleDateFormat format = new SimpleDateFormat(DATE_INPUT_FORMAT);
+            SimpleDateFormat format = new SimpleDateFormat(DATE_INPUT_FORMAT_1);
             Date newDate = format.parse(datetime);
 
             format = new SimpleDateFormat(DATE_INPUT_FORMAT_WITHOUTTIME);
@@ -131,6 +179,45 @@ public final class DateUtils {
 
         return formatedDate;
     }
+    public static String getFormattedMeetingDate(String datetime) {
+        String formatedDate = null;
+        try {
+            datetime = convertMeetingDateToUserTimeZone(datetime);
+
+            SimpleDateFormat format = new SimpleDateFormat(DATE_INPUT_FORMAT_1);
+            Date newDate = format.parse(datetime);
+
+            format = new SimpleDateFormat(DATE_INPUT_FORMAT_WITHOUTTIME);
+            formatedDate = format.format(newDate);
+            return formatedDate;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return formatedDate;
+    }
+    public static boolean isValidDate(String inDate) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_INPUT_FORMAT_WITHOUTTIME);
+        dateFormat.setLenient(false);
+        try {
+            dateFormat.parse(inDate.trim());
+        } catch (ParseException pe) {
+            return false;
+        }
+        return true;
+    }
+    public static boolean isValidTime(String time) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT_1);
+        dateFormat.setLenient(false);
+        try {
+            dateFormat.parse(time.trim());
+        } catch (ParseException pe) {
+            return false;
+        }
+        return true;
+    }
+
 
     public static String getFormattedEventDateDMY(String datetime) {
         String formatedDate = null;
@@ -191,6 +278,12 @@ public final class DateUtils {
 
     public static String GetCurrentdatetime() {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        df.setTimeZone(TimeZone.getTimeZone("gmt"));
+        String completetime = df.format(Calendar.getInstance().getTime());
+        return completetime;
+    }
+    public static String GetCurrentUTCTime() {
+        SimpleDateFormat df = new SimpleDateFormat("hh:mm a");
         df.setTimeZone(TimeZone.getTimeZone("gmt"));
         String completetime = df.format(Calendar.getInstance().getTime());
         return completetime;
@@ -332,6 +425,22 @@ public final class DateUtils {
     public static String convertEventDateToUserTimeZone(String serverDate) {
         String ourdate;
         try {
+            SimpleDateFormat formatter = new SimpleDateFormat(DATE_INPUT_FORMAT_WITHOUTTIME_1);
+            formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+            Date value = formatter.parse(serverDate);
+            SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_INPUT_FORMAT); //this format changeable
+            dateFormatter.setTimeZone(TimeZone.getDefault());
+            ourdate = dateFormatter.format(value);
+
+            Log.d("OurDate", ourdate);
+        } catch (Exception e) {
+            ourdate = "0000-00-00 00:00:00";
+        }
+        return ourdate;
+    }
+    public static String convertMeetingDateToUserTimeZone(String serverDate) {
+        String ourdate;
+        try {
             SimpleDateFormat formatter = new SimpleDateFormat(EVENT_DATE_INPUT_FORMAT);
             formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
             Date value = formatter.parse(serverDate);
@@ -453,5 +562,69 @@ public final class DateUtils {
 
     }
 
+    public static String formatToYesterdayOrToday(String date) {
+        try {
+            Date dateTime = new SimpleDateFormat(DATE_INPUT_FORMAT).parse(date);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(dateTime);
+            Calendar today = Calendar.getInstance();
+            Calendar yesterday = Calendar.getInstance();
+            yesterday.add(Calendar.DATE, -1);
+            SimpleDateFormat timeFormatter = new SimpleDateFormat(DATE_INPUT_FORMAT);
 
+            if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
+                timeFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+                Date newdate = timeFormatter.parse(date);
+                timeFormatter.setTimeZone(TimeZone.getDefault());
+                SimpleDateFormat newtimeFormatter = new SimpleDateFormat("hh:mm aa");
+                return "Today at " + newtimeFormatter.format(newdate);
+            }  else {
+                timeFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+                Date newdate = timeFormatter.parse(date);
+                timeFormatter.setTimeZone(TimeZone.getDefault());
+                SimpleDateFormat  mInputDateFormat= new SimpleDateFormat("EEEE, hh:mm aa");
+                return mInputDateFormat.format(newdate);
+
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "Just Now";
+    }
+    public static String getDateTimeFromTimestamp(String time) {
+        long longTime = Long.parseLong(time);
+
+        Date date = new Date(longTime); // *1000 is to convert seconds to milliseconds
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, hh:mm aa"); // the format of your date
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        sdf.setTimeZone(TimeZone.getDefault());
+       return sdf.format(date);
+    }
+
+    public static Date formattedDateWithoutTime(String date)
+    {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_INPUT_FORMAT_WITHOUTTIME, Locale.US);
+            Date newdate = dateFormat.parse(date);
+            return newdate;
+        }
+        catch(ParseException pe ) {
+            // handle the failure
+        }
+        return new Date();
+    }
+
+    public static Date formattedDateTime(String time)
+    {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat(TIME_FORMAT_1, Locale.US);
+            Date newdate = dateFormat.parse(time);
+            return newdate;
+        }
+        catch(ParseException pe ) {
+            // handle the failure
+        }
+        return new Date();
+    }
 }

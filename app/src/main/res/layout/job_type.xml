@@ -28,37 +28,65 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/view6" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profile_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+    <RelativeLayout
+        android:id="@+id/profile_layout"
+        android:layout_width="53dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:src="@drawable/profile"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="match_parent"
+
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:src="@drawable/white_chatbg"
+            app:civ_border_color="@color/skyblue"
+            app:civ_border_width="2dp" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="2dp"
+            android:src="@drawable/no_thumbnail"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="2dp" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/tv_name"
-        style="@style/TextStyle.Bold"
-        android:layout_width="200dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="AirLine Pilot"
         android:ellipsize="end"
-        android:maxLines="1"
-        app:layout_constraintStart_toEndOf="@+id/profile_image"
+        android:fontFamily="@font/nunitosansbold"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="13sp"
+        android:maxLines="2"
+        app:layout_constraintStart_toEndOf="@+id/profile_layout"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_location"
         style="@style/TextStyle"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:visibility="visible"
+        android:textSize="12sp"
+        android:maxLines="3"
         android:text="Aviation International"
-        app:layout_constraintStart_toEndOf="@+id/profile_image"
+        android:fontFamily="@font/nunitosansregular"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toEndOf="@+id/profile_layout"
+        app:layout_constraintEnd_toEndOf="@+id/tv_name"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
     <TextView
@@ -68,63 +96,51 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="$23,000"
-        app:layout_constraintStart_toEndOf="@+id/profile_image"
+        android:visibility="gone"
+        android:fontFamily="@font/nunitosansregular"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toEndOf="@+id/profile_layout"
         app:layout_constraintTop_toBottomOf="@+id/tv_location" />
 
 
     <TextView
         android:id="@+id/tv_apply"
-        android:layout_width="wrap_content"
+        style="@style/Button_selected_light_blue"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/rounded_button_border"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/nunitosansregular"
+        android:gravity="center"
         android:paddingLeft="15dp"
         android:paddingTop="5dp"
         android:paddingRight="15dp"
         android:paddingBottom="5dp"
         android:text="@string/apply"
-        android:textColor="@color/darker_gray"
+        android:textColor="@color/white"
+        android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/img_like"
+        android:id="@+id/img_more"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:elevation="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/view3"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view3"
-        android:background="@mipmap/ic_like" />
-
-    <ImageView
-        android:id="@+id/img_comment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:elevation="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/view3"
+        android:layout_height="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="6dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:src="@drawable/more"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view3"
-        app:srcCompat="@mipmap/ic_comment" />
+        app:layout_constraintTop_toTopOf="@+id/profile_layout" />
 
-    <ImageView
-        android:id="@+id/img_share"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:elevation="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/view3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view3"
-        app:srcCompat="@mipmap/ic_share" />
+
 
     <View
         android:id="@+id/view"
         android:layout_width="0dp"
-        android:layout_height="30dp"
+        android:layout_height="0dp"
         android:background="@color/colorwhite"
         android:elevation="2dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -140,7 +156,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_image">
+        app:layout_constraintTop_toBottomOf="@+id/profile_layout">
 
 
         <View
@@ -148,7 +164,6 @@
             android:layout_width="0dp"
             android:layout_height="30dp"
             android:layout_marginTop="8dp"
-            android:background="@color/lighter_gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -161,8 +176,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
+            android:fontFamily="@font/nunitosansbold"
             android:text="58"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textColor="@color/skyblue"
+            android:textSize="11sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -173,8 +191,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:paddingLeft="5dp"
+            android:textColor="@color/skyblue"
+            android:textStyle="bold"
             android:text="@string/likes"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="11sp"
+            android:fontFamily="@font/nunitosansbold"
             app:layout_constraintStart_toEndOf="@+id/tv_likecount"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -183,9 +204,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:paddingLeft="10dp"
-            android:text="|"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="@string/amp"
+            android:fontFamily="@font/nunitosansbold"
+            style="@style/TextStyle"
+            android:textSize="11sp"
+            android:textColor="@color/skyblue"
+            android:textStyle="bold"
+            android:layout_marginStart="@dimen/spacing_small"
             app:layout_constraintStart_toEndOf="@+id/textView10"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -194,11 +219,13 @@
             style="@style/TextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:paddingLeft="10dp"
+            android:layout_marginStart="@dimen/spacing_small"
             android:text="03"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="11sp"
+            android:fontFamily="@font/nunitosansbold"
+            android:textColor="@color/skyblue"
+            android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/textView11"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -210,18 +237,146 @@
             android:layout_marginTop="8dp"
             android:paddingLeft="5dp"
             android:text="@string/comments"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="11sp"
+            android:fontFamily="@font/nunitosansbold"
+            android:textColor="@color/skyblue"
+            android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/tv_comcount"
             app:layout_constraintTop_toTopOf="parent" />
+
+
+        <View
+            android:id="@+id/view4"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/gray_1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="1dp"
+            android:baselineAligned="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view4">
+
+            <LinearLayout
+                android:id="@+id/like_click"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:layout_weight="1">
+                <ImageView
+                    android:id="@+id/img_like"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:layout_weight="0"
+                    android:background="@drawable/ic_like" />
+                <TextView
+                    android:gravity="center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/nunitosansregular"
+                    android:text="Like"
+                    android:textColor="@color/gray_1" />
+
+
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:background="@color/gray_light" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/comment_click"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:layout_weight="1.2">
+                <ImageView
+                    android:id="@+id/img_comment"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:layout_weight="0"
+                    android:background="@drawable/ic_comment" />
+
+                <TextView
+                    android:gravity="center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/nunitosansregular"
+                    android:text="Comment"
+                    android:textColor="@color/gray_1" />
+
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:background="@color/gray_light" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/share_click"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="16dp"
+                android:paddingLeft="10dp"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/img_share"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:layout_weight="0"
+                    android:background="@drawable/ic_share" />
+
+                <TextView
+                    android:gravity="center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/nunitosansregular"
+                    android:text="Share"
+                    android:textColor="@color/gray_1" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
+
         android:id="@+id/view1"
         android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:background="@color/colorwhite"
+        android:layout_height="15dp"
+        android:background="@color/lighter_gray"
         android:elevation="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -238,6 +393,7 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:text="@string/view_comments"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/view1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

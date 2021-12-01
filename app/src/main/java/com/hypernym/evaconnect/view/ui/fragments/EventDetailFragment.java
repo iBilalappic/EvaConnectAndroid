@@ -2,6 +2,16 @@ package com.hypernym.evaconnect.view.ui.fragments;
 
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -9,27 +19,13 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.fasterxml.jackson.databind.ser.Serializers;
-import com.google.android.exoplayer2.C;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
-import com.hypernym.evaconnect.dateTimePicker.DateTime;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.EventAttendees;
-import com.hypernym.evaconnect.models.Options;
-import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
@@ -38,8 +34,8 @@ import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.CommentsAdapter;
 import com.hypernym.evaconnect.view.adapters.EventAttendeesAdapter;
+import com.hypernym.evaconnect.view.adapters.InvitedUsersAdapter;
 import com.hypernym.evaconnect.viewmodel.EventViewModel;
-import com.hypernym.evaconnect.viewmodel.HomeViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
@@ -47,8 +43,6 @@ import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -58,12 +52,9 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EventDetailFragment extends BaseFragment implements EventAttendeesAdapter.ItemClickListener, Validator.ValidationListener {
+public class EventDetailFragment extends BaseFragment implements Validator.ValidationListener,CommentsAdapter.OnItemClickListener {
    @BindView(R.id.tv_name)
    TextView tv_name;
-
-    @BindView(R.id.tv_eventname)
-    TextView tv_eventname;
 
    @BindView(R.id.img_event)
     ImageView img_event;
@@ -71,19 +62,10 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
    @BindView(R.id.tv_content)
    TextView tv_content;
 
-   @BindView(R.id.tv_minago)
-   TextView tv_minago;
-
-    @BindView(R.id.img_eventlogo)
-    ImageView img_eventlogo;
-
-    @BindView(R.id.tv_date)
+    @BindView(R.id.tv_eventdate)
     TextView tv_date;
 
-    @BindView(R.id.tv_time)
-    TextView tv_time;
-
-    @BindView(R.id.tv_location)
+    @BindView(R.id.tv_eventLocation)
     TextView tv_location;
 
     @BindView(R.id.rc_comments)
@@ -92,11 +74,8 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
     @BindView(R.id.img_user)
     ImageView img_user;
 
-    @BindView(R.id.rc_attendees)
-    RecyclerView rc_attendees;
-
     @BindView(R.id.btn_addcomment)
-    TextView btn_addcomment;
+    ImageView btn_addcomment;
 
     @NotEmpty
     @BindView(R.id.edt_comment)
@@ -111,6 +90,42 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
     @BindView(R.id.img_like)
     ImageView img_like;
 
+    @BindView(R.id.invite_people)
+    RecyclerView invite_people;
+
+    @BindView(R.id.tv_event_type)
+    TextView tv_event_type;
+
+    @BindView(R.id.modify_event)
+    ImageButton modify_event;
+
+    @BindView(R.id.accept_invite)
+    ImageButton accept_invite;
+
+    @BindView(R.id.interested)
+    ImageButton interested;
+
+    @BindView(R.id.register)
+    ImageButton register;
+
+    @BindView(R.id.like_click)
+    LinearLayout like_click;
+
+    @BindView(R.id.comment_click)
+    LinearLayout comment_click;
+
+    @BindView(R.id.share_click)
+    LinearLayout share_click;
+
+    @BindView(R.id.layout_editcomment)
+    LinearLayout layout_editcomment;
+
+    @BindView(R.id.button_cancel)
+    Button button_cancel;
+
+    @BindView(R.id.button_save)
+    Button button_save;
+
 
     private List<Comment> comments=new ArrayList<>();
     private List<EventAttendees> eventAttendees=new ArrayList<>();
@@ -119,8 +134,10 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
    private CommentsAdapter commentsAdapter;
    private EventAttendeesAdapter eventAttendeesAdapter;
     private Validator validator;
-    int event_id;
+    int event_id,comment_id;
     private Event event=new Event();
+    private InvitedUsersAdapter usersAdapter;
+    private List<User> invitedConnections = new ArrayList<>();
 
     public EventDetailFragment() {
         // Required empty public constructor
@@ -133,6 +150,7 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_event_detail, container, false);
         ButterKnife.bind(this,view);
+        getActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
         init();
         return view;
     }
@@ -143,25 +161,25 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
         eventViewModel = ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(EventViewModel.class);
         validator = new Validator(this);
         validator.setValidationListener(this);
-
-        commentsAdapter=new CommentsAdapter(getContext(),comments);
+        commentsAdapter=new CommentsAdapter(getContext(),comments,this);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
         rc_comments.setLayoutManager(linearLayoutManager);
         rc_comments.setAdapter(commentsAdapter);
 
         AppUtils.setGlideImage(getContext(),img_user, LoginUtils.getLoggedinUser().getUser_image());
-
+        setAttendeesAdapter();
          if(NetworkUtils.isNetworkConnected(getContext()))
          {
              getEventDetails(event_id);
-             getEventComments(event_id);
+
          }
          else
          {
              networkErrorDialog();
          }
+            setPageTitle("Event Details");
 
-        img_like.setOnClickListener(new OnOneOffClickListener() {
+        like_click.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
                 //   showDialog();
@@ -188,7 +206,6 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
                     @Override
                     public void onChanged(BaseModel<List<Event>> listBaseModel) {
                         if (listBaseModel != null && !listBaseModel.isError()) {
-
                             AppUtils.setLikeCount(getContext(), tv_likecount, event.getAction(), img_like);
                             event.setLike_count(Integer.parseInt(tv_likecount.getText().toString()));
 
@@ -200,63 +217,51 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
                 });
             }
         });
+        accept_invite.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                if(event.getIs_private()==0)
+                {
+                    addAttendance(event);
+                }
+                else
+                {
+                    updateAttendance(event);
+                }
+            }
+        });
     }
 
-    private void setAttendeesAdapter(Event event) {
-        EventAttendees goingAttendees=new EventAttendees();
-        goingAttendees.setName("Going");
-        goingAttendees.setCount(event.getGoing());
-        goingAttendees.setElevation(0);
-        goingAttendees.setColor(getContext().getResources().getColor(R.color.gray));
-
-        EventAttendees maybeAttendees=new EventAttendees();
-        maybeAttendees.setName("Maybe");
-        maybeAttendees.setCount(event.getMay_be());
-        maybeAttendees.setElevation(0);
-        maybeAttendees.setColor(getContext().getResources().getColor(R.color.gray));
-
-        EventAttendees notgoingAttendees=new EventAttendees();
-        notgoingAttendees.setName("Not Going");
-        notgoingAttendees.setCount(event.getNot_going());
-        notgoingAttendees.setElevation(0);
-        notgoingAttendees.setColor(getContext().getResources().getColor(R.color.gray));
-        if(event.getIs_attending()!=null)
-        {
-            if(event.getIs_attending().equalsIgnoreCase("going"))
-            {
-                goingAttendees.setElevation(2);
-                goingAttendees.setColor(getContext().getResources().getColor(R.color.light_black));
-            }
-            else if(event.getIs_attending().equalsIgnoreCase("may be"))
-            {
-                maybeAttendees.setElevation(2);
-                maybeAttendees.setColor(getContext().getResources().getColor(R.color.light_black));
-            }
-            else if(event.getIs_attending().equalsIgnoreCase("not going"))
-            {
-                notgoingAttendees.setElevation(2);
-                notgoingAttendees.setColor(getContext().getResources().getColor(R.color.light_black));
-            }
-        }
-        eventAttendees.add(goingAttendees);
-        eventAttendees.add(maybeAttendees);
-        eventAttendees.add(notgoingAttendees);
-
-        eventAttendeesAdapter=new EventAttendeesAdapter(getContext(),eventAttendees,this);
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
-        rc_attendees.setLayoutManager(linearLayoutManager);
-        rc_attendees.setAdapter(eventAttendeesAdapter);
+    private void setAttendeesAdapter() {
+            usersAdapter = new InvitedUsersAdapter(getContext(), invitedConnections,false);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+            invite_people.setLayoutManager(linearLayoutManager);
+            invite_people.setAdapter(usersAdapter);
     }
+
 
     private void getEventComments(int event_id) {
+        comments.clear();
         eventViewModel.getEventComments(event_id).observe(this, new Observer<BaseModel<List<Comment>>>() {
             @Override
             public void onChanged(BaseModel<List<Comment>> listBaseModel) {
                 if(listBaseModel!=null && !listBaseModel.isError())
                 {
                     comments.addAll(listBaseModel.getData());
-                    Collections.reverse(comments);
+                    if(event.getUser_id().equals(LoginUtils.getLoggedinUser().getId()))
+                    {
+                        for (Comment comment:comments)
+                        {
+                            comment.setPostMine(true);
+                        }
+                    }
+                  //  Collections.reverse(comments);
                     commentsAdapter.notifyDataSetChanged();
+                    if(comments.size()>0)
+                        rc_comments.smoothScrollToPosition(comments.size() - 1);
+                    layout_editcomment.setVisibility(View.GONE);
+                    btn_addcomment.setVisibility(View.VISIBLE);
+                    edt_comment.setText("");
                }
                 else {
                     networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
@@ -266,6 +271,7 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
     }
 
     private void getEventDetails(int event_id) {
+        invitedConnections.clear();
         eventViewModel.getEventDetails(event_id).observe(this, new Observer<BaseModel<List<Event>>>() {
             @Override
             public void onChanged(BaseModel<List<Event>> listBaseModel) {
@@ -273,104 +279,94 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
                 {
                     event=listBaseModel.getData().get(0);
                     setEventData(listBaseModel.getData().get(0));
-                    setAttendeesAdapter(listBaseModel.getData().get(0));
+                    for(EventAttendees user:event.getAttendees())
+                    {
+                        invitedConnections.add(user.getUser());
+                    }
+                usersAdapter.notifyDataSetChanged();
+                    getEventComments(event_id);
                 }
                 else
                 {
                     networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
                 }
+                if(event.getCreated_by_id()== LoginUtils.getLoggedinUser().getId())
+                {
+                    modify_event.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    modify_event.setVisibility(View.GONE);
+                    if(event.getIs_attending()!=null && event.getIs_attending().equalsIgnoreCase("Pending"))
+                    {
+                        accept_invite.setVisibility(View.VISIBLE);
+                        interested.setVisibility(View.GONE);
+                    }
+                    else if(event.getIs_attending()!=null && !event.getIs_attending().equalsIgnoreCase("Pending"))
+                    {
+                        accept_invite.setVisibility(View.GONE);
+                        interested.setVisibility(View.VISIBLE);
+                    }
+                    else
+                    {
+                        accept_invite.setVisibility(View.VISIBLE);
+                        interested.setVisibility(View.GONE);
+                    }
+                }
             }
 
             private void setEventData(Event event) {
-                tv_name.setText(event.getEvent_name());
-                tv_minago.setText(DateUtils.getTimeAgo(event.getCreated_datetime()));
+                tv_name.setText(event.getName());
+
                 if(event.getEvent_image().size()>0)
                 {
                     AppUtils.setGlideImageUrl(getContext(),img_event,event.getEvent_image().get(0));
-                    AppUtils.setGlideUrlThumbnail(getContext(),img_eventlogo,event.getEvent_image().get(0));
                 }
               else {
                     img_event.setBackground(getContext().getDrawable(R.drawable.no_thumbnail));
-                    img_eventlogo.setBackground(getContext().getDrawable(R.drawable.no_thumbnail));
                 }
                 tv_content.setText(event.getContent());
 
-                tv_date.setText(DateUtils.getFormattedDateDMY(event.getEvent_start_date())+" - "+ DateUtils.getFormattedDateDMY(event.getEvent_end_date()));
-                tv_time.setText(DateUtils.getFormattedEventTime(event.getStart_time())+" - "+DateUtils.getFormattedEventTime(event.getEnd_time()));
-                tv_location.setText(event.getEvent_address()+" , "+ event.getEvent_city());
-                tv_eventname.setText(event.getEvent_name());
+                tv_date.setText(DateUtils.getFormattedDateDMY(event.getStart_date())+" - "+ DateUtils.getFormattedDateDMY(event.getEnd_date()) +" | "+event.getStart_time()+" - "+event.getEnd_time());
+
+                tv_location.setText(event.getAddress());
+                if(event.getIs_private()==0)
+                {
+                    tv_event_type.setText("Open to the public");
+                }
+                else
+                {
+                    tv_event_type.setText("Private to the public");
+                }
+
                 tv_likecount.setText(String.valueOf(event.getLike_count()));
                 tv_comcount.setText(String.valueOf(event.getComment_count()));
                 if (event.getIs_event_like() != null && event.getIs_event_like() > 0) {
-                    img_like.setBackground(getContext().getDrawable(R.mipmap.ic_like_selected));
+                    img_like.setBackground(getContext().getDrawable(R.drawable.like_selected));
                 } else {
-                    img_like.setBackground(getContext().getDrawable(R.mipmap.ic_like));
+                    img_like.setBackground(getContext().getDrawable(R.drawable.ic_like));
                 }
             }
         });
     }
 
-    @Override
-    public void onItemClick(View view, int position) {
-        if(eventAttendees.get(position).getElevation()==0)
-        {
-            for(EventAttendees options:eventAttendees)
-            {
-                    if(options.getCount()>0 && options.getElevation()>0)
-                    {
-                        options.setCount(options.getCount()-1);
-                    }
-                    options.setColor(getContext().getResources().getColor(R.color.gray));
-                    options.setElevation(0);
-            }
-
-            eventAttendees.get(position).setElevation(2);
-            eventAttendees.get(position).setColor(getContext().getResources().getColor(R.color.light_black));
-            eventAttendees.get(position).setCount(eventAttendees.get(position).getCount()+1);
-            eventAttendeesAdapter.notifyDataSetChanged();
-            updateEventAttendance(eventAttendees.get(position).getName());
-        }
-
-    }
-
-    private void updateEventAttendance(String name) {
-        Event eventAttendance=new Event();
-        eventAttendance.setUser_id(LoginUtils.getLoggedinUser().getId());
-        eventAttendance.setEvent_id(event_id);
-        eventAttendance.setStatus(AppConstants.ACTIVE);
-        if(name.equalsIgnoreCase("Maybe"))
-        {
-            name="May be";
-        }
-        eventAttendance.setAttendance_status(name);
-        eventAttendance.setAttending_date(event.getEvent_start_date());
-        if(NetworkUtils.isNetworkConnected(getContext()))
-        {
-            if(event.getIs_attending()==null)
-            {
-                event.setIs_attending(eventAttendance.getAttendance_status());
-                addAttendance(eventAttendance);
-            }
-            else
-            {
-                eventAttendance.setModified_datetime(DateUtils.GetCurrentdatetime());
-                eventAttendance.setModified_by_id(LoginUtils.getLoggedinUser().getId());
-                updateAttendance(eventAttendance);
-            }
-        }
-        else
-        {
-            networkErrorDialog();
-        }
-    }
-
     private void updateAttendance(Event event) {
+        event.setEvent_id(event_id);
+        event.setModified_by_id(LoginUtils.getLoggedinUser().getId());
+        event.setModified_datetime(DateUtils.GetCurrentdatetime());
+        event.setStatus(AppConstants.ACTIVE);
+        event.setUser_id(LoginUtils.getLoggedinUser().getId());
+        event.setAttendance_status("Going");
+
         eventViewModel.updateEventAttendance(event).observe(this, new Observer<BaseModel<List<Event>>>() {
             @Override
             public void onChanged(BaseModel<List<Event>> listBaseModel) {
                 if(listBaseModel!=null && listBaseModel.getData()!=null)
                 {
-
+                    accept_invite.setVisibility(View.GONE);
+                    interested.setVisibility(View.VISIBLE);
+                    invitedConnections.add(LoginUtils.getLoggedinUser());
+                    usersAdapter.notifyDataSetChanged();
                 }
                 else
                 {
@@ -381,13 +377,21 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
     }
 
     private void addAttendance(Event event) {
-
+        event.setEvent_id(event_id);
+        event.setModified_by_id(LoginUtils.getLoggedinUser().getId());
+        event.setModified_datetime(DateUtils.GetCurrentdatetime());
+        event.setStatus(AppConstants.ACTIVE);
+        event.setUser_id(LoginUtils.getLoggedinUser().getId());
+        event.setAttendance_status("Going");
         eventViewModel.addEventAttendance(event).observe(this, new Observer<BaseModel<List<Event>>>() {
             @Override
             public void onChanged(BaseModel<List<Event>> listBaseModel) {
                 if(listBaseModel!=null && listBaseModel.getData()!=null)
                 {
-
+                    accept_invite.setVisibility(View.GONE);
+                    interested.setVisibility(View.VISIBLE);
+                    invitedConnections.add(LoginUtils.getLoggedinUser());
+                    usersAdapter.notifyDataSetChanged();
                 }
                 else
                 {
@@ -403,6 +407,7 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
         validator.validate();
     }
 
+
     @Override
     public void onValidationSucceeded() {
         addEventComment(event_id);
@@ -415,17 +420,18 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
             Comment comment = new Comment();
             String toServerUnicodeEncoded = StringEscapeUtils.escapeJava(edt_comment.getText().toString());
             comment.setContent(toServerUnicodeEncoded);
-            comment.setCreated_by_id(user.getUser_id());
+            comment.setCreated_by_id(user.getId());
             comment.setStatus(AppConstants.STATUS_ACTIVE);
             comment.setEvent_id(event_id);
             eventViewModel.addComment(comment).observe(this, new Observer<BaseModel<List<Comment>>>() {
                 @Override
                 public void onChanged(BaseModel<List<Comment>> listBaseModel) {
                     if (!listBaseModel.isError()) {
-
                         // Toast.makeText(getContext(), getString(R.string.msg_comment_created), Toast.LENGTH_LONG).show();
                         edt_comment.setText("");
                         //networkResponseDialog(getString(R.string.success),getString(R.string.msg_comment_created));
+//                        if(comments.size()>0)
+//                            rc_comments.smoothScrollToPosition(comments.size() - 1);
                         getEventComments(event_id);
                     } else {
                         networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
@@ -433,7 +439,16 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
                     hideDialog();
                 }
             });
+    }
 
+    @OnClick(R.id.modify_event)
+    public void modifyevent()
+    {
+        CreateEventFragment createEventFragment=new CreateEventFragment();
+        Bundle bundle=new Bundle();
+        bundle.putSerializable("event",event);
+        createEventFragment.setArguments(bundle);
+        loadFragment(R.id.framelayout,createEventFragment,getContext(),true);
     }
 
     @Override
@@ -450,4 +465,57 @@ public class EventDetailFragment extends BaseFragment implements EventAttendeesA
         }
     }
 
+
+    @Override
+    public void onEditComment(View view, int position, String comment) {
+        layout_editcomment.setVisibility(View.VISIBLE);
+        btn_addcomment.setVisibility(View.GONE);
+        edt_comment.setText(comment);
+        comment_id=comments.get(position).getId();
+
+
+    }
+
+    @Override
+    public void onDeleteComment(View view, int position) {
+        eventViewModel.deleteComment(comments.get(position).getId()).observe(this, new Observer<BaseModel<List<Comment>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Comment>> listBaseModel) {
+                comments.remove(position);
+                commentsAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+    @OnClick(R.id.button_cancel)
+    public void cancel()
+    {
+        layout_editcomment.setVisibility(View.GONE);
+        btn_addcomment.setVisibility(View.VISIBLE);
+        edt_comment.setText("");
+    }
+
+    @OnClick(R.id.button_save)
+    public void saveComment()
+    {
+        Comment newcomment=new Comment();
+        newcomment.setId(comment_id);
+        newcomment.setContent(edt_comment.getText().toString());
+        newcomment.setModified_by_id(LoginUtils.getLoggedinUser().getId());
+        newcomment.setModified_datetime(DateUtils.GetCurrentdatetime());
+
+        eventViewModel.editComment(newcomment).observe(this, new Observer<BaseModel<List<Comment>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Comment>> listBaseModel) {
+                if(NetworkUtils.isNetworkConnected(getContext()))
+                {
+                    getEventDetails(event_id);
+                    getEventComments(event_id);
+                }
+                else
+                {
+                    networkErrorDialog();
+                }
+            }
+        });
+    }
 }

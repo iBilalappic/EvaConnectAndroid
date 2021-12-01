@@ -7,9 +7,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
@@ -22,7 +19,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.google.android.gms.common.api.Api;
+import androidx.fragment.app.Fragment;
+
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.utils.AppUtils;
 
@@ -65,6 +63,7 @@ public class LoadUrlFragment extends BaseFragment {
 
     private void init() {
         showBackButton();
+        setPageTitle("Post Details");
         String url=getArguments().getString("url");
         ArrayList<String> urls=AppUtils.containsURL(url);
         webView.setWebViewClient(new WebViewClient());

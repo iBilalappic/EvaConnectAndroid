@@ -2,7 +2,6 @@
 package com.hypernym.evaconnect.utils;
 
 import android.app.Activity;
-import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -11,13 +10,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
-import android.media.MediaMetadataRetriever;
 import android.media.RingtoneManager;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -25,51 +24,48 @@ import android.util.Patterns;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
+import com.facebook.login.LoginManager;
 import com.google.android.material.snackbar.Snackbar;
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.constants.AppConstants;
-import com.hypernym.evaconnect.models.Post;
+import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.User;
-import com.hypernym.evaconnect.view.adapters.HomePostsAdapter;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.view.dialogs.VideoViewDialog;
-import com.hypernym.evaconnect.view.ui.activities.BaseActivity;
 import com.hypernym.evaconnect.view.ui.activities.LoginActivity;
-import com.hypernym.evaconnect.view.ui.fragments.BaseFragment;
 import com.nguyencse.URLEmbeddedData;
 import com.nguyencse.URLEmbeddedTask;
 import com.nguyencse.URLEmbeddedView;
 import com.onesignal.OneSignal;
+import com.shockwave.pdfium.PdfDocument;
+import com.shockwave.pdfium.PdfiumCore;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -80,6 +76,7 @@ public final class AppUtils {
     public static Context applicationContext;
     public static String URL_REGEX="([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?";
     public static SimpleDialog simpleDialog;
+    public final static String FOLDER = Environment.getExternalStorageDirectory() + "/PDF";
     private AppUtils() {
         // This class is not publicly instantiable
     }
@@ -111,6 +108,7 @@ public final class AppUtils {
         Glide.with(context) //1
                 .load(url)
                 .placeholder(R.mipmap.ic_default)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .apply(RequestOptions.circleCropTransform())
                 .into(imageView);
     }
@@ -125,6 +123,7 @@ public final class AppUtils {
         Glide
                 .with(imageView.getContext())
                 .load(getImg(url))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(imageView);
     }
     public static void setGlideVideoThumbnail(Context context, ImageView imageView,String url)
@@ -192,14 +191,14 @@ public final class AppUtils {
     {
         if(type.equalsIgnoreCase(AppConstants.UNLIKE))
         {
-           img_like.setBackground(context.getDrawable(R.mipmap.ic_like));
+           img_like.setBackground(context.getDrawable(R.drawable.ic_like));
            int likes=Integer.parseInt(likeCount.getText().toString());
            if(likes>0)
              likeCount.setText(String.valueOf(likes-1));
         }
         else
         {
-            img_like.setBackground(context.getDrawable(R.mipmap.ic_like_selected));
+            img_like.setBackground(context.getDrawable(R.drawable.like_selected));
             int likes=Integer.parseInt(likeCount.getText().toString());
             likeCount.setText(String.valueOf(likes+1));
         }
@@ -318,6 +317,34 @@ public final class AppUtils {
 
     }
 
+    public static void makeNotification_activity(Context context, Class<?> class_,String chat_id, String message, boolean isUpdateCurrent,
+                                                int requestCode) {
+        Intent intent = new Intent(context, class_);
+        if (isUpdateCurrent) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        } else {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        intent.putExtra("chat_room_id",chat_id);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT
+        );
+        Notification notification = new NotificationCompat.Builder(context)
+                .setSmallIcon(getNotificationIcon())
+                .setTicker(message)
+                // .setColor(ContextCompat.getColor(context, R.color.colorNotificationIcon))
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setContentTitle(context.getString(R.string.app_name))
+                .setContentText(message)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
+                .build();
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.notify(requestCode, notification);
+    }
+
     public static void makeNotification_default(Context context, Class<?> class_, String fragmentName,
                                                 Bundle bundle, String message, boolean isUpdateCurrent,
                                                 int requestCode) {
@@ -349,7 +376,7 @@ public final class AppUtils {
     }
     private static int getNotificationIcon() {
         boolean useWhiteIcon = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP);
-        return useWhiteIcon ? R.drawable.logo : R.mipmap.logo;
+        return useWhiteIcon ? R.drawable.ic_launcher : R.mipmap.ic_launcher;
     }
     public static void logout(Context context)
     {
@@ -360,12 +387,30 @@ public final class AppUtils {
                 switch (v.getId()) {
                     case R.id.button_positive:
                         simpleDialog.dismiss();
+                        HashMap<String,Object> body=new HashMap<>();
+
+                        body.put("modified_by_id",LoginUtils.getLoggedinUser().getId());
+                        body.put("last_online_datetime", DateUtils.GetCurrentdatetime());
+                        body.put("is_online",false);
+                        RestClient.get().appApi().userOnline(LoginUtils.getLoggedinUser().getId(),body).enqueue(new Callback<BaseModel<List<User>>>() {
+                            @Override
+                            public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<BaseModel<List<User>>> call, Throwable t) {
+
+                            }
+                        });
                         Intent intent = new Intent(context, LoginActivity.class);
                         activity.finish();
                         context.startActivity(intent);
                         LoginUtils.clearUser(getApplicationContext());
                         LoginUtils.removeAuthToken(getApplicationContext());
+                        AppUtils.facebookLogout();
                         OneSignal.sendTag("email","null");
+
                         break;
                     case R.id.button_negative:
                         simpleDialog.dismiss();
@@ -374,11 +419,60 @@ public final class AppUtils {
             }
         });
         simpleDialog.show();
-
     }
 
+    //PdfiumAndroid (https://github.com/barteksc/PdfiumAndroid)
+    //https://github.com/barteksc/AndroidPdfViewer/issues/49
+        public static Bitmap generateImageFromPdf(Uri pdfUri,Context context) {
+            int pageNumber = 0;
+            Bitmap bmp=null;
+            PdfiumCore pdfiumCore = new PdfiumCore(context);
+            try {
+                //http://www.programcreek.com/java-api-examples/index.php?api=android.os.ParcelFileDescriptor
+                ParcelFileDescriptor fd = context.getContentResolver().openFileDescriptor(pdfUri, "r");
+                PdfDocument pdfDocument = pdfiumCore.newDocument(fd);
+                pdfiumCore.openPage(pdfDocument, pageNumber);
+                int width = pdfiumCore.getPageWidthPoint(pdfDocument, pageNumber);
+                int height = pdfiumCore.getPageHeightPoint(pdfDocument, pageNumber);
+                bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+                pdfiumCore.renderPageBitmap(pdfDocument, bmp, pageNumber, 0, 0, width, height);
+               // saveImage(bmp);
+                pdfiumCore.closeDocument(pdfDocument); // important!
+
+            } catch(Exception e) {
+                //todo with exception
+            }
+            return bmp;
+        }
+
+        public static void saveImage(Bitmap bmp) {
+            FileOutputStream out = null;
+            try {
+                File folder = new File(FOLDER);
+                if(!folder.exists())
+                    folder.mkdirs();
+                File file = new File(folder, "PDF.png");
+                out = new FileOutputStream(file);
+                bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+            } catch (Exception e) {
+                //todo with exception
+            } finally {
+                try {
+                    if (out != null)
+                        out.close();
+                } catch (Exception e) {
+                    //todo with exception
+                }
+            }
+        }
     public static Bitmap getVideoThumbnail(String url)    {
        return ThumbnailUtils.createVideoThumbnail(url,MediaStore.Video.Thumbnails.MINI_KIND);
+    }
+
+    public static void facebookLogout(){
+        if (LoginManager.getInstance()!=null){
+            LoginManager.getInstance().logOut();
+        }
     }
 
 }

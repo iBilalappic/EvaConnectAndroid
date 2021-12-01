@@ -1,90 +1,127 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.textfield.TextInputEditText;
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.constants.AppConstants;
+import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
-import com.hypernym.evaconnect.utils.GsonUtils;
+import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
-import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
-import com.hypernym.evaconnect.viewmodel.PostViewModel;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.theartofdev.edmodo.cropper.CropImage;
 
-import org.w3c.dom.Text;
-
-import java.util.Collections;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EditProfileFragment extends BaseFragment implements TextInputEditText.OnTouchListener, Validator.ValidationListener {
+public class EditProfileFragment extends BaseFragment implements Validator.ValidationListener {
     @NotEmpty
-    @BindView(R.id.tv_location)
-    TextInputEditText tv_location;
+    @BindView(R.id.edt_location)
+    EditText edt_location;
 
     @NotEmpty
-    @BindView(R.id.tv_designation)
-    TextInputEditText tv_designation;
+    @BindView(R.id.edt_title)
+    EditText edt_designation;
+
+    @NotEmpty
+    @BindView(R.id.edt_sector)
+    EditText edt_sector;
+
+    @NotEmpty
+    @BindView(R.id.edt_firstname)
+    EditText edt_firstname;
+
+    @NotEmpty
+    @BindView(R.id.edt_company)
+    EditText edt_company;
 
     @BindView(R.id.tv_name)
     TextView tv_name;
 
-    @BindView(R.id.tv_connect)
-    TextView tv_connect;
+    @BindView(R.id.tv_location)
+    TextView tv_location;
 
-    @NotEmpty
-    @BindView(R.id.tv_biodata)
-    TextInputEditText tv_biodata;
-
-
-    @NotEmpty
-    @BindView(R.id.tv_field)
-    TextInputEditText tv_field;
-
-    @NotEmpty
-    @BindView(R.id.tv_company)
-    TextInputEditText tv_company;
-
-    @BindView(R.id.update)
-    TextView update;
+    @BindView(R.id.tv_text_manage)
+    TextView tv_text_manage;
 
 
-    private UserViewModel userViewModel;
+    @BindView(R.id.img_edit)
+    ImageView img_edit;
+
+    @BindView(R.id.img_backarrow)
+    ImageView img_backarrow;
+
+    @BindView(R.id.tv_updated)
+    TextView tv_updated;
+
+    @BindView(R.id.btn_save)
+    TextView btn_save;
 
 
     @BindView(R.id.profile_image)
     CircleImageView cv_profile_image;
 
+    @BindView(R.id.lbl_title)
+    TextView lbl_title;
+
+    @BindView(R.id.img_view2)
+    View img_view2;
+
+
+    private UserViewModel userViewModel;
+
+
+    private static final int REQUEST_PHOTO_GALLERY = 4;
+    private static final int CAMERAA = 1;
+    private String GalleryImage, mCurrentPhotoPath, globalImagePath;
+    private File tempFile, file_name;
+    private String currentPhotoPath = "";
+    private String photoVar = null;
+    private MultipartBody.Part partImage;
+
     User user = new User();
     private Validator validator;
-    SimpleDialog simpleDialog;
 
     public EditProfileFragment() {
         // Required empty public constructor
@@ -99,14 +136,35 @@ public class EditProfileFragment extends BaseFragment implements TextInputEditTe
         ButterKnife.bind(this, view);
         validator = new Validator(this);
         validator.setValidationListener(this);
-        tv_designation.setOnTouchListener(this);
+
         user = LoginUtils.getUser();
         SettingUserProfile(user);
 
-        update.setOnClickListener(new View.OnClickListener() {
+        btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 validator.validate();
+            }
+        });
+
+        img_edit.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                openPictureDialog();
+
+            }
+        });
+        img_backarrow.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+        tv_text_manage.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                SettingsFragment settingsFragment = new SettingsFragment();
+                loadFragment(R.id.framelayout, settingsFragment, getContext(), true);
             }
         });
 
@@ -116,84 +174,43 @@ public class EditProfileFragment extends BaseFragment implements TextInputEditTe
     private void SettingUserProfile(User user) {
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(UserViewModel.class);
         GetUserDetails();
-
-//        if (user != null) {
-//            Log.d("USERDATA", "" + GsonUtils.toJson(user));
-//            AppUtils.setGlideImage(getContext(), cv_profile_image, user.getUser_image());
-//            tv_name.setText(user.getFirst_name());
-//            tv_biodata.setText(user.getBio_data());
-//            //  tv_location.setText(user.getBio_data());
-//            // tv_designation.setText();
-//        }
     }
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        final int DRAWABLE_LEFT = 0;
-        final int DRAWABLE_TOP = 1;
-        final int DRAWABLE_RIGHT = 2;
-        final int DRAWABLE_BOTTOM = 3;
-
-        switch (v.getId()) {
-            case R.id.tv_designation:
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (event.getRawX() >= (tv_designation.getRight() - tv_designation.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        // your action here
-                        tv_designation.setEnabled(true);
-                        return true;
-                    }
-                }
-                break;
-            case R.id.tv_location:
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (event.getRawX() >= (tv_location.getRight() - tv_location.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        // your action here
-
-                        return true;
-                    }
-                }
-                break;
-
-
-        }
-
-
-        return false;
-    }
 
     @Override
     public void onValidationSucceeded() {
-        UpdateProfileUser();
+           UpdateProfileUser();
     }
 
     private void UpdateProfileUser() {
         showDialog();
         userViewModel.profile_update(
                 user.getId(),
-                tv_designation.getText().toString(),
-                tv_location.getText().toString(),
-                tv_biodata.getText().toString(),
-                tv_company.getText().toString(),
-                tv_field.getText().toString()
-        ).observe(this, new Observer<BaseModel<List<Object>>>() {
+                edt_designation.getText().toString(),
+                edt_company.getText().toString(),
+                edt_firstname.getText().toString(),partImage).observe(this, new Observer<BaseModel<List<Object>>>() {
             @Override
             public void onChanged(BaseModel<List<Object>> listBaseModel) {
                 if (!listBaseModel.isError()) {
-                    simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), "Profile updated successfully", null, getString(R.string.ok), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            simpleDialog.dismiss();
-                        }
-                    });
-                    GetUserDetails();
+                   tv_updated.setVisibility(View.VISIBLE);
+                   initHandler();
+                   GetUserDetails();
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
                 hideDialog();
-                simpleDialog.show();
-                simpleDialog.setCancelable(false);
             }
         });
+    }
+
+    private void initHandler() {
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                tv_updated.setVisibility(View.GONE);
+            }
+        }, 3000);
     }
 
     private void GetUserDetails() {
@@ -201,19 +218,51 @@ public class EditProfileFragment extends BaseFragment implements TextInputEditTe
         userViewModel.getuser_details(user.getId()
         ).observe(this, new Observer<BaseModel<List<User>>>() {
             @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel) {
-                if (listBaseModel.getData() != null && !listBaseModel.isError()) {
-                    if (listBaseModel.getData().get(0).getIs_linkedin() == 1) {
-                        AppUtils.setGlideImage(getContext(), cv_profile_image, user.getLinkedin_image_url());
-                    } else {
-                        AppUtils.setGlideImage(getContext(), cv_profile_image, user.getUser_image());
+            public void onChanged(BaseModel<List<User>> listBaseModel)
+            {
+                if (listBaseModel.getData() != null && !listBaseModel.isError())
+                {
+                    if (!TextUtils.isEmpty(listBaseModel.getData().get(0).getUser_image()))
+                    {
+                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getUser_image());
                     }
-                    tv_biodata.setText(listBaseModel.getData().get(0).getBio_data());
-                    tv_designation.setText(listBaseModel.getData().get(0).getDesignation());
-                    tv_field.setText(listBaseModel.getData().get(0).getAddress());
-                    tv_location.setText(listBaseModel.getData().get(0).getField());
-                    tv_company.setText(listBaseModel.getData().get(0).getCompany_name());
+//                    else if (listBaseModel.getData().get(0).getIs_facebook() == 1 && !TextUtils.isEmpty(listBaseModel.getData().get(0).getFacebook_image_url())) {
+//                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getFacebook_image_url());
+//                    }
+//                    else {
+//                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getUser_image());
+//                    }
+
+                    tv_location.setText(listBaseModel.getData().get(0).getCountry() + "," + listBaseModel.getData().get(0).getCity());
+                    edt_location.setText(listBaseModel.getData().get(0).getCountry() + "," + listBaseModel.getData().get(0).getCity());
+                    edt_firstname.setText(listBaseModel.getData().get(0).getFirst_name());
+                    if(listBaseModel.getData().get(0).getSector().equalsIgnoreCase("Other"))
+                    {
+                        edt_sector.setText(listBaseModel.getData().get(0).getOther_sector());
+                    }
+                    else
+                    {
+                        edt_sector.setText(listBaseModel.getData().get(0).getSector());
+                    }
+
+                    if(listBaseModel.getData().get(0).getType().equalsIgnoreCase("company"))
+                    {
+                        lbl_title.setVisibility(View.GONE);
+                        edt_designation.setVisibility(View.GONE);
+                        img_view2.setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                        edt_designation.setText(listBaseModel.getData().get(0).getDesignation());
+                        lbl_title.setVisibility(View.VISIBLE);
+                        edt_designation.setVisibility(View.VISIBLE);
+                        img_view2.setVisibility(View.VISIBLE);
+                    }
+
+
+                    edt_company.setText(listBaseModel.getData().get(0).getCompany_name());
                     tv_name.setText(listBaseModel.getData().get(0).getFirst_name());
+                    LoginUtils.saveUser(listBaseModel.getData().get(0));
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
@@ -234,5 +283,134 @@ public class EditProfileFragment extends BaseFragment implements TextInputEditTe
                 Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Result code is RESULT_OK only if the user selects an Image
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE)
+        {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+
+            if (resultCode == RESULT_OK){
+
+                if (result != null && result.getUri()!=null)
+                {
+                    setImage(result.getUri());
+                }
+
+            }
+            else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                if (result != null) {
+                    Exception error = result.getError();
+                    error.printStackTrace();
+                }
+            }
+        }
+
+        if (requestCode == REQUEST_PHOTO_GALLERY && resultCode == RESULT_OK) {
+
+            try {
+                if (data != null && data.getData() != null) {
+                    Uri galleryImageUri = data.getData();
+
+                    try {
+                        String imagePath = ImageFilePathUtil.getPath(getActivity(), galleryImageUri);
+
+                        if (TextUtils.isEmpty(imagePath)){
+                            networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
+                            return;
+                        }
+                        else{
+                            //Do not add getActivity instead of getContext().
+                            CropImage.activity(galleryImageUri)
+                                    .start(getContext(), this);
+                        }
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    Toast.makeText(getContext(), "Something went wrong while retrieving image", Toast.LENGTH_SHORT).show();
+                }
+            } catch (Exception exc) {
+                exc.printStackTrace();
+                Log.e(getClass().getName(), "exc: " + exc.getMessage());
+            }
+        } else {
+            if (requestCode == CAMERAA&& resultCode == RESULT_OK )
+            {
+                try {
+                    Uri SelectedImageUri;
+
+                    SelectedImageUri = Uri.fromFile(galleryAddPic());
+
+                    //Do not add getActivity instead of getContext().
+                    CropImage.activity(SelectedImageUri)
+                            .start(getContext(), this);
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void setImage(Uri uri)
+    {
+        String updatedImage = ImageFilePathUtil.getPath(getActivity(), uri);
+
+        if (!TextUtils.isEmpty(updatedImage) || updatedImage != null)
+        {
+            File file = new File(updatedImage);
+            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+
+            globalImagePath = file.getAbsolutePath();
+
+            if (file.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.IMAGE_SIZE_IN_KB) {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_image_size_large));
+                return;
+            }
+
+            if (!TextUtils.isEmpty(globalImagePath) || globalImagePath != null) {
+
+                Glide.with(this).load(loadFromFile(globalImagePath))
+                        .apply(new RequestOptions())
+                        .into(cv_profile_image);
+
+                Bitmap orignal = loadFromFile(globalImagePath);
+                File filenew = new File(globalImagePath);
+                try {
+                    FileOutputStream out = new FileOutputStream(filenew);
+                    orignal.compress(Bitmap.CompressFormat.JPEG, 50, out);
+                    out.flush();
+                    out.close();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                partImage = MultipartBody.Part.createFormData("user_image", file.getName(), reqFile);
+            }
+            else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
+            }
+        }
+        else {
+            networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
+        }
+    }
+
+    private void galleryAddPics() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        mCurrentPhotoPath=getCurrentPhotoPath();
+        File f = new File(mCurrentPhotoPath);
+        file_name = f;
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        getActivity().sendBroadcast(mediaScanIntent);
     }
 }

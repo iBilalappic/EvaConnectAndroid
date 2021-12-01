@@ -1,11 +1,13 @@
 package com.hypernym.evaconnect.view.adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,7 +19,6 @@ import com.hypernym.evaconnect.models.NetworkConnection;
 import com.hypernym.evaconnect.toolbar.OnItemClickListener;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
-import com.hypernym.evaconnect.utils.LoginUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,28 +45,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull MessageAdapter.ViewHolder holder, int position) {
-        if (networkConnectionList.get(position).getReceiver().getFirstName().equals(LoginUtils.getUser().getFirst_name())) {
-            holder.tv_name.setText(networkConnectionList.get(position).getSender().getFirstName());
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                holder.tv_lastmsg.setText(Html.fromHtml(networkConnectionList.get(position).getMessage(), Html.FROM_HTML_MODE_COMPACT));
-            } else {
-                holder.tv_lastmsg.setText(Html.fromHtml(networkConnectionList.get(position).getMessage()));
-            }
-          //  holder.tv_lastmsg.setText(networkConnectionList.get(position).getMessage());
-            AppUtils.setGlideImage(context, (holder).mImageview6, networkConnectionList.get(position).getSender().getUserImage());
-            holder.tv_minago.setText(DateUtils.getTimeAgo(networkConnectionList.get(position).getCreatedDatetime()));
+        holder.tv_name.setText(networkConnectionList.get(position).getName());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            holder.tv_lastmsg.setText(Html.fromHtml(networkConnectionList.get(position).getMessage(), Html.FROM_HTML_MODE_COMPACT));
+        } else {
+            holder.tv_lastmsg.setText(Html.fromHtml(networkConnectionList.get(position).getMessage()));
         }
-        if (networkConnectionList.get(position).getSender().getFirstName().equals(LoginUtils.getUser().getFirst_name())) {
-            holder.tv_name.setText(networkConnectionList.get(position).getReceiver().getFirstName());
-         //   holder.tv_lastmsg.setText(networkConnectionList.get(position).getMessage());
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                holder.tv_lastmsg.setText(Html.fromHtml(networkConnectionList.get(position).getMessage(), Html.FROM_HTML_MODE_COMPACT));
-            } else {
-                holder.tv_lastmsg.setText(Html.fromHtml(networkConnectionList.get(position).getMessage()));
-            }
-            AppUtils.setGlideImage(context, (holder).mImageview6, networkConnectionList.get(position).getReceiver().getUserImage());
-            holder.tv_minago.setText(DateUtils.getTimeAgo(networkConnectionList.get(position).getCreatedDatetime()));
-        }
+       AppUtils.setGlideImage(context, (holder).mImageview6, networkConnectionList.get(position).getUserImage());
+        holder.tv_minago.setText(DateUtils.getDateTimeFromTimestamp(networkConnectionList.get(position).getCreatedDatetime()));
+
         holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,6 +62,20 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         });
         if (networkConnectionList.get(position).getCreatedDatetime() != null) {
             holder.mtextview22.setText(DateUtils.getTimeAgo(networkConnectionList.get(position).getCreatedDatetime()));
+        }
+        if(networkConnectionList.get(position).isUnread() && networkConnectionList.get(position).getMessageCount()>0)
+        {
+            holder.notification.setVisibility(View.VISIBLE);
+            holder.tv_count.setVisibility(View.VISIBLE);
+            holder.tv_count.setText(String.valueOf(networkConnectionList.get(position).getMessageCount()));
+            holder.tv_lastmsg.setTextColor(context.getResources().getColor(R.color.black));
+            holder.tv_lastmsg.setTypeface(holder.tv_lastmsg.getTypeface(), Typeface.BOLD);
+        }
+        else
+        {
+            holder.notification.setVisibility(View.GONE);
+            holder.tv_count.setVisibility(View.GONE);
+            holder.tv_lastmsg.setTextColor(context.getResources().getColor(R.color.gray));
         }
        // holder.tv_name.setText(String.valueOf(networkConnectionList.get(position).getReceiverId()));
     }
@@ -84,9 +86,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_name, tv_lastmsg, mtextview22,tv_minago;
+        TextView tv_name, tv_lastmsg, mtextview22,tv_minago,tv_count;
         CircleImageView mImageview6;
         ConstraintLayout constraintLayout;
+        ImageView notification;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -96,6 +99,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             mImageview6 = (CircleImageView) itemView.findViewById(R.id.imageView6);
             constraintLayout = (ConstraintLayout) itemView.findViewById(R.id.linearLayout6);
             tv_minago=itemView.findViewById(R.id.tv_minago);
+            tv_count=itemView.findViewById(R.id.tv_count);
+            notification=itemView.findViewById(R.id.notification);
         }
     }
 }

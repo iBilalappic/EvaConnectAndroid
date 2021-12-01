@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,6 +18,9 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.AccountCheck;
 import com.hypernym.evaconnect.models.BaseModel;
@@ -24,6 +28,7 @@ import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.models.UserDetails;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.Constants;
+import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
@@ -69,6 +74,7 @@ public class LinkedinActivity extends BaseActivity {
     private static final String ACCESS_TOKEN_URL = "https://www.linkedin.com/uas/oauth2/accessToken";
     String profileUrl = "https://api.linkedin.com/v2/me?projection=(id,firstName,lastName,profilePicture(displayImage~:playableStreams))";
     String emailAddress = "https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))";
+    String path="";
     private WebView webView;
     private static final String SECRET_KEY_PARAM = "client_secret";
     private static final String RESPONSE_TYPE_PARAM = "response_type";
@@ -290,8 +296,13 @@ public class LinkedinActivity extends BaseActivity {
         protected JSONObject doInBackground(String... urls) {
             if (urls.length > 0) {
                 try {
+
+
+
                     sendGetRequest(profileUrl, accessToken);
                     sendGetRequestForEmail(emailAddress, accessToken);
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -342,6 +353,24 @@ public class LinkedinActivity extends BaseActivity {
             linkedInUserLastName = jsonObject.getJSONObject("firstName").getJSONObject("localized").getString(getFirstnameKey);
             linkedInUserProfile = jsonObject.getJSONObject("profilePicture").getJSONObject("displayImage~").getJSONArray("elements").getJSONObject(0).getJSONArray("identifiers").getJSONObject(0).getString("identifier");
             Log.d("PROFILE",""+linkedInUserProfile);
+
+
+
+
+            Glide.with(LinkedinActivity.this)
+                    .asBitmap()
+                    .load(linkedInUserProfile)
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+
+//                                    image_path=ImageFilePathUtil.saveImage(resource);
+
+                            path= ImageFilePathUtil.SaveImage(resource,"LinkedinProfile.png");
+
+                        }
+                    });
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -367,6 +396,7 @@ public class LinkedinActivity extends BaseActivity {
         Intent intent = new Intent(LinkedinActivity.this, BlankActivity.class);
         intent.putExtra("Email", linkedInUserEmailAddress);
         intent.putExtra("Photo", linkedInUserProfile);
+        intent.putExtra("Path", path);
         startActivity(intent);
         pd.dismiss();
         // CheckUserExist(linkedInUserEmailAddress);

@@ -1,8 +1,11 @@
 package com.hypernym.evaconnect.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
-public class User implements Serializable {
+public class User implements Serializable, Parcelable {
 
     private Integer id;
     private String email;
@@ -15,7 +18,130 @@ public class User implements Serializable {
     private String token;
     private Integer user_id;
     private String user_image;
-    private String linkedin_image_url ;
+    private String linkedin_image_url;
+    private String facebook_image_url;
+    private String city;
+    private String country;
+    private String last_name;
+    private String sector;
+    private String work_aviation;
+    private String designation;
+    private String field;
+    private String address;
+    private String company_name;
+    private String filter;
+    private String chatID;
+    private boolean is_online;
+    private String last_online_datetime;
+    private String other_sector;
+
+    public String getSearch_key() {
+        return search_key;
+    }
+
+    public void setSearch_key(String search_key) {
+        this.search_key = search_key;
+    }
+
+    private String search_key;
+
+    public String getFilter() {
+        return filter;
+    }
+
+    public void setFilter(String filter) {
+        this.filter = filter;
+    }
+
+    public boolean isIs_shared() {
+        return is_shared;
+    }
+
+    public void setIs_shared(boolean is_shared) {
+        this.is_shared = is_shared;
+    }
+
+    private boolean is_shared=false;
+    public String getConnection_status() {
+        return connection_status;
+    }
+
+    public void setConnection_status(String connection_status) {
+        this.connection_status = connection_status;
+    }
+
+    private String connection_status;
+    private Integer total_connection;
+
+    public Integer getIs_notifications() {
+        return is_notifications;
+    }
+
+    public void setIs_notifications(Integer is_notifications) {
+        this.is_notifications = is_notifications;
+    }
+
+    private Integer is_notifications;
+    private String is_connected;
+
+    public String getLogin_type() {
+        return login_type;
+    }
+
+    public void setLogin_type(String login_type) {
+        this.login_type = login_type;
+    }
+
+    private String login_type;
+    private boolean is_receiver;
+    private Integer connection_id;
+    private Integer receiver_id;
+    private Integer is_linkedin;
+    private Integer is_facebook;
+
+
+    public Integer getConnection_count() {
+        return connection_count;
+    }
+
+    public void setConnection_count(Integer connection_count) {
+        this.connection_count = connection_count;
+    }
+
+    private Integer connection_count;
+
+
+    public String getFacebook_image_url() {
+        return facebook_image_url;
+    }
+
+    public void setFacebook_image_url(String facebook_image_url) {
+        this.facebook_image_url = facebook_image_url;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getLast_name() {
+        return last_name;
+    }
+
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
+    }
 
     public String getSector() {
         return sector;
@@ -32,9 +158,6 @@ public class User implements Serializable {
     public void setWork_aviation(String work_aviation) {
         this.work_aviation = work_aviation;
     }
-
-    private String sector;
-    private String work_aviation;
 
     public String getDesignation() {
         return designation;
@@ -68,11 +191,6 @@ public class User implements Serializable {
         this.company_name = company_name;
     }
 
-    private String designation ;
-    private String field ;
-    private String address ;
-    private String company_name ;
-
     public String getLinkedin_image_url() {
         return linkedin_image_url;
     }
@@ -89,12 +207,6 @@ public class User implements Serializable {
         this.is_linkedin = is_linkedin;
     }
 
-    private Integer total_connection;
-    private String is_connected;
-    private boolean is_receiver;
-    private Integer connection_id;
-    private Integer receiver_id;
-
     public Integer getIsLinkedin() {
         return is_linkedin;
     }
@@ -103,7 +215,15 @@ public class User implements Serializable {
         this.is_linkedin = isLinkedin;
     }
 
-    private Integer is_linkedin;
+
+
+    public Integer getIs_facebook() {
+        return is_facebook;
+    }
+
+    public void setIs_facebook(Integer is_facebook) {
+        this.is_facebook = is_facebook;
+    }
 
     public String getEmail() {
         return email;
@@ -232,5 +352,47 @@ public class User implements Serializable {
 
     public void setReceiver_id(Integer receiver_id) {
         this.receiver_id = receiver_id;
+    }
+
+    public String getChatID() {
+        return chatID;
+    }
+
+    public void setChatID(String chatID) {
+        this.chatID = chatID;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+    }
+
+    public boolean isIs_online() {
+        return is_online;
+    }
+
+    public void setIs_online(boolean is_online) {
+        this.is_online = is_online;
+    }
+
+    public String getLast_online_datetime() {
+        return last_online_datetime;
+    }
+
+    public void setLast_online_datetime(String last_online_datetime) {
+        this.last_online_datetime = last_online_datetime;
+    }
+
+    public String getOther_sector() {
+        return other_sector;
+    }
+
+    public void setOther_sector(String other_sector) {
+        this.other_sector = other_sector;
     }
 }

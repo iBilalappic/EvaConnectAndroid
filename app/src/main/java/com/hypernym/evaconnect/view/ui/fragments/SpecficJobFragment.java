@@ -1,40 +1,33 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.JobAd;
-import com.hypernym.evaconnect.models.MyLikesModel;
-import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
-import com.hypernym.evaconnect.utils.DateUtils;
-import com.hypernym.evaconnect.utils.GsonUtils;
+import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.MyLikeAdapter;
 import com.hypernym.evaconnect.view.dialogs.ShareDialog;
 import com.hypernym.evaconnect.viewmodel.JobListViewModel;
-import com.hypernym.evaconnect.viewmodel.MylikesViewModel;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -50,11 +43,11 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
     @BindView(R.id.tv_name)
     TextView tv_name;
 
-    @BindView(R.id.tv_minago)
-    TextView tv_minago;
+//    @BindView(R.id.tv_minago)
+//    TextView tv_minago;
 
-    @BindView(R.id.tv_createddateTime)
-    TextView tv_createddateTime;
+//    @BindView(R.id.tv_createddateTime)
+//    TextView tv_createddateTime;
 
     @BindView(R.id.tv_positionName)
     TextView tv_positionName;
@@ -74,8 +67,8 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
     @BindView(R.id.tv_description)
     TextView tv_description;
 
-    @BindView(R.id.tv_goback)
-    TextView tv_goback;
+    @BindView(R.id.img_backarrow)
+    ImageView img_backarrow;
 
     @BindView(R.id.img_like)
     ImageView img_like;
@@ -85,6 +78,15 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
 
     @BindView(R.id.img_share)
     ImageView img_share;
+
+    @BindView(R.id.like_click)
+    LinearLayout like_click;
+
+    @BindView(R.id.comment_click)
+    LinearLayout comment_click;
+
+    @BindView(R.id.share_click)
+    LinearLayout share_click;
 
     int job_id;
     JobAd jobAd = new JobAd();
@@ -103,18 +105,25 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
         View view = inflater.inflate(R.layout.fragment_specfic_job_ad, container, false);
         ButterKnife.bind(this, view);
         tv_apply.setOnClickListener(this);
-        tv_goback.setOnClickListener(this);
+        img_backarrow.setOnClickListener(this);
         img_like.setOnClickListener(this);
         img_share.setOnClickListener(this);
+        like_click.setOnClickListener(this);
+        share_click.setOnClickListener(this);
+        comment_click.setOnClickListener(this);
+
         return view;
     }
 
     private void init() {
+
         jobListViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(JobListViewModel.class);
         user = LoginUtils.getUser();
+        showBackButton();
+        setPageTitle("Job Details");
         if ((getArguments() != null)) {
-            setPageTitle("");
-            showBackButton();
+        //    setPageTitle("");
+         //   showBackButton();
           //  jobAd = (JobAd) getArguments().getSerializable("JOB_AD");
             job_id = getArguments().getInt("job_id");
             if (job_id != 0) {
@@ -146,13 +155,13 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
                     tv_salaryAmount.setText("£ " + myFormatter.format(getjobAd.getData().get(0).getSalary()) + " pa");
                     tv_description.setText(getjobAd.getData().get(0).getContent());
                     tv_locationName.setText(getjobAd.getData().get(0).getLocation());
-                    tv_weeklyHoursNumber.setText(getjobAd.getData().get(0).getWeeklyHours());
-                    tv_createddateTime.setText(DateUtils.getFormattedDateTime(getjobAd.getData().get(0).getCreatedDatetime()));
-                    tv_minago.setText(DateUtils.getTimeAgo(getjobAd.getData().get(0).getCreatedDatetime()));
+                  //  tv_weeklyHoursNumber.setText(getjobAd.getData().get(0).getWeeklyHours());
+//                    tv_createddateTime.setText(DateUtils.getFormattedDateTime(getjobAd.getData().get(0).getCreatedDatetime()));
+//                    tv_minago.setText(DateUtils.getTimeAgo(getjobAd.getData().get(0).getCreatedDatetime()));
                     if (getjobAd.getData().get(0).getIsJobLike() != null && getjobAd.getData().get(0).getIsJobLike() > 0) {
-                        img_like.setBackground(getActivity().getDrawable(R.mipmap.ic_like_selected));
+                        img_like.setBackground(getActivity().getDrawable(R.drawable.like_selected));
                     } else {
-                        img_like.setBackground(getActivity().getDrawable(R.mipmap.ic_like));
+                        img_like.setBackground(getActivity().getDrawable(R.drawable.ic_like));
                     }
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
@@ -199,20 +208,21 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
                     Toast.makeText(getContext(), "You have already applied to this job", Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case R.id.tv_goback:
+            case R.id.img_backarrow:
                 getActivity().onBackPressed();
                 break;
-            case R.id.img_like:
+            case R.id.like_click:
                 if (checkLikeCount != null && checkLikeCount.getIsJobLike() > 0) {
                     SetJobUnLike(checkLikeCount.getId());
                 } else {
                     SetJobLike(checkLikeCount.getId());
                 }
                 break;
-            case R.id.img_share:
+            case R.id.share_click:
                 ShareDialog shareDialog;
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("specficJob",specficJobAd);
+                bundle.putString(Constants.FRAGMENT_NAME,"JOB_FRAGMENT");
                 shareDialog = new ShareDialog(getContext(),bundle);
                 shareDialog.show();
                 break;

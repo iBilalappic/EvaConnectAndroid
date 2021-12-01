@@ -9,11 +9,11 @@ import androidx.lifecycle.LiveData;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.Event;
+import com.hypernym.evaconnect.models.Meeting;
+import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IEventRepository;
-import com.hypernym.evaconnect.repositories.IUserRespository;
 import com.hypernym.evaconnect.repositories.impl.EventRepository;
-import com.hypernym.evaconnect.repositories.impl.UserRepository;
 
 import java.util.List;
 
@@ -29,6 +29,15 @@ public class EventViewModel extends AndroidViewModel {
     public LiveData<BaseModel<List<Event>>> createEvent(Event event, MultipartBody.Part image)
     {
         return iEventRepository.createEvent(event,image);
+    }
+
+    public LiveData<BaseModel<List<Meeting>>> createMeeting(Meeting meeting)
+    {
+        return iEventRepository.createMeeting(meeting);
+    }
+    public LiveData<BaseModel<List<Meeting>>> updateMeeting(Meeting meeting)
+    {
+        return iEventRepository.updateMeeting(meeting);
     }
 
     public LiveData<BaseModel<List<Event>>> getCalendarEvents(int user_id, String month,String year)
@@ -51,6 +60,12 @@ public class EventViewModel extends AndroidViewModel {
         return iEventRepository.addComment(comment);
     }
 
+    public LiveData<BaseModel<List<Comment>>> editComment(Comment comment)
+    {
+        return iEventRepository.editComment(comment);
+    }
+
+
     public LiveData<BaseModel<List<Event>>> addEventAttendance(Event event)
     {
         return iEventRepository.addEventAttendance(event);
@@ -63,6 +78,26 @@ public class EventViewModel extends AndroidViewModel {
     public LiveData<BaseModel<List<Event>>> likeEvent(Event event)
     {
         return iEventRepository.likeEvent(event);
+    }
+
+    public LiveData<BaseModel<List<Post>>> getEvent(User user, int totalpages, int currentPage)
+    {
+        return iEventRepository.getEvent(user,totalpages,currentPage);
+    }
+
+    public LiveData<BaseModel<List<Event>>> updateEvent(Event event,MultipartBody.Part event_image)
+    {
+        return iEventRepository.updateEvent(event,event_image);
+    }
+
+    public LiveData<BaseModel<List<Comment>>> deleteComment(Integer id)
+    {
+        return iEventRepository.deleteComment(id);
+    }
+
+    public LiveData<BaseModel<List<Event>>> deleteEvent(Post event)
+    {
+        return iEventRepository.deleteEvent(event);
     }
 
 

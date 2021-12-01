@@ -42,9 +42,16 @@ public class NetworkConnection implements Serializable {
     @Expose
     private String message;
 
+    private String chatID;
+
+    private String name;
+
     private String message_key;
 
-    private int unread_msg_count;
+    private int messageCount;
+    private String userImage;
+    private boolean unread;
+
 
     public Integer getId() {
         return id;
@@ -54,13 +61,6 @@ public class NetworkConnection implements Serializable {
         this.id = id;
     }
 
-    public Integer getSenderId() {
-        return senderId;
-    }
-
-    public void setSenderId(Integer senderId) {
-        this.senderId = senderId;
-    }
 
     public Sender getSender() {
         return sender;
@@ -134,19 +134,60 @@ public class NetworkConnection implements Serializable {
         this.message = message;
     }
 
-    public int getUnread_msg_count() {
-        return unread_msg_count;
-    }
-
-    public void setUnread_msg_count(int unread_msg_count) {
-        this.unread_msg_count = unread_msg_count;
-    }
-
     public String getMessage_key() {
         return message_key;
     }
 
     public void setMessage_key(String message_key) {
         this.message_key = message_key;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getChatID() {
+        return chatID;
+    }
+
+    public void setChatID(String chatID) {
+        this.chatID = chatID;
+    }
+
+
+    public String getUserImage() {
+        return userImage;
+    }
+
+    public void setUserImage(String userImage) {
+        this.userImage = userImage;
+    }
+
+    public Integer getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(Integer senderId) {
+        this.senderId = senderId;
+    }
+
+    public boolean isUnread() {
+        return unread;
+    }
+
+    public void setUnread(boolean unread) {
+        this.unread = unread;
+    }
+
+    public int getMessageCount() {
+        return messageCount;
+    }
+
+    public void setMessageCount(int messageCount) {
+        this.messageCount = messageCount;
     }
 }

@@ -1,6 +1,7 @@
 package com.hypernym.evaconnect.view.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 
@@ -27,6 +29,7 @@ public class AttachmentsAdapter extends RecyclerView.Adapter<AttachmentsAdapter.
     int margin = 0; // crop margin, set to 0 for corners with no crop
     private AttachmentsAdapter.ItemClickListener mClickListener;
     private SimpleDialog simpleDialog;
+    private static final String TAG = "AttachmentsAdapter";
 
 
     public AttachmentsAdapter(Context context, List<String> images,AttachmentsAdapter.ItemClickListener itemClickListener)
@@ -46,10 +49,20 @@ public class AttachmentsAdapter extends RecyclerView.Adapter<AttachmentsAdapter.
     @Override
     public void onBindViewHolder(@NonNull AttachmentsAdapter.ViewHolder holder, int position) {
 
-        Glide.with(context)
-                .load(images.get(position))
-                .transform(new RoundedCornersTransformation(radius, margin))
-                .into(holder.img_attach);
+        Log.e("image", "onBindViewHolder: " + images.get(position));
+
+        try{
+            Glide.with(context)
+                    .load(images.get(position)).placeholder(R.drawable.ic_document)
+                    .transform(new RoundedCornersTransformation(radius, margin))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(holder.img_attach);
+        }
+        catch (Exception exception){
+            exception.printStackTrace();
+            Log.e(TAG, "onBindViewHolder: ", exception);
+        }
 
     }
 

@@ -7,15 +7,14 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.JobAd;
-import com.hypernym.evaconnect.models.MyLikesModel;
+import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IJobAdRepository;
-import com.hypernym.evaconnect.repositories.ILikeRepository;
 import com.hypernym.evaconnect.repositories.impl.JobListRepository;
-import com.hypernym.evaconnect.repositories.impl.LikeRepository;
 
 import java.util.List;
 
@@ -45,6 +44,32 @@ public class JobListViewModel extends AndroidViewModel {
     }
     public LiveData<BaseModel<List<Object>>> apply_interview(int job_id,int sender_id,int application_id,String day,String month,String year,String hour,String minutes) {
         return iJobAdRepository.apply_interview(job_id,sender_id,application_id,day,month,year,hour,minutes);
+    }
+    public LiveData<BaseModel<List<Post>>> getJob(User user, int totalpages, int currentPage)
+    {
+        return iJobAdRepository.getJob(user,totalpages,currentPage);
+    }
+
+
+    public LiveData<BaseModel<List<Object>>> setComment(User user,int application_id,String comment)
+    {
+        return iJobAdRepository.setComment(user,application_id,comment);
+    }
+
+
+    public LiveData<BaseModel<List<Comment>>>  getComments(int application_id)
+    {
+        return iJobAdRepository.getJobComments(application_id);
+    }
+
+    public LiveData<BaseModel<List<Comment>>> editComment(Comment comment,Integer id)
+    {
+        return iJobAdRepository.editComment(comment,id);
+    }
+
+    public LiveData<BaseModel<List<Comment>>> deleteComment(Integer id)
+    {
+        return iJobAdRepository.deleteComment(id);
     }
 
 

@@ -1,6 +1,7 @@
 package com.hypernym.evaconnect.view.adapters;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
-import com.hypernym.evaconnect.models.Connection;
-import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 
 import java.util.List;
@@ -46,11 +46,14 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ConnectionsAdapter.ViewHolder holder, int position) {
-        if (connections.get(position).getIs_linkedin() == 1) {
-            AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getLinkedin_image_url());
-        } else {
+        if (!TextUtils.isEmpty(connections.get(position).getUser_image())) {
             AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getUser_image());
         }
+//        else if (connections.get(position).getIs_facebook() == 1 && !TextUtils.isEmpty(connections.get(position).getFacebook_image_url())) {
+//            AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getFacebook_image_url());
+//        } else {
+//            AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getUser_image());
+//        }
         holder.tv_name.setText(connections.get(position).getFirst_name());
         if (connections.get(position).getBio_data() != null && !connections.get(position).getBio_data().isEmpty()) {
             holder.tv_designation.setText(connections.get(position).getBio_data());
@@ -59,22 +62,52 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
         }
 
 
+        if(connections.get(position).getDesignation()!=null)
+        {
+            holder.location.setText(connections.get(position).getDesignation()+" at ");
+        }
+
+
+        holder.tv_designation.setText(connections.get(position).getCompany_name());
         //Hide connect option if post is from logged in user
         User user = LoginUtils.getLoggedinUser();
         if (connections.get(position).getId().equals(user.getId())) {
             holder.tv_connect.setVisibility(View.GONE);
         } else {
             holder.tv_connect.setVisibility(View.VISIBLE);
-            holder.tv_connect.setText(AppUtils.getConnectionStatus(context, connections.get(position).getIs_connected(), connections.get(position).isIs_receiver()));
             String connectionstatus = AppUtils.getConnectionStatus(context, connections.get(position).getIs_connected(), connections.get(position).isIs_receiver());
-            if (connectionstatus.equals(AppConstants.CONNECTED)) {
-                holder.tv_connect.setBackgroundResource(R.drawable.custom_button);
-                holder.tv_connect.setTextColor(context.getResources().getColor(R.color.white));
+            holder.tv_connect.setText(AppUtils.getConnectionStatus(context, connections.get(position).getIs_connected(), connections.get(position).isIs_receiver()));
+            if (connectionstatus.equals(AppConstants.REQUEST_ACCEPT)) {
+                holder.tv_connect.setBackgroundResource(R.drawable.rounded_button_border_green);
+                holder.tv_connect.setTextColor(context.getResources().getColor(R.color.light_green));
+                holder.tv_decline.setVisibility(View.VISIBLE);
             } else {
-                holder.tv_connect.setBackgroundResource(R.drawable.custom_button);
-                holder.tv_connect.setTextColor(context.getResources().getColor(R.color.white));
-                // holder.tv_connect.setBackgroundResource(R.drawable.rounded_button_nobackground);
+                holder.tv_decline.setVisibility(View.GONE);
+                holder.tv_connect.setBackgroundResource(R.drawable.rounded_button_border_blue);
+                holder.tv_connect.setTextColor(context.getResources().getColor(R.color.skyblue));
             }
+            if (connectionstatus.equals(AppConstants.CONNECTED)) {
+                holder.tv_decline.setVisibility(View.GONE);
+            }
+
+        }
+        if(connections.get(position).isIs_online())
+        {
+            holder.tv_connection_status.setText("Online");
+            holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.skyblue));
+        }
+        else
+        {
+            if(connections.get(position).getLast_online_datetime()!=null)
+            {
+                holder.tv_connection_status.setText("Last Online "+ DateUtils.formatToYesterdayOrToday(connections.get(position).getLast_online_datetime()));
+                holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.gray));
+            }
+            else
+            {
+                holder.tv_connection_status.setText("-");
+            }
+
         }
 
     }
@@ -98,16 +131,38 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
         @BindView(R.id.tv_connect)
         TextView tv_connect;
 
+        @BindView(R.id.tv_decline)
+        TextView tv_decline;
+
+        @BindView(R.id.tv_connection_status)
+        TextView tv_connection_status;
+
+        @BindView(R.id.location)
+        TextView location;
+
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             tv_connect.setOnClickListener(this);
+            tv_decline.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            if (onItemClickListener != null)
-                onItemClickListener.onItemClick(v, originalConnections.indexOf(connections.get(getAdapterPosition())));
+            switch (v.getId()) {
+                case R.id.tv_connect:
+                    if (onItemClickListener != null)
+                        onItemClickListener.onItemClick(v, originalConnections.indexOf(connections.get(getAdapterPosition())));
+                    break;
+                case R.id.tv_decline:
+                    if (onItemClickListener != null)
+                        onItemClickListener.onItemClick(v, originalConnections.indexOf(connections.get(getAdapterPosition())));
+                    break;
+            }
+
+//            if (onItemClickListener != null)
+//                onItemClickListener.onItemClick(v, originalConnections.indexOf(connections.get(getAdapterPosition())));
         }
     }
 

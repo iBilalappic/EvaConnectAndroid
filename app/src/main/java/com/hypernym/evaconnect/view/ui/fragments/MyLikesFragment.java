@@ -2,6 +2,9 @@ package com.hypernym.evaconnect.view.ui.fragments;
 
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -10,28 +13,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
-
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.MyLikesModel;
-import com.hypernym.evaconnect.models.NetworkConnection;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
-import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
-import com.hypernym.evaconnect.view.adapters.MessageAdapter;
 import com.hypernym.evaconnect.view.adapters.MyLikeAdapter;
-import com.hypernym.evaconnect.view.adapters.NotificationsAdapter;
-import com.hypernym.evaconnect.viewmodel.MessageViewModel;
 import com.hypernym.evaconnect.viewmodel.MylikesViewModel;
 
 import java.util.ArrayList;
@@ -127,7 +118,7 @@ public class MyLikesFragment extends BaseFragment implements MyLikeAdapter.OnIte
     private void GetMyLikes() {
         showDialog();
         User user = LoginUtils.getLoggedinUser();
-        mylikeViewModel.SetLikes(user.getUser_id(), AppConstants.TOTAL_PAGES, currentPage).observe(this, new Observer<BaseModel<List<MyLikesModel>>>() {
+        mylikeViewModel.SetLikes(user.getId(), AppConstants.TOTAL_PAGES, currentPage).observe(this, new Observer<BaseModel<List<MyLikesModel>>>() {
             @Override
             public void onChanged(BaseModel<List<MyLikesModel>> getnetworkconnection) {
                 if (getnetworkconnection != null && !getnetworkconnection.isError() && getnetworkconnection.getData().size() > 0 && getnetworkconnection.getData().get(0) != null) {

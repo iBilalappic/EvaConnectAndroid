@@ -2,33 +2,32 @@ package com.hypernym.evaconnect.view.ui.fragments;
 
 
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
-import com.hypernym.evaconnect.listeners.OnDoubleTapClickListner;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Comment;
-import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
@@ -37,10 +36,8 @@ import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.CommentsAdapter;
-import com.hypernym.evaconnect.view.adapters.HomePostsAdapter;
 import com.hypernym.evaconnect.view.adapters.SliderImageAdapter;
 import com.hypernym.evaconnect.view.dialogs.ShareDialog;
-import com.hypernym.evaconnect.view.dialogs.VideoViewDialog;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
@@ -51,10 +48,8 @@ import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -64,7 +59,7 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PostDetailsFragment extends BaseFragment implements Validator.ValidationListener {
+public class PostDetailsFragment extends BaseFragment implements Validator.ValidationListener,CommentsAdapter.OnItemClickListener {
 
     @BindView(R.id.rc_comments)
     RecyclerView rc_comments;
@@ -74,7 +69,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     EditText edt_comment;
 
     @BindView(R.id.btn_addcomment)
-    TextView btn_addcomment;
+    ImageView btn_addcomment;
 
     @BindView(R.id.tv_name)
     TextView tv_name;
@@ -129,14 +124,33 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     @BindView(R.id.tv_goback)
     TextView tv_goback;
 
+    @BindView(R.id.layout_editcomment)
+    LinearLayout layout_editcomment;
+
+    @BindView(R.id.button_cancel)
+    Button button_cancel;
+
+    @BindView(R.id.button_save)
+    Button button_save;
+
+    @BindView(R.id.attachment)
+    ConstraintLayout attachment;
+
+    @BindView(R.id.attachment_preview)
+    WebView attachment_preview;
+
     private CommentsAdapter commentsAdapter;
     private SliderImageAdapter sliderImageAdapter;
     private List<Comment> comments = new ArrayList<>();
     private PostViewModel postViewModel;
+
     Post post = new Post();
-    int post_id;
+    int post_id,comment_id;
     private Validator validator;
+    private boolean isEdit=false;
     private ConnectionViewModel connectionViewModel;
+
+
 
     public PostDetailsFragment() {
         // Required empty public constructor
@@ -154,6 +168,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(PostViewModel.class);
         if (getArguments() != null) {
             post_id = getArguments().getInt("post");
+            isEdit=getArguments().getBoolean("isEdit");
             getPostDetails(post_id);
             // getPostDetails(getArguments().getInt("id"));
         }
@@ -187,9 +202,11 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
                     post = listBaseModel.getData().get(0);
                     settingpostType();
                     setPostData(listBaseModel.getData().get(0));
+
                     initRecyclerView();
                     setclickEvents();
                     getComments();
+
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
@@ -205,18 +222,27 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
             post.setPost_type(AppConstants.IMAGE_TYPE);
         } else if (post.getType().equalsIgnoreCase("post") && post.getPost_video() != null) {
             post.setPost_type(AppConstants.VIDEO_TYPE);
-        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() == 0 && AppUtils.containsURL(post.getContent()).size() == 0) {
+        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() == 0 && AppUtils.containsURL(post.getContent()).size() == 0 && post.getPost_document()==null) {
             post.setPost_type(AppConstants.TEXT_TYPE);
         } else if (post.getType().equalsIgnoreCase("event")) {
             post.setPost_type(AppConstants.EVENT_TYPE);
-        } else if (post.getType().equalsIgnoreCase("post") && AppUtils.containsURL(post.getContent()).size() > 0) {
+        }
+        else if (post.getType().equalsIgnoreCase("news")) {
+            post.setPost_type(AppConstants.NEWS_TYPE);
+        }
+        else if (post.getType().equalsIgnoreCase("post") && AppUtils.containsURL(post.getContent()).size() > 0) {
             post.setPost_type(AppConstants.LINK_POST);
+        }
+        else if(post.getType().equalsIgnoreCase("post") && post.getPost_document()!=null)
+        {
+           post.setPost_type(AppConstants.DOCUMENT_TYPE);
         }
     }
 
     private void init() {
         validator = new Validator(this);
         validator.setValidationListener(this);
+        setPageTitle("Post Details");
         showBackButton();
     }
 
@@ -228,32 +254,49 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         tv_createddateTime.setText(DateUtils.getFormattedDateTime(post.getCreated_datetime()));
         tv_minago.setText(DateUtils.getTimeAgo(post.getCreated_datetime()));
         tv_name.setText(post.getUser().getFirst_name());
+//        if(post.getContent().length()==0)
+//        {
+//            tv_content.setVisibility(View.GONE);
+//        }
+//        else
+//        {
+//            tv_content.setVisibility(View.VISIBLE);
+//        }
         tv_content.setText(post.getContent());
         //Hide connect option if post is from logged in user
         User user = LoginUtils.getLoggedinUser();
         if (post.getUser().getId() == user.getId()) {
             tv_connect.setVisibility(View.GONE);
         } else {
-            tv_connect.setVisibility(View.VISIBLE);
+            tv_connect.setVisibility(View.GONE);
             tv_connect.setText(AppUtils.getConnectionStatus(getContext(), post.getIs_connected(), post.isIs_receiver()));
         }
-        if (post.getUser().getIs_linkedin() == 1) {
-            AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getLinkedin_image_url());
-
-        } else {
+        if ( !TextUtils.isEmpty(post.getUser().getUser_image())) {
             AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getUser_image());
         }
-        if (LoginUtils.getUser().getIs_linkedin() == 1) {
-            AppUtils.setGlideImage(getContext(), img_user, user.getLinkedin_image_url());
-        } else {
+//        else if (post.getUser().getIs_facebook() == 1 && !TextUtils.isEmpty(post.getUser().getFacebook_image_url()))
+//        {
+//            AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getFacebook_image_url());
+//        }
+//        else {
+//            AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getUser_image());
+//        }
+
+        if (!TextUtils.isEmpty(user.getUser_image())) {
             AppUtils.setGlideImage(getContext(), img_user, user.getUser_image());
         }
+//        else if (user.getIs_facebook() == 1 && !TextUtils.isEmpty(user.getFacebook_image_url())){
+//            AppUtils.setGlideImage(getContext(), img_user, user.getFacebook_image_url());
+//        }
+//        else {
+//            AppUtils.setGlideImage(getContext(), img_user, user.getUser_image());
+//        }
 
 
         if (post.getIs_post_like() != null && post.getIs_post_like() > 0) {
-            img_like.setBackground(getContext().getDrawable(R.mipmap.ic_like_selected));
+            img_like.setBackground(getContext().getDrawable(R.drawable.like_selected));
         } else {
-            img_like.setBackground(getContext().getDrawable(R.mipmap.ic_like));
+            img_like.setBackground(getContext().getDrawable(R.drawable.ic_like));
         }
         slider_images_detail.setVisibility(View.GONE);
         img_video.setVisibility(View.GONE);
@@ -275,6 +318,19 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
             }
 
         }
+        else if(post.getPost_type() == AppConstants.DOCUMENT_TYPE)
+        {
+            attachment.setVisibility(View.VISIBLE);
+           attachment_preview.setWebViewClient(new WebViewClient());
+           attachment_preview.getSettings().setSupportZoom(false);
+            attachment_preview.getSettings().setJavaScriptEnabled(true);
+            attachment_preview.getSettings().getAllowFileAccess();
+            attachment_preview.getSettings().getAllowUniversalAccessFromFileURLs();
+            attachment_preview.getSettings().getAllowFileAccessFromFileURLs();
+            attachment_preview.setEnabled(false);
+            attachment_preview.loadUrl("https://docs.google.com/gview?embedded=true&url=" + post.getPost_document());
+
+        }
     }
 
     private void addComment(int postID) {
@@ -284,7 +340,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         String toServerUnicodeEncoded = StringEscapeUtils.escapeJava(edt_comment.getText().toString());
 
         comment.setContent(toServerUnicodeEncoded);
-        comment.setCreated_by_id(user.getUser_id());
+        comment.setCreated_by_id(user.getId());
         comment.setStatus(AppConstants.STATUS_ACTIVE);
         comment.setPost_id(postID);
         postViewModel.addComment(comment).observe(this, new Observer<BaseModel<List<Comment>>>() {
@@ -312,10 +368,23 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
                 comments.clear();
                 if (listBaseModel != null && !listBaseModel.isError()) {
                     comments.addAll(listBaseModel.getData());
-                    Collections.reverse(comments);
+                    if(post.getUser().getId().equals(LoginUtils.getLoggedinUser().getId()))
+                    {
+                        for (Comment comment:comments)
+                        {
+                            comment.setPostMine(true);
+                        }
+                    }
+
+//                    Collections.reverse(comments);
                     commentsAdapter.notifyDataSetChanged();
                     post.setComment_count(comments.size());
                     tv_comcount.setText(String.valueOf(comments.size()));
+                    if(comments.size()>0)
+                       rc_comments.smoothScrollToPosition(comments.size() - 1);
+                    layout_editcomment.setVisibility(View.GONE);
+                    btn_addcomment.setVisibility(View.VISIBLE);
+                    edt_comment.setText("");
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
@@ -335,7 +404,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     }
 
     private void initRecyclerView() {
-        commentsAdapter = new CommentsAdapter(getContext(), comments);
+        commentsAdapter = new CommentsAdapter(getContext(), comments,this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rc_comments.setLayoutManager(linearLayoutManager);
         rc_comments.setAdapter(commentsAdapter);
@@ -434,4 +503,57 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         loadFragment(R.id.framelayout, loadUrlFragment, getContext(), true);
     }
 
+    @Override
+    public void onEditComment(View view, int position,String comment) {
+        layout_editcomment.setVisibility(View.VISIBLE);
+        btn_addcomment.setVisibility(View.GONE);
+        edt_comment.setText(comment);
+        comment_id=comments.get(position).getId();
+    }
+
+    @OnClick(R.id.button_cancel)
+    public void cancel()
+    {
+        layout_editcomment.setVisibility(View.GONE);
+        btn_addcomment.setVisibility(View.VISIBLE);
+        edt_comment.setText("");
+    }
+
+    @OnClick(R.id.button_save)
+    public void saveComment()
+    {
+        Comment newcomment=new Comment();
+      // newcomment.setId(comments.get(position).getId());
+       newcomment.setContent(edt_comment.getText().toString());
+       newcomment.setModified_by_id(LoginUtils.getLoggedinUser().getId());
+       newcomment.setModified_datetime(DateUtils.GetCurrentdatetime());
+
+       postViewModel.editComment(newcomment,comment_id).observe(this, new Observer<BaseModel<List<Comment>>>() {
+           @Override
+           public void onChanged(BaseModel<List<Comment>> listBaseModel) {
+               if(NetworkUtils.isNetworkConnected(getContext()))
+               {
+                   getPostDetails(post_id);
+               }
+               else
+               {
+                   networkErrorDialog();
+               }
+           }
+       });
+    }
+
+
+
+
+    @Override
+    public void onDeleteComment(View view, int position) {
+        postViewModel.deleteComment(comments.get(position).getId()).observe(this, new Observer<BaseModel<List<Comment>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Comment>> listBaseModel) {
+                comments.remove(position);
+                commentsAdapter.notifyDataSetChanged();
+            }
+        });
+    }
 }

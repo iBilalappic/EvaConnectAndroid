@@ -1,8 +1,12 @@
 <component name="libraryTable">
   <library name="Gradle: com.github.javiersantos:MaterialStyledDialogs:2.1@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/b4730e5e480261f5ff50cc7a2105cc5b/jetified-MaterialStyledDialogs-2.1/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/b4730e5e480261f5ff50cc7a2105cc5b/jetified-MaterialStyledDialogs-2.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/822f3db5fbf65fd759e3fe0f2b2ab184/jetified-MaterialStyledDialogs-2.1/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/822f3db5fbf65fd759e3fe0f2b2ab184/jetified-MaterialStyledDialogs-2.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/822f3db5fbf65fd759e3fe0f2b2ab184/jetified-MaterialStyledDialogs-2.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/dd38dd60e314498adedd8c27de83f1f6/jetified-MaterialStyledDialogs-2.1/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/dd38dd60e314498adedd8c27de83f1f6/jetified-MaterialStyledDialogs-2.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/dd38dd60e314498adedd8c27de83f1f6/jetified-MaterialStyledDialogs-2.1/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

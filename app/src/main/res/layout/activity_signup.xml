@@ -11,74 +11,42 @@
         android:layout_height="wrap_content"
         tools:context=".view.ui.activities.LoginActivity">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="50dp"
-            android:src="@drawable/ic_new_logo"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/textView2"
             style="@style/TextStyle.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="150dp"
             android:text="@string/signup"
+            android:textColor="@color/colorAccent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/lbl_username"
-            style="@style/TextStyle.Title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
-            android:text="@string/email"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
-        <TextView
-            style="@style/TextStyle.Title"
-            android:id="@+id/textView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="@string/password"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+
 
         <EditText
             android:id="@+id/edt_email"
             style="@style/EditText"
-            android:layout_width="0dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
+            android:layout_width="250dp"
+            android:layout_marginTop="84dp"
             android:maxLength="50"
+            android:textAlignment="textStart"
+            android:textColor="@color/gray_1"
+            android:hint="Email address or Username"
             android:inputType="textEmailAddress"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lbl_username" />
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
 
         <ImageView
             style="@style/EditText.LineBlackRed"
             android:id="@+id/imageView3"
-            android:layout_width="0dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
+            android:layout_width="250dp"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edt_email" />
@@ -87,11 +55,8 @@
         <ImageView
             style="@style/EditText.LineRedBlack"
             android:id="@+id/imageView4"
-            android:layout_width="0dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
+            android:layout_width="250dp"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edt_password" />
@@ -99,21 +64,22 @@
         <EditText
             android:id="@+id/edt_password"
             style="@style/EditText"
-            android:layout_width="0dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="32dp"
+            android:layout_width="250dp"
+          android:layout_marginTop="50dp"
             android:inputType="textPassword"
             android:maxLength="30"
+            android:textColor="@color/gray_1"
+            android:hint="Password"
+            android:textAlignment="textStart"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView5" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
 
             <Button
                 android:id="@+id/btn_signup"
-                style="@style/Button"
-                android:layout_width="wrap_content"
+                style="@style/Button_selected_blue"
+                android:layout_width="250dp"
                 android:text="@string/next"
                 android:layout_marginTop="80dp"
                 android:layout_marginBottom="32dp"

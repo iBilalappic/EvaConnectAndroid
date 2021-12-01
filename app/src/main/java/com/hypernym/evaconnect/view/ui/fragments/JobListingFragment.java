@@ -1,11 +1,11 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -17,19 +17,15 @@ import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.JobAd;
-import com.hypernym.evaconnect.models.MyLikesModel;
-import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
+import com.hypernym.evaconnect.utils.Constants;
+import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.CompanyJobAdAdapter;
 import com.hypernym.evaconnect.view.adapters.JobAdAdapter;
-import com.hypernym.evaconnect.view.adapters.MyLikeAdapter;
-import com.hypernym.evaconnect.view.adapters.NotificationsAdapter;
 import com.hypernym.evaconnect.view.dialogs.ShareDialog;
-import com.hypernym.evaconnect.viewmodel.CreateJobAdViewModel;
-import com.hypernym.evaconnect.viewmodel.HomeViewModel;
 import com.hypernym.evaconnect.viewmodel.JobListViewModel;
 
 import java.util.ArrayList;
@@ -73,6 +69,7 @@ public class JobListingFragment extends BaseFragment implements View.OnClickList
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_joblisting, container, false);
+        getActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
         setPageTitle(getString(R.string.joblist));
         ButterKnife.bind(this, view);
         newjobAd.setOnClickListener(this);
@@ -147,6 +144,7 @@ public class JobListingFragment extends BaseFragment implements View.OnClickList
     }
 
     private void setupRecyclerviewCompany() {
+        Log.d("TAAAG", GsonUtils.toJson(companyJobAdModelList));
         companyJobAdAdapter = new CompanyJobAdAdapter(getContext(), companyJobAdModelList, this);
         CompanylinearLayoutManager = new LinearLayoutManager(getContext());
         rc_joblisting.setLayoutManager(CompanylinearLayoutManager);
@@ -158,7 +156,7 @@ public class JobListingFragment extends BaseFragment implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.newjobAd:
-                loadFragment(R.id.framelayout, new JobCreateFragment(), getContext(), true);
+                loadFragment(R.id.framelayout, new CreateJobFragment(), getContext(), true);
                 break;
 
         }
@@ -190,16 +188,34 @@ public class JobListingFragment extends BaseFragment implements View.OnClickList
                 companyApplicantFragment.setArguments(bundle_0);
                 loadFragment(R.id.framelayout, companyApplicantFragment, getContext(), true);
                 break;
+            case R.id.tv_edit:
+                CreateJobFragment createJobFragment = new CreateJobFragment();
+                Bundle bundle1 = new Bundle();
+                bundle1.putSerializable("COMPANY_AD", companyJobAdModelList.get(position));
+                createJobFragment.setArguments(bundle1);
+                loadFragment(R.id.framelayout, createJobFragment, getContext(), true);
+                break;
             case R.id.img_share:
                 ShareDialog shareDialog;
                 Bundle bundle_share = new Bundle();
                 bundle_share.putSerializable("JobData",jobAdList.get(position));
+                bundle_share.putString(Constants.FRAGMENT_NAME,"JOB_FRAGMENT");
                 shareDialog = new ShareDialog(getContext(),bundle_share);
                 shareDialog.show();
-//                Toast.makeText(getContext(), "goto" + position, Toast.LENGTH_SHORT).show();
                 break;
+
+//            case R.id.comment_click:
+//                SpecficJobComments specficJobComment = new SpecficJobComments();
+//                Bundle bundlecomment = new Bundle();
+//                bundlecomment.putInt("job_id", jobAdList.get(position).getId());
+//                specficJobComment.setArguments(bundlecomment);
+//                loadFragment(R.id.framelayout, specficJobComment, getContext(), true);
+//                break;
+
+
         }
     }
+
 
     private void SetJobLike(Integer id, int position) {
         jobListViewModel.setJobLike(user, id, "like").observe(this, new Observer<BaseModel<List<Object>>>() {

@@ -8,11 +8,8 @@ import androidx.lifecycle.LiveData;
 
 import com.hypernym.evaconnect.models.AppliedApplicants;
 import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.MyLikesModel;
 import com.hypernym.evaconnect.repositories.IApplicantRepository;
-import com.hypernym.evaconnect.repositories.ILikeRepository;
 import com.hypernym.evaconnect.repositories.impl.ApplicantsRepository;
-import com.hypernym.evaconnect.repositories.impl.LikeRepository;
 
 import java.util.List;
 
@@ -30,5 +27,8 @@ public class AppliedApplicantViewModel extends AndroidViewModel {
 
     public LiveData<BaseModel<List<AppliedApplicants>>> declineApplication(int application_id,AppliedApplicants appliedApplicants) {
         return iApplicantRepository.declineApplication(application_id,appliedApplicants);
+    }
+    public LiveData<BaseModel<List<AppliedApplicants>>> getApplicant(int application_id) {
+        return iApplicantRepository.getApplicant(application_id);
     }
 }

@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hypernym.evaconnect.constants.AppConstants;
 
 public abstract class PaginationScrollListener extends RecyclerView.OnScrollListener {
-    public static final int PAGE_START = 0;
+    public static int PAGE_START = 0;
     @NonNull
     private LinearLayoutManager layoutManager;
 

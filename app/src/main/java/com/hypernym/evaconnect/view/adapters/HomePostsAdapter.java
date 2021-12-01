@@ -1,23 +1,17 @@
 package com.hypernym.evaconnect.view.adapters;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.bitmap.FitCenter;
-import com.bumptech.glide.request.RequestOptions;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnDoubleTapClickListner;
@@ -26,13 +20,9 @@ import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
-import com.nguyencse.URLEmbeddedData;
-import com.nguyencse.URLEmbeddedView;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
-
-import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -40,8 +30,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import jp.wasabeef.glide.transformations.CropTransformation;
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class HomePostsAdapter extends RecyclerView.Adapter {
 
@@ -97,6 +85,24 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.view6)
         View top_image;
 
+        @BindView(R.id.tv_designation)
+        TextView tv_designation;
+
+        @BindView(R.id.tv_company)
+        TextView tv_company;
+
+        @BindView(R.id.tv_connect)
+        TextView tv_connect;
+
+        @BindView(R.id.comment_click)
+        LinearLayout comment_click;
+
+        @BindView(R.id.share_click)
+        LinearLayout share_click;
+
+        @BindView(R.id.like_click)
+        LinearLayout like_click;
+
         public TextTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -106,19 +112,19 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
-            img_like.setOnClickListener(new OnOneOffClickListener() {
+            like_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
                 }
             });
-            img_comment.setOnClickListener(new OnOneOffClickListener() {
+            comment_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
-            img_share.setOnClickListener(new OnOneOffClickListener() {
+            share_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onShareClick(v, getAdapterPosition());
@@ -143,6 +149,21 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     mClickListener.onProfileClick(v, getAdapterPosition());
                 }
             });
+
+            tv_name.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onProfileClick(v, getAdapterPosition());
+                }
+            });
+
+            tv_connect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mClickListener.onConnectClick(v,getAdapterPosition());
+                }
+            });
+
         }
     }
 
@@ -159,11 +180,21 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.img_like)
         ImageView img_like;
 
+        @BindView(R.id.like_click)
+        LinearLayout like_click;
+
+
         @BindView(R.id.img_comment)
         ImageView img_comment;
 
+        @BindView(R.id.comment_click)
+        LinearLayout comment_click;
+
         @BindView(R.id.img_share)
         ImageView img_share;
+
+        @BindView(R.id.share_click)
+        LinearLayout share_click;
 
         @BindView(R.id.tv_name)
         TextView tv_name;
@@ -183,6 +214,14 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.tv_eventdate)
         TextView tv_eventdate;
 
+        @BindView(R.id.post_image)
+        ImageView post_image;
+
+        @BindView(R.id.post_detail)
+        TextView post_detail;
+
+
+
         public EventTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -192,26 +231,31 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     mClickListener.onEventItemClick(v, getAdapterPosition());
                 }
             });
-
+            post_image.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onEventItemClick(v, getAdapterPosition());
+                }
+            });
             tv_attending.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onEventItemClick(v, getAdapterPosition());
                 }
             });
-            img_like.setOnClickListener(new OnOneOffClickListener() {
+            like_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onEventLikeClick(v, getAdapterPosition(), tv_likecount);
                 }
             });
-            img_comment.setOnClickListener(new OnOneOffClickListener() {
+            comment_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onEventItemClick(v, getAdapterPosition());
                 }
             });
-            img_share.setOnClickListener(new OnOneOffClickListener() {
+            share_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                      mClickListener.onShareClick(v, getAdapterPosition());
@@ -248,8 +292,20 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.img_comment)
         ImageView img_comment;
 
+        @BindView(R.id.comment_click)
+        LinearLayout comment_click;
+
+        @BindView(R.id.share_click)
+        LinearLayout share_click;
+
+        @BindView(R.id.like_click)
+        LinearLayout like_click;
+
+
         @BindView(R.id.img_share)
         ImageView img_share;
+
+
 
         @BindView(R.id.tv_name)
         TextView tv_name;
@@ -275,19 +331,19 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     //  mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
-            img_like.setOnClickListener(new OnOneOffClickListener() {
+            like_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onJobLikeClick(v, getAdapterPosition(), tv_likecount);
                 }
             });
-            img_comment.setOnClickListener(new OnOneOffClickListener() {
+            comment_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     // mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
-            img_share.setOnClickListener(new OnOneOffClickListener() {
+            share_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                      mClickListener.onShareClick(v, getAdapterPosition());
@@ -309,6 +365,13 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onApplyClick(v, getAdapterPosition());
+                }
+            });
+
+            tv_name.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onProfileClick(v, getAdapterPosition());
                 }
             });
         }
@@ -375,6 +438,25 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.post_image)
         ImageView post_image;
 
+        @BindView(R.id.tv_designation)
+        TextView tv_designation;
+
+        @BindView(R.id.tv_company)
+        TextView tv_company;
+
+        @BindView(R.id.tv_connect)
+        TextView tv_connect;
+
+
+        @BindView(R.id.comment_click)
+        LinearLayout comment_click;
+
+        @BindView(R.id.share_click)
+        LinearLayout share_click;
+
+        @BindView(R.id.like_click)
+        LinearLayout like_click;
+
 
         public ImageTypeViewHolder(View itemView) {
             super(itemView);
@@ -385,19 +467,21 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
-            img_like.setOnClickListener(new OnOneOffClickListener() {
+
+
+            like_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
                 }
             });
-            img_comment.setOnClickListener(new OnOneOffClickListener() {
+            comment_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
-            img_share.setOnClickListener(new OnOneOffClickListener() {
+            share_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onShareClick(v, getAdapterPosition());
@@ -421,6 +505,14 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     mClickListener.onProfileClick(v, getAdapterPosition());
                 }
             });
+
+            tv_name.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onProfileClick(v, getAdapterPosition());
+                }
+            });
+
             post_image.setOnClickListener(new OnDoubleTapClickListner() {
                 @Override
                 public void onSingleClick(View v) {
@@ -429,6 +521,13 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onDoubleClick(View v) {
                     mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
+                }
+            });
+
+            tv_connect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mClickListener.onConnectClick(v,getAdapterPosition());
                 }
             });
 
@@ -480,6 +579,25 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.view6)
         View top_image;
 
+        @BindView(R.id.like_click)
+        LinearLayout like_click;
+
+        @BindView(R.id.comment_click)
+        LinearLayout comment_click;
+
+        @BindView(R.id.share_click)
+        LinearLayout share_click;
+
+        @BindView(R.id.tv_designation)
+        TextView tv_designation;
+
+        @BindView(R.id.tv_company)
+        TextView tv_company;
+
+        @BindView(R.id.tv_connect)
+        TextView tv_connect;
+
+
 
         public VideoTypeViewHolder(View itemView) {
             super(itemView);
@@ -490,19 +608,19 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
-            img_like.setOnClickListener(new OnOneOffClickListener() {
+            like_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
                 }
             });
-            img_comment.setOnClickListener(new OnOneOffClickListener() {
+            comment_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
-            img_share.setOnClickListener(new OnOneOffClickListener() {
+            share_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onShareClick(v, getAdapterPosition());
@@ -532,6 +650,21 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     mClickListener.onProfileClick(v, getAdapterPosition());
                 }
             });
+
+            tv_name.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onProfileClick(v, getAdapterPosition());
+                }
+            });
+
+            tv_connect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mClickListener.onConnectClick(v,getAdapterPosition());
+                }
+            });
+
         }
     }
 
@@ -581,6 +714,25 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.link)
         TextView link;
 
+        @BindView(R.id.comment_click)
+        LinearLayout comment_click;
+
+        @BindView(R.id.share_click)
+        LinearLayout share_click;
+
+        @BindView(R.id.like_click)
+        LinearLayout like_click;
+
+        @BindView(R.id.tv_designation)
+        TextView tv_designation;
+
+        @BindView(R.id.tv_company)
+        TextView tv_company;
+
+        @BindView(R.id.tv_connect)
+        TextView tv_connect;
+
+
         public LinkTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -590,19 +742,19 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
-            img_like.setOnClickListener(new OnOneOffClickListener() {
+            like_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
                 }
             });
-            img_comment.setOnClickListener(new OnOneOffClickListener() {
+            comment_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
-            img_share.setOnClickListener(new OnOneOffClickListener() {
+            share_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onShareClick(v, getAdapterPosition());
@@ -623,13 +775,150 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             link.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    mClickListener.onURLClick(v, getAdapterPosition());
+                    mClickListener.onURLClick(v, getAdapterPosition(),"link");
                 }
             });
             profile_image.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onProfileClick(v, getAdapterPosition());
+                }
+            });
+
+            tv_name.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onProfileClick(v, getAdapterPosition());
+                }
+            });
+
+            tv_connect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mClickListener.onConnectClick(v,getAdapterPosition());
+                }
+            });
+
+        }
+
+    }
+
+
+    public class NewsTypeViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.tv_viewcomments)
+        TextView tv_viewcomments;
+
+        @BindView(R.id.tv_likecount)
+        TextView tv_likecount;
+
+        @BindView(R.id.tv_comcount)
+        TextView tv_comcount;
+
+        @BindView(R.id.img_like)
+        ImageView img_like;
+
+        @BindView(R.id.img_comment)
+        ImageView img_comment;
+
+        @BindView(R.id.img_share)
+        ImageView img_share;
+
+        @BindView(R.id.tv_name)
+        TextView tv_name;
+
+        @BindView(R.id.profile_image)
+        ImageView profile_image;
+
+        @BindView(R.id.tv_createddateTime)
+        TextView tv_createdDateTime;
+
+        @BindView(R.id.tv_minago)
+        TextView tv_minago;
+
+
+        @BindView(R.id.tv_connections)
+        TextView tv_connections;
+
+        @BindView(R.id.view6)
+        View top_image;
+
+        @BindView(R.id.img_video)
+        ImageView img_link;
+
+        @BindView(R.id.channelname)
+        TextView channelname;
+
+        @BindView(R.id.tv_url)
+        TextView tv_url;
+
+        @BindView(R.id.tv_newstitle)
+        TextView tv_newstitle;
+
+        @BindView(R.id.tv_visit)
+        TextView tv_visit;
+
+        @BindView(R.id.comment_click)
+        LinearLayout comment_click;
+
+        @BindView(R.id.share_click)
+        LinearLayout share_click;
+
+        @BindView(R.id.like_click)
+        LinearLayout like_click;
+
+
+        public NewsTypeViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+            tv_viewcomments.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+            like_click.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onNewsLikeClick(v, getAdapterPosition(), tv_likecount);
+                }
+            });
+            comment_click.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+            share_click.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onShareClick(v, getAdapterPosition());
+                }
+            });
+            tv_comcount.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+
+            profile_image.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onProfileClick(v, getAdapterPosition());
+                }
+            });
+
+            tv_name.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onProfileClick(v, getAdapterPosition());
+                }
+            });
+
+            tv_visit.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onURLClick(v, getAdapterPosition(),"news");
                 }
             });
 
@@ -670,6 +959,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             case AppConstants.LINK_POST:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_link, parent, false);
                 return new LinkTypeViewHolder(view);
+            case AppConstants.NEWS_TYPE:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_news, parent, false);
+                return new NewsTypeViewHolder(view);
         }
         return null;
     }
@@ -693,6 +985,8 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     return (position == posts.size() - 1 && isLoadingAdded) ? AppConstants.LOADING_TYPE : AppConstants.VIDEO_TYPE;
                 case AppConstants.LINK_POST:
                     return (position == posts.size() - 1 && isLoadingAdded) ? AppConstants.LOADING_TYPE : AppConstants.LINK_POST;
+                case AppConstants.NEWS_TYPE:
+                    return (position == posts.size() - 1 && isLoadingAdded) ? AppConstants.LOADING_TYPE : AppConstants.NEWS_TYPE;
                 default:
                     return -1;
             }
@@ -724,16 +1018,19 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     AppUtils.makeTextViewResizable(((TextTypeViewHolder) holder).tv_content, 3, posts.get(position).getContent());
                     ((TextTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
                     if (posts.get(position).getIs_post_like() != null && posts.get(position).getIs_post_like() > 0) {
-                        ((TextTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like_selected));
+                        ((TextTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.like_selected));
                     } else {
-                        ((TextTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like));
+                        ((TextTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }
-                    if (posts.get(position).getUser().getIs_linkedin() == 1) {
-                        AppUtils.setGlideImage(mContext, ((TextTypeViewHolder) holder).profile_image, posts.get(position).getUser().getLinkedin_image_url());
-
-                    } else {
+                    if (!TextUtils.isEmpty(posts.get(position).getUser().getUser_image())) {
                         AppUtils.setGlideImage(mContext, ((TextTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
                     }
+//                    else if (posts.get(position).getUser().getIs_facebook() == 1 && !TextUtils.isEmpty(posts.get(position).getUser().getFacebook_image_url())){
+//                        AppUtils.setGlideImage(mContext, ((TextTypeViewHolder) holder).profile_image, posts.get(position).getUser().getFacebook_image_url());
+//                    }
+//                    else {
+//                        AppUtils.setGlideImage(mContext, ((TextTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
+//                    }
 
                     ((TextTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
 
@@ -743,7 +1040,32 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     } else {
                         ((TextTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
+                    ((TextTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name() );
+                    if(!posts.get(position).getUser().getType().equalsIgnoreCase("company"))
+                    {
+                        ((TextTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation() +" at");
+                    }
 
+                    if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
+                        ((TextTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
+                    } else {
+                        ((TextTypeViewHolder) holder).tv_connect.setVisibility(View.VISIBLE);
+                        String connectionstatus = AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver());
+                        ((TextTypeViewHolder) holder).tv_connect.setText(AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver()));
+                        if (connectionstatus.equals(AppConstants.REQUEST_ACCEPT)) {
+                            ((TextTypeViewHolder) holder).tv_connect.setBackgroundResource(R.drawable.rounded_button_border_green);
+                            ((TextTypeViewHolder) holder).tv_connect.setTextColor(mContext.getResources().getColor(R.color.light_green));
+                            //  holder.tv_decline.setVisibility(View.VISIBLE);
+                        } else {
+                            //  holder.tv_decline.setVisibility(View.GONE);
+                            ((TextTypeViewHolder) holder).tv_connect.setBackgroundResource(R.drawable.rounded_button_border_blue);
+                            ((TextTypeViewHolder) holder).tv_connect.setTextColor(mContext.getResources().getColor(R.color.skyblue));
+                        }
+                        if (connectionstatus.equals(AppConstants.CONNECTED)) {
+                            // holder.tv_decline.setVisibility(View.GONE);
+                        }
+
+                    }
                     break;
                 case AppConstants.IMAGE_TYPE:
                     if (String.valueOf(posts.get(position).getComment_count()).equals("0")) {
@@ -765,17 +1087,20 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     AppUtils.makeTextViewResizable(((ImageTypeViewHolder) holder).tv_content, 3, posts.get(position).getContent());
                     ((ImageTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
                     if (posts.get(position).getIs_post_like() != null && posts.get(position).getIs_post_like() > 0) {
-                        ((ImageTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like_selected));
+                        ((ImageTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.like_selected));
                     } else {
-                        ((ImageTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like));
+                        ((ImageTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }
 
-                    if (posts.get(position).getUser().getIs_linkedin() == 1) {
-                        AppUtils.setGlideImage(mContext, ((ImageTypeViewHolder) holder).profile_image, posts.get(position).getUser().getLinkedin_image_url());
-
-                    } else {
+                    if (!TextUtils.isEmpty(posts.get(position).getUser().getUser_image())) {
                         AppUtils.setGlideImage(mContext, ((ImageTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
                     }
+//                    else if (posts.get(position).getUser().getIs_facebook() == 1 && !TextUtils.isEmpty(posts.get(position).getUser().getFacebook_image_url())){
+//                        AppUtils.setGlideImage(mContext, ((ImageTypeViewHolder) holder).profile_image, posts.get(position).getUser().getFacebook_image_url());
+//                    }
+//                    else {
+//                        AppUtils.setGlideImage(mContext, ((ImageTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
+//                    }
 
                     ((ImageTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
                     ((ImageTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getUser().getTotal_connection()));
@@ -784,6 +1109,27 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         ((ImageTypeViewHolder) holder).top_image.setVisibility(View.GONE);
                     } else {
                         ((ImageTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
+                    }
+                    ((ImageTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name() );
+                    ((ImageTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation() +" at ");
+
+                    if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
+                        ((ImageTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
+                    } else {
+                        ((ImageTypeViewHolder) holder).tv_connect.setVisibility(View.VISIBLE);
+                        String connectionstatus = AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver());
+                        ((ImageTypeViewHolder) holder).tv_connect.setText(AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver()));
+                        if (connectionstatus.equals(AppConstants.REQUEST_ACCEPT)) {
+                            ((ImageTypeViewHolder) holder).tv_connect.setBackgroundResource(R.drawable.rounded_button_border_green);
+                            ((ImageTypeViewHolder) holder).tv_connect.setTextColor(mContext.getResources().getColor(R.color.light_green));
+                            //  holder.tv_decline.setVisibility(View.VISIBLE);
+                        } else {
+                            //  holder.tv_decline.setVisibility(View.GONE);
+                            ((ImageTypeViewHolder) holder).tv_connect.setBackgroundResource(R.drawable.rounded_button_border_blue);
+                            ((ImageTypeViewHolder) holder).tv_connect.setTextColor(mContext.getResources().getColor(R.color.skyblue));
+                        }
+
+
                     }
                     break;
                 case AppConstants.EVENT_TYPE:
@@ -794,20 +1140,22 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     ((EventTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
 
                     if (posts.get(position).getIs_event_like() != null && posts.get(position).getIs_event_like() > 0) {
-                        ((EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like_selected));
+                        ((EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.like_selected));
                     } else {
-                        ((EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like));
+                        ((EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }
                     if (posts.get(position).getEvent_image().size() > 0) {
-                        AppUtils.setGlideVideoThumbnail(mContext, ((EventTypeViewHolder) holder).profile_image, posts.get(position).getEvent_image().get(0));
+                        AppUtils.setGlideImageUrl(mContext, ((EventTypeViewHolder) holder).profile_image, posts.get(position).getEvent_image().get(0));
+                        AppUtils.setGlideVideoThumbnail(mContext, ((EventTypeViewHolder) holder).post_image, posts.get(position).getEvent_image().get(0));
                     } else {
-                        ((EventTypeViewHolder) holder).profile_image.setBackground(mContext.getDrawable(R.drawable.no_thumbnail));
+//                        ((EventTypeViewHolder) holder).profile_image.setBackground(mContext.getDrawable(R.drawable.no_thumbnail));
+                        ((EventTypeViewHolder) holder).post_image.setBackground(mContext.getDrawable(R.drawable.no_thumbnail));
                     }
 
-                    ((EventTypeViewHolder) holder).tv_name.setText(posts.get(position).getEvent_name());
-                    ((EventTypeViewHolder) holder).tv_location.setText(posts.get(position).getEvent_city());
-                    ((EventTypeViewHolder) holder).tv_eventdate.setText(DateUtils.getFormattedDateDMY(posts.get(position).getEvent_start_date()));
-
+                    ((EventTypeViewHolder) holder).tv_name.setText(posts.get(position).getName());
+                    ((EventTypeViewHolder) holder).tv_location.setText(posts.get(position).getAddress());
+                    ((EventTypeViewHolder) holder).tv_eventdate.setText(DateUtils.getFormattedDateDMY(posts.get(position).getStart_date()));
+                    ((EventTypeViewHolder) holder).post_detail.setText(posts.get(position).getContent());
                     if (position == 0) {
                         ((EventTypeViewHolder) holder).top_image.setVisibility(View.GONE);
                     } else {
@@ -823,16 +1171,18 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     ((JobTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
 
                     if (posts.get(position).getIs_job_like() != null && posts.get(position).getIs_job_like() > 0) {
-                        ((JobTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like_selected));
+                        ((JobTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.like_selected));
                     } else {
-                        ((JobTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like));
+                        ((JobTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }
 
                     AppUtils.setGlideImage(mContext, ((JobTypeViewHolder) holder).profile_image, posts.get(position).getJob_image());
                     ((JobTypeViewHolder) holder).tv_name.setText(posts.get(position).getJob_title());
-                    ((JobTypeViewHolder) holder).tv_location.setText(posts.get(position).getUser().getFirst_name());
                     DecimalFormat myFormatter = new DecimalFormat("############");
-                    ((JobTypeViewHolder) holder).tv_salary.setText("£ " + myFormatter.format(posts.get(position).getSalary()) + " pa");
+
+                    ((JobTypeViewHolder) holder).tv_location.setText(posts.get(position).getJob_sector()
+                            +" | "+ posts.get(position).getLocation()+" | "+"£ "+myFormatter.format(posts.get((position)).getSalary())+" PA");
+                  //  ((JobTypeViewHolder) holder).tv_salary.setText("£ " + myFormatter.format(posts.get(position).getSalary()) + " pa");
                     if (position == 0) {
                         ((JobTypeViewHolder) holder).top_image.setVisibility(View.GONE);
                     } else {
@@ -842,6 +1192,22 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         ((JobTypeViewHolder) holder).tv_apply.setVisibility(View.GONE);
                     } else {
                         ((JobTypeViewHolder) holder).tv_apply.setVisibility(View.VISIBLE);
+                        if(posts.get(position).getIs_applied()==1)
+                        {
+                            ((JobTypeViewHolder) holder).tv_apply.setText("Applied");
+                        }
+                        else
+                        {
+                            ((JobTypeViewHolder) holder).tv_apply.setText("Apply");
+                            ((JobTypeViewHolder) holder).tv_apply.setOnClickListener(new OnOneOffClickListener() {
+                                @Override
+                                public void onSingleClick(View v) {
+
+                                    mClickListener.onApplyClick(v, position);
+                                }
+                            });
+                        }
+                       // ((JobTypeViewHolder) holder).tv_apply.setText(posts.get(position).);
                     }
 
 
@@ -856,17 +1222,21 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     AppUtils.makeTextViewResizable(((VideoTypeViewHolder) holder).tv_content, 3, posts.get(position).getContent());
                     ((VideoTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
                     if (posts.get(position).getIs_post_like() != null && posts.get(position).getIs_post_like() > 0) {
-                        ((VideoTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like_selected));
+                        ((VideoTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.like_selected));
                     } else {
-                        ((VideoTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like));
+                        ((VideoTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }
 
-                    if (posts.get(position).getUser().getIs_linkedin() == 1) {
-                        AppUtils.setGlideImage(mContext, ((VideoTypeViewHolder) holder).profile_image, posts.get(position).getUser().getLinkedin_image_url());
-
-                    } else {
+                    if ( !TextUtils.isEmpty(posts.get(position).getUser().getUser_image())) {
                         AppUtils.setGlideImage(mContext, ((VideoTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
                     }
+//                    else if (posts.get(position).getUser().getIs_facebook() == 1 && !TextUtils.isEmpty(posts.get(position).getUser().getFacebook_image_url())){
+//                        AppUtils.setGlideImage(mContext, ((VideoTypeViewHolder) holder).profile_image, posts.get(position).getUser().getFacebook_image_url());
+//                    }
+//                    else {
+//                        AppUtils.setGlideImage(mContext, ((VideoTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
+//                    }
+
                     ((VideoTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
                     ((VideoTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getUser().getTotal_connection()));
 
@@ -876,6 +1246,25 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         ((VideoTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
                     AppUtils.setGlideVideoThumbnail(mContext, ((VideoTypeViewHolder) holder).img_video, posts.get(position).getPost_video());
+                    ((VideoTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name());
+                    ((VideoTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation()+" at ");
+
+                    if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
+                        ((VideoTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
+                    } else {
+                        ((VideoTypeViewHolder) holder).tv_connect.setVisibility(View.VISIBLE);
+                        String connectionstatus = AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver());
+                        ((VideoTypeViewHolder) holder).tv_connect.setText(AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver()));
+                        if (connectionstatus.equals(AppConstants.REQUEST_ACCEPT)) {
+                            ((VideoTypeViewHolder) holder).tv_connect.setBackgroundResource(R.drawable.rounded_button_border_green);
+                            ((VideoTypeViewHolder) holder).tv_connect.setTextColor(mContext.getResources().getColor(R.color.light_green));
+                            //  holder.tv_decline.setVisibility(View.VISIBLE);
+                        } else {
+                            //  holder.tv_decline.setVisibility(View.GONE);
+                            ((VideoTypeViewHolder) holder).tv_connect.setBackgroundResource(R.drawable.rounded_button_border_blue);
+                            ((VideoTypeViewHolder) holder).tv_connect.setTextColor(mContext.getResources().getColor(R.color.skyblue));
+                        }
+                    }
                     break;
                 case AppConstants.LINK_POST:
                     if (String.valueOf(posts.get(position).getComment_count()).equals("0")) {
@@ -904,16 +1293,20 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     // ((LinkTypeViewHolder) holder).tv_content.setText(posts.get(position).getContent());
                     ((LinkTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
                     if (posts.get(position).getIs_post_like() != null && posts.get(position).getIs_post_like() > 0) {
-                        ((LinkTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like_selected));
+                        ((LinkTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.like_selected));
                     } else {
-                        ((LinkTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.mipmap.ic_like));
+                        ((LinkTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }
-                    if (posts.get(position).getUser().getIs_linkedin() == 1) {
-                        AppUtils.setGlideImage(mContext, ((LinkTypeViewHolder) holder).profile_image, posts.get(position).getUser().getLinkedin_image_url());
-
-                    } else {
+                    if (!TextUtils.isEmpty(posts.get(position).getUser().getUser_image())) {
                         AppUtils.setGlideImage(mContext, ((LinkTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
                     }
+//                    else if (posts.get(position).getUser().getIs_facebook() == 1 && !TextUtils.isEmpty(posts.get(position).getUser().getFacebook_image_url())) {
+//                        AppUtils.setGlideImage(mContext, ((LinkTypeViewHolder) holder).profile_image, posts.get(position).getUser().getFacebook_image_url());
+//                    }
+//                    else {
+//                        AppUtils.setGlideImage(mContext, ((LinkTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
+//                    }
+
                     ((LinkTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
                     ((LinkTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getUser().getTotal_connection()));
 
@@ -921,6 +1314,66 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         ((LinkTypeViewHolder) holder).top_image.setVisibility(View.GONE);
                     } else {
                         ((LinkTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
+                    }
+                    ((LinkTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name() );
+                    ((LinkTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation()+" at ");
+
+                    if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
+                        ((LinkTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
+                    } else {
+                        ((LinkTypeViewHolder) holder).tv_connect.setVisibility(View.VISIBLE);
+                        String connectionstatus = AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver());
+                        ((LinkTypeViewHolder) holder).tv_connect.setText(AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver()));
+                        if (connectionstatus.equals(AppConstants.REQUEST_ACCEPT)) {
+                            ((LinkTypeViewHolder) holder).tv_connect.setBackgroundResource(R.drawable.rounded_button_border_green);
+                            ((LinkTypeViewHolder) holder).tv_connect.setTextColor(mContext.getResources().getColor(R.color.light_green));
+                            //  holder.tv_decline.setVisibility(View.VISIBLE);
+                        } else {
+                            //  holder.tv_decline.setVisibility(View.GONE);
+                            ((LinkTypeViewHolder) holder).tv_connect.setBackgroundResource(R.drawable.rounded_button_border_blue);
+                            ((LinkTypeViewHolder) holder).tv_connect.setTextColor(mContext.getResources().getColor(R.color.skyblue));
+                        }
+                    }
+                    break;
+
+                case AppConstants.NEWS_TYPE:
+                    if (String.valueOf(posts.get(position).getComment_count()).equals("0")) {
+                        ((NewsTypeViewHolder) holder).tv_viewcomments.setVisibility(View.GONE);
+                    }
+                    //  ((LinkTypeViewHolder) holder).img_link.setBackground(null);
+                    ((NewsTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
+                    ((NewsTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
+                    ((NewsTypeViewHolder) holder).tv_createdDateTime.setText(DateUtils.getFormattedDateTime(posts.get(position).getCreated_datetime()));
+
+
+                   // AppUtils.makeTextViewResizable(((NewsTypeViewHolder) holder).tv_content, 3, posts.get(position).getContent());
+                    // ((LinkTypeViewHolder) holder).tv_content.setText(posts.get(position).getContent());
+                    ((NewsTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
+                    if (posts.get(position).getIs_news_like() != null && posts.get(position).getIs_news_like() > 0) {
+                        ((NewsTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.like_selected));
+                    } else {
+                        ((NewsTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
+                    }
+//                    if (posts.get(position).getUser().getIs_linkedin() == 1 && !TextUtils.isEmpty(posts.get(position).getUser().getLinkedin_image_url())) {
+//                        AppUtils.setGlideImage(mContext, ((NewsTypeViewHolder) holder).profile_image, posts.get(position).getUser().getLinkedin_image_url());
+//                    }
+//                    else if (posts.get(position).getUser().getIs_facebook() == 1 && !TextUtils.isEmpty(posts.get(position).getUser().getFacebook_image_url())) {
+//                        AppUtils.setGlideImage(mContext, ((NewsTypeViewHolder) holder).profile_image, posts.get(position).getUser().getFacebook_image_url());
+//                    }
+//                    else {
+//                        AppUtils.setGlideImage(mContext, ((NewsTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
+//                    }
+
+                    ((NewsTypeViewHolder) holder).tv_name.setText(posts.get(position).getNews_source().getName());
+                    ((NewsTypeViewHolder) holder).tv_url.setText(posts.get(position).getNews_source().getUrl());
+                    ((NewsTypeViewHolder) holder).channelname.setText(posts.get(position).getNews_source().getName());
+                    ((NewsTypeViewHolder) holder).tv_newstitle.setText(posts.get(position).getTitle());
+                    AppUtils.setGlideImage(mContext, ((NewsTypeViewHolder) holder).profile_image, posts.get(position).getNews_source().getImage());
+                    AppUtils.setGlideUrlThumbnail(mContext, ((NewsTypeViewHolder) holder).img_link, posts.get(position).getImage());
+                    if (position == 0) {
+                        ((NewsTypeViewHolder) holder).top_image.setVisibility(View.GONE);
+                    } else {
+                        ((NewsTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
 
                     break;
@@ -940,6 +1393,8 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
         void onLikeClick(View view, int position, TextView likeCount);
 
+        void onNewsLikeClick(View view, int position, TextView likeCount);
+
         void onJobLikeClick(View view, int position, TextView likeCount);
 
         void onShareClick(View view, int position);
@@ -948,7 +1403,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
         void onVideoClick(View view, int position);
 
-        void onURLClick(View view, int position);
+        void onURLClick(View view, int position,String type);
 
         void onProfileClick(View view, int position);
 

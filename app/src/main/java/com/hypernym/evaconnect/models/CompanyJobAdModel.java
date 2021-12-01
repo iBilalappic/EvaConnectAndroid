@@ -22,6 +22,11 @@ public class CompanyJobAdModel implements Serializable {
     @SerializedName("job_sector")
     @Expose
     private String jobSector;
+
+    @SerializedName("job_type")
+    @Expose
+    private String jobType;
+
     @SerializedName("position")
     @Expose
     private String position;
@@ -67,6 +72,18 @@ public class CompanyJobAdModel implements Serializable {
     @SerializedName("status")
     @Expose
     private String status;
+
+    public Integer getActive_hours() {
+        return active_hours;
+    }
+
+    public void setActive_hours(Integer active_hours) {
+        this.active_hours = active_hours;
+    }
+
+    @Expose
+    private Integer active_hours;
+    @SerializedName("active_hours")
 
     public Integer getApplicant_count() {
         return applicant_count;
@@ -241,4 +258,11 @@ public class CompanyJobAdModel implements Serializable {
         this.status = status;
     }
 
+    public String getJobType() {
+        return jobType;
+    }
+
+    public void setJobType(String jobType) {
+        this.jobType = jobType;
+    }
 }

@@ -81,6 +81,20 @@ public class JobAd implements Serializable {
     @Expose
     private String status;
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    @SerializedName("type")
+    @Expose
+    private String type;
+
+
+
     public Integer getIs_applied() {
         return is_applied;
     }

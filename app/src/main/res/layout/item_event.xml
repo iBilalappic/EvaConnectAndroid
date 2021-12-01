@@ -1,24 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center"
-    android:layout_margin="10dp"
-    android:orientation="vertical">
-<TextView
-    style="@style/TextStyle"
-    android:id="@+id/tv_title"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:drawableLeft="@drawable/redcircle"
-    android:drawablePadding="10dp"
-    android:text="World Aviation festival  |  London"/>
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:elevation="@dimen/spacing_xsmall"
+    android:layout_marginBottom="@dimen/spacing_medium">
+
+
+
     <TextView
-        style="@style/TextStyle"
-        android:id="@+id/tv_datetime"
+        android:id="@+id/day"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawablePadding="10dp"
-        android:text="03:00pm - 05:00pm"/>
+        android:textSize="20sp"
+        android:text="4th"
+        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.Text.Bold"
+        android:layout_marginStart="@dimen/spacing_large"
+        android:layout_marginTop="@dimen/spacing_large"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_large"
+        android:layout_marginBottom="@dimen/spacing_large"
+        android:text="May"
+        android:textAppearance="@style/TextAppearance.Text.Regular"
+        android:textColor="#B4B4B4"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/day"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/day" />
+
+    <TextView
+        android:id="@+id/eventTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Meeting with Shehryar"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/day"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/day"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textStyle="bold"
+        android:layout_marginStart="@dimen/spacing_extra_extra_large"
+        android:textAppearance="@style/TextAppearance.Text.Bold"
+        />
+
+    <TextView
+        android:id="@+id/object_type"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Meeting"
+        android:textColor="#2ECC71"
+        android:textAppearance="@style/TextAppearance.Text.Regular"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@id/day"
+        app:layout_constraintTop_toBottomOf="@id/eventTitle"
+        android:layout_marginStart="@dimen/spacing_extra_extra_large"
+        />
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_extra_extra_large"
+        android:text="15:00pm - 17:00"
+        android:textAppearance="@style/TextAppearance.Text.Regular"
+        android:textColor="#B4B4B4"
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@id/day"
+        app:layout_constraintTop_toBottomOf="@id/object_type" />
+
+    <ImageView
+        android:id="@+id/divider"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="8dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_blue_red"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/time" />
+</androidx.constraintlayout.widget.ConstraintLayout>

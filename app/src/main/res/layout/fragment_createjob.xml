@@ -1,433 +1,341 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
 
-    <!--    <View-->
-    <!--        android:id="@+id/view0"-->
-    <!--        android:layout_width="0dp"-->
-    <!--        android:layout_height="3dp"-->
-    <!--        android:background="@drawable/line_redblack50"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent" />-->
-
-
-    <!--    <ScrollView-->
-    <!--        android:id="@+id/sc_createjob"-->
-    <!--        android:layout_width="0dp"-->
-    <!--        android:layout_height="match_parent"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/view0">-->
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/postAd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-            <TextView
-                android:id="@+id/postAd"
-                style="@style/TextStyle.Title"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@drawable/rounded_button_border"
-                android:drawableLeft="@drawable/new_post"
-                android:drawablePadding="10dp"
-                android:paddingLeft="20dp"
-                android:paddingTop="10dp"
-                android:paddingRight="20dp"
-                android:paddingBottom="10dp"
-                android:text="Post Ad" />
-        </androidx.cardview.widget.CardView>
-
-
-        <TextView
-            android:id="@+id/tv_browsefiles"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="80dp"
-            android:layout_marginEnd="50dp"
-            android:layout_weight="1.5"
-            android:background="@drawable/rounded_button_nobackground"
-            android:drawableRight="@drawable/attach_small"
-            android:drawablePadding="5dp"
-            android:paddingLeft="20dp"
-            android:paddingTop="5dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="5dp"
-            android:text="Browse Files"
-            android:textColor="@color/light_black"
-            android:textSize="11sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <TextView
-            android:id="@+id/tv_description"
-            style="@style/TextStyle"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="45dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:text="Please add an image to help promote your job advertisment"
-            android:textSize="9sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_browsefiles"></TextView>
-
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profile_image"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="40dp"
-            android:src="@drawable/no_thumbnail"
-            app:civ_border_color="@color/colorwhite"
-            app:civ_border_width="2dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tv_browsefiles"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <TextView
-            android:id="@+id/tv_question1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="30dp"
-            android:text="What sector do they work in?"
-            android:textColor="@color/gray"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_description">
-
-        </TextView>
-
-        <LinearLayout
-            android:id="@+id/linearLayout0"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="5dp"
-            android:background="@color/lighter_gray"
-            android:gravity="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_question1">
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/spacing_medium">
 
 
-            <Spinner
-                android:id="@+id/spinner_jobsector"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:hint="Select Job Sector"
-                android:spinnerMode="dropdown"
-                android:theme="@style/ThemeOverlay.AppCompat.Light"
-                android:textColor="@color/dark_gray"
-                android:textColorHint="@color/lighter_gray"
-                android:textSize="12sp" />
-
-
-        </LinearLayout>
-
-
-        <TextView
-            android:id="@+id/tv_question2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:text="Who will be they working for?"
-            android:textColor="@color/gray"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout0">
-
-        </TextView>
-
-        <EditText
-            android:id="@+id/edit_companyName"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="5dp"
-            android:background="@color/lighter_gray"
-            android:gravity="center"
-            android:hint="Enter Company Name"
-            android:maxLength="80"
-            android:imeOptions="actionNext"
-            android:inputType="text"
-            android:textColor="@color/dark_gray"
-            android:textColorHint="@color/dark_gray"
-            android:textSize="13sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_question2">
-
-        </EditText>
-
-        <TextView
-            android:id="@+id/tv_question7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:text="What will be Job Title?"
-            android:textColor="@color/gray"
-            android:textSize="12sp"
-            android:visibility="gone"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_companyName">
-
-        </TextView>
-
-        <EditText
-            android:id="@+id/edit_jobtitle"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="5dp"
-            android:background="@color/lighter_gray"
-            android:gravity="center"
-            android:hint="Enter Job Title"
-            android:imeOptions="actionNext"
-            android:inputType="text"
-            android:textColor="@color/dark_gray"
-            android:textColorHint="@color/dark_gray"
-            android:textSize="13sp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_question7">
-
-        </EditText>
-
-        <TextView
-            android:id="@+id/tv_question8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:text="What will be Job Position?"
-            android:textColor="@color/gray"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_jobtitle">
-
-        </TextView>
-
-        <EditText
-            android:id="@+id/edit_jobpostion"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="5dp"
-            android:background="@color/lighter_gray"
-            android:gravity="center"
-            android:hint="Enter Job Position"
-            android:maxLength="80"
-            android:imeOptions="actionNext"
-            android:inputType="text"
-            android:textColor="@color/dark_gray"
-            android:textColorHint="@color/dark_gray"
-            android:textSize="13sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_question8">
-
-        </EditText>
-
-
-        <TextView
-            android:id="@+id/tv_question3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:text="Where will they be working?"
-            android:textColor="@color/gray"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_jobpostion">
-
-        </TextView>
-
-        <EditText
-            android:id="@+id/edit_Location"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="5dp"
-            android:background="@color/lighter_gray"
-            android:gravity="center"
-            android:hint="Enter Location"
-            android:maxLength="255"
-            android:imeOptions="actionNext"
-            android:inputType="text"
-            android:textColor="@color/dark_gray"
-            android:textColorHint="@color/dark_gray"
-            android:textSize="13sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_question3">
-
-        </EditText>
-
-
-        <TextView
-            android:id="@+id/tv_question4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:text="How much will they earn?"
-            android:textColor="@color/gray"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_Location">
-
-        </TextView>
-
-        <EditText
-            android:id="@+id/edit_amount"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="5dp"
-            android:background="@color/lighter_gray"
-            android:gravity="center"
-            android:imeOptions="actionDone"
-            android:inputType="number"
-            android:maxLength="9"
-            android:hint="£ 97,000 (per annum)"
-            android:textColor="@color/dark_gray"
-            android:textColorHint="@color/dark_gray"
-            android:textSize="13sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_question4">
-
-        </EditText>
-
-        <TextView
-            android:id="@+id/tv_question5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:text="What are their weekly hours?"
-            android:textColor="@color/gray"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_amount">
-
-        </TextView>
-
-
-        <LinearLayout
-            android:id="@+id/linearLayout1"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/lighter_gray"
-            android:gravity="center"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_question5">
-
-
-            <Spinner
-                android:id="@+id/spinner_week"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:hint="Select Job Sector"
-                android:spinnerMode="dropdown"
-                android:theme="@style/ThemeOverlay.AppCompat.Light"
-                android:textColor="@color/dark_gray"
-                android:textColorHint="@color/lighter_gray"
-                android:textSize="12sp" />
-
-
-        </LinearLayout>
-
-
-        <TextView
-            android:id="@+id/tv_question6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="40dp"
-            android:text="Describe the role"
-            android:textColor="@color/gray"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout1">
-
-        </TextView>
-
-        <LinearLayout
-            android:id="@+id/linearLayout2"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="30dp"
-            android:background="@color/lighter_gray"
-            android:padding="@dimen/spacing_large"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_question6">
-
-            <EditText
-                android:id="@+id/edit_jobdescription"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/lighter_gray"
-                android:hint="Please give your job description here (4000 character max)"
-                android:maxLength="4000"
-                android:textAlignment="textStart"
-                android:textColor="@color/dark_gray"
-                android:textColorHint="@color/dark_gray"
-                android:textSize="13sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                android:layout_marginBottom="@dimen/spacing_medium">
+
+                <LinearLayout
+                    android:id="@+id/layout_header"
+                    android:layout_width="0dp"
+                    android:layout_height="55dp"
+                    android:background="@color/lighter_gray_2"
+                    android:elevation="2dp"
+                    android:gravity="start|center"
+                    android:visibility="gone"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
 
-            </EditText>
+                    <ImageView
+                        android:id="@+id/img_backarrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:src="@drawable/ic_arrow_left" />
 
-        </LinearLayout>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/nunitosansbold"
+                        android:gravity="end|center"
+                        android:text="Create a Job Listing"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
-
-        </Space>
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <!--    </ScrollView>-->
+                </LinearLayout>
 
 
-</ScrollView>
+
+                <RelativeLayout
+
+                    android:id="@+id/profile_layout"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layout_header">
+
+
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:background="@android:color/transparent"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/white_chatbg"
+                        app:civ_border_color="@color/skyblue"
+                        app:civ_border_width="2dp"
+                        />
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:padding="2dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/profile_image"
+                        android:src="@drawable/no_thumbnail"
+                        app:civ_border_color="@color/white"
+                        app:civ_border_width="2dp"
+                        />
+                </RelativeLayout>
+
+
+
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="35dp"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/nunitosansbold"
+                    android:maxLines="1"
+                    android:text="Add an image"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toEndOf="@+id/profile_layout"
+                    app:layout_constraintTop_toBottomOf="@+id/layout_header" />
+
+
+                <TextView
+                    android:id="@+id/tv_browsefiles"
+                    style="@style/Button_border_light_blue"
+                    android:layout_width="130dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="15dp"
+                    android:elevation="2dp"
+                    android:fontFamily="@font/nunitosansregular"
+                    android:gravity="center"
+                    android:text="Browse Files"
+                    android:textColor="@color/skyblue"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layout_header" />
+
+
+                <EditText
+                    android:id="@+id/edit_jobtitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:fontFamily="@font/nunitosansregular"
+                    android:hint="Title"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:text=""
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray_1"
+                    android:textSize="14sp"
+                    android:theme="@style/MyEditTextTheme"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/profile_layout">
+
+                </EditText>
+
+
+                <Spinner
+                    android:id="@+id/spinner_jobsector"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginEnd="20dp"
+                    android:gravity="start|center"
+                    android:hint="Job Sector"
+                    android:spinnerMode="dropdown"
+                    android:textColor="@color/dark_gray"
+                    android:textColorHint="@color/lighter_gray"
+                    android:textSize="12sp"
+                    android:theme="@style/MyEditTextTheme"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_jobtitle" />
+
+
+                <EditText
+                    android:id="@+id/edit_companyName"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginEnd="20dp"
+                    android:fontFamily="@font/nunitosansregular"
+                    android:gravity="start|center"
+                    android:hint="Company Name"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:enabled="false"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray_1"
+                    android:textSize="13sp"
+                    android:theme="@style/MyEditTextTheme"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/spinner_jobsector">
+
+                </EditText>
+
+                <EditText
+                    android:id="@+id/edit_jobpostion"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginEnd="20dp"
+                    android:fontFamily="@font/nunitosansregular"
+                    android:gravity="start|center"
+                    android:hint="Position"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray_1"
+                    android:textSize="13sp"
+                    android:theme="@style/MyEditTextTheme"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_companyName">
+
+                </EditText>
+
+
+                <EditText
+                    android:id="@+id/edit_Location"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginEnd="20dp"
+                    android:fontFamily="@font/nunitosansregular"
+                    android:gravity="start|center"
+                    android:hint="Location"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray_1"
+                    android:textSize="13sp"
+                    android:theme="@style/MyEditTextTheme"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_jobpostion">
+
+                </EditText>
+
+
+                <EditText
+                    android:id="@+id/edit_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginEnd="20dp"
+                    android:fontFamily="@font/nunitosansregular"
+                    android:gravity="start|center"
+                    android:hint="Salary per annum"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="9"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray_1"
+                    android:textSize="13sp"
+                    android:theme="@style/MyEditTextTheme"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_Location">
+
+                </EditText>
+
+                <TextView
+                    style="@style/TextStyle.Black"
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Active for 21 Days"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_amount" />
+
+                <Spinner
+                    android:id="@+id/spinner_jobtype"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="20dp"
+                    android:gravity="start|center"
+                    android:hint="Job Type"
+                    android:spinnerMode="dropdown"
+                    android:textColor="@color/dark_gray"
+                    android:textColorHint="@color/lighter_gray"
+                    android:textSize="12sp"
+                    android:theme="@style/MyEditTextTheme"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+
+                <EditText
+                    android:id="@+id/edit_jobdescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="20dp"
+                    android:fontFamily="@font/nunitosansregular"
+                    android:gravity="start|center"
+                    android:hint="Describe the role"
+                    android:imeOptions="actionDone"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray_1"
+                    android:textSize="13sp"
+                    android:theme="@style/MyEditTextTheme"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/spinner_jobtype">
+
+                </EditText>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
+
+    </FrameLayout>
+
+
+    <TextView
+        android:id="@+id/postAd"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/button_gradient_1"
+        android:fontFamily="@font/nunitosansbold"
+        android:gravity="center"
+        android:text="Create Job Listing"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

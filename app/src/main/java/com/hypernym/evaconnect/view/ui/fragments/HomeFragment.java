@@ -2,11 +2,14 @@ package com.hypernym.evaconnect.view.ui.fragments;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -15,42 +18,31 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.TextView;
-
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
-import com.hypernym.evaconnect.models.Dashboard;
 import com.hypernym.evaconnect.models.Event;
-import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
-import com.hypernym.evaconnect.utils.GsonUtils;
+import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.HomePostsAdapter;
-import com.hypernym.evaconnect.view.dialogs.NavigationDialog;
 import com.hypernym.evaconnect.view.dialogs.ShareDialog;
-import com.hypernym.evaconnect.view.ui.activities.SharePostActivity;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.EventViewModel;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
 import com.hypernym.evaconnect.viewmodel.JobListViewModel;
+import com.hypernym.evaconnect.viewmodel.NewsViewModel;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
+import com.hypernym.evaconnect.viewmodel.UserViewModel;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -61,7 +53,8 @@ import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_ST
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemClickListener,
+        SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.rc_home)
     RecyclerView rc_home;
 
@@ -76,6 +69,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     private LinearLayoutManager linearLayoutManager;
     private HomeViewModel homeViewModel;
     private PostViewModel postViewModel;
+    private NewsViewModel newsViewModel;
     private ConnectionViewModel connectionViewModel;
     private EventViewModel eventViewModel;
     private int currentPage = PAGE_START;
@@ -84,6 +78,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     int itemCount = 0;
     private List<Post> notifications = new ArrayList<>();
     private JobListViewModel jobListViewModel;
+    private UserViewModel userViewModel;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -95,28 +90,32 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
+
         return view;
     }
 
     private void init() {
-        setPageTitle(getString(R.string.home));
         homeViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(HomeViewModel.class);
         postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(PostViewModel.class);
         connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
         jobListViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(JobListViewModel.class);
         eventViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(EventViewModel.class);
-
+        userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(UserViewModel.class);
+        newsViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(NewsViewModel.class);
         //   currentPage = PAGE_START;
         homePostsAdapter = new HomePostsAdapter(getContext(), posts, this);
         linearLayoutManager = new LinearLayoutManager(getContext());
 
         rc_home.setLayoutManager(linearLayoutManager);
         rc_home.setAdapter(homePostsAdapter);
+
         RecyclerView.ItemAnimator animator = rc_home.getItemAnimator();
         if (animator instanceof SimpleItemAnimator) {
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
         }
         swipeRefresh.setOnRefreshListener(this);
+        hideBackButton();
+
         /**
          * add scroll listener while user reach in bottom load more will call
          */
@@ -151,6 +150,12 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         init();
         onRefresh();
 
+        if (NetworkUtils.isNetworkConnected(getContext())) {
+            GetUserDetails();
+        } else {
+            networkErrorDialog();
+        }
+
         newpost.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
@@ -183,7 +188,11 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
                             post.setPost_type(AppConstants.EVENT_TYPE);
                         } else if (post.getType().equalsIgnoreCase("job")) {
                             post.setPost_type(AppConstants.JOB_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("post") && post.isIs_url()) {
+                        }
+                     else if (post.getType().equalsIgnoreCase("news")) {
+                        post.setPost_type(AppConstants.NEWS_TYPE);
+                    }
+                        else if (post.getType().equalsIgnoreCase("post") && post.isIs_url()) {
                             post.setPost_type(AppConstants.LINK_POST);
                         }
                     }
@@ -212,12 +221,25 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
 
     @Override
     public void onItemClick(View view, int position) {
-        PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("post", posts.get(position).getId());
-        Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
-        postDetailsFragment.setArguments(bundle);
-        loadFragment(R.id.framelayout, postDetailsFragment, getContext(), true);
+        if(!posts.get(position).getType().equalsIgnoreCase("news"))
+        {
+            PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("post", posts.get(position).getId());
+            Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
+            postDetailsFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, postDetailsFragment, getContext(), true);
+        }
+        else
+        {
+            NewsDetailsFragment postDetailsFragment = new NewsDetailsFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("post", posts.get(position).getId());
+            Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
+            postDetailsFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, postDetailsFragment, getContext(), true);
+        }
+
     }
 
     @Override
@@ -257,10 +279,54 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         if (NetworkUtils.isNetworkConnected(getContext())) {
 
             likePost(post, position);
+
         } else {
             networkErrorDialog();
         }
 
+    }
+
+    @Override
+    public void onNewsLikeClick(View view, int position, TextView likeCount) {
+        //showDialog();
+        Post post = posts.get(position);
+        User user = LoginUtils.getLoggedinUser();
+        post.setRss_news_id(post.getId());
+        post.setCreated_by_id(user.getId());
+        if (post.getIs_news_like() == null || post.getIs_news_like() < 1) {
+            post.setAction(AppConstants.LIKE);
+            if (post.getIs_news_like() == null) {
+                post.setIs_news_like(1);
+                if (post.getLike_count() == null)
+                    post.setLike_count(0);
+                else
+                    post.setLike_count(post.getLike_count() + 1);
+            } else {
+                post.setIs_news_like(post.getIs_news_like() + 1);
+                if (post.getLike_count() == null)
+                    post.setLike_count(0);
+                else
+                    post.setLike_count(post.getLike_count() + 1);
+            }
+        } else {
+            post.setAction(AppConstants.UNLIKE);
+            if (post.getIs_news_like() > 0) {
+                post.setIs_news_like(post.getIs_news_like() - 1);
+                post.setLike_count(post.getLike_count() - 1);
+            } else {
+                post.setIs_news_like(0);
+                post.setLike_count(0);
+            }
+
+        }
+        Log.d("Listing status", post.getAction() + " count" + post.getIs_post_like());
+        if (NetworkUtils.isNetworkConnected(getContext())) {
+
+            likeNews(post, position);
+
+        } else {
+            networkErrorDialog();
+        }
     }
 
     @Override
@@ -340,6 +406,20 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         });
     }
 
+    private void likeNews(Post post, int position) {
+        newsViewModel.likePost(post).observe(this, new Observer<BaseModel<List<Post>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Post>> listBaseModel) {
+                if (listBaseModel != null && !listBaseModel.isError()) {
+                    homePostsAdapter.notifyItemChanged(position);
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+                hideDialog();
+            }
+        });
+    }
+
     @Override
     public void onShareClick(View view, int position) {
 //       Intent intent=new Intent(getContext(), SharePostActivity.class);
@@ -347,8 +427,8 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
 //       startActivity(intent);
         ShareDialog shareDialog;
         Bundle bundle = new Bundle();
-        bundle.putSerializable("PostData",posts.get(position));
-        shareDialog = new ShareDialog(getContext(),bundle);
+        bundle.putSerializable("PostData", posts.get(position));
+        shareDialog = new ShareDialog(getContext(), bundle);
         shareDialog.show();
     }
 
@@ -357,7 +437,19 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
 
         TextView text = (TextView) view;
         if (NetworkUtils.isNetworkConnected(getContext())) {
-            callConnectApi(text, position);
+            if(text.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_ACCEPT)){
+                Connection connection = new Connection();
+                User user = LoginUtils.getLoggedinUser();
+                connection.setStatus(AppConstants.ACTIVE);
+                connection.setId(posts.get(position).getConnection_id());
+                connection.setModified_by_id(user.getId());
+                connection.setModified_datetime(DateUtils.GetCurrentdatetime());
+                callDeclineConnectApi(connection);
+            }
+            else {
+                callConnectApi(text, position);
+            }
+
         } else {
             networkErrorDialog();
         }
@@ -370,21 +462,37 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     }
 
     @Override
-    public void onURLClick(View view, int position) {
-        LoadUrlFragment loadUrlFragment = new LoadUrlFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("url", posts.get(position).getContent());
-        loadUrlFragment.setArguments(bundle);
-        loadFragment(R.id.framelayout, loadUrlFragment, getContext(), true);
+    public void onURLClick(View view, int position,String type) {
+        if(type.equalsIgnoreCase("news"))
+        {
+            LoadUrlFragment loadUrlFragment = new LoadUrlFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("url", posts.get(position).getLink());
+            loadUrlFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, loadUrlFragment, getContext(), true);
+        }
+        else
+        {
+            LoadUrlFragment loadUrlFragment = new LoadUrlFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("url", posts.get(position).getContent());
+            loadUrlFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, loadUrlFragment, getContext(), true);
+        }
+
     }
 
     @Override
     public void onProfileClick(View view, int position) {
-        PersonDetailFragment personDetailFragment = new PersonDetailFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("PostData", posts.get(position));
-        personDetailFragment.setArguments(bundle);
-        loadFragment(R.id.framelayout, personDetailFragment, getContext(), true);
+        if(!posts.get(position).getType().equalsIgnoreCase("news"))
+        {
+            PersonProfileFragment personDetailFragment = new PersonProfileFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("PostData", posts.get(position));
+            personDetailFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, personDetailFragment, getContext(), true);
+        }
+
     }
 
     @Override
@@ -477,7 +585,9 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
                 @Override
                 public void onChanged(BaseModel<List<Connection>> listBaseModel) {
                     if (listBaseModel != null && !listBaseModel.isError()) {
-                        text.setText("Request Sent");
+                        text.setText("Pending");
+                        onRefresh();
+
                     } else {
                         networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                     }
@@ -499,4 +609,42 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
             networkErrorDialog();
         }
     }
+
+    private void GetUserDetails() {
+        User user = new User();
+        user = LoginUtils.getUser();
+        userViewModel.getuser_details(user.getId()
+        ).observe(this, new Observer<BaseModel<List<User>>>() {
+            @Override
+            public void onChanged(BaseModel<List<User>> listBaseModel) {
+                if (listBaseModel!=null && listBaseModel.getData() != null && !listBaseModel.isError()) {
+                    swipeRefresh.setRefreshing(false);
+                    LoginUtils.saveUser(listBaseModel.getData().get(0));
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+                hideDialog();
+            }
+        });
+    }
+
+
+
+    private void callDeclineConnectApi(Connection connection) {
+
+        connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Connection>> listBaseModel) {
+                if (listBaseModel != null && !listBaseModel.isError()) {
+
+                    onRefresh();
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+                hideDialog();
+            }
+        });
+    }
+
+
 }

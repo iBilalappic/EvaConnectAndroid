@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 
 import com.hypernym.evaconnect.models.AccountCheck;
 import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.Stats;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IUserRespository;
 import com.hypernym.evaconnect.repositories.impl.UserRepository;
@@ -15,7 +16,6 @@ import com.hypernym.evaconnect.repositories.impl.UserRepository;
 import java.util.List;
 
 import okhttp3.MultipartBody;
-import retrofit2.http.Multipart;
 
 public class UserViewModel extends AndroidViewModel {
     private IUserRespository iUserRespository =new UserRepository();
@@ -47,13 +47,18 @@ public class UserViewModel extends AndroidViewModel {
     {
         return iUserRespository.isEmailExist_linkedin(email);
     }
-    public LiveData<BaseModel<List<User>>> linkedin_login(String email)
+    public LiveData<BaseModel<List<User>>> linkedin_login(String email, String linkedinType)
     {
-        return iUserRespository.linkedin_login(email);
+        return iUserRespository.linkedin_login(email,linkedinType);
     }
-    public LiveData<BaseModel<List<Object>>> profile_update(Integer id, String designation, String field, String company_name, String address, String bio_data)
+
+    public LiveData<BaseModel<List<User>>> facebookLogin(String user_email, String facebookType){
+        return iUserRespository.facebookLogin(user_email,facebookType);
+    }
+
+    public LiveData<BaseModel<List<Object>>> profile_update(int id, String designation,String companyname, String firstname, MultipartBody.Part partImage)
     {
-        return iUserRespository.profile_update(id,designation,field,company_name,address,bio_data);
+        return iUserRespository.profile_update(id,designation,companyname,firstname,partImage);
     }
 
     public LiveData<BaseModel<List<User>>> getuser_details(Integer id)
@@ -63,5 +68,25 @@ public class UserViewModel extends AndroidViewModel {
     public LiveData<BaseModel<List<String>>> getSector(String name)
     {
         return iUserRespository.getSector(name);
+    }
+
+    public LiveData<BaseModel<List<User>>> setting_update(Integer notification, Integer id)
+    {
+        return iUserRespository.setting_update(notification,id);
+    }
+
+    public LiveData<BaseModel<List<User>>> update_password(String Oldpassword,String Newpassword)
+    {
+        return iUserRespository.update_password(Oldpassword,Newpassword);
+    }
+
+    public LiveData<BaseModel<List<User>>> userOnline(boolean isactive)
+    {
+        return iUserRespository.userOnline(isactive);
+    }
+
+    public LiveData<BaseModel<List<Stats>>> getUserStats()
+    {
+        return iUserRespository.getUserStats();
     }
 }
