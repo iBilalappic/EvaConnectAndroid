@@ -32,14 +32,13 @@
                 app:civ_border_width="2dp"/>
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:padding="2dp"
+                android:id="@+id/profile_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/profile_image"
+                android:padding="2dp"
                 android:src="@drawable/no_thumbnail"
                 app:civ_border_color="@color/white"
-                app:civ_border_width="2dp"
-                />
+                app:civ_border_width="2dp" />
         </RelativeLayout>
 
         <TextView
@@ -48,11 +47,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
             android:text="Ed Hunter"
             android:textSize="18dp"
             app:layout_constraintStart_toEndOf="@+id/profile_layout"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/profile_layout"
+            app:layout_constraintBottom_toBottomOf="@+id/profile_layout"/>
 
         <TextView
             android:id="@+id/tv_designation"
@@ -70,8 +69,20 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:textColor="#EF8080"
+            android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/tv_designation"
             app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:id="@+id/img_add_post"
+            android:src="@drawable/ic_add_post"
+            android:layout_marginEnd="@dimen/spacing_large"
+            android:layout_marginTop="@dimen/spacing_large"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></ImageView>
+
 
         <EditText
             android:id="@+id/edt_content"
@@ -249,6 +260,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="2dp"
             android:text="TextView"
+            android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/profile_layout"
             app:layout_constraintTop_toBottomOf="@+id/tv_designation" />
 

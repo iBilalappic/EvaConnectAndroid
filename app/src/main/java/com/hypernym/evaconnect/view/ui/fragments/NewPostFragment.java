@@ -38,6 +38,8 @@ import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.utils.URLTextWatcher;
 import com.hypernym.evaconnect.view.adapters.AttachmentsAdapter;
+import com.hypernym.evaconnect.view.bottomsheets.BottomSheetPictureSelection;
+import com.hypernym.evaconnect.view.bottomsheets.BottomsheetAttachmentSelection;
 import com.hypernym.evaconnect.view.dialogs.LocalVideoViewDialog;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
@@ -98,6 +100,9 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
     @BindView(R.id.img_play)
     ImageView img_play;
 
+    @BindView(R.id.img_add_post)
+    ImageView img_add_post;
+
     @BindView(R.id.uev)
     URLEmbeddedView urlEmbeddedView;
 
@@ -148,6 +153,16 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                 LaunchGallery();
             }
         });
+
+        img_add_post.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                BottomsheetAttachmentSelection bottomSheetPictureSelection = new BottomsheetAttachmentSelection(new BaseFragment.YourDialogFragmentDismissHandler());
+                bottomSheetPictureSelection.show(getActivity().getSupportFragmentManager(), bottomSheetPictureSelection.getTag());
+            }
+        });
+
+
 
         camera.setOnClickListener(new OnOneOffClickListener() {
             @Override
@@ -215,12 +230,10 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
         setPostButton();
         if(getArguments().getBoolean("isVideo"))
         {
-            setPageTitle(getString(R.string.menu2));
-            post.setText(getString(R.string.menu2));
+            setPageTitle("Back");
+            post.setText("Post");
             tv_recordvideo.setVisibility(View.VISIBLE);
             camera.setVisibility(View.GONE);
-
-
         }
        else
         {

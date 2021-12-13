@@ -49,6 +49,7 @@ import com.hypernym.evaconnect.view.ui.fragments.HomeFragment;
 import com.hypernym.evaconnect.view.ui.fragments.MainViewPagerFragment;
 import com.hypernym.evaconnect.view.ui.fragments.MessageFragment;
 import com.hypernym.evaconnect.view.ui.fragments.MyLikesFragment;
+import com.hypernym.evaconnect.view.ui.fragments.NewPostFragment;
 import com.hypernym.evaconnect.view.ui.fragments.NotificationsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.PersonProfileFragment;
 import com.hypernym.evaconnect.view.ui.fragments.PostDetailsFragment;
@@ -104,6 +105,13 @@ public class HomeActivity extends BaseActivity {
 
     @BindView(R.id.img_messages)
     ImageView img_messages;
+    @BindView(R.id.img_post)
+    ImageView img_post;
+
+
+
+    @BindView(R.id.tv_post)
+    TextView tv_post;
 
     @BindView(R.id.message_click)
     LinearLayout message_click;
@@ -131,6 +139,9 @@ public class HomeActivity extends BaseActivity {
 
     @BindView(R.id.home_selector)
     ImageView home_selector;
+
+    @BindView(R.id.post_selector)
+    ImageView post_selector;
 
     @BindView(R.id.messages_selector)
     ImageView messages_selector;
@@ -289,8 +300,40 @@ public class HomeActivity extends BaseActivity {
         badge_notification.setText(String.valueOf(count));
         badge_notification.setVisibility(View.GONE);
     }
+//
+//    NewPostFragment newPostFragment=new NewPostFragment();
+//    Bundle bundle=new Bundle();
+//                    bundle.putBoolean("isVideo",true);
+//                    newPostFragment.setArguments(bundle);
+//    loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
 
+    @OnClick(R.id.post_click)
+    public void post() {
 
+        post_selector.setImageResource(R.drawable.bottomline);
+        home_selector.setImageResource(0);
+        connections_selector.setImageResource(0);
+        messages_selector.setImageResource(0);
+        profile_selector.setImageResource(0);
+
+        img_post.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
+        tv_post.setTextColor(ContextCompat.getColor(this, R.color.skyblue));
+        img_home.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+        tv_home.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+        tv_connections.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+        tv_message.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+        tv_profile.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+        img_connections.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+        img_messages.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+        img_logout.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+
+        NewPostFragment newPostFragment=new NewPostFragment();
+        Bundle bundle=new Bundle();
+        bundle.putBoolean("isVideo",true);
+        newPostFragment.setArguments(bundle);
+        loadFragment(R.id.framelayout, newPostFragment, this, true);
+
+    }
 
     @OnClick(R.id.home_click)
     public void home() {
@@ -335,11 +378,13 @@ public class HomeActivity extends BaseActivity {
         img_connections.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
         img_messages.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
         img_logout.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+        img_post.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
 
         tv_home.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
         tv_connections.setTextColor(ContextCompat.getColor(this, R.color.skyblue));
         tv_message.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
         tv_profile.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+        tv_post.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
 
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.framelayout);
         if (f instanceof ConnectionsFragment) {
@@ -364,11 +409,13 @@ public class HomeActivity extends BaseActivity {
         img_connections.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
         img_messages.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
         img_logout.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+        img_post.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
 
         tv_home.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
         tv_connections.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
         tv_message.setTextColor(ContextCompat.getColor(this, R.color.skyblue));
         tv_profile.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+        tv_post.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
 
 
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.framelayout);
@@ -399,10 +446,12 @@ public class HomeActivity extends BaseActivity {
         img_connections.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
         img_messages.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
         img_logout.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
+        img_post.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
 
         tv_home.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
         tv_connections.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
         tv_message.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+        tv_post.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
         tv_profile.setTextColor(ContextCompat.getColor(this, R.color.skyblue));
 
 
@@ -563,7 +612,8 @@ public class HomeActivity extends BaseActivity {
 
 
 
-        } else if (fragment instanceof MyLikesFragment || fragment instanceof ConnectionsFragment || fragment instanceof EditProfileFragment || fragment instanceof NotificationsFragment || fragment instanceof MessageFragment) {
+        } else if (fragment instanceof MyLikesFragment || fragment instanceof ConnectionsFragment || fragment instanceof EditProfileFragment || fragment instanceof NotificationsFragment || fragment instanceof MessageFragment
+        || fragment instanceof NewPostFragment) {
 //            img_home.setImageDrawable(getDrawable(R.drawable.home_selected));
 //            img_connections.setImageDrawable(getDrawable(R.drawable.connections));
 //            img_messages.setImageDrawable(getDrawable(R.drawable.messages));
@@ -573,11 +623,13 @@ public class HomeActivity extends BaseActivity {
             img_connections.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
             img_messages.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
             img_logout.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+            img_post.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
 
             tv_home.setTextColor(ContextCompat.getColor(this, R.color.skyblue));
             tv_connections.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
             tv_message.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
             tv_profile.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+            tv_post.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
 
 
             super.onBackPressed();
