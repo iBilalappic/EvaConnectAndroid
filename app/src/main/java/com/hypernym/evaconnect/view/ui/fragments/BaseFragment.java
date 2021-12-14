@@ -55,6 +55,8 @@ public class BaseFragment extends Fragment {
     private SimpleDialog simpleDialog;
     public static final int RequestPermissionCode = 1;
     private static final int REQUEST_PHOTO_GALLERY = 4;
+    private static final int REQUEST_DOCUMENTS = 5;
+
     private static final int CAMERAA = 1;
     private static final int VIDEO_CAPTURE = 101;
     private String mCurrentPhotoPath;
@@ -216,7 +218,11 @@ public class BaseFragment extends Fragment {
                 takePhotoFromCamera();
             }
             else if (msg.what == 2) {
-                LaunchGallery();
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//        intent.setType("file/*");
+                intent.setType("application/pdf");
+
+                startActivityForResult(Intent.createChooser(intent, "Select File"), REQUEST_DOCUMENTS);
             }
 
         }

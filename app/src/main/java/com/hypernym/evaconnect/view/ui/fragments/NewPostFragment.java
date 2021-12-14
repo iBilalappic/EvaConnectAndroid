@@ -13,12 +13,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -112,6 +114,23 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
     @BindView(R.id.tv_recordvideo)
     TextView tv_recordvideo;
 
+    @BindView(R.id.attachment)
+    ConstraintLayout attachment;
+
+    @BindView(R.id.attachment_preview)
+    ImageView webView;
+
+    @BindView(R.id.img_removeAttachment)
+    ImageView img_removeAttachment;
+
+    @BindView(R.id.tv_filename)
+    TextView tv_filename;
+
+
+    @BindView(R.id.loadimage)
+    WebView loadimage;
+
+
 
     private AttachmentsAdapter attachmentsAdapter;
     private List<String> attachments = new ArrayList<>();
@@ -132,6 +151,13 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
     private SimpleDialog simpleDialog;
     private ConnectionViewModel connectionViewModel;
     Uri SelectedImageUri;
+
+    MultipartBody.Part part_images_document = null;
+    private List<File> MultipleFile = new ArrayList<>();
+    private static final int REQUEST_DOCUMENTS = 5;
+
+
+
     public NewPostFragment() {
         // Required empty public constructor
     }
@@ -287,7 +313,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
         edt_content.setText(post.getContent());
         if(post.getPost_image().size()>0)
         {
-            attachments.add(post.getPost_image().get(0));
+            attachments.addAll(post.getPost_image());
             attachmentsAdapter.notifyDataSetChanged();
             rc_attachments.setVisibility(View.VISIBLE);
         }
@@ -390,6 +416,13 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                                         AppUtils.setGlideVideoThumbnail(getContext(), img_video, currentPhotoPath);
                                         video = MultipartBody.Part.createFormData("post_video", file_name.getName(), reqFile);
                                         setPostButton();
+                                        attachments.clear();
+                                        attachmentsAdapter.notifyDataSetChanged();
+                                        rc_attachments.setVisibility(View.GONE);
+                                        attachment.setVisibility(View.GONE);
+                                        img_removeAttachment.setVisibility(View.GONE);
+
+
                                     }
                                     else {
                                         //Do not add getActivity instead of getContext().
@@ -439,6 +472,13 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                                 AppUtils.setGlideVideoThumbnail(getContext(), img_video, currentPhotoPath);
                                 video = MultipartBody.Part.createFormData("post_video", file_name.getName(), reqFile);
                                 setPostButton();
+                                attachments.clear();
+                                attachmentsAdapter.notifyDataSetChanged();
+                                rc_attachments.setVisibility(View.GONE);
+                                attachment.setVisibility(View.GONE);
+                                img_removeAttachment.setVisibility(View.GONE);
+
+
 
                             } else {
                                 networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
@@ -455,6 +495,75 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                 Log.e(getClass().getName(), "exc: " + exc.getMessage());
             }
         }
+        else if (requestCode == REQUEST_DOCUMENTS && resultCode == RESULT_OK) {
+            try {
+                if (data != null && data.getData() != null) {
+
+                    SelectedImageUri = data.getData();
+
+                    // ImageFilePathUtil.checkFileType(".pdf");
+                    GalleryImage = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
+                    mProfileImageDecodableString = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
+                    Log.e(getClass().getName(), "image file path: " + GalleryImage);
+
+                    tempFile = new File(GalleryImage);
+
+                    currentPhotoPath = GalleryImage;
+
+                    if (tempFile.toString().equalsIgnoreCase("File path not found")) {
+                        networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_storage));
+                    } else {
+                        if (tempFile.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.FILE_SIZE_LIMIT_IN_KB) {
+                            networkResponseDialog(getString(R.string.error), getString(R.string.err_image_size_large));
+                            return;
+                        } else {
+                            if (photoVar == null) {
+                                MultipleFile.add(tempFile);
+                                Log.e(getClass().getName(), "file path details: " + tempFile.getName() + " " + tempFile.getAbsolutePath() + "length" + tempFile.length());
+
+                                // photoVar = GalleryImage;
+                                file_name = new File(ImageFilePathUtil.getPath(getActivity(), SelectedImageUri));
+                                RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file_name);
+
+                                video = MultipartBody.Part.createFormData("post_document", file_name.getName(), reqFile);
+                                //  MultiplePhoto.add(partImage);
+                                //Drawable drawable = (Drawable)new BitmapDrawable(getResources(),);
+                                webView.setImageBitmap(AppUtils.generateImageFromPdf(SelectedImageUri, getContext()));
+                                loadimage.setVisibility(View.GONE);
+                                webView.setVisibility(View.VISIBLE);
+                                img_video.setVisibility(View.GONE);
+                                img_play.setVisibility(View.GONE);
+
+                                tv_filename.setText(file_name.getName());
+                                img_removeAttachment.setVisibility(View.VISIBLE);
+                                attachment.setVisibility(View.VISIBLE);
+                                //  attachment_preview.loadUrl(SelectedImageUri.toString());
+                                attachments.clear();
+                                attachmentsAdapter.notifyDataSetChanged();
+                                rc_attachments.setVisibility(View.GONE);
+                                setPostButton();
+                                if (!TextUtils.isEmpty(currentPhotoPath) || currentPhotoPath != null) {
+
+                                } else {
+                                    networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
+                                }
+                            } else {
+                                networkResponseDialog(getString(R.string.error), getString(R.string.err_one_file_at_a_time));
+                                return;
+                            }
+                        }
+                    }
+
+                } else {
+                    Toast.makeText(getActivity(), "Something went wrong while retrieving image", Toast.LENGTH_SHORT).show();
+                }
+            } catch (Exception exc) {
+                exc.printStackTrace();
+                Log.e(getClass().getName(), "exc: " + exc.getMessage());
+            }
+        }
+
+
         else if (requestCode == CAMERAA)
         {
             try {
@@ -498,12 +607,21 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                             AppUtils.setGlideVideoThumbnail(getContext(), img_video, currentPhotoPath);
                             video = MultipartBody.Part.createFormData("post_video", file_name.getName(), reqFile);
                             setPostButton();
+                            attachments.clear();
+                            attachmentsAdapter.notifyDataSetChanged();
+                            rc_attachments.setVisibility(View.GONE);
+                            img_removeAttachment.setVisibility(View.GONE);
+
+
                         } else {
                             attachments.add(currentPhotoPath);
                             attachmentsAdapter.notifyDataSetChanged();
                             rc_attachments.setVisibility(View.VISIBLE);
                             img_video.setVisibility(View.GONE);
                             img_play.setVisibility(View.GONE);
+                            attachment.setVisibility(View.GONE);
+                            img_removeAttachment.setVisibility(View.GONE);
+
                             part_images.add(MultipartBody.Part.createFormData("post_image", file_name.getName(), reqFile));
                             setPostButton();
                         }
@@ -517,7 +635,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                 }
             }
         }
-        else if(requestCode==5)
+        else if(requestCode==6)
         {
             File file = galleryAddPic();
             RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
@@ -546,6 +664,13 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                     AppUtils.setGlideVideoThumbnail(getContext(), img_video, globalImagePath);
                     video = MultipartBody.Part.createFormData("post_video", file_name.getName(), reqFile);
                     setPostButton();
+                    attachments.clear();
+                    attachmentsAdapter.notifyDataSetChanged();
+                    rc_attachments.setVisibility(View.GONE);
+                    attachment.setVisibility(View.GONE);
+
+                    img_removeAttachment.setVisibility(View.GONE);
+
                 } else {
 
                     attachments.add(globalImagePath);
@@ -553,6 +678,9 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                     rc_attachments.setVisibility(View.VISIBLE);
                     img_video.setVisibility(View.GONE);
                     img_play.setVisibility(View.GONE);
+                    attachment.setVisibility(View.GONE);
+                    img_removeAttachment.setVisibility(View.GONE);
+
                     part_images.add(MultipartBody.Part.createFormData("post_image", file.getName(), reqFile));
                     setPostButton();
                 }
@@ -577,6 +705,9 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                     rc_attachments.setVisibility(View.VISIBLE);
                     img_video.setVisibility(View.GONE);
                     img_play.setVisibility(View.GONE);
+                    attachment.setVisibility(View.GONE);
+                    img_removeAttachment.setVisibility(View.GONE);
+
                     part_images.add(MultipartBody.Part.createFormData("post_image", file.getName(), reqFile));
                     setPostButton();
                 }
@@ -614,6 +745,14 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
         videoViewDialog.show();
     }
 
+    @OnClick(R.id.img_removeAttachment)
+    public void removeAttachment() {
+        attachment.setVisibility(View.GONE);
+        img_removeAttachment.setVisibility(View.GONE);
+        video = null;
+        setPostButton();
+    }
+
     @Override
     public void onItemClick(View view, int position) {
         simpleDialog = new SimpleDialog(getContext(), getString(R.string.confirmation), getString(R.string.msg_remove_attachment), getString(R.string.button_no), getString(R.string.button_yes), new OnOneOffClickListener() {
@@ -624,7 +763,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                         attachments.remove(position);
                         attachmentsAdapter.notifyDataSetChanged();
                         part_images.remove(position);
-                      //  setPostButton();
+                        setPostButton();
                         break;
                     case R.id.button_negative:
                         break;
