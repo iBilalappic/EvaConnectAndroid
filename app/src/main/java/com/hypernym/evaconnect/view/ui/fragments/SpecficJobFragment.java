@@ -1,6 +1,13 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
+import static android.content.Context.CLIPBOARD_SERVICE;
+
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +16,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -24,6 +33,7 @@ import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.MyLikeAdapter;
+import com.hypernym.evaconnect.view.bottomsheets.BottomsheetShareSelection;
 import com.hypernym.evaconnect.view.dialogs.ShareDialog;
 import com.hypernym.evaconnect.viewmodel.JobListViewModel;
 
@@ -219,12 +229,15 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
                 }
                 break;
             case R.id.share_click:
-                ShareDialog shareDialog;
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("specficJob",specficJobAd);
-                bundle.putString(Constants.FRAGMENT_NAME,"JOB_FRAGMENT");
-                shareDialog = new ShareDialog(getContext(),bundle);
-                shareDialog.show();
+//                ShareDialog shareDialog;
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("specficJob",specficJobAd);
+//                bundle.putString(Constants.FRAGMENT_NAME,"JOB_FRAGMENT");
+//                shareDialog = new ShareDialog(getContext(),bundle);
+//                shareDialog.show();
+                BottomsheetShareSelection bottomSheetPictureSelection = new BottomsheetShareSelection(new YourDialogFragmentDismissHandler());
+                bottomSheetPictureSelection.show(getActivity().getSupportFragmentManager(), bottomSheetPictureSelection.getTag());
+
                 break;
         }
     }
@@ -272,4 +285,47 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
         init();
         super.onResume();
     }
+
+
+
+    protected class YourDialogFragmentDismissHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 102) {
+                Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
+                whatsappIntent.setType("text/plain");
+                whatsappIntent.setPackage("com.whatsapp");
+                whatsappIntent.putExtra(Intent.EXTRA_TEXT, "https://www.evaintmedia.com/" + specficJobAd.getType() + "/" + specficJobAd.getId());
+                try {
+                    getContext().startActivity(whatsappIntent);
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(requireContext(), "Whatsapp have not been installed.", Toast.LENGTH_SHORT).show();
+                }
+            }
+            else if(msg.what==100){
+                ShareConnectionFragment shareConnectionFragment = new ShareConnectionFragment();
+                FragmentTransaction transaction = ((AppCompatActivity) requireActivity()).getSupportFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+                transaction.replace(R.id.framelayout, shareConnectionFragment);
+                Bundle bundle = new Bundle();
+                {
+                    bundle.putInt(Constants.DATA, specficJobAd.getId());
+                    bundle.putString(Constants.TYPE,  specficJobAd.getType());
+                }
+                shareConnectionFragment.setArguments(bundle);
+                if (true) {
+                    transaction.addToBackStack(null);
+                }
+                transaction.commit();
+            }else if(msg.what==103){
+                ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(CLIPBOARD_SERVICE);
+                ClipData clip;
+                clip = ClipData.newPlainText("label", "https://www.evaintmedia.com/" + specficJobAd.getType() + "/" + specficJobAd.getId());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(requireContext(), "link copied", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 }
