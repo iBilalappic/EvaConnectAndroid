@@ -372,6 +372,7 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
         } else if (posts.get(position).getType().equalsIgnoreCase("post") && posts.get(position).getPost_video() != null) {
             NewPostFragment newPostFragment=new NewPostFragment();
             Bundle bundle=new Bundle();
+//            bundle.putInt("post", posts.get(position).getId());
             bundle.putBoolean("isVideo",true);
             bundle.putBoolean("isEdit",true);
             newPostFragment.setArguments(bundle);
@@ -394,10 +395,11 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
             loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
         }
         else if (posts.get(position).getType().equalsIgnoreCase("post") && posts.get(position).getPost_document()!=null) {
-            ShareArticleFragment newPostFragment = new ShareArticleFragment();
+            NewPostFragment newPostFragment = new NewPostFragment();
             Bundle bundle = new Bundle();
             bundle.putInt("post", posts.get(position).getId());
             bundle.putBoolean("isEdit",true);
+            bundle.putBoolean("document_type",true);
             Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
             newPostFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
