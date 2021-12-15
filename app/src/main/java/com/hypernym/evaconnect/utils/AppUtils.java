@@ -292,7 +292,7 @@ public final class AppUtils {
                 obs.removeGlobalOnLayoutListener(this);
                 if (tv.getLineCount() > maxLine) {
                     int lineEndIndex = tv.getLayout().getLineEnd(maxLine);
-                    String text = tv.getText().subSequence(0, lineEndIndex - maxLine) + "...See More";
+                    String text = tv.getText().subSequence(0, lineEndIndex - maxLine) + "...Tap to See more";
                     tv.setText(text);
 
                 }
