@@ -45,6 +45,10 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
     @BindView(R.id.tv_view_cv)
     TextView tv_view_cv;
 
+
+    @BindView(R.id.tv_cvname)
+    TextView tv_cvname;
+
     @BindView(R.id.tv_description)
     TextView tv_description;
 
@@ -67,6 +71,9 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
 
     @BindView(R.id.tv_name)
     TextView tv_name;
+
+    @BindView(R.id.tv_download_cv)
+    TextView tv_download_cv;
 
     @BindView(R.id.tv_name_applicant)
     TextView tv_name_applicant;
@@ -120,6 +127,7 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
         tv_edit.setOnClickListener(this);
         tv_hide.setOnClickListener(this);
         tv_message.setOnClickListener(this);
+        tv_download_cv.setOnClickListener(this);
 
         //   tv_declineApplicant.setOnClickListener(this);
         //  timePicker.setIs24HourView(true);
@@ -172,14 +180,14 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
             tv_hide.setText("Hide");
             hidden_value = 1;
             hidden_layout.setVisibility(View.GONE);
-            tv_message.setVisibility(View.VISIBLE);
+            tv_message.setVisibility(View.GONE);
             tv_view_cv.setEnabled(true);
             tv_view_cv.setTextColor(Color.BLACK);
             tv_description.setTextColor(Color.BLACK);
         } else {
             tv_hide.setText("Hidden");
             hidden_value = 0;
-            hidden_layout.setVisibility(View.VISIBLE);
+            hidden_layout.setVisibility(View.GONE);
             tv_message.setVisibility(View.GONE);
             tv_view_cv.setEnabled(false);
             tv_view_cv.setTextColor(Color.GRAY);
@@ -193,7 +201,7 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
     public void onClick(View v) {
 
         switch (v.getId()) {
-            case R.id.tv_view_cv:
+            case R.id.tv_download_cv:
                 if (appliedApplicants.getApplicationAttachment() != null) {
                     WebviewCvFragment webviewCvFragment = new WebviewCvFragment();
                     Bundle bundle = new Bundle();

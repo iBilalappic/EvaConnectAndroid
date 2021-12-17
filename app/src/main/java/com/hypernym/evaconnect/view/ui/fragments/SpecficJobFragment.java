@@ -2,6 +2,7 @@ package com.hypernym.evaconnect.view.ui.fragments;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
@@ -34,6 +35,7 @@ import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.MyLikeAdapter;
 import com.hypernym.evaconnect.view.bottomsheets.BottomsheetShareSelection;
+import com.hypernym.evaconnect.view.dialogs.ApplicationSuccess_dialog;
 import com.hypernym.evaconnect.view.dialogs.ShareDialog;
 import com.hypernym.evaconnect.viewmodel.JobListViewModel;
 
@@ -130,7 +132,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
         jobListViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(JobListViewModel.class);
         user = LoginUtils.getUser();
         showBackButton();
-        setPageTitle("Job Details");
+        setPageTitle("Job Listing");
         if ((getArguments() != null)) {
         //    setPageTitle("");
          //   showBackButton();

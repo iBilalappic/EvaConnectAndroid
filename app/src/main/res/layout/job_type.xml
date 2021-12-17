@@ -162,7 +162,7 @@
         <View
             android:id="@+id/view2"
             android:layout_width="0dp"
-            android:layout_height="30dp"
+            android:layout_height="5dp"
             android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -178,6 +178,7 @@
             android:layout_marginTop="8dp"
             android:fontFamily="@font/nunitosansbold"
             android:text="58"
+            android:visibility="gone"
             android:textColor="@color/skyblue"
             android:textSize="11sp"
             android:textStyle="bold"
@@ -194,6 +195,7 @@
             android:textColor="@color/skyblue"
             android:textStyle="bold"
             android:text="@string/likes"
+            android:visibility="gone"
             android:textSize="11sp"
             android:fontFamily="@font/nunitosansbold"
             app:layout_constraintStart_toEndOf="@+id/tv_likecount"
@@ -208,6 +210,7 @@
             android:fontFamily="@font/nunitosansbold"
             style="@style/TextStyle"
             android:textSize="11sp"
+            android:visibility="gone"
             android:textColor="@color/skyblue"
             android:textStyle="bold"
             android:layout_marginStart="@dimen/spacing_small"
@@ -223,6 +226,7 @@
             android:layout_marginStart="@dimen/spacing_small"
             android:text="03"
             android:textSize="11sp"
+            android:visibility="gone"
             android:fontFamily="@font/nunitosansbold"
             android:textColor="@color/skyblue"
             android:textStyle="bold"
@@ -238,6 +242,7 @@
             android:paddingLeft="5dp"
             android:text="@string/comments"
             android:textSize="11sp"
+            android:visibility="gone"
             android:fontFamily="@font/nunitosansbold"
             android:textColor="@color/skyblue"
             android:textStyle="bold"
@@ -250,6 +255,7 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="@color/gray_1"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view2" />
@@ -260,16 +266,19 @@
             android:layout_height="match_parent"
             android:layout_marginStart="16dp"
             android:layout_marginTop="1dp"
+            android:layout_marginBottom="@dimen/spacing_medium"
             android:baselineAligned="false"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view4">
+            app:layout_constraintTop_toBottomOf="@+id/view2">
 
             <LinearLayout
                 android:id="@+id/like_click"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:paddingLeft="10dp"
+                android:visibility="gone"
                 android:layout_weight="1">
                 <ImageView
                     android:id="@+id/img_like"
@@ -305,6 +314,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:paddingLeft="10dp"
+                android:visibility="gone"
                 android:layout_weight="1.2">
                 <ImageView
                     android:id="@+id/img_comment"
@@ -341,6 +351,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="16dp"
                 android:paddingLeft="10dp"
+                android:visibility="gone"
                 android:layout_weight="1">
 
                 <ImageView
@@ -364,6 +375,203 @@
             </LinearLayout>
 
 
+            <LinearLayout
+                android:id="@+id/layout_salary_amount"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:layout_weight="1">
+                <ImageView
+                    android:id="@+id/img_salary"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:layout_weight="0"
+                    android:background="@drawable/clock_black" />
+                <TextView
+                    android:gravity="center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:id="@+id/tv_salary_amount"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/nunitosansregular"
+                    android:text="--"
+                    android:textColor="@color/black" />
+
+
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="30dp"
+                    android:visibility="gone"
+                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:background="@color/gray_light" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/layout_location"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:layout_weight="1.2">
+                <ImageView
+                    android:id="@+id/img_location"
+                    android:layout_width="12dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:layout_weight="0"
+                    android:background="@drawable/location_black" />
+
+                <TextView
+                    android:gravity="center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/nunitosansregular"
+                    android:text="--"
+                    android:id="@+id/tv_location_1"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:textColor="@color/black" />
+
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="30dp"
+                    android:visibility="gone"
+                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:background="@color/gray_light" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/layout_job_shift_time"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/spacing_medium"
+                android:paddingLeft="10dp"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/img_shift_time"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:layout_weight="0"
+                    android:background="@drawable/ic_clock_1" />
+
+                <TextView
+                    android:gravity="center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:maxLines="2"
+                    android:layout_gravity="center"
+                    android:ellipsize="end"
+                    android:id="@+id/tv_shift_time"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/nunitosansregular"
+                    android:text="--"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/layout_applicants"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:layout_weight="1">
+                <ImageView
+                    android:id="@+id/img_user"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:layout_weight="0"
+                    android:background="@drawable/ic_user_black" />
+                <TextView
+                    android:gravity="center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:maxLines="2"
+                    android:id="@+id/tv_total_applicant"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/nunitosansbold"
+                    android:text="--"
+                    android:textColor="@color/black" />
+
+
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="30dp"
+                    android:visibility="gone"
+                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:background="@color/gray_light" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/layout_active_time"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:layout_weight="1">
+                <ImageView
+                    android:id="@+id/img_active_time"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:layout_weight="0"
+                    android:background="@drawable/ic_clock_1" />
+                <TextView
+                    android:gravity="center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:id="@+id/tv_active_time"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/nunitosansbold"
+                    android:text="--"
+                    android:textColor="@color/black" />
+
+
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="30dp"
+                    android:visibility="gone"
+                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:background="@color/gray_light" />
+
+
+            </LinearLayout>
+
+
+
+
         </LinearLayout>
 
 
@@ -375,7 +583,7 @@
 
         android:id="@+id/view1"
         android:layout_width="0dp"
-        android:layout_height="15dp"
+        android:layout_height="5dp"
         android:background="@color/lighter_gray"
         android:elevation="1dp"
         app:layout_constraintEnd_toEndOf="parent"
