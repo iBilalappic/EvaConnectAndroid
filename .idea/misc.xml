@@ -13,6 +13,8 @@
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/fragment_companyjobad.xml" value="0.34408602150537637" />
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/fragment_createjob.xml" value="0.264" />
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/fragment_home.xml" value="0.34408602150537637" />
+        <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/fragment_job.xml" value="0.33669354838709675" />
+        <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/fragment_job_view_pager.xml" value="0.33669354838709675" />
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/fragment_new_post.xml" value="0.34408602150537637" />
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/fragment_post.xml" value="0.34408602150537637" />
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/fragment_search_result.xml" value="0.34408602150537637" />
@@ -20,7 +22,9 @@
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/fragment_specfic_job_ad.xml" value="0.34408602150537637" />
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/fragment_viewpager.xml" value="0.34408602150537637" />
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/item_attachment.xml" value="0.34408602150537637" />
+        <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/item_companyjoblisting.xml" value="0.33669354838709675" />
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/item_connection.xml" value="0.34408602150537637" />
+        <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/item_joblisting.xml" value="0.33669354838709675" />
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/item_link.xml" value="0.34408602150537637" />
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/item_loading.xml" value="0.34408602150537637" />
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/item_post.xml" value="0.34408602150537637" />

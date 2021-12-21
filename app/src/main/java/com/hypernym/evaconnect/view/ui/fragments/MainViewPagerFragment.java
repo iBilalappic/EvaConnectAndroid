@@ -96,7 +96,11 @@ public class MainViewPagerFragment extends BaseFragment implements FloatingActio
                 case 1:
                      return new EventFragment();
                 case 2:
-                    return new JobFragment();
+                    if(LoginUtils.getUser().getType()!=null&&LoginUtils.getUser().getType().equalsIgnoreCase("company")){
+                        return new JobFragment();
+                    }else{
+                        return new JobViewPagerFragment();
+                    }
                 case 3:
                     return new NewsFragment();
             }

@@ -82,6 +82,9 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
         @BindView(R.id.tv_apply)
         TextView tv_apply;
 
+        @BindView(R.id.tv_content)
+        TextView tv_content;
+
         @BindView(R.id.tv_salary_amount)
         TextView tv_salary_amount;
 
@@ -374,14 +377,16 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
                         }else{
                             ((JobHomeAdapter.JobTypeViewHolder) holder).tv_total_applicant.setText(posts.get(position).getApplicant_count()+" Applicants");
                         }
-
                         if(posts.get(position).getActive_hours()!=0){
                             ((JobTypeViewHolder) holder).tv_active_time.setText("Active for "+posts.get(position).getActive_hours()+" hrs");
                         }else{
                             ((JobHomeAdapter.JobTypeViewHolder) holder).tv_active_time.setText("0 hrs");
                         }
-
-
+                        if(posts.get(position).getContent()!=null){
+                            ((JobTypeViewHolder) holder).tv_content.setVisibility(View.VISIBLE);
+                            ((JobTypeViewHolder) holder).tv_content.setText(posts.get(position).getContent());
+                        }
+                        ((JobHomeAdapter.JobTypeViewHolder) holder).top_image.setVisibility(View.GONE);
                     } else {
                         ((JobHomeAdapter.JobTypeViewHolder) holder).tv_apply.setVisibility(View.VISIBLE);
                         ((JobHomeAdapter.JobTypeViewHolder) holder).layout_job_shift_time.setVisibility(View.VISIBLE);
@@ -389,7 +394,8 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
                         ((JobHomeAdapter.JobTypeViewHolder) holder).layout_location.setVisibility(View.VISIBLE);
                         ((JobHomeAdapter.JobTypeViewHolder) holder).layout_applicants.setVisibility(View.GONE);
                         ((JobTypeViewHolder) holder).layout_active_time.setVisibility(View.GONE);
-
+                        ((JobTypeViewHolder) holder).tv_content.setVisibility(View.GONE);
+                        ((JobHomeAdapter.JobTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
 
                         if(posts.get(position).getIs_applied()==1)
                         {

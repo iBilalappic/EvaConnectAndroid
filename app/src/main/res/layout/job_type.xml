@@ -11,6 +11,7 @@
     <View
         android:id="@+id/view6"
         android:layout_width="0dp"
+        android:visibility="gone"
         android:layout_height="2dp"
         android:background="@drawable/ic_blue_red"
         app:layout_constraintEnd_toEndOf="parent"
@@ -56,6 +57,21 @@
             app:civ_border_color="@color/white"
             app:civ_border_width="2dp" />
     </RelativeLayout>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:id="@+id/tv_content"
+        android:layout_marginEnd="16dp"
+        android:text="--"
+        android:layout_marginTop="@dimen/spacing_medium"
+        android:textStyle="bold"
+        android:textSize="12sp"
+        android:fontFamily="@font/nunitosansbold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_layout"></TextView>
 
     <TextView
         android:id="@+id/tv_name"
@@ -153,10 +169,9 @@
         android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_layout">
+        app:layout_constraintTop_toBottomOf="@+id/tv_content">
 
 
         <View
@@ -266,7 +281,7 @@
             android:layout_height="match_parent"
             android:layout_marginStart="16dp"
             android:layout_marginTop="1dp"
-            android:layout_marginBottom="@dimen/spacing_medium"
+            android:layout_marginBottom="@dimen/spacing_large"
             android:baselineAligned="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -583,7 +598,7 @@
 
         android:id="@+id/view1"
         android:layout_width="0dp"
-        android:layout_height="5dp"
+        android:layout_height="10dp"
         android:background="@color/lighter_gray"
         android:elevation="1dp"
         app:layout_constraintEnd_toEndOf="parent"
