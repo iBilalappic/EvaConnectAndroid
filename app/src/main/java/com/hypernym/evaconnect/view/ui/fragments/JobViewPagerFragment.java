@@ -3,14 +3,8 @@ package com.hypernym.evaconnect.view.ui.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.OvershootInterpolator;
-import android.widget.PopupMenu;
-import android.widget.TextView;
-
-import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -22,7 +16,6 @@ import butterknife.ButterKnife;
 public class JobViewPagerFragment extends BaseFragment {
     private ViewPager mViewPager;
     private JobViewPagerFragment.SectionsPagerAdapter sectionsPagerAdapter;
-    Context mContext;
 
 
     @Override
