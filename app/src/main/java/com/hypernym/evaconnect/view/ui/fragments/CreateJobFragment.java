@@ -72,6 +72,9 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
     @BindView(R.id.spinner_jobtype)
     Spinner spinner_jobtype;
 
+    @BindView(R.id.spinner_job_duration)
+    Spinner spinner_job_duration;
+
     @NotEmpty
     @BindView(R.id.edit_companyName)
     EditText edit_companyName;
@@ -130,10 +133,11 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
 
     private List<String> mSpinnerJobsector = new ArrayList<>();
     private List<String> mSpinnerJobtype = new ArrayList<>();
-    String JobSector, JobType;
+    private List<String> mSpinnerJobDuration = new ArrayList<>();
+    String JobSector, JobType,JobDuration;
 
     private CompanyJobAdModel companyJobAdModel = new CompanyJobAdModel();
-    ArrayAdapter<String> arraySectorAdapter, arrayWeekAdapter, arrayTypeAdapter;
+    ArrayAdapter<String> arraySectorAdapter, arrayJobDurationAdapter, arrayTypeAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -163,12 +167,12 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
         jobListViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(JobListViewModel.class);
         createJobAdViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(CreateJobAdViewModel.class);
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(UserViewModel.class);
-        setPageTitle("Create Job");
+        setPageTitle("Create a Job Listing");
 
         if ((getArguments() != null)) {
             setPageTitle("");
             postAd.setText("Update Job Listing");
-            setPageTitle("Update Job");
+            setPageTitle("Update Job Listing");
             //  showBackButton();
             job_id = getArguments().getInt("job_id");
             if (job_id != 0) {
@@ -201,6 +205,8 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
         edit_companyName.setText(LoginUtils.getUser().getCompany_name());
         getSectorFromApi(LoginUtils.getUser().getWork_aviation());
         getJobTypes();
+        getJobDuration();
+
     }
 
     private void GetJob_id(Integer id) {
@@ -223,6 +229,8 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
                     getSectorFromApi(LoginUtils.getUser().getWork_aviation());
                     getJobTypes();
 
+
+
                     // getSectorFromApi(LoginUtils.getUser().getWork_aviation());
 
                 } else {
@@ -230,6 +238,41 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
                 }
                 hideDialog();
             }
+        });
+    }
+
+    private void getJobDuration() {
+        mSpinnerJobDuration.add("12");
+        mSpinnerJobDuration.add("24");
+        mSpinnerJobDuration.add("37");
+
+        SettingJobDurationSpinner();
+
+    }
+
+    private void SettingJobDurationSpinner() {
+        arrayJobDurationAdapter = new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_dropdown_item_1line, mSpinnerJobDuration);
+        arrayJobDurationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_job_duration.setAdapter(arrayJobDurationAdapter);
+
+//        if (companyJobAdModel.getActive_hours() != null) {
+//            int spinnerPosition = arrayTypeAdapter.getPosition(companyJobAdModel.getActive_hours().toString());
+//            spinner_job_duration.setSelection(spinnerPosition);
+//        }
+
+        spinner_job_duration.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                JobDuration = parent.getItemAtPosition(position).toString();
+                Log.d("TAG", "onItemSelected: "+JobDuration);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
         });
     }
 
@@ -412,7 +455,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
                 edit_jobdescription.getText().toString(),
                 edit_Location.getText().toString(),
                 edit_jobtitle.getText().toString(),
-                edit_jobpostion.getText().toString(), JobType).observe(this, new Observer<BaseModel<List<Object>>>() {
+                edit_jobpostion.getText().toString(), JobType,JobDuration).observe(this, new Observer<BaseModel<List<Object>>>() {
             @Override
             public void onChanged(BaseModel<List<Object>> getnetworkconnection) {
                 if (getnetworkconnection != null && !getnetworkconnection.isError()) {
@@ -446,7 +489,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
                 edit_jobdescription.getText().toString(),
                 edit_Location.getText().toString(),
                 edit_jobtitle.getText().toString(),
-                edit_jobpostion.getText().toString(), JobType).observe(this, new Observer<BaseModel<List<Object>>>() {
+                edit_jobpostion.getText().toString(), JobType,JobDuration).observe(this, new Observer<BaseModel<List<Object>>>() {
             @Override
             public void onChanged(BaseModel<List<Object>> getnetworkconnection) {
                 if (getnetworkconnection != null && !getnetworkconnection.isError()) {

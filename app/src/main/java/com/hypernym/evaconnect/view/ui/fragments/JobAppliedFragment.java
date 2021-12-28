@@ -1,6 +1,7 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
+import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -36,7 +37,6 @@ import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.JobHomeAdapter;
 import com.hypernym.evaconnect.view.bottomsheets.BottomsheetShareSelection;
-import com.hypernym.evaconnect.view.dialogs.ShareDialog;
 import com.hypernym.evaconnect.viewmodel.JobListViewModel;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
 
@@ -46,9 +46,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
-
-public class JobFragment extends BaseFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, JobHomeAdapter.ItemClickListener {
+public class JobAppliedFragment extends BaseFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, JobHomeAdapter.ItemClickListener {
 
     @BindView(R.id.rc_job)
     RecyclerView rc_job;
@@ -69,7 +67,7 @@ public class JobFragment extends BaseFragment implements View.OnClickListener, S
     private boolean isLoading = false;
     int item_position;
 
-    public JobFragment() {
+    public JobAppliedFragment() {
     }
 
     @Override
@@ -238,11 +236,11 @@ public class JobFragment extends BaseFragment implements View.OnClickListener, S
                     posts.addAll(dashboardBaseModel.getData());
                     postAdapter.notifyDataSetChanged();
                     swipeRefresh.setRefreshing(false);
-                  //  postAdapter.removeLoading();
+                    //  postAdapter.removeLoading();
                     isLoading = false;
                 } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
                     isLastPage = true;
-                   // postAdapter.removeLoading();
+                    // postAdapter.removeLoading();
                     isLoading = false;
                     swipeRefresh.setRefreshing(false);
                 } else {
@@ -331,7 +329,7 @@ public class JobFragment extends BaseFragment implements View.OnClickListener, S
 //        shareDialog.show();
 
         item_position = position;
-        BottomsheetShareSelection bottomSheetPictureSelection = new BottomsheetShareSelection(new YourDialogFragmentDismissHandler());
+        BottomsheetShareSelection bottomSheetPictureSelection = new BottomsheetShareSelection(new JobAppliedFragment.YourDialogFragmentDismissHandler());
         bottomSheetPictureSelection.show(getActivity().getSupportFragmentManager(), bottomSheetPictureSelection.getTag());
     }
 
@@ -347,10 +345,10 @@ public class JobFragment extends BaseFragment implements View.OnClickListener, S
     @Override
     public void onApplyCommentClick(View view, int position) {
         SpecficJobComments specficJobComment = new SpecficJobComments();
-                Bundle bundlecomment = new Bundle();
-                bundlecomment.putInt("job_id", posts.get(position).getId());
-                specficJobComment.setArguments(bundlecomment);
-                loadFragment(R.id.framelayout, specficJobComment, getContext(), true);
+        Bundle bundlecomment = new Bundle();
+        bundlecomment.putInt("job_id", posts.get(position).getId());
+        specficJobComment.setArguments(bundlecomment);
+        loadFragment(R.id.framelayout, specficJobComment, getContext(), true);
     }
 
     @Override

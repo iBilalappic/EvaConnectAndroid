@@ -17,26 +17,19 @@
 
         app:layout_constraintTop_toTopOf="parent"
         app:tabIndicatorColor="@color/white"
-        app:tabSelectedTextColor="@color/skyblue"
+
+        app:tabSelectedTextColor="@color/black"
         app:tabTextAppearance="@style/CustomTextAppearanceTab"
-        app:tabTextColor="@color/gray" />
+        app:tabTextColor="@color/light_gray" />
 
     <View
         android:id="@+id/line"
         app:layout_constraintTop_toBottomOf="@+id/tabs"
         android:background="@drawable/ic_blue_red"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="2dp"/>
 
-    <TextView
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@+id/line"
-        android:gravity="center"
-        android:textColor="@color/light_green"
-        android:text="@string/new_post"
-        android:id="@+id/newpostcheck"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"/>
 
 
     <androidx.viewpager.widget.ViewPager
@@ -47,19 +40,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newpostcheck" />
+        app:layout_constraintTop_toBottomOf="@+id/line" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:visibility="gone"
-        android:src="@android:drawable/ic_input_add"
-        app:backgroundTint="@color/light_blue"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@android:color/white" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

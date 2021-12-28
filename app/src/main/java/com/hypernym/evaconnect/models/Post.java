@@ -69,6 +69,26 @@ public class Post implements Serializable {
     private Integer total_connection;
     private String action;
     private String type;
+
+    public String getJob_type() {
+        return job_type;
+    }
+
+    public void setJob_type(String job_type) {
+        this.job_type = job_type;
+    }
+
+    private String job_type;
+
+    public int getActive_hours() {
+        return active_hours;
+    }
+
+    public void setActive_hours(int active_hours) {
+        this.active_hours = active_hours;
+    }
+
+    private int active_hours;
     private String is_connected;
     private MultipartBody.Part video;
     private String post_video;

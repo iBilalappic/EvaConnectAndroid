@@ -19,6 +19,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.utils.LoginUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -95,7 +96,11 @@ public class MainViewPagerFragment extends BaseFragment implements FloatingActio
                 case 1:
                      return new EventTabsFragment();
                 case 2:
-                    return new JobFragment();
+                    if(LoginUtils.getUser().getType()!=null&&LoginUtils.getUser().getType().equalsIgnoreCase("company")){
+                        return new JobFragment();
+                    }else{
+                        return new JobViewPagerFragment();
+                    }
                 case 3:
                     return new NewsFragment();
             }
@@ -104,7 +109,11 @@ public class MainViewPagerFragment extends BaseFragment implements FloatingActio
 
         @Override
         public int getCount() {
-            return 4;
+            if(LoginUtils.getUser().getType()!=null&&LoginUtils.getUser().getType().equalsIgnoreCase("company")){
+                return 3;
+            }else{
+                return 4;
+            }
         }
 
         @Override

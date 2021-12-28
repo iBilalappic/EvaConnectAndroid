@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -54,6 +55,8 @@ public class BaseFragment extends Fragment {
     private SimpleDialog simpleDialog;
     public static final int RequestPermissionCode = 1;
     private static final int REQUEST_PHOTO_GALLERY = 4;
+    private static final int REQUEST_DOCUMENTS = 5;
+
     private static final int CAMERAA = 1;
     private static final int VIDEO_CAPTURE = 101;
     private String mCurrentPhotoPath;
@@ -214,6 +217,13 @@ public class BaseFragment extends Fragment {
             } else if (msg.what == 45) {
                 takePhotoFromCamera();
             }
+            else if (msg.what == 2) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//        intent.setType("file/*");
+                intent.setType("application/pdf");
+
+                startActivityForResult(Intent.createChooser(intent, "Select File"), REQUEST_DOCUMENTS);
+            }
 
         }
     }
@@ -225,10 +235,19 @@ public class BaseFragment extends Fragment {
                 }, RequestPermissionCode);
     }
     public void LaunchGallery() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("image/* video/*");
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_PHOTO_GALLERY);
+
+        if (Build.VERSION.SDK_INT < 19) {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/* video/*");
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_PHOTO_GALLERY);
+        } else {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("image/*");
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] {"image/*", "video/*"});
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_PHOTO_GALLERY);
+        }
+
     }
 
 

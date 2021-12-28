@@ -29,6 +29,8 @@ import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
+import com.hypernym.evaconnect.view.dialogs.ApplicationSuccess_dialog;
+import com.hypernym.evaconnect.view.dialogs.SearchDialog;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.viewmodel.ApplicationSubmitViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
@@ -84,6 +86,7 @@ public class ApplicationFormFragment extends BaseFragment implements View.OnClic
     @BindView(R.id.img_backarrow)
     ImageView img_backarrow;
 
+    ApplicationSuccess_dialog applicationSuccess_dialog;
 
     String mProfileImageDecodableString;
     private File tempFile, file_name;
@@ -152,16 +155,20 @@ public class ApplicationFormFragment extends BaseFragment implements View.OnClic
             @Override
             public void onChanged(BaseModel<List<Object>> getnetworkconnection) {
                 if (getnetworkconnection != null && !getnetworkconnection.isError()) {
-                    simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_application_form), null, getString(R.string.ok), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // onBackPressed();
-                            if (getFragmentManager().getBackStackEntryCount() != 0) {
-                                getFragmentManager().popBackStack();
-                            }
-                            simpleDialog.dismiss();
-                        }
-                    });
+                    applicationSuccess_dialog = new ApplicationSuccess_dialog(requireActivity(),getContext());
+                    applicationSuccess_dialog.show();
+
+//                    simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_application_form), null, getString(R.string.ok), new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                             onBackPressed();
+//
+//                            if (getFragmentManager().getBackStackEntryCount() != 0) {
+//                                getFragmentManager().popBackStack();
+//                            }
+//                            simpleDialog.dismiss();
+//                        }
+//                    });
                     hideDialog();
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
