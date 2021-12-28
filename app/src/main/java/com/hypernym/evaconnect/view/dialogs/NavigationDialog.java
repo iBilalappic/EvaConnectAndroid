@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.hypernym.evaconnect.MyActivityFragment;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.models.BaseModel;
@@ -109,7 +110,8 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
                 dismiss();
                 FragmentTransaction transaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
                 transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
-                ActivityFragment activityFragment=new ActivityFragment();
+                //ActivityFragment activityFragment=new ActivityFragment();
+                MyActivityFragment activityFragment=new MyActivityFragment();
                 Bundle bundle=new Bundle();
                 bundle.putBoolean("isNotification",true);
                 activityFragment.setArguments(bundle);

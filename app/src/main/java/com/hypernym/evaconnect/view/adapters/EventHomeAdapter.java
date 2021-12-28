@@ -58,9 +58,9 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
 
         @BindView(R.id.tv_comcount)
         TextView tv_comcount;
-
+/*
         @BindView(R.id.img_like)
-        ImageView img_like;
+        ImageView img_like;*/
 
         @BindView(R.id.like_click)
         LinearLayout like_click;
@@ -79,6 +79,12 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
 
         @BindView(R.id.tv_name)
         TextView tv_name;
+
+        @BindView(R.id.tv_address)
+        TextView tv_address;
+
+        @BindView(R.id.tv_date)
+        TextView tv_date;
 
         @BindView(R.id.profile_image)
         ImageView profile_image;
@@ -247,11 +253,11 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
                     ((EventHomeAdapter.EventTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((EventHomeAdapter.EventTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
 
-                    if (posts.get(position).getIs_event_like() != null && posts.get(position).getIs_event_like() > 0) {
+/*                    if (posts.get(position).getIs_event_like() != null && posts.get(position).getIs_event_like() > 0) {
                         ((EventHomeAdapter.EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.like_selected));
                     } else {
                         ((EventHomeAdapter.EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
-                    }
+                    }*/
                     if (posts.get(position).getEvent_image().size() > 0) {
                         AppUtils.setGlideUrlThumbnail(mContext, ((EventHomeAdapter.EventTypeViewHolder) holder).profile_image, posts.get(position).getEvent_image().get(0));
                         AppUtils.setGlideImageUrl(mContext, ((EventTypeViewHolder) holder).post_image, posts.get(position).getEvent_image().get(0));
@@ -260,6 +266,9 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
                         ((EventTypeViewHolder) holder).post_image.setBackground(mContext.getDrawable(R.drawable.no_thumbnail));
                     }
 
+                    ((EventTypeViewHolder) holder).tv_address.setText(posts.get(position).getAddress());
+                    ((EventTypeViewHolder) holder).tv_date.setText(new StringBuilder().append(posts.get(position).getStart_date()).append("-").append(posts.get(position).getEnd_date()).toString());
+                    //
                     ((EventHomeAdapter.EventTypeViewHolder) holder).tv_name.setText(posts.get(position).getName());
                     ((EventHomeAdapter.EventTypeViewHolder) holder).tv_location.setText(posts.get(position).getAddress());
                     ((EventHomeAdapter.EventTypeViewHolder) holder).tv_eventdate.setText(DateUtils.getFormattedDateDMY(posts.get(position).getStart_date()));

@@ -22,8 +22,10 @@ import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
+import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
+import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
@@ -283,6 +285,14 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
                         connection.setModified_datetime(DateUtils.GetCurrentdatetime());
                         callDeclineConnectApi(connection);
                     }
+                    break;
+
+                case R.id.ly_main:
+                    User user = connectionList.get(position);
+                    PersonProfileFragment personProfileFragment = new PersonProfileFragment();
+                    Bundle bundle2 = new Bundle();
+                    bundle2.putParcelable("user", user);
+                    loadFragment_bundle(R.id.framelayout, personProfileFragment, getContext(), true, bundle2);
                     break;
 
             }

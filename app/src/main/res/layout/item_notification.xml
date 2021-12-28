@@ -1,99 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout10"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <RelativeLayout
-
-        android:id="@+id/profile_layout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_width="53dp"
-        android:layout_height="53dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp">
-
-
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:background="@android:color/transparent"
-
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/white_chatbg"
-            app:civ_border_color="@color/skyblue"
-            app:civ_border_width="2dp"
-            />
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:padding="2dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/no_thumbnail"
-            android:id="@+id/profile_image"
-            app:civ_border_color="@color/white"
-            app:civ_border_width="2dp"
-            />
-    </RelativeLayout>
-
-
-
-
-    <TextView
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:id="@+id/tv_connect"
-        style="@style/Button_border_green"
-        android:layout_width="77dp"
-        android:layout_height="27dp"
-        android:layout_marginEnd="@dimen/spacing_medium"
-        android:fontFamily="@font/nunitosansregular"
-        android:gravity="center"
-        android:paddingLeft="15dp"
-        android:paddingTop="5dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="5dp"
-        android:text="Accept"
-        android:textColor="@color/light_green"
-        android:textSize="9sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_status"
-        style="@style/TextStyle.Black"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textStyle="normal"
-        android:text="Liked your post (36 mins ago)"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/profile_layout"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.395" />
-
     <View
+        android:id="@+id/view12"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="8dp"
         android:background="@color/gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_layout" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        style="@style/TextStyle"
-        android:id="@+id/tv_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="TextView"
-        app:layout_constraintStart_toEndOf="@+id/profile_layout"
-        app:layout_constraintTop_toBottomOf="@+id/tv_status" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
 
+        android:layout_height="110dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+
+            android:id="@+id/profile_layout"
+            android:layout_width="63dp"
+            android:layout_height="63dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="match_parent"
+
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:src="@drawable/white_chatbg"
+                app:civ_border_color="@color/skyblue"
+                app:civ_border_width="2dp" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="2dp"
+                android:src="@drawable/no_thumbnail"
+                app:civ_border_color="@color/white"
+                app:civ_border_width="2dp" />
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/tv_connect"
+            style="@style/Button_border_green"
+            android:layout_width="77dp"
+            android:layout_height="27dp"
+            android:layout_marginEnd="@dimen/spacing_medium"
+            android:fontFamily="@font/nunitosansregular"
+            android:gravity="center"
+            android:paddingLeft="15dp"
+            android:paddingTop="5dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="5dp"
+            android:text="Accept"
+            android:textColor="@color/light_green"
+            android:textSize="9sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_status"
+            style="@style/TextStyle.Black"
+            android:fontFamily="@font/nunitosansregular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Liked your post (36 mins ago)"
+            android:textSize="20sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/profile_layout"
+            app:layout_constraintTop_toTopOf="@+id/profile_layout"
+            app:layout_constraintVertical_bias="0.00999999" />
+
+
+        <TextView
+            android:id="@+id/tv_date"
+            style="@style/TextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:text="TextView"
+            android:fontFamily="@font/nunitosansregular"
+            app:layout_constraintStart_toEndOf="@+id/profile_layout"
+            app:layout_constraintTop_toBottomOf="@+id/tv_status" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/view11"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#4ACDCDCD"
+        app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

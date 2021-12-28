@@ -42,7 +42,7 @@ import okhttp3.RequestBody;
 
 public class PasswordActivity extends BaseActivity implements Validator.ValidationListener, View.OnClickListener {
 
-    String email, password, photourl, activity_type, user_type,path,
+    String email, password, photourl, activity_type, user_type,path, about,
             aviation_type, JobSector, username, firstname, surname,
             city, country, filepath, jobtitle, company_name,otherJobSector;
 
@@ -56,6 +56,12 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
     @Password(min = 8)
     @BindView(R.id.edt_password)
     EditText edt_password;
+
+    @NotEmpty
+    @Password(min = 8)
+    @BindView(R.id.edt_confirmpassword)
+    EditText edt_confirmpassword;
+
 
     @BindView(R.id.btn_finish)
     Button btn_finish;
@@ -86,7 +92,11 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
         btn_finish.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
-                validator.validate();
+                if (edt_password.getText().toString().equals(edt_confirmpassword.getText().toString())) {
+                    validator.validate();
+                }else{
+                    Toast.makeText(PasswordActivity.this, "Password And Confirm Password Must Be Same", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -110,6 +120,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             aviation_type = getIntent().getStringExtra("aviation_type");
             JobSector = getIntent().getStringExtra("job_sector");
             jobtitle = getIntent().getStringExtra("jobtitle");
+            about = getIntent().getStringExtra("about");
             company_name = getIntent().getStringExtra("companyname");
             otherJobSector=getIntent().getStringExtra("other_job_sector");
 
@@ -134,6 +145,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             user.setSector(JobSector);
             user.setLast_name(surname);
             user.setCity(city);
+            user.setAbout(about);
             user.setCountry(country);
             user.setCompany_name(company_name);
             user.setDesignation(jobtitle);
@@ -176,6 +188,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             aviation_type = getIntent().getStringExtra("aviation_type");
             JobSector = getIntent().getStringExtra("job_sector");
             jobtitle = getIntent().getStringExtra("jobtitle");
+            about = getIntent().getStringExtra("about");
             company_name = getIntent().getStringExtra("companyname");
             otherJobSector=getIntent().getStringExtra("other_job_sector");
             filepath = path;
@@ -198,6 +211,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             user.setSector(JobSector);
             user.setLast_name(surname);
             user.setCity(city);
+            user.setAbout(about);
             user.setCountry(country);
             user.setCompany_name(company_name);
             user.setDesignation(jobtitle);
@@ -215,6 +229,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             firstname = getIntent().getStringExtra("FirstName");
             surname = getIntent().getStringExtra("SurName");
             city = getIntent().getStringExtra("city");
+            about = getIntent().getStringExtra("about");
             country = getIntent().getStringExtra("country");
             filepath = getIntent().getStringExtra("FilePath");
             aviation_type = getIntent().getStringExtra("aviation_type");
@@ -243,6 +258,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             user.setSector(JobSector);
             user.setLast_name(surname);
             user.setCity(city);
+            user.setAbout(about);
             user.setCountry(country);
             user.setCompany_name(company_name);
             user.setDesignation(jobtitle);

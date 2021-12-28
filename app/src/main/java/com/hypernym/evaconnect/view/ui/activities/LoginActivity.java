@@ -2,6 +2,7 @@ package com.hypernym.evaconnect.view.ui.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -79,6 +81,9 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     @BindView(R.id.btn_login)
     Button btn_login;
 
+    @BindView(R.id.cbRememberMe)
+    CheckBox cbRememberMe;
+
     @NotEmpty
     @Email
     @BindView(R.id.edt_email)
@@ -92,6 +97,11 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     @BindView(R.id.rootview)
     FrameLayout rootview;
 
+
+    private SharedPreferences loginPreferences;
+    private SharedPreferences.Editor loginPrefsEditor;
+    private Boolean saveLogin;
+    private String username,password;
 
     private Validator validator;
     private UserViewModel userViewModel;
@@ -108,6 +118,11 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
         ButterKnife.bind(this);
 
         initFacebookLogin();
+
+
+        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        loginPrefsEditor = loginPreferences.edit();
+        initRememberMe();
 
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getApplication(), this)).get(UserViewModel.class);
         validator = new Validator(this);
@@ -163,11 +178,21 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
 
     }
 
+    private void initRememberMe() {
+
+        saveLogin = loginPreferences.getBoolean("saveLogin", false);
+        if (saveLogin == true) {
+            edt_email.setText(loginPreferences.getString("username", ""));
+            edt_password.setText(loginPreferences.getString("password", ""));
+            cbRememberMe.setChecked(true);
+        }
+    }
+
     private void initFacebookLogin() {
         facebookCallbackManager = CallbackManager.Factory.create();
         btn_facebook.setPermissions(Arrays.asList(AppConstants.EMAIL, AppConstants.PUBLIC_PROFILE));
-        btn_facebook.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null);
-        btn_facebook.setLoginBehavior(LoginBehavior.WEB_ONLY);
+       /* btn_facebook.setCompoundDrawablesRelativeWithIntrinsicBounds(getResources().getDrawable(R.drawable.com_facebook_button_icon), null, null, null);
+        */btn_facebook.setLoginBehavior(LoginBehavior.WEB_ONLY);
 
         btn_facebook.registerCallback(facebookCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -289,6 +314,21 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
         });
     }
 
+    private void saveCredential() {
+        username = edt_email.getText().toString();
+        password = edt_password.getText().toString();
+
+        if (cbRememberMe.isChecked()) {
+            loginPrefsEditor.putBoolean("saveLogin", true);
+            loginPrefsEditor.putString("username", username);
+            loginPrefsEditor.putString("password", password);
+            loginPrefsEditor.commit();
+        } else {
+            loginPrefsEditor.clear();
+            loginPrefsEditor.commit();
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         facebookCallbackManager.onActivityResult(requestCode, resultCode, data);
@@ -350,6 +390,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
                         LoginUtils.saveUserToken(user.getData().get(0).getToken());
                     }
                     createUserOnFirebase();
+                    saveCredential();
                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     // set the new task and clear flags
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

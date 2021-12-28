@@ -188,8 +188,9 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_edit_black_24dp" />
-                            <entry key="sourceFile" value="C:\Users\METIS_1" />
+                            <entry key="assetSourceType" value="FILE" />
+                            <entry key="outputName" value="ic_grey_arrow" />
+                            <entry key="sourceFile" value="C:\Users\metis\Desktop\Path 438.svg" />
                           </map>
                         </option>
                       </PersistentState>

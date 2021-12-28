@@ -117,12 +117,13 @@
                 android:id="@+id/btn_login"
                 style="@style/Button_selected_red"
                 android:layout_width="250dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/login"
-                app:layout_constraintEnd_toEndOf="@+id/tv_signup"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/tv_signup"
-                app:layout_constraintTop_toBottomOf="@+id/edt_password" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cbRememberMe" />
 
 
             <TextView
@@ -130,7 +131,7 @@
                 style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:paddingLeft="15dp"
                 android:paddingTop="5dp"
                 android:paddingRight="15dp"
@@ -147,24 +148,25 @@
                 android:id="@+id/tv_or"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="16dp"
                 android:text="OR"
                 android:textColor="@color/gray_1"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_forgotpass" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_signup" />
 
             <com.facebook.login.widget.LoginButton
-                xmlns:fb="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/btn_facebook"
-                style="@style/Button_selected_blue_fb"
-                android:layout_width="188dp"
+                android:fontFamily="@font/nunitosansregular"
+                android:textSize="15sp"
+               style="@style/Button_selected_blue_fb"
+                android:textAllCaps="false"
+                android:layout_width="232dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                fb:com_facebook_login_text="@string/fb_sign_in_text"
-                fb:com_facebook_logout_text="@string/fb_sign_in_text"
-                android:layout_marginBottom="50dp"
+                android:layout_marginTop="16dp"
+                app:com_facebook_login_text="@string/fb_sign_in_text"
+                app:com_facebook_logout_text="@string/fb_sign_in_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_or" />
@@ -172,12 +174,14 @@
 
             <Button
                 android:id="@+id/btn_linkedin"
-                style="@style/Button_selected_blue"
-                android:layout_width="188dp"
+                style="@style/Button_linkedin"
+                android:layout_width="232dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
-                android:layout_marginBottom="50dp"
+                android:layout_marginBottom="24dp"
+                android:textStyle="bold"
                 android:text="Sign in with Linkedin"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/btn_facebook" />
@@ -185,16 +189,53 @@
 
             <Button
                 android:id="@+id/tv_signup"
-                style="@style/Button_selected_light_blue"
-                android:layout_width="188dp"
+                style="@style/Button_create_account"
+                android:layout_width="232dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:layout_marginBottom="50dp"
+                android:layout_marginTop="32dp"
                 android:text="@string/signup"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.502"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_forgotpass" />
+
+            <CheckBox
+                android:id="@+id/cbRememberMe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:buttonTint="@color/blue_gradient"
+                android:fontFamily="@font/nunitosansregular"
+                android:text="Remember Me"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_linkedin" />
+                app:layout_constraintTop_toBottomOf="@+id/edt_password" />
+
+            <View
+                android:id="@+id/view9"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="16dp"
+                android:background="#DCDCDC"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_or"
+                app:layout_constraintEnd_toStartOf="@+id/tv_or"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_or" />
+
+            <View
+                android:id="@+id/view10"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="32dp"
+                android:background="#DCDCDC"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_or"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_or"
+                app:layout_constraintTop_toTopOf="@+id/tv_or" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

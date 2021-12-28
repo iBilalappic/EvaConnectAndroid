@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -98,6 +99,12 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
 
     @BindView(R.id.img_cross)
     ImageView img_cross;
+
+    @BindView(R.id.layout_individual)
+    ConstraintLayout layout_individual;
+
+    @BindView(R.id.layout_company)
+    ConstraintLayout layout_company;
 
 
     private static final int REQUEST_PHOTO_GALLERY = 4;
@@ -185,7 +192,7 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
     public void onValidationSucceeded() {
 
         if (activity_type.equals("LinkedinActivity")) {
-            Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
+            Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_3_Activity.class);
             intent.putExtra("Email", edt_email.getText().toString());
             intent.putExtra("Photo", photourl);
             intent.putExtra("Path", path);
@@ -197,7 +204,7 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
 
         }
         else if (activity_type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)){
-            Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
+            Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_3_Activity.class);
             intent.putExtra("Email", edt_email.getText().toString());
             intent.putExtra("Photo", photourl);
             intent.putExtra("Path", path);
@@ -279,6 +286,8 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
                 break;
 
             case R.id.img_cross:
+
+            case R.id.tv_already_account:
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 break;
@@ -297,6 +306,11 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
                 tv_individual.setBackground(getDrawable(R.drawable.rounded_button_red));
                 tv_company.setTextColor(getResources().getColor(R.color.gray));
                 tv_individual.setTextColor(getResources().getColor(R.color.white));
+                layout_company.setVisibility(View.GONE);
+                layout_individual.setVisibility(View.VISIBLE);
+                img_profile.setImageDrawable(getResources().getDrawable(R.drawable.ic_user_profile));
+                tv_upload_image.setText("Upload Image");
+                btn_next.setClickable(true);
                 userType = "user";
                 break;
 
@@ -305,12 +319,13 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
                 tv_company.setTextColor(getResources().getColor(R.color.white));
                 tv_individual.setBackground(getDrawable(R.drawable.rounded_button_border));
                 tv_individual.setTextColor(getResources().getColor(R.color.gray));
+                layout_individual.setVisibility(View.GONE);
+                layout_company.setVisibility(View.VISIBLE);
+                img_profile.setImageDrawable(getResources().getDrawable(R.drawable.ic_logo_company));
+                tv_upload_image.setText("Upload Logo");
+                btn_next.setClickable(false);
+                Toast.makeText(this, "Company module is under development", Toast.LENGTH_SHORT).show();
                 userType = "company";
-                break;
-
-            case R.id.tv_already_account:
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
                 break;
 
         }

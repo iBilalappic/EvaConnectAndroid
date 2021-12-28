@@ -6,9 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
@@ -17,6 +20,7 @@ import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
+import com.hypernym.evaconnect.view.ui.fragments.PersonProfileFragment;
 
 import java.util.List;
 
@@ -140,12 +144,15 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
         @BindView(R.id.location)
         TextView location;
 
+        @BindView(R.id.ly_main)
+        LinearLayout ly_main;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             tv_connect.setOnClickListener(this);
             tv_decline.setOnClickListener(this);
+            ly_main.setOnClickListener(this);
         }
 
         @Override
@@ -159,6 +166,12 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
                     if (onItemClickListener != null)
                         onItemClickListener.onItemClick(v, originalConnections.indexOf(connections.get(getAdapterPosition())));
                     break;
+
+                case R.id.ly_main:
+                    if (onItemClickListener != null)
+                        onItemClickListener.onItemClick(v, originalConnections.indexOf(connections.get(getAdapterPosition())));
+                    break;
+
             }
 
 //            if (onItemClickListener != null)

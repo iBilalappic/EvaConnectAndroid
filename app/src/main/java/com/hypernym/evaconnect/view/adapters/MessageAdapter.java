@@ -97,7 +97,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             tv_lastmsg = (TextView) itemView.findViewById(R.id.tv_lastmsg);
             mtextview22 = (TextView) itemView.findViewById(R.id.textView22);
             mImageview6 = (CircleImageView) itemView.findViewById(R.id.imageView6);
-            constraintLayout = (ConstraintLayout) itemView.findViewById(R.id.linearLayout6);
+            constraintLayout = (ConstraintLayout) itemView.findViewById(R.id.ly_main);
             tv_minago=itemView.findViewById(R.id.tv_minago);
             tv_count=itemView.findViewById(R.id.tv_count);
             notification=itemView.findViewById(R.id.notification);

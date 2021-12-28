@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +22,7 @@ import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import com.mobsandgeeks.saripaar.Validator;
@@ -35,34 +37,28 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class SettingsFragment extends BaseFragment implements View.OnClickListener {
 
 
-    @NotEmpty
-    @BindView(R.id.edt_email)
-    EditText edt_email;
+    @BindView(R.id.ly_profile)
+    LinearLayout ly_profile;
 
-    @BindView(R.id.tv_password)
-    TextView tv_password;
-
-    @BindView(R.id.tv_pushNotification)
-    TextView tv_pushNotification;
-
-
-    @BindView(R.id.tv_text_manage)
-    TextView tv_text_manage;
 
     @BindView(R.id.img_backarrow)
     ImageView img_backarrow;
-    @BindView(R.id.tv_name)
-    TextView tv_name;
 
-    @BindView(R.id.tv_location)
-    TextView tv_location;
+    @BindView(R.id.ly_notification)
+    LinearLayout ly_notification;
 
-    @BindView(R.id.btn_save)
-    TextView btn_save;
+    @BindView(R.id.ly_term_condition)
+    LinearLayout ly_term_condition;
 
+    @BindView(R.id.ly_cookie)
+    LinearLayout ly_cookie;
 
-    @BindView(R.id.profile_image)
-    CircleImageView cv_profile_image;
+    @BindView(R.id.ly_help)
+    LinearLayout ly_help;
+
+    @BindView(R.id.ly_security)
+    LinearLayout ly_security;
+
 
     User user = new User();
     private UserViewModel userViewModel;
@@ -84,41 +80,13 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
         ButterKnife.bind(this, view);
         img_backarrow.setOnClickListener(this);
-        showBackButton();
-        setPageTitle("Edit Settings");
-//        switch_push.setOnClickListener(this);
-//
-//        switch_push.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                if(isChecked){
-//                    notification_check = 1;
-//                }else{
-//                    notification_check = 0;
-//                }
-//
-//            }
-//        });
-        btn_save.setOnClickListener(new OnOneOffClickListener() {
-            @Override
-            public void onSingleClick(View v) {
+        ly_profile.setOnClickListener(this);
+        ly_notification.setOnClickListener(this);
+        ly_help.setOnClickListener(this);
+        ly_term_condition.setOnClickListener(this);
+        ly_cookie.setOnClickListener(this);
+        ly_security.setOnClickListener(this);
 
-            }
-        });
-
-        tv_password.setOnClickListener(new OnOneOffClickListener() {
-            @Override
-            public void onSingleClick(View v) {
-                ShowConfirmationDialog();
-            }
-        });
-        tv_pushNotification.setOnClickListener(new OnOneOffClickListener() {
-            @Override
-            public void onSingleClick(View v) {
-                PushNotificationsFragment pushNotificationsFragment = new PushNotificationsFragment();
-                loadFragment(R.id.framelayout, pushNotificationsFragment, getContext(), true);
-            }
-        });
 
 
         user = LoginUtils.getUser();
@@ -138,7 +106,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
             public void onChanged(BaseModel<List<User>> listBaseModel) {
                 if (listBaseModel.getData() != null && !listBaseModel.isError()) {
                     if (!TextUtils.isEmpty(listBaseModel.getData().get(0).getUser_image())) {
-                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getUser_image());
+                        //   AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getUser_image());
 //                        tv_password.setEnabled(false);
                     }
 //                    else if (listBaseModel.getData().get(0).getIs_facebook() == 1 && !TextUtils.isEmpty(listBaseModel.getData().get(0).getFacebook_image_url())) {
@@ -148,9 +116,9 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
 //                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getUser_image());
 //                    }
 
-                    edt_email.setText(listBaseModel.getData().get(0).getEmail());
-                    tv_location.setText(listBaseModel.getData().get(0).getCountry() + "," + listBaseModel.getData().get(0).getCity());
-                    tv_name.setText(listBaseModel.getData().get(0).getFirst_name());
+                    //     edt_email.setText(listBaseModel.getData().get(0).getEmail());
+                    //  tv_location.setText(listBaseModel.getData().get(0).getCountry() + "," + listBaseModel.getData().get(0).getCity());
+                    //  tv_name.setText(listBaseModel.getData().get(0).getFirst_name());
                     notification_check = listBaseModel.getData().get(0).getIs_notifications();
 
                     LoginUtils.saveUser(listBaseModel.getData().get(0));
@@ -190,31 +158,25 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                         }
 
                     } else {
-                        if(editText_old_password.length()< 8)
-                        {
+                        if (editText_old_password.length() < 8) {
                             editText_old_password.setError(getString(R.string.err_password));
                         }
-                        if(editText_newpassword.length()<8)
-                        {
+                        if (editText_newpassword.length() < 8) {
                             editText_newpassword.setError(getString(R.string.err_password));
                         }
-                      if(editText_confirmpassword.length()<8)
-                        {
+                        if (editText_confirmpassword.length() < 8) {
                             editText_confirmpassword.setError(getString(R.string.err_password));
                         }
 
                     }
                 } else {
-                    if(editText_old_password.length()< 8)
-                    {
+                    if (editText_old_password.length() < 8) {
                         editText_old_password.setError(getString(R.string.err_password));
                     }
-                     if(editText_newpassword.length()<8)
-                    {
+                    if (editText_newpassword.length() < 8) {
                         editText_newpassword.setError(getString(R.string.err_password));
                     }
-                    if(editText_confirmpassword.length()<8)
-                    {
+                    if (editText_confirmpassword.length() < 8) {
                         editText_confirmpassword.setError(getString(R.string.err_password));
                     }
 
@@ -244,7 +206,41 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
+        TermConditionHelpPolicyFragment termConditionHelpPolicyFragment = new TermConditionHelpPolicyFragment();
         switch (v.getId()) {
+            case R.id.ly_profile:
+                EditProfileFragment editProfileFragment = new EditProfileFragment();
+                loadFragment(R.id.framelayout, editProfileFragment, getContext(), true);
+                break;
+
+            case R.id.ly_notification:
+                PushNotificationsFragment pushNotificationsFragment = new PushNotificationsFragment();
+                loadFragment(R.id.framelayout, pushNotificationsFragment, getContext(), true);
+                break;
+
+            case R.id.ly_help:
+                Bundle bundle = new Bundle();
+                bundle.putString(Constants.FRAGMENT_NAME, Constants.HELP);
+                loadFragment_bundle(R.id.framelayout, termConditionHelpPolicyFragment, getContext(), true, bundle);
+                break;
+
+            case R.id.ly_cookie:
+                Bundle bundle2 = new Bundle();
+                bundle2.putString(Constants.FRAGMENT_NAME, Constants.COOKIES_POLICY);
+               loadFragment_bundle(R.id.framelayout, termConditionHelpPolicyFragment, getContext(), true, bundle2);
+                break;
+
+            case R.id.ly_term_condition:
+                Bundle bundle3 = new Bundle();
+                bundle3.putString(Constants.FRAGMENT_NAME, Constants.TERMS_AND_CONDITION);
+                loadFragment_bundle(R.id.framelayout, termConditionHelpPolicyFragment, getContext(), true, bundle3);
+                break;
+
+            case R.id.ly_security:
+
+                loadFragment(R.id.framelayout, termConditionHelpPolicyFragment, getContext(), true);
+                break;
+
             case R.id.img_backarrow:
                 getActivity().onBackPressed();
                 break;

@@ -43,6 +43,7 @@ import com.hypernym.evaconnect.view.ui.fragments.ActivityFragment;
 import com.hypernym.evaconnect.view.ui.fragments.BaseFragment;
 import com.hypernym.evaconnect.view.ui.fragments.ChatFragment;
 import com.hypernym.evaconnect.view.ui.fragments.ConnectionsFragment;
+import com.hypernym.evaconnect.view.ui.fragments.ConnectionsTabFragment;
 import com.hypernym.evaconnect.view.ui.fragments.EditProfileFragment;
 import com.hypernym.evaconnect.view.ui.fragments.EventDetailFragment;
 import com.hypernym.evaconnect.view.ui.fragments.HomeFragment;
@@ -342,9 +343,9 @@ public class HomeActivity extends BaseActivity {
         tv_profile.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
 
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.framelayout);
-        if (f instanceof ConnectionsFragment) {
+        if (f instanceof ConnectionsTabFragment) {
         } else {
-            ConnectionsFragment fragment = new ConnectionsFragment();
+            ConnectionsTabFragment fragment = new ConnectionsTabFragment();
             loadFragment(R.id.framelayout, fragment, this, true);
         }
         //   tv_back.setVisibility(View.GONE);
@@ -563,7 +564,7 @@ public class HomeActivity extends BaseActivity {
 
 
 
-        } else if (fragment instanceof MyLikesFragment || fragment instanceof ConnectionsFragment || fragment instanceof EditProfileFragment || fragment instanceof NotificationsFragment || fragment instanceof MessageFragment) {
+        } else if (fragment instanceof MyLikesFragment || fragment instanceof ConnectionsTabFragment || fragment instanceof EditProfileFragment || fragment instanceof NotificationsFragment || fragment instanceof MessageFragment) {
 //            img_home.setImageDrawable(getDrawable(R.drawable.home_selected));
 //            img_connections.setImageDrawable(getDrawable(R.drawable.connections));
 //            img_messages.setImageDrawable(getDrawable(R.drawable.messages));

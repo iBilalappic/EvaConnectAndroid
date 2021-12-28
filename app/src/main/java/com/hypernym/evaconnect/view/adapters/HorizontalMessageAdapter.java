@@ -102,7 +102,7 @@ public class HorizontalMessageAdapter extends RecyclerView.Adapter<HorizontalMes
             mtextview20 = (TextView) itemView.findViewById(R.id.tv_name);
 
             mImageview6 = (CircleImageView) itemView.findViewById(R.id.imageView6);
-            constraintLayout = (ConstraintLayout) itemView.findViewById(R.id.linearLayout6);
+            constraintLayout = (ConstraintLayout) itemView.findViewById(R.id.ly_main);
             view5 = (View) itemView.findViewById(R.id.view5);
         }
     }

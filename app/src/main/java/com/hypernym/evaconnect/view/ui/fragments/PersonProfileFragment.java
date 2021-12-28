@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -50,6 +51,8 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
     @BindView(R.id.tv_connect)
     TextView tv_connect;
 
+    @BindView(R.id.layout_account_private)
+    ConstraintLayout layout_account_private;
 
     @BindView(R.id.tv_profession)
     TextView tv_profession;
@@ -57,8 +60,8 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
     @BindView(R.id.tv_company)
     TextView tv_company;
 
-    @BindView(R.id.tv_location)
-    TextView tv_location;
+ /*   @BindView(R.id.tv_location)
+    TextView tv_location;*/
 
     @BindView(R.id.tv_connections_count)
     TextView tv_connections_count;
@@ -70,7 +73,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
     LinearLayout layout_EditDetail;
 
     @BindView(R.id.layout_message)
-    LinearLayout layout_message;
+    TextView layout_message;
 
     @BindView(R.id.layout_disconnect)
     LinearLayout layout_disconnect;
@@ -79,7 +82,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
     LinearLayout layout_settings;
 
     @BindView(R.id.layout_block)
-    LinearLayout layout_block;
+    TextView layout_block;
 
     @BindView(R.id.view0)
     View view0;
@@ -96,12 +99,20 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
     @BindView(R.id.view4)
     View view4;
 
+    @BindView(R.id.img_backarrow)
+    ImageView img_backarrow;
+
+    @BindView(R.id.tv_bio)
+    TextView tv_bio;
+
+
     SimpleDialog simpleDialog;
     Post post = new Post();
     User user = new User();
+    User targetUser = new User();
     private ConnectionViewModel connectionViewModel;
     private UserViewModel userViewModel;
-
+    String argumentReceived = "";
     public PersonProfileFragment() {
         // Required empty public constructor
     }
@@ -117,6 +128,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
         layout_block.setOnClickListener(this);
         layout_EditDetail.setOnClickListener(this);
         layout_settings.setOnClickListener(this);
+        img_backarrow.setOnClickListener(this);
         layout_notification.setOnClickListener(this);
         layout_message.setOnClickListener(this);
         init();
@@ -131,17 +143,18 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
         setPageTitle("Profile");
         user = LoginUtils.getLoggedinUser();
         if ((getArguments() != null)) {
-          //  showBackButton();
+            //  showBackButton();
+
+            targetUser = getArguments().getParcelable("user");
             post = (Post) getArguments().getSerializable("PostData");
             Log.d("TAAAG", GsonUtils.toJson(post));
 
+            if (post!=null) {
+                argumentReceived = "PostData";
+                if (!TextUtils.isEmpty(post.getUser().getUser_image())) {
+                    AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getUser_image());
 
-
-
-            if (!TextUtils.isEmpty(post.getUser().getUser_image())) {
-                AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getUser_image());
-
-            }
+                }
 //            else if (post.getUser().getIs_facebook() == 1 && !TextUtils.isEmpty(post.getUser().getFacebook_image_url())){
 //                AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getFacebook_image_url());
 //            }
@@ -149,19 +162,23 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
 //                AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getUser_image());
 //            }
 
-            tv_name.setText(post.getUser().getFirst_name());
+                tv_name.setText(post.getUser().getFirst_name());
 
-            if (post.getUser().getDesignation() != null && !post.getUser().getDesignation().isEmpty()) {
-                tv_profession.setText(post.getUser().getDesignation());
-            }
-            else
-            {
-                tv_profession.setText(post.getUser().getCompany_name());
-            }
+                if (post.getUser().getBio_data() != null && !post.getUser().getBio_data().isEmpty()) {
+                    tv_bio.setText(post.getUser().getBio_data());
+                } else {
+                    tv_bio.setVisibility(View.GONE);
+                }
+
+                if (post.getUser().getDesignation() != null && !post.getUser().getDesignation().isEmpty()) {
+                    tv_profession.setText(post.getUser().getDesignation());
+                } else {
+                    tv_profession.setText(post.getUser().getCompany_name());
+                }
 
 //            tv_location.setText(post.getUser().getCountry() + "," + post.getUser().getCity());
 //            tv_company.setText(post.getUser().getSector() + " | " + post.getUser().getCompany_name());
-           tv_connections_count.setText(String.valueOf(post.getUser().getTotal_connection()));
+                tv_connections_count.setText(String.valueOf(post.getUser().getTotal_connection()));
 
 //            if(post.getUser().getIs_notifications()>0)
 //            {
@@ -173,75 +190,194 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
 //            }
 
 
-            getUserDetails();
+                getUserDetails();
 
-            if (post.getUser().getId().equals(user.getId())) {
-                tv_connect.setVisibility(View.GONE);
-                layout_message.setVisibility(View.GONE);
-                view3.setVisibility(View.GONE);
-
-
-                layout_disconnect.setVisibility(View.GONE);
-                view4.setVisibility(View.GONE);
-                layout_block.setVisibility(View.GONE);
-
-                layout_settings.setVisibility(View.VISIBLE);
-                view2.setVisibility(View.GONE);
-
-                layout_EditDetail.setVisibility(View.VISIBLE);
-                view1.setVisibility(View.VISIBLE);
-
-                layout_notification.setVisibility(View.VISIBLE);
-                view0.setVisibility(View.VISIBLE);
-
-            } else {
-                tv_connect.setVisibility(View.VISIBLE);
-                layout_message.setVisibility(View.VISIBLE);
-                view3.setVisibility(View.VISIBLE);
-
-                layout_disconnect.setVisibility(View.VISIBLE);
-                view4.setVisibility(View.VISIBLE);
-
-                layout_block.setVisibility(View.VISIBLE);
-
-                layout_settings.setVisibility(View.GONE);
-                view2.setVisibility(View.GONE);
-
-                layout_EditDetail.setVisibility(View.GONE);
-                view1.setVisibility(View.GONE);
-
-                layout_notification.setVisibility(View.GONE);
-                view0.setVisibility(View.GONE);
-
-
-                String status = AppUtils.getConnectionStatus(getContext(), post.getIs_connected(), post.isIs_receiver());
-                if (status.equals(AppConstants.DELETED)) {
+                if (post.getUser().getId().equals(user.getId())) {
                     tv_connect.setVisibility(View.GONE);
+
+                    layout_account_private.setVisibility(View.GONE);
+
+                    layout_message.setVisibility(View.GONE);
+                    view3.setVisibility(View.GONE);
+
+                    layout_disconnect.setVisibility(View.GONE);
+                    view4.setVisibility(View.GONE);
+                    layout_block.setVisibility(View.GONE);
+
+                    layout_settings.setVisibility(View.VISIBLE);
+                    view2.setVisibility(View.GONE);
+
+                    layout_EditDetail.setVisibility(View.VISIBLE);
+                    view1.setVisibility(View.VISIBLE);
+
+                    layout_notification.setVisibility(View.VISIBLE);
+                    view0.setVisibility(View.VISIBLE);
+
                 } else {
                     tv_connect.setVisibility(View.VISIBLE);
-                    tv_connect.setText(AppUtils.getConnectionStatus(getContext(), post.getIs_connected(), post.isIs_receiver()));
-                    if(AppUtils.getConnectionStatus(getContext(), post.getIs_connected(), post.isIs_receiver()).equalsIgnoreCase(AppConstants.CONNECTED))
-                    {
-                        layout_disconnect.setVisibility(View.VISIBLE);
-                        layout_block.setVisibility(View.VISIBLE);
-                    }
-                    else
-                    {
-                        layout_disconnect.setVisibility(View.GONE);
-                        layout_block.setVisibility(View.VISIBLE);
-                    }
-                }
-            }
-            tv_connect.setOnClickListener(new OnOneOffClickListener() {
-                @Override
-                public void onSingleClick(View v) {
-                    if (NetworkUtils.isNetworkConnected(getContext())) {
-                        callConnectApi(tv_connect, post.getUser());
+                    layout_message.setVisibility(View.VISIBLE);
+                    view3.setVisibility(View.VISIBLE);
+
+                    layout_disconnect.setVisibility(View.VISIBLE);
+                    view4.setVisibility(View.VISIBLE);
+
+                    layout_block.setVisibility(View.VISIBLE);
+
+                    layout_settings.setVisibility(View.GONE);
+                    view2.setVisibility(View.GONE);
+
+                    layout_EditDetail.setVisibility(View.GONE);
+                    view1.setVisibility(View.GONE);
+
+                    layout_notification.setVisibility(View.GONE);
+
+                    view0.setVisibility(View.GONE);
+
+
+                    String status = AppUtils.getConnectionStatus(getContext(), post.getIs_connected(), post.isIs_receiver());
+                    if (status.equals(AppConstants.DELETED)) {
+                        tv_connect.setVisibility(View.GONE);
                     } else {
-                        networkErrorDialog();
+                        tv_connect.setVisibility(View.VISIBLE);
+                        layout_account_private.setVisibility(View.GONE);
+                        tv_connect.setText(AppUtils.getConnectionStatus(getContext(), post.getIs_connected(), post.isIs_receiver()));
+                        if (AppUtils.getConnectionStatus(getContext(), post.getIs_connected(), post.isIs_receiver()).equalsIgnoreCase(AppConstants.CONNECTED)) {
+                            layout_disconnect.setVisibility(View.VISIBLE);
+                            layout_block.setVisibility(View.VISIBLE);
+                            layout_account_private.setVisibility(View.GONE);
+                        } else {
+                            layout_disconnect.setVisibility(View.GONE);
+                            layout_account_private.setVisibility(View.VISIBLE);
+                            layout_block.setVisibility(View.GONE);
+                        }
                     }
                 }
-            });
+                tv_connect.setOnClickListener(new OnOneOffClickListener() {
+                    @Override
+                    public void onSingleClick(View v) {
+                        if (NetworkUtils.isNetworkConnected(getContext())) {
+                            callConnectApi(tv_connect, post.getUser());
+                        } else {
+                            networkErrorDialog();
+                        }
+                    }
+                });
+            }else if(targetUser!=null){
+                argumentReceived = "user";
+                if (!TextUtils.isEmpty(targetUser.getUser_image())) {
+                    AppUtils.setGlideImage(getContext(), profile_image, targetUser.getUser_image());
+
+                }
+//            else if (targetUser.getIs_facebook() == 1 && !TextUtils.isEmpty(targetUser.getFacebook_image_url())){
+//                AppUtils.setGlideImage(getContext(), profile_image, targetUser.getFacebook_image_url());
+//            }
+//            else {
+//                AppUtils.setGlideImage(getContext(), profile_image, targetUser.getUser_image());
+//            }
+
+                tv_name.setText(targetUser.getFirst_name());
+
+                if (targetUser.getBio_data() != null && !targetUser.getBio_data().isEmpty()) {
+                    tv_bio.setText(targetUser.getBio_data());
+                } else {
+                    tv_bio.setVisibility(View.GONE);
+                }
+
+                if (targetUser.getDesignation() != null && !targetUser.getDesignation().isEmpty()) {
+                    tv_profession.setText(targetUser.getDesignation());
+                } else {
+                    tv_profession.setText(targetUser.getCompany_name());
+                }
+
+//            tv_location.setText(targetUser.getCountry() + "," + targetUser.getCity());
+//            tv_company.setText(targetUser.getSector() + " | " + targetUser.getCompany_name());
+                tv_connections_count.setText(String.valueOf(targetUser.getTotal_connection()));
+
+//            if(targetUser.getIs_notifications()>0)
+//            {
+//                bell.setImageResource(R.drawable.ic_notification_bell);
+//            }
+//            else
+//            {
+//                bell.setImageResource(R.drawable.ic_bell);
+//            }
+
+
+                getUserDetails();
+
+                if (targetUser.getId().equals(user.getId())) {
+                    tv_connect.setVisibility(View.GONE);
+
+                    layout_account_private.setVisibility(View.GONE);
+
+                    layout_message.setVisibility(View.GONE);
+                    view3.setVisibility(View.GONE);
+
+                    layout_disconnect.setVisibility(View.GONE);
+                    view4.setVisibility(View.GONE);
+                    layout_block.setVisibility(View.GONE);
+
+                    layout_settings.setVisibility(View.VISIBLE);
+                    view2.setVisibility(View.GONE);
+
+                    layout_EditDetail.setVisibility(View.VISIBLE);
+                    view1.setVisibility(View.VISIBLE);
+
+                    layout_notification.setVisibility(View.VISIBLE);
+                    view0.setVisibility(View.VISIBLE);
+
+                } else {
+                    tv_connect.setVisibility(View.VISIBLE);
+                    layout_message.setVisibility(View.VISIBLE);
+                    view3.setVisibility(View.VISIBLE);
+
+                    layout_disconnect.setVisibility(View.VISIBLE);
+                    view4.setVisibility(View.VISIBLE);
+
+                  //  layout_block.setVisibility(View.VISIBLE);
+
+                    layout_settings.setVisibility(View.GONE);
+                    view2.setVisibility(View.GONE);
+
+                    layout_EditDetail.setVisibility(View.GONE);
+                    view1.setVisibility(View.GONE);
+
+                    layout_notification.setVisibility(View.GONE);
+
+                    view0.setVisibility(View.GONE);
+
+
+                    String status = AppUtils.getConnectionStatus(getContext(), targetUser.getIs_connected(), targetUser.isIs_receiver());
+                    if (status.equals(AppConstants.DELETED)) {
+                        tv_connect.setVisibility(View.GONE);
+                    } else {
+                        tv_connect.setVisibility(View.VISIBLE);
+                        layout_account_private.setVisibility(View.GONE);
+                        tv_connect.setText(AppUtils.getConnectionStatus(getContext(), targetUser.getIs_connected(), targetUser.isIs_receiver()));
+                        if (AppUtils.getConnectionStatus(getContext(), targetUser.getIs_connected(), targetUser.isIs_receiver()).equalsIgnoreCase(AppConstants.CONNECTED)) {
+                            layout_disconnect.setVisibility(View.VISIBLE);
+                            layout_block.setVisibility(View.GONE);
+                            layout_account_private.setVisibility(View.GONE);
+                        } else {
+                            layout_disconnect.setVisibility(View.GONE);
+                            layout_account_private.setVisibility(View.VISIBLE);
+                            layout_block.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+                User finalTargetUser = targetUser;
+                tv_connect.setOnClickListener(new OnOneOffClickListener() {
+                    @Override
+                    public void onSingleClick(View v) {
+                        if (NetworkUtils.isNetworkConnected(getContext())) {
+                            callConnectApi(tv_connect, finalTargetUser);
+                        } else {
+                            networkErrorDialog();
+                        }
+                    }
+                });
+
+            }
         } else {
             user = LoginUtils.getLoggedinUser();
             Log.d("TAAAG", GsonUtils.toJson(user));
@@ -259,7 +395,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
 
             tv_name.setText(user.getFirst_name());
 
-            tv_location.setText(user.getCountry() + "," + user.getCity());
+            //  tv_location.setText(user.getCountry() + "," + user.getCity());
             tv_company.setText(user.getSector() + " | " + user.getCompany_name());
             tv_connections_count.setText(String.valueOf(user.getConnection_count()));
 
@@ -274,9 +410,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
 //            }
             if (user.getDesignation() != null && !user.getDesignation().isEmpty()) {
                 tv_profession.setText(user.getDesignation());
-            }
-            else
-            {
+            } else {
                 tv_profession.setText(user.getCompany_name());
             }
             tv_connect.setVisibility(View.GONE);
@@ -300,16 +434,22 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
             });
         }
     }
-    public void getUserDetails()
-    {
-      //  User user = new User();
-       // user = LoginUtils.getUser();
-        userViewModel.getuser_details(post.getUser().getId()
+
+    public void getUserDetails() {
+        //  User user = new User();
+        // user = LoginUtils.getUser();
+        int id;
+                if(argumentReceived.equalsIgnoreCase("user")){
+                    id = targetUser.getId();
+                }else{
+                    id = post.getUser().getId();
+                }
+        userViewModel.getuser_details(id
         ).observe(this, new Observer<BaseModel<List<User>>>() {
             @Override
             public void onChanged(BaseModel<List<User>> listBaseModel) {
                 if (listBaseModel.getData() != null && !listBaseModel.isError()) {
-                    tv_location.setText(listBaseModel.getData().get(0).getCountry() + "," + listBaseModel.getData().get(0).getCity());
+                    // tv_location.setText(listBaseModel.getData().get(0).getCountry() + "," + listBaseModel.getData().get(0).getCity());
                     tv_company.setText(listBaseModel.getData().get(0).getSector() + " | " + listBaseModel.getData().get(0).getCompany_name());
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
@@ -318,56 +458,48 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
             }
         });
     }
-    public void callConnectApi(TextView tv_connect,User connectionItem) {
-        Connection connection=new Connection();
-        User user= LoginUtils.getLoggedinUser();
+
+    public void callConnectApi(TextView tv_connect, User connectionItem) {
+        Connection connection = new Connection();
+        User user = LoginUtils.getLoggedinUser();
         connection.setReceiver_id(connectionItem.getId());
         connection.setSender_id(user.getId());
 
-        if(!tv_connect.getText().toString().equalsIgnoreCase(AppConstants.CONNECTED) && post.getConnection_id()==null && !tv_connect.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_SENT))
-        {
+        if (!tv_connect.getText().toString().equalsIgnoreCase(AppConstants.CONNECTED) && post.getConnection_id() == null && !tv_connect.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_SENT)) {
             connection.setStatus(AppConstants.STATUS_PENDING);
             showDialog();
-            callApi(tv_connect,connection,connectionItem);
-        }
-        else if (!tv_connect.getText().toString().equalsIgnoreCase(AppConstants.CONNECTED) && post.getConnection_id()!=null && !tv_connect.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_SENT))
-        {
+            callApi(tv_connect, connection, connectionItem);
+        } else if (!tv_connect.getText().toString().equalsIgnoreCase(AppConstants.CONNECTED) && post.getConnection_id() != null && !tv_connect.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_SENT)) {
             connection.setStatus(AppConstants.ACTIVE);
             connection.setId(post.getConnection_id());
             connection.setModified_by_id(user.getId());
             connection.setModified_datetime(DateUtils.GetCurrentdatetime());
-            callApi(tv_connect,connection,connectionItem);
+            callApi(tv_connect, connection, connectionItem);
         }
     }
 
-    private void callApi(TextView tv_connect,Connection connection,User connectionItem )
-    {
+    private void callApi(TextView tv_connect, Connection connection, User connectionItem) {
 
         connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
             @Override
             public void onChanged(BaseModel<List<Connection>> listBaseModel) {
-                if(listBaseModel!=null && !listBaseModel.isError())
-                {
-                    if(tv_connect.getText().toString().equalsIgnoreCase(getString(R.string.connect)))
-                    {
+                if (listBaseModel != null && !listBaseModel.isError()) {
+                    if (tv_connect.getText().toString().equalsIgnoreCase(getString(R.string.connect))) {
                         tv_connect.setText(AppConstants.REQUEST_SENT);
 
-                    }
-                    else
-                    {
+                    } else {
                         tv_connect.setText(AppConstants.CONNECTED);
                     }
                     connectionItem.setIs_connected(AppConstants.ACTIVE);
 
-                }
-                else
-                {
-                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
                 hideDialog();
             }
         });
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -378,9 +510,14 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                 BlockUserApiCall();
                 break;
             case R.id.layout_message:
-                ChatFragment chatFragment=new ChatFragment();
-                Bundle bundlemessage=new Bundle();
-                bundlemessage.putSerializable("user",post.getUser());
+                ChatFragment chatFragment = new ChatFragment();
+                Bundle bundlemessage = new Bundle();
+                if (argumentReceived.equalsIgnoreCase("Postuser")) {
+                    bundlemessage.putSerializable("user", post.getUser());
+                }
+                else {
+                    bundlemessage.putSerializable("user", targetUser);
+                }
                 chatFragment.setArguments(bundlemessage);
                 loadFragment(R.id.framelayout, chatFragment, getContext(), true);
                 break;
@@ -388,12 +525,15 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                 EditProfileFragment editProfileFragment = new EditProfileFragment();
                 loadFragment(R.id.framelayout, editProfileFragment, getContext(), true);
                 break;
+            case R.id.img_backarrow:
+                getActivity().onBackPressed();
+                break;
             case R.id.layout_notification:
 
                 bell.setImageResource(R.drawable.ic_bell);
-                ActivityFragment activityFragment=new ActivityFragment();
-                Bundle bundle=new Bundle();
-                bundle.putBoolean("isNotification",true);
+                ActivityFragment activityFragment = new ActivityFragment();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("isNotification", true);
                 activityFragment.setArguments(bundle);
                 loadFragment(R.id.framelayout, activityFragment, getContext(), true);
                 break;
@@ -406,32 +546,42 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
 
     private void BlockUserApiCall() {
 
-            connectionViewModel.block_user(post.getConnection_id(), post.getUser()).observe(this, new Observer<BaseModel<List<Object>>>() {
-                @Override
-                public void onChanged(BaseModel<List<Object>> listBaseModel) {
-                    if (!listBaseModel.isError()) {
-                        simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_block_user), null, getString(R.string.ok), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                getActivity().onBackPressed();
-                                simpleDialog.dismiss();
-                            }
-                        });
-                    } else {
+        int id;
+        User user;
+        if(argumentReceived.equalsIgnoreCase("Postuser")){
+            id = post.getUser().getConnection_id();
+            user = post.getUser();
+        }else{
+            id = targetUser.getConnection_id();
+            user = targetUser;
+        }
 
-                        simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), "Your connection is already block", null, getString(R.string.ok), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                getActivity().onBackPressed();
-                                simpleDialog.dismiss();
-                            }
-                        });
-                    }
-                    hideDialog();
-                    simpleDialog.show();
-                    simpleDialog.setCancelable(false);
+        connectionViewModel.block_user(id, user).observe(this, new Observer<BaseModel<List<Object>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Object>> listBaseModel) {
+                if (!listBaseModel.isError()) {
+                    simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_block_user), null, getString(R.string.ok), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            getActivity().onBackPressed();
+                            simpleDialog.dismiss();
+                        }
+                    });
+                } else {
+
+                    simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), "Your connection is already block", null, getString(R.string.ok), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            getActivity().onBackPressed();
+                            simpleDialog.dismiss();
+                        }
+                    });
                 }
-            });
+                hideDialog();
+                simpleDialog.show();
+                simpleDialog.setCancelable(false);
+            }
+        });
 
 
     }

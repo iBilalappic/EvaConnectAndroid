@@ -36,20 +36,22 @@ public class PushNotificationsFragment extends BaseFragment implements View.OnCl
 
     @BindView(R.id.img_backarrow)
     ImageView img_backarrow;
-    @BindView(R.id.tv_name)
-    TextView tv_name;
+   /* @BindView(R.id.tv_name)
+    TextView tv_name;*/
 
-    @BindView(R.id.tv_location)
+  /*  @BindView(R.id.tv_location)
     TextView tv_location;
 
     @BindView(R.id.btn_save)
-    TextView btn_save;
+    TextView btn_save;*/
 
     @BindView(R.id.switch_push)
     Switch switch_push;
 
-    @BindView(R.id.profile_image)
-    CircleImageView cv_profile_image;
+  /*  @BindView(R.id.profile_image)
+    CircleImageView cv_profile_image;*/
+
+
 
     User user = new User();
     private Validator validator;
@@ -73,8 +75,6 @@ public class PushNotificationsFragment extends BaseFragment implements View.OnCl
         ButterKnife.bind(this, view);
         img_backarrow.setOnClickListener(this);
         switch_push.setOnClickListener(this);
-showBackButton();
-setPageTitle("Edit Settings");
         switch_push.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -86,12 +86,12 @@ setPageTitle("Edit Settings");
 
             }
         });
-        btn_save.setOnClickListener(new OnOneOffClickListener() {
+/*        btn_save.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
                 UpdateSetting();
             }
-        });
+        });*/
 
 
         user = LoginUtils.getUser();
@@ -101,7 +101,7 @@ setPageTitle("Edit Settings");
 
     private void SettingUserProfile(User user) {
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(UserViewModel.class);
-        GetUserDetails();
+       // GetUserDetails();
     }
 
     private void GetUserDetails() {
@@ -111,15 +111,15 @@ setPageTitle("Edit Settings");
             public void onChanged(BaseModel<List<User>> listBaseModel) {
                 if (listBaseModel.getData() != null && !listBaseModel.isError()) {
                     if (!TextUtils.isEmpty(listBaseModel.getData().get(0).getUser_image())) {
-                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getUser_image());
+                       // AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getUser_image());
                     }
 //                    else if (listBaseModel.getData().get(0).getIs_facebook() == 1 && !TextUtils.isEmpty(listBaseModel.getData().get(0).getFacebook_image_url())) {
 //                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getFacebook_image_url());
 //                    } else {
 //                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getUser_image());
 //                    }
-                    tv_location.setText(listBaseModel.getData().get(0).getCountry() + "," + listBaseModel.getData().get(0).getCity());
-                    tv_name.setText(listBaseModel.getData().get(0).getFirst_name());
+                  //  tv_location.setText(listBaseModel.getData().get(0).getCountry() + "," + listBaseModel.getData().get(0).getCity());
+                  //  tv_name.setText(listBaseModel.getData().get(0).getFirst_name());
                     notification_check = listBaseModel.getData().get(0).getIs_notifications();
                     if (notification_check == 1) {
                         switch_push.setChecked(true);
@@ -145,7 +145,7 @@ setPageTitle("Edit Settings");
             public void onChanged(BaseModel<List<User>> listBaseModel) {
                 if (listBaseModel.getData() != null && !listBaseModel.isError()) {
                     hideDialog();
-                    Toast.makeText(getContext(), ""+listBaseModel.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "" + listBaseModel.getMessage(), Toast.LENGTH_SHORT).show();
                     GetUserDetails();
                 } else {
                     hideDialog();

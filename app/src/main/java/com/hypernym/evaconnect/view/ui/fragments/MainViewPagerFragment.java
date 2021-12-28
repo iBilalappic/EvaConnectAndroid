@@ -93,7 +93,7 @@ public class MainViewPagerFragment extends BaseFragment implements FloatingActio
                 case 0:
                      return new PostFragment();
                 case 1:
-                     return new EventFragment();
+                     return new EventTabsFragment();
                 case 2:
                     return new JobFragment();
                 case 3:

@@ -21,6 +21,7 @@ public class User implements Serializable, Parcelable {
     private String linkedin_image_url;
     private String facebook_image_url;
     private String city;
+    private String about;
     private String country;
     private String last_name;
     private String sector;
@@ -41,6 +42,14 @@ public class User implements Serializable, Parcelable {
 
     public void setSearch_key(String search_key) {
         this.search_key = search_key;
+    }
+
+    public String getAbout() {
+        return about;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
     }
 
     private String search_key;

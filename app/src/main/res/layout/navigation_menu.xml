@@ -333,10 +333,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:layout_marginStart="30dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/nunitosansbold"
         android:text="@string/app_version"
         android:textColor="@color/gray"
         android:textSize="12sp"
-        android:fontFamily="@font/nunitosansbold"
         app:layout_constraintBottom_toTopOf="@+id/tv_logout"
         app:layout_constraintStart_toStartOf="parent" />
 
