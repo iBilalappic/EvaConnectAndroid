@@ -70,10 +70,13 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PostDetailsFragment extends BaseFragment implements Validator.ValidationListener,CommentsAdapter.OnItemClickListener {
+public class PostDetailsFragment extends BaseFragment implements Validator.ValidationListener,CommentsAdapter.OnItemClickListener,View.OnClickListener {
 
     @BindView(R.id.rc_comments)
     RecyclerView rc_comments;
+
+    @BindView(R.id.img_backarrow)
+    ImageView img_backarrow;
 
     @NotEmpty
     @BindView(R.id.edt_comment)
@@ -174,6 +177,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_post_details, container, false);
         ButterKnife.bind(this, view);
+        img_backarrow.setOnClickListener(this);
         init();
 
         postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(PostViewModel.class);
@@ -256,8 +260,8 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     private void init() {
         validator = new Validator(this);
         validator.setValidationListener(this);
-        setPageTitle("Post Details");
-        showBackButton();
+        //setPageTitle("Post Details");
+        //showBackButton();
     }
 
     private void setPostData(Post post) {
@@ -555,6 +559,14 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
                }
            }
        });
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId()==R.id.img_backarrow)
+        {
+            getActivity().onBackPressed();
+        }
     }
 
 

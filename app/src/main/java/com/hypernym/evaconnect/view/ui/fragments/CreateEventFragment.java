@@ -104,6 +104,9 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
     @BindView(R.id.edt_eventname)
     EditText edt_eventname;
 
+    @BindView(R.id.img_backarrow)
+    ImageView img_backarrow;
+
     @NotEmpty
     @BindView(R.id.edt_eventlocation)
     EditText edt_eventCity;
@@ -209,7 +212,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
       //  invitedConnections.clear();
 
         event_type_spinner.setOnItemSelectedListener(this);
-        showBackButton();
+       // showBackButton();
         setPageTitle(getString(R.string.action1));
         if(getArguments()!=null)
         {
@@ -458,9 +461,15 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
 
     @OnClick(R.id.post)
     public void post() {
-
         validator.validate();
     }
+
+    @OnClick(R.id.img_backarrow)
+    public void back() {
+        getActivity().onBackPressed();
+    }
+
+
 
     private void requestpermission() {
         ActivityCompat.requestPermissions(getActivity(), new String[]

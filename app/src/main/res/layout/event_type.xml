@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="5dp">
+    app:cardCornerRadius="5dp"
+    android:elevation="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout2"
@@ -74,7 +75,7 @@
             android:maxLines="1"
             android:text="Networth And Vibe"
             android:textColor="@color/black"
-            android:textSize="13sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/tv_attending"
             app:layout_constraintStart_toEndOf="@+id/profile_layout"
@@ -287,8 +288,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="32dp"
                 android:layout_marginTop="1dp"
+                android:layout_marginEnd="8dp"
+
                 android:baselineAligned="false"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -298,38 +301,38 @@
                 <LinearLayout
                     android:id="@+id/like_click"
                     android:layout_width="0dp"
-                    android:orientation="vertical"
                     android:layout_height="match_parent"
-                    android:layout_weight="2">
+                    android:layout_weight="2"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/tv_address"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:text="@string/messages"
-                        android:textSize="16sp"
-                        android:textColor="@color/black"
-                        android:fontFamily="@font/nunitosansregular"
                         android:layout_gravity="center"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"
+                        android:fontFamily="@font/nunitosansregular"
+                        android:text="@string/messages"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/tv_date"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:textSize="16sp"
                         android:fontFamily="@font/nunitosansregular"
-                        android:textColor="@color/black" />
+                        android:gravity="center_vertical"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
 
 
                     <View
                         android:layout_width="1dp"
                         android:layout_height="30dp"
-                        android:visibility="gone"
                         android:layout_marginEnd="@dimen/spacing_medium"
-                        android:background="@color/gray_light" />
+                        android:background="@color/gray_light"
+                        android:visibility="gone" />
 
 
                 </LinearLayout>
@@ -338,9 +341,9 @@
                 <LinearLayout
                     android:id="@+id/comment_click"
                     android:layout_width="0dp"
-                    android:visibility="gone"
                     android:layout_height="match_parent"
-                    android:layout_weight="1.2">
+                    android:layout_weight="1.2"
+                    android:visibility="gone">
 
                     <ImageView
                         android:id="@+id/img_comment"
@@ -374,10 +377,18 @@
                 <LinearLayout
                     android:id="@+id/share_click"
                     android:layout_width="0dp"
+                    android:layout_gravity="center"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="16dp"
                     android:layout_weight="1">
+                    <ImageView
 
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="@dimen/spacing_medium"
+                        android:layout_weight="0"
+                         />
                     <ImageView
                         android:id="@+id/img_share"
                         android:layout_width="18dp"

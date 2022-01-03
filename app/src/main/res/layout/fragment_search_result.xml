@@ -48,9 +48,11 @@
         <EditText
             android:id="@+id/edt_search"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
+            android:padding="15dp"
+            android:background="@android:color/transparent"
             android:hint="Search for result"
             android:textSize="14sp"
             android:theme="@style/MyEditTextTheme"
@@ -64,7 +66,7 @@
             android:layout_height="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="24dp"
-            android:background="@drawable/ic_search_blue"
+            android:background="@drawable/sendbtn"
             android:gravity="center"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
@@ -77,25 +79,27 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
             android:layout_marginTop="10dp"
+            android:visibility="gone"
             android:fontFamily="@font/nunitosansregular"
             android:text="Filter by:"
             android:textColor="@color/gray_1"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edt_search"></TextView>
+            app:layout_constraintTop_toBottomOf="@+id/edt_search"/>
 
         <TextView
             android:id="@+id/tv_total_result"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
+            android:visibility="gone"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/nunitosansbold"
             android:text="Found 4 results in"
             android:textColor="@color/gray_1"
             android:textSize="10sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_filter_by"></TextView>
+            app:layout_constraintTop_toBottomOf="@+id/tv_filter_by"/>
 
         <TextView
             android:id="@+id/tv_category"
@@ -103,18 +107,20 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
             android:layout_marginTop="10dp"
+            android:visibility="gone"
             android:fontFamily="@font/nunitosansbold"
             android:text="post"
             android:textColor="@color/skyblue"
             android:textSize="10sp"
             app:layout_constraintStart_toEndOf="@+id/tv_total_result"
-            app:layout_constraintTop_toBottomOf="@+id/tv_filter_by"></TextView>
+            app:layout_constraintTop_toBottomOf="@+id/tv_filter_by"/>
 
         <TextView
             android:id="@+id/tv_events"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
+            android:visibility="gone"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:fontFamily="@font/nunitosansregular"
@@ -122,7 +128,7 @@
             android:textColor="@color/gray_1"
             android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@+id/tv_posts"
-            app:layout_constraintTop_toBottomOf="@+id/edt_search"></TextView>
+            app:layout_constraintTop_toBottomOf="@+id/edt_search"/>
 
         <TextView
             android:id="@+id/tv_posts"
@@ -130,13 +136,14 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
             android:layout_marginTop="10dp"
+            android:visibility="gone"
             android:layout_marginEnd="20dp"
             android:fontFamily="@font/nunitosansregular"
             android:text="Posts"
             android:textColor="@color/gray_1"
             android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@+id/tv_job"
-            app:layout_constraintTop_toBottomOf="@+id/edt_search"></TextView>
+            app:layout_constraintTop_toBottomOf="@+id/edt_search"/>
 
         <TextView
             android:id="@+id/tv_job"
@@ -147,10 +154,11 @@
             android:layout_marginEnd="20dp"
             android:fontFamily="@font/nunitosansregular"
             android:text="Jobs"
+            android:visibility="gone"
             android:textColor="@color/gray_1"
             android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@+id/tv_news"
-            app:layout_constraintTop_toBottomOf="@+id/edt_search"></TextView>
+            app:layout_constraintTop_toBottomOf="@+id/edt_search"/>
 
 
         <TextView
@@ -159,6 +167,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
             android:layout_marginTop="10dp"
+            android:visibility="gone"
             android:layout_marginEnd="20dp"
             android:fontFamily="@font/nunitosansregular"
             android:text="News"
@@ -169,16 +178,58 @@
 
         </TextView>
 
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edt_search"
+            app:tabSelectedTextColor="@color/black"
+            app:tabTextAppearance="@style/tab_text"
+            app:tabMode="scrollable"
+            app:tabTextColor="@color/gray_1">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Post" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Jobs" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="News" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Connections" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Companies" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="events" />
+        </com.google.android.material.tabs.TabLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rc_home"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="20dp"
             android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_total_result" />
+            app:layout_constraintTop_toBottomOf="@+id/tabLayout2" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

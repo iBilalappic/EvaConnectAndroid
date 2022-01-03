@@ -237,8 +237,8 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                 break;
 
             case R.id.ly_security:
-
-                loadFragment(R.id.framelayout, termConditionHelpPolicyFragment, getContext(), true);
+                SecurityFragment securityFragment = new SecurityFragment();
+                loadFragment(R.id.framelayout, securityFragment, getContext(), true);
                 break;
 
             case R.id.img_backarrow:

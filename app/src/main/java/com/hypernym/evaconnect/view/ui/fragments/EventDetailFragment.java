@@ -52,15 +52,15 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EventDetailFragment extends BaseFragment implements Validator.ValidationListener,CommentsAdapter.OnItemClickListener {
-   @BindView(R.id.tv_name)
-   TextView tv_name;
+public class EventDetailFragment extends BaseFragment implements Validator.ValidationListener, CommentsAdapter.OnItemClickListener {
+    @BindView(R.id.tv_name)
+    TextView tv_name;
 
-   @BindView(R.id.img_event)
+    @BindView(R.id.img_event)
     ImageView img_event;
 
-   @BindView(R.id.tv_content)
-   TextView tv_content;
+    @BindView(R.id.tv_content)
+    TextView tv_content;
 
     @BindView(R.id.tv_eventdate)
     TextView tv_date;
@@ -127,15 +127,15 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
     Button button_save;
 
 
-    private List<Comment> comments=new ArrayList<>();
-    private List<EventAttendees> eventAttendees=new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
+    private List<EventAttendees> eventAttendees = new ArrayList<>();
 
-   private EventViewModel eventViewModel;
-   private CommentsAdapter commentsAdapter;
-   private EventAttendeesAdapter eventAttendeesAdapter;
+    private EventViewModel eventViewModel;
+    private CommentsAdapter commentsAdapter;
+    private EventAttendeesAdapter eventAttendeesAdapter;
     private Validator validator;
-    int event_id,comment_id;
-    private Event event=new Event();
+    int event_id, comment_id;
+    private Event event = new Event();
     private InvitedUsersAdapter usersAdapter;
     private List<User> invitedConnections = new ArrayList<>();
 
@@ -148,36 +148,33 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_event_detail, container, false);
-        ButterKnife.bind(this,view);
+        View view = inflater.inflate(R.layout.fragment_event_detail, container, false);
+        ButterKnife.bind(this, view);
         getActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
         init();
         return view;
     }
 
     private void init() {
-        showBackButton();
-        event_id=getArguments().getInt("id");
-        eventViewModel = ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(EventViewModel.class);
+        //  showBackButton();
+        event_id = getArguments().getInt("id");
+        eventViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(EventViewModel.class);
         validator = new Validator(this);
         validator.setValidationListener(this);
-        commentsAdapter=new CommentsAdapter(getContext(),comments,this);
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
+        commentsAdapter = new CommentsAdapter(getContext(), comments, this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rc_comments.setLayoutManager(linearLayoutManager);
         rc_comments.setAdapter(commentsAdapter);
 
-        AppUtils.setGlideImage(getContext(),img_user, LoginUtils.getLoggedinUser().getUser_image());
+        AppUtils.setGlideImage(getContext(), img_user, LoginUtils.getLoggedinUser().getUser_image());
         setAttendeesAdapter();
-         if(NetworkUtils.isNetworkConnected(getContext()))
-         {
-             getEventDetails(event_id);
+        if (NetworkUtils.isNetworkConnected(getContext())) {
+            getEventDetails(event_id);
 
-         }
-         else
-         {
-             networkErrorDialog();
-         }
-            setPageTitle("Event Details");
+        } else {
+            networkErrorDialog();
+        }
+        setPageTitle("Event Details");
 
         like_click.setOnClickListener(new OnOneOffClickListener() {
             @Override
@@ -201,7 +198,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
                     event.setIs_event_like(event.getIs_event_like() - 1);
                     //  post.setLike_count(post.getLike_count()-1);
                 }
-               // Log.d("Detail status", post.getAction() + " count" + post.getIs_post_like());
+                // Log.d("Detail status", post.getAction() + " count" + post.getIs_post_like());
                 eventViewModel.likeEvent(event).observe(getActivity(), new Observer<BaseModel<List<Event>>>() {
                     @Override
                     public void onChanged(BaseModel<List<Event>> listBaseModel) {
@@ -220,12 +217,9 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
         accept_invite.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
-                if(event.getIs_private()==0)
-                {
+                if (event.getIs_private() == 0) {
                     addAttendance(event);
-                }
-                else
-                {
+                } else {
                     updateAttendance(event);
                 }
             }
@@ -233,10 +227,10 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
     }
 
     private void setAttendeesAdapter() {
-            usersAdapter = new InvitedUsersAdapter(getContext(), invitedConnections,false);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-            invite_people.setLayoutManager(linearLayoutManager);
-            invite_people.setAdapter(usersAdapter);
+        usersAdapter = new InvitedUsersAdapter(getContext(), invitedConnections, false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        invite_people.setLayoutManager(linearLayoutManager);
+        invite_people.setAdapter(usersAdapter);
     }
 
 
@@ -245,26 +239,22 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
         eventViewModel.getEventComments(event_id).observe(this, new Observer<BaseModel<List<Comment>>>() {
             @Override
             public void onChanged(BaseModel<List<Comment>> listBaseModel) {
-                if(listBaseModel!=null && !listBaseModel.isError())
-                {
+                if (listBaseModel != null && !listBaseModel.isError()) {
                     comments.addAll(listBaseModel.getData());
-                    if(event.getUser_id().equals(LoginUtils.getLoggedinUser().getId()))
-                    {
-                        for (Comment comment:comments)
-                        {
+                    if (event.getUser_id().equals(LoginUtils.getLoggedinUser().getId())) {
+                        for (Comment comment : comments) {
                             comment.setPostMine(true);
                         }
                     }
-                  //  Collections.reverse(comments);
+                    //  Collections.reverse(comments);
                     commentsAdapter.notifyDataSetChanged();
-                    if(comments.size()>0)
+                    if (comments.size() > 0)
                         rc_comments.smoothScrollToPosition(comments.size() - 1);
                     layout_editcomment.setVisibility(View.GONE);
                     btn_addcomment.setVisibility(View.VISIBLE);
                     edt_comment.setText("");
-               }
-                else {
-                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
             }
         });
@@ -275,40 +265,28 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
         eventViewModel.getEventDetails(event_id).observe(this, new Observer<BaseModel<List<Event>>>() {
             @Override
             public void onChanged(BaseModel<List<Event>> listBaseModel) {
-                if(listBaseModel!=null && !listBaseModel.isError() && listBaseModel.getData().size()>0)
-                {
-                    event=listBaseModel.getData().get(0);
+                if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
+                    event = listBaseModel.getData().get(0);
                     setEventData(listBaseModel.getData().get(0));
-                    for(EventAttendees user:event.getAttendees())
-                    {
+                    for (EventAttendees user : event.getAttendees()) {
                         invitedConnections.add(user.getUser());
                     }
-                usersAdapter.notifyDataSetChanged();
+                    usersAdapter.notifyDataSetChanged();
                     getEventComments(event_id);
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
-                else
-                {
-                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
-                }
-                if(event.getCreated_by_id()== LoginUtils.getLoggedinUser().getId())
-                {
+                if (event.getCreated_by_id() == LoginUtils.getLoggedinUser().getId()) {
                     modify_event.setVisibility(View.VISIBLE);
-                }
-                else
-                {
+                } else {
                     modify_event.setVisibility(View.GONE);
-                    if(event.getIs_attending()!=null && event.getIs_attending().equalsIgnoreCase("Pending"))
-                    {
+                    if (event.getIs_attending() != null && event.getIs_attending().equalsIgnoreCase("Pending")) {
                         accept_invite.setVisibility(View.VISIBLE);
                         interested.setVisibility(View.GONE);
-                    }
-                    else if(event.getIs_attending()!=null && !event.getIs_attending().equalsIgnoreCase("Pending"))
-                    {
+                    } else if (event.getIs_attending() != null && !event.getIs_attending().equalsIgnoreCase("Pending")) {
                         accept_invite.setVisibility(View.GONE);
                         interested.setVisibility(View.VISIBLE);
-                    }
-                    else
-                    {
+                    } else {
                         accept_invite.setVisibility(View.VISIBLE);
                         interested.setVisibility(View.GONE);
                     }
@@ -318,24 +296,19 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
             private void setEventData(Event event) {
                 tv_name.setText(event.getName());
 
-                if(event.getEvent_image().size()>0)
-                {
-                    AppUtils.setGlideImageUrl(getContext(),img_event,event.getEvent_image().get(0));
-                }
-              else {
+                if (event.getEvent_image().size() > 0) {
+                    AppUtils.setGlideImageUrl(getContext(), img_event, event.getEvent_image().get(0));
+                } else {
                     img_event.setBackground(getContext().getDrawable(R.drawable.no_thumbnail));
                 }
                 tv_content.setText(event.getContent());
 
-                tv_date.setText(DateUtils.getFormattedDateDMY(event.getStart_date())+" - "+ DateUtils.getFormattedDateDMY(event.getEnd_date()) +" | "+event.getStart_time()+" - "+event.getEnd_time());
+                tv_date.setText(DateUtils.getFormattedDateDMY(event.getStart_date()) + " - " + DateUtils.getFormattedDateDMY(event.getEnd_date()) + " | " + event.getStart_time() + " - " + event.getEnd_time());
 
                 tv_location.setText(event.getAddress());
-                if(event.getIs_private()==0)
-                {
+                if (event.getIs_private() == 0) {
                     tv_event_type.setText("Open to the public");
-                }
-                else
-                {
+                } else {
                     tv_event_type.setText("Private to the public");
                 }
 
@@ -361,16 +334,13 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
         eventViewModel.updateEventAttendance(event).observe(this, new Observer<BaseModel<List<Event>>>() {
             @Override
             public void onChanged(BaseModel<List<Event>> listBaseModel) {
-                if(listBaseModel!=null && listBaseModel.getData()!=null)
-                {
+                if (listBaseModel != null && listBaseModel.getData() != null) {
                     accept_invite.setVisibility(View.GONE);
                     interested.setVisibility(View.VISIBLE);
                     invitedConnections.add(LoginUtils.getLoggedinUser());
                     usersAdapter.notifyDataSetChanged();
-                }
-                else
-                {
-                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
             }
         });
@@ -386,24 +356,20 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
         eventViewModel.addEventAttendance(event).observe(this, new Observer<BaseModel<List<Event>>>() {
             @Override
             public void onChanged(BaseModel<List<Event>> listBaseModel) {
-                if(listBaseModel!=null && listBaseModel.getData()!=null)
-                {
+                if (listBaseModel != null && listBaseModel.getData() != null) {
                     accept_invite.setVisibility(View.GONE);
                     interested.setVisibility(View.VISIBLE);
                     invitedConnections.add(LoginUtils.getLoggedinUser());
                     usersAdapter.notifyDataSetChanged();
-                }
-                else
-                {
-                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
             }
         });
     }
 
     @OnClick(R.id.btn_addcomment)
-    public void addComment()
-    {
+    public void addComment() {
         validator.validate();
     }
 
@@ -415,40 +381,39 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
 
     private void addEventComment(int event_id) {
 
-            showDialog();
-            User user = LoginUtils.getUser();
-            Comment comment = new Comment();
-            String toServerUnicodeEncoded = StringEscapeUtils.escapeJava(edt_comment.getText().toString());
-            comment.setContent(toServerUnicodeEncoded);
-            comment.setCreated_by_id(user.getId());
-            comment.setStatus(AppConstants.STATUS_ACTIVE);
-            comment.setEvent_id(event_id);
-            eventViewModel.addComment(comment).observe(this, new Observer<BaseModel<List<Comment>>>() {
-                @Override
-                public void onChanged(BaseModel<List<Comment>> listBaseModel) {
-                    if (!listBaseModel.isError()) {
-                        // Toast.makeText(getContext(), getString(R.string.msg_comment_created), Toast.LENGTH_LONG).show();
-                        edt_comment.setText("");
-                        //networkResponseDialog(getString(R.string.success),getString(R.string.msg_comment_created));
+        showDialog();
+        User user = LoginUtils.getUser();
+        Comment comment = new Comment();
+        String toServerUnicodeEncoded = StringEscapeUtils.escapeJava(edt_comment.getText().toString());
+        comment.setContent(toServerUnicodeEncoded);
+        comment.setCreated_by_id(user.getId());
+        comment.setStatus(AppConstants.STATUS_ACTIVE);
+        comment.setEvent_id(event_id);
+        eventViewModel.addComment(comment).observe(this, new Observer<BaseModel<List<Comment>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Comment>> listBaseModel) {
+                if (!listBaseModel.isError()) {
+                    // Toast.makeText(getContext(), getString(R.string.msg_comment_created), Toast.LENGTH_LONG).show();
+                    edt_comment.setText("");
+                    //networkResponseDialog(getString(R.string.success),getString(R.string.msg_comment_created));
 //                        if(comments.size()>0)
 //                            rc_comments.smoothScrollToPosition(comments.size() - 1);
-                        getEventComments(event_id);
-                    } else {
-                        networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                    }
-                    hideDialog();
+                    getEventComments(event_id);
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
-            });
+                hideDialog();
+            }
+        });
     }
 
     @OnClick(R.id.modify_event)
-    public void modifyevent()
-    {
-        CreateEventFragment createEventFragment=new CreateEventFragment();
-        Bundle bundle=new Bundle();
-        bundle.putSerializable("event",event);
+    public void modifyevent() {
+        CreateEventFragment createEventFragment = new CreateEventFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("event", event);
         createEventFragment.setArguments(bundle);
-        loadFragment(R.id.framelayout,createEventFragment,getContext(),true);
+        loadFragment(R.id.framelayout, createEventFragment, getContext(), true);
     }
 
     @Override
@@ -471,9 +436,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
         layout_editcomment.setVisibility(View.VISIBLE);
         btn_addcomment.setVisibility(View.GONE);
         edt_comment.setText(comment);
-        comment_id=comments.get(position).getId();
-
-
+        comment_id = comments.get(position).getId();
     }
 
     @Override
@@ -486,18 +449,17 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
             }
         });
     }
+
     @OnClick(R.id.button_cancel)
-    public void cancel()
-    {
+    public void cancel() {
         layout_editcomment.setVisibility(View.GONE);
         btn_addcomment.setVisibility(View.VISIBLE);
         edt_comment.setText("");
     }
 
     @OnClick(R.id.button_save)
-    public void saveComment()
-    {
-        Comment newcomment=new Comment();
+    public void saveComment() {
+        Comment newcomment = new Comment();
         newcomment.setId(comment_id);
         newcomment.setContent(edt_comment.getText().toString());
         newcomment.setModified_by_id(LoginUtils.getLoggedinUser().getId());
@@ -506,13 +468,10 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
         eventViewModel.editComment(newcomment).observe(this, new Observer<BaseModel<List<Comment>>>() {
             @Override
             public void onChanged(BaseModel<List<Comment>> listBaseModel) {
-                if(NetworkUtils.isNetworkConnected(getContext()))
-                {
+                if (NetworkUtils.isNetworkConnected(getContext())) {
                     getEventDetails(event_id);
                     getEventComments(event_id);
-                }
-                else
-                {
+                } else {
                     networkErrorDialog();
                 }
             }

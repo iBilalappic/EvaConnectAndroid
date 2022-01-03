@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
@@ -20,6 +21,7 @@ import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
+import com.mobsandgeeks.saripaar.annotation.Optional;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -46,21 +48,22 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
 
     public class TextTypeViewHolder extends RecyclerView.ViewHolder {
+        @Nullable
         @BindView(R.id.tv_viewcomments)
         TextView tv_viewcomments;
-
+        @Nullable
         @BindView(R.id.tv_likecount)
         TextView tv_likecount;
 
         @BindView(R.id.tv_comcount)
         TextView tv_comcount;
-
+        @Nullable
         @BindView(R.id.img_like)
         ImageView img_like;
-
+        @Nullable
         @BindView(R.id.img_comment)
         ImageView img_comment;
-
+        @Nullable
         @BindView(R.id.img_share)
         ImageView img_share;
 
@@ -168,25 +171,35 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
     }
 
     public class EventTypeViewHolder extends RecyclerView.ViewHolder {
+        @Nullable
         @BindView(R.id.tv_viewcomments)
         TextView tv_viewcomments;
-
+        @Nullable
         @BindView(R.id.tv_likecount)
         TextView tv_likecount;
-
+        @Nullable
         @BindView(R.id.tv_comcount)
         TextView tv_comcount;
 
+        @Nullable
+        @BindView(R.id.tv_address)
+        TextView tv_address;
+
+        @Nullable
+        @BindView(R.id.tv_date)
+        TextView tv_date;
+
+        @Nullable
         @BindView(R.id.img_like)
         ImageView img_like;
-
+        @Nullable
         @BindView(R.id.like_click)
         LinearLayout like_click;
 
-
+        @Nullable
         @BindView(R.id.img_comment)
         ImageView img_comment;
-
+        @Nullable
         @BindView(R.id.comment_click)
         LinearLayout comment_click;
 
@@ -274,30 +287,32 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
     }
 
     public class JobTypeViewHolder extends RecyclerView.ViewHolder {
+        @Nullable
         @BindView(R.id.tv_viewcomments)
         TextView tv_viewcomments;
-
+        @Nullable
         @BindView(R.id.tv_likecount)
         TextView tv_likecount;
-
+        @Nullable
         @BindView(R.id.tv_comcount)
         TextView tv_comcount;
 
         @BindView(R.id.tv_location)
         TextView tv_location;
 
+        @Nullable
         @BindView(R.id.img_like)
         ImageView img_like;
-
+        @Nullable
         @BindView(R.id.img_comment)
         ImageView img_comment;
-
+        @Nullable
         @BindView(R.id.comment_click)
         LinearLayout comment_click;
 
         @BindView(R.id.share_click)
         LinearLayout share_click;
-
+        @Nullable
         @BindView(R.id.like_click)
         LinearLayout like_click;
 
@@ -393,15 +408,16 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
     }
 
     public class ImageTypeViewHolder extends RecyclerView.ViewHolder {
+        @Nullable
         @BindView(R.id.tv_viewcomments)
         TextView tv_viewcomments;
-
+        @Nullable
         @BindView(R.id.tv_likecount)
         TextView tv_likecount;
-
+        @Nullable
         @BindView(R.id.tv_comcount)
         TextView tv_comcount;
-
+        @Nullable
         @BindView(R.id.tv_createddateTime)
         TextView tv_createdDateTime;
 
@@ -423,9 +439,10 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.tv_connections)
         TextView tv_connections;
 
+        @Nullable
         @BindView(R.id.img_like)
         ImageView img_like;
-
+        @Nullable
         @BindView(R.id.img_comment)
         ImageView img_comment;
 
@@ -453,7 +470,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
         @BindView(R.id.share_click)
         LinearLayout share_click;
-
+        @Nullable
         @BindView(R.id.like_click)
         LinearLayout like_click;
 
@@ -537,12 +554,15 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
     }
 
     public class VideoTypeViewHolder extends RecyclerView.ViewHolder {
+        @Nullable
         @BindView(R.id.tv_viewcomments)
         TextView tv_viewcomments;
 
+        @Nullable
         @BindView(R.id.tv_likecount)
         TextView tv_likecount;
 
+        @Nullable
         @BindView(R.id.tv_comcount)
         TextView tv_comcount;
 
@@ -567,9 +587,11 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.tv_connections)
         TextView tv_connections;
 
+        @Nullable
         @BindView(R.id.img_like)
         ImageView img_like;
 
+        @Nullable
         @BindView(R.id.img_comment)
         ImageView img_comment;
 
@@ -594,6 +616,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.tv_company)
         TextView tv_company;
 
+        @Nullable
         @BindView(R.id.tv_connect)
         TextView tv_connect;
 
@@ -669,18 +692,23 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
     }
 
     public class LinkTypeViewHolder extends RecyclerView.ViewHolder {
+        @Nullable
         @BindView(R.id.tv_viewcomments)
         TextView tv_viewcomments;
 
+        @Nullable
         @BindView(R.id.tv_likecount)
         TextView tv_likecount;
 
+        @Nullable
         @BindView(R.id.tv_comcount)
         TextView tv_comcount;
 
+        @Nullable
         @BindView(R.id.img_like)
         ImageView img_like;
 
+        @Nullable
         @BindView(R.id.img_comment)
         ImageView img_comment;
 
@@ -720,6 +748,8 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.share_click)
         LinearLayout share_click;
 
+
+        @Nullable
         @BindView(R.id.like_click)
         LinearLayout like_click;
 
@@ -728,7 +758,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
         @BindView(R.id.tv_company)
         TextView tv_company;
-
+        @Nullable
         @BindView(R.id.tv_connect)
         TextView tv_connect;
 
@@ -805,18 +835,20 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
 
     public class NewsTypeViewHolder extends RecyclerView.ViewHolder {
+        @Nullable
         @BindView(R.id.tv_viewcomments)
         TextView tv_viewcomments;
-
+        @Nullable
         @BindView(R.id.tv_likecount)
         TextView tv_likecount;
-
+        @Nullable
         @BindView(R.id.tv_comcount)
         TextView tv_comcount;
 
+        @Nullable
         @BindView(R.id.img_like)
         ImageView img_like;
-
+        @Nullable
         @BindView(R.id.img_comment)
         ImageView img_comment;
 
@@ -856,13 +888,13 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
         @BindView(R.id.tv_visit)
         TextView tv_visit;
-
+        @Nullable
         @BindView(R.id.comment_click)
         LinearLayout comment_click;
 
         @BindView(R.id.share_click)
         LinearLayout share_click;
-
+        @Nullable
         @BindView(R.id.like_click)
         LinearLayout like_click;
 
@@ -1139,11 +1171,14 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     ((EventTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((EventTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
 
-                    if (posts.get(position).getIs_event_like() != null && posts.get(position).getIs_event_like() > 0) {
+
+                    ((EventTypeViewHolder) holder).tv_address.setText(String.valueOf(posts.get(position).getAddress()));
+                    ((EventTypeViewHolder) holder).tv_date.setText(DateUtils.eventDate(posts.get(position).getStart_date(),posts.get(position).getEnd_date()));
+/*                    if (posts.get(position).getIs_event_like() != null && posts.get(position).getIs_event_like() > 0) {
                         ((EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.like_selected));
                     } else {
                         ((EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
-                    }
+                    }*/
                     if (posts.get(position).getEvent_image().size() > 0) {
                         AppUtils.setGlideImageUrl(mContext, ((EventTypeViewHolder) holder).profile_image, posts.get(position).getEvent_image().get(0));
                         AppUtils.setGlideVideoThumbnail(mContext, ((EventTypeViewHolder) holder).post_image, posts.get(position).getEvent_image().get(0));

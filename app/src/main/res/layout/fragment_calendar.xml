@@ -47,17 +47,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                <TextView
                     android:id="@+id/fab"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|end"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:src="@android:drawable/ic_input_add"
-                    app:backgroundTint="@color/light_blue"
+                    style="@style/TextStyle.Title"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/button_gradient_1"
+                    android:drawablePadding="10dp"
+                    android:gravity="center"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="20dp"
+                    android:paddingBottom="10dp"
+                    android:text="Post"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:tint="@android:color/white" />
 
                 <TextView
@@ -78,7 +85,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:visibility="visible"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/fab"
                     app:layout_constraintTop_toTopOf="parent" />
 
 

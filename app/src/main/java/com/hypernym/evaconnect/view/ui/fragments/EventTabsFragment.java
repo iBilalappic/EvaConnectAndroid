@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventTabsFragment extends Fragment {
+    
 
     User user = new User();
     public EventTabsFragment() {

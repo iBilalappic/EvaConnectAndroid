@@ -11,19 +11,53 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".view.ui.fragments.NewPostFragment">
+        <LinearLayout
+            android:id="@+id/layout_header"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:gravity="start|center"
+            android:orientation="horizontal"
+            android:background="#FCFBFF"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <ImageView
+                android:id="@+id/img_backarrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:src="@drawable/ic_arrow_left" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/nunitosansbold"
+                android:gravity="end"
+                android:text="Create a Event"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_large"
-            android:layout_marginTop="@dimen/spacing_large"
             android:text="Title"
             android:textAppearance="@style/TextAppearance.Text.Bold"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/layout_header" />
 
         <EditText
             android:id="@+id/edt_eventname"

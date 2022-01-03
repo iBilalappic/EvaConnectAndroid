@@ -267,7 +267,7 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
                     }
 
                     ((EventTypeViewHolder) holder).tv_address.setText(posts.get(position).getAddress());
-                    ((EventTypeViewHolder) holder).tv_date.setText(new StringBuilder().append(posts.get(position).getStart_date()).append("-").append(posts.get(position).getEnd_date()).toString());
+                    ((EventTypeViewHolder) holder).tv_date.setText(DateUtils.eventDate(posts.get(position).getStart_date(),posts.get(position).getEnd_date()));
                     //
                     ((EventHomeAdapter.EventTypeViewHolder) holder).tv_name.setText(posts.get(position).getName());
                     ((EventHomeAdapter.EventTypeViewHolder) holder).tv_location.setText(posts.get(position).getAddress());

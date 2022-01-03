@@ -138,6 +138,45 @@ public final class DateUtils {
         return mOutputTimeString;
     }
 
+    public static String eventDate(String date1, String date2) {
+        Date mParsedDate;
+        Date mParsedDate2;
+        String mOutputDateString = "";
+        String mOutputTimeString = "";
+        String mOutputTimeString2 = "";
+
+        SimpleDateFormat mInputDateFormat =
+                new SimpleDateFormat(DATE_INPUT_FORMAT_WITHOUTTIME, java.util.Locale.getDefault());
+
+        SimpleDateFormat mOutputDateFormat1 =
+                new SimpleDateFormat(DATE_FORMAT_2, java.util.Locale.getDefault());
+        try {
+
+            mParsedDate = mInputDateFormat.parse(date1);
+            mOutputTimeString = mOutputDateFormat1.format(mParsedDate);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        SimpleDateFormat mInputDateFormat2 =
+                new SimpleDateFormat(DATE_INPUT_FORMAT_WITHOUTTIME, java.util.Locale.getDefault());
+
+        SimpleDateFormat mOutputDateFormat2 =
+                new SimpleDateFormat(DATE_FORMAT_2, java.util.Locale.getDefault());
+        try {
+
+            mParsedDate2 = mInputDateFormat2.parse(date2);
+            mOutputTimeString2 = mOutputDateFormat2.format(mParsedDate2);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return mOutputTimeString + " - " + mOutputTimeString2;
+    }
+
     public static String getFormattedDateDMY(String datetime) {
         Date mParsedDate;
         String mOutputDateString = "";

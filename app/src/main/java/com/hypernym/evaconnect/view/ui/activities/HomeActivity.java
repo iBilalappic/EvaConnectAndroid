@@ -12,9 +12,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -43,6 +45,7 @@ import com.hypernym.evaconnect.view.ui.fragments.ActivityFragment;
 import com.hypernym.evaconnect.view.ui.fragments.BaseFragment;
 import com.hypernym.evaconnect.view.ui.fragments.ChatFragment;
 import com.hypernym.evaconnect.view.ui.fragments.ConnectionsFragment;
+import com.hypernym.evaconnect.view.ui.fragments.ConnectionsTabFragment;
 import com.hypernym.evaconnect.view.ui.fragments.EditProfileFragment;
 import com.hypernym.evaconnect.view.ui.fragments.EventDetailFragment;
 import com.hypernym.evaconnect.view.ui.fragments.HomeFragment;
@@ -53,6 +56,7 @@ import com.hypernym.evaconnect.view.ui.fragments.NewPostFragment;
 import com.hypernym.evaconnect.view.ui.fragments.NotificationsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.PersonProfileFragment;
 import com.hypernym.evaconnect.view.ui.fragments.PostDetailsFragment;
+import com.hypernym.evaconnect.view.ui.fragments.SearchResultFragment;
 import com.hypernym.evaconnect.view.ui.fragments.SpecficJobFragment;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
@@ -387,9 +391,9 @@ public class HomeActivity extends BaseActivity {
         tv_post.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
 
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.framelayout);
-        if (f instanceof ConnectionsFragment) {
+        if (f instanceof ConnectionsTabFragment) {
         } else {
-            ConnectionsFragment fragment = new ConnectionsFragment();
+            ConnectionsTabFragment fragment = new ConnectionsTabFragment();
             loadFragment(R.id.framelayout, fragment, this, true);
         }
         //   tv_back.setVisibility(View.GONE);
@@ -498,9 +502,17 @@ public class HomeActivity extends BaseActivity {
 
     @OnClick(R.id.toolbarSearch)
     public void openDialog(View view) {
-        searchDialog = new SearchDialog(this);
-        searchDialog.show();
-
+       /* searchDialog = new SearchDialog(this);
+        searchDialog.show();*/
+        SearchResultFragment searchResultFragment = new SearchResultFragment();
+        FragmentTransaction transaction = ( this).getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+        transaction.replace(R.id.framelayout, searchResultFragment);
+        transaction.addToBackStack(null);
+/*        Bundle bundle = new Bundle();
+        bundle.putString(Constants.SEARCH,edt_keyword.getText().toString());
+        searchResultFragment.setArguments(bundle);*/
+        transaction.commit();
 
     }
     //
@@ -612,7 +624,7 @@ public class HomeActivity extends BaseActivity {
 
 
 
-        } else if (fragment instanceof MyLikesFragment || fragment instanceof ConnectionsFragment || fragment instanceof EditProfileFragment || fragment instanceof NotificationsFragment || fragment instanceof MessageFragment
+        } else if (fragment instanceof MyLikesFragment || fragment instanceof ConnectionsTabFragment || fragment instanceof EditProfileFragment || fragment instanceof NotificationsFragment || fragment instanceof MessageFragment
         || fragment instanceof NewPostFragment) {
 //            img_home.setImageDrawable(getDrawable(R.drawable.home_selected));
 //            img_connections.setImageDrawable(getDrawable(R.drawable.connections));

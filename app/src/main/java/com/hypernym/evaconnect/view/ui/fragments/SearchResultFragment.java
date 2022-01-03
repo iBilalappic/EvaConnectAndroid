@@ -148,8 +148,8 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         tv_job.setOnClickListener(this);
         tv_posts.setOnClickListener(this);
         initRecycler();
-        showBackButton();
-        setPageTitle("Search Results");
+       // showBackButton();
+       // setPageTitle("Search Results");
         /**
          * add scroll listener while user reach in bottom load more will call
          */
