@@ -49,6 +49,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.OnItemClickListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private JobListViewModel jobListViewModel;
+
+
     @BindView(R.id.profile_image)
     CircleImageView profile_image;
 
@@ -131,8 +133,8 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
 
         jobListViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(JobListViewModel.class);
         user = LoginUtils.getUser();
-        showBackButton();
-        setPageTitle("Job Listing");
+       // showBackButton();
+       // setPageTitle("Job Listing");
         if ((getArguments() != null)) {
         //    setPageTitle("");
          //   showBackButton();

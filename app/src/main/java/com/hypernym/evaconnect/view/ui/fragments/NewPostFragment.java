@@ -127,6 +127,8 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
     @BindView(R.id.tv_filename)
     TextView tv_filename;
 
+    @BindView(R.id.img_backarrow)
+    ImageView img_backarrow;
 
     @BindView(R.id.loadimage)
     WebView loadimage;
@@ -168,6 +170,13 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_new_post, container, false);
         ButterKnife.bind(this, view);
+        ButterKnife.bind(this, view);
+        img_backarrow.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+               getActivity().onBackPressed();
+            }
+        });
         postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(PostViewModel.class);
         connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
         init();
@@ -257,7 +266,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
         tv_address.setText(user.getCity() + " , " + user.getCountry());
         // getConnectionCount();
 
-        showBackButton();
+       // showBackButton();
         setPostButton();
 
         if (getArguments().getBoolean("document_type")) {

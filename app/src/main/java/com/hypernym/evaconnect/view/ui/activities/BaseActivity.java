@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -101,6 +102,11 @@ public class BaseActivity extends AppCompatActivity {
         hideDialog();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+       // getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+    }
 
     public void loadFragment(int id, Fragment fragment, Context context, boolean isBack) {
         FragmentTransaction transaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();

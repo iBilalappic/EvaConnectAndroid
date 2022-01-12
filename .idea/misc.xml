@@ -20,6 +20,7 @@
         <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/activity_create_account_5.xml" value="0.105078125" />
         <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/activity_email_verification.xml" value="0.17890625" />
         <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/activity_forgot_password.xml" value="0.17890625" />
+        <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/activity_home.xml" value="0.190625" />
         <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/activity_password.xml" value="0.152" />
         <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/activity_verification_code.xml" value="0.17890625" />
@@ -47,11 +48,12 @@
         <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/fragment_event_tabs.xml" value="0.17890625" />
         <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/fragment_home.xml" value="0.190625" />
         <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/fragment_job.xml" value="0.190625" />
+        <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/fragment_job_view_pager.xml" value="0.190625" />
         <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/fragment_joblisting.xml" value="0.190625" />
         <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/fragment_message.xml" value="0.17890625" />
         <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/fragment_message_connections.xml" value="0.17890625" />
         <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/fragment_my_activity.xml" value="0.264" />
-        <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/fragment_new_post.xml" value="0.190625" />
+        <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/fragment_new_post.xml" value="0.16" />
         <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/fragment_notifications.xml" value="0.190625" />
         <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/fragment_pending.xml" value="0.180078125" />
         <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/fragment_person_detail.xml" value="0.176" />
@@ -68,10 +70,20 @@
         <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/item_connection.xml" value="0.190625" />
         <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/item_friend_list.xml" value="0.4" />
         <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/item_notification.xml" value="0.264" />
-        <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/layout_bottomsheet_attachment.xml" value="0.190625" />
+        <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/layout_bottomsheet_attachment.xml" value="0.36964078794901506" />
+        <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/layout_bottomsheet_share.xml" value="0.264" />
+        <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/nav_menu_item.xml" value="0.190625" />
         <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/navigation_menu.xml" value="0.190625" />
         <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/layout/toolbar.xml" value="0.2" />
+        <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/menu/activity_main_drawer.xml" value="0.190625" />
+        <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.190625" />
         <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/menu/calendar_popup.xml" value="0.190625" />
+        <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/menu/chat_options.xml" value="0.190625" />
+        <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/menu/comment_menu.xml" value="0.190625" />
+        <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/menu/dashboard_menu.xml" value="0.190625" />
+        <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/menu/job_menu.xml" value="0.190625" />
+        <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/menu/menu_options.xml" value="0.190625" />
+        <entry key="..\:/Users/metis/StudioProjects/eva-android/app/src/main/res/menu/post_menu.xml" value="0.190625" />
       </map>
     </option>
   </component>

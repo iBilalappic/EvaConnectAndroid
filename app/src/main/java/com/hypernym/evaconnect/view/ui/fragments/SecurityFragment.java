@@ -33,7 +33,7 @@ public class SecurityFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(view);
+        ButterKnife.bind(this, view);
         img_backarrow.setOnClickListener(this);
         ly_change_password.setOnClickListener(this);
     }

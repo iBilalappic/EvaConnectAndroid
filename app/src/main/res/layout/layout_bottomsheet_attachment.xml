@@ -23,21 +23,22 @@
         android:orientation="horizontal"
         android:paddingStart="@dimen/spacing_large"
         android:paddingTop="@dimen/spacing_large"
+        android:paddingBottom="@dimen/spacing_large"
         android:paddingEnd="@dimen/spacing_large">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="25dp"
+            android:layout_height="match_parent"
             android:src="@drawable/ic_picture" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/spacing_large"
+            android:layout_marginStart="20dp"
             android:fontFamily="@font/nunitosansregular"
             android:textColor="@color/black"
             android:text="Add photo or video"
-            android:textSize="12sp"></TextView>
+            android:textSize="17sp"/>
 
 
     </LinearLayout>
@@ -49,11 +50,12 @@
         android:orientation="horizontal"
         android:paddingStart="@dimen/spacing_large"
         android:paddingTop="@dimen/spacing_large"
+        android:paddingBottom="@dimen/spacing_large"
         android:paddingEnd="@dimen/spacing_large">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="25dp"
+            android:layout_height="match_parent"
             android:src="@drawable/ic_paperclip" />
 
         <TextView
@@ -63,7 +65,7 @@
             android:fontFamily="@font/nunitosansregular"
             android:textColor="@color/black"
             android:text="Add document"
-            android:textSize="12sp"></TextView>
+            android:textSize="17sp"/>
 
 
     </LinearLayout>
@@ -75,12 +77,12 @@
         android:orientation="horizontal"
         android:paddingStart="@dimen/spacing_large"
         android:paddingTop="@dimen/spacing_large"
-        android:paddingEnd="@dimen/spacing_large"
-        android:paddingBottom="@dimen/spacing_medium">
+        android:paddingBottom="@dimen/spacing_large"
+        android:paddingEnd="@dimen/spacing_large">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="25dp"
+            android:layout_height="match_parent"
             android:src="@drawable/ic_link_url" />
 
         <TextView
@@ -90,7 +92,7 @@
             android:fontFamily="@font/nunitosansregular"
             android:textColor="@color/black"
             android:text="Add a URL link"
-            android:textSize="12sp"></TextView>
+            android:textSize="17sp"/>
 
 
     </LinearLayout>

@@ -346,6 +346,7 @@ public class HomeActivity extends BaseActivity {
         connections_selector.setImageResource(0);
         messages_selector.setImageResource(0);
         profile_selector.setImageResource(0);
+        post_selector.setImageResource(0);
 
         img_home.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
         tv_home.setTextColor(ContextCompat.getColor(this, R.color.skyblue));
@@ -376,6 +377,7 @@ public class HomeActivity extends BaseActivity {
         connections_selector.setImageResource(R.drawable.bottomline);
         messages_selector.setImageResource(0);
         profile_selector.setImageResource(0);
+        post_selector.setImageResource(0);
 
 
         img_home.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
@@ -407,6 +409,7 @@ public class HomeActivity extends BaseActivity {
         connections_selector.setImageResource(0);
         messages_selector.setImageResource(R.drawable.bottomline);
         profile_selector.setImageResource(0);
+        post_selector.setImageResource(0);
 
 
         img_home.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
@@ -445,6 +448,7 @@ public class HomeActivity extends BaseActivity {
         connections_selector.setImageResource(0);
         messages_selector.setImageResource(0);
         profile_selector.setImageResource(R.drawable.bottomline);
+        post_selector.setImageResource(0);
 
         img_home.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
         img_connections.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));

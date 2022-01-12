@@ -28,8 +28,9 @@
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:tint="@color/black"
+            android:layout_gravity=""
             android:src="@drawable/ic_share_with_connection" />
 
         <TextView
@@ -39,7 +40,7 @@
             android:fontFamily="@font/nunitosansregular"
             android:textColor="@color/black"
             android:text="Share with Connection"
-            android:textSize="12sp"></TextView>
+            android:textSize="17sp"/>
 
 
     </LinearLayout>
@@ -55,8 +56,8 @@
         android:paddingEnd="@dimen/spacing_large">
 
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="match_parent"
             android:tint="@color/black"
             android:src="@drawable/ic_share_whatsapp" />
 
@@ -67,7 +68,7 @@
             android:fontFamily="@font/nunitosansregular"
             android:textColor="@color/black"
             android:text="Share with WhatsApp"
-            android:textSize="12sp"></TextView>
+            android:textSize="17sp"/>
 
 
     </LinearLayout>
@@ -83,18 +84,18 @@
         android:paddingBottom="@dimen/spacing_large">
 
         <ImageView
-            android:layout_width="15dp"
-            android:layout_height="15dp"
+            android:layout_width="25dp"
+            android:layout_height="match_parent"
             android:src="@drawable/ic_link_url" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
+            android:layout_marginStart="20dp"
             android:fontFamily="@font/nunitosansregular"
             android:textColor="@color/black"
             android:text="Share URL link"
-            android:textSize="12sp"></TextView>
+            android:textSize="17sp"/>
 
 
     </LinearLayout>
@@ -110,18 +111,18 @@
         android:paddingBottom="@dimen/spacing_large">
 
         <ImageView
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="25dp"
+            android:layout_height="match_parent"
             android:src="@drawable/ic_share" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="21dp"
+            android:layout_marginStart="20dp"
             android:fontFamily="@font/nunitosansregular"
             android:textColor="@color/black"
             android:text="Share with Other"
-            android:textSize="12sp"></TextView>
+            android:textSize="17sp"/>
 
 
     </LinearLayout>
