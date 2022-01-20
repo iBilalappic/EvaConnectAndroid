@@ -80,7 +80,7 @@
 
 
         <EditText
-            android:id="@+id/tv_country"
+            android:id="@+id/ed_country"
             style="@style/Button.border_unselected_white"
             android:layout_width="250dp"
             android:layout_height="37dp"
@@ -107,7 +107,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_country" />
+            app:layout_constraintTop_toBottomOf="@+id/ed_country" />
 
 
         <EditText

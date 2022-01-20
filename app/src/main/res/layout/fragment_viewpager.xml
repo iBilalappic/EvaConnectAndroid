@@ -14,11 +14,10 @@
         android:background="@color/lighter_gray_1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-
+        app:tabIndicatorColor="@color/skyblue"
         app:layout_constraintTop_toTopOf="parent"
-        app:tabIndicatorColor="@color/white"
         app:tabSelectedTextColor="@color/skyblue"
-        app:tabTextAppearance="@style/CustomTextAppearanceTab"
+        app:tabTextAppearance="@style/CustomTextAppearanceMainTab"
         app:tabTextColor="@color/gray" />
 
     <View

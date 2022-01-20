@@ -4,8 +4,9 @@
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/8cd9b0501cb8c597dee5a2e664fae5af/swiperefreshlayout-1.0.0/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/8cd9b0501cb8c597dee5a2e664fae5af/swiperefreshlayout-1.0.0/jars/classes.jar!/" />
       <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/8cd9b0501cb8c597dee5a2e664fae5af/swiperefreshlayout-1.0.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/aec7cc4bc6da3b1ffab03f774217d902/swiperefreshlayout-1.0.0/res" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/8cd9b0501cb8c597dee5a2e664fae5af/swiperefreshlayout-1.0.0/jars/classes.jar!/" />
       <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/8cd9b0501cb8c597dee5a2e664fae5af/swiperefreshlayout-1.0.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />

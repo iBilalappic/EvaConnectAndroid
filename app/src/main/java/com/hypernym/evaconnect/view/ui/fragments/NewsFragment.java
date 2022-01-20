@@ -114,6 +114,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener, 
     private void init() {
         newsViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(NewsViewModel.class);
 
+        requireActivity().findViewById(R.id.line).setVisibility(View.VISIBLE);
         //   currentPage = PAGE_START;
         postAdapter = new HomePostsAdapter(getContext(), posts, this);
         linearLayoutManager = new LinearLayoutManager(getContext());

@@ -11,7 +11,7 @@
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
-
+        android:id="@+id/main_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -19,11 +19,13 @@
         <ImageView
 
             android:id="@+id/imageView5"
-            android:layout_width="150dp"
-            android:layout_height="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="16dp"
             android:src="@drawable/ic_toolbar_icon"
+            app:layout_constraintBottom_toTopOf="@+id/seprator_line"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,8 +37,9 @@
             android:layout_marginEnd="3dp"
             android:gravity="right"
             android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView5"
             app:layout_constraintEnd_toStartOf="@+id/toolbarlayout"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="@+id/imageView5">
 
             <ImageView
                 android:id="@+id/img_search"
@@ -54,12 +57,12 @@
             android:id="@+id/toolbarlayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
             android:layout_marginRight="10dp"
             android:gravity="right"
             android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView5"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="@+id/imageView5">
 
             <ImageView
                 android:id="@+id/img_menu"
@@ -140,9 +143,10 @@
             android:layout_height="2dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/ic_blue_red"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+            app:layout_constraintTop_toBottomOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

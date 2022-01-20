@@ -4,9 +4,10 @@
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/ff8e6c78bed9964bba35a76b11528f1e/gifdecoder-4.10.0/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/ff8e6c78bed9964bba35a76b11528f1e/gifdecoder-4.10.0/jars/classes.jar!/" />
       <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/ff8e6c78bed9964bba35a76b11528f1e/gifdecoder-4.10.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/4add510ada183d2e81e4ce36f01abd90/gifdecoder-4.10.0/res" />
       <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/ff8e6c78bed9964bba35a76b11528f1e/gifdecoder-4.10.0/AndroidManifest.xml" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/ff8e6c78bed9964bba35a76b11528f1e/gifdecoder-4.10.0/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/com.github.bumptech.glide/gifdecoder/4.10.0/bb79514b223bfa7560f7b7849bd66eb07370937e/gifdecoder-4.10.0-javadoc.jar!/" />

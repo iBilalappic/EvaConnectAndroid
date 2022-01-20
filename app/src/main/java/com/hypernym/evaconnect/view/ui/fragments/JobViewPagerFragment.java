@@ -24,12 +24,17 @@ public class JobViewPagerFragment extends BaseFragment {
         setHasOptionsMenu(true);
     }
 
-
+   @Override
+    public void onResume() {
+        super.onResume();
+        requireActivity().findViewById(R.id.seprator_line).setVisibility(View.GONE);
+        requireActivity().findViewById(R.id.line).setVisibility(View.GONE);
+    }
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_job_view_pager, container, false);
         ButterKnife.bind(this,view);
-        requireActivity().findViewById(R.id.seprator_line).setVisibility(View.GONE);
         hideBackButton();
+        getActivity().findViewById(R.id.line).setVisibility(View.GONE);
         sectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
         mViewPager = (ViewPager) view.findViewById(R.id.container);
         mViewPager.setAdapter(sectionsPagerAdapter);

@@ -119,7 +119,8 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
         postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(PostViewModel.class);
         //   currentPage = PAGE_START;
        connectionViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
-        postAdapter = new PostAdapter(getContext(), posts, this);
+
+       postAdapter = new PostAdapter(getContext(), posts, this);
         linearLayoutManager = new LinearLayoutManager(getContext());
 
         rc_post.setLayoutManager(linearLayoutManager);

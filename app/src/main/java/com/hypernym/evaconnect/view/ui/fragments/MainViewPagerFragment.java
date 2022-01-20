@@ -44,7 +44,6 @@ public class MainViewPagerFragment extends BaseFragment implements FloatingActio
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_viewpager, container, false);
         ButterKnife.bind(this,view);
-        requireActivity().findViewById(R.id.seprator_line).setVisibility(View.GONE);
         hideBackButton();
         sectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
         mViewPager = (ViewPager) view.findViewById(R.id.container);
@@ -54,6 +53,9 @@ public class MainViewPagerFragment extends BaseFragment implements FloatingActio
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setupWithViewPager(mViewPager);
+        tabLayout.setSelectedTabIndicator(getResources().getDrawable(R.drawable.bottomline));
+        tabLayout.setTabIndicatorFullWidth(false);
+
         fab.setOnClickListener(this);
 
         if(getnewPost())
@@ -109,7 +111,7 @@ public class MainViewPagerFragment extends BaseFragment implements FloatingActio
 
         @Override
         public int getCount() {
-            if(LoginUtils.getUser().getType()!=null&&LoginUtils.getUser().getType().equalsIgnoreCase("company")){
+            if(LoginUtils.getUser()!=null && LoginUtils.getUser().getType().equalsIgnoreCase("company")){
                 return 3;
             }else{
                 return 4;

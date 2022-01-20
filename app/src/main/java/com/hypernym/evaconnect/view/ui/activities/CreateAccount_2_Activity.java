@@ -41,6 +41,8 @@ public class CreateAccount_2_Activity extends BaseActivity implements
     @BindView(R.id.edit_about_yourself)
     EditText edit_about_yourself;
 
+    @BindView(R.id.tv_main_title)
+    TextView tv_main_title;
 
     String email, photourl, activity_type, user_type, firstname, surname, file_name,path;
 
@@ -134,6 +136,17 @@ public class CreateAccount_2_Activity extends BaseActivity implements
             user_type = getIntent().getStringExtra("userType");
             firstname = getIntent().getStringExtra("FirstName");
             surname = getIntent().getStringExtra("SurName");
+        }
+
+        if(user_type!=null){
+            switch (user_type){
+                case "company":{
+                    tv_main_title.setText(R.string.tell_us_about_comapny);
+                }
+                case "user":{
+                    tv_main_title.setText(R.string.tell_us_about_yourself);
+                }
+            }
         }
 
     }

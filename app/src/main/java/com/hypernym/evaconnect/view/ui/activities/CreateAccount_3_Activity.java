@@ -13,13 +13,17 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,9 +45,11 @@ import com.hypernym.evaconnect.utils.Constants;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.skydoves.powerspinner.IconSpinnerItem;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -63,8 +69,6 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
     @BindView(R.id.btn_next)
     Button btn_next;
 
-    @BindView(R.id.edit_dob)
-    EditText edit_dob;
 
     @BindView(R.id.tv_dob)
     TextView tv_dob;
@@ -73,8 +77,8 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
     TextView title;
 
     @NotEmpty
-    @BindView(R.id.tv_country)
-    EditText tv_country;
+    @BindView(R.id.ed_country)
+    EditText ed_country;
 
     @NotEmpty
     @BindView(R.id.tv_city)
@@ -90,9 +94,24 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
     @BindView(R.id.tv_already_account)
     TextView tv_already_account;
 
+    @BindView(R.id.layout_date)
+    LinearLayout layout_date;
+
+    @BindView(R.id.edit_date)
+    EditText edit_date;
+
+    @BindView(R.id.edit_month)
+    EditText edit_month;
+
+    @BindView(R.id.edit_year)
+    EditText edit_year;
+
+
+
     String email, photourl, activity_type, user_type, firstname, surname, file_name, path, about, dob;
     final Calendar myCalendar = Calendar.getInstance();
 
+    String dob_str = "";
     public static final int RequestPermissionCode = 1;
     LatLng mLastLocation;
     long UPDATE_INTERVAL = 15000;  /* 1 sec */
@@ -188,11 +207,11 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
             about = getIntent().getStringExtra("about");
         }
         if (user_type.equals("user")) {
-            edit_dob.setVisibility(View.VISIBLE);
+            layout_date.setVisibility(View.VISIBLE);
             tv_dob.setVisibility(View.VISIBLE);
             title.setText("Date of Birth / Location");
         } else {
-            edit_dob.setVisibility(View.GONE);
+            layout_date.setVisibility(View.GONE);
             tv_dob.setVisibility(View.GONE);
             title.setText("Location");
         }
@@ -217,12 +236,57 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
             }
         });
 
-        edit_dob.setOnClickListener(new View.OnClickListener() {
+        ed_country.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.toString().equalsIgnoreCase("UK")) {
+                    List<String> iconSpinnerItems = new ArrayList<>();
+                    iconSpinnerItems.add("item1");
+
+                }
+                else {
+
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        edit_date.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                new DatePickerDialog(CreateAccount_3_Activity.this, date, myCalendar
+                new DatePickerDialog(CreateAccount_3_Activity.this,R.style.DialogTheme, date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+        edit_month.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                new DatePickerDialog(CreateAccount_3_Activity.this,R.style.DialogTheme, date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+        edit_year.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                new DatePickerDialog(CreateAccount_3_Activity.this,R.style.DialogTheme, date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
@@ -232,8 +296,17 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
     private void updateLabel() {
         String myFormat = "MM/dd/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        edit_date.setText(String.valueOf(DateFormat.format("dd",   myCalendar.getTime())));
+        edit_month.setText(String.valueOf(DateFormat.format("MM",   myCalendar.getTime())));
+        edit_year.setText(String.valueOf(DateFormat.format("YYYY", myCalendar.getTime())));
+        dob_str = sdf.format(myCalendar.getTime());
 
-        edit_dob.setText(sdf.format(myCalendar.getTime()));
+      /*  String dayOfTheWeek = (String) DateFormat.format("EEEE", myCalendar.getTime()); // Thursday
+        String day          = (String) DateFormat.format("dd",   myCalendar.getTime()); // 20
+        String monthString  = (String) DateFormat.format("MMM",  myCalendar.getTime()); // Jun
+        String monthNumber  = (String) DateFormat.format("MM",   myCalendar.getTime()); // 06
+        String year         = (String) DateFormat.format("YY", myCalendar.getTime()); // 2013*/
+       /* edit_dob.setText(sdf.format(myCalendar.getTime()));*/
     }
 
     @Override
@@ -255,9 +328,9 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
             intent.putExtra("FirstName", firstname);
             intent.putExtra("SurName", surname);
             intent.putExtra("city", tv_city.getText().toString());
-            intent.putExtra("country", tv_country.getText().toString());
+            intent.putExtra("country", ed_country.getText().toString());
             intent.putExtra("about", about);
-            intent.putExtra("dob", edit_dob.getText().toString());
+            intent.putExtra("dob", dob_str);
             intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
             startActivity(intent);
 
@@ -270,9 +343,9 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
             intent.putExtra("FirstName", firstname);
             intent.putExtra("SurName", surname);
             intent.putExtra("about", about);
-            intent.putExtra("dob", edit_dob.getText().toString());
+            intent.putExtra("dob", dob_str);
             intent.putExtra("city", tv_city.getText().toString());
-            intent.putExtra("country", tv_country.getText().toString());
+            intent.putExtra("country", ed_country.getText().toString());
             intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
             startActivity(intent);
         } else {
@@ -285,9 +358,9 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
                 intent.putExtra("FilePath", file_name);
                 intent.putExtra("userType", user_type);
                 intent.putExtra("about", about);
-                intent.putExtra("dob", edit_dob.getText().toString());
+                intent.putExtra("dob", dob_str);
                 intent.putExtra("city", tv_city.getText().toString());
-                intent.putExtra("country", tv_country.getText().toString());
+                intent.putExtra("country", ed_country.getText().toString());
                 intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
                 startActivity(intent);
             } else {
@@ -296,9 +369,9 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
                 intent.putExtra("SurName", surname);
                 intent.putExtra("userType", user_type);
                 intent.putExtra("about", about);
-                intent.putExtra("dob", edit_dob.getText().toString());
+                intent.putExtra("dob", dob_str);
                 intent.putExtra("city", tv_city.getText().toString());
-                intent.putExtra("country", tv_country.getText().toString());
+                intent.putExtra("country", ed_country.getText().toString());
                 intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
                 startActivity(intent);
             }
@@ -312,7 +385,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
         for (ValidationError error : errors) {
             View view = error.getView();
             String message = error.getCollatedErrorMessage(this);
-            if (view.getId() == R.id.tv_country) {
+            if (view.getId() == R.id.ed_country) {
                 message = getString(R.string.msg_country);
             }
             if (view.getId() == R.id.tv_city) {
@@ -412,7 +485,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
                     String sector = splitArray[1];
 
                     tv_city.setText(city);
-                    tv_country.setText(country);
+                    ed_country.setText(country);
                     hideDialog();
 
                 }
@@ -446,6 +519,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
 
             case RequestPermissionCode:
@@ -477,13 +551,18 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
                 break;
 
             case R.id.img_cross:
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                break;
 
             case R.id.tv_already_account:
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+                break;
+
+            case R.id.edit_month:
+            case R.id.edit_year:
+            case R.id.edit_date:
+                new DatePickerDialog(CreateAccount_3_Activity.this, date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
                 break;
         }
     }
