@@ -23,8 +23,6 @@
             tools:layout_conversion_absoluteWidth="411dp" />
 
 
-
-
         <FrameLayout
             android:id="@+id/framelayout"
             android:layout_width="0dp"
@@ -64,21 +62,21 @@
                         android:src="@drawable/ic_home_1" />
 
                     <TextView
-                        android:layout_marginBottom="6dp"
                         android:id="@+id/tv_home"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:layout_marginBottom="6dp"
                         android:fontFamily="@font/nunitosansbold"
                         android:text="Home"
                         android:textColor="@color/gray_1"
                         android:textSize="12sp" />
 
                     <ImageView
-                        android:layout_gravity="bottom"
                         android:id="@+id/home_selector"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="6dp"
+                        android:layout_gravity="bottom" />
 
                 </LinearLayout>
 
@@ -102,27 +100,28 @@
 
                     <ImageView
                         android:id="@+id/img_connections"
-                        android:layout_width="40dp"
-                        android:layout_height="23dp"
+                        android:layout_width="35dp"
+                        android:layout_height="25dp"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_connection_1" />
 
 
                     <TextView
-                        android:paddingBottom="6dp"
                         android:id="@+id/tv_connections"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:fontFamily="@font/nunitosansbold"
+                        android:paddingBottom="6dp"
                         android:text="Connections"
 
                         android:textColor="@color/gray_1"
                         android:textSize="12sp" />
+
                     <ImageView
                         android:id="@+id/connections_selector"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="6dp" />
 
                 </LinearLayout>
 
@@ -146,27 +145,28 @@
 
                     <ImageView
                         android:id="@+id/img_post"
-                        android:layout_width="40dp"
-                        android:layout_height="23dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:layout_gravity="center"
                         android:src="@drawable/plus" />
 
 
                     <TextView
-                        android:paddingBottom="6dp"
                         android:id="@+id/tv_post"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:fontFamily="@font/nunitosansbold"
+                        android:paddingBottom="6dp"
                         android:text="Post"
 
                         android:textColor="@color/gray_1"
                         android:textSize="12sp" />
+
                     <ImageView
                         android:id="@+id/post_selector"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="4dp" />
 
                 </LinearLayout>
 
@@ -208,8 +208,8 @@
 
                         <ImageView
                             android:id="@+id/img_messages"
-                            android:layout_width="50dp"
-                            android:layout_height="20dp"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
                             android:src="@drawable/ic_message_1"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -220,21 +220,21 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <TextView
-android:paddingBottom="6dp"
                         android:id="@+id/tv_message"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:fontFamily="@font/nunitosansbold"
-                        android:text="Messages"
                         android:gravity="center_horizontal|bottom"
+                        android:paddingBottom="6dp"
+                        android:text="Messages"
                         android:textColor="@color/gray_1"
                         android:textSize="12sp" />
 
                     <ImageView
                         android:id="@+id/messages_selector"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="6dp" />
                 </LinearLayout>
 
 
@@ -261,12 +261,12 @@ android:paddingBottom="6dp"
                         android:src="@drawable/ic_profile_1" />
 
                     <TextView
-                        android:paddingBottom="6dp"
                         android:id="@+id/tv_profile"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:fontFamily="@font/nunitosansbold"
+                        android:paddingBottom="6dp"
                         android:text="Profile"
                         android:textColor="@color/gray_1"
                         android:textSize="12sp" />
@@ -275,8 +275,7 @@ android:paddingBottom="6dp"
 
                         android:id="@+id/profile_selector"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        />
+                        android:layout_height="6dp" />
 
                 </LinearLayout>
 

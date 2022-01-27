@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.RingtoneManager;
 import android.media.ThumbnailUtils;
@@ -18,7 +19,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.Gravity;
@@ -292,9 +296,14 @@ public final class AppUtils {
                 obs.removeGlobalOnLayoutListener(this);
                 if (tv.getLineCount() > maxLine) {
                     int lineEndIndex = tv.getLayout().getLineEnd(maxLine);
-                    String text = tv.getText().subSequence(0, lineEndIndex - maxLine) + "...Tap to See more";
-                    tv.setText(text);
+                    String text = tv.getText().subSequence(0, lineEndIndex - maxLine) + "... Tap to see more";
 
+                    if(text != null && text.contains("Tap to see more"))
+                    {
+                        Spannable spannable = new SpannableString(text);
+                        spannable.setSpan(new ForegroundColorSpan(Color.GRAY), text.indexOf("Tap to see more"), text.indexOf("Tap to see more") + "Tap to see more".length(),Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        tv.setText(spannable);
+                    }
                 }
             }
         });

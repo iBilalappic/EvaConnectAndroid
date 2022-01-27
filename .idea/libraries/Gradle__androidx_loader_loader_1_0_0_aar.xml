@@ -3,8 +3,9 @@
     <CLASSES>
       <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/8f60e560032f1532325ea8bf9ec3cc7d/loader-1.0.0/res" />
       <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/99f21cd90f8d77aa8e5551c4c035e652/loader-1.0.0/res" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/8f60e560032f1532325ea8bf9ec3cc7d/loader-1.0.0/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/8f60e560032f1532325ea8bf9ec3cc7d/loader-1.0.0/AndroidManifest.xml" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/126660a10bcbed6088f7e6dcf6f0d86f/loader-1.0.0/AndroidManifest.xml" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/126660a10bcbed6088f7e6dcf6f0d86f/loader-1.0.0/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/126660a10bcbed6088f7e6dcf6f0d86f/loader-1.0.0/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

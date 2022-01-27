@@ -278,7 +278,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
 
             attachment.setVisibility(View.VISIBLE);
 
-            post.setBackground(getResources().getDrawable(R.drawable.button_bg));
+            post.setBackground(getResources().getDrawable(R.drawable.button_gradient_1));
             post.setText("Post");
             setPageTitle("Back");
 
@@ -890,7 +890,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
 
     public void setPostButton() {
         if (edt_content.getText().length() > 0 || part_images.size() > 0 || video != null) {
-            post.setBackground(getResources().getDrawable(R.drawable.button_bg));
+            post.setBackground(getResources().getDrawable(R.drawable.button_gradient_1));
         } else {
             post.setBackground(getResources().getDrawable(R.drawable.button_unfocused));
         }

@@ -3,8 +3,9 @@
     <CLASSES>
       <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/f729e1b0d226bc9a6149b4f9d93939c5/legacy-support-v4-1.0.0/res" />
       <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/c65f1ad01deaba8e673e3cbbe3f99f7c/legacy-support-v4-1.0.0/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/f729e1b0d226bc9a6149b4f9d93939c5/legacy-support-v4-1.0.0/AndroidManifest.xml" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/f729e1b0d226bc9a6149b4f9d93939c5/legacy-support-v4-1.0.0/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/fa9f886ff19dc7b5c44d1ab66fcc9906/legacy-support-v4-1.0.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/fa9f886ff19dc7b5c44d1ab66fcc9906/legacy-support-v4-1.0.0/AndroidManifest.xml" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/fa9f886ff19dc7b5c44d1ab66fcc9906/legacy-support-v4-1.0.0/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

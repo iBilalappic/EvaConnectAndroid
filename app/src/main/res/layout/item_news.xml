@@ -172,6 +172,8 @@
                 android:id="@+id/view2"
                 android:layout_width="0dp"
                 android:layout_height="25dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -198,14 +200,13 @@
                 style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:paddingLeft="5dp"
                 android:text="@string/likes"
                 android:textColor="@color/skyblue"
                 android:textSize="11sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/tv_likecount"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/tv_likecount" />
 
             <TextView
                 android:id="@+id/textView11"
@@ -213,15 +214,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/spacing_small"
-                android:layout_marginBottom="39dp"
                 android:fontFamily="@font/nunitosansbold"
                 android:text="@string/amp"
                 android:textColor="@color/skyblue"
                 android:textSize="11sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView10"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/textView10" />
 
             <TextView
                 android:id="@+id/tv_comcount"
@@ -229,28 +228,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/spacing_small"
-                android:layout_marginTop="5dp"
                 android:text="03"
                 android:textColor="@color/skyblue"
                 android:textSize="11sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/textView11"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/textView11" />
 
             <TextView
                 android:id="@+id/textView14"
                 style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:fontFamily="@font/nunitosansbold"
                 android:paddingLeft="5dp"
                 android:text="@string/comments"
-                android:textSize="11sp"
                 android:textColor="@color/skyblue"
+                android:textSize="11sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/tv_comcount"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/tv_comcount" />
 
             <TextView
                 android:id="@+id/tv_createddateTime"
@@ -271,7 +268,9 @@
                 android:id="@+id/view4"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginTop="@dimen/spacing_medium"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:visibility="visible"
                 android:background="@color/gray_1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -279,10 +278,12 @@
 
 
             <LinearLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="32dp"
                 android:layout_marginTop="1dp"
+                android:layout_marginEnd="32dp"
                 android:baselineAligned="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -292,28 +293,33 @@
                     android:id="@+id/like_click"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:paddingLeft="10dp">
+
                     <ImageView
                         android:id="@+id/img_like"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:layout_gravity="center"
                         android:layout_marginEnd="@dimen/spacing_medium"
                         android:layout_weight="0"
                         android:background="@drawable/ic_like" />
 
                     <TextView
-                        android:gravity="center_vertical"
                         android:layout_width="0dp"
                         android:layout_height="30dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/nunitosansregular"
+                        android:gravity="center_vertical"
                         android:text="Like"
-                        android:textColor="@color/gray_1" />
+                        android:textColor="@color/gray_1"
+                        android:textSize="12sp" />
+
 
                     <View
                         android:layout_width="1dp"
                         android:layout_height="30dp"
+                        android:visibility="gone"
                         android:layout_marginEnd="@dimen/spacing_medium"
                         android:background="@color/gray_light" />
 
@@ -325,32 +331,35 @@
                     android:id="@+id/comment_click"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1.2">
+                    android:layout_weight="1"
+                    android:layout_marginStart="16dp"
+                    android:paddingLeft="10dp">
 
                     <ImageView
                         android:id="@+id/img_comment"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:layout_gravity="center"
                         android:layout_marginEnd="@dimen/spacing_medium"
                         android:layout_weight="0"
                         android:background="@drawable/ic_comment" />
 
                     <TextView
-                        android:gravity="center_vertical"
                         android:layout_width="0dp"
                         android:layout_height="30dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/nunitosansregular"
+                        android:gravity="center_vertical"
                         android:text="Comment"
-                        android:textColor="@color/gray_1" />
-
+                        android:textColor="@color/gray_1"
+                        android:textSize="12sp" />
 
 
                     <View
                         android:layout_width="1dp"
                         android:layout_height="30dp"
                         android:layout_marginEnd="@dimen/spacing_medium"
+                        android:visibility="gone"
                         android:background="@color/gray_light" />
 
 
@@ -361,26 +370,29 @@
                     android:id="@+id/share_click"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="16dp"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:layout_marginStart="16dp"
+                    android:paddingLeft="10dp">
+
                     <ImageView
                         android:id="@+id/img_share"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:layout_gravity="center"
                         android:layout_marginEnd="@dimen/spacing_medium"
                         android:layout_weight="0"
                         android:background="@drawable/ic_share" />
+
+
                     <TextView
-                        android:gravity="center_vertical"
                         android:layout_width="0dp"
                         android:layout_height="30dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/nunitosansregular"
+                        android:gravity="center_vertical"
                         android:text="Share"
-                        android:textColor="@color/gray_1" />
-
-
+                        android:textColor="@color/gray_1"
+                        android:textSize="12sp" />
 
 
                 </LinearLayout>

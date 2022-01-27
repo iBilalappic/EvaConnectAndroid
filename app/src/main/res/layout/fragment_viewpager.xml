@@ -25,6 +25,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tabs"
         android:background="@drawable/ic_blue_red"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="2dp"/>
 
     <TextView

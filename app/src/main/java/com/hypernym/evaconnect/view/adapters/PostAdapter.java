@@ -1100,8 +1100,8 @@ public class PostAdapter  extends RecyclerView.Adapter {
                         ((PostAdapter.VideoTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
                     AppUtils.setGlideVideoThumbnail(mContext, ((PostAdapter.VideoTypeViewHolder) holder).img_video, posts.get(position).getPost_video());
-                    ((PostAdapter.VideoTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name());
-                    if(posts.get(position).getUser().getDesignation()!=null)
+                    ((PostAdapter.VideoTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name().trim());
+                    if(posts.get(position).getUser().getDesignation()!=null && !posts.get(position).getUser().getDesignation().isEmpty())
                     {
                         ((PostAdapter.VideoTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation()+" at ");
                     }
@@ -1181,10 +1181,10 @@ public class PostAdapter  extends RecyclerView.Adapter {
                         ((PostAdapter.LinkTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
                     ((PostAdapter.LinkTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name());
-                    if(posts.get(position).getUser().getDesignation()!=null){
+                    if(posts.get(position).getUser().getDesignation()!=null && !posts.get(position).getUser().getDesignation().isEmpty()){
 //                        if(posts.get(position).getUser().getType().equalsIgnoreCase("company"))
 //                        {
-                            ((PostAdapter.LinkTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation()+" at");
+                            ((PostAdapter.LinkTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation()+" at ");
                        // }
                     }else{
                         ((PostAdapter.LinkTypeViewHolder) holder).tv_designation.setText("--");

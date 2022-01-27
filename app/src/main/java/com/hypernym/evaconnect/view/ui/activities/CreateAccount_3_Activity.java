@@ -20,10 +20,13 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +45,7 @@ import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.utils.Constants;
+import com.hypernym.evaconnect.view.adapters.MySpinnerAdapter;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
@@ -50,6 +54,7 @@ import com.skydoves.powerspinner.IconSpinnerItem;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -59,6 +64,7 @@ import butterknife.ButterKnife;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.CAMERA;
+import static java.security.AccessController.getContext;
 
 public class CreateAccount_3_Activity extends BaseActivity implements Validator.ValidationListener,
         com.google.android.gms.location.LocationListener, View.OnClickListener {
@@ -80,9 +86,9 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
     @BindView(R.id.ed_country)
     EditText ed_country;
 
-    @NotEmpty
+   /* @NotEmpty
     @BindView(R.id.tv_city)
-    EditText tv_city;
+    EditText tv_city;*/
 
     @BindView(R.id.img_backarrow)
     ImageView img_backarrow;
@@ -106,9 +112,15 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
     @BindView(R.id.edit_year)
     EditText edit_year;
 
+    @BindView(R.id.tv_city)
+    Spinner spinCities;
+
+    @BindView(R.id.edit_language)
+    Spinner edit_language;
 
 
-    String email, photourl, activity_type, user_type, firstname, surname, file_name, path, about, dob;
+
+    String email, photourl, activity_type, user_type, firstname, surname, file_name, path, about, dob, city;
     final Calendar myCalendar = Calendar.getInstance();
 
     String dob_str = "";
@@ -236,6 +248,30 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
             }
         });
 
+        ArrayAdapter<String> adapterUkCities = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, getResources()
+                .getStringArray(R.array.uk_cities));
+
+        ArrayAdapter<String> adapterPakCities = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, getResources()
+                .getStringArray(R.array.pak_cities));
+
+       /* ArrayAdapter<String> adapterlanguages = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, getResources()
+                .getStringArray(R.array.languageSpinnerItems));*/
+
+
+        MySpinnerAdapter adapterlanguages = new MySpinnerAdapter(
+               this,
+                android.R.layout.simple_spinner_item,
+                Arrays.asList(getResources().getStringArray(R.array.languageSpinnerItems))
+        );
+        adapterUkCities.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapterPakCities.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //
+        adapterlanguages.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        edit_language.setAdapter(adapterlanguages);
+
         ed_country.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -244,19 +280,30 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.toString().equalsIgnoreCase("UK")) {
-                    List<String> iconSpinnerItems = new ArrayList<>();
-                    iconSpinnerItems.add("item1");
+                if(s.toString().equalsIgnoreCase("United Kingdom")) {
+                    spinCities.setAdapter(adapterUkCities);
 
-                }
-                else {
-
+                }else if(s.toString().equalsIgnoreCase("Pakistan")){
+                    spinCities.setAdapter(adapterPakCities);
                 }
 
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+            }
+        });
+
+        spinCities.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                       int position, long id) {
+                city = arg0.getItemAtPosition(position).toString();
+                Log.d("city",""+city);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
         edit_date.setOnClickListener(new View.OnClickListener() {
@@ -298,7 +345,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         edit_date.setText(String.valueOf(DateFormat.format("dd",   myCalendar.getTime())));
         edit_month.setText(String.valueOf(DateFormat.format("MM",   myCalendar.getTime())));
-        edit_year.setText(String.valueOf(DateFormat.format("YYYY", myCalendar.getTime())));
+        edit_year.setText(String.valueOf(DateFormat.format("yyyy", myCalendar.getTime())));
         dob_str = sdf.format(myCalendar.getTime());
 
       /*  String dayOfTheWeek = (String) DateFormat.format("EEEE", myCalendar.getTime()); // Thursday
@@ -327,7 +374,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
             intent.putExtra("userType", user_type);
             intent.putExtra("FirstName", firstname);
             intent.putExtra("SurName", surname);
-            intent.putExtra("city", tv_city.getText().toString());
+            intent.putExtra("city", city);
             intent.putExtra("country", ed_country.getText().toString());
             intent.putExtra("about", about);
             intent.putExtra("dob", dob_str);
@@ -344,7 +391,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
             intent.putExtra("SurName", surname);
             intent.putExtra("about", about);
             intent.putExtra("dob", dob_str);
-            intent.putExtra("city", tv_city.getText().toString());
+            intent.putExtra("city", city);
             intent.putExtra("country", ed_country.getText().toString());
             intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
             startActivity(intent);
@@ -359,7 +406,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
                 intent.putExtra("userType", user_type);
                 intent.putExtra("about", about);
                 intent.putExtra("dob", dob_str);
-                intent.putExtra("city", tv_city.getText().toString());
+                intent.putExtra("city", city);
                 intent.putExtra("country", ed_country.getText().toString());
                 intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
                 startActivity(intent);
@@ -370,7 +417,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
                 intent.putExtra("userType", user_type);
                 intent.putExtra("about", about);
                 intent.putExtra("dob", dob_str);
-                intent.putExtra("city", tv_city.getText().toString());
+                intent.putExtra("city", city);
                 intent.putExtra("country", ed_country.getText().toString());
                 intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
                 startActivity(intent);
@@ -484,7 +531,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
                     String street = splitArray[0];
                     String sector = splitArray[1];
 
-                    tv_city.setText(city);
+                  //  spinCities.setText(city);
                     ed_country.setText(country);
                     hideDialog();
 

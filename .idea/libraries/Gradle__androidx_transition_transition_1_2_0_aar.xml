@@ -1,12 +1,12 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.transition:transition:1.2.0@aar">
     <ANNOTATIONS>
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/775ee39c9caac90cb0a561b9ad5fc751/transition-1.2.0/annotations.zip!/" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/b375223687e5f0a01e8883f798e053b2/transition-1.2.0/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/775ee39c9caac90cb0a561b9ad5fc751/transition-1.2.0/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/775ee39c9caac90cb0a561b9ad5fc751/transition-1.2.0/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/775ee39c9caac90cb0a561b9ad5fc751/transition-1.2.0/AndroidManifest.xml" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/b375223687e5f0a01e8883f798e053b2/transition-1.2.0/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/b375223687e5f0a01e8883f798e053b2/transition-1.2.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/b375223687e5f0a01e8883f798e053b2/transition-1.2.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

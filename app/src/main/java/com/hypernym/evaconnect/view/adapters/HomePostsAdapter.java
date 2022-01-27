@@ -1325,7 +1325,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         // ((LinkTypeViewHolder) holder).tv_content.setText(posts.get(position).getContent());
                     }
                     AppUtils.makeTextViewResizable(((LinkTypeViewHolder) holder).tv_content, 3, posts.get(position).getContent());
-                    // ((LinkTypeViewHolder) holder).tv_content.setText(posts.get(position).getContent());
+                    // ((LinkTypeV       iewHolder) holder).tv_content.setText(posts.get(position).getContent());
                     ((LinkTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
                     if (posts.get(position).getIs_post_like() != null && posts.get(position).getIs_post_like() > 0) {
                         ((LinkTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.like_selected));

@@ -3,8 +3,9 @@
     <CLASSES>
       <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/3df61ba7079956c71de5a6d50bff1443/jetified-glide-transformations-3.3.0/res" />
       <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/2220be8c2815b17c722f6b781fafc906/jetified-glide-transformations-3.3.0/res" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/3df61ba7079956c71de5a6d50bff1443/jetified-glide-transformations-3.3.0/jars/classes.jar!/" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/3df61ba7079956c71de5a6d50bff1443/jetified-glide-transformations-3.3.0/AndroidManifest.xml" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/c295fa4da00db04379f5308588d505c5/jetified-glide-transformations-3.3.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/c295fa4da00db04379f5308588d505c5/jetified-glide-transformations-3.3.0/AndroidManifest.xml" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/c295fa4da00db04379f5308588d505c5/jetified-glide-transformations-3.3.0/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/jp.wasabeef/glide-transformations/3.3.0/a01318f662dc7a6cb61f6fac04600ffd60733d30/glide-transformations-3.3.0-javadoc.jar!/" />

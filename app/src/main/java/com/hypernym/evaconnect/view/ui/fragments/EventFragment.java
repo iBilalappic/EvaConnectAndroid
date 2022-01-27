@@ -58,6 +58,9 @@ public class EventFragment extends BaseFragment implements View.OnClickListener,
     @BindView(R.id.newpost)
     TextView newpost;
 
+    @BindView(R.id.tv_create_event)
+    TextView tv_create_event;
+
 //    @BindView(R.id.fab)
 //    FloatingActionButton fab;
 
@@ -102,7 +105,6 @@ public class EventFragment extends BaseFragment implements View.OnClickListener,
         super.onResume();
         init();
         onRefresh();
-
         newpost.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
@@ -112,11 +114,18 @@ public class EventFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private void init() {
+        User user=LoginUtils.getLoggedinUser();
         eventViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(EventViewModel.class);
         postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(PostViewModel.class);
         //   currentPage = PAGE_START;
         postAdapter = new EventHomeAdapter(getContext(), posts, this);
         linearLayoutManager = new LinearLayoutManager(getContext());
+
+        if (user.getType().equalsIgnoreCase("company")) {
+            tv_create_event.setVisibility(View.VISIBLE);
+        }else{
+            tv_create_event.setVisibility(View.GONE);
+        }
 
         rc_event.setLayoutManager(linearLayoutManager);
         rc_event.setAdapter(postAdapter);

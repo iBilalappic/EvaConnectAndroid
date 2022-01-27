@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -125,6 +126,9 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
 
     @BindView(R.id.tv_connect)
     TextView tv_connect;
+
+    @BindView(R.id.cv)
+    CardView cv;
 
     @BindView(R.id.img_video)
     ImageView img_video;
@@ -317,17 +321,19 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
             img_like.setBackground(getContext().getDrawable(R.drawable.ic_like));
         }
         slider_images_detail.setVisibility(View.GONE);
-        img_video.setVisibility(View.GONE);
-        img_play.setVisibility(View.GONE);
+        cv.setVisibility(View.GONE);
         link.setVisibility(View.GONE);
         if (post.getPost_type() == AppConstants.IMAGE_TYPE) {
             slider_images_detail.setVisibility(View.VISIBLE);
         } else if (post.getPost_type() == AppConstants.VIDEO_TYPE) {
-            img_video.setVisibility(View.VISIBLE);
-            img_play.setVisibility(View.VISIBLE);
+            cv.setVisibility(View.VISIBLE);
+
             AppUtils.setGlideVideoThumbnail(getContext(), img_video, post.getPost_video());
         } else if (post.getPost_type() == AppConstants.LINK_POST) {
+
+            cv.setVisibility(View.VISIBLE);
             img_video.setVisibility(View.VISIBLE);
+            img_play.setVisibility(View.VISIBLE);
             ArrayList<String> URLs = AppUtils.containsURL(post.getContent().toString());
             if (URLs.size() > 0) {
                 AppUtils.customUrlEmbeddedView(getContext(), URLs.get(0), img_video);

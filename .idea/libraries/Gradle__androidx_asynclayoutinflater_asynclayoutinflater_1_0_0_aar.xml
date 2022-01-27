@@ -3,8 +3,9 @@
     <CLASSES>
       <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/8e68c531b87ca61a800af87c5390f78a/asynclayoutinflater-1.0.0/res" />
       <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/aa5bc9d2122fa1b2327b9a10963a3021/asynclayoutinflater-1.0.0/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/8e68c531b87ca61a800af87c5390f78a/asynclayoutinflater-1.0.0/AndroidManifest.xml" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/8e68c531b87ca61a800af87c5390f78a/asynclayoutinflater-1.0.0/jars/classes.jar!/" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/55615bb65750f0bc96425ddd1a04d5bc/asynclayoutinflater-1.0.0/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/55615bb65750f0bc96425ddd1a04d5bc/asynclayoutinflater-1.0.0/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/55615bb65750f0bc96425ddd1a04d5bc/asynclayoutinflater-1.0.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

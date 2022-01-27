@@ -132,7 +132,6 @@
         style="@style/TextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="3dp"
         android:ellipsize="end"
         android:singleLine="true"
         android:textColor="#EF8080"
@@ -189,7 +188,7 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/layout_border"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/cardView"
@@ -241,10 +240,13 @@
     <ImageView
         android:id="@+id/post_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:adjustViewBounds="true"
         android:background="@color/gray"
+        android:scaleType="centerCrop"
         android:src="@drawable/no_thumbnail"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/cardView"
@@ -266,7 +268,7 @@
          />
 
 
-    <androidx.cardview.widget.CardView
+    <RelativeLayout
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -299,10 +301,13 @@
                 android:id="@+id/slider_images"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:adjustViewBounds="true"
                 android:background="@color/gray"
-                android:scaleType="fitXY"
+                android:scaleType="centerCrop"
                 android:visibility="gone"
+                android:layout_marginTop="5dp"
                 app:layout_constraintBottom_toTopOf="@id/view2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -317,8 +322,8 @@
                 app:sliderIndicatorOrientation="horizontal"
                 app:sliderIndicatorPadding="3dp"
                 app:sliderIndicatorRadius="2dp"
-                app:sliderIndicatorSelectedColor="@color/btn_border"
-                app:sliderIndicatorUnselectedColor="@color/colorwhite"
+                app:sliderIndicatorSelectedColor="@color/colorAccent"
+                app:sliderIndicatorUnselectedColor="#FC8F8E8E"
                 app:sliderScrollTimeInSec="1"
                 app:sliderStartAutoCycle="true" />
 
@@ -440,7 +445,7 @@
                 android:layout_height="0.5dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-               android:visibility="gone"
+               android:visibility="visible"
                 android:background="@color/gray_1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -574,7 +579,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    </androidx.cardview.widget.CardView>
+    </RelativeLayout>
 
 
     <TextView

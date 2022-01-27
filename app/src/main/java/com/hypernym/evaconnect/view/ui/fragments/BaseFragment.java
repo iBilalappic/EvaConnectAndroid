@@ -164,11 +164,12 @@ public class BaseFragment extends Fragment {
         transaction.replace(id, fragment);
         if (fragment instanceof MainViewPagerFragment || fragment instanceof ActivityFragment) {
             getActivity().findViewById(R.id.seprator_line).setVisibility(View.GONE);
-        } else if (fragment instanceof JobViewPagerFragment || fragment instanceof EventTabsFragment) {
-            getActivity().findViewById(R.id.line).setVisibility(View.GONE);
-        } else {
-            getActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
         }
+/*        if (fragment instanceof JobViewPagerFragment || fragment instanceof EventTabsFragment) {
+            getActivity().findViewById(R.id.line).setVisibility(View.GONE);
+        }else {
+            getActivity().findViewById(R.id.line).setVisibility(View.VISIBLE);
+        }*/
 
        /* if (fragment instanceof JobViewPagerFragment || fragment instanceof EventTabsFragment) {
             getActivity().findViewById(R.id.line).setVisibility(View.GONE);
@@ -191,9 +192,9 @@ public class BaseFragment extends Fragment {
 
         if (fragment instanceof MainViewPagerFragment || fragment instanceof ActivityFragment) {
             getActivity().findViewById(R.id.seprator_line).setVisibility(View.GONE);
-        } else if (fragment instanceof JobViewPagerFragment || fragment instanceof EventTabsFragment) {
+        } /*else if (fragment instanceof JobViewPagerFragment || fragment instanceof EventTabsFragment) {
             getActivity().findViewById(R.id.line).setVisibility(View.GONE);
-        } else {
+        }*/ else {
             getActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
         }
 

@@ -57,6 +57,11 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener, 
     @BindView(R.id.newpost)
     TextView newpost;
 
+
+    @BindView(R.id.tv_create_event)
+    TextView tv_create_event;
+
+
 //    @BindView(R.id.fab)
 //    FloatingActionButton fab;
 
@@ -114,11 +119,11 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener, 
     private void init() {
         newsViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(NewsViewModel.class);
 
-        requireActivity().findViewById(R.id.line).setVisibility(View.VISIBLE);
+
         //   currentPage = PAGE_START;
         postAdapter = new HomePostsAdapter(getContext(), posts, this);
         linearLayoutManager = new LinearLayoutManager(getContext());
-
+        tv_create_event.setVisibility(View.GONE);
         rc_event.setLayoutManager(linearLayoutManager);
         rc_event.setAdapter(postAdapter);
         RecyclerView.ItemAnimator animator = rc_event.getItemAnimator();

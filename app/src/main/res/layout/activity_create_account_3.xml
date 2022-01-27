@@ -135,7 +135,7 @@
                 android:drawableRight="@drawable/ic_down_arrow"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:text="YY"
+                android:text="YYYY"
                 android:textColor="@color/text_color"
                 android:textColorHint="@color/gray_1"
                 android:textSize="13sp" />
@@ -163,6 +163,7 @@
             android:layout_height="37dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="32dp"
+            android:focusable="false"
             android:gravity="start|center"
             android:hint="Country"
             android:textColor="@color/text_color"
@@ -187,13 +188,21 @@
             app:layout_constraintTop_toBottomOf="@+id/ed_country" />
 
 
-        <EditText
+        <LinearLayout
+            android:id="@+id/layout_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/rounded_button_border"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3">
+        <Spinner
             android:id="@+id/tv_city"
-            style="@style/Button.border_unselected_white"
+            style="?android:attr/spinnerDropDownItemStyle"
             android:layout_width="250dp"
             android:layout_height="37dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp"
             android:gravity="start|center"
             android:hint="City"
             android:textColor="@color/text_color"
@@ -202,7 +211,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
+        </LinearLayout>
         <TextView
             android:id="@+id/tv_language"
             style="@style/TextStyle.Title"
@@ -215,36 +224,30 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_city" />
+            app:layout_constraintTop_toBottomOf="@+id/layout_city" />
 
-
-        <com.skydoves.powerspinner.PowerSpinnerView
-            android:id="@+id/edit_language"
-            style="@style/Button.border_unselected_white"
-            android:layout_width="250dp"
-            android:layout_height="37dp"
-            android:layout_marginStart="8dp"
+        <LinearLayout
+            android:id="@+id/layout_language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:gravity="start|center"
-            android:hint="Language"
-            app:spinner_popup_background="@color/white"
-            app:spinner_popup_animation="dropdown"
-            app:spinner_popup_elevation="14dp"
-            app:spinner_arrow_show="true"
-            app:spinner_arrow_drawable="@drawable/ic_down_arrow"
-            app:spinner_arrow_gravity="end"
-            app:spinner_arrow_tint="@color/black"
-            app:spinner_item_array="@array/languageSpinnerItems"
-            android:textColor="@color/text_color"
-            android:textColorHint="@color/gray_1"
-            android:textSize="13sp"
-            app:spinner_divider_color="@color/gray_light"
-            app:spinner_divider_show="true"
-            app:spinner_divider_size="0.4dp"
+            android:background="@drawable/rounded_button_border"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_language" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_language">
 
+            <Spinner
+                android:id="@+id/edit_language"
+                style="?android:attr/spinnerDropDownItemStyle"
+                android:layout_width="250dp"
+                android:layout_height="37dp"
+                android:layout_marginStart="8dp"
+                android:gravity="start|center"
+                android:hint="Language"
+                android:textColor="@color/text_color"
+                android:textColorHint="@color/gray_1"
+                android:textSize="13sp" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/btn_next"
@@ -256,7 +259,7 @@
             app:layout_constraintBottom_toTopOf="@+id/tv_already_account"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_language"
+            app:layout_constraintTop_toBottomOf="@+id/layout_language"
             app:layout_constraintVertical_bias="1.0" />
 
         <TextView

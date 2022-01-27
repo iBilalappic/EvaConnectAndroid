@@ -110,7 +110,6 @@ public class JobIndustryFragment extends BaseFragment implements View.OnClickLis
         //   currentPage = PAGE_START;
         postAdapter = new JobHomeAdapter(getContext(), posts, this);
         linearLayoutManager = new LinearLayoutManager(getContext());
-
         rc_job.setLayoutManager(linearLayoutManager);
         rc_job.setAdapter(postAdapter);
 

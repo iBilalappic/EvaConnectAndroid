@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -58,6 +59,9 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
 
         @BindView(R.id.tv_comcount)
         TextView tv_comcount;
+
+        @BindView(R.id.tv_detail)
+        TextView tv_detail;
 /*
         @BindView(R.id.img_like)
         ImageView img_like;*/
@@ -109,6 +113,12 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
 
         @BindView(R.id.img_more)
         ImageView img_more;
+
+        @BindView(R.id.linearLayout3)
+        ConstraintLayout linearLayout3;
+
+        @BindView(R.id.linearLayout4)
+        ConstraintLayout linearLayout4;
 
 
         public EventTypeViewHolder(View itemView) {
@@ -273,20 +283,25 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
                     ((EventHomeAdapter.EventTypeViewHolder) holder).tv_location.setText(posts.get(position).getAddress());
                     ((EventHomeAdapter.EventTypeViewHolder) holder).tv_eventdate.setText(DateUtils.getFormattedDateDMY(posts.get(position).getStart_date()));
                     ((EventTypeViewHolder) holder).post_detail.setText(posts.get(position).getContent());
-                    if (position == 0) {
-                        ((EventHomeAdapter.EventTypeViewHolder) holder).top_image.setVisibility(View.GONE);
-                    } else {
-                        ((EventHomeAdapter.EventTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
-                    }
+
                     if(posts.get(position).getUser().getId().equals( LoginUtils.getLoggedinUser().getId()))
                     {
                         ((EventTypeViewHolder) holder).tv_attending.setVisibility(View.GONE);
                         ((EventTypeViewHolder) holder).img_more.setVisibility(View.VISIBLE);
+                       //
+                        AppUtils.makeTextViewResizable(((EventTypeViewHolder) holder).tv_detail, 3, posts.get(position).getContent());
+                        ((EventTypeViewHolder) holder).linearLayout3.setVisibility(View.GONE);
+                        ((EventTypeViewHolder) holder).linearLayout4.setVisibility(View.VISIBLE);
+
+
                     }
                     else
                     {
                         ((EventTypeViewHolder) holder).tv_attending.setVisibility(View.VISIBLE);
                         ((EventTypeViewHolder) holder).img_more.setVisibility(View.GONE);
+                        //
+                        ((EventTypeViewHolder) holder).linearLayout3.setVisibility(View.VISIBLE);
+                        ((EventTypeViewHolder) holder).linearLayout4.setVisibility(View.GONE);
                     }
 
                     break;

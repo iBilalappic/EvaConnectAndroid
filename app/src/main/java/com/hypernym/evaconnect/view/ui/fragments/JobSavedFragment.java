@@ -110,7 +110,6 @@ public class JobSavedFragment extends BaseFragment implements View.OnClickListen
         //   currentPage = PAGE_START;
         postAdapter = new JobHomeAdapter(getContext(), posts, this);
         linearLayoutManager = new LinearLayoutManager(getContext());
-
         rc_job.setLayoutManager(linearLayoutManager);
         rc_job.setAdapter(postAdapter);
 
