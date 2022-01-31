@@ -73,7 +73,7 @@
             android:text="Derek J. Sine"
             android:textColor="@color/black"
             android:textSize="18sp"
-            app:layout_constraintEnd_toStartOf="@+id/tv_view_profile"
+            app:layout_constraintEnd_toStartOf="@+id/iv_accept"
             app:layout_constraintStart_toEndOf="@+id/profile_layout"
             app:layout_constraintTop_toTopOf="@+id/profile_layout" />
         <TextView
@@ -103,28 +103,39 @@
             android:text="--"
             android:textColor="@color/colorAccent"
             android:textSize="14sp"
-            app:layout_constraintEnd_toStartOf="@+id/tv_view_profile"
+            app:layout_constraintEnd_toStartOf="@+id/iv_accept"
             app:layout_constraintStart_toEndOf="@+id/location"
             app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
 
-        <TextView
-            android:id="@+id/tv_view_profile"
-            style="@style/Button_border_light_blue"
-            android:layout_width="112dp"
-            android:layout_height="37dp"
-            android:layout_marginEnd="16dp"
+        <ImageView
+            android:id="@+id/iv_accept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
             android:fontFamily="@font/nunitosansregular"
             android:gravity="center"
-            android:paddingLeft="15dp"
-            android:paddingTop="5dp"
-            android:paddingRight="15dp"
-            android:paddingBottom="5dp"
+            android:src="@drawable/ic_accept"
             android:text="View Profile"
             android:textColor="@color/skyblue"
             android:textSize="11sp"
             app:layout_constraintBottom_toBottomOf="@+id/profile_layout"
-            app:layout_constraintEnd_toStartOf="@+id/tv_decline"
+            app:layout_constraintEnd_toStartOf="@+id/iv_reject"
+            app:layout_constraintTop_toTopOf="@+id/profile_layout" />
+
+        <ImageView
+            android:id="@+id/iv_reject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/nunitosansregular"
+            android:gravity="center"
+            android:src="@drawable/ic_reject"
+            android:text="View Profile"
+            android:textColor="@color/skyblue"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="@+id/profile_layout"
+            app:layout_constraintEnd_toEndOf="@+id/tv_connect"
             app:layout_constraintTop_toTopOf="@+id/profile_layout" />
         <TextView
             android:id="@+id/tv_connect"
@@ -173,13 +184,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
-            android:layout_marginEnd="8dp"
             android:ellipsize="end"
             android:maxLines="2"
             android:text="-"
             android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="@+id/profile_layout"
-            app:layout_constraintEnd_toStartOf="@+id/tv_connect"
+            app:layout_constraintEnd_toEndOf="@+id/tv_field"
             app:layout_constraintStart_toEndOf="@+id/profile_layout"
             app:layout_constraintTop_toBottomOf="@+id/tv_field" />
 

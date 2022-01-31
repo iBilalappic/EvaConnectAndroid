@@ -47,6 +47,7 @@
     <color name="light_green">#2ECC71</color>
     <color name="lighter_green">#59E098</color>
     <color name="seperator_white">#F7F6FA</color>
+    <color name="dark_gray_text">#565656</color>
 
 
 </resources>

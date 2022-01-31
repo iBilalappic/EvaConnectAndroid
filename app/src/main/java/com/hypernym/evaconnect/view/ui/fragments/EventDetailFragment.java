@@ -97,7 +97,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
     TextView tv_event_type;
 
     @BindView(R.id.modify_event)
-    ImageButton modify_event;
+    TextView modify_event;
 
     @BindView(R.id.accept_invite)
     ImageButton accept_invite;
@@ -106,7 +106,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
     ImageButton interested;
 
     @BindView(R.id.register)
-    ImageButton register;
+    TextView register;
 
     @BindView(R.id.like_click)
     LinearLayout like_click;
@@ -126,6 +126,11 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
     @BindView(R.id.button_save)
     Button button_save;
 
+    @BindView(R.id.save)
+    ImageButton save;
+
+    @BindView(R.id.interested_header)
+    TextView interested_header;
 
     private List<Comment> comments = new ArrayList<>();
     private List<EventAttendees> eventAttendees = new ArrayList<>();
@@ -287,8 +292,9 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
                         accept_invite.setVisibility(View.GONE);
                         interested.setVisibility(View.VISIBLE);
                     } else {
-                        accept_invite.setVisibility(View.VISIBLE);
-                        interested.setVisibility(View.GONE);
+                        accept_invite.setVisibility(View.GONE);
+                        interested.setVisibility(View.VISIBLE);
+                        save.setVisibility(View.VISIBLE);
                     }
                 }
             }

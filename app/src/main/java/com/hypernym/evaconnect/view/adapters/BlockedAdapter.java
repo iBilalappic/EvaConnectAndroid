@@ -10,31 +10,28 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
-import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
-import com.hypernym.evaconnect.view.ui.fragments.PersonProfileFragment;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.ViewHolder> {
+public class BlockedAdapter extends RecyclerView.Adapter<BlockedAdapter.ViewHolder>{
+
     private Context context;
     private List<User> connections, originalConnections;
-    private ConnectionsAdapter.OnItemClickListener onItemClickListener;
+    private BlockedAdapter.OnItemClickListener onItemClickListener;
     int count = 0;
     private boolean isLoaderVisible = false;
 
-    public ConnectionsAdapter(Context context, List<User> connectionList, ConnectionsAdapter.OnItemClickListener onItemClickListener) {
+    public BlockedAdapter(Context context, List<User> connectionList, BlockedAdapter.OnItemClickListener onItemClickListener) {
         this.context = context;
         this.connections = connectionList;
         this.onItemClickListener = onItemClickListener;
@@ -43,13 +40,13 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
 
     @NonNull
     @Override
-    public ConnectionsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_connection, parent, false);
-        return new ViewHolder(view);
+    public BlockedAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_block, parent, false);
+        return new BlockedAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ConnectionsAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BlockedAdapter.ViewHolder holder, int position) {
         if (!TextUtils.isEmpty(connections.get(position).getUser_image())) {
             AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getUser_image());
         }
@@ -115,7 +112,6 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
         }
 
     }
-
     @Override
     public int getItemCount() {
         return connections.size();
@@ -179,9 +175,6 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
         }
     }
 
-    //This method will filter the list
-    //here we are passing the filtered data
-    //and assigning it to the list with notifydatasetchanged method
     public void filterList(List<User> filterdNames) {
         connections.clear();
         if (filterdNames.size() > 0) {

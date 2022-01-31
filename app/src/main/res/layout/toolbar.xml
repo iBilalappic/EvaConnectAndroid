@@ -7,20 +7,18 @@
     app:contentInsetLeft="0dp"
     app:contentInsetStart="0dp"
     app:contentInsetEnd="0dp"
-    app:contentInsetRight="0dp"
-    >
+    app:contentInsetRight="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
 
         <ImageView
-
             android:id="@+id/imageView5"
             android:layout_width="170dp"
-            android:layout_height="46dp"
+            android:layout_height="56dp"
             android:layout_marginStart="20dp"
             android:src="@drawable/ic_toolbar_icon"
             app:layout_constraintBottom_toTopOf="@+id/seprator_line"

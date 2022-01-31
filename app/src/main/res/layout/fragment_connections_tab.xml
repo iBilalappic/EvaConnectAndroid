@@ -9,12 +9,12 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout2"
-        app:tabSelectedTextColor="@color/blue_1"
         app:tabTextColor="@color/gray_1"
-        app:tabTextAppearance="@style/tab_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
+        app:tabSelectedTextColor="@color/skyblue"
+        app:tabTextAppearance="@style/CustomTextAppearanceMainTab"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 

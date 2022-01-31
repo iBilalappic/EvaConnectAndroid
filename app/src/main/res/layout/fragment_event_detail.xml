@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/lighter_gray"
-        app:layout_constraintBottom_toTopOf="@+id/edt_comment"
+        app:layout_constraintBottom_toTopOf="@+id/register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -24,33 +24,119 @@
             android:clipToPadding="false"
             android:paddingBottom="5dp">
 
+            <LinearLayout
+                android:id="@+id/layout_header"
+                android:layout_width="0dp"
+                android:layout_height="55dp"
+                android:gravity="start|center"
+                android:orientation="horizontal"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <ImageView
+                    android:id="@+id/img_backarrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:src="@drawable/ic_arrow_left" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/nunitosansbold"
+                    android:gravity="start"
+                    android:text="Industry Events"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/modify_event"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:text="Edit"
+                    android:textColor="#5894dd"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:layout_gravity="center"
+                    android:background="@drawable/ic_holo_blue_button"
+                    app:layout_constraintBottom_toBottomOf="@+id/img_event"
+                    app:layout_constraintEnd_toEndOf="parent" />
+                <TextView
+                    android:id="@+id/interested_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:text="Interested?"
+                    android:textColor="#5894dd"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:background="@drawable/ic_holo_blue_button"
+                    app:layout_constraintBottom_toBottomOf="@+id/img_event"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/tv_name"
-                style="@style/TextStyle.Bold"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/nunitosansbold"
                 android:text="Event Name"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toStartOf="@+id/tv_minago"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/img_event" />
+
+            <TextView
+                android:id="@+id/tv_createdby"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/nunitosansregular"
+                android:text="Created by EVA International"
+                android:textColor="#B4B4B4"
+                android:textSize="10sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
             <ImageView
                 android:id="@+id/img_event"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_height="240dp"
                 android:background="@color/gray"
+
+                android:scaleType="centerCrop"
+                android:maxHeight="240dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tv_goback" />
+                app:layout_constraintTop_toBottomOf="@+id/layout_header" />
 
             <ImageButton
-                android:id="@+id/modify_event"
+                android:id="@+id/save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="29dp"
+                android:background="@drawable/ic_star"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/interested"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/interested" />
+
+            <ImageButton
+                android:id="@+id/modify_event_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:background="@drawable/modify_event"
                 app:layout_constraintBottom_toBottomOf="@+id/img_event"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -68,20 +154,21 @@
                 android:id="@+id/interested"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:background="@drawable/interested"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="@+id/img_event"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <ImageButton
-                android:id="@+id/register"
+                android:id="@+id/register_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="140dp"
                 android:background="@drawable/register"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/img_event"
-                app:layout_constraintEnd_toEndOf="@+id/modify_event" />
+                app:layout_constraintEnd_toEndOf="@+id/modify_event_1" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"
@@ -89,6 +176,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 app:cardElevation="4dp"
+                android:visibility="gone"
                 app:cardPreventCornerOverlap="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -351,24 +439,30 @@
                 style="@style/TextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="17dp"
+                android:layout_marginEnd="16dp"
+                android:justificationMode="inter_word"
+                android:fontFamily="@font/nunitosansregular"
+                android:text="@string/four_us_and_canadian_airlines_have_awarded_new_ground_handling_contracts_to_worldwide_flight_services_wfs_in_the_us_lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_sed_do_eiusmod_tempor_incididunt_ut_labore_et_dolore_magna_aliqua_ut_enim_ad_minim_veniam_quis_nostrud_exercitation_ullamco_laboris_nisi_ut_aliquip_ex_ea_commodo_consequat_duis_aute_irure_dolor_in_reprehenderit_in_voluptate_velit_esse_cillum_dolore_eu_fugiat_nulla_pariatur_excepteur_sint_occaecat_cupidatat_non_proident_sunt_in_culpa_qui_officia_deserunt_mollit_anim"
+                android:textColor="#565656"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_createdby" />
 
             <TextView
                 android:id="@+id/tv_eventdate"
-                style="@style/TextStyle"
+                android:fontFamily="@font/nunitosansbold"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="16dp"
                 android:drawableLeft="@drawable/clock_black"
                 android:drawablePadding="20dp"
-                android:text="TextView"
+                android:text="4th May 2020 | 17:00 - 19:00"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -393,6 +487,7 @@
                 android:id="@+id/rc_comments"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:background="@color/lighter_gray_1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -411,23 +506,23 @@
                 android:paddingRight="15dp"
                 android:text="@string/go_back"
                 android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/view"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view" />
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <TextView
                 android:id="@+id/tv_eventLocation"
-                style="@style/TextStyle"
+                android:fontFamily="@font/nunitosansbold"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="16dp"
                 android:drawableLeft="@drawable/location_black"
                 android:drawablePadding="20dp"
                 android:gravity="center_vertical"
-                android:text="TextView"
+                android:text="Hilton Hotel, Heathrow, London"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -435,15 +530,16 @@
 
             <TextView
                 android:id="@+id/tv_event_type"
-                style="@style/TextStyle"
+                android:fontFamily="@font/nunitosansbold"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="16dp"
                 android:drawableLeft="@drawable/event_type"
                 android:drawablePadding="20dp"
                 android:gravity="center_vertical"
-                android:text="TextView"
+                android:text="Open to the public"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -451,12 +547,14 @@
 
             <TextView
                 android:id="@+id/textView13"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
                 android:text="They are also interested"
                 android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_event_type" />
 
@@ -465,6 +563,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:scrollbars="none"
                 app:layout_constraintEnd_toStartOf="@+id/add1"
                 app:layout_constraintStart_toStartOf="parent"
@@ -492,8 +591,29 @@
         android:hint="@string/tap_here_to_comment"
         android:inputType="textPersonName"
         android:text=""
+        android:visibility="gone"
         android:textColor="@color/black"
         android:textColorHint="@color/gray_1"
+        app:layout_constraintBottom_toTopOf="@+id/layout_editcomment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/register"
+        style="@style/TextStyle.Title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/button_gradient_1"
+        android:drawablePadding="10dp"
+        android:gravity="center"
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="10dp"
+        android:text="Register"
+        android:textColor="@color/white"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/layout_editcomment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

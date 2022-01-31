@@ -63,12 +63,11 @@ public class ConnectionsTabFragment extends BaseFragment implements View.OnClick
         Adapter adapter = new Adapter(getChildFragmentManager());
         if (user != null && user.getType().equals("company")) {
             adapter.addFragment(new ConnectionsFragment(), "Followers");
-            adapter.addFragment(new ConnectionsFragment(), "Blocked");
         }else {
             adapter.addFragment(new ConnectionsFragment(), "Connected");
-            adapter.addFragment(new ConnectionsFragment(), "Pending");
-            adapter.addFragment(new ConnectionsFragment(), "Blocked");
+            adapter.addFragment(new PendingFragment(), "Pending");
         }
+        adapter.addFragment(new BlockedFragment(), "Blocked");
         viewPager.setAdapter(adapter);
 
 
