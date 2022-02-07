@@ -31,9 +31,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
+                android:padding="10dp"
                 android:src="@drawable/ic_arrow_left" />
 
             <TextView
+                android:id="@+id/header_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
@@ -43,7 +45,7 @@
                 android:gravity="end"
                 android:text="Create a Meeting"
                 android:textColor="@color/black"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
 
@@ -54,7 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_large"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:text="Title"
             android:textAppearance="@style/TextAppearance.Text.Bold"
             android:textSize="12sp"
@@ -73,10 +75,11 @@
             android:maxLength="50"
             android:textSize="14sp"
             android:textColorHint="#B4B4B4"
+            android:fontFamily="@font/nunitosansregular"
             android:hint="e-g Appointment, Client, Event, Conference Call, Personal, Staff Meeting"
             android:backgroundTint="#5894DD"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -88,13 +91,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_clock"
-            android:tint="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_startdate"
             app:layout_constraintBottom_toBottomOf="@id/tv_startdate"
             android:layout_marginStart="@dimen/spacing_large"
-
-            />
+            app:tint="@color/black" />
 
         <EditText
             android:id="@+id/tv_startdate"
@@ -193,7 +194,7 @@
             android:hint="Location"
             android:padding="10dp"
             android:layout_marginEnd="@dimen/spacing_large"
-            android:textAppearance="@style/TextAppearance.Text.Regular"
+            android:fontFamily="@font/nunitosansregular"
             android:textColor="@color/black"
             android:textColorHint="#B4B4B4"
             android:textSize="14sp"
@@ -224,7 +225,7 @@
             android:hint="Details"
             android:padding="10dp"
             android:layout_marginEnd="@dimen/spacing_large"
-            android:textAppearance="@style/TextAppearance.Text.Regular"
+           android:fontFamily="@font/nunitosansregular"
             android:textColor="@color/black"
             android:textColorHint="#B4B4B4"
             android:textSize="14sp"
@@ -236,19 +237,22 @@
             android:id="@+id/invited"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Invite attendee"
-            android:textSize="12sp"
-            android:textAppearance="@style/TextAppearance.Text.Bold"
-            app:layout_constraintTop_toBottomOf="@id/edt_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="@dimen/spacing_large"
             android:layout_marginEnd="16dp"
-            />
+            android:fontFamily="@font/nunitosansbold"
+            android:text="Invite"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edt_content" />
+
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/invite_people_meeting"
             android:layout_width="0dp"
-            android:layout_height="120dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:scrollbars="none"
             app:layout_constraintEnd_toStartOf="@+id/add1"
@@ -257,32 +261,21 @@
 
         <ImageView
             android:id="@+id/add1"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:paddingTop="4dp"
             android:src="@drawable/iconadd"
-            app:layout_constraintBottom_toBottomOf="@id/invite_people_meeting"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/invite_people_meeting"
-            app:layout_constraintVertical_bias="0.35" />
+            app:layout_constraintTop_toBottomOf="@+id/invited" />
 
-        <ImageView
-            android:id="@+id/add2"
-            android:layout_width="48dp"
-            android:layout_height="45dp"
-            app:layout_constraintStart_toStartOf="@id/add1"
-            app:layout_constraintEnd_toEndOf="@id/add1"
-            app:layout_constraintTop_toTopOf="@id/add1"
-            app:layout_constraintBottom_toBottomOf="@id/add1"
-            android:src="@drawable/circle"
-            />
 
         <TextView
             android:id="@+id/post"
             style="@style/TextStyle.Title"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginTop="24dp"
             android:background="@drawable/button_gradient_1"
             android:drawablePadding="10dp"
             android:gravity="center"
@@ -290,12 +283,32 @@
             android:paddingTop="10dp"
             android:paddingRight="20dp"
             android:paddingBottom="10dp"
-            android:text="Create Meeting"
+            android:text="Done"
             android:textColor="@color/white"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/invite_people_meeting"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/textView19"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/nunitosansregular"
+            android:gravity="center"
+            android:text="Add\nParticipant"
+            android:textColor="@color/black"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/post"
+            app:layout_constraintEnd_toEndOf="@+id/add1"
+            app:layout_constraintStart_toStartOf="@+id/add1"
+            app:layout_constraintTop_toBottomOf="@+id/add1"
+            app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

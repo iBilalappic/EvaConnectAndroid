@@ -104,7 +104,8 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
 
     @BindView(R.id.tv_bio)
     TextView tv_bio;
-
+    @BindView(R.id.tv_connections)
+    TextView tv_connections;
 
     SimpleDialog simpleDialog;
     Post post = new Post();
@@ -113,6 +114,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
     private ConnectionViewModel connectionViewModel;
     private UserViewModel userViewModel;
     String argumentReceived = "";
+
     public PersonProfileFragment() {
         // Required empty public constructor
     }
@@ -142,6 +144,13 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
         hideChatPerson();
         setPageTitle("Profile");
         user = LoginUtils.getLoggedinUser();
+
+        if (user.getType() != null && user.getType().equalsIgnoreCase("company")) {
+            tv_connections.setText("Followers");
+        } else {
+            tv_connections.setText("Connections");
+        }
+
         if ((getArguments() != null)) {
             //  showBackButton();
 
@@ -149,7 +158,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
             post = (Post) getArguments().getSerializable("PostData");
             Log.d("TAAAG", GsonUtils.toJson(post));
 
-            if (post!=null) {
+            if (post != null) {
                 argumentReceived = "PostData";
                 if (!TextUtils.isEmpty(post.getUser().getUser_image())) {
                     AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getUser_image());
@@ -262,7 +271,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                         }
                     }
                 });
-            }else if(targetUser!=null){
+            } else if (targetUser != null) {
                 argumentReceived = "user";
                 if (!TextUtils.isEmpty(targetUser.getUser_image())) {
                     AppUtils.setGlideImage(getContext(), profile_image, targetUser.getUser_image());
@@ -334,7 +343,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                     layout_disconnect.setVisibility(View.VISIBLE);
                     view4.setVisibility(View.VISIBLE);
 
-                  //  layout_block.setVisibility(View.VISIBLE);
+                    //  layout_block.setVisibility(View.VISIBLE);
 
                     layout_settings.setVisibility(View.GONE);
                     view2.setVisibility(View.GONE);
@@ -439,11 +448,11 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
         //  User user = new User();
         // user = LoginUtils.getUser();
         int id;
-                if(argumentReceived.equalsIgnoreCase("user")){
-                    id = targetUser.getId();
-                }else{
-                    id = post.getUser().getId();
-                }
+        if (argumentReceived.equalsIgnoreCase("user")) {
+            id = targetUser.getId();
+        } else {
+            id = post.getUser().getId();
+        }
         userViewModel.getuser_details(id
         ).observe(this, new Observer<BaseModel<List<User>>>() {
             @Override
@@ -514,8 +523,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                 Bundle bundlemessage = new Bundle();
                 if (argumentReceived.equalsIgnoreCase("Postuser")) {
                     bundlemessage.putSerializable("user", post.getUser());
-                }
-                else {
+                } else {
                     bundlemessage.putSerializable("user", targetUser);
                 }
                 chatFragment.setArguments(bundlemessage);
@@ -548,10 +556,10 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
 
         int id;
         User user;
-        if(argumentReceived.equalsIgnoreCase("Postuser")){
+        if (argumentReceived.equalsIgnoreCase("Postuser")) {
             id = post.getUser().getConnection_id();
             user = post.getUser();
-        }else{
+        } else {
             id = targetUser.getConnection_id();
             user = targetUser;
         }

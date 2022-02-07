@@ -44,7 +44,7 @@ public class CreateAccount_2_Activity extends BaseActivity implements
     @BindView(R.id.tv_main_title)
     TextView tv_main_title;
 
-    String email, photourl, activity_type, user_type, firstname, surname, file_name,path;
+    String email, photourl, activity_type, user_type, firstname, surname, file_name, path, companyUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +67,7 @@ public class CreateAccount_2_Activity extends BaseActivity implements
                     intent.putExtra("userType", user_type);
                     intent.putExtra("FirstName", firstname);
                     intent.putExtra("SurName", surname);
+                    intent.putExtra("companyUrl", companyUrl);
                     intent.putExtra("about", edit_about_yourself.getText().toString());
                     intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
                     startActivity(intent);
@@ -79,6 +80,7 @@ public class CreateAccount_2_Activity extends BaseActivity implements
                     intent.putExtra("userType", user_type);
                     intent.putExtra("FirstName", firstname);
                     intent.putExtra("SurName", surname);
+                    intent.putExtra("companyUrl", companyUrl);
                     intent.putExtra("about", edit_about_yourself.getText().toString());
                     intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
                     startActivity(intent);
@@ -91,6 +93,7 @@ public class CreateAccount_2_Activity extends BaseActivity implements
                         intent.putExtra("SurName", surname);
                         intent.putExtra("FilePath", file_name);
                         intent.putExtra("userType", user_type);
+                        intent.putExtra("companyUrl", companyUrl);
                         intent.putExtra("about", edit_about_yourself.getText().toString());
                         intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
                         startActivity(intent);
@@ -99,6 +102,7 @@ public class CreateAccount_2_Activity extends BaseActivity implements
                         intent.putExtra("FirstName", firstname);
                         intent.putExtra("SurName", surname);
                         intent.putExtra("userType", user_type);
+                        intent.putExtra("companyUrl", companyUrl);
                         intent.putExtra("about", edit_about_yourself.getText().toString());
                         intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
                         startActivity(intent);
@@ -116,6 +120,7 @@ public class CreateAccount_2_Activity extends BaseActivity implements
             photourl = getIntent().getStringExtra("Photo");
             user_type = getIntent().getStringExtra("userType");
             path = getIntent().getStringExtra("Path");
+            companyUrl = getIntent().getStringExtra("companyUrl");
             activity_type = "LinkedinActivity";
             firstname = getIntent().getStringExtra("FirstName");
             surname = getIntent().getStringExtra("SurName");
@@ -125,6 +130,7 @@ public class CreateAccount_2_Activity extends BaseActivity implements
             email = getIntent().getStringExtra("Email");
             photourl = getIntent().getStringExtra("Photo");
             path = getIntent().getStringExtra("Path");
+            companyUrl = getIntent().getStringExtra("companyUrl");
             user_type = getIntent().getStringExtra("userType");
             activity_type = AppConstants.FACEBOOK_LOGIN_TYPE;
             firstname = getIntent().getStringExtra("FirstName");
@@ -132,6 +138,7 @@ public class CreateAccount_2_Activity extends BaseActivity implements
         } else {
             email = getIntent().getStringExtra("Email");
             activity_type = "normal_type";
+            companyUrl = getIntent().getStringExtra("companyUrl");
             file_name = getIntent().getStringExtra("FilePath");
             user_type = getIntent().getStringExtra("userType");
             firstname = getIntent().getStringExtra("FirstName");

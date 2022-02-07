@@ -21,18 +21,15 @@ import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
-import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import com.mobsandgeeks.saripaar.Validator;
-import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SettingsFragment extends BaseFragment implements View.OnClickListener {
 
@@ -58,6 +55,15 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
 
     @BindView(R.id.ly_security)
     LinearLayout ly_security;
+
+    @BindView(R.id.ly_news)
+    LinearLayout ly_news;
+
+    @BindView(R.id.view17)
+    View view;
+
+    @BindView(R.id.ly_language_region)
+    LinearLayout ly_language_region;
 
 
     User user = new User();
@@ -86,10 +92,15 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         ly_term_condition.setOnClickListener(this);
         ly_cookie.setOnClickListener(this);
         ly_security.setOnClickListener(this);
-
-
+        ly_news.setOnClickListener(this);
+        ly_language_region.setOnClickListener(this);
 
         user = LoginUtils.getUser();
+/*
+        if(user.getType().equalsIgnoreCase("company")){
+            ly_news.setVisibility(View.GONE);
+            view.setVisibility(View.GONE);
+        }*/
         SettingUserProfile(user);
         return view;
     }
@@ -101,7 +112,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
 
     private void GetUserDetails() {
         showDialog();
-        userViewModel.getuser_details(user.getId()).observe(this, new Observer<BaseModel<List<User>>>() {
+        userViewModel.getuser_details(user.getId()).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<User>>>() {
             @Override
             public void onChanged(BaseModel<List<User>> listBaseModel) {
                 if (listBaseModel.getData() != null && !listBaseModel.isError()) {
@@ -239,6 +250,16 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
             case R.id.ly_security:
                 SecurityFragment securityFragment = new SecurityFragment();
                 loadFragment(R.id.framelayout, securityFragment, getContext(), true);
+                break;
+
+            case R.id.ly_news:
+                RssNewsFragment rssNewsFragment = new RssNewsFragment();
+                loadFragment(R.id.framelayout, rssNewsFragment, getContext(), true);
+                break;
+
+            case R.id.ly_language_region:
+                LanguageFragment languageFragment = new LanguageFragment();
+                loadFragment(R.id.framelayout, languageFragment, getContext(), true);
                 break;
 
             case R.id.img_backarrow:

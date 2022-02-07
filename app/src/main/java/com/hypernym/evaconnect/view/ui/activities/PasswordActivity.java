@@ -42,8 +42,8 @@ import okhttp3.RequestBody;
 
 public class PasswordActivity extends BaseActivity implements Validator.ValidationListener, View.OnClickListener {
 
-    String email, password, photourl, activity_type, user_type,path, about,
-            aviation_type, JobSector, username, firstname, surname,
+    String email, password, photourl, activity_type, user_type,path, about, language,
+            aviation_type, JobSector, username, firstname, surname, companyUrl,
             city, country, filepath, jobtitle, company_name,otherJobSector;
 
     private Validator validator;
@@ -121,8 +121,10 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             JobSector = getIntent().getStringExtra("job_sector");
             jobtitle = getIntent().getStringExtra("jobtitle");
             about = getIntent().getStringExtra("about");
+            language = getIntent().getStringExtra("language");
             company_name = getIntent().getStringExtra("companyname");
             otherJobSector=getIntent().getStringExtra("other_job_sector");
+            companyUrl=getIntent().getStringExtra("companyUrl");
 
 
             filepath = path;
@@ -146,12 +148,14 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             user.setLast_name(surname);
             user.setCity(city);
             user.setAbout(about);
+            user.setLanguage(language);
             user.setCountry(country);
             user.setCompany_name(company_name);
             user.setDesignation(jobtitle);
             user.setLinkedin_image_url("");
             user.setFacebook_image_url("");
             user.setOther_sector(otherJobSector);
+            user.setCompany_url(companyUrl);
 
 
 //            user.setUsername(email);
@@ -189,8 +193,10 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             JobSector = getIntent().getStringExtra("job_sector");
             jobtitle = getIntent().getStringExtra("jobtitle");
             about = getIntent().getStringExtra("about");
+            language = getIntent().getStringExtra("language");
             company_name = getIntent().getStringExtra("companyname");
             otherJobSector=getIntent().getStringExtra("other_job_sector");
+            companyUrl=getIntent().getStringExtra("companyUrl");
             filepath = path;
 
             if(filepath!=null){
@@ -212,12 +218,14 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             user.setLast_name(surname);
             user.setCity(city);
             user.setAbout(about);
+            user.setLanguage(language);
             user.setCountry(country);
             user.setCompany_name(company_name);
             user.setDesignation(jobtitle);
             user.setLinkedin_image_url("");
             user.setFacebook_image_url("");
             user.setOther_sector(otherJobSector);
+            user.setCompany_url(companyUrl);
 
 
 
@@ -230,6 +238,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             surname = getIntent().getStringExtra("SurName");
             city = getIntent().getStringExtra("city");
             about = getIntent().getStringExtra("about");
+            language = getIntent().getStringExtra("language");
             country = getIntent().getStringExtra("country");
             filepath = getIntent().getStringExtra("FilePath");
             aviation_type = getIntent().getStringExtra("aviation_type");
@@ -237,6 +246,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             jobtitle = getIntent().getStringExtra("jobtitle");
             company_name = getIntent().getStringExtra("companyname");
             otherJobSector=getIntent().getStringExtra("other_job_sector");
+            companyUrl=getIntent().getStringExtra("companyUrl");
             activity_type = "normal_type";
             user.setLinkedin_image_url("");
             user.setFacebook_image_url("");
@@ -259,12 +269,14 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             user.setLast_name(surname);
             user.setCity(city);
             user.setAbout(about);
+            user.setLanguage(language);
             user.setCountry(country);
             user.setCompany_name(company_name);
             user.setDesignation(jobtitle);
             user.setLinkedin_image_url("");
             user.setFacebook_image_url("");
             user.setOther_sector(otherJobSector);
+            user.setCompany_url(companyUrl);
         }
     }
 
@@ -305,8 +317,14 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
 
                 } else {
                     hideDialog();
-                    logins.getException();
-                    simpleDialog = networkResponseDialog(getString(R.string.error), logins.getMessage());
+                    try {
+                        if (logins != null) {
+                            logins.getException();
+                        simpleDialog = networkResponseDialog(getString(R.string.error), logins.getMessage());
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });

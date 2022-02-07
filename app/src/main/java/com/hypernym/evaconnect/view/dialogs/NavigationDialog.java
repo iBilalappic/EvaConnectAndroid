@@ -26,6 +26,7 @@ import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.view.ui.fragments.ActivityFragment;
 import com.hypernym.evaconnect.view.ui.fragments.CalendarFragment;
 import com.hypernym.evaconnect.view.ui.fragments.JobListingFragment;
+import com.hypernym.evaconnect.view.ui.fragments.SettingsFragment;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 
 import java.util.List;
@@ -38,7 +39,7 @@ import retrofit2.Response;
 public class NavigationDialog extends Dialog implements View.OnClickListener {
 
     private ImageView img_close;
-    private LinearLayout editProfile, notifications, mJoblisting, myactivity, calendar;
+    private LinearLayout editProfile, notifications, mJoblisting, myactivity, calendar ,settings;
     private TextView logout, tv_name, tv_designation,
             tv_company, tv_location, tv_connections_count, tv_notication_count, tv_calender_event, tv_joblisting;
     private Context context;
@@ -75,11 +76,17 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
         mJoblisting=findViewById(R.id.joblisting);
         calendar = findViewById(R.id.calendar);
         myactivity = findViewById(R.id.layout_myactivity);
+        settings = findViewById(R.id.settings);
         mJoblisting.setOnClickListener(this);
+        settings.setOnClickListener(this);
         // mLike.setOnClickListener(this);
         setCanceledOnTouchOutside(true);
         setCancelable(true);
         Window window = getWindow();
+
+        if(user.getType().equalsIgnoreCase("user")){
+            mJoblisting.setVisibility(View.GONE);
+        }
 
 
         WindowManager.LayoutParams wlp = window.getAttributes();
@@ -139,6 +146,20 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
 //                transaction.commit();
 //            }
 //        });
+
+
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+                FragmentTransaction transaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+                transaction.replace(R.id.framelayout, new SettingsFragment());
+                transaction.addToBackStack(null);
+                transaction.commit();
+
+            }
+        });
 
         calendar.setOnClickListener(new View.OnClickListener() {
             @Override

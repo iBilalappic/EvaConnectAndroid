@@ -86,7 +86,7 @@
         android:paddingStart="@dimen/spacing_large"
         android:paddingTop="@dimen/spacing_large"
         android:paddingEnd="@dimen/spacing_large"
-        android:paddingBottom="@dimen/spacing_medium">
+        android:paddingBottom="21dp">
 
         <ImageView
             android:layout_width="0dp"

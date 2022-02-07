@@ -47,7 +47,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:src="@drawable/ic_close"
-                android:tint="@color/black" />
+                app:tint="@color/black" />
 
         </LinearLayout>
 
@@ -91,15 +91,19 @@
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
 
-        <Button
+        <TextView
             android:id="@+id/btn_next"
-            style="@style/Button.border_selected_red"
+            style="@style/Button_selected_blue"
             android:layout_width="250dp"
-            android:layout_marginTop="32dp"
-            android:text="Next"
+            android:layout_marginTop="16dp"
+            android:text="@string/next"
+            android:gravity="center"
+            android:backgroundTint="@color/skyblue"
+            app:layout_constraintBottom_toTopOf="@+id/tv_already_account"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+            app:layout_constraintTop_toBottomOf="@+id/textView4"
+            app:layout_constraintVertical_bias="0.100000024" />
 
 
         <TextView

@@ -18,6 +18,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 
 import androidx.fragment.app.Fragment;
 
@@ -36,9 +37,12 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class LoadUrlFragment extends BaseFragment {
+public class LoadUrlFragment extends BaseFragment implements View.OnClickListener {
     @BindView(R.id.webview)
     WebView webView;
+
+    @BindView(R.id.img_backarrow)
+    ImageView img_backarrow;
     private static final int INPUT_FILE_REQUEST_CODE = 1;
     private static final int FILECHOOSER_RESULTCODE = 1;
     private ValueCallback<Uri> mUploadMessage;
@@ -58,12 +62,13 @@ public class LoadUrlFragment extends BaseFragment {
         View view=inflater.inflate(R.layout.fragment_load_url, container, false);
         ButterKnife.bind(this,view);
         init();
+        img_backarrow.setOnClickListener(this);
         return view;
     }
 
     private void init() {
-        showBackButton();
-        setPageTitle("Post Details");
+     //   showBackButton();
+     //   setPageTitle("Post Details");
         String url=getArguments().getString("url");
         ArrayList<String> urls=AppUtils.containsURL(url);
         webView.setWebViewClient(new WebViewClient());
@@ -92,6 +97,14 @@ public class LoadUrlFragment extends BaseFragment {
 //        });
 
     }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.img_backarrow) {
+            (getActivity()).onBackPressed();
+        }
+    }
+
     public class ChromeClient extends WebChromeClient {
         // For Android 5.0
         public boolean onShowFileChooser(WebView view, ValueCallback<Uri[]> filePath, WebChromeClient.FileChooserParams fileChooserParams) {

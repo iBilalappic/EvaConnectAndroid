@@ -30,6 +30,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
+            android:name=".EnterCodeActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.ui.activities.VerificationCode"
             android:exported="false" />
         <activity

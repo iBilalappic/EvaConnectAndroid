@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,7 +40,7 @@ public class EditProfileJobTitleFragment extends BaseFragment implements  View.O
     TextView btn_save;
 
     @BindView(R.id.img_backarrow)
-    TextView img_backarrow;
+    ImageView img_backarrow;
 
     private MultipartBody.Part partImage;
 
@@ -150,6 +151,9 @@ public class EditProfileJobTitleFragment extends BaseFragment implements  View.O
 
     @Override
     public void onClick(View v) {
+        if(v.getId()==R.id.img_backarrow){
+            getActivity().onBackPressed();
+        }
 
     }
 

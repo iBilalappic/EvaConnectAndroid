@@ -118,7 +118,7 @@ public class JobListingFragment extends BaseFragment implements View.OnClickList
     }
 
     private void GetJobAd() {
-        jobListViewModel.getjobAd(user).observe(this, new Observer<BaseModel<List<JobAd>>>() {
+        jobListViewModel.getjobAd(user).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<JobAd>>>() {
             @Override
             public void onChanged(BaseModel<List<JobAd>> getnetworkconnection) {
                 if (getnetworkconnection != null && !getnetworkconnection.isError()) {
@@ -137,7 +137,7 @@ public class JobListingFragment extends BaseFragment implements View.OnClickList
     }
 
     private void GetCompanyJobAd() {
-        jobListViewModel.getcompanyAd(user).observe(this, new Observer<BaseModel<List<CompanyJobAdModel>>>() {
+        jobListViewModel.getcompanyAd(user).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<CompanyJobAdModel>>>() {
             @Override
             public void onChanged(BaseModel<List<CompanyJobAdModel>> getnetworkconnection) {
                 if (getnetworkconnection != null && !getnetworkconnection.isError()) {

@@ -103,8 +103,8 @@ public class CompanyApplicantFragment extends BaseFragment implements View.OnCli
         appliedApplicantViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(AppliedApplicantViewModel.class);
 
         if ((getArguments() != null)) {
-            setPageTitle("Application Details");
-            showBackButton();
+            //setPageTitle("Application Details");
+            //showBackButton();
             companyJobAdModel = (CompanyJobAdModel) getArguments().getSerializable("COMPANY_AD");
             AppUtils.setGlideImage(getContext(), profile_image, companyJobAdModel.getJobImage());
             tv_name.setText(companyJobAdModel.getJobTitle());

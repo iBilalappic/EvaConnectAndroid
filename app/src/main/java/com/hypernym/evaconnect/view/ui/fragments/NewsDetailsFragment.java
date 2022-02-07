@@ -206,6 +206,8 @@ public class NewsDetailsFragment extends BaseFragment implements Validator.Valid
         });
     }
 
+
+
     private void settingpostType() {
 
         post.setPost_type(AppConstants.NEWS_TYPE);
@@ -214,8 +216,8 @@ public class NewsDetailsFragment extends BaseFragment implements Validator.Valid
     private void init() {
         validator = new Validator(this);
         validator.setValidationListener(this);
-        showBackButton();
-        setPageTitle("News Details");
+       // showBackButton();
+       // setPageTitle("News Details");
     }
 
     private void setPostData(Post post) {

@@ -36,7 +36,7 @@ import butterknife.ButterKnife;
 public class CreateAccount_4_Activity extends BaseActivity implements View.OnClickListener {
 
     String email, password, photourl, activity_type, user_type,path, about,
-            aviation_type = "Commercial Aviation", JobSector,username,firstname,surname,city,country,filepath;
+            aviation_type = "Commercial Aviation", JobSector,username,firstname,surname,city,country,filepath, language, companyUrl;
 
     @BindView(R.id.tv_general_business)
     TextView tv_general_business;
@@ -115,6 +115,7 @@ public class CreateAccount_4_Activity extends BaseActivity implements View.OnCli
             photourl = getIntent().getStringExtra("Photo");
             user_type = getIntent().getStringExtra("userType");
             path = getIntent().getStringExtra("Path");
+            companyUrl = getIntent().getStringExtra("companyUrl");
             username = getIntent().getStringExtra("username");
             activity_type = "LinkedinActivity";
             firstname = getIntent().getStringExtra("FirstName");
@@ -122,12 +123,14 @@ public class CreateAccount_4_Activity extends BaseActivity implements View.OnCli
             city = getIntent().getStringExtra("city");
             country = getIntent().getStringExtra("country");
             about = getIntent().getStringExtra("about");
+            language = getIntent().getStringExtra("language");
 
         }
         else if (!TextUtils.isEmpty(type) && type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)){
             email = getIntent().getStringExtra("Email");
             photourl = getIntent().getStringExtra("Photo");
             path = getIntent().getStringExtra("Path");
+            companyUrl = getIntent().getStringExtra("companyUrl");
             user_type = getIntent().getStringExtra("userType");
             username = getIntent().getStringExtra("username");
             activity_type = AppConstants.FACEBOOK_LOGIN_TYPE;
@@ -136,17 +139,20 @@ public class CreateAccount_4_Activity extends BaseActivity implements View.OnCli
             city = getIntent().getStringExtra("city");
             country = getIntent().getStringExtra("country");
             about = getIntent().getStringExtra("about");
+            language = getIntent().getStringExtra("language");
         }
         else {
             email = getIntent().getStringExtra("Email");
             user_type = getIntent().getStringExtra("userType");
             username = getIntent().getStringExtra("username");
             firstname = getIntent().getStringExtra("FirstName");
+            companyUrl = getIntent().getStringExtra("companyUrl");
             surname = getIntent().getStringExtra("SurName");
             city = getIntent().getStringExtra("city");
             country = getIntent().getStringExtra("country");
             filepath = getIntent().getStringExtra("FilePath");
             about = getIntent().getStringExtra("about");
+            language = getIntent().getStringExtra("language");
             activity_type = "normal_type";
         }
 
@@ -196,14 +202,14 @@ public class CreateAccount_4_Activity extends BaseActivity implements View.OnCli
                 if((!spinner_sector.getSelectedItem().equals("Choose"))) {
 
                     if (activity_type.equals("LinkedinActivity")) {
-                        Intent intent = new Intent(CreateAccount_4_Activity.this, PasswordActivity.class);
+                        Intent intent = new Intent(CreateAccount_4_Activity.this, EmailVerification.class);
                         intent.putExtra("Email", email);
                         intent.putExtra("Photo", photourl);
                         intent.putExtra("userType", user_type);
                         intent.putExtra("Path", path);
                         intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
                         intent.putExtra("aviation_type", aviation_type);
-
+                        intent.putExtra("companyUrl", companyUrl);
                         intent.putExtra("job_sector", JobSector);
                         intent.putExtra("other_job_sector", edt_sector.getText().toString());
                         intent.putExtra("username", username);
@@ -211,20 +217,21 @@ public class CreateAccount_4_Activity extends BaseActivity implements View.OnCli
                         intent.putExtra("SurName", surname);
                         intent.putExtra("city", city);
                         intent.putExtra("country", country);
-                        intent.putExtra("about", country);
+                        intent.putExtra("about", about);
+                        intent.putExtra("language", language);
                         intent.putExtra("jobtitle", edt_jobtitle.getText().toString());
                         intent.putExtra("companyname", edt_company.getText().toString());
                         startActivity(intent);
 
                     } else if (activity_type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)) {
-                        Intent intent = new Intent(CreateAccount_4_Activity.this, PasswordActivity.class);
+                        Intent intent = new Intent(CreateAccount_4_Activity.this, EmailVerification.class);
                         intent.putExtra("Email", email);
                         intent.putExtra("Photo", photourl);
                         intent.putExtra("Path", path);
                         intent.putExtra("userType", user_type);
                         intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
                         intent.putExtra("aviation_type", aviation_type);
-
+                        intent.putExtra("companyUrl", companyUrl);
                         intent.putExtra("job_sector", JobSector);
                         intent.putExtra("other_job_sector", edt_sector.getText().toString());
                         intent.putExtra("username", username);
@@ -232,13 +239,14 @@ public class CreateAccount_4_Activity extends BaseActivity implements View.OnCli
                         intent.putExtra("SurName", surname);
                         intent.putExtra("city", city);
                         intent.putExtra("country", country);
-                        intent.putExtra("about", country);
+                        intent.putExtra("about", about);
+                        intent.putExtra("language", language);
                         intent.putExtra("jobtitle", edt_jobtitle.getText().toString());
                         intent.putExtra("companyname", edt_company.getText().toString());
                         startActivity(intent);
                     } else {
 
-                        Intent intent = new Intent(CreateAccount_4_Activity.this, PasswordActivity.class);
+                        Intent intent = new Intent(CreateAccount_4_Activity.this, EmailVerification.class);
                         if (filepath != null) {
 
                             intent.putExtra("Email", email);
@@ -251,9 +259,11 @@ public class CreateAccount_4_Activity extends BaseActivity implements View.OnCli
                             intent.putExtra("FirstName", firstname);
                             intent.putExtra("SurName", surname);
                             intent.putExtra("city", city);
+                            intent.putExtra("companyUrl", companyUrl);
                             intent.putExtra("country", country);
                             intent.putExtra("FilePath", filepath);
-                            intent.putExtra("about", country);
+                            intent.putExtra("about", about);
+                            intent.putExtra("language", language);
                             intent.putExtra("jobtitle", edt_jobtitle.getText().toString());
                             intent.putExtra("companyname", edt_company.getText().toString());
                             startActivity(intent);
@@ -265,11 +275,13 @@ public class CreateAccount_4_Activity extends BaseActivity implements View.OnCli
                             intent.putExtra("job_sector", JobSector);
                             intent.putExtra("other_job_sector", edt_sector.getText().toString());
                             intent.putExtra("username", username);
+                            intent.putExtra("companyUrl", companyUrl);
                             intent.putExtra("FirstName", firstname);
                             intent.putExtra("SurName", surname);
                             intent.putExtra("city", city);
                             intent.putExtra("country", country);
-                            intent.putExtra("about", country);
+                            intent.putExtra("about", about);
+                            intent.putExtra("language", language);
                             intent.putExtra("jobtitle", edt_jobtitle.getText().toString());
                             intent.putExtra("companyname", edt_company.getText().toString());
                             startActivity(intent);

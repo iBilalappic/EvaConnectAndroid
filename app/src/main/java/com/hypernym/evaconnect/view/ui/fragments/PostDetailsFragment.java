@@ -217,7 +217,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     }
 
     private void getPostDetails(int id) {
-        postViewModel.getPostByID(id).observe(this, new Observer<BaseModel<List<Post>>>() {
+        postViewModel.getPostByID(id).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError()) {
@@ -333,7 +333,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
 
             cv.setVisibility(View.VISIBLE);
             img_video.setVisibility(View.VISIBLE);
-            img_play.setVisibility(View.VISIBLE);
+            img_play.setVisibility(View.GONE);
             ArrayList<String> URLs = AppUtils.containsURL(post.getContent().toString());
             if (URLs.size() > 0) {
                 AppUtils.customUrlEmbeddedView(getContext(), URLs.get(0), img_video);

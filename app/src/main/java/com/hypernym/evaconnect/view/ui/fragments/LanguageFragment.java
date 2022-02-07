@@ -1,4 +1,7 @@
-package com.hypernym.evaconnect.view.ui.activities;
+package com.hypernym.evaconnect.view.ui.fragments;
+
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.CAMERA;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -12,14 +15,23 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Adapter;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -29,10 +41,6 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -44,16 +52,19 @@ import com.google.android.gms.maps.model.LatLng;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
+import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.utils.Constants;
+import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.view.adapters.MySpinnerAdapter;
+import com.hypernym.evaconnect.view.ui.activities.CreateAccount_3_Activity;
+import com.hypernym.evaconnect.view.ui.activities.CreateAccount_4_Activity;
+import com.hypernym.evaconnect.view.ui.activities.LoginActivity;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
-import com.skydoves.powerspinner.IconSpinnerItem;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -62,18 +73,13 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-import static android.Manifest.permission.CAMERA;
-import static java.security.AccessController.getContext;
 
-public class CreateAccount_3_Activity extends BaseActivity implements Validator.ValidationListener,
+public class LanguageFragment extends BaseFragment implements Validator.ValidationListener,
         com.google.android.gms.location.LocationListener, View.OnClickListener {
 
-
     private Validator validator;
-
     @BindView(R.id.btn_next)
-    Button btn_next;
+    TextView btn_next;
 
 
     @BindView(R.id.tv_dob)
@@ -97,8 +103,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
     ImageView img_cross;
 
 
-    @BindView(R.id.tv_already_account)
-    TextView tv_already_account;
+
 
     @BindView(R.id.layout_date)
     LinearLayout layout_date;
@@ -122,7 +127,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
 
     String email, photourl, activity_type, user_type, firstname, surname, file_name, path, about, dob, city, companyUrl;
     final Calendar myCalendar = Calendar.getInstance();
-
+    User user = new User();
     String dob_str = "";
     public static final int RequestPermissionCode = 1;
     LatLng mLastLocation;
@@ -140,19 +145,27 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
         updateLabel();
     };
     private String selected_val ="English";
+    public LanguageFragment() {
+        // Required empty public constructor
+    }
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_account_3);
-        ButterKnife.bind(this);
-        tv_already_account.setOnClickListener(this);
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ButterKnife.bind(this, view);
+        user = LoginUtils.getUser();
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
         isLocationEnabled();
         init();
+    }
 
-
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_language, container, false);
     }
 
     private void isLocationEnabled() {
@@ -164,7 +177,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
     }
 
     private void buildAlertMessageNoGps() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
                 .setCancelable(false)
                 .setPositiveButton("Enable GPS", new DialogInterface.OnClickListener() {
@@ -184,45 +197,9 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
         alert.setCanceledOnTouchOutside(false);
         alert.show();
     }
-
-
     private void init() {
-        String type = getIntent().getStringExtra(Constants.ACTIVITY_NAME);
 
-        if ("LinkedinActivity".equals(getIntent().getStringExtra(Constants.ACTIVITY_NAME))) {
-            email = getIntent().getStringExtra("Email");
-            photourl = getIntent().getStringExtra("Photo");
-            user_type = getIntent().getStringExtra("userType");
-            path = getIntent().getStringExtra("Path");
-            activity_type = "LinkedinActivity";
-            companyUrl = getIntent().getStringExtra("companyUrl");
-            firstname = getIntent().getStringExtra("FirstName");
-            surname = getIntent().getStringExtra("SurName");
-            about = getIntent().getStringExtra("about");
-
-
-        } else if (!TextUtils.isEmpty(type) && type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)) {
-            email = getIntent().getStringExtra("Email");
-            photourl = getIntent().getStringExtra("Photo");
-            path = getIntent().getStringExtra("Path");
-            user_type = getIntent().getStringExtra("userType");
-            activity_type = AppConstants.FACEBOOK_LOGIN_TYPE;
-            companyUrl = getIntent().getStringExtra("companyUrl");
-            firstname = getIntent().getStringExtra("FirstName");
-            surname = getIntent().getStringExtra("SurName");
-            about = getIntent().getStringExtra("about");
-
-        } else {
-            email = getIntent().getStringExtra("Email");
-            activity_type = "normal_type";
-            file_name = getIntent().getStringExtra("FilePath");
-            user_type = getIntent().getStringExtra("userType");
-            firstname = getIntent().getStringExtra("FirstName");
-            companyUrl = getIntent().getStringExtra("companyUrl");
-            surname = getIntent().getStringExtra("SurName");
-            about = getIntent().getStringExtra("about");
-        }
-        if (user_type.equals("user")) {
+        if (user.getType().equalsIgnoreCase("user")) {
             layout_date.setVisibility(View.VISIBLE);
             tv_dob.setVisibility(View.VISIBLE);
             title.setText("Date of Birth / Location");
@@ -252,11 +229,11 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
             }
         });
 
-        ArrayAdapter<String> adapterUkCities = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> adapterUkCities = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_item, getResources()
                 .getStringArray(R.array.uk_cities));
 
-        ArrayAdapter<String> adapterPakCities = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> adapterPakCities = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_item, getResources()
                 .getStringArray(R.array.pak_cities));
 
@@ -266,7 +243,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
 
 
         MySpinnerAdapter adapterlanguages = new MySpinnerAdapter(
-               this,
+                getActivity(),
                 android.R.layout.simple_spinner_item,
                 Arrays.asList(getResources().getStringArray(R.array.languageSpinnerItems))
         );
@@ -280,7 +257,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
             @Override
             public void onItemSelected(AdapterView<?>arg0, View view, int arg2, long arg3) {
 
-                 selected_val=edit_language.getSelectedItem().toString();
+                selected_val=edit_language.getSelectedItem().toString();
 
             }
 
@@ -332,7 +309,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                new DatePickerDialog(CreateAccount_3_Activity.this,R.style.DialogTheme, date, myCalendar
+                new DatePickerDialog(getContext(),R.style.DialogTheme, date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
@@ -343,7 +320,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                new DatePickerDialog(CreateAccount_3_Activity.this,R.style.DialogTheme, date, myCalendar
+                new DatePickerDialog(getContext(),R.style.DialogTheme, date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
@@ -354,7 +331,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                new DatePickerDialog(CreateAccount_3_Activity.this,R.style.DialogTheme, date, myCalendar
+                new DatePickerDialog(getContext(),R.style.DialogTheme, date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
@@ -374,11 +351,11 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
         String monthString  = (String) DateFormat.format("MMM",  myCalendar.getTime()); // Jun
         String monthNumber  = (String) DateFormat.format("MM",   myCalendar.getTime()); // 06
         String year         = (String) DateFormat.format("YY", myCalendar.getTime()); // 2013*/
-       /* edit_dob.setText(sdf.format(myCalendar.getTime()));*/
+        /* edit_dob.setText(sdf.format(myCalendar.getTime()));*/
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
 
         startLocationUpdates();
@@ -387,71 +364,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
     @Override
     public void onValidationSucceeded() {
 
-        if (activity_type.equals("LinkedinActivity")) {
-            Intent intent = new Intent(CreateAccount_3_Activity.this, CreateAccount_4_Activity.class);
-            intent.putExtra("Email", email);
-            intent.putExtra("Photo", photourl);
-            intent.putExtra("Path", path);
-            intent.putExtra("userType", user_type);
-            intent.putExtra("FirstName", firstname);
-            intent.putExtra("SurName", surname);
-            intent.putExtra("companyUrl", companyUrl);
-            intent.putExtra("city", city);
-            intent.putExtra("country", ed_country.getText().toString());
-            intent.putExtra("about", about);
-            intent.putExtra("language", selected_val);
-            intent.putExtra("dob", dob_str);
-            intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-            startActivity(intent);
 
-        } else if (activity_type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)) {
-            Intent intent = new Intent(CreateAccount_3_Activity.this, CreateAccount_4_Activity.class);
-            intent.putExtra("Email", email);
-            intent.putExtra("Photo", photourl);
-            intent.putExtra("Path", path);
-            intent.putExtra("userType", user_type);
-            intent.putExtra("FirstName", firstname);
-            intent.putExtra("SurName", surname);
-            intent.putExtra("about", about);
-            intent.putExtra("dob", dob_str);
-            intent.putExtra("companyUrl", companyUrl);
-            intent.putExtra("city", city);
-            intent.putExtra("country", ed_country.getText().toString());
-            intent.putExtra("language", selected_val);
-            intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-            startActivity(intent);
-        } else {
-            Intent intent = new Intent(CreateAccount_3_Activity.this, CreateAccount_4_Activity.class);
-            if (file_name != null) {
-
-                intent.putExtra("Email", email);
-                intent.putExtra("FirstName", firstname);
-                intent.putExtra("SurName", surname);
-                intent.putExtra("FilePath", file_name);
-                intent.putExtra("userType", user_type);
-                intent.putExtra("about", about);
-                intent.putExtra("dob", dob_str);
-                intent.putExtra("companyUrl", companyUrl);
-                intent.putExtra("city", city);
-                intent.putExtra("country", ed_country.getText().toString());
-                intent.putExtra("language", selected_val);
-                intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-                startActivity(intent);
-            } else {
-                intent.putExtra("Email", email);
-                intent.putExtra("FirstName", firstname);
-                intent.putExtra("SurName", surname);
-                intent.putExtra("userType", user_type);
-                intent.putExtra("about", about);
-                intent.putExtra("dob", dob_str);
-                intent.putExtra("companyUrl", companyUrl);
-                intent.putExtra("city", city);
-                intent.putExtra("country", ed_country.getText().toString());
-                intent.putExtra("language", selected_val);
-                intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-                startActivity(intent);
-            }
-        }
 
     }
 
@@ -460,7 +373,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
     public void onValidationFailed(List<ValidationError> errors) {
         for (ValidationError error : errors) {
             View view = error.getView();
-            String message = error.getCollatedErrorMessage(this);
+            String message = error.getCollatedErrorMessage(getActivity());
             if (view.getId() == R.id.ed_country) {
                 message = getString(R.string.msg_country);
             }
@@ -471,7 +384,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
             if (view instanceof EditText) {
                 ((EditText) view).setError(message);
             } else {
-                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -492,15 +405,15 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
 
         // Check whether location settings are satisfied
         // https://developers.google.com/android/reference/com/google/android/gms/location/SettingsClient
-        SettingsClient settingsClient = LocationServices.getSettingsClient(this);
+        SettingsClient settingsClient = LocationServices.getSettingsClient(getActivity());
         settingsClient.checkLocationSettings(locationSettingsRequest);
 
         // new Google API SDK v11 uses getFusedLocationProviderClient(this)
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, new LocationCallback() {
+        LocationServices.getFusedLocationProviderClient(getActivity()).requestLocationUpdates(mLocationRequest, new LocationCallback() {
                     @Override
                     public void onLocationResult(LocationResult locationResult) {
                         // do work here
@@ -508,7 +421,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
                         try {
                             if (counter > 1) {
                                 onLocationChanged(locationResult.getLastLocation());
-                                LocationServices.getFusedLocationProviderClient(getApplicationContext()).removeLocationUpdates(this);
+                                LocationServices.getFusedLocationProviderClient(getActivity().getApplicationContext()).removeLocationUpdates(this);
                             }
                         } catch (Exception ex) {
 
@@ -530,7 +443,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
             showDialog();
             Geocoder geocoder;
             List<Address> addresses = null;
-            geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+            geocoder = new Geocoder(getActivity().getApplicationContext(), Locale.getDefault());
 
             try {
                 addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
@@ -560,7 +473,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
                     String street = splitArray[0];
                     String sector = splitArray[1];
 
-                  //  spinCities.setText(city);
+                    //  spinCities.setText(city);
                     ed_country.setText(country);
                     hideDialog();
 
@@ -573,8 +486,8 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
 
     public boolean Checkpermission() {
 
-        int FirstPermissionResult = ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION);
-        int CameraResult = ContextCompat.checkSelfPermission(this, CAMERA);
+        int FirstPermissionResult = ContextCompat.checkSelfPermission(getActivity(), ACCESS_FINE_LOCATION);
+        int CameraResult = ContextCompat.checkSelfPermission(getActivity(), CAMERA);
 
 
         return FirstPermissionResult == PackageManager.PERMISSION_GRANTED &&
@@ -582,7 +495,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
     }
 
     private void requestlocationpermission() {
-        ActivityCompat.requestPermissions(this, new String[]
+        ActivityCompat.requestPermissions(getActivity(), new String[]
                 {
                         ACCESS_FINE_LOCATION,
                         CAMERA
@@ -620,28 +533,21 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(CreateAccount_3_Activity.this, LoginActivity.class);
+
         switch (v.getId()) {
             case R.id.img_backarrow:
-                this.finish();
+                getActivity().onBackPressed();
                 break;
 
-            case R.id.img_cross:
-
-            case R.id.tv_already_account:
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                break;
 
             case R.id.edit_month:
             case R.id.edit_year:
             case R.id.edit_date:
-                new DatePickerDialog(CreateAccount_3_Activity.this, date, myCalendar
+                new DatePickerDialog(getContext(), date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
                 break;
         }
     }
-
 
 }

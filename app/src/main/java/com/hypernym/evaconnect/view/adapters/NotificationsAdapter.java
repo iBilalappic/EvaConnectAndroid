@@ -47,10 +47,15 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         AppUtils.setGlideImage(context, holder.profile_image, notificationsList.get(position).getUser().getUser_image());
         holder.tv_status.setText(notificationsList.get(position).getContent());
         holder.tv_date.setText(DateUtils.formatToYesterdayOrToday(notificationsList.get(position).getCreated_datetime()));
-
+        if ( notificationsList.get(position).getContent().contains("commented")) {
+            holder.tv_visit.setVisibility(View.VISIBLE);
+        } else {
+            holder.tv_visit.setVisibility(View.GONE);
+        }
         if(notificationsList.get(position).getObject_type().equalsIgnoreCase("connection"))
         {
             holder.tv_connect.setVisibility(View.VISIBLE);
+            holder.tv_visit.setVisibility(View.GONE);
 
         }
         else
@@ -96,6 +101,11 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
         @BindView(R.id.tv_connect)
         TextView tv_connect;
+
+
+        @BindView(R.id.tv_visit)
+        TextView tv_visit;
+
 
 
         public ViewHolder(@NonNull View itemView) {

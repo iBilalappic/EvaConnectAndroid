@@ -10,8 +10,11 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,6 +27,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.core.util.PatternsCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -90,6 +94,20 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
     @BindView(R.id.edt_surname)
     EditText edt_surname;
 
+    @NotEmpty
+    @BindView(R.id.edt_companyname)
+    EditText edt_companyname;
+
+    @NotEmpty
+    @BindView(R.id.edt_companyurl)
+    EditText edt_companyurl;
+
+
+    @NotEmpty
+    @BindView(R.id.edt_email_company)
+    EditText edt_email_company;
+
+
     @BindView(R.id.img_profile)
     CircleImageView img_profile;
 
@@ -135,7 +153,17 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
         btn_next.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
-                validator.validate();
+                EditText target;
+                if(userType.equalsIgnoreCase("user")){
+                    target = edt_email;
+                }else{
+                    target = edt_email_company;
+                }
+                if (isValidEmail(target.getText())) {
+                    validator.validate();
+                }else
+                    Toast.makeText(getApplicationContext(),"Invalid email address",Toast.LENGTH_SHORT).show();
+
                 Log.d("TAAAG",""+ file_name);
             }
         });
@@ -143,6 +171,7 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
 
     private void init() {
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getApplication(), this)).get(UserViewModel.class);
+
 
         validator = new Validator(this);
         validator.setValidationListener(this);
@@ -187,7 +216,9 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
         }
     }
 
-
+    public static boolean isValidEmail(CharSequence target) {
+        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
+    }
     @Override
     public void onValidationSucceeded() {
 
@@ -231,22 +262,45 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
                     hideDialog();
 
                     if(file_name!=null){
-                        Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
-                        intent.putExtra("Email", edt_email.getText().toString());
-                        intent.putExtra("FirstName", edt_firstname.getText().toString());
-                        intent.putExtra("SurName", edt_surname.getText().toString());
-                        intent.putExtra("FilePath", file_name.toString());
-                        intent.putExtra("userType", userType);
-                        intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-                        startActivity(intent);
+                        if (!userType.equalsIgnoreCase("company")) {
+                            Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
+                            intent.putExtra("Email", edt_email.getText().toString());
+                            intent.putExtra("FirstName", edt_firstname.getText().toString());
+                            intent.putExtra("SurName", edt_surname.getText().toString());
+                            intent.putExtra("FilePath", file_name.toString());
+                            intent.putExtra("userType", userType);
+                            intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+                            startActivity(intent);
+                        } else {
+                            Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
+                            intent.putExtra("Email", edt_email_company.getText().toString());
+                            intent.putExtra("FirstName", edt_companyname.getText().toString());
+                            intent.putExtra("companyUrl", edt_companyurl.getText().toString());
+                            intent.putExtra("FilePath", file_name.toString());
+                            intent.putExtra("SurName", "");
+                            intent.putExtra("userType", userType);
+                            intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+                            startActivity(intent);
+                        }
                     }else{
-                        Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
-                        intent.putExtra("Email", edt_email.getText().toString());
-                        intent.putExtra("FirstName", edt_firstname.getText().toString());
-                        intent.putExtra("SurName", edt_surname.getText().toString());
-                        intent.putExtra("userType", userType);
-                        intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-                        startActivity(intent);
+                        if (!userType.equalsIgnoreCase("company")) {
+                            Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
+                            intent.putExtra("Email", edt_email.getText().toString());
+                            intent.putExtra("FirstName", edt_firstname.getText().toString());
+                            intent.putExtra("SurName", edt_surname.getText().toString());
+                            intent.putExtra("userType", userType);
+                            intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+                            startActivity(intent);
+                        } else {
+                            Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
+                            intent.putExtra("Email", edt_email_company.getText().toString());
+                            intent.putExtra("FirstName", edt_companyname.getText().toString());
+                            intent.putExtra("companyUrl", edt_companyurl.getText().toString());
+                            intent.putExtra("SurName", "");
+                            intent.putExtra("userType", userType);
+                            intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+                            startActivity(intent);
+                        }
                     }
                 }
             }
@@ -254,7 +308,41 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
         });
 
     }
+   public void validateEmail(EditText emailValidate){
+      // final EditText emailValidate = (EditText)findViewById(R.id.textMessage);
 
+      // final TextView textView = (TextView)findViewById(R.id.text);
+
+       String email = emailValidate.getText().toString().trim();
+
+       String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+
+       emailValidate .addTextChangedListener(new TextWatcher() {
+           public void afterTextChanged(Editable s) {
+
+               if ( PatternsCompat.EMAIL_ADDRESS.matcher(email).matches() && s.length() > 0)
+               {
+
+                   Toast.makeText(getApplicationContext(),"Valid email address",Toast.LENGTH_SHORT).show();
+                   // or
+                 //  textView.setText("valid email");
+               }
+               else
+               {
+                 //  emailValidate.setError("Invalid email address");
+                   Toast.makeText(getApplicationContext(),"Invalid email address",Toast.LENGTH_SHORT).show();
+                   //or
+                //   textView.setText("invalid email");
+               }
+           }
+           public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+               // other stuffs
+           }
+           public void onTextChanged(CharSequence s, int start, int before, int count) {
+               // other stuffs
+           }
+       });
+   }
 
 
     @Override
@@ -312,6 +400,7 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
                 tv_upload_image.setText("Upload Image");
                 btn_next.setClickable(true);
                 userType = "user";
+                resetEditText(edt_firstname,edt_surname,edt_email);
                 break;
 
             case R.id.tv_company:
@@ -323,14 +412,20 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
                 layout_company.setVisibility(View.VISIBLE);
                 img_profile.setImageDrawable(getResources().getDrawable(R.drawable.ic_logo_company));
                 tv_upload_image.setText("Upload Logo");
-                btn_next.setClickable(false);
-                Toast.makeText(this, "Company module is under development", Toast.LENGTH_SHORT).show();
+                //btn_next.setClickable(false);
+                //Toast.makeText(this, "Company module is under development", Toast.LENGTH_SHORT).show();
                 userType = "company";
+                resetEditText(edt_companyname,edt_companyurl,edt_email_company);
                 break;
 
         }
     }
 
+    public void resetEditText(EditText edtext1, EditText edtext2, EditText edtext3){
+        edtext1.setText("");
+        edtext2.setText("");
+        edtext3.setText("");
+    }
     public boolean Checkpermission() {
 
         int ExternalReadResult = ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE);

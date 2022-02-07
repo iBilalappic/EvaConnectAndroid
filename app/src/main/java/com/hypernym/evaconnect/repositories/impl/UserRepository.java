@@ -52,6 +52,8 @@ public class UserRepository implements IUserRespository {
                 RequestBody.create(MediaType.parse("text/plain"), user.getCountry()),
                 RequestBody.create(MediaType.parse("text/plain"), user.getCity()),
                 RequestBody.create(MediaType.parse("text/plain"), user.getLast_name()),
+                RequestBody.create(MediaType.parse("text/plain"), user.getLanguage()),
+              /*  RequestBody.create(MediaType.parse("text/plain"), user.getCompany_url()),*/
                 partImage).enqueue(new Callback<BaseModel<List<User>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {

@@ -3,39 +3,35 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="115dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:elevation="@dimen/spacing_xsmall"
     android:layout_marginBottom="@dimen/spacing_medium">
 
 
-
     <TextView
         android:id="@+id/day"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="25dp"
+        android:fontFamily="@font/nunitosansbold"
         android:text="4th"
-        android:textStyle="bold"
-        android:textAppearance="@style/TextAppearance.Text.Bold"
-        android:layout_marginStart="@dimen/spacing_large"
-        android:layout_marginTop="@dimen/spacing_large"
+        android:textColor="@color/black"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/month"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_large"
-        android:layout_marginBottom="@dimen/spacing_large"
         android:text="May"
-        android:textAppearance="@style/TextAppearance.Text.Regular"
+        android:fontFamily="@font/nunitosansbold"
         android:textColor="#B4B4B4"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/day"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/day" />
@@ -44,40 +40,39 @@
         android:id="@+id/eventTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="25dp"
+        android:fontFamily="@font/nunitosansbold"
         android:text="Meeting with Shehryar"
-        android:textSize="12sp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/day"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/day"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textStyle="bold"
-        android:layout_marginStart="@dimen/spacing_extra_extra_large"
-        android:textAppearance="@style/TextAppearance.Text.Bold"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/object_type"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="22dp"
+        android:fontFamily="@font/nunitosansregular"
         android:text="Meeting"
         android:textColor="#2ECC71"
-        android:textAppearance="@style/TextAppearance.Text.Regular"
-        android:textSize="12sp"
+        android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@id/day"
-        app:layout_constraintTop_toBottomOf="@id/eventTitle"
-        android:layout_marginStart="@dimen/spacing_extra_extra_large"
-        />
+        app:layout_constraintTop_toBottomOf="@id/eventTitle" />
 
     <TextView
         android:id="@+id/time"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_extra_extra_large"
+        android:layout_marginStart="22dp"
         android:text="15:00pm - 17:00"
         android:textAppearance="@style/TextAppearance.Text.Regular"
         android:textColor="#B4B4B4"
-        android:textSize="10sp"
+        android:textSize="14sp"
         app:layout_constraintStart_toEndOf="@id/day"
         app:layout_constraintTop_toBottomOf="@id/object_type" />
 
@@ -85,10 +80,9 @@
         android:id="@+id/divider"
         android:layout_width="0dp"
         android:layout_height="2dp"
-        android:layout_marginTop="8dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_blue_red"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/time" />
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

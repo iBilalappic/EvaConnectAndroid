@@ -386,7 +386,7 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
                             ((JobTypeViewHolder) holder).tv_content.setVisibility(View.VISIBLE);
                             ((JobTypeViewHolder) holder).tv_content.setText(posts.get(position).getContent());
                         }
-                        ((JobHomeAdapter.JobTypeViewHolder) holder).top_image.setVisibility(View.GONE);
+                       // ((JobHomeAdapter.JobTypeViewHolder) holder).top_image.setVisibility(View.GONE);
                     } else {
                         ((JobHomeAdapter.JobTypeViewHolder) holder).tv_apply.setVisibility(View.VISIBLE);
                         ((JobHomeAdapter.JobTypeViewHolder) holder).layout_job_shift_time.setVisibility(View.VISIBLE);
@@ -395,7 +395,7 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
                         ((JobHomeAdapter.JobTypeViewHolder) holder).layout_applicants.setVisibility(View.GONE);
                         ((JobTypeViewHolder) holder).layout_active_time.setVisibility(View.GONE);
                         ((JobTypeViewHolder) holder).tv_content.setVisibility(View.GONE);
-                        ((JobHomeAdapter.JobTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
+                       // ((JobHomeAdapter.JobTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
 
                         if(posts.get(position).getIs_applied()==1)
                         {
@@ -403,7 +403,7 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
                         }
                         else
                         {
-                            ((JobHomeAdapter.JobTypeViewHolder) holder).tv_apply.setText("Apply");
+                            ((JobHomeAdapter.JobTypeViewHolder) holder).tv_apply.setText("Go to Ad");
                             ((JobHomeAdapter.JobTypeViewHolder) holder).tv_apply.setOnClickListener(new OnOneOffClickListener() {
                                 @Override
                                 public void onSingleClick(View v) {

@@ -125,6 +125,7 @@
                 android:id="@+id/save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="onClick"
                 android:layout_marginEnd="29dp"
                 android:background="@drawable/ic_star"
                 android:visibility="visible"
@@ -141,22 +142,44 @@
                 app:layout_constraintBottom_toBottomOf="@+id/img_event"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <ImageButton
+            <TextView
                 android:id="@+id/accept_invite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/accept_invite"
+               android:text="Accept Invite"
+                android:paddingLeft="20dp"
+                android:paddingTop="8dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="8dp"
+                android:textSize="13sp"
                 android:visibility="gone"
+                android:drawablePadding="5sp"
+                android:drawableLeft="@drawable/ic_check"
+                style="@style/Button_selected_red"
+                android:layout_marginStart="25dp"
+                android:layout_marginBottom="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/img_event"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintStart_toStartOf="parent" />
 
-            <ImageButton
+            <TextView
                 android:id="@+id/interested"
+                style="@style/Button_selected_light_blue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/interested"
+                android:layout_marginStart="25dp"
+                android:layout_marginBottom="32dp"
                 android:visibility="visible"
+                android:drawablePadding="5sp"
+                android:drawableLeft="@drawable/ic_check"
+                android:fontFamily="@font/nunitosansregular"
+                android:paddingLeft="20dp"
+                android:paddingTop="8dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="8dp"
+                android:text="Interested"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+
                 app:layout_constraintBottom_toBottomOf="@+id/img_event"
                 app:layout_constraintStart_toStartOf="parent" />
 

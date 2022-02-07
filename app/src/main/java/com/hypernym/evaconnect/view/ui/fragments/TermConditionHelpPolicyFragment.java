@@ -55,18 +55,21 @@ public class TermConditionHelpPolicyFragment extends BaseFragment implements Vie
                     case Constants.HELP:
                         header_title.setText(R.string.help);
                         title.setText("Please contact us on");
+                        title.setTextColor(getResources().getColor(R.color.grayish_black_text));
                         email.setVisibility(View.VISIBLE);
                         description.setText(R.string.large_dummy_text);
                         break;
                     case Constants.TERMS_AND_CONDITION:
                         header_title.setText("Terms of Service");
                         title.setText("Terms of Service");
+                        title.setTextColor(getResources().getColor(R.color.colorAccent));
                         email.setVisibility(View.GONE);
                         description.setText(R.string.large_dummy_text);
                         break;
                     case Constants.COOKIES_POLICY:
                         header_title.setText("Cookies Policy");
                         title.setText("Cookies Policy");
+                        title.setTextColor(getResources().getColor(R.color.colorAccent));
                         email.setVisibility(View.GONE);
                         description.setText(R.string.large_dummy_text);
                         break;

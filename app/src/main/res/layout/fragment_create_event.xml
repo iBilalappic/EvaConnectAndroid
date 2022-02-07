@@ -41,7 +41,7 @@
                 android:gravity="end"
                 android:text="Create a Event"
                 android:textColor="@color/black"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
 
@@ -52,6 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_large"
+            android:layout_marginTop="30dp"
             android:text="Title"
             android:textAppearance="@style/TextAppearance.Text.Bold"
             android:textSize="12sp"
@@ -85,13 +86,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/clock_black"
-            android:tint="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_startdate"
             app:layout_constraintBottom_toBottomOf="@id/tv_startdate"
             android:layout_marginStart="@dimen/spacing_large"
 
-            />
+            app:tint="@color/black" />
 
         <EditText
             android:id="@+id/tv_startdate"
@@ -291,7 +291,7 @@
             android:id="@+id/invite_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintTop_toBottomOf="@id/icon_link">
 
             <TextView
@@ -305,10 +305,25 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/textView19"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="@font/nunitosansregular"
+                android:gravity="center"
+                android:text="Add\nParticipant"
+                android:textColor="@color/black"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="@+id/add1"
+                app:layout_constraintStart_toStartOf="@+id/add1"
+                app:layout_constraintTop_toBottomOf="@+id/add1" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/invite_people"
                 android:layout_width="0dp"
-                android:layout_height="120dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:scrollbars="none"
                 app:layout_constraintEnd_toStartOf="@+id/add1"
@@ -317,25 +332,15 @@
 
             <ImageView
                 android:id="@+id/add1"
-                android:layout_width="55dp"
-                android:layout_height="55dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:paddingTop="4dp"
                 android:src="@drawable/iconadd"
-                app:layout_constraintBottom_toBottomOf="@+id/invite_people"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/invite_people"
-                app:layout_constraintVertical_bias="0.35" />
+                app:layout_constraintTop_toBottomOf="@+id/invited" />
 
-            <ImageView
-                android:id="@+id/add2"
-                android:layout_width="48dp"
-                android:layout_height="45dp"
-                android:src="@drawable/circle"
-                app:layout_constraintBottom_toBottomOf="@id/add1"
-                app:layout_constraintEnd_toEndOf="@id/add1"
-                app:layout_constraintStart_toStartOf="@id/add1"
-                app:layout_constraintTop_toTopOf="@id/add1" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

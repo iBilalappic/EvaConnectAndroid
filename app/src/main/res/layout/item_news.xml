@@ -31,35 +31,32 @@
 
 
     <RelativeLayout
+        android:id="@+id/profile_layout"
+        android:layout_width="53dp"
+        android:layout_height="53dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:id="@+id/profile_layout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_width="53dp"
-        android:layout_height="53dp">
-
+        app:layout_constraintTop_toTopOf="parent">
 
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:background="@android:color/transparent"
-
             android:layout_width="match_parent"
+
             android:layout_height="match_parent"
+            android:background="@android:color/transparent"
             android:src="@drawable/white_chatbg"
             app:civ_border_color="@color/skyblue"
-            app:civ_border_width="2dp"
-            />
+            app:civ_border_width="2dp" />
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:padding="2dp"
+            android:id="@+id/profile_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/profile_image"
-            app:civ_border_color="@color/white"
-            app:civ_border_width="2dp"
+            android:padding="2dp"
             android:src="@drawable/no_thumbnail"
-            />
+            app:civ_border_color="@color/white"
+            app:civ_border_width="2dp" />
     </RelativeLayout>
 
     <TextView
@@ -67,41 +64,44 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:ellipsize="end"
         android:fontFamily="@font/nunitosansbold"
         android:maxLines="1"
         android:text="Ed Hunter"
         android:textColor="@color/black"
-        android:textSize="13sp"
+        android:textSize="18sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/tv_url"
         app:layout_constraintStart_toEndOf="@+id/profile_layout"
-        app:layout_constraintTop_toTopOf="@+id/profile_layout" />
+        app:layout_constraintTop_toTopOf="@+id/profile_layout"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/tv_url"
-        android:layout_width="250dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="3dp"
         android:ellipsize="end"
-        android:fontFamily="@font/nunitosansbold"
+        android:fontFamily="@font/nunitosansregular"
         android:maxLines="1"
         android:text="url"
         android:textColor="@color/gray_1"
-        android:textSize="12sp"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_layout"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/profile_layout"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
     <TextView
         android:id="@+id/tv_connections"
-        style="@style/TextStyle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:fontFamily="@font/nunitosansregular"
         android:text="465,345 connections"
+        android:textSize="14dp"
         android:visibility="gone"
-        app:layout_constraintStart_toEndOf="@+id/profile_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_name"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
     <TextView
@@ -149,7 +149,7 @@
         app:layout_constraintTop_toBottomOf="@+id/view" />
 
 
-    <androidx.cardview.widget.CardView
+    <RelativeLayout
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -188,9 +188,8 @@
                 android:layout_marginTop="4dp"
                 android:fontFamily="@font/nunitosansbold"
                 android:text="58"
-                android:textSize="11sp"
                 android:textColor="@color/skyblue"
-                android:textStyle="bold"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toStartOf="@+id/view2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -200,27 +199,14 @@
                 style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/nunitosansbold"
                 android:paddingLeft="5dp"
                 android:text="@string/likes"
                 android:textColor="@color/skyblue"
-                android:textSize="11sp"
-                android:textStyle="bold"
+                android:textSize="14sp"
                 app:layout_constraintStart_toEndOf="@+id/tv_likecount"
                 app:layout_constraintTop_toTopOf="@+id/tv_likecount" />
 
-            <TextView
-                android:id="@+id/textView11"
-                style="@style/TextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_small"
-                android:fontFamily="@font/nunitosansbold"
-                android:text="@string/amp"
-                android:textColor="@color/skyblue"
-                android:textSize="11sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/textView10"
-                app:layout_constraintTop_toTopOf="@+id/textView10" />
 
             <TextView
                 android:id="@+id/tv_comcount"
@@ -228,12 +214,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/spacing_small"
+                android:fontFamily="@font/nunitosansbold"
                 android:text="03"
                 android:textColor="@color/skyblue"
-                android:textSize="11sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/textView11"
-                app:layout_constraintTop_toTopOf="@+id/textView11" />
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@+id/textView10"
+                app:layout_constraintTop_toTopOf="@+id/textView10" />
 
             <TextView
                 android:id="@+id/textView14"
@@ -244,10 +230,38 @@
                 android:paddingLeft="5dp"
                 android:text="@string/comments"
                 android:textColor="@color/skyblue"
-                android:textSize="11sp"
-                android:textStyle="bold"
+                android:textSize="14sp"
                 app:layout_constraintStart_toEndOf="@+id/tv_comcount"
                 app:layout_constraintTop_toTopOf="@+id/tv_comcount" />
+
+            <TextView
+                android:id="@+id/tv_share_counter"
+                style="@style/TextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:fontFamily="@font/nunitosansbold"
+                android:text="0"
+                android:textColor="@color/skyblue"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/textView14"
+                app:layout_constraintTop_toTopOf="@+id/textView14" />
+
+            <TextView
+                android:id="@+id/tv_share_text"
+                style="@style/TextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunitosansbold"
+                android:paddingLeft="5dp"
+                android:text="@string/shares"
+                android:textColor="@color/skyblue"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/tv_share_counter"
+                app:layout_constraintTop_toTopOf="@+id/tv_share_counter" />
+
 
             <TextView
                 android:id="@+id/tv_createddateTime"
@@ -259,8 +273,8 @@
                 android:layout_marginBottom="50dp"
                 android:fontFamily="@font/nunitosansregular"
                 android:text="12:04pm | 12 jan"
-                android:textSize="10sp"
                 android:textColor="@color/black"
+                android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -269,9 +283,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="11dp"
                 android:layout_marginEnd="16dp"
-                android:visibility="visible"
                 android:background="@color/gray_1"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view2" />
@@ -319,9 +334,9 @@
                     <View
                         android:layout_width="1dp"
                         android:layout_height="30dp"
-                        android:visibility="gone"
                         android:layout_marginEnd="@dimen/spacing_medium"
-                        android:background="@color/gray_light" />
+                        android:background="@color/gray_light"
+                        android:visibility="gone" />
 
 
                 </LinearLayout>
@@ -331,8 +346,8 @@
                     android:id="@+id/comment_click"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:layout_marginStart="16dp"
+                    android:layout_weight="1"
                     android:paddingLeft="10dp">
 
                     <ImageView
@@ -359,8 +374,8 @@
                         android:layout_width="1dp"
                         android:layout_height="30dp"
                         android:layout_marginEnd="@dimen/spacing_medium"
-                        android:visibility="gone"
-                        android:background="@color/gray_light" />
+                        android:background="@color/gray_light"
+                        android:visibility="gone" />
 
 
                 </LinearLayout>
@@ -370,8 +385,8 @@
                     android:id="@+id/share_click"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:layout_marginStart="16dp"
+                    android:layout_weight="1"
                     android:paddingLeft="10dp">
 
                     <ImageView
@@ -402,17 +417,18 @@
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/img_video"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_height="245dp"
+        android:layout_marginTop="23dp"
         android:adjustViewBounds="true"
         android:elevation="2dp"
         android:foregroundGravity="center"
         android:minHeight="200dp"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_layout" />
@@ -420,20 +436,20 @@
 
     <TextView
         android:id="@+id/tv_visit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_width="102dp"
+        android:layout_height="28dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/rounded_button_border_blue"
+        android:gravity="center"
         android:paddingLeft="30dp"
         android:paddingTop="5dp"
         android:paddingRight="30dp"
         android:paddingBottom="5dp"
-        android:textSize="13sp"
         android:text="Visit"
         android:textColor="@color/skyblue"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/img_video" />
+        app:layout_constraintTop_toTopOf="@+id/tv_newstitle" />
 
     <TextView
         android:id="@+id/channelname"
@@ -444,7 +460,7 @@
         android:layout_marginTop="8dp"
         android:fontFamily="@font/nunitosansregular"
         android:text="TextView"
-        android:textSize="13.5sp"
+        android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/img_video" />
@@ -452,12 +468,14 @@
     <TextView
         android:id="@+id/tv_newstitle"
         style="@style/TextStyle.Bold"
-        android:layout_width="230dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="TextView"
+        android:layout_marginEnd="8dp"
         android:ellipsize="end"
-        android:textSize="20sp"
+        android:text="TextView"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/tv_visit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/channelname" />
 

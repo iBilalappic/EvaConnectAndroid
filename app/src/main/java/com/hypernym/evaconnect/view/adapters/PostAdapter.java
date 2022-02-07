@@ -775,7 +775,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                         ((TextTypeViewHolder) holder).img_more.setVisibility(View.VISIBLE);
                     } else {
                         ((TextTypeViewHolder) holder).img_more.setVisibility(View.GONE);
-                        ((PostAdapter.TextTypeViewHolder) holder).tv_connect.setVisibility(View.VISIBLE);
+                        ((PostAdapter.TextTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
                         String connectionstatus = AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver());
                         ((PostAdapter.TextTypeViewHolder) holder).tv_connect.setText(AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver()));
                         if (connectionstatus.equals(AppConstants.REQUEST_ACCEPT)) {
@@ -855,7 +855,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                         ((ImageTypeViewHolder) holder).img_more.setVisibility(View.VISIBLE);
                     } else {
                         ((ImageTypeViewHolder) holder).img_more.setVisibility(View.GONE);
-                        ((PostAdapter.ImageTypeViewHolder) holder).tv_connect.setVisibility(View.VISIBLE);
+                        ((PostAdapter.ImageTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
                         String connectionstatus = AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver());
                         ((PostAdapter.ImageTypeViewHolder) holder).tv_connect.setText(AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver()));
                         if (connectionstatus.equals(AppConstants.REQUEST_ACCEPT)) {
@@ -996,7 +996,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                         ((ImageTypeViewHolder) holder).img_more.setVisibility(View.VISIBLE);
                     } else {
                         ((ImageTypeViewHolder) holder).img_more.setVisibility(View.GONE);
-                        ((PostAdapter.ImageTypeViewHolder) holder).tv_connect.setVisibility(View.VISIBLE);
+                        ((PostAdapter.ImageTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
                         String connectionstatus = AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver());
                         ((PostAdapter.ImageTypeViewHolder) holder).tv_connect.setText(AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver()));
                         if (connectionstatus.equals(AppConstants.REQUEST_ACCEPT)) {
@@ -1112,7 +1112,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                         ((VideoTypeViewHolder) holder).img_more.setVisibility(View.VISIBLE);
                     } else {
                         ((VideoTypeViewHolder) holder).img_more.setVisibility(View.GONE);
-                        ((PostAdapter.VideoTypeViewHolder) holder).tv_connect.setVisibility(View.VISIBLE);
+                        ((PostAdapter.VideoTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
                         String connectionstatus = AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver());
                         ((PostAdapter.VideoTypeViewHolder) holder).tv_connect.setText(AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver()));
                         if (connectionstatus.equals(AppConstants.REQUEST_ACCEPT)) {
@@ -1143,6 +1143,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     ArrayList<String> urls = AppUtils.containsURL(posts.get(position).getContent());
                     if (urls.size() > 0) {
                         // AppUtils.showUrlEmbeddedView(urls.get(0),((LinkTypeViewHolder) holder).img_link);
+                        //AppUtils.customUrlEmbeddedView(getContext(), URLs.get(0), img_video);
                         AppUtils.customUrlEmbeddedView(((PostAdapter.LinkTypeViewHolder) holder).img_link.getContext(), urls.get(0), ((PostAdapter.LinkTypeViewHolder) holder).img_link);
 
                         AppUtils.makeTextViewResizable(((PostAdapter.LinkTypeViewHolder) holder).link, 1, urls.get(0));
@@ -1196,7 +1197,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                         ((LinkTypeViewHolder) holder).img_more.setVisibility(View.VISIBLE);
                     } else {
                         ((LinkTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
-                        ((PostAdapter.LinkTypeViewHolder) holder).tv_connect.setVisibility(View.VISIBLE);
+                        ((PostAdapter.LinkTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
                         String connectionstatus = AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver());
                         ((PostAdapter.LinkTypeViewHolder) holder).tv_connect.setText(AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver()));
                         if (connectionstatus.equals(AppConstants.REQUEST_ACCEPT)) {

@@ -153,8 +153,8 @@ public class ShareArticleFragment extends BaseFragment {
     private void init() {
         User user = LoginUtils.getLoggedinUser();
         AppUtils.setGlideImage(getContext(), profile_image, user.getUser_image());
-        showBackButton();
-        setPageTitle(getString(R.string.menu4));
+       // showBackButton();
+       // setPageTitle(getString(R.string.menu4));
         if (!TextUtils.isEmpty(user.getUser_image())) {
             AppUtils.setGlideImage(getContext(), profile_image, user.getUser_image());
 

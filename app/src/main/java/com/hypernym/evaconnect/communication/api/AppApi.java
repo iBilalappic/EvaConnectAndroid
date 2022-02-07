@@ -59,6 +59,7 @@ public interface AppApi {
                                        @Part("country") RequestBody country,
                                        @Part("city") RequestBody city,
                                        @Part("last_name") RequestBody last_name,
+                                       @Part("language") RequestBody language,
                                        @Part MultipartBody.Part user_image);
 
     @POST(APIConstants.LOGIN)

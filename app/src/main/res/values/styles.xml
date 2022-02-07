@@ -168,8 +168,9 @@
     </style>
     <style name="CalendarWidgetHeader">
         <item name="android:textAppearance">@style/TextStyle.Title</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/light_blue</item>
+        <item name="android:fontFamily">@font/nunitosansbold</item>
     </style>
 
 

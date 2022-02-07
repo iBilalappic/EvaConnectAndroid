@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout2"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -30,34 +29,31 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <RelativeLayout
+        android:id="@+id/profile_layout"
+        android:layout_width="53dp"
+        android:layout_height="53dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:id="@+id/profile_layout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_width="53dp"
-        android:layout_height="53dp">
-
+        app:layout_constraintTop_toTopOf="parent">
 
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:background="@android:color/transparent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@android:color/transparent"
             android:src="@drawable/white_chatbg"
             app:civ_border_color="@color/skyblue"
-            app:civ_border_width="2dp"
-            />
+            app:civ_border_width="2dp" />
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:padding="2dp"
+            android:id="@+id/profile_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/profile_image"
-            app:civ_border_color="@color/white"
+            android:padding="2dp"
             android:src="@drawable/no_thumbnail"
-            app:civ_border_width="2dp"
-            />
+            app:civ_border_color="@color/white"
+            app:civ_border_width="2dp" />
     </RelativeLayout>
 
     <TextView
@@ -75,6 +71,7 @@
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/profile_layout"
         app:layout_constraintTop_toTopOf="@+id/profile_layout" />
+
     <TextView
         android:id="@+id/tv_connect"
         style="@style/Button_border_light_blue"
@@ -93,6 +90,7 @@
         android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/profile_layout" />
+
     <ImageView
         android:id="@+id/img_more"
         android:layout_width="wrap_content"
@@ -117,14 +115,14 @@
 
     <TextView
 
-        app:layout_constraintEnd_toStartOf="@+id/tv_connect"
-        android:singleLine="true"
-        android:ellipsize="end"
         android:id="@+id/tv_company"
         style="@style/TextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:singleLine="true"
         android:textColor="#EF8080"
+        app:layout_constraintEnd_toStartOf="@+id/tv_connect"
         app:layout_constraintStart_toEndOf="@+id/tv_designation"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
@@ -224,6 +222,7 @@
                 android:fontFamily="@font/nunitosansbold"
                 android:text="58"
                 android:textColor="@color/skyblue"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/view2"
                 app:layout_constraintStart_toStartOf="parent"
@@ -234,28 +233,14 @@
                 style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:paddingLeft="5dp"
                 android:text="@string/likes"
                 android:textColor="@color/skyblue"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/tv_likecount"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/tv_likecount" />
 
-            <TextView
-                android:id="@+id/textView11"
-                style="@style/TextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_small"
-                android:layout_marginBottom="38dp"
-                android:fontFamily="@font/nunitosansbold"
-                android:text="@string/amp"
-                android:textColor="@color/skyblue"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textView10"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_comcount"
@@ -263,34 +248,63 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/spacing_small"
-                android:layout_marginTop="5dp"
                 android:text="03"
                 android:textColor="@color/skyblue"
+                android:textSize="14sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/textView11"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toEndOf="@+id/textView10"
+                app:layout_constraintTop_toTopOf="@+id/textView10" />
 
             <TextView
                 android:id="@+id/textView14"
                 style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
                 android:fontFamily="@font/nunitosansbold"
                 android:paddingLeft="5dp"
                 android:text="@string/comments"
                 android:textColor="@color/skyblue"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/tv_comcount"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/tv_comcount" />
+
+            <TextView
+                android:id="@+id/tv_share_counter"
+                style="@style/TextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:fontFamily="@font/nunitosansbold"
+                android:text="0"
+                android:textColor="@color/skyblue"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/textView14"
+                app:layout_constraintTop_toTopOf="@+id/textView14" />
+
+            <TextView
+                android:id="@+id/tv_share_text"
+                style="@style/TextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunitosansbold"
+                android:paddingLeft="5dp"
+                android:text="@string/shares"
+                android:textColor="@color/skyblue"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/tv_share_counter"
+                app:layout_constraintTop_toTopOf="@+id/tv_share_counter" />
+
 
             <TextView
                 android:id="@+id/tv_createddateTime"
+                style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="16dp"
-                style="@style/TextStyle"
                 android:layout_marginBottom="50dp"
                 android:fontFamily="@font/nunitosansregular"
                 android:text="12:04pm | 12 jan"
@@ -302,7 +316,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="@dimen/spacing_medium"
+                android:layout_marginTop="11dp"
                 android:layout_marginEnd="16dp"
                 android:background="@color/gray_1"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -352,9 +366,9 @@
                     <View
                         android:layout_width="1dp"
                         android:layout_height="30dp"
-                        android:visibility="gone"
                         android:layout_marginEnd="@dimen/spacing_medium"
-                        android:background="@color/gray_light" />
+                        android:background="@color/gray_light"
+                        android:visibility="gone" />
 
 
                 </LinearLayout>
@@ -364,8 +378,8 @@
                     android:id="@+id/comment_click"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:layout_marginStart="16dp"
+                    android:layout_weight="1"
                     android:paddingLeft="10dp">
 
                     <ImageView
@@ -392,8 +406,8 @@
                         android:layout_width="1dp"
                         android:layout_height="30dp"
                         android:layout_marginEnd="@dimen/spacing_medium"
-                        android:visibility="gone"
-                        android:background="@color/gray_light" />
+                        android:background="@color/gray_light"
+                        android:visibility="gone" />
 
 
                 </LinearLayout>
@@ -403,8 +417,8 @@
                     android:id="@+id/share_click"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:layout_marginStart="16dp"
+                    android:layout_weight="1"
                     android:paddingLeft="10dp">
 
                     <ImageView
@@ -444,9 +458,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:visibility="gone"
         android:fontFamily="@font/nunitosansregular"
         android:textSize="12sp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_layout" />

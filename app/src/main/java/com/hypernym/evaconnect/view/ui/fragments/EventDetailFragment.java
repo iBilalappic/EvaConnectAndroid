@@ -52,7 +52,7 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EventDetailFragment extends BaseFragment implements Validator.ValidationListener, CommentsAdapter.OnItemClickListener {
+public class EventDetailFragment extends BaseFragment implements Validator.ValidationListener, CommentsAdapter.OnItemClickListener, View.OnClickListener{
     @BindView(R.id.tv_name)
     TextView tv_name;
 
@@ -100,10 +100,10 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
     TextView modify_event;
 
     @BindView(R.id.accept_invite)
-    ImageButton accept_invite;
+    TextView accept_invite;
 
     @BindView(R.id.interested)
-    ImageButton interested;
+    TextView interested;
 
     @BindView(R.id.register)
     TextView register;
@@ -132,6 +132,10 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
     @BindView(R.id.interested_header)
     TextView interested_header;
 
+    @BindView(R.id.img_backarrow)
+    ImageView img_backarrow;
+
+
     private List<Comment> comments = new ArrayList<>();
     private List<EventAttendees> eventAttendees = new ArrayList<>();
 
@@ -156,6 +160,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
         View view = inflater.inflate(R.layout.fragment_event_detail, container, false);
         ButterKnife.bind(this, view);
         getActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
+        img_backarrow.setOnClickListener(this);
         init();
         return view;
     }
@@ -267,7 +272,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
 
     private void getEventDetails(int event_id) {
         invitedConnections.clear();
-        eventViewModel.getEventDetails(event_id).observe(this, new Observer<BaseModel<List<Event>>>() {
+        eventViewModel.getEventDetails(event_id).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<Event>>>() {
             @Override
             public void onChanged(BaseModel<List<Event>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
@@ -283,6 +288,11 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
                 }
                 if (event.getCreated_by_id() == LoginUtils.getLoggedinUser().getId()) {
                     modify_event.setVisibility(View.VISIBLE);
+                    interested_header.setVisibility(View.GONE);
+                    interested.setVisibility(View.GONE);
+                    save.setVisibility(View.GONE);
+                    register.setVisibility(View.GONE);
+
                 } else {
                     modify_event.setVisibility(View.GONE);
                     if (event.getIs_attending() != null && event.getIs_attending().equalsIgnoreCase("Pending")) {
@@ -456,6 +466,11 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
         });
     }
 
+    @OnClick(R.id.save)
+    public void save() {
+       save.setBackground(getResources().getDrawable(R.drawable.ic_star_selected));
+    }
+
     @OnClick(R.id.button_cancel)
     public void cancel() {
         layout_editcomment.setVisibility(View.GONE);
@@ -482,5 +497,12 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
                 }
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId()==R.id.img_backarrow){
+            getActivity().onBackPressed();
+        }
     }
 }

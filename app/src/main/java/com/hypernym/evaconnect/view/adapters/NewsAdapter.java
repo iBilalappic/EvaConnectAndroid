@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -55,6 +56,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             holder.layout_news.setBackgroundResource(R.drawable.border_skyblue);
         else
             holder.layout_news.setBackgroundResource(R.drawable.border_gery);
+
+        holder.news_name.setText(newSources.get(position).getName());
     }
 
     @Override
@@ -65,12 +68,14 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView img_icon;
-        LinearLayout layout_news;
+        ConstraintLayout layout_news;
+        TextView news_name;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             img_icon = itemView.findViewById(R.id.img_newsicon);
             layout_news = itemView.findViewById(R.id.layout_news);
+            news_name = itemView.findViewById(R.id.news_name);
             itemView.setOnClickListener(this);
 
         }

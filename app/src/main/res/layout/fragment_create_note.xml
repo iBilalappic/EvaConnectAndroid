@@ -43,8 +43,7 @@
                 android:gravity="end"
                 android:text="Create a Note"
                 android:textColor="@color/black"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textSize="12sp" />
 
 
         </LinearLayout>
@@ -54,7 +53,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_large"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
             android:text="Title"
             android:textAppearance="@style/TextAppearance.Text.Bold"
             android:textSize="12sp"
@@ -88,13 +88,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_clock"
-            android:tint="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_startdate"
             app:layout_constraintBottom_toBottomOf="@id/tv_startdate"
             android:layout_marginStart="@dimen/spacing_large"
 
-            />
+            app:tint="@color/black" />
 
         <EditText
             android:id="@+id/tv_startdate"
@@ -209,29 +208,27 @@
             android:id="@+id/icon_pen"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_large"
+            android:layout_marginTop="8dp"
             android:src="@drawable/ic_edit_black_24dp"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="@dimen/spacing_large"
-            app:layout_constraintTop_toTopOf="@id/edt_content"
-            app:layout_constraintBottom_toBottomOf="@id/edt_content"
-            app:layout_constraintVertical_bias="0.50"
-            />
+            app:layout_constraintTop_toTopOf="@id/edt_content" />
 
         <EditText
             android:id="@+id/edt_content"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_large"
-            android:layout_marginEnd="@dimen/spacing_large"
             android:backgroundTint="#F6F6F6"
             android:drawablePadding="8dp"
             android:hint="Details"
             android:padding="10dp"
+            android:inputType="textMultiLine"
             android:textAppearance="@style/TextAppearance.Text.Regular"
             android:textColor="@color/black"
             android:textColorHint="#B4B4B4"
             android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tv_remind_me"
             app:layout_constraintStart_toEndOf="@+id/icon_pen"
             app:layout_constraintTop_toBottomOf="@id/edt_eventlocation" />
 
@@ -290,6 +287,7 @@
             style="@style/TextStyle.Title"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/button_gradient_1"
             android:drawablePadding="10dp"
             android:gravity="center"
@@ -297,12 +295,30 @@
             android:paddingTop="10dp"
             android:paddingRight="20dp"
             android:paddingBottom="10dp"
-            android:text="Create Note"
+            android:text="Done"
             android:textColor="@color/white"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/invite_people_meeting"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/tv_remind_me"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/ic_holo_blue_button"
+            android:gravity="center"
+            android:paddingTop="13dp"
+            android:paddingBottom="14dp"
+            android:text="Remind me"
+            android:textColor="@color/skyblue"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="@+id/edt_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/edt_content" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

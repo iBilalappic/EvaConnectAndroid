@@ -43,6 +43,7 @@
                 android:id="@+id/img_cross"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:visibility="gone"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:src="@drawable/ic_close"
@@ -82,7 +83,7 @@
             android:layout_marginBottom="@dimen/spacing_large"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintBottom_toTopOf="@id/bottom_layout"
+            app:layout_constraintBottom_toTopOf="@id/bottom_layout"
             app:layout_constraintTop_toBottomOf="@+id/textView3"
             >
 
@@ -100,32 +101,34 @@
             android:layout_height="wrap_content">
 
 
-        <TextView
-            android:gravity="center"
-            android:id="@+id/textView4"
-            style="@style/TextStyle.Title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:visibility="gone"
-            android:text="Please select before proceeding"
-            android:textColor="@color/skyblue"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            <TextView
+                android:gravity="center"
+                android:id="@+id/textView4"
+                style="@style/TextStyle.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:visibility="gone"
+                android:text="Please select before proceeding"
+                android:textColor="@color/skyblue"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
 
-        <Button
-            android:id="@+id/btn_next"
-            style="@style/Button_selected_red"
-            android:layout_width="250dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:text="Finish"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            <TextView
+                android:id="@+id/btn_next"
+                style="@style/Button_selected_red"
+                android:layout_width="250dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="Finish"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </LinearLayout>
 

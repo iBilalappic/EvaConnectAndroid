@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnDoubleTapClickListner;
@@ -316,11 +317,8 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.like_click)
         LinearLayout like_click;
 
-
         @BindView(R.id.img_share)
         ImageView img_share;
-
-
 
         @BindView(R.id.tv_name)
         TextView tv_name;
@@ -1073,7 +1071,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         ((TextTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
                     ((TextTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name() );
-                    if(!posts.get(position).getUser().getType().equalsIgnoreCase("company"))
+                    if(!posts.get(position).getUser().getType().equalsIgnoreCase("company") && posts.get(position).getUser().getDesignation()!=null && !posts.get(position).getUser().getDesignation().isEmpty())
                     {
                         ((TextTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation() +" at");
                     }
@@ -1143,7 +1141,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         ((ImageTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
                     ((ImageTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name() );
-                    ((ImageTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation() +" at ");
+                    if (posts.get(position).getUser().getDesignation()!=null && !posts.get(position).getUser().getDesignation().isEmpty()) {
+                        ((ImageTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation() +" at ");
+                    }
 
                     if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
                         ((ImageTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
@@ -1282,7 +1282,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     }
                     AppUtils.setGlideVideoThumbnail(mContext, ((VideoTypeViewHolder) holder).img_video, posts.get(position).getPost_video());
                     ((VideoTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name());
-                    ((VideoTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation()+" at ");
+                    if (posts.get(position).getUser().getDesignation()!=null && !posts.get(position).getUser().getDesignation().isEmpty()) {
+                        ((VideoTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation()+" at ");
+                    }
 
                     if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
                         ((VideoTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
@@ -1319,10 +1321,10 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         AppUtils.setGlideVideoThumbnail(((LinkTypeViewHolder) holder).img_link.getContext(), ((LinkTypeViewHolder) holder).img_link, posts.get(position).getLink_thumbnail());
 
                     } else {
-                        // ((LinkTypeViewHolder) holder).img_link.setBackground(null);
-                        // ((LinkTypeViewHolder) holder).img_link.setVisibility(View.GONE);
-                        // Glide.with(((LinkTypeViewHolder) holder).img_link.getContext()).clear(((LinkTypeViewHolder) holder).img_link);
-                        // ((LinkTypeViewHolder) holder).tv_content.setText(posts.get(position).getContent());
+                         ((LinkTypeViewHolder) holder).img_link.setBackground(null);
+                         ((LinkTypeViewHolder) holder).img_link.setVisibility(View.GONE);
+                         Glide.with(((LinkTypeViewHolder) holder).img_link.getContext()).clear(((LinkTypeViewHolder) holder).img_link);
+                         ((LinkTypeViewHolder) holder).tv_content.setText(posts.get(position).getContent());
                     }
                     AppUtils.makeTextViewResizable(((LinkTypeViewHolder) holder).tv_content, 3, posts.get(position).getContent());
                     // ((LinkTypeV       iewHolder) holder).tv_content.setText(posts.get(position).getContent());
@@ -1351,7 +1353,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         ((LinkTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
                     ((LinkTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name() );
-                    ((LinkTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation()+" at ");
+                    if (posts.get(position).getUser().getDesignation()!=null && !posts.get(position).getUser().getDesignation().isEmpty()) {
+                        ((LinkTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation()+" at ");
+                    }
 
                     if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
                         ((LinkTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
@@ -1404,7 +1408,12 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     ((NewsTypeViewHolder) holder).channelname.setText(posts.get(position).getNews_source().getName());
                     ((NewsTypeViewHolder) holder).tv_newstitle.setText(posts.get(position).getTitle());
                     AppUtils.setGlideImage(mContext, ((NewsTypeViewHolder) holder).profile_image, posts.get(position).getNews_source().getImage());
-                    AppUtils.setGlideUrlThumbnail(mContext, ((NewsTypeViewHolder) holder).img_link, posts.get(position).getImage());
+                    if(!posts.get(position).getImage().equals("http://67.205.178.219:8000/media/public/no_image.png")) {
+                        AppUtils.setGlideUrlThumbnail(mContext, ((NewsTypeViewHolder) holder).img_link, posts.get(position).getImage());
+                    }else{
+                        ((NewsTypeViewHolder) holder).img_link.setVisibility(View.GONE);
+                    }
+
                     if (position == 0) {
                         ((NewsTypeViewHolder) holder).top_image.setVisibility(View.GONE);
                     } else {

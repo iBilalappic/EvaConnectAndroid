@@ -51,11 +51,10 @@
                     android:layout_marginEnd="20dp"
                     android:layout_weight="1"
                     android:fontFamily="@font/nunitosansbold"
-                    android:gravity="start"
-                    android:text="Back"
+                    android:gravity="end"
+                    android:text="Job Listing"
                     android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:textSize="12sp" />
 
 
             </LinearLayout>
@@ -73,7 +72,7 @@
                 android:id="@+id/cardView_Main"
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
-                android:layout_marginTop="10dp"
+
                 android:elevation="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -91,7 +90,7 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_marginStart="20dp"
-                        android:layout_marginTop="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
@@ -121,29 +120,28 @@
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="15dp"
-                        android:layout_marginTop="10dp"
                         android:ellipsize="end"
                         android:fontFamily="@font/nunitosansbold"
                         android:maxLines="1"
                         android:text="Ed Hunter"
                         android:textColor="@color/black"
-                        android:textSize="13sp"
-                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toTopOf="@+id/tv_positionName"
                         app:layout_constraintStart_toEndOf="@+id/profile_layout"
-                        app:layout_constraintTop_toTopOf="@+id/profile_layout" />
+                        app:layout_constraintTop_toTopOf="@+id/profile_layout"
+                        app:layout_constraintVertical_chainStyle="packed" />
 
                     <TextView
                         android:id="@+id/tv_positionName"
                         style="@style/TextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
                         android:fontFamily="@font/nunitosansregular"
                         android:text="--"
                         android:textColor="@color/black"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toEndOf="@+id/profile_layout"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/profile_layout"
+                        app:layout_constraintStart_toStartOf="@+id/tv_name"
                         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
 
@@ -173,9 +171,9 @@
                         android:id="@+id/img_1"
                         android:layout_width="15dp"
                         android:layout_height="15dp"
-                        android:layout_marginStart="25dp"
-                        android:layout_marginTop="25dp"
-                        android:src="@drawable/ic_clock_1"
+                        android:layout_marginStart="27dp"
+                        android:layout_marginTop="22dp"
+                        android:src="@drawable/ic_euro_circle"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -198,7 +196,7 @@
                         android:id="@+id/img_2"
                         android:layout_width="15dp"
                         android:layout_height="18dp"
-                        android:layout_marginStart="25dp"
+                        android:layout_marginStart="27dp"
                         android:layout_marginTop="20dp"
                         android:src="@drawable/ic_location"
                         app:layout_constraintStart_toStartOf="parent"
@@ -222,7 +220,7 @@
                         android:id="@+id/img_3"
                         android:layout_width="15dp"
                         android:layout_height="15dp"
-                        android:layout_marginStart="25dp"
+                        android:layout_marginStart="27dp"
                         android:layout_marginTop="20dp"
                         android:src="@drawable/ic_clock_1"
                         app:layout_constraintStart_toStartOf="parent"
@@ -243,14 +241,14 @@
                         app:layout_constraintTop_toTopOf="@+id/img_3" />
 
                     <ImageView
+                        android:id="@+id/img_favourite"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_star_selected"
-                        android:id="@+id/img_favourite"
+                        android:layout_marginEnd="25dp"
+                        android:src="@drawable/ic_star_unselected"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginEnd="20dp"
-                        app:layout_constraintBottom_toBottomOf="parent"></ImageView>
+                        app:layout_constraintTop_toTopOf="parent"/>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -308,6 +306,7 @@
                         android:id="@+id/layout1"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
+                        android:visibility="gone"
                         android:layout_marginStart="16dp"
                         android:layout_marginBottom="16dp"
                         android:baselineAligned="false"
@@ -442,7 +441,7 @@
         <TextView
             android:id="@+id/tv_apply"
             android:layout_width="match_parent"
-            android:layout_height="42dp"
+            android:layout_height="50dp"
             android:background="@drawable/button_gradient_1"
             android:drawablePadding="10dp"
             android:fontFamily="@font/nunitosansbold"

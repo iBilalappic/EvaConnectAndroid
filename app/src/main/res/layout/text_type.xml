@@ -217,14 +217,13 @@
                 style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="42dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="4dp"
                 android:fontFamily="@font/nunitosansbold"
                 android:text="58"
+                android:textSize="14sp"
                 android:textColor="@color/skyblue"
-                android:textSize="11sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/view2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -233,29 +232,14 @@
                 style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:paddingLeft="5dp"
                 android:text="@string/likes"
                 android:textColor="@color/skyblue"
-                android:textSize="11sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/tv_likecount"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/tv_likecount" />
 
-            <TextView
-                android:id="@+id/textView11"
-                style="@style/TextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_small"
-                android:layout_marginTop="4dp"
-                android:fontFamily="@font/nunitosansbold"
-                android:text="@string/amp"
-                android:textColor="@color/skyblue"
-                android:textSize="11sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/textView10"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_comcount"
@@ -263,28 +247,55 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/spacing_small"
-                android:layout_marginTop="5dp"
                 android:text="03"
                 android:textColor="@color/skyblue"
-                android:textSize="11sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/textView11"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toEndOf="@+id/textView10"
+                app:layout_constraintTop_toTopOf="@+id/textView10" />
 
             <TextView
                 android:id="@+id/textView14"
                 style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:fontFamily="@font/nunitosansbold"
                 android:paddingLeft="5dp"
                 android:text="@string/comments"
                 android:textColor="@color/skyblue"
-                android:textSize="11sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/tv_comcount"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/tv_comcount" />
+
+            <TextView
+                android:id="@+id/tv_share_counter"
+                style="@style/TextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:fontFamily="@font/nunitosansbold"
+                android:text="0"
+                android:textColor="@color/skyblue"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/textView14"
+                app:layout_constraintTop_toTopOf="@+id/textView14" />
+
+            <TextView
+                android:id="@+id/tv_share_text"
+                style="@style/TextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunitosansbold"
+                android:paddingLeft="5dp"
+                android:text="@string/shares"
+                android:textColor="@color/skyblue"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/tv_share_counter"
+                app:layout_constraintTop_toTopOf="@+id/tv_share_counter" />
+
 
             <TextView
                 android:id="@+id/tv_createddateTime"
@@ -296,7 +307,7 @@
                 android:layout_marginBottom="50dp"
                 android:fontFamily="@font/nunitosansregular"
                 android:text="12:04pm | 12 jan"
-                android:textSize="10sp"
+                android:textSize="14sp"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -306,7 +317,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="@dimen/spacing_medium"
+                android:layout_marginTop="11dp"
                 android:layout_marginEnd="16dp"
                 android:background="@color/gray_1"
                 app:layout_constraintEnd_toEndOf="parent"

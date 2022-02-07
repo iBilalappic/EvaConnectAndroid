@@ -40,7 +40,7 @@
                 android:fontFamily="@font/nunitosansbold"
                 android:gravity="start"
                 android:layout_marginStart="20dp"
-                android:text="Push Notification"
+                android:text="Push Notifications"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -699,55 +699,6 @@
             app:layout_constraintTop_toBottomOf="@+id/linearLayout12" />
 
 
-        <LinearLayout
-            android:id="@+id/linearLayout13"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="15dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout12">
-
-            <TextView
-                android:id="@+id/lbl_txt13"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="20dp"
-                android:layout_weight="1.3"
-                android:fontFamily="@font/nunitosansbold"
-                android:gravity="center_vertical"
-                android:text="Suggested Connections"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_4" />
-
-
-            <Switch
-                android:id="@+id/switch_push13"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="20dp"
-                android:layout_weight="0.7"
-                android:theme="@style/SCBSwitch"
-                app:layout_constraintBottom_toBottomOf="@+id/lbl_txt2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/lbl_txt2" />
-
-        </LinearLayout>
-
-        <View
-            android:id="@+id/img_view13"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#54B4B4B4"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout13" />
-
 
         <TextView
             android:id="@+id/btn_submit"
@@ -761,7 +712,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout13"
+            app:layout_constraintTop_toBottomOf="@+id/img_view12"
             app:layout_constraintVertical_bias="0.8" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

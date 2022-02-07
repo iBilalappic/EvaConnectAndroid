@@ -103,7 +103,7 @@ public class MessageConnectionFragment extends BaseFragment implements MessageCo
         Log.e("type", type);
 
         connectionViewModel.getConnectionByFilter(userData, AppConstants.TOTAL_PAGES, currentPage)
-                .observe(this, listBaseModel ->
+                .observe(getViewLifecycleOwner(), listBaseModel ->
                 {
                     if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
                         if (currentPage == PAGE_START) {
@@ -170,8 +170,8 @@ public class MessageConnectionFragment extends BaseFragment implements MessageCo
     }
 
     private void init() {
-        showBackButton();
-        setPageTitle("Your Connections");
+       // showBackButton();
+       // setPageTitle("Your Connections");
 
         Bundle bundle = getArguments();
         if (bundle != null) {

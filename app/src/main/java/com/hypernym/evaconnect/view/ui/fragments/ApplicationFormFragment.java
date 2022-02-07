@@ -112,8 +112,8 @@ public class ApplicationFormFragment extends BaseFragment implements View.OnClic
     }
 
     private void init() {
-        setPageTitle("Job Details");
-         showBackButton();
+       // setPageTitle("Job Details");
+       //  showBackButton();
         if ((getArguments() != null)) {
 
             jobAd = (JobAd) getArguments().getSerializable("JOB_AD");

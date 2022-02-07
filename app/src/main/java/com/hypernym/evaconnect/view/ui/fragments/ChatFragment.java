@@ -170,7 +170,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void init() {
-        showBackButton();
+        //showBackButton();
         setupRecycler(chatMessageList);
 
         attachmentsAdapter = new AttachmentsAdapter(getContext(), attachments, this);
@@ -240,7 +240,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
                                             user.setUser_image(dataSnapshot.child("imageName").getValue().toString());
 
-                                            showBackButton();
+                                            //showBackButton();
 
                                             setChatPerson(getContext(),user.getUser_image());
                                             findFirebaseChats(user.getId());

@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -127,7 +128,7 @@ public class InvitedUsersAdapter extends RecyclerView.Adapter<InvitedUsersAdapte
         TextView tv_designation_title;
 
         @BindView(R.id.remove)
-        TextView remove;
+        ImageView remove;
 
         @BindView(R.id.firstName)
         TextView firstName;

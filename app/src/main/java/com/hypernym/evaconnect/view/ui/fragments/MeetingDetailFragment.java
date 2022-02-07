@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -37,7 +38,7 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MeetingDetailFragment extends BaseFragment {
+public class MeetingDetailFragment extends BaseFragment implements View.OnClickListener{
     int meeting_id;
     MeetingViewModel meetingViewModel;
     InvitedUsersAdapter usersAdapter;
@@ -72,6 +73,13 @@ public class MeetingDetailFragment extends BaseFragment {
 
     @BindView(R.id.btn_notattending)
     TextView btn_notattending;
+
+    @BindView(R.id.title)
+    TextView title;
+
+    @BindView(R.id.img_backarrow)
+    ImageView img_backarrow;
+
     private Event event;
 
     public MeetingDetailFragment() {
@@ -98,8 +106,7 @@ public class MeetingDetailFragment extends BaseFragment {
     }
 
     private void init() {
-        showBackButton();
-        setPageTitle("Meeting Details");
+      //  showBackButton();
         meeting_id=getArguments().getInt("id");
         meetingViewModel = ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(MeetingViewModel.class);
         setAttendeesAdapter();
@@ -123,7 +130,7 @@ public class MeetingDetailFragment extends BaseFragment {
         loadFragment(R.id.framelayout,createMeetingFragment,getContext(),true);
     }
     private void getMeetingDetails(int meeting_id) {
-        meetingViewModel.getMeetingDetails(meeting_id).observe(this, new Observer<BaseModel<List<Event>>>() {
+        meetingViewModel.getMeetingDetails(meeting_id).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<Event>>>() {
             @Override
             public void onChanged(BaseModel<List<Event>> listBaseModel) {
 
@@ -227,4 +234,10 @@ public class MeetingDetailFragment extends BaseFragment {
         invite_people.setAdapter(usersAdapter);
     }
 
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.img_backarrow) {
+            (getActivity()).onBackPressed();
+        }
+    }
 }

@@ -157,7 +157,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
         img_backarrow.setOnClickListener(this);
 
         init();
-        showBackButton();
+      //  showBackButton();
 
         return view;
     }
@@ -172,7 +172,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
         if ((getArguments() != null)) {
             setPageTitle("");
             postAd.setText("Update Job Listing");
-            setPageTitle("Update Job Listing");
+           // setPageTitle("Update Job Listing");
             //  showBackButton();
             job_id = getArguments().getInt("job_id");
             if (job_id != 0) {

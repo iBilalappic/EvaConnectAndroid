@@ -5,6 +5,7 @@ import static android.content.Context.CLIPBOARD_SERVICE;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -231,12 +232,18 @@ public class EventFragment extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void onItemClick(View view, int position) {
-        PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("post", posts.get(position).getId());
-        Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
-        postDetailsFragment.setArguments(bundle);
-        loadFragment(R.id.framelayout, postDetailsFragment, getContext(), true);
+        if (view.getId()==R.id.tv_attending) {
+            TextView textView = (TextView) view.findViewById(R.id.tv_attending);
+            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
+
+        } else {
+            PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("post", posts.get(position).getId());
+            Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
+            postDetailsFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, postDetailsFragment, getContext(), true);
+        }
     }
 
     @Override
@@ -339,11 +346,26 @@ public class EventFragment extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void onEventItemClick(View view, int position) {
-        EventDetailFragment eventDetailFragment = new EventDetailFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("id", posts.get(position).getId());
-        eventDetailFragment.setArguments(bundle);
-        loadFragment(R.id.framelayout, eventDetailFragment, getContext(), true);
+
+        if (view.getId()==R.id.tv_attending) {
+            TextView textView = (TextView) view.findViewById(R.id.tv_attending);
+            Drawable[] compoundDrawables = textView.getCompoundDrawables();
+
+            Drawable leftCompoundDrawable = compoundDrawables[0];
+            if (leftCompoundDrawable==null) {
+                textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
+            } else {
+                textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            }
+
+        } else {
+            EventDetailFragment eventDetailFragment = new EventDetailFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("id", posts.get(position).getId());
+            eventDetailFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, eventDetailFragment, getContext(), true);
+        }
+
     }
 
     @Override

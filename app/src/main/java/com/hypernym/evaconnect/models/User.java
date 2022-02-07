@@ -22,6 +22,7 @@ public class User implements Serializable, Parcelable {
     private String facebook_image_url;
     private String city;
     private String about;
+    private String language;
     private String country;
     private String last_name;
     private String sector;
@@ -35,6 +36,7 @@ public class User implements Serializable, Parcelable {
     private boolean is_online;
     private String last_online_datetime;
     private String other_sector;
+    private String company_url;
 
     public String getSearch_key() {
         return search_key;
@@ -403,5 +405,21 @@ public class User implements Serializable, Parcelable {
 
     public void setOther_sector(String other_sector) {
         this.other_sector = other_sector;
+    }
+
+    public String getCompany_url() {
+        return company_url;
+    }
+
+    public void setCompany_url(String company_url) {
+        this.company_url = company_url;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 }

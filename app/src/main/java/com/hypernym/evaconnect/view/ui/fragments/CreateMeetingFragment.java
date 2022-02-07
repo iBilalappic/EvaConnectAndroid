@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,7 +53,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CreateMeetingFragment extends BaseFragment implements Validator.ValidationListener, DateTimePicker.OnDateTimeSetListener, InvitedConnectionListener {
+public class CreateMeetingFragment extends BaseFragment implements Validator.ValidationListener, DateTimePicker.OnDateTimeSetListener, InvitedConnectionListener, View.OnClickListener {
 
     @BindView(R.id.tv_startdate)
     EditText tv_startdate;
@@ -83,6 +84,12 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
 
     @BindView(R.id.post)
     TextView post;
+
+    @BindView(R.id.img_backarrow)
+    ImageView img_backarrow;
+
+    @BindView(R.id.header_title)
+    TextView header_title;
 
 
     private static final String TAG = CreateMeetingFragment.class.getSimpleName();
@@ -124,6 +131,7 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
         View view = inflater.inflate(R.layout.fragment_create_meeting, container, false);
 
         ButterKnife.bind(this, view);
+        img_backarrow.setOnClickListener(this);
         init();
        // initRecyclerview();
 
@@ -273,8 +281,8 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
 
     private void init() {
 
-        setPageTitle("Create a Meeting Schedule");
-
+       // setPageTitle("Create a Meeting Schedule");
+        header_title.setText("Create a Meeting");
         tv_startdate.setInputType(InputType.TYPE_NULL);
         tv_startdate.setText(dateformat.format(new Date()));
 
@@ -290,7 +298,8 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
         initRecyclerview();
         if(getArguments()!=null)
         {
-            setPageTitle("Update Meeting Schedule");
+            header_title.setText("Update Meeting");
+           // setPageTitle("Update Meeting Schedule");
             event=(Event) getArguments().getSerializable("meeting");
             edt_eventname.setText(event.getName());
             edt_description.setText(event.getContent());
@@ -419,5 +428,12 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
         invitedConnections.addAll(connections);
         Log.e(TAG, "onResume: " + GsonUtils.toJson(invitedConnections));
         usersAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.img_backarrow) {
+            (getActivity()).onBackPressed();
+        }
     }
 }

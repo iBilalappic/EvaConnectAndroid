@@ -5,6 +5,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -42,6 +43,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         try
         {
+            /*if ( position == 0) {
+              holder.divider.setVisibility(View.GONE);
+            } else {
+                holder.divider.setVisibility(View.VISIBLE);
+            }*/
+
             if(events.get(position).getObject_type().equalsIgnoreCase("interview"))
             {
                 if(events.get(position).getObject_details()!=null)
@@ -117,11 +124,11 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
         String superscript = "";
 
-        if (date.equals("1") || date.equals("21") || date.equals("31"))
+        if (date.equals("1")|| date.equals("01") || date.equals("21") || date.equals("31"))
             superscript = "st";
-        else if (date.equals("2") || date.equals("22"))
+        else if (date.equals("2") ||date.equals("02") || date.equals("22"))
             superscript = "nd";
-        else if (date.equals("3") || date.equals("23"))
+        else if (date.equals("3") || date.equals("03") || date.equals("23"))
             superscript = "rd";
         else
             superscript = "th";
@@ -154,6 +161,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
         @BindView(R.id.time)
         TextView time;
+
+        @BindView(R.id.divider)
+        ImageView divider;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

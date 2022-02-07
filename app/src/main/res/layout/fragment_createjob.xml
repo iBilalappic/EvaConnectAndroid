@@ -30,11 +30,9 @@
                     android:id="@+id/layout_header"
                     android:layout_width="0dp"
                     android:layout_height="55dp"
-                    android:background="@color/lighter_gray_2"
-                    android:elevation="2dp"
                     android:gravity="start|center"
                     android:orientation="horizontal"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -50,15 +48,26 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="30dp"
                         android:layout_marginEnd="20dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/nunitosansbold"
-                        android:gravity="end|center"
+                        android:gravity="end"
                         android:text="Create a Job Listing"
                         android:textColor="@color/black"
                         android:textSize="12sp" />
 
+
                 </LinearLayout>
+
+                <View
+                    android:id="@+id/view13"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#1D000000"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layout_header" />
 
 
                 <RelativeLayout
@@ -68,6 +77,7 @@
                     android:layout_height="60dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
+                    android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/layout_header">
 
@@ -86,6 +96,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:padding="2dp"
+
                         android:src="@drawable/no_thumbnail"
                         app:civ_border_color="@color/white"
                         app:civ_border_width="2dp" />
@@ -98,6 +109,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="35dp"
+                    android:visibility="gone"
                     android:ellipsize="end"
                     android:fontFamily="@font/nunitosansbold"
                     android:maxLines="1"
@@ -118,6 +130,7 @@
                     android:elevation="2dp"
                     android:fontFamily="@font/nunitosansregular"
                     android:gravity="center"
+                    android:visibility="gone"
                     android:text="Browse Files"
                     android:textColor="@color/skyblue"
                     android:textSize="12sp"
@@ -130,9 +143,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="25dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:fontFamily="@font/nunitosansbold"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginEnd="25dp"
+                    android:fontFamily="@font/nunitosansregular"
                     android:hint="Title"
                     android:imeOptions="actionNext"
                     android:inputType="text"
@@ -143,7 +156,7 @@
                     android:theme="@style/MyEditTextTheme"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/profile_layout">
+                    app:layout_constraintTop_toBottomOf="@+id/textView9">
 
                 </EditText>
 
@@ -154,7 +167,7 @@
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:layout_marginStart="25dp"
-                    android:layout_marginEnd="20dp"
+                    android:layout_marginEnd="25dp"
                     android:gravity="start|center"
                     android:hint="Job Sector"
                     android:spinnerMode="dropdown"
@@ -171,9 +184,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginStart="25dp"
-                    android:background="@color/gray_1"
                     android:layout_marginTop="@dimen/spacing_small"
-                    android:layout_marginEnd="20dp"
+                    android:layout_marginEnd="25dp"
+                    android:background="@color/gray_1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/spinner_jobsector"></View>
 
 
@@ -205,7 +220,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginStart="25dp"
-                    android:layout_marginEnd="20dp"
+                    android:layout_marginEnd="25dp"
                     android:fontFamily="@font/nunitosansregular"
                     android:gravity="start|center"
                     android:hint="Position"
@@ -213,7 +228,7 @@
                     android:inputType="text"
                     android:textColor="@color/black"
                     android:textColorHint="@color/gray_1"
-                    android:textSize="13sp"
+                    android:textSize="14sp"
                     android:theme="@style/MyEditTextTheme"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -227,7 +242,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginStart="25dp"
-                    android:layout_marginEnd="20dp"
+                    android:layout_marginEnd="25dp"
                     android:fontFamily="@font/nunitosansregular"
                     android:gravity="start|center"
                     android:hint="Location"
@@ -235,7 +250,7 @@
                     android:inputType="text"
                     android:textColor="@color/black"
                     android:textColorHint="@color/gray_1"
-                    android:textSize="13sp"
+                    android:textSize="14sp"
                     android:theme="@style/MyEditTextTheme"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -249,7 +264,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginStart="25dp"
-                    android:layout_marginEnd="20dp"
+                    android:layout_marginEnd="25dp"
                     android:fontFamily="@font/nunitosansregular"
                     android:gravity="start|center"
                     android:hint="Salary"
@@ -258,7 +273,7 @@
                     android:maxLength="9"
                     android:textColor="@color/black"
                     android:textColorHint="@color/gray_1"
-                    android:textSize="13sp"
+                    android:textSize="14sp"
                     android:theme="@style/MyEditTextTheme"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -286,7 +301,7 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="20dp"
+                    android:layout_marginEnd="25dp"
                     android:gravity="start|center"
                     android:hint="Job Type"
                     android:spinnerMode="dropdown"
@@ -304,10 +319,12 @@
                     android:id="@+id/view1"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginStart="25dp"
-                    android:background="@color/gray_1"
+                    android:layout_marginStart="24dp"
                     android:layout_marginTop="@dimen/spacing_small"
-                    android:layout_marginEnd="20dp"
+                    android:layout_marginEnd="24dp"
+                    android:background="@color/gray_1"
+                    app:layout_constraintEnd_toEndOf="@+id/spinner_jobtype"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/spinner_jobtype"></View>
 
                 <Spinner
@@ -317,13 +334,13 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="12dp"
-                    android:layout_marginEnd="20dp"
+                    android:layout_marginEnd="25dp"
                     android:gravity="start|center"
                     android:hint="Listing Duration"
                     android:spinnerMode="dropdown"
                     android:textColor="@color/dark_gray"
                     android:textColorHint="@color/lighter_gray"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:theme="@style/MyEditTextTheme"
                     android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -336,11 +353,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginStart="25dp"
-                    android:background="@color/gray_1"
                     android:layout_marginTop="@dimen/spacing_small"
-                    android:layout_marginEnd="20dp"
+                    android:layout_marginEnd="25dp"
+                    android:background="@color/gray_1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/spinner_job_duration"></View>
-
 
 
                 <EditText
@@ -349,20 +367,33 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="20dp"
+                    android:layout_marginEnd="25dp"
                     android:fontFamily="@font/nunitosansregular"
                     android:gravity="start|center"
                     android:hint="Job Description"
                     android:imeOptions="actionDone"
                     android:textColor="@color/black"
                     android:textColorHint="@color/gray_1"
-                    android:textSize="13sp"
+                    android:textSize="14sp"
                     android:theme="@style/MyEditTextTheme"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view2">
 
                 </EditText>
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="26dp"
+                    android:layout_marginTop="30dp"
+                    android:text="Title"
+                    android:fontFamily="@font/nunitosansbold"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view13" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -381,7 +412,7 @@
         android:gravity="center"
         android:text="Submit"
         android:textColor="@color/white"
-        android:textSize="12sp"
+        android:textSize="14sp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

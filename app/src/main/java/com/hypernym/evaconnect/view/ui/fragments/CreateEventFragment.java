@@ -86,7 +86,7 @@ import static android.app.Activity.RESULT_OK;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CreateEventFragment extends BaseFragment implements DateTimePicker.OnDateTimeSetListener, Validator.ValidationListener, AdapterView.OnItemSelectedListener, InvitedConnectionListener {
+public class CreateEventFragment extends BaseFragment implements DateTimePicker.OnDateTimeSetListener, Validator.ValidationListener, AdapterView.OnItemSelectedListener, InvitedConnectionListener, View.OnClickListener {
     private static final String TAG = CreateEventFragment.class.getSimpleName();
     @BindView(R.id.tv_startdate)
     EditText tv_startdate;
@@ -133,6 +133,8 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
 
     @BindView(R.id.invite_layout)
     ConstraintLayout invite_layout;
+
+
 
     private boolean isStartDate = false;
     private Date startDate = new Date();
@@ -671,6 +673,13 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
             }
         }
         return false;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.img_backarrow) {
+            (getActivity()).onBackPressed();
+        }
     }
 
     protected class YourDialogFragmentDismissHandler extends Handler {
