@@ -91,12 +91,21 @@ public class EventFragment extends BaseFragment implements View.OnClickListener,
         View view = inflater.inflate(R.layout.fragment_event, container, false);
 
         ButterKnife.bind(this, view);
+        tv_create_event.setOnClickListener(this);
         return view;
     }
 
 
     @Override
     public void onClick(View v) {
+        if(v.getId()==R.id.tv_create_event){
+            CreateEventFragment createEventFragment = new CreateEventFragment();
+           /* Bundle bundle = new Bundle();
+            bundle.putInt("post", posts.get(position).getId());
+            Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());*/
+            //createEventFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, createEventFragment, getContext(), true);
+        }
 
     }
 

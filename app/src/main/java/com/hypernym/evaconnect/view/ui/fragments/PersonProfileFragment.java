@@ -454,7 +454,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
             id = post.getUser().getId();
         }
         userViewModel.getuser_details(id
-        ).observe(this, new Observer<BaseModel<List<User>>>() {
+        ).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<User>>>() {
             @Override
             public void onChanged(BaseModel<List<User>> listBaseModel) {
                 if (listBaseModel.getData() != null && !listBaseModel.isError()) {
@@ -516,7 +516,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                 RemoveUserApiCall();
                 break;
             case R.id.layout_block:
-                BlockUserApiCall();
+                BlockUserApiCall(post.getUser());
                 break;
             case R.id.layout_message:
                 ChatFragment chatFragment = new ChatFragment();
@@ -552,9 +552,9 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
         }
     }
 
-    private void BlockUserApiCall() {
+    private void BlockUserApiCall(User receiver) {
 
-        int id;
+       /* int id;
         User user;
         if (argumentReceived.equalsIgnoreCase("Postuser")) {
             id = post.getUser().getConnection_id();
@@ -562,9 +562,15 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
         } else {
             id = targetUser.getConnection_id();
             user = targetUser;
-        }
+        }*/
 
-        connectionViewModel.block_user(id, user).observe(this, new Observer<BaseModel<List<Object>>>() {
+        Connection connection = new Connection();
+        User user = LoginUtils.getLoggedinUser();
+        connection.setSender_id(user.getId());
+        connection.setReceiver_id(receiver.getId());
+        connection.setStatus(AppConstants.DELETED);
+
+        connectionViewModel.block(connection).observe(this, new Observer<BaseModel<List<Object>>>() {
             @Override
             public void onChanged(BaseModel<List<Object>> listBaseModel) {
                 if (!listBaseModel.isError()) {

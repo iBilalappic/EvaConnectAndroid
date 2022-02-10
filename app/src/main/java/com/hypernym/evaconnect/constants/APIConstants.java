@@ -8,6 +8,7 @@ public interface APIConstants {
     public static String LOGIN="user/login/";
     public static String FORGOT_PASSWORD="user/forgotpassword/";
     public static String GET_POSTS="post/";
+    public static String GET_BLOCKED_USERS="user/connection/block/";
     public static String CHECK_EMAIL_EXIST="user/account/check/";
     public static String DASHBOARD="dashboard/android/?";
     public static String DASHBOARD_SEARCH="dashboard/search/?";
@@ -24,7 +25,7 @@ public interface APIConstants {
     public static String CONNECT="user/connection/";
     public static String UPDATE_CONNECTION="user/connection/details/{id}/";
     public static String GET_ALL_CONNECTIONS="user/network/connection/?";
-    public static String GET_CONNECTION_BY_FILTER="user/network/connection/filter/?";
+    public static String GET_CONNECTION_BY_FILTER="user/network/connection/filter/";
     public static String GET_ALL_NOTIFICATIONS="user/notifications/filter/?";
     public static String NOTIFICATION_MARKS_AS_READ="user/notifications/details/?";
     public static String GET_POST_BY_ID="post/details/";
@@ -85,5 +86,5 @@ public interface APIConstants {
     public static String GET_JOB_TYPE="job/type/";
     public static String USER_ONLINE="user/details/{id}/";
     public static String USER_STATS="user/stats/{id}/";
-
+    public static String GET_ALL_PENDING = "user/pending/connection/";
 }

@@ -105,9 +105,10 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         swipeRefresh.setOnRefreshListener(this);
         initMainOptionsRecView();
         initRecyclerView();
-        setPageTitle(getString(R.string.connections));
         if (NetworkUtils.isNetworkConnected(getContext())) {
-            getConnectionByRecommendedUser();
+            getConnectionByFilter(type,currentPage,false);
+            /* getConnectionByRecommendedUser();*/
+            //getUserConnections();
         } else {
             networkErrorDialog();
         }
@@ -124,29 +125,30 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         return view;
     }
 
-    private void getConnectionByRecommendedUser() {
+  /*  private void getConnectionByRecommendedUser() {
         User userData = new User();
         User user = LoginUtils.getLoggedinUser();
         userData.setType(type);
         userData.setUser_id(user.getId());
-        connectionViewModel.getConnectionByRecommendedUser(userData, 6, 0).observe(this, new Observer<BaseModel<List<User>>>() {
+        userData.setConnection_status("active");
+        connectionViewModel.getConnectionByFilter(userData, 10, 0).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<User>>>() {
             @Override
             public void onChanged(BaseModel<List<User>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError()) {
                     recommendeduserList.addAll(listBaseModel.getData());
                     recommendedUser_horizontalAdapter.notifyDataSetChanged();
-                    getConnectionByFilter(type, currentPage, false);
+                 //   getConnectionByFilter(type, currentPage, false);
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
                 hideDialog();
             }
         });
-    }
+    }*/
 
-    private void getUserConnections() {
+   /* private void getUserConnections() {
         showDialog();
-        connectionViewModel.getAllConnections(AppConstants.TOTAL_PAGES, currentPage).observe(this, new Observer<BaseModel<List<User>>>() {
+        connectionViewModel.getAllConnections(AppConstants.TOTAL_PAGES, currentPage).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<User>>>() {
             @Override
             public void onChanged(BaseModel<List<User>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError()) {
@@ -164,7 +166,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
                 hideDialog();
             }
         });
-    }
+    }*/
 
     private void initMainOptionsRecView() {
 
@@ -227,11 +229,12 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         User user = LoginUtils.getLoggedinUser();
        // userData.setType(mtype);
         userData.setUser_id(user.getId());
+        userData.setConnection_status("active");
         if (edt_search.getText().toString().length() > 0)
             userData.setFirst_name(edt_search.getText().toString());
         Log.e("type", mtype);
 
-        connectionViewModel.getConnectionByFilter(userData, AppConstants.TOTAL_PAGES, currentPage).observe(this, new Observer<BaseModel<List<User>>>() {
+        connectionViewModel.getConnectionByFilter(userData, AppConstants.TOTAL_PAGES, currentPage).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<User>>>() {
             @Override
             public void onChanged(BaseModel<List<User>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {

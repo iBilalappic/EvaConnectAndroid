@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hypernym.evaconnect.R;
@@ -25,12 +26,12 @@ import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
+import com.hypernym.evaconnect.models.GetPendingData;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
-import com.hypernym.evaconnect.view.adapters.ConnectionsAdapter;
 import com.hypernym.evaconnect.view.adapters.OptionsAdapter;
 import com.hypernym.evaconnect.view.adapters.PendingAdapter;
 import com.hypernym.evaconnect.view.adapters.RecommendedUser_HorizontalAdapter;
@@ -68,9 +69,13 @@ public class PendingFragment extends BaseFragment implements OptionsAdapter.Item
     SwipeRefreshLayout swipeRefresh;
 
 
+
+
+
     private PendingAdapter pendingAdapter;
     private RecommendedUser_HorizontalAdapter recommendedUser_horizontalAdapter;
     private List<User> connectionList = new ArrayList<>();
+    private List<GetPendingData> pendingList = new ArrayList<>();
     private List<User> recommendeduserList = new ArrayList<>();
 
     private LinearLayoutManager linearLayoutManager, linearLayoutManagerHorizontal;
@@ -105,7 +110,7 @@ public class PendingFragment extends BaseFragment implements OptionsAdapter.Item
         initRecyclerView();
         setPageTitle(getString(R.string.connections));
         if (NetworkUtils.isNetworkConnected(getContext())) {
-            getConnectionByRecommendedUser();
+            getAllPending();
         } else {
             networkErrorDialog();
         }
@@ -142,15 +147,22 @@ public class PendingFragment extends BaseFragment implements OptionsAdapter.Item
         });
     }
 
-    private void getUserConnections() {
+    private void getAllPending() {
         showDialog();
-        connectionViewModel.getAllConnections(AppConstants.TOTAL_PAGES, currentPage).observe(this, new Observer<BaseModel<List<User>>>() {
+        connectionViewModel.getAllPending(AppConstants.TOTAL_PAGES, currentPage).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<GetPendingData>>>() {
             @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel) {
+            public void onChanged(BaseModel<List<GetPendingData>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError()) {
-                    connectionList.clear();
-                    connectionList.addAll(listBaseModel.getData());
+                    pendingList.clear();
+                    pendingList.addAll(listBaseModel.getData());
                     pendingAdapter.notifyDataSetChanged();
+                    if (connectionList.size() > 0) {
+                        rc_connections.setVisibility(View.VISIBLE);
+                        empty.setVisibility(View.GONE);
+                    }else{
+                        rc_connections.setVisibility(View.GONE);
+                        empty.setVisibility(View.VISIBLE);
+                    }
                     isLoading = false;
                 } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
                     isLastPage = true;
@@ -173,7 +185,7 @@ public class PendingFragment extends BaseFragment implements OptionsAdapter.Item
     }
 
     private void initRecyclerView() {
-        pendingAdapter = new PendingAdapter(getContext(), connectionList, this);
+        pendingAdapter = new PendingAdapter(getContext(), pendingList, this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rc_connections.setLayoutManager(linearLayoutManager);
         rc_connections.setAdapter(pendingAdapter);
@@ -243,6 +255,9 @@ public class PendingFragment extends BaseFragment implements OptionsAdapter.Item
                     if (connectionList.size() > 0) {
                         rc_connections.setVisibility(View.VISIBLE);
                         empty.setVisibility(View.GONE);
+                    }else{
+                        rc_connections.setVisibility(View.GONE);
+                        empty.setVisibility(View.VISIBLE);
                     }
                     isLoading = false;
                 } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
@@ -266,23 +281,24 @@ public class PendingFragment extends BaseFragment implements OptionsAdapter.Item
     public void onItemClick(View view, int position) {
         if (NetworkUtils.isNetworkConnected(getContext())) {
             switch (view.getId()) {
-                case R.id.tv_decline:
-                    SettingDeclineData(connectionList.get(position));
+                case R.id.iv_reject:
+                    SettingDeclineData(pendingList.get(position), position);
                     break;
 
-                case R.id.tv_connect:
-                    TextView textView = (TextView) view;
-                    callConnectApi(textView, connectionList.get(position));
+                case R.id.iv_accept:
+                    ImageView textView = (ImageView) view;
+                   // callConnectApi(pendingList.get(position));
                     //GetUserDetails();
-                    if(textView.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_ACCEPT)){
+
                         Connection connection = new Connection();
-                        User user = LoginUtils.getLoggedinUser();
+                        User user2 = LoginUtils.getLoggedinUser();
                         connection.setStatus(AppConstants.ACTIVE);
-                        connection.setId(connectionList.get(position).getConnection_id());
-                        connection.setModified_by_id(user.getId());
+                        connection.setId(pendingList.get(position).getId());
+                    connection.setSender_id(pendingList.get(position).getSenderId());
+                    connection.setReceiver_id(pendingList.get(position).getReceiverId());
+                        connection.setModified_by_id(user2.getId());
                         connection.setModified_datetime(DateUtils.GetCurrentdatetime());
-                        callDeclineConnectApi(connection);
-                    }
+                        callDeclineConnectApi(connection, position);
                     break;
 
                 case R.id.ly_main:
@@ -300,28 +316,42 @@ public class PendingFragment extends BaseFragment implements OptionsAdapter.Item
         }
     }
 
-    private void SettingDeclineData(User connectionItem) {
+    private void SettingDeclineData(GetPendingData connectionItem, int position) {
         Connection connection = new Connection();
         User user = LoginUtils.getLoggedinUser();
         connection.setStatus(AppConstants.REQUEST_DECLINE);
-        connection.setId(connectionItem.getConnection_id());
+        connection.setId(connectionItem.getId());
+        connection.setSender_id(connectionItem.getSenderId());
+        connection.setReceiver_id(connectionItem.getReceiverId());
         connection.setModified_by_id(user.getId());
         connection.setModified_datetime(DateUtils.GetCurrentdatetime());
-        callDeclineConnectApi(connection);
+        callDeclineConnectApi(connection,position);
     }
 
-    private void callDeclineConnectApi(Connection connection) {
+    private void SettingAcceptData(GetPendingData connectionItem, int position) {
+        Connection connection = new Connection();
+        User user = LoginUtils.getLoggedinUser();
+        connection.setStatus(AppConstants.REQUEST_ACCEPT);
+        connection.setId(connectionItem.getId());
+        connection.setSender_id(connectionItem.getSenderId());
+        connection.setReceiver_id(connectionItem.getReceiverId());
+        connection.setModified_by_id(user.getId());
+        connection.setModified_datetime(DateUtils.GetCurrentdatetime());
+        callDeclineConnectApi(connection,position);
+    }
+
+    private void callDeclineConnectApi(Connection connection, int position) {
 
         connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
             @Override
             public void onChanged(BaseModel<List<Connection>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError()) {
 
-                    connectionList.clear();
-                    pendingAdapter.notifyDataSetChanged();
-                    getConnectionByFilter(type, PAGE_START, true);
+                    //pendingList.clear();
+                    pendingAdapter.removeAt(position);
+                   // getConnectionByFilter(type, PAGE_START, true);
                 } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                    networkResponseDialog(getString(R.string.error), listBaseModel.getMessage());
                 }
                 hideDialog();
             }

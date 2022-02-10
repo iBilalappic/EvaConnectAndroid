@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.models.GetPendingData;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
@@ -26,12 +27,12 @@ import butterknife.ButterKnife;
 public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHolder>{
 
     private Context context;
-    private List<User> connections, originalConnections;
+    private List<GetPendingData> connections, originalConnections;
     private PendingAdapter.OnItemClickListener onItemClickListener;
     int count = 0;
     private boolean isLoaderVisible = false;
 
-    public PendingAdapter(Context context, List<User> connectionList, PendingAdapter.OnItemClickListener onItemClickListener) {
+    public PendingAdapter(Context context, List<GetPendingData> connectionList, PendingAdapter.OnItemClickListener onItemClickListener) {
         this.context = context;
         this.connections = connectionList;
         this.onItemClickListener = onItemClickListener;
@@ -47,17 +48,17 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull PendingAdapter.ViewHolder holder, int position) {
-        if (!TextUtils.isEmpty(connections.get(position).getUser_image())) {
-            AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getUser_image());
+        if (!TextUtils.isEmpty(connections.get(position).getSender().getUserImage())) {
+            AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getSender().getUserImage());
         }
 //        else if (connections.get(position).getIs_facebook() == 1 && !TextUtils.isEmpty(connections.get(position).getFacebook_image_url())) {
 //            AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getFacebook_image_url());
 //        } else {
 //            AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getUser_image());
 //        }
-        holder.tv_name.setText(connections.get(position).getFirst_name());
-        if (connections.get(position).getBio_data() != null && !connections.get(position).getBio_data().isEmpty()) {
-            holder.tv_designation.setText(connections.get(position).getBio_data());
+        holder.tv_name.setText(connections.get(position).getSender().getFirstName());
+        if (connections.get(position).getSender().getBioData() != null && !connections.get(position).getSender().getBioData().isEmpty()) {
+            holder.tv_designation.setText(connections.get(position).getSender().getBioData());
         } else {
             holder.tv_designation.setText("--");
         }
@@ -69,7 +70,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         }*/
 
 
-        holder.tv_designation.setText(connections.get(position).getCompany_name());
+        holder.tv_designation.setText(connections.get(position).getSender().getCompanyName());
         //Hide connect option if post is from logged in user
         User user = LoginUtils.getLoggedinUser();
 /*        if (connections.get(position).getId().equals(user.getId())) {
@@ -92,16 +93,16 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
             }
 
         }*/
-        if(connections.get(position).isIs_online())
+        if(connections.get(position).getSender().getIs_online())
         {
             holder.tv_connection_status.setText("Online");
             holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.skyblue));
         }
         else
         {
-            if(connections.get(position).getLast_online_datetime()!=null)
+            if(connections.get(position).getSender().getLast_online_datetime()!=null)
             {
-                holder.tv_connection_status.setText("Last Online "+ DateUtils.formatToYesterdayOrToday(connections.get(position).getLast_online_datetime()));
+                holder.tv_connection_status.setText("Last Online "+ DateUtils.formatToYesterdayOrToday(String.valueOf(connections.get(position).getSender().getLast_online_datetime())));
                 holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.gray));
             }
             else
@@ -144,27 +145,30 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         @BindView(R.id.ly_main)
         LinearLayout ly_main;
 
+        @BindView(R.id.iv_accept)
+        ImageView iv_accept;
+
+        @BindView(R.id.iv_reject)
+        ImageView iv_reject;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             tv_connect.setOnClickListener(this);
             tv_decline.setOnClickListener(this);
             ly_main.setOnClickListener(this);
+            iv_reject.setOnClickListener(this);
+            iv_accept.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.tv_connect:
-                    if (onItemClickListener != null)
-                        onItemClickListener.onItemClick(v, originalConnections.indexOf(connections.get(getAdapterPosition())));
-                    break;
-                case R.id.tv_decline:
-                    if (onItemClickListener != null)
-                        onItemClickListener.onItemClick(v, originalConnections.indexOf(connections.get(getAdapterPosition())));
-                    break;
-
+                case R.id.iv_accept:
+                case R.id.iv_reject:
                 case R.id.ly_main:
+                case R.id.tv_decline:
                     if (onItemClickListener != null)
                         onItemClickListener.onItemClick(v, originalConnections.indexOf(connections.get(getAdapterPosition())));
                     break;
@@ -176,7 +180,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         }
     }
 
-    public void filterList(List<User> filterdNames) {
+    public void filterList(List<GetPendingData> filterdNames) {
         connections.clear();
         if (filterdNames.size() > 0) {
 
@@ -196,18 +200,24 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
     public void removeLoading() {
         isLoaderVisible = false;
         int position = connections.size() - 1;
-        User item = getItem(position);
+        GetPendingData item = getItem(position);
         if (item != null) {
             connections.remove(position);
             notifyItemRemoved(position);
         }
     }
 
-    User getItem(int position) {
+    GetPendingData getItem(int position) {
         if (connections.size() > 0)
             return connections.get(position);
         else
             return null;
+    }
+
+    public void removeAt(int position) {
+        connections.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, connections.size());
     }
 
 }

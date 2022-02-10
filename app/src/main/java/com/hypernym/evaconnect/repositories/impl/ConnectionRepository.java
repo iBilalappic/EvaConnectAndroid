@@ -7,6 +7,8 @@ import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
+import com.hypernym.evaconnect.models.GetBlockedData;
+import com.hypernym.evaconnect.models.GetPendingData;
 import com.hypernym.evaconnect.models.ShareConnection;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IConnectionRespository;
@@ -23,11 +25,15 @@ public class ConnectionRepository implements IConnectionRespository {
 
     private MutableLiveData<BaseModel<List<Connection>>> connectionMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<User>>> userMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<GetPendingData>>> pendingMutableLiveData = new MutableLiveData<>();
 
     private MutableLiveData<BaseModel<User>> connectionCountMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> remove_userMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Object>>> unblockMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> block_userMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> share_connection = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<GetBlockedData>>> getBlockedUsers = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<User>>> getAllPending = new MutableLiveData<>();
 
     @Override
     public LiveData<BaseModel<List<Connection>>> connect(Connection connection) {
@@ -65,6 +71,47 @@ public class ConnectionRepository implements IConnectionRespository {
     }
 
     @Override
+    public LiveData<BaseModel<List<Object>>> block(Connection connection) {
+        unblockMutableLiveData = new MutableLiveData<>();
+        String status = connection.getStatus();
+        int sender_id = connection.getSender_id();
+        int receiver_id = connection.getReceiver_id();
+        RestClient.get().appApi().block(connection).enqueue(new Callback<BaseModel<List<Object>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+                if (response.body() != null) {
+                    unblockMutableLiveData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+                unblockMutableLiveData.setValue(null);
+            }
+        });
+        return unblockMutableLiveData;
+    }
+
+    public LiveData<BaseModel<List<GetBlockedData>>> getBlockedUsers() {
+        getBlockedUsers = new MutableLiveData<>();
+
+        RestClient.get().appApi().getBlockedUsers().enqueue(new Callback<BaseModel<List<GetBlockedData>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<GetBlockedData>>> call, Response<BaseModel<List<GetBlockedData>>> response) {
+                if (response.body() != null) {
+                    getBlockedUsers.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<GetBlockedData>>> call, Throwable t) {
+                getBlockedUsers.setValue(null);
+            }
+        });
+        return getBlockedUsers;
+    }
+
+    @Override
     public LiveData<BaseModel<List<User>>> getAllConnections(int total,int current) {
         userMutableLiveData=new MutableLiveData<>();
         User user=LoginUtils.getLoggedinUser();
@@ -81,6 +128,26 @@ public class ConnectionRepository implements IConnectionRespository {
             }
         });
         return userMutableLiveData;
+    }
+
+
+    @Override
+    public LiveData<BaseModel<List<GetPendingData>>>getAllPending (int total,int current) {
+        pendingMutableLiveData=new MutableLiveData<>();
+        User user=LoginUtils.getLoggedinUser();
+
+        RestClient.get().appApi().getAllPending(/*user,total,current*/).enqueue(new Callback<BaseModel<List<GetPendingData>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<GetPendingData>>> call, Response<BaseModel<List<GetPendingData>>> response) {
+                pendingMutableLiveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<GetPendingData>>> call, Throwable t) {
+                pendingMutableLiveData.setValue(null);
+            }
+        });
+        return pendingMutableLiveData;
     }
 
     @Override
@@ -203,6 +270,8 @@ public class ConnectionRepository implements IConnectionRespository {
         });
         return share_connection;
     }
+    
+
     @Override
     public LiveData<BaseModel<List<Object>>> share_connection_event(ShareConnection shareConnection) {
 

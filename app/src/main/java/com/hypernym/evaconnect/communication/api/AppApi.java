@@ -10,6 +10,8 @@ import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.Event;
+import com.hypernym.evaconnect.models.GetBlockedData;
+import com.hypernym.evaconnect.models.GetPendingData;
 import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.Meeting;
 import com.hypernym.evaconnect.models.MyLikesModel;
@@ -30,6 +32,8 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
@@ -65,11 +69,17 @@ public interface AppApi {
     @POST(APIConstants.LOGIN)
     Call<BaseModel<List<User>>> login(@Body User user);
 
+    @POST(APIConstants.BLOCK_USER)
+    Call<BaseModel<List<Object>>> block(@Body Connection connection);
+
     @POST(APIConstants.FORGOT_PASSWORD)
     Call<BaseModel<List<User>>> forgotPassword(@Body User username);
 
     @GET(APIConstants.GET_POSTS)
     Call<BaseModel<List<Post>>> getPosts();
+
+    @GET(APIConstants.GET_BLOCKED_USERS)
+    Call<BaseModel<List<GetBlockedData>>> getBlockedUsers();
 
     @Multipart
     @POST(APIConstants.GET_POSTS)
@@ -216,6 +226,9 @@ public interface AppApi {
 
     @POST(APIConstants.GET_ALL_CONNECTIONS)
     Call<BaseModel<List<User>>> getAllConnections(@Body User user,@Query("limit") int limit, @Query("offset") int offset);
+
+    @GET(APIConstants.GET_ALL_PENDING)
+    Call<BaseModel<List<GetPendingData>>> getAllPending(/*@Body User user, @Query("limit") int limit, @Query("offset") int offset*/);
 
     @POST(APIConstants.GET_CONNECTION_BY_FILTER)
     Call<BaseModel<List<User>>> getConnectionByFilter(@Body User user,@Query("limit") int limit, @Query("offset") int offset);

@@ -25,6 +25,7 @@ import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
+import com.hypernym.evaconnect.models.GetBlockedData;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.DateUtils;
@@ -69,7 +70,7 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
 
     private BlockedAdapter blockedAdapter;
     private RecommendedUser_HorizontalAdapter recommendedUser_horizontalAdapter;
-    private List<User> connectionList = new ArrayList<>();
+    private List<GetBlockedData> connectionList = new ArrayList<>();
     private List<User> recommendeduserList = new ArrayList<>();
 
     private LinearLayoutManager linearLayoutManager, linearLayoutManagerHorizontal;
@@ -108,7 +109,7 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
         initRecyclerView();
         setPageTitle(getString(R.string.connections));
         if (NetworkUtils.isNetworkConnected(getContext())) {
-            getConnectionByRecommendedUser();
+            getBlockedConnections();
         } else {
             networkErrorDialog();
         }
@@ -125,27 +126,45 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
         return view;
     }
 
-    private void getConnectionByRecommendedUser() {
+    private void getBlockedConnections() {
         User userData = new User();
         User user = LoginUtils.getLoggedinUser();
         userData.setType(type);
         userData.setUser_id(user.getId());
-        connectionViewModel.getConnectionByRecommendedUser(userData, 6, 0).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<User>>>() {
-            @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError()) {
-                    recommendeduserList.addAll(listBaseModel.getData());
-                    recommendedUser_horizontalAdapter.notifyDataSetChanged();
-                    getConnectionByFilter(type, currentPage, false);
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+        connectionViewModel.getBlockedUsers().observe(getViewLifecycleOwner(), listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
+                if (currentPage == PAGE_START) {
+                    connectionList.clear();
+                    blockedAdapter.notifyDataSetChanged();
                 }
-                hideDialog();
+                //
+                connectionList.addAll(listBaseModel.getData());
+                blockedAdapter.notifyDataSetChanged();
+                if (connectionList.size() > 0) {
+                    rc_connections.setVisibility(View.VISIBLE);
+                    empty.setVisibility(View.GONE);
+                }else{
+                    rc_connections.setVisibility(View.GONE);
+                    empty.setVisibility(View.VISIBLE);
+                }
+                isLoading = false;
+            } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
+
+                if(connectionList.size()==0)
+                {
+                    rc_connections.setVisibility(View.GONE);
+                    empty.setVisibility(View.VISIBLE);
+                }
+                isLastPage = true;
+                // homePostsAdapter.removeLoading();
+                isLoading = false;
+            } else {
+                networkResponseDialog(getString(R.string.error), listBaseModel.getMessage());
             }
         });
     }
 
-    private void getUserConnections() {
+    /*private void getUserConnections() {
         showDialog();
         connectionViewModel.getAllConnections(AppConstants.TOTAL_PAGES, currentPage).observe(this, new Observer<BaseModel<List<User>>>() {
             @Override
@@ -165,7 +184,7 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
                 hideDialog();
             }
         });
-    }
+    }*/
 
     private void initMainOptionsRecView() {
 
@@ -186,13 +205,13 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
         rc_connections.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
             @Override
             protected void loadMoreItems() {
-                isLoading = true;
+               /* isLoading = true;
                 currentPage = AppConstants.TOTAL_PAGES + currentPage;
                 if (NetworkUtils.isNetworkConnected(getContext())) {
                     getConnectionByFilter(type, currentPage, false);
                 } else {
                     networkErrorDialog();
-                }
+                }*/
             }
 
             @Override
@@ -232,9 +251,9 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
             userData.setFirst_name(edt_search.getText().toString());
         Log.e("type", mtype);
 
-        connectionViewModel.getConnectionByFilter(userData, AppConstants.TOTAL_PAGES, currentPage).observe(this, new Observer<BaseModel<List<User>>>() {
+        connectionViewModel.getBlockedUsers().observe(getViewLifecycleOwner(), new Observer<BaseModel<List<GetBlockedData>>>() {
             @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel) {
+            public void onChanged(BaseModel<List<GetBlockedData>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
                     if (currentPage == PAGE_START) {
                         connectionList.clear();
@@ -269,11 +288,15 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
     public void onItemClick(View view, int position) {
         if (NetworkUtils.isNetworkConnected(getContext())) {
             switch (view.getId()) {
-                case R.id.tv_decline:
-                    SettingDeclineData(connectionList.get(position));
-                    break;
 
-                case R.id.tv_connect:
+                case R.id.tv_unblock:
+                    UnBlockUser(connectionList.get(position), position);
+                    break;
+              /*  case R.id.tv_decline:
+                    SettingDeclineData(connectionList.get(position));
+                    break;*/
+
+               /* case R.id.tv_connect:
                     TextView textView = (TextView) view;
                     callConnectApi(textView, connectionList.get(position));
                     //GetUserDetails();
@@ -286,15 +309,15 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
                         connection.setModified_datetime(DateUtils.GetCurrentdatetime());
                         callDeclineConnectApi(connection);
                     }
-                    break;
+                    break;*/
 
-                case R.id.ly_main:
+               /* case R.id.ly_main:
                     User user = connectionList.get(position);
                     PersonProfileFragment personProfileFragment = new PersonProfileFragment();
                     Bundle bundle2 = new Bundle();
                     bundle2.putParcelable("user", user);
                     loadFragment_bundle(R.id.framelayout, personProfileFragment, getContext(), true, bundle2);
-                    break;
+                    break;*/
 
             }
 
@@ -303,26 +326,25 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
         }
     }
 
-    private void SettingDeclineData(User connectionItem) {
+    private void UnBlockUser(GetBlockedData blockedData, int position) {
         Connection connection = new Connection();
         User user = LoginUtils.getLoggedinUser();
-        connection.setStatus(AppConstants.REQUEST_DECLINE);
-        connection.setId(connectionItem.getConnection_id());
-        connection.setModified_by_id(user.getId());
-        connection.setModified_datetime(DateUtils.GetCurrentdatetime());
-        callDeclineConnectApi(connection);
+        connection.setSender_id(blockedData.getSenderId());
+        connection.setReceiver_id(blockedData.getReceiverId());
+        connection.setStatus(AppConstants.ACTIVE);
+        callUnBlockUser(connection, position);
     }
 
-    private void callDeclineConnectApi(Connection connection) {
 
-        connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
+    private void callUnBlockUser(Connection connection, int position) {
+
+        connectionViewModel.block(connection).observe(this, new Observer<BaseModel<List<Object>>>() {
             @Override
-            public void onChanged(BaseModel<List<Connection>> listBaseModel) {
+            public void onChanged(BaseModel<List<Object>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError()) {
 
-                    connectionList.clear();
-                    blockedAdapter.notifyDataSetChanged();
-                    getConnectionByFilter(type, PAGE_START, true);
+                    blockedAdapter.removeAt(position);
+                   // getConnectionByFilter(type, PAGE_START, true);
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
@@ -334,8 +356,9 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
     @Override
     public void onRefresh() {
         if (NetworkUtils.isNetworkConnected(getContext())) {
-            GetUserDetails();
-            getConnectionByFilter(type, currentPage, false);
+            getBlockedConnections();
+            //GetUserDetails();
+           // getConnectionByFilter(type, currentPage, false);
         } else {
             networkErrorDialog();
         }
@@ -366,7 +389,7 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
 
             connectionList.clear();
             blockedAdapter.notifyDataSetChanged();
-            getConnectionByFilter(type, PAGE_START, true);
+           // getConnectionByFilter(type, PAGE_START, true);
 
         }
 

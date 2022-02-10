@@ -56,6 +56,9 @@ public class JobFragment extends BaseFragment implements View.OnClickListener, S
     @BindView(R.id.newpost)
     TextView newpost;
 
+    @BindView(R.id.tv_create_job)
+    TextView tv_create_job;
+
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
     private JobListViewModel jobListViewModel;
@@ -82,13 +85,17 @@ public class JobFragment extends BaseFragment implements View.OnClickListener, S
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_job, container, false);
         ButterKnife.bind(this, view);
+        tv_create_job.setOnClickListener(this);
         return view;
     }
 
 
     @Override
     public void onClick(View v) {
-
+        if(v.getId()==R.id.tv_create_job){
+            CreateJobFragment createJobFragment = new CreateJobFragment();
+            loadFragment(R.id.framelayout, createJobFragment, getContext(), true);
+        }
     }
 
 
@@ -113,6 +120,12 @@ public class JobFragment extends BaseFragment implements View.OnClickListener, S
         postAdapter = new JobHomeAdapter(getContext(), posts, this);
         linearLayoutManager = new LinearLayoutManager(getContext());
 
+        User user=LoginUtils.getLoggedinUser();
+        if (user.getType().equalsIgnoreCase("company")) {
+            tv_create_job.setVisibility(View.VISIBLE);
+        }else{
+            tv_create_job.setVisibility(View.GONE);
+        }
         rc_job.setLayoutManager(linearLayoutManager);
         rc_job.setAdapter(postAdapter);
 

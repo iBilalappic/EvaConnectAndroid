@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.models.AccountCheck;
 import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.GetBlockedData;
 import com.hypernym.evaconnect.models.Stats;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IUserRespository;
@@ -30,6 +31,7 @@ public class UserRepository implements IUserRespository {
     private MutableLiveData<BaseModel<List<Object>>> ProfileUpdateMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<String>>> SectorMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Stats>>> statMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<GetBlockedData>>> getBlockedUsers = new MutableLiveData<>();
 
     @Override
     public LiveData<BaseModel<List<User>>> signup(User user, MultipartBody.Part partImage) {
@@ -176,6 +178,7 @@ public class UserRepository implements IUserRespository {
         });
         return statMutableLiveData;
     }
+
 
     @Override
     public LiveData<BaseModel<List<User>>> forgotPassword(String email) {
