@@ -120,10 +120,19 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
         @BindView(R.id.linearLayout4)
         ConstraintLayout linearLayout4;
 
+        @BindView(R.id.tv_interested)
+        TextView tv_interested;
+
 
         public EventTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            tv_interested.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onEventItemClick(v, getAdapterPosition());
+                }
+            });
             tv_viewcomments.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
@@ -131,6 +140,13 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
                 }
             });
             post_image.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onEventItemClick(v, getAdapterPosition());
+                }
+            });
+
+            tv_detail.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onEventItemClick(v, getAdapterPosition());
@@ -262,6 +278,7 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
                     }
                     ((EventHomeAdapter.EventTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((EventHomeAdapter.EventTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
+                    //((EventHomeAdapter.EventTypeViewHolder) holder).tv_interested.setText(String.valueOf(posts.get(position).getLike_count()));
 
 /*                    if (posts.get(position).getIs_event_like() != null && posts.get(position).getIs_event_like() > 0) {
                         ((EventHomeAdapter.EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.like_selected));
@@ -269,7 +286,7 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
                         ((EventHomeAdapter.EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }*/
                     if (posts.get(position).getEvent_image().size() > 0) {
-                        AppUtils.setGlideUrlThumbnail(mContext, ((EventHomeAdapter.EventTypeViewHolder) holder).profile_image, posts.get(position).getEvent_image().get(0));
+                        AppUtils.setGlideUrlThumbnail(mContext, ((EventHomeAdapter.EventTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
                         AppUtils.setGlideImageUrl(mContext, ((EventTypeViewHolder) holder).post_image, posts.get(position).getEvent_image().get(0));
                     } else {
 //                        ((EventHomeAdapter.EventTypeViewHolder) holder).profile_image.setBackground(mContext.getDrawable(R.drawable.no_thumbnail));
@@ -281,11 +298,14 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
                     //
                     ((EventHomeAdapter.EventTypeViewHolder) holder).tv_name.setText(posts.get(position).getName());
                     ((EventHomeAdapter.EventTypeViewHolder) holder).tv_location.setText(posts.get(position).getAddress());
-                    ((EventHomeAdapter.EventTypeViewHolder) holder).tv_eventdate.setText(DateUtils.getFormattedDateDMY(posts.get(position).getStart_date()));
+                    ((EventHomeAdapter.EventTypeViewHolder) holder).tv_eventdate.setText(DateUtils.eventDate(posts.get(position).getStart_date(),posts.get(position).getEnd_date()));
                     ((EventTypeViewHolder) holder).post_detail.setText(posts.get(position).getContent());
 
                     if(posts.get(position).getUser().getId().equals( LoginUtils.getLoggedinUser().getId()))
                     {
+                        ((EventTypeViewHolder) holder).tv_location.setVisibility(View.VISIBLE);
+
+                        ((EventTypeViewHolder) holder).tv_eventdate.setVisibility(View.VISIBLE);
                         ((EventTypeViewHolder) holder).tv_attending.setVisibility(View.GONE);
                         ((EventTypeViewHolder) holder).img_more.setVisibility(View.VISIBLE);
                        //
@@ -297,6 +317,8 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
                     }
                     else
                     {
+                        ((EventTypeViewHolder) holder).tv_location.setVisibility(View.GONE);
+                        ((EventTypeViewHolder) holder).tv_eventdate.setVisibility(View.GONE);
                         ((EventTypeViewHolder) holder).tv_attending.setVisibility(View.VISIBLE);
                         ((EventTypeViewHolder) holder).img_more.setVisibility(View.GONE);
                         //

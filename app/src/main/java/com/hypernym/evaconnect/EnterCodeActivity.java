@@ -1,22 +1,39 @@
 package com.hypernym.evaconnect;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
+import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.User;
+import com.hypernym.evaconnect.models.UserDetails;
+import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.Constants;
+import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.view.ui.activities.BaseActivity;
 import com.hypernym.evaconnect.view.ui.activities.EmailVerification;
+import com.hypernym.evaconnect.view.ui.activities.HomeActivity;
 import com.hypernym.evaconnect.view.ui.activities.LoginActivity;
+import com.hypernym.evaconnect.view.ui.activities.NewsActivity;
 import com.hypernym.evaconnect.view.ui.activities.PasswordActivity;
+import com.hypernym.evaconnect.viewmodel.UserViewModel;
+import com.onesignal.OneSignal;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,177 +53,79 @@ public class EnterCodeActivity extends BaseActivity implements View.OnClickListe
     @BindView(R.id.btn_next)
     TextView btn_next;
 
-    String email, password, photourl, activity_type, user_type,path, about, other_job_sector,companyname, language,
-            aviation_type = "Commercial Aviation", JobSector,username,firstname,surname,city,country,filepath, companyUrl, jobtitle;
+    @BindView(R.id.ed_code)
+    EditText ed_code;
 
+    String email, user_type;
+    private UserViewModel userViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_code);
         ButterKnife.bind(this);
+        userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getApplication(), this)).get(UserViewModel.class);
         init();
     }
 
     private void init() {
-
-        String type = getIntent().getStringExtra(Constants.ACTIVITY_NAME);
-
-        if ("LinkedinActivity".equals(getIntent().getStringExtra(Constants.ACTIVITY_NAME))) {
+        if (getIntent()!=null) {
             email = getIntent().getStringExtra("Email");
-            photourl = getIntent().getStringExtra("Photo");
-            user_type = getIntent().getStringExtra("userType");
-            path = getIntent().getStringExtra("Path");
-            companyUrl = getIntent().getStringExtra("companyUrl");
-            username = getIntent().getStringExtra("username");
-            activity_type = "LinkedinActivity";
-            firstname = getIntent().getStringExtra("FirstName");
-            surname = getIntent().getStringExtra("SurName");
-            city = getIntent().getStringExtra("city");
-            country = getIntent().getStringExtra("country");
-            about = getIntent().getStringExtra("about");
-            language = getIntent().getStringExtra("language");
-            jobtitle = getIntent().getStringExtra("jobtitle");
-            JobSector = getIntent().getStringExtra("job_sector");
-            other_job_sector = getIntent().getStringExtra("other_job_sector");
-            companyname = getIntent().getStringExtra("companyname");
-
+            user_type = getIntent().getStringExtra("user_type");
         }
-        else if (!TextUtils.isEmpty(type) && type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)){
-            email = getIntent().getStringExtra("Email");
-            photourl = getIntent().getStringExtra("Photo");
-            path = getIntent().getStringExtra("Path");
-            companyUrl = getIntent().getStringExtra("companyUrl");
-            user_type = getIntent().getStringExtra("userType");
-            username = getIntent().getStringExtra("username");
-            activity_type = AppConstants.FACEBOOK_LOGIN_TYPE;
-            firstname = getIntent().getStringExtra("FirstName");
-            surname = getIntent().getStringExtra("SurName");
-            city = getIntent().getStringExtra("city");
-            country = getIntent().getStringExtra("country");
-            about = getIntent().getStringExtra("about");
-            language = getIntent().getStringExtra("language");
-            jobtitle = getIntent().getStringExtra("jobtitle");
-            JobSector = getIntent().getStringExtra("job_sector");
-            other_job_sector = getIntent().getStringExtra("other_job_sector");
-            companyname = getIntent().getStringExtra("companyname");
-        }
-        else {
-            email = getIntent().getStringExtra("Email");
-            user_type = getIntent().getStringExtra("userType");
-            username = getIntent().getStringExtra("username");
-            firstname = getIntent().getStringExtra("FirstName");
-            companyUrl = getIntent().getStringExtra("companyUrl");
-            surname = getIntent().getStringExtra("SurName");
-            city = getIntent().getStringExtra("city");
-            country = getIntent().getStringExtra("country");
-            filepath = getIntent().getStringExtra("FilePath");
-            about = getIntent().getStringExtra("about");
-            language = getIntent().getStringExtra("language");
-            jobtitle = getIntent().getStringExtra("jobtitle");
-            JobSector = getIntent().getStringExtra("job_sector");
-            other_job_sector = getIntent().getStringExtra("other_job_sector");
-            companyname = getIntent().getStringExtra("companyname");
-            activity_type = "normal_type";
-        }
+        ed_code.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()==4){
+                   btn_next.setEnabled(true);
+                   btn_next.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.skyblue)));
+                }else{
+                    btn_next.setEnabled(false);
+                    btn_next.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
+                }
+            }
 
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
         btn_next.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
-
-
-                if (activity_type.equals("LinkedinActivity")) {
-                    Intent intent = new Intent(EnterCodeActivity.this, PasswordActivity.class);
-                    intent.putExtra("Email", email);
-                    intent.putExtra("Photo", photourl);
-                    intent.putExtra("userType", user_type);
-                    intent.putExtra("Path", path);
-                    intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-                    intent.putExtra("aviation_type", aviation_type);
-                    intent.putExtra("companyUrl", companyUrl);
-                    intent.putExtra("job_sector", JobSector);
-                    intent.putExtra("other_job_sector", other_job_sector);
-                    intent.putExtra("username", username);
-                    intent.putExtra("FirstName", firstname);
-                    intent.putExtra("SurName", surname);
-                    intent.putExtra("city", city);
-                    intent.putExtra("country", country);
-                    intent.putExtra("about", about);
-                    intent.putExtra("language", language);
-                    intent.putExtra("jobtitle", jobtitle);
-                    intent.putExtra("companyname", companyname);
-                    startActivity(intent);
-
-                } else if (activity_type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)) {
-                    Intent intent = new Intent(EnterCodeActivity.this, PasswordActivity.class);
-                    intent.putExtra("Email", email);
-                    intent.putExtra("Photo", photourl);
-                    intent.putExtra("Path", path);
-                    intent.putExtra("userType", user_type);
-                    intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-                    intent.putExtra("aviation_type", aviation_type);
-                    intent.putExtra("companyUrl", companyUrl);
-                    intent.putExtra("job_sector", JobSector);
-                    intent.putExtra("other_job_sector", other_job_sector);
-                    intent.putExtra("username", username);
-                    intent.putExtra("FirstName", firstname);
-                    intent.putExtra("SurName", surname);
-                    intent.putExtra("city", city);
-                    intent.putExtra("country", country);
-                    intent.putExtra("about", about);
-                    intent.putExtra("language", language);
-                    intent.putExtra("jobtitle", jobtitle);
-                    intent.putExtra("companyname",companyname);
-                    startActivity(intent);
-                } else {
-
-                    Intent intent = new Intent(EnterCodeActivity.this, PasswordActivity.class);
-                    if (filepath != null) {
-
-                        intent.putExtra("Email", email);
-                        intent.putExtra("userType", user_type);
-                        intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-                        intent.putExtra("aviation_type", aviation_type);
-                        intent.putExtra("job_sector", JobSector);
-                        intent.putExtra("other_job_sector", other_job_sector);
-                        intent.putExtra("username", username);
-                        intent.putExtra("FirstName", firstname);
-                        intent.putExtra("SurName", surname);
-                        intent.putExtra("city", city);
-                        intent.putExtra("companyUrl", companyUrl);
-                        intent.putExtra("country", country);
-                        intent.putExtra("FilePath", filepath);
-                        intent.putExtra("about", about);
-                        intent.putExtra("language", language);
-                        intent.putExtra("jobtitle", jobtitle);
-                        intent.putExtra("companyname", companyname);
-                        startActivity(intent);
-                    } else {
-                        intent.putExtra("Email", email);
-                        intent.putExtra("userType", user_type);
-                        intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-                        intent.putExtra("aviation_type", aviation_type);
-                        intent.putExtra("job_sector", JobSector);
-                        intent.putExtra("other_job_sector", other_job_sector);
-                        intent.putExtra("username", username);
-                        intent.putExtra("companyUrl", companyUrl);
-                        intent.putExtra("FirstName", firstname);
-                        intent.putExtra("SurName", surname);
-                        intent.putExtra("city", city);
-                        intent.putExtra("country", country);
-                        intent.putExtra("about", about);
-                        intent.putExtra("language", language);
-                        intent.putExtra("jobtitle", jobtitle);
-                        intent.putExtra("companyname", companyname);
-                        startActivity(intent);
-                    }
-
-                }
-
+                callEmailVerificationCodeApi();
             }
         });
     }
 
+    private void goToNextScreen() {
+        Intent intent;
+            if (user_type.equalsIgnoreCase("user")) {
+                intent = new Intent(EnterCodeActivity.this, NewsActivity.class);
+            } else {
+                intent = new Intent(EnterCodeActivity.this, HomeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            }
+            startActivity(intent);
+    }
+
+    private void callEmailVerificationCodeApi() {
+
+        userViewModel.getEmailVerificationCode(email, Integer.parseInt(ed_code.getText().toString())).observe(this, new Observer<BaseModel<List<Object>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Object>> response) {
+                if (response != null && !response.isError()) {
+                   goToNextScreen();
+                } else if (response != null && response.isError()) {
+                    hideDialog();
+                    networkResponseDialog(getString(R.string.error), response.getMessage());
+                } else if (response == null) {
+                    hideDialog();
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+            }
+        });
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

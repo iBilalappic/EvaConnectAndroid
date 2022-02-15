@@ -35,6 +35,8 @@ import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
+import com.hypernym.evaconnect.view.dialogs.ApplicationSuccess_dialog;
+import com.hypernym.evaconnect.view.dialogs.JobSuccess_dialog;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.viewmodel.CreateJobAdViewModel;
 import com.hypernym.evaconnect.viewmodel.JobListViewModel;
@@ -127,7 +129,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
 
     private CreateJobAdViewModel createJobAdViewModel;
     private UserViewModel userViewModel;
-
+    private JobSuccess_dialog jobSuccess_dialog;
     //    private String[] mSpinnerJobSector = {"Piolots", "ITSystems", "Security"};
     private String[] mSpinnerActive = {"How long would you like this listing", "12", "24"};
 
@@ -210,7 +212,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
     }
 
     private void GetJob_id(Integer id) {
-        jobListViewModel.getJobId(id).observe(this, new Observer<BaseModel<List<SpecficJobAd>>>() {
+        jobListViewModel.getJobId(id).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<SpecficJobAd>>>() {
             @Override
             public void onChanged(BaseModel<List<SpecficJobAd>> getjobAd) {
                 if (getjobAd != null && !getjobAd.isError()) {
@@ -278,7 +280,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
 
 
     private void getSectorFromApi(String aviation_type) {
-        userViewModel.getSector(aviation_type).observe(this, new Observer<BaseModel<List<String>>>() {
+        userViewModel.getSector(aviation_type).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<String>>>() {
             @Override
             public void onChanged(BaseModel<List<String>> listBaseModel) {
                 if (listBaseModel.getData() != null && !listBaseModel.isError()) {
@@ -294,7 +296,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
     }
 
     private void getJobTypes() {
-        createJobAdViewModel.getJobType().observe(this, new Observer<BaseModel<List<String>>>() {
+        createJobAdViewModel.getJobType().observe(getViewLifecycleOwner(), new Observer<BaseModel<List<String>>>() {
             @Override
             public void onChanged(BaseModel<List<String>> listBaseModel) {
                 if (listBaseModel.getData() != null && !listBaseModel.isError()) {
@@ -493,13 +495,8 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
             @Override
             public void onChanged(BaseModel<List<Object>> getnetworkconnection) {
                 if (getnetworkconnection != null && !getnetworkconnection.isError()) {
-                    simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_jobAd), null, getString(R.string.ok), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            getActivity().onBackPressed();
-                            simpleDialog.dismiss();
-                        }
-                    });
+                    jobSuccess_dialog = new JobSuccess_dialog(requireActivity(),getContext());
+                    jobSuccess_dialog.show();
                     hideDialog();
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));

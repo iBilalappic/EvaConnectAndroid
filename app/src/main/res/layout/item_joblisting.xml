@@ -150,7 +150,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_content" />
 
     <LinearLayout
-        android:id="@+id/layout1"
+        android:id="@+id/lay_designation"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="16dp"
@@ -270,7 +270,7 @@
         android:elevation="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout1" />
+        app:layout_constraintTop_toBottomOf="@+id/lay_designation" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

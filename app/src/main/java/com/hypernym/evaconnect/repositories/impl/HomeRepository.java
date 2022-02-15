@@ -23,6 +23,7 @@ public class HomeRepository implements IHomeRepository {
     private MutableLiveData<BaseModel<List<Post>>> dashboardMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Post>>> notificationMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<NewSources>>> newsoucesMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<NewSources>>> selectedNewsoucesMutableLiveData = new MutableLiveData<>();
 
 
     @Override
@@ -140,6 +141,23 @@ public class HomeRepository implements IHomeRepository {
             }
         });
         return newsoucesMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<NewSources>>> getSelectedNewSources(Integer user_id) {
+        selectedNewsoucesMutableLiveData = new MutableLiveData<>();
+        RestClient.get().appApi().getSelectedNewSources(user_id).enqueue(new Callback<BaseModel<List<NewSources>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<NewSources>>> call, Response<BaseModel<List<NewSources>>> response) {
+                selectedNewsoucesMutableLiveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<NewSources>>> call, Throwable t) {
+                selectedNewsoucesMutableLiveData.setValue(null);
+            }
+        });
+        return selectedNewsoucesMutableLiveData;
     }
 
     @Override

@@ -29,6 +29,10 @@ public class UserViewModel extends AndroidViewModel {
         return iUserRespository.signup(user,image);
     }
 
+    public LiveData<BaseModel<List<Object>>> getEmailVerificationCode(String email, int verification_code)
+    {
+        return iUserRespository.getEmailVerificationCode(email,verification_code);
+    }
 
 
     public LiveData<BaseModel<List<User>>> login(User user)

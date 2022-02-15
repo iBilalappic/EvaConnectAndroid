@@ -38,8 +38,7 @@ public class EmailVerification extends BaseActivity implements View.OnClickListe
     @BindView(R.id.btn_next)
     TextView btn_next;
 
-    String email, password, photourl, activity_type, user_type,path, about, other_job_sector,companyname, language,
-            aviation_type = "Commercial Aviation", JobSector,username,firstname,surname,city,country,filepath, companyUrl, jobtitle;
+    String email, user_type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,161 +50,17 @@ public class EmailVerification extends BaseActivity implements View.OnClickListe
 
     private void init() {
 
-        String type = getIntent().getStringExtra(Constants.ACTIVITY_NAME);
-
-        if ("LinkedinActivity".equals(getIntent().getStringExtra(Constants.ACTIVITY_NAME))) {
+        if (getIntent()!=null) {
             email = getIntent().getStringExtra("Email");
-            photourl = getIntent().getStringExtra("Photo");
-            user_type = getIntent().getStringExtra("userType");
-            path = getIntent().getStringExtra("Path");
-            companyUrl = getIntent().getStringExtra("companyUrl");
-            username = getIntent().getStringExtra("username");
-            activity_type = "LinkedinActivity";
-            firstname = getIntent().getStringExtra("FirstName");
-            surname = getIntent().getStringExtra("SurName");
-            city = getIntent().getStringExtra("city");
-            country = getIntent().getStringExtra("country");
-            about = getIntent().getStringExtra("about");
-            language = getIntent().getStringExtra("language");
-            jobtitle = getIntent().getStringExtra("jobtitle");
-            JobSector = getIntent().getStringExtra("job_sector");
-
-            other_job_sector = getIntent().getStringExtra("other_job_sector");
-            companyname = getIntent().getStringExtra("companyname");
-
+            user_type = getIntent().getStringExtra("user_type");
         }
-        else if (!TextUtils.isEmpty(type) && type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)){
-            email = getIntent().getStringExtra("Email");
-            photourl = getIntent().getStringExtra("Photo");
-            path = getIntent().getStringExtra("Path");
-            companyUrl = getIntent().getStringExtra("companyUrl");
-            user_type = getIntent().getStringExtra("userType");
-            username = getIntent().getStringExtra("username");
-            activity_type = AppConstants.FACEBOOK_LOGIN_TYPE;
-            firstname = getIntent().getStringExtra("FirstName");
-            surname = getIntent().getStringExtra("SurName");
-            city = getIntent().getStringExtra("city");
-            country = getIntent().getStringExtra("country");
-            about = getIntent().getStringExtra("about");
-            language = getIntent().getStringExtra("language");
-            jobtitle = getIntent().getStringExtra("jobtitle");
-            JobSector = getIntent().getStringExtra("job_sector");
-            other_job_sector = getIntent().getStringExtra("other_job_sector");
-            companyname = getIntent().getStringExtra("companyname");
-        }
-        else {
-            email = getIntent().getStringExtra("Email");
-            user_type = getIntent().getStringExtra("userType");
-            username = getIntent().getStringExtra("username");
-            firstname = getIntent().getStringExtra("FirstName");
-            companyUrl = getIntent().getStringExtra("companyUrl");
-            surname = getIntent().getStringExtra("SurName");
-            city = getIntent().getStringExtra("city");
-            country = getIntent().getStringExtra("country");
-            filepath = getIntent().getStringExtra("FilePath");
-            about = getIntent().getStringExtra("about");
-            language = getIntent().getStringExtra("language");
-            activity_type = "normal_type";
-            jobtitle = getIntent().getStringExtra("jobtitle");
-            JobSector = getIntent().getStringExtra("job_sector");
-            other_job_sector = getIntent().getStringExtra("other_job_sector");
-            companyname = getIntent().getStringExtra("companyname");
-        }
-
-
         btn_next.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
-
-
-                    if (activity_type.equals("LinkedinActivity")) {
                         Intent intent = new Intent(EmailVerification.this, EnterCodeActivity.class);
                         intent.putExtra("Email", email);
-                        intent.putExtra("Photo", photourl);
-                        intent.putExtra("userType", user_type);
-                        intent.putExtra("Path", path);
-                        intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-                        intent.putExtra("aviation_type", aviation_type);
-                        intent.putExtra("companyUrl", companyUrl);
-                        intent.putExtra("job_sector", JobSector);
-                        intent.putExtra("other_job_sector", other_job_sector);
-                        intent.putExtra("username", username);
-                        intent.putExtra("FirstName", firstname);
-                        intent.putExtra("SurName", surname);
-                        intent.putExtra("city", city);
-                        intent.putExtra("country", country);
-                        intent.putExtra("about", about);
-                        intent.putExtra("language", language);
-                        intent.putExtra("jobtitle", jobtitle);
-                        intent.putExtra("companyname", companyname);
+                        intent.putExtra("user_type", user_type);
                         startActivity(intent);
-
-                    } else if (activity_type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)) {
-                        Intent intent = new Intent(EmailVerification.this, EnterCodeActivity.class);
-                        intent.putExtra("Email", email);
-                        intent.putExtra("Photo", photourl);
-                        intent.putExtra("Path", path);
-                        intent.putExtra("userType", user_type);
-                        intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-                        intent.putExtra("aviation_type", aviation_type);
-                        intent.putExtra("companyUrl", companyUrl);
-                        intent.putExtra("job_sector", JobSector);
-                        intent.putExtra("other_job_sector", other_job_sector);
-                        intent.putExtra("username", username);
-                        intent.putExtra("FirstName", firstname);
-                        intent.putExtra("SurName", surname);
-                        intent.putExtra("city", city);
-                        intent.putExtra("country", country);
-                        intent.putExtra("about", about);
-                        intent.putExtra("language", language);
-                        intent.putExtra("jobtitle", jobtitle);
-                        intent.putExtra("companyname",companyname);
-                        startActivity(intent);
-                    } else {
-
-                        Intent intent = new Intent(EmailVerification.this, EnterCodeActivity.class);
-                        if (filepath != null) {
-
-                            intent.putExtra("Email", email);
-                            intent.putExtra("userType", user_type);
-                            intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-                            intent.putExtra("aviation_type", aviation_type);
-                            intent.putExtra("job_sector", JobSector);
-                            intent.putExtra("other_job_sector", other_job_sector);
-                            intent.putExtra("username", username);
-                            intent.putExtra("FirstName", firstname);
-                            intent.putExtra("SurName", surname);
-                            intent.putExtra("city", city);
-                            intent.putExtra("companyUrl", companyUrl);
-                            intent.putExtra("country", country);
-                            intent.putExtra("FilePath", filepath);
-                            intent.putExtra("about", about);
-                            intent.putExtra("language", language);
-                            intent.putExtra("jobtitle", jobtitle);
-                            intent.putExtra("companyname", companyname);
-                            startActivity(intent);
-                        } else {
-                            intent.putExtra("Email", email);
-                            intent.putExtra("userType", user_type);
-                            intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-                            intent.putExtra("aviation_type", aviation_type);
-                            intent.putExtra("job_sector", JobSector);
-                            intent.putExtra("other_job_sector", other_job_sector);
-                            intent.putExtra("username", username);
-                            intent.putExtra("companyUrl", companyUrl);
-                            intent.putExtra("FirstName", firstname);
-                            intent.putExtra("SurName", surname);
-                            intent.putExtra("city", city);
-                            intent.putExtra("country", country);
-                            intent.putExtra("about", about);
-                            intent.putExtra("language", language);
-                            intent.putExtra("jobtitle", jobtitle);
-                            intent.putExtra("companyname", companyname);
-                            startActivity(intent);
-                        }
-
-                    }
-
             }
         });
     }

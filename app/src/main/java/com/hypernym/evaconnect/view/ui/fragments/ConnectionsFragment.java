@@ -79,6 +79,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
     private boolean isLastPage = false;
     private boolean isLoading = false;
     private boolean isSearchFlag = false;
+    private User user;
 
     public ConnectionsFragment() {
         // Required empty public constructor
@@ -100,17 +101,21 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
 
         connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(UserViewModel.class);
-
+        user = LoginUtils.getLoggedinUser();
         currentPage = PAGE_START;
         swipeRefresh.setOnRefreshListener(this);
         initMainOptionsRecView();
         initRecyclerView();
         if (NetworkUtils.isNetworkConnected(getContext())) {
             getConnectionByFilter(type,currentPage,false);
-            /* getConnectionByRecommendedUser();*/
-            //getUserConnections();
         } else {
             networkErrorDialog();
+        }
+
+        if(user.getType().equalsIgnoreCase("user")){
+            edt_search.setHint("Search for a Connection");
+        }else{
+            edt_search.setHint("Search for a Followers");
         }
         edt_search.addTextChangedListener(new TextWatcher());
 
@@ -124,49 +129,6 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
 
         return view;
     }
-
-  /*  private void getConnectionByRecommendedUser() {
-        User userData = new User();
-        User user = LoginUtils.getLoggedinUser();
-        userData.setType(type);
-        userData.setUser_id(user.getId());
-        userData.setConnection_status("active");
-        connectionViewModel.getConnectionByFilter(userData, 10, 0).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<User>>>() {
-            @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError()) {
-                    recommendeduserList.addAll(listBaseModel.getData());
-                    recommendedUser_horizontalAdapter.notifyDataSetChanged();
-                 //   getConnectionByFilter(type, currentPage, false);
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
-            }
-        });
-    }*/
-
-   /* private void getUserConnections() {
-        showDialog();
-        connectionViewModel.getAllConnections(AppConstants.TOTAL_PAGES, currentPage).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<User>>>() {
-            @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError()) {
-                    connectionList.clear();
-                    connectionList.addAll(listBaseModel.getData());
-                    connectionsAdapter.notifyDataSetChanged();
-                    isLoading = false;
-                } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
-                    isLastPage = true;
-                    // homePostsAdapter.removeLoading();
-                    isLoading = false;
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
-            }
-        });
-    }*/
 
     private void initMainOptionsRecView() {
 
@@ -226,7 +188,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
 
         // showDialog();
         User userData = new User();
-        User user = LoginUtils.getLoggedinUser();
+
        // userData.setType(mtype);
         userData.setUser_id(user.getId());
         userData.setConnection_status("active");

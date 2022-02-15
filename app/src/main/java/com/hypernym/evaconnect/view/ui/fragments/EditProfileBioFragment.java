@@ -1,16 +1,15 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.User;
@@ -19,15 +18,12 @@ import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import java.io.File;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MultipartBody;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link EditProfileBioFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class EditProfileBioFragment extends Fragment {
+
+public class EditProfileBioFragment extends Fragment implements View.OnClickListener {
     @BindView(R.id.profile_image)
     CircleImageView cv_profile_image;
 
@@ -52,7 +48,7 @@ public class EditProfileBioFragment extends Fragment {
     private String photoVar = null;
     private MultipartBody.Part partImage;
 
-    String city,country, first_name, sector, designation, company = "";
+    String city, country, first_name, sector, designation, company = "";
     private UserViewModel userViewModel;
     User user = new User();
 
@@ -63,6 +59,8 @@ public class EditProfileBioFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        ButterKnife.bind(this, view);
+        img_backarrow.setOnClickListener(this);
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -71,5 +69,12 @@ public class EditProfileBioFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_edit_profile_bio, container, false);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.img_backarrow) {
+            getActivity().onBackPressed();
+        }
     }
 }

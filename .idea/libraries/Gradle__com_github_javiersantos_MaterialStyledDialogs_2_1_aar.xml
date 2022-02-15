@@ -1,17 +1,13 @@
 <component name="libraryTable">
   <library name="Gradle: com.github.javiersantos:MaterialStyledDialogs:2.1@aar">
     <CLASSES>
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/44fcfa69f867f13dc882a476a7fa34f5/jetified-MaterialStyledDialogs-2.1/res" />
-      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/44fcfa69f867f13dc882a476a7fa34f5/jetified-MaterialStyledDialogs-2.1/AndroidManifest.xml" />
-      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/44fcfa69f867f13dc882a476a7fa34f5/jetified-MaterialStyledDialogs-2.1/jars/classes.jar!/" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/7f78eae26726c2c2b04479d8c6dbd9c0/jetified-MaterialStyledDialogs-2.1/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/7f78eae26726c2c2b04479d8c6dbd9c0/jetified-MaterialStyledDialogs-2.1/AndroidManifest.xml" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/7f78eae26726c2c2b04479d8c6dbd9c0/jetified-MaterialStyledDialogs-2.1/res" />
+      <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/c558241a08fded37fbe1683e6125b70f/jetified-MaterialStyledDialogs-2.1/jars/classes.jar!/" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/c558241a08fded37fbe1683e6125b70f/jetified-MaterialStyledDialogs-2.1/res" />
+      <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/c558241a08fded37fbe1683e6125b70f/jetified-MaterialStyledDialogs-2.1/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/com.github.javiersantos/MaterialStyledDialogs/2.1/e72a7d3e1232b671938009639b29c4cab1607b47/MaterialStyledDialogs-2.1-sources.jar!/" />
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.javiersantos/MaterialStyledDialogs/2.1/e72a7d3e1232b671938009639b29c4cab1607b47/MaterialStyledDialogs-2.1-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -100,6 +101,9 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
     @BindView(R.id.hidden_layout)
     LinearLayout hidden_layout;
 
+    @BindView(R.id.img_backarrow)
+    ImageView img_backarrow;
+
 
     Uri uri;
     User user = new User();
@@ -128,6 +132,7 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
         tv_hide.setOnClickListener(this);
         tv_message.setOnClickListener(this);
         tv_download_cv.setOnClickListener(this);
+        img_backarrow.setOnClickListener(this);
 
         //   tv_declineApplicant.setOnClickListener(this);
         //  timePicker.setIs24HourView(true);
@@ -246,7 +251,9 @@ public class AppliedApplicantFragment extends BaseFragment implements View.OnCli
             case R.id.tv_hide:
                 HideApplication();
                 break;
-
+            case R.id.img_backarrow:
+                getActivity().onBackPressed();
+                break;
 
 //            case R.id.tv_offerinterview:
 //                Calendar mcurrentTime = Calendar.getInstance();

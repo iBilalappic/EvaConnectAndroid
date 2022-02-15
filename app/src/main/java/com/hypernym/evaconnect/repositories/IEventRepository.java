@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Comment;
+import com.hypernym.evaconnect.models.GetEventInterestedUsers;
 import com.hypernym.evaconnect.models.Meeting;
 import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.Post;
@@ -26,6 +27,8 @@ public interface IEventRepository {
     LiveData<BaseModel<List<Event>>> getEventDetails(int event_id);
 
     LiveData<BaseModel<List<Comment>>> getEventComments(int event_id);
+
+    LiveData<BaseModel<List<GetEventInterestedUsers>>> getEventInterested(int event_id);
 
     LiveData<BaseModel<List<Comment>>> addComment(Comment comment);
 

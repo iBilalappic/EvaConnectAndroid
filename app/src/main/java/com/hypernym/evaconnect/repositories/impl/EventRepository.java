@@ -8,6 +8,7 @@ import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.Event;
+import com.hypernym.evaconnect.models.GetEventInterestedUsers;
 import com.hypernym.evaconnect.models.Meeting;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
@@ -28,7 +29,29 @@ public class EventRepository implements IEventRepository {
     private MutableLiveData<BaseModel<List<Meeting>>> meetingMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Comment>>> commentMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Post>>> dashboardMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<GetEventInterestedUsers>>> interestedMutableLiveData = new MutableLiveData<>();
 
+
+    @Override
+    public LiveData<BaseModel<List<GetEventInterestedUsers>>> getEventInterested(int event_id) {
+        interestedMutableLiveData=new MutableLiveData<>();
+        Event event=new Event();
+        event.setEvent_id(event_id);
+        RestClient.get().appApi().getEventInterested(event_id).enqueue(new Callback<BaseModel<List<GetEventInterestedUsers>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<GetEventInterestedUsers>>> call, Response<BaseModel<List<GetEventInterestedUsers>>> response) {
+                if(response.body()!=null)
+                {
+                    interestedMutableLiveData.setValue(response.body());
+                }
+            }
+            @Override
+            public void onFailure(Call<BaseModel<List<GetEventInterestedUsers>>> call, Throwable t) {
+                interestedMutableLiveData.setValue(null);
+            }
+        });
+        return interestedMutableLiveData;
+    }
     @Override
     public LiveData<BaseModel<List<Meeting>>> createMeeting(Meeting meeting) {
         meetingMutableLiveData = new MutableLiveData<>();

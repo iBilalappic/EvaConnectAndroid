@@ -28,7 +28,7 @@
                 android:id="@+id/img_backarrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:padding="20dp"
                 android:src="@drawable/ic_arrow_left" />
 
             <TextView
@@ -39,7 +39,7 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/nunitosansbold"
                 android:gravity="end"
-                android:text="Create a Event"
+                android:text="Create an Event"
                 android:textColor="@color/black"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -299,9 +299,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="Invite attendee"
+                android:layout_marginTop="35dp"
+                android:layout_marginEnd="16dp"
+                android:text="Invited"
                 android:textAppearance="@style/TextAppearance.Text.Bold"
                 android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -316,7 +319,9 @@
                 android:text="Add\nParticipant"
                 android:textColor="@color/black"
                 android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/invite_people"
                 app:layout_constraintEnd_toEndOf="@+id/add1"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="@+id/add1"
                 app:layout_constraintTop_toBottomOf="@+id/add1" />
 
@@ -325,21 +330,27 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
                 android:scrollbars="none"
+                android:requiresFadingEdge="horizontal"
+                android:fadingEdgeLength="40dp"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:layout_constraintEnd_toStartOf="@+id/add1"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/invited" />
+                app:layout_constraintTop_toBottomOf="@id/invited"
+                tools:listitem="@layout/item_invited_users" />
 
             <ImageView
                 android:id="@+id/add1"
-                android:layout_width="wrap_content"
+                android:layout_width="55dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:src="@drawable/iconadd"
+                app:layout_constraintBottom_toTopOf="@+id/textView19"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/invited" />
-
+                app:layout_constraintTop_toTopOf="@+id/invite_people"
+                app:layout_constraintVertical_chainStyle="packed" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -357,16 +368,39 @@
             android:layout_marginTop="13dp"
             />
 
-        <ImageView
-            android:id="@+id/img_event"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <RelativeLayout
+            android:id="@+id/rv_photo"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
             android:layout_margin="12dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="center"
             app:layout_constraintBottom_toTopOf="@id/post"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/coverImageTitle"
-            app:srcCompat="@drawable/no_thumbnail" />
+            app:layout_constraintTop_toBottomOf="@+id/coverImageTitle">
+
+            <ImageView
+                android:id="@+id/img_event"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:scaleType="centerCrop"
+                app:srcCompat="@color/gray" />
+
+            <TextView
+                android:id="@+id/tv_upload"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:fontFamily="@font/nunitosansbold"
+                android:gravity="center"
+                android:text="Upload Photo"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/post"
@@ -380,7 +414,7 @@
             android:paddingTop="10dp"
             android:paddingRight="20dp"
             android:paddingBottom="10dp"
-            android:text="Create Event"
+            android:text="Done"
             android:textColor="@color/white"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -29,6 +29,7 @@ public class UserRepository implements IUserRespository {
     private MutableLiveData<BaseModel<List<User>>> LinkedinLoginMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<User>>> facebookLoginMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> ProfileUpdateMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Object>>> EmailVerificationCode = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<String>>> SectorMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Stats>>> statMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<GetBlockedData>>> getBlockedUsers = new MutableLiveData<>();
@@ -70,6 +71,25 @@ public class UserRepository implements IUserRespository {
             }
         });
         return userMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<Object>>> getEmailVerificationCode(String email, int verification_code) {
+        EmailVerificationCode = new MutableLiveData<>();
+        RestClient.get().appApi().getEmailVerificationCode(email,verification_code).enqueue(new Callback<BaseModel<List<Object>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+                if (response.body() != null) {
+                    EmailVerificationCode.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+                EmailVerificationCode.setValue(null);
+            }
+        });
+        return EmailVerificationCode;
     }
 
 

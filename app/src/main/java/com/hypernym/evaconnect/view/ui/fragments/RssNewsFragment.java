@@ -28,11 +28,12 @@ import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.decorators.ItemDecorationAlbumColumns;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.NewSources;
+import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
+import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.utils.RecyclerItemClickListener;
 import com.hypernym.evaconnect.view.adapters.NewsAdapter;
-import com.hypernym.evaconnect.view.ui.fragments.BaseFragment;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
@@ -60,7 +61,7 @@ public class RssNewsFragment extends BaseFragment implements Validator.Validatio
     @BindView(R.id.img_backarrow)
     ImageView img_backarrow;
 
-    @BindView(R.id.textView4)
+    @BindView(R.id.ed_code)
     TextView textView4;
 
     @BindView(R.id.btn_next)
@@ -81,7 +82,7 @@ public class RssNewsFragment extends BaseFragment implements Validator.Validatio
     boolean isMultiSelect = false;
     ActionMode mActionMode;
     int Postion;
-
+    User user = new User();
     public RssNewsFragment() {
         // Required empty public constructor
     }
@@ -106,7 +107,7 @@ public class RssNewsFragment extends BaseFragment implements Validator.Validatio
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        user = LoginUtils.getUser();
         ButterKnife.bind(this, view);
         validator = new Validator(this);
         validator.setValidationListener(this);
@@ -119,9 +120,29 @@ public class RssNewsFragment extends BaseFragment implements Validator.Validatio
 
     private void init() {
         homeViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(HomeViewModel.class);
-        GetNewSources();
+        showDialog();
+        GetSelectedNews();
+
     }
 
+
+    private void GetSelectedNews() {
+        homeViewModel.getSelectedNewSources(user.getId()).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<NewSources>>>() {
+            @Override
+            public void onChanged(BaseModel<List<NewSources>> getNewsources) {
+                if (getNewsources != null && !getNewsources.isError()) {
+                    MultiSelect.clear();
+                    MultiSelect.addAll(getNewsources.getData());
+                   /* setupRecyclerview();*/
+                    GetNewSources();
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+                hideDialog();
+
+            }
+        });
+    }
     private void GetNewSources() {
         homeViewModel.getNewSources().observe(getViewLifecycleOwner(), new Observer<BaseModel<List<NewSources>>>() {
             @Override

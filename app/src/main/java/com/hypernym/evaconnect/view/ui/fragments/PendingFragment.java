@@ -361,7 +361,7 @@ public class PendingFragment extends BaseFragment implements OptionsAdapter.Item
     @Override
     public void onRefresh() {
         if (NetworkUtils.isNetworkConnected(getContext())) {
-            GetUserDetails();
+           // GetUserDetails();
             getConnectionByFilter(type, currentPage, false);
         } else {
             networkErrorDialog();

@@ -367,6 +367,12 @@ public class EventFragment extends BaseFragment implements View.OnClickListener,
                 textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
 
+        }else if(view.getId()==R.id.tv_interested){
+            EventInterestedFragment eventDetailFragment = new EventInterestedFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("event_id", posts.get(position).getId());
+            eventDetailFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, eventDetailFragment, getContext(), true);
         } else {
             EventDetailFragment eventDetailFragment = new EventDetailFragment();
             Bundle bundle = new Bundle();

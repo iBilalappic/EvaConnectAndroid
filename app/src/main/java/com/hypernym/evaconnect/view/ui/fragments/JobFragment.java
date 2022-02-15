@@ -28,6 +28,7 @@ import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
@@ -40,6 +41,7 @@ import com.hypernym.evaconnect.view.dialogs.ShareDialog;
 import com.hypernym.evaconnect.viewmodel.JobListViewModel;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,6 +73,7 @@ public class JobFragment extends BaseFragment implements View.OnClickListener, S
     private boolean isLastPage = false;
     private boolean isLoading = false;
     int item_position;
+    private CompanyJobAdModel companyJobAdModel;
 
     public JobFragment() {
     }
@@ -269,7 +272,24 @@ public class JobFragment extends BaseFragment implements View.OnClickListener, S
 
     @Override
     public void onItemClick(View view, int position) {
-
+        if (view.getId()==R.id.layout_applicants) {
+            CompanyApplicantFragment companyApplicantFragment = new CompanyApplicantFragment();
+            companyJobAdModel = new CompanyJobAdModel();
+            companyJobAdModel.setId(posts.get(position).getId());
+            companyJobAdModel.setJobTitle(posts.get(position).getJob_title());
+            companyJobAdModel.setJobImage(posts.get(position).getJob_image());
+            companyJobAdModel.setContent(posts.get(position).getContent());
+            companyJobAdModel.setJobSector(posts.get(position).getJob_sector());
+            companyJobAdModel.setActive_hours(posts.get(position).getActive_hours());
+            companyJobAdModel.setApplicant_count(posts.get(position).getApplicant_count());
+            companyJobAdModel.setSalary(posts.get(position).getSalary());
+            companyJobAdModel.setLocation(posts.get(position).getLocation());
+            companyJobAdModel.setPosition(posts.get(position).getPosition());
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("COMPANY_AD", companyJobAdModel);
+            companyApplicantFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, companyApplicantFragment, getContext(), true);
+        }
     }
 
 

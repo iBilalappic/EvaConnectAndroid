@@ -48,7 +48,7 @@ public class CreateAccount_4_Activity extends BaseActivity implements View.OnCli
     Spinner spinner_sector;
 
     @BindView(R.id.btn_next)
-    Button btn_next;
+    TextView btn_next;
 
     @BindView(R.id.img_backarrow)
     ImageView img_backarrow;
@@ -202,7 +202,7 @@ public class CreateAccount_4_Activity extends BaseActivity implements View.OnCli
                 if((!spinner_sector.getSelectedItem().equals("Choose"))) {
 
                     if (activity_type.equals("LinkedinActivity")) {
-                        Intent intent = new Intent(CreateAccount_4_Activity.this, EmailVerification.class);
+                        Intent intent = new Intent(CreateAccount_4_Activity.this, PasswordActivity.class);
                         intent.putExtra("Email", email);
                         intent.putExtra("Photo", photourl);
                         intent.putExtra("userType", user_type);
@@ -224,7 +224,7 @@ public class CreateAccount_4_Activity extends BaseActivity implements View.OnCli
                         startActivity(intent);
 
                     } else if (activity_type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)) {
-                        Intent intent = new Intent(CreateAccount_4_Activity.this, EmailVerification.class);
+                        Intent intent = new Intent(CreateAccount_4_Activity.this, PasswordActivity.class);
                         intent.putExtra("Email", email);
                         intent.putExtra("Photo", photourl);
                         intent.putExtra("Path", path);
@@ -246,7 +246,7 @@ public class CreateAccount_4_Activity extends BaseActivity implements View.OnCli
                         startActivity(intent);
                     } else {
 
-                        Intent intent = new Intent(CreateAccount_4_Activity.this, EmailVerification.class);
+                        Intent intent = new Intent(CreateAccount_4_Activity.this, PasswordActivity.class);
                         if (filepath != null) {
 
                             intent.putExtra("Email", email);

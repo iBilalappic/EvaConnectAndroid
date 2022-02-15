@@ -72,7 +72,7 @@ public class JobAdAdapter extends RecyclerView.Adapter<JobAdAdapter.ViewHolder> 
         TextView tv_name, tv_postion, tv_salary, tv_gotoadd,tv_content;
         CircleImageView profile_image;
         ImageView img_like, img_comment, img_share,img_more;
-        LinearLayout comment_click;
+        LinearLayout comment_click, layout_applicants;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -87,10 +87,12 @@ public class JobAdAdapter extends RecyclerView.Adapter<JobAdAdapter.ViewHolder> 
             img_comment = itemView.findViewById(R.id.img_comment);
             img_share = itemView.findViewById(R.id.img_share);
             tv_content = itemView.findViewById(R.id.tv_content);
+            layout_applicants = itemView.findViewById(R.id.layout_applicants);
             itemView.setOnClickListener(this);
             img_like.setOnClickListener(this);
             img_share.setOnClickListener(this);
             tv_gotoadd.setOnClickListener(this);
+            layout_applicants.setOnClickListener(this);
 //            img_comment.setOnClickListener(this);
             comment_click.setOnClickListener(this);
         }
@@ -100,19 +102,12 @@ public class JobAdAdapter extends RecyclerView.Adapter<JobAdAdapter.ViewHolder> 
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.img_like:
-                    onItemClickListener.onItemClick(v, getAdapterPosition());
-                    break;
+                case R.id.layout_applicants:
                 case R.id.tv_gotoadd:
-                    onItemClickListener.onItemClick(v, getAdapterPosition());
-                    break;
                 case R.id.img_share:
-                    onItemClickListener.onItemClick(v, getAdapterPosition());
-                    break;
                 case R.id.like_click:
-                    onItemClickListener.onItemClick(v,getAdapterPosition());
-                    break;
                 case R.id.comment_click:
-                    onItemClickListener.onItemClick(v,getAdapterPosition());
+                    onItemClickListener.onItemClick(v, getAdapterPosition());
                     break;
             }
 

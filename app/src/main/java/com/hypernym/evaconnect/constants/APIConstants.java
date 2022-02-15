@@ -46,6 +46,7 @@ public interface APIConstants {
     public static String GET_APPLICANTS="job/application/filter/";
     public static String ADD_EVENT="event/";
     public static String ADD_MEETING="meeting/";
+    public static String GET_EVENT_INTERESTED="event/interested/";
     public static String UPDATE_MEETING="meeting/details/{id}/";
     public static String GET_CALENDAR_MARKS="user/calendar/";
     public static String GET_EVENT_DETAILS="event/details/";
@@ -67,6 +68,7 @@ public interface APIConstants {
     public static String GET_USER_DETAILS="user/details/{id}/";
     public static String GET_SECTOR="user/sector/";
     public static String Get_NEWS_SOURCES="news/sources/";
+    public static String Get_SELECTED_NEWS_SOURCES="news/selection/user/";
     public static String SET_NEWS_SOURCES="news/selection/";
     public static String SETTING_UPDATE="user/details/{user_id}/";
     public static String UPDATE_PASSWORD="user/changepassword/";
@@ -87,4 +89,5 @@ public interface APIConstants {
     public static String USER_ONLINE="user/details/{id}/";
     public static String USER_STATS="user/stats/{id}/";
     public static String GET_ALL_PENDING = "user/pending/connection/";
+    public static String EMAIL_VERIFICATION_CODE = "user/verification/";
 }

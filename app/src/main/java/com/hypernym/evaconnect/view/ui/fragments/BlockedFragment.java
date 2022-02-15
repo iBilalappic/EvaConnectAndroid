@@ -205,13 +205,13 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
         rc_connections.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
             @Override
             protected void loadMoreItems() {
-               /* isLoading = true;
+                isLoading = true;
                 currentPage = AppConstants.TOTAL_PAGES + currentPage;
                 if (NetworkUtils.isNetworkConnected(getContext())) {
                     getConnectionByFilter(type, currentPage, false);
                 } else {
                     networkErrorDialog();
-                }*/
+                }
             }
 
             @Override
@@ -356,9 +356,9 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
     @Override
     public void onRefresh() {
         if (NetworkUtils.isNetworkConnected(getContext())) {
-            getBlockedConnections();
+            //getBlockedConnections();
             //GetUserDetails();
-           // getConnectionByFilter(type, currentPage, false);
+            getConnectionByFilter(type, currentPage, false);
         } else {
             networkErrorDialog();
         }
@@ -389,7 +389,7 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
 
             connectionList.clear();
             blockedAdapter.notifyDataSetChanged();
-           // getConnectionByFilter(type, PAGE_START, true);
+            getConnectionByFilter(type, PAGE_START, true);
 
         }
 

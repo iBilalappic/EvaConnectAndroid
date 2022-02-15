@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -34,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_weight="1"
-            android:text="About yourself"
+            android:text="Bio"
             android:textColor="@color/black"
             android:textSize="14sp"
 
@@ -89,20 +88,30 @@
     <EditText
         android:id="@+id/edit_about_yourself"
         android:layout_width="wrap_content"
-        android:layout_height="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="28dp"
+        android:layout_marginEnd="24dp"
         android:background="@drawable/ic_rectangle_about_yourself"
         android:ems="10"
         android:fontFamily="@font/nunitosansregular"
         android:gravity="start"
         android:justificationMode="inter_word"
+        android:minHeight="250dp"
         android:padding="15dp"
-        android:hint=""
+        android:paddingBottom="15dp"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
+    <View
+        android:id="@+id/view25"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_about_yourself" />
 
     <TextView
         android:id="@+id/btn_next"
@@ -115,7 +124,7 @@
         app:layout_constraintBottom_toTopOf="@+id/tv_already_account"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_about_yourself"
+        app:layout_constraintTop_toBottomOf="@+id/view25"
         app:layout_constraintVertical_bias="1.0" />
 
     <TextView

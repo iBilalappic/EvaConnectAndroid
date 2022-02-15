@@ -364,7 +364,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             super(itemView);
             mtextview20 = itemView.findViewById(R.id.tv_name);
             mtextview21 = itemView.findViewById(R.id.tv_lastmsg);
-            mlayout1 = itemView.findViewById(R.id.layout1);
+            mlayout1 = itemView.findViewById(R.id.lay_designation);
             mlayout2 = itemView.findViewById(R.id.layout2);
             layout_accept = itemView.findViewById(R.id.layout_accept);
             imageView6 = itemView.findViewById(R.id.imageView6);

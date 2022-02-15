@@ -178,7 +178,7 @@
                 android:layout_width="232dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="50dp"
                 android:textStyle="bold"
                 android:text="Sign in with Linkedin"
                 app:layout_constraintBottom_toBottomOf="parent"

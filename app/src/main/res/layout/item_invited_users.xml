@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingStart="@dimen/spacing_small"
     android:paddingEnd="@dimen/spacing_small">
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/invitedUserImage"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginTop="8dp"
         android:src="@drawable/profile"
         app:civ_border_color="@color/skyblue"
@@ -46,6 +47,7 @@
        android:fontFamily="@font/nunitosansregular"
         android:textColor="@color/black"
         android:textSize="14sp"
+        android:maxLines="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,6 +61,7 @@
         android:textAlignment="center"
         android:gravity="center"
         android:textSize="12sp"
+        android:maxLines="1"
         android:fontFamily="@font/nunitosansregular"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

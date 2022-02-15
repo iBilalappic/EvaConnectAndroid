@@ -2,6 +2,7 @@
 
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="5dp"
@@ -38,7 +39,7 @@
             android:id="@+id/profile_layout"
             android:layout_width="53dp"
             android:layout_height="53dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -68,62 +69,71 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
             android:ellipsize="end"
             android:fontFamily="@font/nunitosansbold"
             android:maxLines="1"
             android:text="Networth And Vibe"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/profile_layout"
+            app:layout_constraintBottom_toTopOf="@+id/tv_location"
             app:layout_constraintEnd_toStartOf="@+id/tv_attending"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/profile_layout"
             app:layout_constraintTop_toTopOf="@+id/profile_layout"
-            app:layout_constraintVertical_bias="0.518" />
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
             android:id="@+id/tv_location"
-            style="@style/TextStyle"
-            android:layout_width="150dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:ellipsize="end"
             android:fontFamily="@font/nunitosansregular"
-            android:maxLines="1"
+            android:maxLines="2"
             android:text="London"
-            android:textSize="12sp"
-            android:visibility="gone"
-
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/tv_eventdate"
+            app:layout_constraintEnd_toStartOf="@+id/tv_attending"
             app:layout_constraintStart_toEndOf="@+id/profile_layout"
             app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
         <TextView
             android:id="@+id/tv_eventdate"
-            style="@style/TextStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:fontFamily="@font/nunitosansregular"
             android:text="23 Aug 19"
-            android:textSize="12sp"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="@id/tv_location"
-            app:layout_constraintTop_toBottomOf="@id/tv_location" />
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/profile_layout"
+            app:layout_constraintEnd_toStartOf="@+id/tv_attending"
+            app:layout_constraintStart_toEndOf="@+id/profile_layout"
+            app:layout_constraintTop_toBottomOf="@+id/tv_location" />
 
+        <View
+            android:id="@+id/seperator"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_eventdate" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cv"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:layout_margin="16dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:elevation="10dp"
-            app:cardCornerRadius="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/post_detail"
+            app:cardCornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/view3"
-            app:layout_constraintTop_toBottomOf="@+id/profile_layout">
+            app:layout_constraintTop_toBottomOf="@+id/seperator">
 
             <ImageView
                 android:id="@+id/post_image"
@@ -132,21 +142,7 @@
                 android:background="@drawable/no_thumbnail"
                 android:scaleType="centerCrop" />
         </androidx.cardview.widget.CardView>
-     <!--   <ImageView
-            android:id="@+id/post_image"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:visibility="gone"
-            android:layout_marginBottom="8dp"
-            android:adjustViewBounds="true"
-            android:background="@drawable/no_thumbnail"
-            app:layout_constraintBottom_toTopOf="@+id/post_detail"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/view3"
-            app:layout_constraintTop_toBottomOf="@+id/profile_layout" />-->
+
 
         <TextView
             android:id="@+id/post_detail"
@@ -157,8 +153,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:textSize="13.5sp"
-            android:visibility="gone"
             android:textStyle="normal"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cv" />
@@ -225,10 +221,10 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/nunitosansbold"
                 android:text="58"
-                android:visibility="gone"
                 android:textColor="@color/skyblue"
                 android:textSize="11sp"
                 android:textStyle="bold"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -241,11 +237,11 @@
                 android:fontFamily="@font/nunitosansbold"
                 android:paddingLeft="5dp"
                 android:text="@string/likes"
-                android:visibility="gone"
                 android:textColor="@color/skyblue"
-
                 android:textSize="11sp"
+
                 android:textStyle="bold"
+                android:visibility="gone"
                 app:layout_constraintStart_toEndOf="@+id/tv_likecount"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -258,10 +254,10 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/nunitosansbold"
                 android:text="@string/amp"
-                android:visibility="gone"
                 android:textColor="@color/skyblue"
                 android:textSize="11sp"
                 android:textStyle="bold"
+                android:visibility="gone"
                 app:layout_constraintStart_toEndOf="@+id/textView10"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -274,10 +270,10 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/nunitosansbold"
                 android:text="03"
-                android:visibility="gone"
                 android:textColor="@color/skyblue"
                 android:textSize="11sp"
                 android:textStyle="bold"
+                android:visibility="gone"
                 app:layout_constraintStart_toEndOf="@+id/textView11"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -290,10 +286,10 @@
                 android:fontFamily="@font/nunitosansbold"
                 android:paddingLeft="5dp"
                 android:text="@string/comments"
-                android:visibility="gone"
                 android:textColor="@color/skyblue"
                 android:textSize="11sp"
                 android:textStyle="bold"
+                android:visibility="gone"
                 app:layout_constraintStart_toEndOf="@+id/tv_comcount"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -400,18 +396,19 @@
                 <LinearLayout
                     android:id="@+id/share_click"
                     android:layout_width="0dp"
-                    android:layout_gravity="center"
                     android:layout_height="match_parent"
+                    android:layout_gravity="center"
                     android:layout_marginEnd="16dp"
                     android:layout_weight="1">
+
                     <ImageView
 
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:layout_gravity="center"
                         android:layout_marginEnd="@dimen/spacing_medium"
-                        android:layout_weight="0"
-                         />
+                        android:layout_weight="0" />
+
                     <ImageView
                         android:id="@+id/img_share"
                         android:layout_width="18dp"
@@ -453,29 +450,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:gravity="start"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/nunitosansregular"
-                android:text="Today at 18:06"
+                android:gravity="start"
+                android:text="--"
                 android:textColor="@color/black"
                 android:textSize="16.5sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/tv_created_time"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="end"
-                android:gravity="end"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/nunitosansregular"
+                android:gravity="end"
                 android:text="Today at 18:06"
                 android:textColor="@color/black"
                 android:textSize="10sp"
@@ -491,8 +489,6 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_created_time" />
-
-
 
 
             <View
@@ -562,13 +558,34 @@
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="6dp"
+            android:layout_marginEnd="16dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:src="@drawable/more"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/profile_layout" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="20dp" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="left"
+            app:constraint_referenced_ids="seperator" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="left"
+            app:constraint_referenced_ids="seperator" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
 

@@ -297,15 +297,19 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <Button
+        <TextView
             android:id="@+id/btn_next"
-            style="@style/Button_selected_blue"
+            style="@style/Button_selected_light_blue"
             android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"
             android:text="@string/next"
             app:layout_constraintBottom_toTopOf="@+id/tv_already_account"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layout_individual" />
+            app:layout_constraintTop_toBottomOf="@+id/layout_individual"
+            app:layout_constraintVertical_bias="1.0" />
 
         <TextView
             android:id="@+id/tv_already_account"

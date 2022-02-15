@@ -14,6 +14,7 @@ import retrofit2.http.Part;
 
 public interface IUserRespository {
     LiveData<BaseModel<List<User>>> signup(User user, @Part MultipartBody.Part user_image);
+    LiveData<BaseModel<List<Object>>> getEmailVerificationCode(String email,int verification_code);
     LiveData<BaseModel<List<User>>> login(User user);
     LiveData<BaseModel<List<User>>> forgotPassword(String email);
     LiveData<BaseModel<List<User>>> isEmailExist(String email);

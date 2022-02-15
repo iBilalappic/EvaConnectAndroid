@@ -111,9 +111,6 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
     @BindView(R.id.img_backarrow)
     ImageView img_backarrow;
 
-
-
-
     private UserViewModel userViewModel;
 
 
@@ -147,37 +144,9 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
         ly_change_password.setOnClickListener(this);
         ly_edit_location.setOnClickListener(this);
         img_backarrow.setOnClickListener(this);
-       // ly_change_profile_picture.setOnClickListener(this);
         user = LoginUtils.getUser();
         SettingUserProfile(user);
 
-/*        btn_save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                validator.validate();
-            }
-        });*/
-
-/*        img_edit.setOnClickListener(new OnOneOffClickListener() {
-            @Override
-            public void onSingleClick(View v) {
-                openPictureDialog();
-
-            }
-        });*/
-/*        img_backarrow.setOnClickListener(new OnOneOffClickListener() {
-            @Override
-            public void onSingleClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });*/
-/*        tv_text_manage.setOnClickListener(new OnOneOffClickListener() {
-            @Override
-            public void onSingleClick(View v) {
-                SettingsFragment settingsFragment = new SettingsFragment();
-                loadFragment(R.id.framelayout, settingsFragment, getContext(), true);
-            }
-        });*/
 
         return view;
     }
@@ -192,97 +161,6 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
     public void onValidationSucceeded() {
        //    UpdateProfileUser();
     }
-
-  /*  private void UpdateProfileUser() {
-        showDialog();
-        userViewModel.profile_update(
-                user.getId(),
-                edt_designation.getText().toString(),
-                edt_company.getText().toString(),
-                edt_firstname.getText().toString(),partImage).observe(this, new Observer<BaseModel<List<Object>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Object>> listBaseModel) {
-                if (!listBaseModel.isError()) {
-                   tv_updated.setVisibility(View.VISIBLE);
-                   initHandler();
-                   GetUserDetails();
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
-            }
-        });
-    }*/
-
-/*    private void initHandler() {
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                tv_updated.setVisibility(View.GONE);
-            }
-        }, 3000);
-    }*/
-
-/*
-    private void GetUserDetails() {
-        showDialog();
-        userViewModel.getuser_details(user.getId()
-        ).observe(this, new Observer<BaseModel<List<User>>>() {
-            @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel)
-            {
-                if (listBaseModel.getData() != null && !listBaseModel.isError())
-                {
-                    if (!TextUtils.isEmpty(listBaseModel.getData().get(0).getUser_image()))
-                    {
-                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getUser_image());
-                    }
-//                    else if (listBaseModel.getData().get(0).getIs_facebook() == 1 && !TextUtils.isEmpty(listBaseModel.getData().get(0).getFacebook_image_url())) {
-//                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getFacebook_image_url());
-//                    }
-//                    else {
-//                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getUser_image());
-//                    }
-
-                    tv_location.setText(listBaseModel.getData().get(0).getCountry() + "," + listBaseModel.getData().get(0).getCity());
-                    edt_location.setText(listBaseModel.getData().get(0).getCountry() + "," + listBaseModel.getData().get(0).getCity());
-                    edt_firstname.setText(listBaseModel.getData().get(0).getFirst_name());
-                    if(listBaseModel.getData().get(0).getSector().equalsIgnoreCase("Other"))
-                    {
-                        edt_sector.setText(listBaseModel.getData().get(0).getOther_sector());
-                    }
-                    else
-                    {
-                        edt_sector.setText(listBaseModel.getData().get(0).getSector());
-                    }
-
-                    if(listBaseModel.getData().get(0).getType().equalsIgnoreCase("company"))
-                    {
-                        lbl_title.setVisibility(View.GONE);
-                        edt_designation.setVisibility(View.GONE);
-                        img_view2.setVisibility(View.GONE);
-                    }
-                    else
-                    {
-                        edt_designation.setText(listBaseModel.getData().get(0).getDesignation());
-                        lbl_title.setVisibility(View.VISIBLE);
-                        edt_designation.setVisibility(View.VISIBLE);
-                        img_view2.setVisibility(View.VISIBLE);
-                    }
-
-
-                    edt_company.setText(listBaseModel.getData().get(0).getCompany_name());
-                    tv_name.setText(listBaseModel.getData().get(0).getFirst_name());
-                    LoginUtils.saveUser(listBaseModel.getData().get(0));
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
-            }
-        });
-    }
-*/
 
     @Override
     public void onValidationFailed(List<ValidationError> errors) {

@@ -55,9 +55,6 @@ public class CompanyApplicantFragment extends BaseFragment implements View.OnCli
 
     @BindView(R.id.tv_sector)
     TextView tv_sector;
-//
-//    @BindView(R.id.tv_weeklyHoursNumber)
-//    TextView tv_weeklyHoursNumber;
 
     @BindView(R.id.tv_edit)
     TextView tv_edit;
@@ -83,7 +80,7 @@ public class CompanyApplicantFragment extends BaseFragment implements View.OnCli
 
     private void GetApplicants() {
         showDialog();
-        appliedApplicantViewModel.getApplicants(companyJobAdModel.getId()).observe(this, new Observer<BaseModel<List<AppliedApplicants>>>() {
+        appliedApplicantViewModel.getApplicants(companyJobAdModel.getId()).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<AppliedApplicants>>>() {
             @Override
             public void onChanged(BaseModel<List<AppliedApplicants>> getApplicants) {
                 if (getApplicants != null && !getApplicants.isError()) {
@@ -112,7 +109,11 @@ public class CompanyApplicantFragment extends BaseFragment implements View.OnCli
             tv_sector.setText(companyJobAdModel.getJobSector());
             tv_activehour.setText("Active for "+companyJobAdModel.getActive_hours()+" hrs");
          //   tv_weeklyHoursNumber.setText(companyJobAdModel.getWeeklyHours());
-            tv_totalapplicant.setText(companyJobAdModel.getApplicant_count()+" Applicants");
+            if (companyJobAdModel.getApplicant_count()!=null) {
+                tv_totalapplicant.setText(companyJobAdModel.getApplicant_count()+" Applicants");
+            }else{
+                tv_totalapplicant.setText("0 Applicants");
+            }
 //            tv_minago.setText(DateUtils.getTimeAgo(jobAd.getCreatedDatetime()));
             GetApplicants();
 

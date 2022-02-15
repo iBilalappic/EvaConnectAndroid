@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -134,6 +135,12 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
     @BindView(R.id.invite_layout)
     ConstraintLayout invite_layout;
 
+    @BindView(R.id.rv_photo)
+    RelativeLayout rv_photo;
+
+    @BindView(R.id.tv_upload)
+    TextView tv_upload;
+
 
 
     private boolean isStartDate = false;
@@ -238,14 +245,14 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
             {
                 Log.d("exception",ex.getMessage());
             }
-            if(event.getIs_private()==1)
+          /*  if(event.getIs_private()==1)
             {
                 invite_layout.setVisibility(View.VISIBLE);
             }
             else
             {
                 invite_layout.setVisibility(View.GONE);
-            }
+            }*/
             if(invitedConnections.size()==0)
             {
                 for(EventAttendees eventAttendees:event.getAttendees())
@@ -255,8 +262,10 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
             }
 
             usersAdapter.notifyDataSetChanged();
-            if(event.getEvent_image().size()>0)
+            if(event.getEvent_image().size()>0){
               AppUtils.setGlideUrlThumbnail(getContext(),img_event,event.getEvent_image().get(0));
+                tv_upload.setVisibility(View.GONE);
+            }
         }
         else
         {
@@ -451,7 +460,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
         }
     }
 
-    @OnClick(R.id.img_event)
+    @OnClick(R.id.rv_photo)
     public void setImage() {
         if (Checkpermission()) {
             BottomSheetPictureSelection bottomSheetPictureSelection = new BottomSheetPictureSelection(new YourDialogFragmentDismissHandler());
@@ -569,6 +578,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
                             partImage = MultipartBody.Part.createFormData("event_image", file_name.getName(), reqFile);
                             if (!TextUtils.isEmpty(currentPhotoPath) || currentPhotoPath != null) {
                                 Glide.with(this).load(currentPhotoPath).into(img_event);
+                                tv_upload.setVisibility(View.GONE);
 
                             } else {
                                 networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
@@ -603,7 +613,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
                     Glide.with(this).load(loadFromFile(globalImagePath))
                             .apply(new RequestOptions())
                             .into(img_event);
-
+                    tv_upload.setVisibility(View.GONE);
                     Bitmap orignal = loadFromFile(globalImagePath);
                     File filenew = new File(globalImagePath);
                     try {
@@ -628,7 +638,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
     {
         event_type = parent.getItemAtPosition(position).toString();
         event.setIs_private(position);
-        if(position==1)
+      /*  if(position==1)
         {
 
             invite_layout.setVisibility(View.VISIBLE);
@@ -636,7 +646,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
         else
         {
             invite_layout.setVisibility(View.GONE);
-        }
+        }*/
         Log.e(TAG, "onItemClick: " + event_type);
     }
 

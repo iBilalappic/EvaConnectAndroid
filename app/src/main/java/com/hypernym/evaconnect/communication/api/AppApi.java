@@ -11,6 +11,7 @@ import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.GetBlockedData;
+import com.hypernym.evaconnect.models.GetEventInterestedUsers;
 import com.hypernym.evaconnect.models.GetPendingData;
 import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.Meeting;
@@ -248,6 +249,11 @@ public interface AppApi {
     @POST(APIConstants.GET_POST_BY_ID)
     Call<BaseModel<List<Post>>> getPostById(@Body Object user);
 
+    @POST(APIConstants.EMAIL_VERIFICATION_CODE)
+    @FormUrlEncoded
+    Call<BaseModel<List<Object>>> getEmailVerificationCode(@Field("email")String email,
+                                                           @Field("verification_code")int verification_code);
+
     @GET(APIConstants.GET_CONNECTION_COUNT)
     Call<BaseModel<User>> getConnectionCount(@Path("id") int id);
 
@@ -270,6 +276,9 @@ public interface AppApi {
 
     @POST(APIConstants.ADD_MEETING)
     Call<BaseModel<List<Meeting>>> createMeeting(@Body Meeting meeting);
+
+    @GET(APIConstants.GET_EVENT_INTERESTED)
+    Call<BaseModel<List<GetEventInterestedUsers>>> getEventInterested(@Query("event_id") int event_id);
 
     @PATCH(APIConstants.UPDATE_MEETING)
     Call<BaseModel<List<Meeting>>> updateMeeting(@Body Meeting meeting,@Path("id") int id);
@@ -347,6 +356,10 @@ public interface AppApi {
 
     @GET(APIConstants.Get_NEWS_SOURCES)
     Call<BaseModel<List<NewSources>>> getNewSources();
+
+    @POST(APIConstants.Get_SELECTED_NEWS_SOURCES)
+    @FormUrlEncoded
+    Call<BaseModel<List<NewSources>>> getSelectedNewSources(@Field("user_id") Integer user_id);
 
     @POST(APIConstants.SET_NEWS_SOURCES)
     Call<BaseModel<List<NewSources>>> setNewSources(@Body HashMap<String, Object> body);

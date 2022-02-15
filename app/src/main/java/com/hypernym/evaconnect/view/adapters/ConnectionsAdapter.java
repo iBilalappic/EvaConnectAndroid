@@ -72,7 +72,12 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
         }*/
 
 
-        holder.tv_designation.setText(connections.get(position).getCompany_name());
+        if (connections.get(position).getCompany_name()!=null && !connections.get(position).getCompany_name().isEmpty()) {
+            holder.tv_designation.setVisibility(View.VISIBLE);
+            holder.tv_designation.setText(connections.get(position).getCompany_name());
+        } else {
+            holder.tv_designation.setVisibility(View.GONE);
+        }
         //Hide connect option if post is from logged in user
         User user = LoginUtils.getLoggedinUser();
 /*        if (connections.get(position).getId().equals(user.getId())) {
@@ -140,9 +145,6 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
 
         @BindView(R.id.tv_connection_status)
         TextView tv_connection_status;
-
-        @BindView(R.id.location)
-        TextView location;
 
         @BindView(R.id.ly_main)
         LinearLayout ly_main;

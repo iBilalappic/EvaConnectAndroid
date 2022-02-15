@@ -117,6 +117,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
             public void onChanged(BaseModel<List<User>> listBaseModel) {
                 if (listBaseModel.getData() != null && !listBaseModel.isError()) {
                     if (!TextUtils.isEmpty(listBaseModel.getData().get(0).getUser_image())) {
+
                         //   AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getUser_image());
 //                        tv_password.setEnabled(false);
                     }

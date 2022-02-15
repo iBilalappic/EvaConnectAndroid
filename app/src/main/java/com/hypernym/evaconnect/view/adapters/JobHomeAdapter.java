@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
@@ -73,6 +74,9 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
         @BindView(R.id.tv_name)
         TextView tv_name;
 
+        @BindView(R.id.linearLayout2)
+        ConstraintLayout linearLayout2;
+
         @BindView(R.id.profile_image)
         ImageView profile_image;
 
@@ -125,10 +129,6 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
         @BindView(R.id.layout_active_time)
         LinearLayout layout_active_time;
 
-
-
-
-
         @BindView(R.id.img_more)
         ImageView img_more;
 
@@ -173,10 +173,22 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
                 }
             });
 
+            linearLayout2.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onApplyClick(v, getAdapterPosition());
+                }
+            });
             tv_name.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onApplyClick(v, getAdapterPosition());
+                }
+            });
+            layout_applicants.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
             img_more.setOnClickListener(new OnOneOffClickListener() {
@@ -338,7 +350,7 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
                         ((JobHomeAdapter.JobTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }
 
-                    AppUtils.setGlideImage(mContext, ((JobHomeAdapter.JobTypeViewHolder) holder).profile_image, posts.get(position).getJob_image());
+                    AppUtils.setGlideImage(mContext, ((JobHomeAdapter.JobTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
                     ((JobHomeAdapter.JobTypeViewHolder) holder).tv_name.setText(posts.get(position).getJob_title());
                     DecimalFormat myFormatter = new DecimalFormat("############");
 

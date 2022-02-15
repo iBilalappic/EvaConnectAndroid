@@ -39,8 +39,8 @@ import retrofit2.Response;
 public class NavigationDialog extends Dialog implements View.OnClickListener {
 
     private ImageView img_close;
-    private LinearLayout editProfile, notifications, mJoblisting, myactivity, calendar ,settings;
-    private TextView logout, tv_name, tv_designation,
+    private LinearLayout editProfile, notifications, mJoblisting, myactivity, calendar ,settings, lay_designation;
+    private TextView logout, tv_name, tv_designation, tv_at,
             tv_company, tv_location, tv_connections_count, tv_notication_count, tv_calender_event, tv_joblisting;
     private Context context;
     private CircleImageView profile_image;
@@ -68,6 +68,7 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
         tv_company = findViewById(R.id.tv_company);
         tv_location = findViewById(R.id.tv_location);
         tv_connections_count = findViewById(R.id.tv_connections_count);
+        lay_designation = findViewById(R.id.lay_designation);
         tv_notication_count = findViewById(R.id.tv_notication_count);
         tv_calender_event = findViewById(R.id.tv_calender_event);
         tv_joblisting = findViewById(R.id.tv_joblisting);
@@ -76,6 +77,7 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
         mJoblisting=findViewById(R.id.joblisting);
         calendar = findViewById(R.id.calendar);
         myactivity = findViewById(R.id.layout_myactivity);
+        tv_at = findViewById(R.id.tv_at);
         settings = findViewById(R.id.settings);
         mJoblisting.setOnClickListener(this);
         settings.setOnClickListener(this);
@@ -86,6 +88,8 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
 
         if(user.getType().equalsIgnoreCase("user")){
             mJoblisting.setVisibility(View.GONE);
+        }else{
+            lay_designation.setVisibility(View.GONE);
         }
 
 
@@ -199,12 +203,13 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
         if (user != null && user.getType().equals("company")) {
             tv_calender_event.setText("Calendar and Events");
             tv_joblisting.setText("My Jobs");
-
+            tv_name.setText(user.getFirst_name());
         } else {
             tv_calender_event.setText("Calendar");
             tv_joblisting.setText("Job Listings");
+            tv_name.setText(user.getFirst_name() + " " + user.getLast_name());
         }
-        tv_name.setText(user.getFirst_name() + " " + user.getLast_name());
+
         if(user.getDesignation()!=null)
         {
             tv_designation.setText(user.getDesignation());

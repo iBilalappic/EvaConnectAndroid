@@ -16,6 +16,7 @@ public interface IHomeRepository {
     LiveData<BaseModel<List<Post>>> notificationMarkAsRead(int id);
     LiveData<BaseModel<List<Post>>> getAllUnReadNotifications();
     LiveData<BaseModel<List<NewSources>>> getNewSources();
+    LiveData<BaseModel<List<NewSources>>> getSelectedNewSources(Integer user_id);
     LiveData<BaseModel<List<NewSources>>> setNewSources(List<Integer> newsSelectedids);
 
 }

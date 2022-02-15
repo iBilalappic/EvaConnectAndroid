@@ -764,11 +764,19 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     } else {
                         ((PostAdapter.TextTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
-                    ((PostAdapter.TextTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name());
-                   if(posts.get(position).getUser().getDesignation()!=null)
+
+    /*                if (posts.get(position).getUser().getType()!=null && posts.get(position).getUser().getCompany_name()!=null && posts.get(position).getUser().getType().equalsIgnoreCase("user")) {
+                        ((TextTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getConnection_count() + " Connections");
+                    } else {
+                        ((TextTypeViewHolder) holder).tv_company.setVisibility(View.GONE);
+                    }*/
+                    //For visible connection
+                    if(posts.get(position).getUser().getDesignation()!=null && !posts.get(position).getUser().getDesignation().isEmpty() )
                    {
-                       ((PostAdapter.TextTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation() +" at ");
-                   }
+                       ((TextTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getTotal_connection() + " Connections");
+                   }else {
+                        ((TextTypeViewHolder) holder).tv_company.setVisibility(View.GONE);
+                    }
 
                     if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
                         ((TextTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
@@ -844,11 +852,17 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     } else {
                         ((PostAdapter.ImageTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
-                    ((PostAdapter.ImageTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name());
-                  if(posts.get(position).getUser().getDesignation()!=null)
-                  {
-                      ((PostAdapter.ImageTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation() +" at ");
-                  }
+/*                    if (posts.get(position).getUser().getType()!=null && posts.get(position).getUser().getCompany_name()!=null && posts.get(position).getUser().getType().equalsIgnoreCase("user")) {
+                        ((PostAdapter.ImageTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getConnection_count() + " Connections");
+                    } else {
+                        ((PostAdapter.ImageTypeViewHolder) holder).tv_company.setVisibility(View.GONE);
+                    }*/
+                    if(posts.get(position).getUser().getDesignation()!=null && !posts.get(position).getUser().getDesignation().isEmpty() )
+                    {
+                        ((ImageTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getTotal_connection() + " Connections");
+                    }else {
+                        ((ImageTypeViewHolder) holder).tv_company.setVisibility(View.GONE);
+                    }
 
                     if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
                         ((ImageTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
@@ -986,10 +1000,16 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     } else {
                         ((PostAdapter.ImageTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
-                    ((PostAdapter.ImageTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name());
-                    if(posts.get(position).getUser().getDesignation()!=null)
+/*                    if (posts.get(position).getUser().getType()!=null && posts.get(position).getUser().getCompany_name()!=null && posts.get(position).getUser().getType().equalsIgnoreCase("user")) {
+                        ((ImageTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getConnection_count() + " Connections");
+                    } else {
+                        ((ImageTypeViewHolder) holder).tv_company.setVisibility(View.GONE);
+                    }*/
+                    if(posts.get(position).getUser().getDesignation()!=null && !posts.get(position).getUser().getDesignation().isEmpty() )
                     {
-                        ((PostAdapter.ImageTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation() +" at ");
+                        ((ImageTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getTotal_connection() + " Connections");
+                    }else {
+                        ((ImageTypeViewHolder) holder).tv_company.setVisibility(View.GONE);
                     }
                     if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
                         ((ImageTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
@@ -1100,10 +1120,16 @@ public class PostAdapter  extends RecyclerView.Adapter {
                         ((PostAdapter.VideoTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
                     AppUtils.setGlideVideoThumbnail(mContext, ((PostAdapter.VideoTypeViewHolder) holder).img_video, posts.get(position).getPost_video());
-                    ((PostAdapter.VideoTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name().trim());
-                    if(posts.get(position).getUser().getDesignation()!=null && !posts.get(position).getUser().getDesignation().isEmpty())
+/*                    if (posts.get(position).getUser().getType()!=null && posts.get(position).getUser().getCompany_name()!=null && posts.get(position).getUser().getType().equalsIgnoreCase("user")) {
+                        ((VideoTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getConnection_count() + " Connections");
+                    } else {
+                        ((VideoTypeViewHolder) holder).tv_company.setVisibility(View.GONE);
+                    }*/
+                    if(posts.get(position).getUser().getDesignation()!=null && !posts.get(position).getUser().getDesignation().isEmpty() )
                     {
-                        ((PostAdapter.VideoTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation()+" at ");
+                        ((VideoTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getTotal_connection() + " Connections");
+                    }else {
+                        ((VideoTypeViewHolder) holder).tv_company.setVisibility(View.GONE);
                     }
 
 
@@ -1181,14 +1207,16 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     } else {
                         ((PostAdapter.LinkTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
-                    ((PostAdapter.LinkTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name());
-                    if(posts.get(position).getUser().getDesignation()!=null && !posts.get(position).getUser().getDesignation().isEmpty()){
-//                        if(posts.get(position).getUser().getType().equalsIgnoreCase("company"))
-//                        {
-                            ((PostAdapter.LinkTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation()+" at ");
-                       // }
-                    }else{
-                        ((PostAdapter.LinkTypeViewHolder) holder).tv_designation.setText("--");
+                   /* if (posts.get(position).getUser().getType()!=null && posts.get(position).getUser().getCompany_name()!=null && posts.get(position).getUser().getType().equalsIgnoreCase("user")) {
+                        ((LinkTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getConnection_count() + " Connections");
+                    } else {
+                        ((LinkTypeViewHolder) holder).tv_company.setVisibility(View.GONE);
+                    }*/
+                    if(posts.get(position).getUser().getDesignation()!=null && !posts.get(position).getUser().getDesignation().isEmpty() )
+                    {
+                        ((LinkTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getTotal_connection() + " Connections");
+                    }else {
+                        ((LinkTypeViewHolder) holder).tv_company.setVisibility(View.GONE);
                     }
 
 
