@@ -70,6 +70,9 @@ public interface AppApi {
     @POST(APIConstants.LOGIN)
     Call<BaseModel<List<User>>> login(@Body User user);
 
+    @DELETE(APIConstants.DELETE_USER)
+    Call<BaseModel<List<Object>>> deleteUser(@Path("id") int id);
+
     @POST(APIConstants.BLOCK_USER)
     Call<BaseModel<List<Object>>> block(@Body Connection connection);
 

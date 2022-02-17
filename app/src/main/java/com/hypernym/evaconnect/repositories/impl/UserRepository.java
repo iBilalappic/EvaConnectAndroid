@@ -37,6 +37,7 @@ public class UserRepository implements IUserRespository {
     private MutableLiveData<BaseModel<List<Stats>>> statMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<GetBlockedData>>> getBlockedUsers = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> resetPasswordMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Object>>> deleteUserMutableLiveData = new MutableLiveData<>();
 
     @Override
     public LiveData<BaseModel<List<User>>> signup(User user, MultipartBody.Part partImage) {
@@ -411,5 +412,25 @@ public class UserRepository implements IUserRespository {
         });
         return SectorMutableLiveData;
 
+    }
+
+    @Override
+    public LiveData<BaseModel<List<Object>>> deleteUser(Integer id) {
+        RestClient.get().appApi().deleteUser(id).enqueue(new Callback<BaseModel<List<Object>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+                if (response.body()!=null){
+                    deleteUserMutableLiveData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+                deleteUserMutableLiveData.setValue(null);
+                t.printStackTrace();
+            }
+        });
+
+        return deleteUserMutableLiveData;
     }
 }
