@@ -255,6 +255,9 @@ public interface AppApi {
     Call<BaseModel<List<Object>>> getEmailVerificationCode(@Field("email")String email,
                                                            @Field("verification_code")int verification_code);
 
+    @POST(APIConstants.RESET_PASSWORD)
+    Call<BaseModel<List<Object>>> getResetPassword(@Body Object object);
+
     @GET(APIConstants.GET_CONNECTION_COUNT)
     Call<BaseModel<User>> getConnectionCount(@Path("id") int id);
 
