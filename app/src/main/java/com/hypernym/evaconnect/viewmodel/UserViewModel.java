@@ -34,6 +34,10 @@ public class UserViewModel extends AndroidViewModel {
         return iUserRespository.getEmailVerificationCode(email,verification_code);
     }
 
+    public LiveData<BaseModel<List<Object>>> getResetPassword(String email, String verification_code,String password)
+    {
+        return iUserRespository.resetPassword(email,verification_code,password);
+    }
 
     public LiveData<BaseModel<List<User>>> login(User user)
     {

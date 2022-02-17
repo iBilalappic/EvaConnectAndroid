@@ -80,10 +80,8 @@ public class ForgotPassword extends BaseActivity implements Validator.Validation
         if(NetworkUtils.isNetworkConnected(this))
         {
             //showDialog();
-            //callForgotPassApi();
-            Intent intent = new Intent(this, EnterCodeActivity.class);
-            intent.putExtra(Constants.ACTIVITY_NAME,Constants.FORGOT_PASSWORD);
-            startActivity(intent);
+            callForgotPassApi();
+
         }
         else
         {
@@ -99,7 +97,11 @@ public class ForgotPassword extends BaseActivity implements Validator.Validation
             public void onChanged(BaseModel<List<User>> user) {
                 if(user !=null && !user.isError())
                 {
-                  networkResponseDialog(getString(R.string.success),getString(R.string.msg_forgotpass));
+                 // networkResponseDialog(getString(R.string.success),getString(R.string.msg_forgotpass));
+                    Intent intent = new Intent(ForgotPassword.this, EnterCodeActivity.class);
+                    intent.putExtra(Constants.ACTIVITY_NAME,Constants.FORGOT_PASSWORD);
+                    intent.putExtra("Email",edt_email.getText().toString());
+                    startActivity(intent);
                 }
                  else if(user.isError())
                 {

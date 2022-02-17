@@ -73,8 +73,8 @@ public class EnterCodeActivity extends BaseActivity implements View.OnClickListe
             user_type = getIntent().getStringExtra("user_type");
         }else if(getIntent()!=null && !getIntent().getStringExtra(Constants.ACTIVITY_NAME).isEmpty()){
             activityName = getIntent().getStringExtra(Constants.ACTIVITY_NAME);
-            btn_next.setEnabled(true);
-            btn_next.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.skyblue)));
+            email = getIntent().getStringExtra("Email");
+
         }
         ed_code.addTextChangedListener(new TextWatcher() {
             @Override
@@ -97,11 +97,11 @@ public class EnterCodeActivity extends BaseActivity implements View.OnClickListe
         btn_next.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
-                if (activityName!=null && activityName.equalsIgnoreCase(Constants.FORGOT_PASSWORD) ) {
+              /*  if (activityName!=null && activityName.equalsIgnoreCase(Constants.FORGOT_PASSWORD) ) {
                     navigateNewPasswordActivity();
-                } else {
+                } else {*/
                     callEmailVerificationCodeApi();
-                }
+               // }
             }
         });
     }
@@ -109,6 +109,8 @@ public class EnterCodeActivity extends BaseActivity implements View.OnClickListe
     private void navigateNewPasswordActivity() {
         Intent intent = new Intent(this, PasswordActivity.class);
         intent.putExtra(Constants.ACTIVITY_NAME,Constants.FORGOT_PASSWORD);
+        intent.putExtra("Email",email);
+        intent.putExtra("Code",ed_code.getText().toString());
         startActivity(intent);
     }
 
@@ -129,7 +131,11 @@ public class EnterCodeActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onChanged(BaseModel<List<Object>> response) {
                 if (response != null && !response.isError()) {
-                   goToNextScreen();
+                    if (activityName!=null && activityName.equalsIgnoreCase(Constants.FORGOT_PASSWORD)) {
+                       navigateNewPasswordActivity();
+                    } else {
+                        goToNextScreen();
+                    }
                 } else if (response != null && response.isError()) {
                     hideDialog();
                     networkResponseDialog(getString(R.string.error), response.getMessage());

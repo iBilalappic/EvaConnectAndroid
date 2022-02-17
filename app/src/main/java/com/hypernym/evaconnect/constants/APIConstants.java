@@ -90,4 +90,5 @@ public interface APIConstants {
     public static String USER_STATS="user/stats/{id}/";
     public static String GET_ALL_PENDING = "user/pending/connection/";
     public static String EMAIL_VERIFICATION_CODE = "user/verification/";
+    public static String RESET_PASSWORD = "user/forgotpassword/";
 }

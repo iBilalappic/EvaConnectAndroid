@@ -45,7 +45,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
 
     String email, password, photourl, activity_type, user_type,path, about, language,
             aviation_type, JobSector, username, firstname, surname, companyUrl,
-            city, country, filepath, jobtitle, company_name,otherJobSector;
+            city, country, filepath, jobtitle, company_name,otherJobSector, code;
 
     private Validator validator;
 
@@ -234,6 +234,8 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
         }
         else if(getIntent()!=null && type.equalsIgnoreCase(Constants.FORGOT_PASSWORD)){
             activityName = getIntent().getStringExtra(Constants.ACTIVITY_NAME);
+            email = getIntent().getStringExtra("Email");
+            code = getIntent().getStringExtra("Code");
         }
         else {
             email = getIntent().getStringExtra("Email");
@@ -290,7 +292,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
 
         if (NetworkUtils.isNetworkConnected(this)) {
             if (activityName!=null && activityName.equalsIgnoreCase(Constants.FORGOT_PASSWORD)) {
-                navigateLoginActivity();
+                callResetPassword(email,code,edt_password.getText().toString());
             } else {
                 user.setStatus(AppConstants.USER_STATUS);
                 user.setPassword(edt_password.getText().toString());
@@ -310,6 +312,24 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
         startActivity(intent);
     }
 
+
+    private void callResetPassword(String email, String code, String password ) {
+
+        userViewModel.getResetPassword(email, code,password ).observe(this, new Observer<BaseModel<List<Object>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Object>> response) {
+                if (response != null && !response.isError()) {
+                    navigateLoginActivity();
+                } else if (response != null && response.isError()) {
+                    hideDialog();
+                    networkResponseDialog(getString(R.string.error), response.getMessage());
+                } else if (response == null) {
+                    hideDialog();
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+            }
+        });
+    }
     public void callSignupApi() {
         userViewModel.signUp(user, partImage).observe(this, new Observer<BaseModel<List<User>>>() {
             @Override

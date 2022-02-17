@@ -13,6 +13,9 @@ import com.hypernym.evaconnect.repositories.IUserRespository;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,6 +36,7 @@ public class UserRepository implements IUserRespository {
     private MutableLiveData<BaseModel<List<String>>> SectorMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Stats>>> statMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<GetBlockedData>>> getBlockedUsers = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Object>>> resetPasswordMutableLiveData = new MutableLiveData<>();
 
     @Override
     public LiveData<BaseModel<List<User>>> signup(User user, MultipartBody.Part partImage) {
@@ -91,7 +95,6 @@ public class UserRepository implements IUserRespository {
         });
         return EmailVerificationCode;
     }
-
 
     @Override
     public LiveData<BaseModel<List<User>>> login(User user) {
@@ -219,6 +222,32 @@ public class UserRepository implements IUserRespository {
             }
         });
         return userMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<Object>>> resetPassword(String email, String code, String password ) {
+        resetPasswordMutableLiveData = new MutableLiveData<>();
+
+        HashMap<String, Object> body = new HashMap<String, Object>();
+        body.put("email", email);
+        body.put("verification_code", code);
+        body.put("new_password", password);
+
+
+        RestClient.get().appApi().getResetPassword(body).enqueue(new Callback<BaseModel<List<Object>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+                if (response.body() != null) {
+                    resetPasswordMutableLiveData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+                resetPasswordMutableLiveData.setValue(null);
+            }
+        });
+        return resetPasswordMutableLiveData;
     }
 
     @Override
