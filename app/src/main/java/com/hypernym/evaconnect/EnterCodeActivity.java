@@ -56,7 +56,7 @@ public class EnterCodeActivity extends BaseActivity implements View.OnClickListe
     @BindView(R.id.ed_code)
     EditText ed_code;
 
-    String email, user_type;
+    String email, user_type, activityName;
     private UserViewModel userViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,9 +68,13 @@ public class EnterCodeActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void init() {
-        if (getIntent()!=null) {
+        if (getIntent()!=null && getIntent().getStringExtra(Constants.ACTIVITY_NAME).isEmpty()) {
             email = getIntent().getStringExtra("Email");
             user_type = getIntent().getStringExtra("user_type");
+        }else if(getIntent()!=null && !getIntent().getStringExtra(Constants.ACTIVITY_NAME).isEmpty()){
+            activityName = getIntent().getStringExtra(Constants.ACTIVITY_NAME);
+            btn_next.setEnabled(true);
+            btn_next.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.skyblue)));
         }
         ed_code.addTextChangedListener(new TextWatcher() {
             @Override
@@ -93,9 +97,19 @@ public class EnterCodeActivity extends BaseActivity implements View.OnClickListe
         btn_next.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
-                callEmailVerificationCodeApi();
+                if (activityName!=null && activityName.equalsIgnoreCase(Constants.FORGOT_PASSWORD) ) {
+                    navigateNewPasswordActivity();
+                } else {
+                    callEmailVerificationCodeApi();
+                }
             }
         });
+    }
+
+    private void navigateNewPasswordActivity() {
+        Intent intent = new Intent(this, PasswordActivity.class);
+        intent.putExtra(Constants.ACTIVITY_NAME,Constants.FORGOT_PASSWORD);
+        startActivity(intent);
     }
 
     private void goToNextScreen() {

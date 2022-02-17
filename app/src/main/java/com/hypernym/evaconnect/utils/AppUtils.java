@@ -191,6 +191,48 @@ public final class AppUtils {
         }
         return connectionStatus;
     }
+
+    public static String getConnectionStatusWithUserType(Context context,String status,boolean isreceiver, String userType)
+    {
+        String connectionStatus=context.getString(R.string.connect);
+        if(status!=null)
+        {
+            switch (status)
+            {
+                case AppConstants.NOT_CONNECTED:
+
+                    if (userType!=null && userType.equalsIgnoreCase("company")) {
+                        connectionStatus=context.getString(R.string.invite_to_follow);
+                    } else {
+                        connectionStatus=context.getString(R.string.connect);
+                    }
+                    break;
+                case AppConstants.ACTIVE:
+                    /*if (userType!=null && userType.equalsIgnoreCase("company")) {
+                        connectionStatus=AppConstants.INVITED;
+                    } else {*/
+                        connectionStatus=AppConstants.CONNECTED;
+                   // }
+                    break;
+                case AppConstants.DELETED:
+                    connectionStatus=AppConstants.DELETED;
+                    break;
+                case AppConstants.PENDING:
+                    if(isreceiver)
+                    {
+                        connectionStatus=AppConstants.REQUEST_ACCEPT;
+                    }
+                    else
+                    {
+                        if (userType!=null && userType.equalsIgnoreCase("company")) {
+                        connectionStatus=AppConstants.INVITED; }
+                        else { connectionStatus=AppConstants.REQUEST_SENT; }
+                    }
+                    break;
+            }
+        }
+        return connectionStatus;
+    }
     public static void setLikeCount(Context context,TextView likeCount,String type,ImageView img_like)
     {
         if(type.equalsIgnoreCase(AppConstants.UNLIKE))

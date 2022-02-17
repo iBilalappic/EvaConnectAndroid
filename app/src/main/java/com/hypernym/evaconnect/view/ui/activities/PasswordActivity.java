@@ -1,6 +1,7 @@
 package com.hypernym.evaconnect.view.ui.activities;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -77,6 +78,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
 
     @BindView(R.id.tv_already_account)
     TextView tv_already_account;
+    private String activityName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -230,6 +232,9 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
 
 
         }
+        else if(getIntent()!=null && type.equalsIgnoreCase(Constants.FORGOT_PASSWORD)){
+            activityName = getIntent().getStringExtra(Constants.ACTIVITY_NAME);
+        }
         else {
             email = getIntent().getStringExtra("Email");
             user_type = getIntent().getStringExtra("userType");
@@ -282,15 +287,27 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
 
     @Override
     public void onValidationSucceeded() {
-        user.setStatus(AppConstants.USER_STATUS);
-        user.setPassword(edt_password.getText().toString());
+
         if (NetworkUtils.isNetworkConnected(this)) {
-            showDialog();
-            callSignupApi();
+            if (activityName!=null && activityName.equalsIgnoreCase(Constants.FORGOT_PASSWORD)) {
+                navigateLoginActivity();
+            } else {
+                user.setStatus(AppConstants.USER_STATUS);
+                user.setPassword(edt_password.getText().toString());
+                showDialog();
+                callSignupApi();
+            }
         } else {
             networkErrorDialog();
         }
 
+    }
+
+    private void navigateLoginActivity() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.putExtra(Constants.ACTIVITY_NAME,Constants.FORGOT_PASSWORD);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     public void callSignupApi() {

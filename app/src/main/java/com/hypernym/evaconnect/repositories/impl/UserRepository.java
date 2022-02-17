@@ -205,7 +205,7 @@ public class UserRepository implements IUserRespository {
         userMutableLiveData = new MutableLiveData<>();
         User user = new User();
         user.setUsername(email);
-        RestClient.get().appApi().forgotPassword(user).enqueue(new Callback<BaseModel<List<User>>>() {
+        RestClient.get().appApi().forgotPassword(email).enqueue(new Callback<BaseModel<List<User>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
                 if (response.body() != null) {

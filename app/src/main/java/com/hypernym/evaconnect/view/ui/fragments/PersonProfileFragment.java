@@ -1,5 +1,7 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
+import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
+
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -14,10 +16,14 @@ import android.widget.Toast;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
+import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.Post;
@@ -28,16 +34,19 @@ import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
+import com.hypernym.evaconnect.view.adapters.PostAdapter;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
+import com.hypernym.evaconnect.viewmodel.PostViewModel;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PersonProfileFragment extends BaseFragment implements View.OnClickListener {
+public class PersonProfileFragment extends BaseFragment implements View.OnClickListener, PostAdapter.ItemClickListener {
 
     @BindView(R.id.profile_image)
     ImageView profile_image;
@@ -107,6 +116,11 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
     @BindView(R.id.tv_connections)
     TextView tv_connections;
 
+
+    @BindView(R.id.rc_post)
+    RecyclerView rc_post;
+
+
     SimpleDialog simpleDialog;
     Post post = new Post();
     User user = new User();
@@ -114,6 +128,17 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
     private ConnectionViewModel connectionViewModel;
     private UserViewModel userViewModel;
     String argumentReceived = "";
+
+    //for view post
+    private PostViewModel postViewModel;
+    private PostAdapter postAdapter;
+    private List<Post> posts = new ArrayList<>();
+    int itemCount = 0;
+    int item_position;
+    private LinearLayoutManager linearLayoutManager;
+    private int currentPage = PAGE_START;
+    private boolean isLastPage = false;
+    private boolean isLoading = false;
 
     public PersonProfileFragment() {
         // Required empty public constructor
@@ -209,8 +234,8 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                     layout_message.setVisibility(View.GONE);
                     view3.setVisibility(View.GONE);
 
-                    layout_disconnect.setVisibility(View.GONE);
-                    view4.setVisibility(View.GONE);
+                    /* *//* layout_disconnect.setVisibility(View.GONE);*//*
+                    view4.setVisibility(View.GONE);*/
                     layout_block.setVisibility(View.GONE);
 
                     layout_settings.setVisibility(View.VISIBLE);
@@ -227,8 +252,8 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                     layout_message.setVisibility(View.VISIBLE);
                     view3.setVisibility(View.VISIBLE);
 
-                    layout_disconnect.setVisibility(View.VISIBLE);
-                    view4.setVisibility(View.VISIBLE);
+                   /* layout_disconnect.setVisibility(View.VISIBLE);
+                    view4.setVisibility(View.VISIBLE);*/
 
                     layout_block.setVisibility(View.VISIBLE);
 
@@ -249,13 +274,13 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                     } else {
                         tv_connect.setVisibility(View.VISIBLE);
                         layout_account_private.setVisibility(View.GONE);
-                        tv_connect.setText(AppUtils.getConnectionStatus(getContext(), post.getIs_connected(), post.isIs_receiver()));
+                        tv_connect.setText(AppUtils.getConnectionStatusWithUserType(getContext(), post.getIs_connected(), post.isIs_receiver(), user.getType()));
                         if (AppUtils.getConnectionStatus(getContext(), post.getIs_connected(), post.isIs_receiver()).equalsIgnoreCase(AppConstants.CONNECTED)) {
-                            layout_disconnect.setVisibility(View.VISIBLE);
+                            /*  layout_disconnect.setVisibility(View.VISIBLE);*/
                             layout_block.setVisibility(View.VISIBLE);
                             layout_account_private.setVisibility(View.GONE);
                         } else {
-                            layout_disconnect.setVisibility(View.GONE);
+                            /* layout_disconnect.setVisibility(View.GONE);*/
                             layout_account_private.setVisibility(View.VISIBLE);
                             layout_block.setVisibility(View.GONE);
                         }
@@ -277,12 +302,6 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                     AppUtils.setGlideImage(getContext(), profile_image, targetUser.getUser_image());
 
                 }
-//            else if (targetUser.getIs_facebook() == 1 && !TextUtils.isEmpty(targetUser.getFacebook_image_url())){
-//                AppUtils.setGlideImage(getContext(), profile_image, targetUser.getFacebook_image_url());
-//            }
-//            else {
-//                AppUtils.setGlideImage(getContext(), profile_image, targetUser.getUser_image());
-//            }
 
                 tv_name.setText(targetUser.getFirst_name());
 
@@ -298,19 +317,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                     tv_profession.setText(targetUser.getCompany_name());
                 }
 
-//            tv_location.setText(targetUser.getCountry() + "," + targetUser.getCity());
-//            tv_company.setText(targetUser.getSector() + " | " + targetUser.getCompany_name());
                 tv_connections_count.setText(String.valueOf(targetUser.getTotal_connection()));
-
-//            if(targetUser.getIs_notifications()>0)
-//            {
-//                bell.setImageResource(R.drawable.ic_notification_bell);
-//            }
-//            else
-//            {
-//                bell.setImageResource(R.drawable.ic_bell);
-//            }
-
 
                 getUserDetails();
 
@@ -322,8 +329,8 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                     layout_message.setVisibility(View.GONE);
                     view3.setVisibility(View.GONE);
 
-                    layout_disconnect.setVisibility(View.GONE);
-                    view4.setVisibility(View.GONE);
+                  /*  layout_disconnect.setVisibility(View.GONE);
+                    view4.setVisibility(View.GONE);*/
                     layout_block.setVisibility(View.GONE);
 
                     layout_settings.setVisibility(View.VISIBLE);
@@ -340,10 +347,6 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                     layout_message.setVisibility(View.VISIBLE);
                     view3.setVisibility(View.VISIBLE);
 
-                    layout_disconnect.setVisibility(View.VISIBLE);
-                    view4.setVisibility(View.VISIBLE);
-
-                    //  layout_block.setVisibility(View.VISIBLE);
 
                     layout_settings.setVisibility(View.GONE);
                     view2.setVisibility(View.GONE);
@@ -362,13 +365,13 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                     } else {
                         tv_connect.setVisibility(View.VISIBLE);
                         layout_account_private.setVisibility(View.GONE);
-                        tv_connect.setText(AppUtils.getConnectionStatus(getContext(), targetUser.getIs_connected(), targetUser.isIs_receiver()));
+                        tv_connect.setText(AppUtils.getConnectionStatusWithUserType(getContext(), targetUser.getIs_connected(), targetUser.isIs_receiver(), user.getType()));
                         if (AppUtils.getConnectionStatus(getContext(), targetUser.getIs_connected(), targetUser.isIs_receiver()).equalsIgnoreCase(AppConstants.CONNECTED)) {
-                            layout_disconnect.setVisibility(View.VISIBLE);
+                            /* layout_disconnect.setVisibility(View.VISIBLE);*/
                             layout_block.setVisibility(View.GONE);
                             layout_account_private.setVisibility(View.GONE);
                         } else {
-                            layout_disconnect.setVisibility(View.GONE);
+                            /*  layout_disconnect.setVisibility(View.GONE);*/
                             layout_account_private.setVisibility(View.VISIBLE);
                             layout_block.setVisibility(View.VISIBLE);
                         }
@@ -395,13 +398,6 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                 AppUtils.setGlideImage(getContext(), profile_image, user.getUser_image());
 
             }
-//            else if (user.getIs_facebook() == 1 && !TextUtils.isEmpty(user.getFacebook_image_url())){
-//                AppUtils.setGlideImage(getContext(), profile_image, user.getFacebook_image_url());
-//            }
-//            else {
-//                AppUtils.setGlideImage(getContext(), profile_image, user.getUser_image());
-//            }
-
             tv_name.setText(user.getFirst_name());
 
             //  tv_location.setText(user.getCountry() + "," + user.getCity());
@@ -409,14 +405,6 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
             tv_connections_count.setText(String.valueOf(user.getConnection_count()));
 
 
-//            if(user.getIs_notifications()>0)
-//            {
-//                bell.setImageResource(R.drawable.ic_notification_bell);
-//            }
-//            else
-//            {
-//                bell.setImageResource(R.drawable.ic_bell);
-//            }
             if (user.getDesignation() != null && !user.getDesignation().isEmpty()) {
                 tv_profession.setText(user.getDesignation());
             } else {
@@ -427,8 +415,6 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
             view3.setVisibility(View.GONE);
 
 
-            layout_disconnect.setVisibility(View.GONE);
-            view4.setVisibility(View.GONE);
             layout_block.setVisibility(View.GONE);
 
             tv_connect.setOnClickListener(new OnOneOffClickListener() {
@@ -442,6 +428,46 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                 }
             });
         }
+
+
+        postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(PostViewModel.class);
+        currentPage = PAGE_START;
+
+        postAdapter = new PostAdapter(getContext(), posts, this);
+        linearLayoutManager = new LinearLayoutManager(getContext());
+
+        rc_post.setLayoutManager(linearLayoutManager);
+        rc_post.setAdapter(postAdapter);
+        RecyclerView.ItemAnimator animator = rc_post.getItemAnimator();
+        if (animator instanceof SimpleItemAnimator) {
+            ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
+        }
+        callPostsApi();
+        /**
+         * add scroll listener while user reach in bottom load more will call
+         */
+        rc_post.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
+            @Override
+            protected void loadMoreItems() {
+                isLoading = true;
+                currentPage = AppConstants.TOTAL_PAGES + currentPage;
+                if (NetworkUtils.isNetworkConnected(getContext())) {
+                    callPostsApi();
+                } else {
+                    networkErrorDialog();
+                }
+            }
+
+            @Override
+            public boolean isLastPage() {
+                return isLastPage;
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
+            }
+        });
     }
 
     public void getUserDetails() {
@@ -464,6 +490,48 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
                 hideDialog();
+            }
+        });
+    }
+
+    private void callPostsApi() {
+        User user = LoginUtils.getLoggedinUser();
+
+        postViewModel.getPost(user, AppConstants.TOTAL_PAGES, currentPage).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<Post>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Post>> dashboardBaseModel) {
+
+                //   homePostsAdapter.clear();
+                if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
+                    for (Post post : dashboardBaseModel.getData()) {
+                        if (post.getContent() == null) {
+                            post.setContent("");
+                        }
+                        if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() > 0) {
+                            post.setPost_type(AppConstants.IMAGE_TYPE);
+                        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_video() != null) {
+                            post.setPost_type(AppConstants.VIDEO_TYPE);
+                        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() == 0 && !post.isIs_url() && post.getPost_document() == null) {
+                            post.setPost_type(AppConstants.TEXT_TYPE);
+                        } else if (post.getType().equalsIgnoreCase("post") && post.isIs_url() && post.getPost_document() == null) {
+                            post.setPost_type(AppConstants.LINK_POST);
+                        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_document() != null) {
+                            post.setPost_type(AppConstants.DOCUMENT_TYPE);
+                        }
+                    }
+                    posts.addAll(dashboardBaseModel.getData());
+                    postAdapter.notifyDataSetChanged();
+                    //  swipeRefresh.setRefreshing(false);
+                    postAdapter.removeLoading();
+                    isLoading = false;
+                } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
+                    isLastPage = true;
+                    postAdapter.removeLoading();
+                    isLoading = false;
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+
             }
         });
     }
@@ -493,11 +561,16 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
             @Override
             public void onChanged(BaseModel<List<Connection>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError()) {
-                    if (tv_connect.getText().toString().equalsIgnoreCase(getString(R.string.connect))) {
-                        tv_connect.setText(AppConstants.REQUEST_SENT);
+                    if (tv_connect.getText().toString().equalsIgnoreCase(getString(R.string.connect)) ||
+                            tv_connect.getText().toString().equalsIgnoreCase(getString(R.string.invite_to_follow))) {
 
+                        tv_connect.setText(AppConstants.INVITED);
                     } else {
-                        tv_connect.setText(AppConstants.CONNECTED);
+                        if (user.getType() != null && user.getType().equalsIgnoreCase("user")) {
+                            tv_connect.setText(AppConstants.CONNECTED);
+                        } else {
+                            tv_connect.setText(AppConstants.INVITED);
+                        }
                     }
                     connectionItem.setIs_connected(AppConstants.ACTIVE);
 
@@ -636,5 +709,59 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
     }
 
 
+    @Override
+    public void onItemClick(View view, int position) {
+
+    }
+
+    @Override
+    public void onDocumentClick(View view, int position) {
+
+    }
+
+    @Override
+    public void onLikeClick(View view, int position, TextView likeCount) {
+
+    }
+
+    @Override
+    public void onShareClick(View view, int position) {
+
+    }
+
+    @Override
+    public void onVideoClick(View view, int position) {
+
+    }
+
+    @Override
+    public void onURLClick(View view, int position) {
+
+    }
+
+    @Override
+    public void onProfileClick(View view, int position) {
+
+    }
+
+    @Override
+    public void onConnectClick(View view, int position) {
+
+    }
+
+    @Override
+    public void onMoreClick(View view, int position) {
+
+    }
+
+    @Override
+    public void onEditClick(View view, int position) {
+
+    }
+
+    @Override
+    public void onDeleteClick(View view, int position) {
+
+    }
 }
 

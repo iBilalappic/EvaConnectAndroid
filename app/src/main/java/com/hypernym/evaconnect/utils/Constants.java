@@ -28,4 +28,5 @@ public class Constants {
     public static final String FACEBOOK_TYPE = "facebook";
     public static final String TYPE = "type";
     public static final String SEARCH = "search";
+    public static final String FORGOT_PASSWORD = "forgot_password";
 }

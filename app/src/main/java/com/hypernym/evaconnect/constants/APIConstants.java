@@ -6,7 +6,7 @@ public interface APIConstants {
     public static String ONESINGAL_BASE_URL ="https://onesignal.com/";
     public static String SIGNUP="user/signup/";
     public static String LOGIN="user/login/";
-    public static String FORGOT_PASSWORD="user/forgotpassword/";
+    public static String FORGOT_PASSWORD="user/password/verification/";
     public static String GET_POSTS="post/";
     public static String GET_BLOCKED_USERS="user/connection/block/";
     public static String CHECK_EMAIL_EXIST="user/account/check/";

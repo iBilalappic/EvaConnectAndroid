@@ -508,7 +508,7 @@
 
 
             <TextView
-                android:id="@+id/textView16"
+                android:id="@+id/tv_change_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -615,6 +615,7 @@
 
 
             <TextView
+                android:id="@+id/tv_bio"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

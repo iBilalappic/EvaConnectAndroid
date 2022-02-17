@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/lighter_gray_1"
     android:orientation="vertical">
 
@@ -218,6 +218,7 @@
                 android:layout_marginEnd="24dp"
                 android:fontFamily="@font/nunitosansbold"
                 android:gravity="center"
+                android:justificationMode="inter_word"
                 android:textColor="@color/gray"
                 android:textSize="14sp"
                 android:textStyle="bold"
@@ -344,7 +345,7 @@
                 style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="16dp"
                 android:fontFamily="@font/nunitosansbold"
                 android:text="Followers"
                 android:textColor="@color/gray"
@@ -380,8 +381,8 @@
 
                     <ImageView
                         android:id="@+id/bell"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:src="@drawable/ic_bell" />
 
                     <TextView
@@ -417,8 +418,8 @@
                     android:gravity="start|center">
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:src="@drawable/ic_edit" />
 
                     <TextView
@@ -426,7 +427,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
                         android:fontFamily="@font/nunitosansbold"
-                        android:text="Edit Details"
+                        android:text="Edit Profile"
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -455,8 +456,8 @@
                     android:gravity="start|center">
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="25dp"
+                        android:layout_width="18dp"
+                        android:layout_height="22dp"
                         android:src="@drawable/ic_settings" />
 
                     <TextView
@@ -524,6 +525,7 @@
                 android:id="@+id/layout_disconnect"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -533,8 +535,8 @@
                     android:gravity="start|center">
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:src="@drawable/ic_edit" />
 
                     <TextView
@@ -586,6 +588,33 @@
 
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View posts"
+            android:textColor="@color/black"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:textSize="20sp"
+            android:fontFamily="@font/nunitosansbold"/>
+
+
+        <View
+            android:id="@+id/tab_line"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/ic_blue_red"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rc_post"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_height="500dp" />
 
 
     </LinearLayout>

@@ -74,7 +74,8 @@ public interface AppApi {
     Call<BaseModel<List<Object>>> block(@Body Connection connection);
 
     @POST(APIConstants.FORGOT_PASSWORD)
-    Call<BaseModel<List<User>>> forgotPassword(@Body User username);
+    @FormUrlEncoded
+    Call<BaseModel<List<User>>> forgotPassword(@Field("email") String email);
 
     @GET(APIConstants.GET_POSTS)
     Call<BaseModel<List<Post>>> getPosts();

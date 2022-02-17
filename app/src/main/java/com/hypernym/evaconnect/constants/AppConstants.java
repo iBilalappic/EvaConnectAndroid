@@ -1,6 +1,7 @@
 package com.hypernym.evaconnect.constants;
 
 public class AppConstants {
+    public static final String INVITED = "Invited";
     public static String OS="android";
     public static final String USER = "user";
     public static final String USER_TOKEN = "Token";

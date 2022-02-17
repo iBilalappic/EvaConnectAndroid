@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -111,6 +112,17 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
     @BindView(R.id.img_backarrow)
     ImageView img_backarrow;
 
+    @BindView(R.id.tv_change_profile)
+    TextView tv_change_profile;
+
+    @BindView(R.id.tv_bio)
+    TextView tv_bio;
+
+
+    @BindView(R.id.view15)
+    View view15;
+
+
     private UserViewModel userViewModel;
 
 
@@ -147,7 +159,17 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
         user = LoginUtils.getUser();
         SettingUserProfile(user);
 
-
+        if (user.getType().equalsIgnoreCase("company")) {
+            tv_change_profile.setText("Change Company Logo");
+            tv_bio.setText("Edit Company Bio");
+            ly_edit_job_title.setVisibility(View.GONE);
+            view15.setVisibility(View.GONE);
+        } else {
+            tv_change_profile.setText("Change Profile Picture");
+            tv_bio.setText("Edit Bio");
+            ly_edit_job_title.setVisibility(View.VISIBLE);
+            view15.setVisibility(View.VISIBLE);
+        }
         return view;
     }
 

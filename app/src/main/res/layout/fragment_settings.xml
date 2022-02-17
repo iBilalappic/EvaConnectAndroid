@@ -428,7 +428,7 @@
                 android:gravity="center_vertical"
                 android:textColor="@color/black"
                 android:fontFamily="@font/nunitosansbold"
-                android:text="Term &amp; Condition" />
+                android:text="Term of Services" />
 
 
             <View

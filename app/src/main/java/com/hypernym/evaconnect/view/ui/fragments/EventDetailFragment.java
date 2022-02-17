@@ -135,6 +135,8 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
     @BindView(R.id.img_backarrow)
     ImageView img_backarrow;
 
+    @BindView(R.id.tv_interested)
+    TextView tv_interested;
 
     private List<Comment> comments = new ArrayList<>();
     private List<EventAttendees> eventAttendees = new ArrayList<>();
@@ -280,6 +282,12 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
                     setEventData(listBaseModel.getData().get(0));
                     for (EventAttendees user : event.getAttendees()) {
                         invitedConnections.add(user.getUser());
+                    }
+
+                    if(invitedConnections.size()>0){
+                        tv_interested.setVisibility(View.VISIBLE);
+                    }else{
+                        tv_interested.setVisibility(View.GONE);
                     }
                     usersAdapter.notifyDataSetChanged();
                     getEventComments(event_id);

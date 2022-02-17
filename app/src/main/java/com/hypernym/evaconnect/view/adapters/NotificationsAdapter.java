@@ -54,8 +54,8 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         }
         if(notificationsList.get(position).getObject_type().equalsIgnoreCase("connection"))
         {
-            holder.tv_connect.setVisibility(View.VISIBLE);
-            holder.tv_visit.setVisibility(View.GONE);
+            holder.tv_connect.setVisibility(View.GONE);
+            holder.tv_visit.setVisibility(View.VISIBLE);
 
         }
         else
@@ -65,10 +65,10 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!notificationsList.get(position).getObject_type().equalsIgnoreCase("connection"))
-                {
+              /*  if(!notificationsList.get(position).getObject_type().equalsIgnoreCase("connection"))
+                {*/
                     onItemClickListener.onItemClick(v, position);
-                }
+              //  }
             }
         });
 

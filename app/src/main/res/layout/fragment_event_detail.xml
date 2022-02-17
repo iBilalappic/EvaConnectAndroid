@@ -569,7 +569,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_eventLocation" />
 
             <TextView
-                android:id="@+id/textView13"
+                android:id="@+id/tv_interested"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -585,12 +585,11 @@
                 android:id="@+id/invite_people"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:scrollbars="none"
-                app:layout_constraintEnd_toStartOf="@+id/add1"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView13" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_interested" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
