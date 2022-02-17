@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <RelativeLayout
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
         android:id="@+id/profile_layout"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,14 +50,13 @@
             />
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:padding="2dp"
+            android:id="@+id/profile_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/profile_image"
-            app:civ_border_color="@color/white"
-            app:civ_border_width="2dp"
+            android:padding="2dp"
             android:src="@drawable/no_thumbnail"
-            />
+            app:civ_border_color="@color/white"
+            app:civ_border_width="2dp" />
     </RelativeLayout>
 
     <TextView
@@ -205,7 +204,10 @@
                 android:id="@+id/cv"
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
-                android:layout_margin="16dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="16dp"
                 android:elevation="10dp"
                 app:cardCornerRadius="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -223,9 +225,9 @@
                     android:id="@+id/img_play"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
+                    android:layout_gravity="center"
                     android:elevation="4dp"
                     android:visibility="visible"
-                    android:layout_gravity="center"
                     app:srcCompat="@drawable/play" />
             </androidx.cardview.widget.CardView>
 
@@ -233,9 +235,9 @@
                 android:id="@+id/tv_content"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="13dp"
+                android:layout_marginEnd="20dp"
                 android:fontFamily="@font/nunitosansregular"
                 android:text="“Things you’d never hear in a ticket office” … Let’s play a game of mock the week, or the LinkedIn version of Mock the Week. I’ll Start: https://lnkd.in… see more"
                 android:textColor="@color/black"
@@ -244,6 +246,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cv" />
+
             <View
                 android:id="@+id/view2"
                 android:layout_width="0dp"
@@ -258,7 +261,7 @@
                 style="@style/TextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/nunitosansbold"
                 android:text="58"
@@ -343,7 +346,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="20dp"
                 android:fontFamily="@font/nunitosansregular"
                 android:text="12:04pm | 12 jan"
                 android:textColor="@color/black"
@@ -406,9 +409,9 @@
                     <View
                         android:layout_width="1dp"
                         android:layout_height="30dp"
-                        android:visibility="gone"
                         android:layout_marginEnd="@dimen/spacing_medium"
-                        android:background="@color/gray_light" />
+                        android:background="@color/gray_light"
+                        android:visibility="gone" />
 
 
                 </LinearLayout>
@@ -418,8 +421,8 @@
                     android:id="@+id/comment_click"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:layout_marginStart="16dp"
+                    android:layout_weight="1"
                     android:paddingLeft="10dp">
 
                     <ImageView
@@ -446,8 +449,8 @@
                         android:layout_width="1dp"
                         android:layout_height="30dp"
                         android:layout_marginEnd="@dimen/spacing_medium"
-                        android:visibility="gone"
-                        android:background="@color/gray_light" />
+                        android:background="@color/gray_light"
+                        android:visibility="gone" />
 
 
                 </LinearLayout>
@@ -457,8 +460,8 @@
                     android:id="@+id/share_click"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:layout_marginStart="16dp"
+                    android:layout_weight="1"
                     android:paddingLeft="10dp">
 
                     <ImageView
@@ -492,9 +495,9 @@
                 android:layout_width="0dp"
                 android:layout_height="10dp"
                 android:elevation="1dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/layout" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

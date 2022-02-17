@@ -218,7 +218,7 @@
             android:id="@+id/edt_content"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_large"
+            android:layout_marginTop="8dp"
             android:backgroundTint="#F6F6F6"
             android:drawablePadding="8dp"
             android:hint="Details"
@@ -230,7 +230,7 @@
             android:textSize="14sp"
             app:layout_constraintEnd_toStartOf="@+id/tv_remind_me"
             app:layout_constraintStart_toEndOf="@+id/icon_pen"
-            app:layout_constraintTop_toBottomOf="@id/edt_eventlocation" />
+            app:layout_constraintTop_toBottomOf="@id/tv_remind_me" />
 
         <TextView
             android:id="@+id/invited"
@@ -316,9 +316,8 @@
             android:text="Remind me"
             android:textColor="@color/skyblue"
             android:textSize="11sp"
-            app:layout_constraintBottom_toBottomOf="@+id/edt_content"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/edt_content" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_startTime" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
