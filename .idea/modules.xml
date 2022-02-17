@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/eva-android.evaConnect.iml" filepath="$PROJECT_DIR$/.idea/modules/eva-android.evaConnect.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/eva-android.evaConnect.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/eva-android.evaConnect.app.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/evaConnect.iml" filepath="$PROJECT_DIR$/.idea/modules/evaConnect.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/evaConnect.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/evaConnect.app.iml" />
     </modules>
