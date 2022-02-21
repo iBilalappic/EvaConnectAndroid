@@ -126,7 +126,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
     @BindView(R.id.button_save)
     Button button_save;
 
-    @BindView(R.id.save)
+    @BindView(R.id.img_fav_event)
     ImageButton save;
 
     @BindView(R.id.interested_header)
@@ -474,9 +474,23 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
         });
     }
 
-    @OnClick(R.id.save)
+    @OnClick(R.id.img_fav_event)
     public void save() {
-       save.setBackground(getResources().getDrawable(R.drawable.ic_star_selected));
+        showDialog();
+        callSaveEventApi();
+
+    }
+
+    private void callSaveEventApi() {
+        eventViewModel.saveEvent(event_id).observe(this, new Observer<BaseModel<Object>>() {
+            @Override
+            public void onChanged(BaseModel<Object> listBaseModel) {
+                if(listBaseModel!=null&&!listBaseModel.isError()){
+                    hideDialog();
+                    save.setBackground(getResources().getDrawable(R.drawable.ic_star_selected));
+                }
+            }
+        });
     }
 
     @OnClick(R.id.button_cancel)

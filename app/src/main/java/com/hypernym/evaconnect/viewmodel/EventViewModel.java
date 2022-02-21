@@ -108,6 +108,11 @@ public class EventViewModel extends AndroidViewModel {
         return iEventRepository.deleteEvent(event);
     }
 
+    public LiveData<BaseModel<Object>> saveEvent(int event_id)
+    {
+        return iEventRepository.saveEvent(event_id);
+    }
+
 
 
 }

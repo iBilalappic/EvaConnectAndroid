@@ -445,4 +445,12 @@ public interface AppApi {
 
     @GET(APIConstants.USER_STATS)
     Call<BaseModel<List<Stats>>> getUserStats(@Path("id") int id);
+
+    @POST(APIConstants.SAVE_JOB)
+    Call<BaseModel<Object>> save_job(@Body HashMap<String, Object> body);
+
+    @POST(APIConstants.SAVE_EVENT)
+    Call<BaseModel<Object>> save_event(@Body HashMap<String, Object> body);
+
+
 }

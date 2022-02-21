@@ -48,5 +48,7 @@ public interface IEventRepository {
 
     LiveData<BaseModel<List<Comment>>> deleteComment(Integer id);
 
+    LiveData<BaseModel<Object>> saveEvent(int event_id);
+
 
 }
