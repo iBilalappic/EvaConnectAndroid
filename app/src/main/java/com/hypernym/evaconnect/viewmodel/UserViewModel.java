@@ -104,4 +104,8 @@ public class UserViewModel extends AndroidViewModel {
     {
         return iUserRespository.getUserStats();
     }
+
+    public LiveData<BaseModel<List<Object>>> deleteuser(Integer id){
+        return iUserRespository.deleteUser(id);
+    }
 }

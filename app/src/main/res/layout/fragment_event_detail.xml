@@ -74,6 +74,7 @@
                     android:text="Interested?"
                     android:textColor="#5894dd"
                     android:gravity="center"
+                    android:layout_marginEnd="24dp"
                     android:layout_gravity="center"
                     android:background="@drawable/ic_holo_blue_button"
                     app:layout_constraintBottom_toBottomOf="@+id/img_event"
@@ -584,6 +585,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/invite_people"
                 android:layout_width="0dp"
+                android:layout_marginStart="16dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:scrollbars="none"

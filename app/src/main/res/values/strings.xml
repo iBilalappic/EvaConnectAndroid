@@ -17,6 +17,8 @@
     <string name="reset">Reset my password</string>
     <string name="email">Email</string>
     <string name="upload_an_image_of_you">Upload image</string>
+    <string name="dialog_title">Confirmation</string>
+    <string name="dialog_message">Are you sure you want to delete this account?</string>
     <string name="desc_forgot_password">Once you have submitted the detials of the desired account, please check your email to reset your password</string>
 
     <string name="createJoblist">Create Job Listing</string>
@@ -62,6 +64,7 @@
     <string name="button_ok">Yes</string>
     <string name="confirmation">Confirmation</string>
     <string name="button_yes">YES</string>
+    <string name="success_msg_user_deleted">Your account has been deleted successfully</string>
     <string name="button_no">NO</string>
     <string name="attending">Attending?</string>
     <string name="apply">Apply</string>

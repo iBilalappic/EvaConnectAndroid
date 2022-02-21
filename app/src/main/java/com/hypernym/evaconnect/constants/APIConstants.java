@@ -13,6 +13,7 @@ public interface APIConstants {
     public static String DASHBOARD="dashboard/android/?";
     public static String DASHBOARD_SEARCH="dashboard/search/?";
     public static String POST="dashboard/post/?";
+    public static String DELETE_USER="user/details/{id}/";
    // public static String POST="post/filter/";
     public static String EVENT="dashboard/event/?";
     public static String USER_EDIT="user/details/";
