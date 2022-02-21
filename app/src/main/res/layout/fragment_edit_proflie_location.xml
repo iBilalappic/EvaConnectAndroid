@@ -51,7 +51,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:src="@drawable/ic_close"
-                android:tint="@color/black" />
+                app:tint="@color/black" />
 
         </LinearLayout>
 
@@ -64,19 +64,99 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layout_header" />
 
+
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/tv_dob"
             style="@style/TextStyle.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:text="Where are you located"
+            android:layout_marginTop="32dp"
+            android:text="What is your date of birth?"
             android:textColor="@color/colorAccent"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view1" />
+            app:layout_constraintTop_toBottomOf="@+id/layout_header" />
+
+
+        <LinearLayout
+            android:id="@+id/layout_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_dob">
+
+            <EditText
+                android:id="@+id/edit_date"
+                style="@style/Button.border_unselected_white"
+                android:layout_width="wrap_content"
+                android:layout_height="37dp"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:drawableRight="@drawable/ic_down_arrow"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:text="DD"
+                android:textColor="@color/text_color"
+                android:textColorHint="@color/gray_1"
+                android:textSize="13sp" />
+
+            <View
+                android:layout_width="3dp"
+                android:layout_height="match_parent" />
+
+            <EditText
+                android:id="@+id/edit_month"
+                style="@style/Button.border_unselected_white"
+                android:layout_width="wrap_content"
+                android:layout_height="37dp"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:drawableRight="@drawable/ic_down_arrow"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:text="MM"
+                android:textColor="@color/text_color"
+                android:textColorHint="@color/gray_1"
+                android:textSize="13sp" />
+
+            <View
+                android:layout_width="3dp"
+                android:layout_height="match_parent" />
+
+            <EditText
+                android:id="@+id/edit_year"
+                style="@style/Button.border_unselected_white"
+                android:layout_width="wrap_content"
+                android:layout_height="37dp"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:drawableRight="@drawable/ic_down_arrow"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:text="YYYY"
+                android:textColor="@color/text_color"
+                android:textColorHint="@color/gray_1"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView2"
+            style="@style/TextStyle.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Where are you located"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp"
+            android:layout_marginTop="32dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_date" />
 
 
         <EditText
@@ -88,6 +168,7 @@
             android:layout_marginTop="32dp"
             android:gravity="start|center"
             android:hint="Country"
+            android:focusable="false"
             android:textColorHint="@color/gray_1"
             android:textColor="@color/text_color"
             android:textSize="13sp"
@@ -110,21 +191,30 @@
             app:layout_constraintTop_toBottomOf="@+id/ed_country" />
 
 
-        <EditText
-            android:id="@+id/tv_city"
-            style="@style/Button.border_unselected_white"
-            android:layout_width="250dp"
-            android:layout_height="37dp"
-            android:layout_marginStart="8dp"
+        <LinearLayout
+            android:id="@+id/layout_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:gravity="start|center"
-            android:hint="City"
-            android:textColorHint="@color/gray_1"
-            android:textColor="@color/text_color"
-            android:textSize="13sp"
+            android:background="@drawable/rounded_button_border"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+            app:layout_constraintTop_toBottomOf="@+id/textView3">
+            <Spinner
+                android:id="@+id/tv_city"
+                style="?android:attr/spinnerDropDownItemStyle"
+                android:layout_width="250dp"
+                android:layout_height="37dp"
+                android:layout_marginStart="8dp"
+                android:gravity="start|center"
+                android:hint="City"
+                android:textColor="@color/text_color"
+                android:textColorHint="@color/gray_1"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_language"
@@ -138,24 +228,31 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_city" />
+            app:layout_constraintTop_toBottomOf="@+id/layout_city" />
 
 
-        <EditText
-            android:id="@+id/edit_language"
-            style="@style/Button.border_unselected_white"
-            android:layout_width="250dp"
-            android:layout_height="37dp"
-            android:layout_marginStart="8dp"
+        <LinearLayout
+            android:id="@+id/layout_language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:gravity="start|center"
-            android:hint="Language"
-            android:textColorHint="@color/gray_1"
-            android:textColor="@color/text_color"
-            android:textSize="13sp"
+            android:background="@drawable/rounded_button_border"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_language" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_language">
+
+            <Spinner
+                android:id="@+id/edit_language"
+                style="?android:attr/spinnerDropDownItemStyle"
+                android:layout_width="250dp"
+                android:layout_height="37dp"
+                android:layout_marginStart="8dp"
+                android:gravity="start|center"
+                android:hint="Language"
+                android:textColor="@color/text_color"
+                android:textColorHint="@color/gray_1"
+                android:textSize="13sp" />
+        </LinearLayout>
 
 
         <TextView
@@ -170,7 +267,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_language"
+            app:layout_constraintTop_toBottomOf="@+id/layout_language"
             app:layout_constraintVertical_bias="1.0" />
 
 

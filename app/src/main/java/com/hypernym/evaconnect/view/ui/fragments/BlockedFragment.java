@@ -105,6 +105,7 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
 
         currentPage = PAGE_START;
         swipeRefresh.setOnRefreshListener(this);
+        edt_search.setHint("Search for a Blocked User");
         initMainOptionsRecView();
         initRecyclerView();
         setPageTitle(getString(R.string.connections));

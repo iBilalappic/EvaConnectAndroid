@@ -371,6 +371,10 @@ public interface AppApi {
     @POST(APIConstants.POST)
     Call<BaseModel<List<Post>>> getPost(@Body User user, @Query("limit") int limit, @Query("offset") int offset);
 
+    @PATCH(APIConstants.USER_EDIT+"{user_id}/")
+    Call<BaseModel<List<Object>>> Edit_Profile(@Path(value = "user_id") int user_id,
+                                               @Body Object user);
+
     @POST(APIConstants.EVENT)
     Call<BaseModel<List<Post>>> getEvent(@Body User user, @Query("limit") int limit, @Query("offset") int offset);
 

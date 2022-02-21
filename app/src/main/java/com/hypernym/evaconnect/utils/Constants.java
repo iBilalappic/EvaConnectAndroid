@@ -29,4 +29,5 @@ public class Constants {
     public static final String TYPE = "type";
     public static final String SEARCH = "search";
     public static final String FORGOT_PASSWORD = "forgot_password";
+    public static final String USER = "user";
 }

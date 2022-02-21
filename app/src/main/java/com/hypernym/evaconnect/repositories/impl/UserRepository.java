@@ -32,6 +32,7 @@ public class UserRepository implements IUserRespository {
     private MutableLiveData<BaseModel<List<User>>> LinkedinLoginMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<User>>> facebookLoginMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> ProfileUpdateMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Object>>> EditProfileMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> EmailVerificationCode = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<String>>> SectorMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Stats>>> statMutableLiveData = new MutableLiveData<>();
@@ -235,6 +236,32 @@ public class UserRepository implements IUserRespository {
 
 
         RestClient.get().appApi().getResetPassword(body).enqueue(new Callback<BaseModel<List<Object>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+                if (response.body() != null) {
+                    resetPasswordMutableLiveData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+                resetPasswordMutableLiveData.setValue(null);
+            }
+        });
+        return resetPasswordMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<Object>>> editProfile (Object user, int id) {
+        resetPasswordMutableLiveData = new MutableLiveData<>();
+
+       /* HashMap<String, Object> body = new HashMap<String, Object>();
+        body.put("email", email);
+        body.put("verification_code", code);
+        body.put("new_password", password);*/
+
+
+        RestClient.get().appApi().Edit_Profile(id, user).enqueue(new Callback<BaseModel<List<Object>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
                 if (response.body() != null) {

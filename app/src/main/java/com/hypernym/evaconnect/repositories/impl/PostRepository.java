@@ -120,6 +120,7 @@ public class PostRepository implements IPostRepository {
     public LiveData<BaseModel<List<Post>>> getPost(User user, int total, int current) {
         dashboardMutableLiveData = new MutableLiveData<>();
         user.setUser_id(user.getId());
+        user.setFilter("all_posts");
         RestClient.get().appApi().getPost(user, total, current).enqueue(new Callback<BaseModel<List<Post>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {

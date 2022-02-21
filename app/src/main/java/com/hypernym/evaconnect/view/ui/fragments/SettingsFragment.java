@@ -67,6 +67,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
 
 
     User user = new User();
+    User userData = new User();
     private UserViewModel userViewModel;
 
     private Validator validator;
@@ -116,23 +117,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
             @Override
             public void onChanged(BaseModel<List<User>> listBaseModel) {
                 if (listBaseModel.getData() != null && !listBaseModel.isError()) {
-                    if (!TextUtils.isEmpty(listBaseModel.getData().get(0).getUser_image())) {
-
-                        //   AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getUser_image());
-//                        tv_password.setEnabled(false);
-                    }
-//                    else if (listBaseModel.getData().get(0).getIs_facebook() == 1 && !TextUtils.isEmpty(listBaseModel.getData().get(0).getFacebook_image_url())) {
-//                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getFacebook_image_url());
-//                        tv_password.setEnabled(false);
-//                    } else {
-//                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getUser_image());
-//                    }
-
-                    //     edt_email.setText(listBaseModel.getData().get(0).getEmail());
-                    //  tv_location.setText(listBaseModel.getData().get(0).getCountry() + "," + listBaseModel.getData().get(0).getCity());
-                    //  tv_name.setText(listBaseModel.getData().get(0).getFirst_name());
-                    notification_check = listBaseModel.getData().get(0).getIs_notifications();
-
+                    userData = listBaseModel.getData().get(0);
                     LoginUtils.saveUser(listBaseModel.getData().get(0));
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
@@ -239,7 +224,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
             case R.id.ly_cookie:
                 Bundle bundle2 = new Bundle();
                 bundle2.putString(Constants.FRAGMENT_NAME, Constants.COOKIES_POLICY);
-               loadFragment_bundle(R.id.framelayout, termConditionHelpPolicyFragment, getContext(), true, bundle2);
+                loadFragment_bundle(R.id.framelayout, termConditionHelpPolicyFragment, getContext(), true, bundle2);
                 break;
 
             case R.id.ly_term_condition:

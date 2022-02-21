@@ -131,12 +131,13 @@ public class EditProfileChangePasswordFragment extends BaseFragment implements V
     }
 
     private void UpdatePassword(String oldpassword, String Newpassword) {
+        showDialog();
         userViewModel.update_password(oldpassword, Newpassword).observe(this, new Observer<BaseModel<List<User>>>() {
             @Override
             public void onChanged(BaseModel<List<User>> listBaseModel) {
                 if (listBaseModel.getData() != null && !listBaseModel.isError()) {
-
                     Toast.makeText(getContext(), "" + listBaseModel.getMessage(), Toast.LENGTH_SHORT).show();
+                    getActivity().onBackPressed();
                 } else if (listBaseModel.isError()) {
                     networkResponseDialog(getString(R.string.messages), listBaseModel.getMessage());
                 } else {
