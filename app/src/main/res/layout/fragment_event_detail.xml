@@ -139,7 +139,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:background="@drawable/modify_event"
+                android:background="@drawable/ic_modify_btn"
                 app:layout_constraintBottom_toBottomOf="@+id/img_event"
                 app:layout_constraintEnd_toEndOf="parent" />
 

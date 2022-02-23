@@ -1,8 +1,8 @@
 package com.hypernym.evaconnect.constants;
 
 public interface APIConstants {
-   //public static String BASE_SERVER_URL="http:/67.205.178.219:8000/eva/"; //Staging
-//   public static String BASE_SERVER_URL="http://168.63.140.202:8003/eva/";
+  //public static String BASE_SERVER_URL="http:/67.205.178.219:8000/eva/"; //Staging
+  //public static String BASE_SERVER_URL="http://168.63.140.202:8003/eva/";
     public static String ONESINGAL_BASE_URL ="https://onesignal.com/";
     public static String SIGNUP="user/signup/";
     public static String LOGIN="user/login/";
@@ -94,4 +94,5 @@ public interface APIConstants {
     public static String GET_ALL_PENDING = "user/pending/connection/";
     public static String EMAIL_VERIFICATION_CODE = "user/verification/";
     public static String RESET_PASSWORD = "user/forgotpassword/";
+    public String GET_ALL_MYACTIVITY = "user/activity/";
 }

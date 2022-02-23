@@ -236,6 +236,16 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
                 }
             }
         });
+        register.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                if (event.getIs_private() == 0) {
+                    addAttendance(event);
+                } else {
+                    updateAttendance(event);
+                }
+            }
+        });
     }
 
     private void setAttendeesAdapter() {

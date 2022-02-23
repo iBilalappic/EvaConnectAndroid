@@ -244,6 +244,12 @@ public interface AppApi {
     @POST(APIConstants.GET_ALL_NOTIFICATIONS)
     Call<BaseModel<List<Post>>> getAllNotifications(@Body Object user,@Query("limit") int limit, @Query("offset") int offset);
 
+   /* @POST(APIConstants.GET_ALL_MYACTIVITY)
+    Call<BaseModel<List<Post>>> getAllMyActivity(@Body Object user*//*,@Query("limit") int limit, @Query("offset") int offset*//*);*/
+
+    @POST(APIConstants.GET_ALL_MYACTIVITY)
+    Call<BaseModel<List<Post>>> getAllMyActivity(@Body Object user /*,@Query("limit") int limit, @Query("offset") int offset*/);
+
     @POST(APIConstants.GET_ALL_NOTIFICATIONS)
     Call<BaseModel<List<Post>>> getAllUnreadNotifications(@Body Object user);
 

@@ -91,6 +91,7 @@
 
     <string name="msg_jobAd">Your Job Ad has been created successfully.</string>
     <string name="msg_jobAd_update">Your Job Ad has been Updated successfully.</string>
+    <string name="msg_jobAd_create">Your Job Ad has been Created successfully.</string>
     <string name="msg_remove_user">Your connection has been removed successfully.</string>
     <string name="msg_block_user">This user has been block successfully.</string>
     <string name="msg_event_created">Your Event has been created successfully.</string>

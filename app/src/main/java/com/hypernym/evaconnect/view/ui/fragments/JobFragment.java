@@ -373,6 +373,7 @@ public class JobFragment extends BaseFragment implements View.OnClickListener, S
         SpecficJobFragment specficJobFragment = new SpecficJobFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("job_id", posts.get(position).getId());
+        bundle.putString("user_image", posts.get(position).getUser().getUser_image());
         specficJobFragment.setArguments(bundle);
         loadFragment(R.id.framelayout, specficJobFragment, getContext(), true);
     }

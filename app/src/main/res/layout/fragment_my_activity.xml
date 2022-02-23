@@ -26,12 +26,12 @@
                 style="@style/TextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/nunitosansbold"
                 android:gravity="center"
                 android:padding="10dp"
                 android:text="My Activity"
-                android:fontFamily="@font/nunitosansbold"
                 android:textColor="@color/blue_1"
-                android:textSize="14sp" />
+                android:textSize="18sp" />
         </RelativeLayout>
 
 

@@ -13,8 +13,10 @@ import com.hypernym.evaconnect.models.Meeting;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IEventRepository;
+import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 
+import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -218,6 +220,14 @@ public class EventRepository implements IEventRepository {
     @Override
     public LiveData<BaseModel<List<Event>>> addEventAttendance(Event event) {
         eventMutableLiveData=new MutableLiveData<>();
+
+        HashMap<String, Object> data = new HashMap<String, Object>();
+        data.put("event_id", event.getEvent_id());
+        data.put("user_id", event.getUser_id());
+        data.put("status", event.getStatus());
+        data.put("attending_date", DateUtils.GetCurrentdate());
+        data.put("attendance_status", event.getAttendance_status());
+
         RestClient.get().appApi().addEventAttendance(event).enqueue(new Callback<BaseModel<List<Event>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Event>>> call, Response<BaseModel<List<Event>>> response) {
@@ -238,6 +248,8 @@ public class EventRepository implements IEventRepository {
     @Override
     public LiveData<BaseModel<List<Event>>> updateEventAttendance(Event event) {
         eventMutableLiveData=new MutableLiveData<>();
+
+
         RestClient.get().appApi().updateEventAttendance(event).enqueue(new Callback<BaseModel<List<Event>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Event>>> call, Response<BaseModel<List<Event>>> response) {

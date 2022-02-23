@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,6 +108,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
     SpecficJobAd specficJobAd=new SpecficJobAd();
     private SpecficJobAd checkLikeCount = new SpecficJobAd();
     User user;
+    private String user_image = "";
 
     public SpecficJobFragment() {
         // Required empty public constructor
@@ -139,6 +141,8 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
         //    setPageTitle("");
          //   showBackButton();
           //  jobAd = (JobAd) getArguments().getSerializable("JOB_AD");
+            user_image  = getArguments().getString("user_image");
+            Log.v("user_image",user_image+"");
             job_id = getArguments().getInt("job_id");
             if (job_id != 0) {
                 GetJob_id(job_id);
@@ -162,7 +166,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
                     settingData(getjobAd.getData().get(0));
                     specficJobAd=getjobAd.getData().get(0);
                     checkLikeCount = getjobAd.getData().get(0);
-                    AppUtils.setGlideImage(getContext(), profile_image, getjobAd.getData().get(0).getJobImage());
+                    AppUtils.setGlideImage(getContext(), profile_image, user_image);
                     tv_name.setText(getjobAd.getData().get(0).getJobTitle());
                     tv_positionName.setText(getjobAd.getData().get(0).getPosition());
                     DecimalFormat myFormatter = new DecimalFormat("############");
