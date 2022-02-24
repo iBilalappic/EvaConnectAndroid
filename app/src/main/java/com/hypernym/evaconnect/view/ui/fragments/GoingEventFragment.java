@@ -1,11 +1,24 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
+import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -15,34 +28,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.Connection;
+import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
-import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.Constants;
-import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
-import com.hypernym.evaconnect.view.adapters.PostAdapter;
-import com.hypernym.evaconnect.view.bottomsheets.BottomsheetAttachmentSelection;
+import com.hypernym.evaconnect.view.adapters.EventHomeAdapter;
 import com.hypernym.evaconnect.view.bottomsheets.BottomsheetShareSelection;
-import com.hypernym.evaconnect.view.dialogs.ShareDialog;
-import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
+import com.hypernym.evaconnect.viewmodel.EventViewModel;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
 
 import java.util.ArrayList;
@@ -51,33 +51,34 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
 
-public class PostFragment extends BaseFragment implements View.OnClickListener,SwipeRefreshLayout.OnRefreshListener, PostAdapter.ItemClickListener {
+public class GoingEventFragment extends BaseFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, EventHomeAdapter.ItemClickListener {
 
-    @BindView(R.id.rc_post)
-    RecyclerView rc_post;
+    @BindView(R.id.rc_event)
+    RecyclerView rc_event;
 
     @BindView(R.id.newpost)
     TextView newpost;
 
-//    @BindView(R.id.fab)
-//    FloatingActionButton fab;
+    @BindView(R.id.tv_create_event)
+    TextView tv_create_event;
+
+    @BindView(R.id.tv_empty)
+    TextView tv_empty;
 
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
+    private EventViewModel eventViewModel;
     private PostViewModel postViewModel;
-    private PostAdapter postAdapter;
+    private EventHomeAdapter postAdapter;
     private List<Post> posts = new ArrayList<>();
     int itemCount = 0;
-    int item_position;
     private LinearLayoutManager linearLayoutManager;
     private int currentPage = PAGE_START;
     private boolean isLastPage = false;
     private boolean isLoading = false;
-    private ConnectionViewModel connectionViewModel;
-
-    public PostFragment() {
+    int item_position;
+    public GoingEventFragment() {
     }
 
     @Override
@@ -88,15 +89,24 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_post, container, false);
+        View view = inflater.inflate(R.layout.fragment_going_event, container, false);
 
         ButterKnife.bind(this, view);
+        tv_create_event.setOnClickListener(this);
         return view;
     }
 
 
     @Override
     public void onClick(View v) {
+        if(v.getId()==R.id.tv_create_event){
+            CreateEventFragment createEventFragment = new CreateEventFragment();
+           /* Bundle bundle = new Bundle();
+            bundle.putInt("post", posts.get(position).getId());
+            Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());*/
+            //createEventFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, createEventFragment, getContext(), true);
+        }
 
     }
 
@@ -106,7 +116,6 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
         super.onResume();
         init();
         onRefresh();
-
         newpost.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
@@ -116,16 +125,22 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
     }
 
     private void init() {
+        User user= LoginUtils.getLoggedinUser();
+        eventViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(EventViewModel.class);
         postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(PostViewModel.class);
         //   currentPage = PAGE_START;
-       connectionViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
-
-       postAdapter = new PostAdapter(getContext(), posts, this);
+        postAdapter = new EventHomeAdapter(getContext(), posts, this);
         linearLayoutManager = new LinearLayoutManager(getContext());
 
-        rc_post.setLayoutManager(linearLayoutManager);
-        rc_post.setAdapter(postAdapter);
-        RecyclerView.ItemAnimator animator = rc_post.getItemAnimator();
+        if (user.getType().equalsIgnoreCase("company")) {
+            tv_create_event.setVisibility(View.VISIBLE);
+        }else{
+            tv_create_event.setVisibility(View.GONE);
+        }
+
+        rc_event.setLayoutManager(linearLayoutManager);
+        rc_event.setAdapter(postAdapter);
+        RecyclerView.ItemAnimator animator = rc_event.getItemAnimator();
         if (animator instanceof SimpleItemAnimator) {
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
         }
@@ -133,13 +148,13 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
         /**
          * add scroll listener while user reach in bottom load more will call
          */
-        rc_post.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
+      /*  rc_event.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
             @Override
             protected void loadMoreItems() {
                 isLoading = true;
                 currentPage = AppConstants.TOTAL_PAGES + currentPage;
                 if (NetworkUtils.isNetworkConnected(getContext())) {
-                    callPostsApi();
+                  //  callPostsApi();
                 } else {
                     networkErrorDialog();
                 }
@@ -154,8 +169,7 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
             public boolean isLoading() {
                 return isLoading;
             }
-        });
-
+        });*/
 
     }
 
@@ -175,22 +189,18 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
 
     @Override
     public void onItemClick(View view, int position) {
-        PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("post", posts.get(position).getId());
-        Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
-        postDetailsFragment.setArguments(bundle);
-        loadFragment(R.id.framelayout, postDetailsFragment, getContext(), true);
-    }
+        if (view.getId()==R.id.tv_attending) {
+            TextView textView = (TextView) view.findViewById(R.id.tv_attending);
+            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
 
-    @Override
-    public void onDocumentClick(View view, int position) {
-        WebviewCvFragment webviewCvFragment = new WebviewCvFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("applicant_cv", posts.get(position).getPost_document());
-        Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
-        webviewCvFragment.setArguments(bundle);
-        loadFragment(R.id.framelayout, webviewCvFragment, getContext(), true);
+        } else {
+            PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("post", posts.get(position).getId());
+            Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
+            postDetailsFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, postDetailsFragment, getContext(), true);
+        }
     }
 
     @Override
@@ -234,6 +244,12 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
         }
 
     }
+
+    @Override
+    public void onJobLikeClick(View view, int position, TextView likeCount) {
+
+    }
+
     private void likePost(Post post, int position) {
         postViewModel.likePost(post).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
@@ -249,136 +265,139 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
     }
 
     public void onShareClick(View view, int position) {
-//        ShareDialog shareDialog;
-//        Bundle bundle = new Bundle();
-//        bundle.putSerializable("PostData",posts.get(position));
-//        shareDialog = new ShareDialog(getContext(),bundle);
-//        shareDialog.show();
-
-        item_position=position;
-        BottomsheetShareSelection bottomSheetPictureSelection = new BottomsheetShareSelection(new YourDialogFragmentDismissHandler());
+        item_position = position;
+        BottomsheetShareSelection bottomSheetPictureSelection = new BottomsheetShareSelection(new GoingEventFragment.YourDialogFragmentDismissHandler());
         bottomSheetPictureSelection.show(getActivity().getSupportFragmentManager(), bottomSheetPictureSelection.getTag());
     }
 
     @Override
+    public void onConnectClick(View view, int position) {
+
+    }
+
+    @Override
     public void onVideoClick(View view, int position) {
-        AppUtils.playVideo(getContext(), posts.get(position).getPost_video());
+
     }
 
     @Override
     public void onURLClick(View view, int position) {
-        LoadUrlFragment loadUrlFragment = new LoadUrlFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("url", posts.get(position).getContent());
-        loadUrlFragment.setArguments(bundle);
-        loadFragment(R.id.framelayout, loadUrlFragment, getContext(), true);
+
     }
 
     @Override
     public void onProfileClick(View view, int position) {
-        PersonProfileFragment personDetailFragment = new PersonProfileFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("PostData", posts.get(position));
-        personDetailFragment.setArguments(bundle);
-        loadFragment(R.id.framelayout, personDetailFragment, getContext(), true);
+
     }
 
     @Override
-    public void onConnectClick(View view, int position) {
-        TextView text = (TextView) view;
+    public void onApplyClick(View view, int position) {
+
+    }
+
+    @Override
+    public void onEventItemClick(View view, int position) {
+
+        if (view.getId()==R.id.tv_attending) {
+            TextView textView = (TextView) view.findViewById(R.id.tv_attending);
+            Drawable[] compoundDrawables = textView.getCompoundDrawables();
+
+            Drawable leftCompoundDrawable = compoundDrawables[0];
+            if (leftCompoundDrawable==null) {
+                textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
+            } else {
+                textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            }
+
+        }else if(view.getId()==R.id.tv_interested){
+            EventInterestedFragment eventDetailFragment = new EventInterestedFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("event_id", posts.get(position).getId());
+            eventDetailFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, eventDetailFragment, getContext(), true);
+        } else {
+            EventDetailFragment eventDetailFragment = new EventDetailFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("id", posts.get(position).getId());
+            eventDetailFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, eventDetailFragment, getContext(), true);
+        }
+
+    }
+
+    @Override
+    public void onEventLikeClick(View view, int position, TextView likeCount) {
+        Post post = posts.get(position);
+        User user = LoginUtils.getLoggedinUser();
+        post.setEvent_id(post.getId());
+        post.setCreated_by_id(user.getId());
+        if (post.getIs_event_like() == null || post.getIs_event_like() < 1) {
+            post.setAction(AppConstants.LIKE);
+            if (post.getIs_event_like() == null) {
+                post.setIs_event_like(1);
+                if (post.getLike_count() == null)
+                    post.setLike_count(0);
+                else
+                    post.setLike_count(post.getLike_count() + 1);
+            } else {
+                post.setIs_event_like(post.getIs_event_like() + 1);
+                if (post.getLike_count() == null)
+                    post.setLike_count(0);
+                else
+                    post.setLike_count(post.getLike_count() + 1);
+            }
+        } else {
+            post.setAction(AppConstants.UNLIKE);
+            if (post.getIs_event_like() > 0) {
+                post.setIs_event_like(post.getIs_event_like() - 1);
+                post.setLike_count(post.getLike_count() - 1);
+            } else {
+                post.setIs_event_like(0);
+                post.setLike_count(0);
+            }
+
+        }
+        // Log.d("Listing status",post.getAction()+" count"+post.getIs_post_like());
         if (NetworkUtils.isNetworkConnected(getContext())) {
-
-            if(text.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_ACCEPT)){
-                Connection connection = new Connection();
-                User user = LoginUtils.getLoggedinUser();
-                connection.setStatus(AppConstants.ACTIVE);
-                connection.setId(posts.get(position).getConnection_id());
-                connection.setModified_by_id(user.getId());
-                connection.setModified_datetime(DateUtils.GetCurrentdatetime());
-                callDeclineConnectApi(connection);
-            }
-            else
-            {
-                callConnectApi(text, position);
-            }
-
-
-
+            likeEvent(post, position);
         } else {
             networkErrorDialog();
         }
     }
 
     @Override
-    public void onMoreClick(View view, int position) {
-
-    }
-
-    @Override
     public void onEditClick(View view, int position) {
-//            postViewModel.editPost(posts.get(position)).observe(this, new Observer<BaseModel<List<Post>>>() {
-//                @Override
-//                public void onChanged(BaseModel<List<Post>> listBaseModel) {
-//                    if (NetworkUtils.isNetworkConnected(getContext())) {
-//                        posts.clear();
-//                        callPostsApi();
-//                    } else {
-//                        networkErrorDialog();
-//                    }
-//                }
-//            });
-        if (posts.get(position).getType().equalsIgnoreCase("post") && posts.get(position).getPost_image().size() > 0) {
-            NewPostFragment newPostFragment = new NewPostFragment();
-            Bundle bundle = new Bundle();
-            bundle.putInt("post", posts.get(position).getId());
-            bundle.putBoolean("isEdit",true);
-            Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
-            newPostFragment.setArguments(bundle);
-            loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
-        } else if (posts.get(position).getType().equalsIgnoreCase("post") && posts.get(position).getPost_video() != null) {
-            NewPostFragment newPostFragment=new NewPostFragment();
-            Bundle bundle=new Bundle();
-            bundle.putInt("post", posts.get(position).getId());
-            bundle.putBoolean("isVideo",true);
-            bundle.putBoolean("isEdit",true);
-            newPostFragment.setArguments(bundle);
-            loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
-        } else if (posts.get(position).getType().equalsIgnoreCase("post") && posts.get(position).getPost_image().size() == 0 && !posts.get(position).isIs_url() && posts.get(position).getPost_document()==null) {
-            NewPostFragment newPostFragment = new NewPostFragment();
-            Bundle bundle = new Bundle();
-            bundle.putInt("post", posts.get(position).getId());
-            bundle.putBoolean("isEdit",true);
-            Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
-            newPostFragment.setArguments(bundle);
-            loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
-        } else if (posts.get(position).getType().equalsIgnoreCase("post") && posts.get(position).isIs_url()) {
-            NewPostFragment newPostFragment = new NewPostFragment();
-            Bundle bundle = new Bundle();
-            bundle.putInt("post", posts.get(position).getId());
-            bundle.putBoolean("isEdit",true);
-            Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
-            newPostFragment.setArguments(bundle);
-            loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
-        }
-        else if (posts.get(position).getType().equalsIgnoreCase("post") && posts.get(position).getPost_document()!=null) {
-            NewPostFragment newPostFragment = new NewPostFragment();
-            Bundle bundle = new Bundle();
-            bundle.putInt("post", posts.get(position).getId());
-            bundle.putBoolean("isEdit",true);
-            bundle.putBoolean("document_type",true);
-            Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
-            newPostFragment.setArguments(bundle);
-            loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
-        }
+        getEventDetails(posts.get(position).getId());
 
     }
+    private void getEventDetails(int event_id) {
+        // invitedConnections.clear();
+        eventViewModel.getEventDetails(event_id).observe(this, new Observer<BaseModel<List<Event>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Event>> listBaseModel) {
+                if(listBaseModel!=null && !listBaseModel.isError() && listBaseModel.getData().size()>0)
+                {
+                    CreateEventFragment createEventFragment=new CreateEventFragment();
+                    Bundle bundle=new Bundle();
+                    bundle.putSerializable("event",listBaseModel.getData().get(0));
+                    createEventFragment.setArguments(bundle);
+                    loadFragment(R.id.framelayout,createEventFragment,getContext(),true);
+                }
+                else
+                {
+                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                }
 
+            }
+
+
+        });
+    }
     @Override
     public void onDeleteClick(View view, int position) {
-
-        postViewModel.deletePost(posts.get(position)).observe(this, new Observer<BaseModel<List<Post>>>() {
+        eventViewModel.deleteEvent(posts.get(position)).observe(this, new Observer<BaseModel<List<Event>>>() {
             @Override
-            public void onChanged(BaseModel<List<Post>> listBaseModel) {
+            public void onChanged(BaseModel<List<Event>> listBaseModel) {
                 if (NetworkUtils.isNetworkConnected(getContext())) {
                     posts.clear();
                     callPostsApi();
@@ -389,15 +408,17 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
         });
     }
 
-
-    private void callDeclineConnectApi(Connection connection) {
-
-        connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
+    private void likeEvent(Post post, int position) {
+        Event event = new Event();
+        event.setEvent_id(post.getEvent_id());
+        event.setCreated_by_id(LoginUtils.getLoggedinUser().getId());
+        event.setAction(post.getAction());
+        event.setStatus(AppConstants.ACTIVE);
+        eventViewModel.likeEvent(event).observe(this, new Observer<BaseModel<List<Event>>>() {
             @Override
-            public void onChanged(BaseModel<List<Connection>> listBaseModel) {
+            public void onChanged(BaseModel<List<Event>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError()) {
-
-                    onRefresh();
+                    postAdapter.notifyItemChanged(position);
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
@@ -405,42 +426,42 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
             }
         });
     }
+
     private void callPostsApi() {
         User user = LoginUtils.getLoggedinUser();
 
-        postViewModel.getPost(user, AppConstants.TOTAL_PAGES, currentPage).observe(this, new Observer<BaseModel<List<Post>>>() {
+
+        user.setFilter("going");
+
+
+        eventViewModel.getEvent(user/*, AppConstants.TOTAL_PAGES, currentPage*/).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> dashboardBaseModel) {
 
-                //   homePostsAdapter.clear();
+               // postAdapter.clear();
+                tv_empty.setVisibility(View.GONE);
+                rc_event.setVisibility(View.VISIBLE);
                 if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
                     for (Post post : dashboardBaseModel.getData()) {
                         if (post.getContent() == null) {
                             post.setContent("");
                         }
-                        if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() > 0) {
-                            post.setPost_type(AppConstants.IMAGE_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_video() != null) {
-                            post.setPost_type(AppConstants.VIDEO_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() == 0 && !post.isIs_url()  && post.getPost_document() == null) {
-                            post.setPost_type(AppConstants.TEXT_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("post") && post.isIs_url() && post.getPost_document() == null) {
-                            post.setPost_type(AppConstants.LINK_POST);
-                        }
-                        else if(post.getType().equalsIgnoreCase("post") && post.getPost_document() != null)
-                        {
-                            post.setPost_type(AppConstants.DOCUMENT_TYPE);
+                        else if (post.getType().equalsIgnoreCase("event")) {
+                            post.setPost_type(AppConstants.EVENT_TYPE);
                         }
                     }
                     posts.addAll(dashboardBaseModel.getData());
                     postAdapter.notifyDataSetChanged();
                     swipeRefresh.setRefreshing(false);
-                    postAdapter.removeLoading();
+                  //  postAdapter.removeLoading();
                     isLoading = false;
                 } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
                     isLastPage = true;
                     postAdapter.removeLoading();
                     isLoading = false;
+                    tv_empty.setVisibility(View.VISIBLE);
+                    tv_empty.setText(dashboardBaseModel.getMessage());
+                    rc_event.setVisibility(View.GONE);
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
@@ -449,30 +470,6 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
         });
     }
 
-
-
-    private void callConnectApi(TextView text, int position) {
-        if (text.getText().toString().equalsIgnoreCase(getString(R.string.connect))) {
-            showDialog();
-            User user = LoginUtils.getLoggedinUser();
-            Connection connection = new Connection();
-            connection.setReceiver_id(posts.get(position).getUser().getId());
-            connection.setSender_id(user.getId());
-            connection.setStatus(AppConstants.STATUS_PENDING);
-            connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
-                @Override
-                public void onChanged(BaseModel<List<Connection>> listBaseModel) {
-                    if (listBaseModel != null && !listBaseModel.isError()) {
-                        text.setText("Pending");
-                        onRefresh();
-                    } else {
-                        networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                    }
-                    hideDialog();
-                }
-            });
-        }
-    }
 
     protected class YourDialogFragmentDismissHandler extends Handler {
         @Override
@@ -482,7 +479,7 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
                 Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
                 whatsappIntent.setType("text/plain");
                 whatsappIntent.setPackage("com.whatsapp");
-                    whatsappIntent.putExtra(Intent.EXTRA_TEXT, "https://www.evaintmedia.com/" + posts.get(item_position).getType() + "/" + posts.get(item_position).getId());
+                whatsappIntent.putExtra(Intent.EXTRA_TEXT, "https://www.evaintmedia.com/" + posts.get(item_position).getType() + "/" + posts.get(item_position).getId());
                 try {
                     getContext().startActivity(whatsappIntent);
                 } catch (android.content.ActivityNotFoundException ex) {

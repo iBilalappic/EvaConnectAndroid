@@ -309,10 +309,14 @@ public class EventRepository implements IEventRepository {
     }
 
     @Override
-    public LiveData<BaseModel<List<Post>>> getEvent(User user, int total, int current) {
+    public LiveData<BaseModel<List<Post>>> getEvent(User user/*, int total, int current*/) {
         dashboardMutableLiveData = new MutableLiveData<>();
-        user.setUser_id(user.getId());
-        RestClient.get().appApi().getEvent(user, total, current).enqueue(new Callback<BaseModel<List<Post>>>() {
+        HashMap<String, Object> data = new HashMap<String, Object>();
+        data.put("user_id", user.getId());
+        data.put("filter", user.getFilter());
+       /* data.put("search_key", user.getSearch_key());
+        user.setUser_id(user.getId());*/
+        RestClient.get().appApi().getEvent(data/*, total, current*/).enqueue(new Callback<BaseModel<List<Post>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
                 dashboardMutableLiveData.setValue(response.body());

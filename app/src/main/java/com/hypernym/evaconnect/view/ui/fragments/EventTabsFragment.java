@@ -48,13 +48,13 @@ public class EventTabsFragment extends Fragment {
 
         EventTabsFragment.Adapter adapter = new EventTabsFragment.Adapter(getChildFragmentManager());
         if (user != null && user.getType().equals("company")) {
-            adapter.addFragment(new EventFragment(), "All");
-            adapter.addFragment(new EventFragment(), "Previous");
+            adapter.addFragment(new AllEventFragment(), "All");
+            adapter.addFragment(new PassedEventFragment(), "Previous");
         }else {
-            adapter.addFragment(new EventFragment(), "All");
-            adapter.addFragment(new EventFragment(), "Going");
-            adapter.addFragment(new EventFragment(), "Saved");
-            adapter.addFragment(new EventFragment(), "Passed");
+            adapter.addFragment(new AllEventFragment(), "All");
+            adapter.addFragment(new GoingEventFragment(), "Going");
+            adapter.addFragment(new SavedEventFragment(), "Saved");
+            adapter.addFragment(new PassedEventFragment(), "Passed");
         }
         viewPager.setAdapter(adapter);
 

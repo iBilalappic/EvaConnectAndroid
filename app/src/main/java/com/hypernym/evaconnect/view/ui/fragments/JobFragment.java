@@ -162,58 +162,7 @@ public class JobFragment extends BaseFragment implements View.OnClickListener, S
                 return isLoading;
             }
         });
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                final OvershootInterpolator interpolator = new OvershootInterpolator();
-//                ViewCompat.animate(fab).
-//                        rotation(135f).
-//                        withLayer().
-//                        setDuration(300).
-//                        setInterpolator(interpolator).
-//                        start();
-//                /** Instantiating PopupMenu class */
-//                PopupMenu popup = new PopupMenu(getContext(), v);
-//
-//                /** Adding menu items to the popumenu */
-//                popup.getMenuInflater().inflate(R.menu.dashboard_menu, popup.getMenu());
-//
-//                popup.setOnDismissListener(new PopupMenu.OnDismissListener() {
-//                    @Override
-//                    public void onDismiss(PopupMenu menu) {
-//                        ViewCompat.animate(fab).
-//                                rotation(0f).
-//                                withLayer().
-//                                setDuration(300).
-//                                setInterpolator(interpolator).
-//                                start();
-//                    }
-//                });
-//                /** Defining menu item click listener for the popup menu */
-//                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//
-//                    @Override
-//                    public boolean onMenuItemClick(MenuItem item) {
-//
-//                        if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu1))) {
-//                            loadFragment(R.id.framelayout, new NewPostFragment(), getContext(), true);
-//                        }  else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu2))) {
-//                            loadFragment(R.id.framelayout, new ShareVideoFragment(), getContext(), true);
-//                        }
-//                        else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu3))) {
-//                            loadFragment(R.id.framelayout, new CreateEventFragment(), getContext(), true);
-//                        } else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu3))) {
-//                            loadFragment(R.id.framelayout, new ShareVideoFragment(), getContext(), true);
-//                        }
-//
-//                        return true;
-//                    }
-//                });
-//
-//                /** Showing the popup menu */
-//                popup.show();
-//            }
-//        });
+
 
     }
 

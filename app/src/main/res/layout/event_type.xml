@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="5dp"
+    android:layout_marginBottom="20dp"
     android:elevation="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -529,8 +530,8 @@
             android:id="@+id/view1"
             android:layout_width="0dp"
             android:layout_height="15dp"
-            android:background="@color/lighter_gray"
             android:elevation="1dp"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -548,7 +549,7 @@
             android:paddingRight="15dp"
             android:text="@string/view_comments"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/view1"
+            app:layout_constraintBottom_toBottomOf="@+id/view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"

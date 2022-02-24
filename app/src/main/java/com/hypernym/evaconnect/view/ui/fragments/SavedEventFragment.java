@@ -1,12 +1,24 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
+import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -15,15 +27,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
@@ -39,7 +42,6 @@ import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.EventHomeAdapter;
 import com.hypernym.evaconnect.view.bottomsheets.BottomsheetShareSelection;
-import com.hypernym.evaconnect.view.dialogs.ShareDialog;
 import com.hypernym.evaconnect.viewmodel.EventViewModel;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
 
@@ -49,9 +51,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
 
-public class EventFragment extends BaseFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, EventHomeAdapter.ItemClickListener {
+public class SavedEventFragment extends BaseFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, EventHomeAdapter.ItemClickListener {
 
     @BindView(R.id.rc_event)
     RecyclerView rc_event;
@@ -62,8 +63,9 @@ public class EventFragment extends BaseFragment implements View.OnClickListener,
     @BindView(R.id.tv_create_event)
     TextView tv_create_event;
 
-//    @BindView(R.id.fab)
-//    FloatingActionButton fab;
+    @BindView(R.id.tv_empty)
+    TextView tv_empty;
+
 
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
@@ -77,7 +79,7 @@ public class EventFragment extends BaseFragment implements View.OnClickListener,
     private boolean isLastPage = false;
     private boolean isLoading = false;
     int item_position;
-    public EventFragment() {
+    public SavedEventFragment() {
     }
 
     @Override
@@ -88,7 +90,7 @@ public class EventFragment extends BaseFragment implements View.OnClickListener,
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_event, container, false);
+        View view = inflater.inflate(R.layout.fragment_saved_event, container, false);
 
         ButterKnife.bind(this, view);
         tv_create_event.setOnClickListener(this);
@@ -124,7 +126,7 @@ public class EventFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private void init() {
-        User user=LoginUtils.getLoggedinUser();
+        User user= LoginUtils.getLoggedinUser();
         eventViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(EventViewModel.class);
         postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(PostViewModel.class);
         //   currentPage = PAGE_START;
@@ -147,13 +149,13 @@ public class EventFragment extends BaseFragment implements View.OnClickListener,
         /**
          * add scroll listener while user reach in bottom load more will call
          */
-        rc_event.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
+       /* rc_event.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
             @Override
             protected void loadMoreItems() {
                 isLoading = true;
                 currentPage = AppConstants.TOTAL_PAGES + currentPage;
                 if (NetworkUtils.isNetworkConnected(getContext())) {
-                    callPostsApi();
+                 //   callPostsApi();
                 } else {
                     networkErrorDialog();
                 }
@@ -168,60 +170,7 @@ public class EventFragment extends BaseFragment implements View.OnClickListener,
             public boolean isLoading() {
                 return isLoading;
             }
-        });
-
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                final OvershootInterpolator interpolator = new OvershootInterpolator();
-//                ViewCompat.animate(fab).
-//                        rotation(135f).
-//                        withLayer().
-//                        setDuration(300).
-//                        setInterpolator(interpolator).
-//                        start();
-//                /** Instantiating PopupMenu class */
-//                PopupMenu popup = new PopupMenu(getContext(), v);
-//
-//                /** Adding menu items to the popumenu */
-//                popup.getMenuInflater().inflate(R.menu.dashboard_menu, popup.getMenu());
-//
-//                popup.setOnDismissListener(new PopupMenu.OnDismissListener() {
-//                    @Override
-//                    public void onDismiss(PopupMenu menu) {
-//                        ViewCompat.animate(fab).
-//                                rotation(0f).
-//                                withLayer().
-//                                setDuration(300).
-//                                setInterpolator(interpolator).
-//                                start();
-//                    }
-//                });
-//                /** Defining menu item click listener for the popup menu */
-//                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//
-//                    @Override
-//                    public boolean onMenuItemClick(MenuItem item) {
-//                        if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu1))) {
-//                            loadFragment(R.id.framelayout, new NewPostFragment(), getContext(), true);
-//                        }  else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu2))) {
-//                            loadFragment(R.id.framelayout, new ShareVideoFragment(), getContext(), true);
-//                        }
-//                        else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu3))) {
-//                            loadFragment(R.id.framelayout, new CreateEventFragment(), getContext(), true);
-//                        } else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu3))) {
-//                            loadFragment(R.id.framelayout, new ShareVideoFragment(), getContext(), true);
-//                        }
-//
-//
-//                        return true;
-//                    }
-//                });
-//
-//                /** Showing the popup menu */
-//                popup.show();
-//            }
-//        });
+        });*/
 
     }
 
@@ -317,14 +266,8 @@ public class EventFragment extends BaseFragment implements View.OnClickListener,
     }
 
     public void onShareClick(View view, int position) {
-//        ShareDialog shareDialog;
-//        Bundle bundle = new Bundle();
-//        bundle.putSerializable("PostData",posts.get(position));
-//        shareDialog = new ShareDialog(getContext(),bundle);
-//        shareDialog.show();
-
         item_position = position;
-        BottomsheetShareSelection bottomSheetPictureSelection = new BottomsheetShareSelection(new YourDialogFragmentDismissHandler());
+        BottomsheetShareSelection bottomSheetPictureSelection = new BottomsheetShareSelection(new SavedEventFragment.YourDialogFragmentDismissHandler());
         bottomSheetPictureSelection.show(getActivity().getSupportFragmentManager(), bottomSheetPictureSelection.getTag());
     }
 
@@ -429,7 +372,7 @@ public class EventFragment extends BaseFragment implements View.OnClickListener,
 
     }
     private void getEventDetails(int event_id) {
-       // invitedConnections.clear();
+        // invitedConnections.clear();
         eventViewModel.getEventDetails(event_id).observe(this, new Observer<BaseModel<List<Event>>>() {
             @Override
             public void onChanged(BaseModel<List<Event>> listBaseModel) {
@@ -488,11 +431,17 @@ public class EventFragment extends BaseFragment implements View.OnClickListener,
     private void callPostsApi() {
         User user = LoginUtils.getLoggedinUser();
 
-        eventViewModel.getEvent(user, AppConstants.TOTAL_PAGES, currentPage).observe(this, new Observer<BaseModel<List<Post>>>() {
+
+            user.setFilter("saved");
+
+
+        eventViewModel.getEvent(user/*, AppConstants.TOTAL_PAGES, currentPage*/).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> dashboardBaseModel) {
 
-                //   homePostsAdapter.clear();
+                //postAdapter.clear();
+                tv_empty.setVisibility(View.GONE);
+                rc_event.setVisibility(View.VISIBLE);
                 if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
                     for (Post post : dashboardBaseModel.getData()) {
                         if (post.getContent() == null) {
@@ -505,12 +454,16 @@ public class EventFragment extends BaseFragment implements View.OnClickListener,
                     posts.addAll(dashboardBaseModel.getData());
                     postAdapter.notifyDataSetChanged();
                     swipeRefresh.setRefreshing(false);
-                    postAdapter.removeLoading();
+                  //  postAdapter.removeLoading();
                     isLoading = false;
+
                 } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
                     isLastPage = true;
                     postAdapter.removeLoading();
                     isLoading = false;
+                    tv_empty.setVisibility(View.VISIBLE);
+                    tv_empty.setText(dashboardBaseModel.getMessage());
+                    rc_event.setVisibility(View.GONE);
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }

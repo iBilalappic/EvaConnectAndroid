@@ -12,10 +12,12 @@ public interface APIConstants {
     public static String CHECK_EMAIL_EXIST="user/account/check/";
     public static String DASHBOARD="dashboard/android/?";
     public static String DASHBOARD_SEARCH="dashboard/search/?";
-    public static String POST="dashboard/post/?";
+   // public static String POST="dashboard/post/?";
+    public static String POST="post/filter/";
     public static String DELETE_USER="user/details/{id}/";
    // public static String POST="post/filter/";
-    public static String EVENT="dashboard/event/?";
+   // public static String EVENT="dashboard/event/?";
+    public static String EVENT="event/filter/";
     public static String USER_EDIT="user/details/";
     public static String NEWS="dashboard/news/?";
     public static String JOB="dashboard/job/?";

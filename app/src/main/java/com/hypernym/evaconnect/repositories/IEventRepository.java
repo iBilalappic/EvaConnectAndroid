@@ -42,7 +42,7 @@ public interface IEventRepository {
 
     LiveData<BaseModel<List<Event>>> deleteEvent(Post post);
 
-    LiveData<BaseModel<List<Post>>> getEvent(User user, int total, int current);
+    LiveData<BaseModel<List<Post>>> getEvent(User user/*, int total, int current*/);
 
     LiveData<BaseModel<List<Event>>> updateEvent(Event event,@Part MultipartBody.Part user_image);
 
