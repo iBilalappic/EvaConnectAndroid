@@ -83,4 +83,9 @@ public class ConnectionViewModel extends AndroidViewModel {
     {
         return iConnectionRepository.share_connection_post(shareConnection);
     }
+
+    public LiveData<BaseModel<List<Object>>> share_connection_news(ShareConnection shareConnection)
+    {
+        return iConnectionRepository.share_connection_news(shareConnection);
+    }
 }

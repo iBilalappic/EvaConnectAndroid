@@ -270,6 +270,24 @@ public class ConnectionRepository implements IConnectionRespository {
         });
         return share_connection;
     }
+
+    @Override
+    public LiveData<BaseModel<List<Object>>> share_connection_news(ShareConnection shareConnection) {
+
+        share_connection=new MutableLiveData<>();
+
+        RestClient.get().appApi().share_connection_news(shareConnection).enqueue(new Callback<BaseModel<List<Object>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+                share_connection.setValue(response.body());
+            }
+            @Override
+            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+                share_connection.setValue(null);
+            }
+        });
+        return share_connection;
+    }
     
 
     @Override

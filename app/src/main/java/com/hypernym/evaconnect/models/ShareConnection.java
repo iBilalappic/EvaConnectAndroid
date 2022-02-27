@@ -35,9 +35,30 @@ public class ShareConnection {
         this.event_id = event_id;
     }
 
+    public String getObject_type() {
+        return object_type;
+    }
+
+    public void setObject_type(String object_type) {
+        this.object_type = object_type;
+    }
+
+    public int getObject_id() {
+        return object_id;
+    }
+
+    public void setObject_id(int object_id) {
+        this.object_id = object_id;
+    }
+
     @SerializedName("job_id")
     private int job_id;
 
+    @SerializedName("object_id")
+    private int object_id;
+
+    @SerializedName("object_type")
+    private String object_type;
 
     @SerializedName("post_id")
     private int post_id;

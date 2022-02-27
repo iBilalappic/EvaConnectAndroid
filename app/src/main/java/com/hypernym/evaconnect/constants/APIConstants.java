@@ -12,8 +12,8 @@ public interface APIConstants {
     public static String CHECK_EMAIL_EXIST="user/account/check/";
     public static String DASHBOARD="dashboard/android/?";
     public static String DASHBOARD_SEARCH="dashboard/search/?";
-   // public static String POST="dashboard/post/?";
-    public static String POST="post/filter/";
+    public static String POST="dashboard/post/?";
+    public static String POST_FILTER="post/filter/";
     public static String DELETE_USER="user/details/{id}/";
    // public static String POST="post/filter/";
    // public static String EVENT="dashboard/event/?";
@@ -80,6 +80,7 @@ public interface APIConstants {
     public static String UPDATE_PASSWORD="user/changepassword/";
     public static String GET_MEETING_DETAILS="meeting/details/";
     public static String SHARE_JOB="job/share/";
+    public static String SHARE_NEWS="dashboard/share/";
     public static String SHARE_EVENT="event/share/";
     public static String SHARE_POST="post/share/";
     public static String GET_CONNECTION_BY_RECOMMENDED_USER="user/network/connection/recommendations/?";
