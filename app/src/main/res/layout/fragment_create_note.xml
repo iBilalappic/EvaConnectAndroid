@@ -39,6 +39,7 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="20dp"
                 android:layout_weight="1"
+                android:id="@+id/tv_header_name"
                 android:fontFamily="@font/nunitosansbold"
                 android:gravity="end"
                 android:text="Create a Note"

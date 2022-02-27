@@ -46,7 +46,11 @@ import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -140,7 +144,6 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
 
     private CompanyJobAdModel companyJobAdModel = new CompanyJobAdModel();
     ArrayAdapter<String> arraySectorAdapter, arrayJobDurationAdapter, arrayTypeAdapter;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -160,6 +163,16 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
 
         init();
       //  showBackButton();
+//        try{
+//           // Uri uri=AppUtils.getUriToResource(getContext(),R.drawable.ic_user_profile);
+//            Uri imageUrl = getURLForResource(R.drawable.ic_user_profile);
+//            file_name = new File(imageUrl.getPath());
+//            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file_name);
+//            partImage = MultipartBody.Part.createFormData("job_image", file_name.getName(), reqFile);
+//        }catch (Exception ex){
+//            ex.printStackTrace();
+//            Log.d("TAG", "onCreateView: "+ex);
+//        }
 
         return view;
     }
@@ -407,7 +420,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
                             Toast.makeText(getContext(), "Please select job sector", Toast.LENGTH_SHORT).show();
                         } else if (JobType == null) {
                             Toast.makeText(getContext(), "Please select job type", Toast.LENGTH_SHORT).show();
-                        } else if (partImage == null && mJobImage == null) {
+                        } else if (partImage == null) {
                             Toast.makeText(getContext(), "Please add image for job post", Toast.LENGTH_SHORT).show();
                         } else {
                             validator.validate();
@@ -418,7 +431,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
                             Toast.makeText(getContext(), "Please select job sector", Toast.LENGTH_SHORT).show();
                         } else if (JobType == null) {
                             Toast.makeText(getContext(), "Please select job type", Toast.LENGTH_SHORT).show();
-                        } else if (partImage == null && companyJobAdModel.getJobImage() == null) {
+                        } else if (partImage == null ) {
                             Toast.makeText(getContext(), "Please add image for job post", Toast.LENGTH_SHORT).show();
                         } else {
                             validator.validate();
@@ -502,8 +515,8 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
                 hideDialog();
-                if (!simpleDialog.isShowing())
-                    simpleDialog.show();
+//                if (!simpleDialog.isShowing())
+//                    simpleDialog.show();
             }
 
         });

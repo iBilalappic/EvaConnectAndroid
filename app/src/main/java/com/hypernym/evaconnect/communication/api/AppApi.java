@@ -18,6 +18,7 @@ import com.hypernym.evaconnect.models.Meeting;
 import com.hypernym.evaconnect.models.MyLikesModel;
 import com.hypernym.evaconnect.models.NetworkConnection;
 import com.hypernym.evaconnect.models.NewSources;
+import com.hypernym.evaconnect.models.NotesData;
 import com.hypernym.evaconnect.models.Notification_onesignal;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.ShareConnection;
@@ -451,6 +452,15 @@ public interface AppApi {
 
     @POST(APIConstants.SAVE_EVENT)
     Call<BaseModel<Object>> save_event(@Body HashMap<String, Object> body);
+
+    @POST(APIConstants.CREATE_NOTES)
+    Call<BaseModel<List<Object>>> create_notes(@Body HashMap<String, Object> body);
+
+    @GET(APIConstants.GET_NOTES)
+    Call<BaseModel<List<NotesData>>> get_notes(@Path("id") int id);
+
+    @PATCH(APIConstants.CREATE_NOTES)
+    Call<BaseModel<List<Object>>> update_notes(@Body HashMap<String, Object> body);
 
 
 }

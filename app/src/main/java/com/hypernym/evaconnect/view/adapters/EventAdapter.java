@@ -100,6 +100,21 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                     setDayTextWithSuperScript(holder, position);
                 }
             }
+            else if(events.get(position).getObject_type().equalsIgnoreCase("note"))
+            {
+                holder.itemView.setVisibility(View.VISIBLE);
+
+
+                    if(events.get(position).getNotes()!=null){ holder.eventTitle.setText(events.get(position).getObject_details().getTitle() + " | " + events.get(position).getObject_details().getDetails()); }
+
+                    holder.time.setText(DateUtils.get12formant(events.get(position).getObject_details().getOccurrence_time()));
+//                    if (events.get(position).getObject_details().getStart_date() != null)
+                    holder.month.setText(DateUtils.extractMonth(events.get(position).getOccurrence_date()));
+                    holder.type.setText(events.get(position).getObject_type());
+                    holder.type.setTextColor(context.getResources().getColor(R.color.light_blue));
+                    setDayTextWithSuperScript(holder, position);
+
+            }
             else{
                 holder.itemView.setVisibility(View.GONE);
             }
@@ -117,6 +132,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         if (events.get(position).getObject_type().equalsIgnoreCase("event"))
         {
             date = DateUtils.extractDay(events.get(position).getObject_details().getStart_date());
+        }
+        else  if (events.get(position).getObject_type().equalsIgnoreCase("note"))
+        {
+            date = DateUtils.extractDay(events.get(position).getOccurrence_date());
         }
         else{
             date = DateUtils.extractDay(events.get(position).getObject_details().getStart_date());

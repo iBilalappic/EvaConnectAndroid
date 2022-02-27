@@ -5,8 +5,10 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -31,6 +33,7 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.AnyRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -61,6 +64,7 @@ import com.shockwave.pdfium.PdfiumCore;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -526,4 +530,9 @@ public final class AppUtils {
         }
     }
 
+
+//    public static Uri getURLForResource (int resourceId) {
+//        //use BuildConfig.APPLICATION_ID instead of R.class.getPackage().getName() if both are not same
+//        return Uri.parse("android.resource://"+R.class.getPackage().getName()+"/" +resourceId);
+//    }
 }

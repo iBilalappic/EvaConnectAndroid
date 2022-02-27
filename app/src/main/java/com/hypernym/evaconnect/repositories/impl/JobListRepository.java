@@ -274,12 +274,13 @@ public class JobListRepository implements IJobAdRepository {
     }
 
     @Override
-    public LiveData<BaseModel<Object>> setFavJob(int job_id) {
+    public LiveData<BaseModel<Object>> setFavJob(int job_id, Boolean is_favourite_job) {
         FavMutableLiveData = new MutableLiveData<>();
         HashMap<String, Object> body = new HashMap<>();
         body.put("job_id", job_id);
         body.put("user_id", LoginUtils.getUser().getId());
-        body.put("status", "deleted");
+        body.put("is_favourite", true);
+        body.put("status", "active");
 
         RestClient.get().appApi().save_job(body).enqueue(new Callback<BaseModel<Object>>() {
             @Override

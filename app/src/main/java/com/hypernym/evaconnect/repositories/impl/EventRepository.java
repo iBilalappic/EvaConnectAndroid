@@ -366,12 +366,13 @@ public class EventRepository implements IEventRepository {
     }
 
     @Override
-    public LiveData<BaseModel<Object>> saveEvent(int event_id) {
+    public LiveData<BaseModel<Object>> saveEvent(int event_id, Boolean is_favourite_event) {
         saveEventMutableLiveData=new MutableLiveData<>();
         HashMap<String, Object> body = new HashMap<>();
         body.put("event_id", event_id);
         body.put("user_id", LoginUtils.getUser().getId());
         body.put("status", "active");
+        body.put("is_favourite", true);
         RestClient.get().appApi().save_event(body).enqueue(new Callback<BaseModel<Object>>() {
             @Override
             public void onResponse(Call<BaseModel<Object>> call, Response<BaseModel<Object>> response) {

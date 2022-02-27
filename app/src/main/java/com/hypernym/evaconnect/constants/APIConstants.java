@@ -93,4 +93,7 @@ public interface APIConstants {
     public static String RESET_PASSWORD = "user/forgotpassword/";
     public static String SAVE_JOB = "job/save/";
     public static String SAVE_EVENT = "event/save/";
+    public static String CREATE_NOTES = "user/notes/";
+    public static String GET_NOTES = "user/notes/details/{id}";
+    public static String UPDATE_NOTES = "user/notes/details/{id}";
 }

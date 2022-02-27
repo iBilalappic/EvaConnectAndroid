@@ -149,6 +149,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
     private Event event = new Event();
     private InvitedUsersAdapter usersAdapter;
     private List<User> invitedConnections = new ArrayList<>();
+    private Boolean is_favourite_event=false;
 
     public EventDetailFragment() {
         // Required empty public constructor
@@ -482,7 +483,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
     }
 
     private void callSaveEventApi() {
-        eventViewModel.saveEvent(event_id).observe(this, new Observer<BaseModel<Object>>() {
+        eventViewModel.saveEvent(event_id,is_favourite_event).observe(this, new Observer<BaseModel<Object>>() {
             @Override
             public void onChanged(BaseModel<Object> listBaseModel) {
                 if(listBaseModel!=null&&!listBaseModel.isError()){

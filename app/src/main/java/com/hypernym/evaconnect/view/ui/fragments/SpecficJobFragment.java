@@ -113,6 +113,8 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
     private SpecficJobAd checkLikeCount = new SpecficJobAd();
     User user;
 
+    public Boolean is_favourite_job=false;
+
     public SpecficJobFragment() {
         // Required empty public constructor
     }
@@ -260,7 +262,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
     }
 
     private void setFavJob() {
-        jobListViewModel.setFavJob(job_id).observe(this, new Observer<BaseModel<Object>>() {
+        jobListViewModel.setFavJob(job_id,is_favourite_job).observe(this, new Observer<BaseModel<Object>>() {
             @Override
             public void onChanged(BaseModel<Object> setlike) {
                 if(setlike.getData()!=null){
