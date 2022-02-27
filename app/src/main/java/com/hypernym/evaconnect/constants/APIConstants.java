@@ -20,7 +20,8 @@ public interface APIConstants {
     public static String EVENT="event/filter/";
     public static String USER_EDIT="user/details/";
     public static String NEWS="dashboard/news/?";
-    public static String JOB="dashboard/job/?";
+   // public static String JOB="dashboard/job/?";
+    public static String JOB="job/filter/";
     public static String FRIENDCONNECTION="user/network/connection/details/{id}/";
     public static String ADD_COMMENT="post/comment/";
     public static String EDIT_COMMENT="post/comment/details/{id}/";

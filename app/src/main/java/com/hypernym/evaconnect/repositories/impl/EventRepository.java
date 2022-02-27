@@ -134,11 +134,11 @@ public class EventRepository implements IEventRepository {
     }
 
     @Override
-    public LiveData<BaseModel<List<Event>>> getEventDetails(int event_id) {
+    public LiveData<BaseModel<List<Event>>> getEventDetails(int event_id, int user_id) {
         eventMutableLiveData = new MutableLiveData<>();
         Event event=new Event();
         event.setEvent_id(event_id);
-        event.setUser_id(LoginUtils.getLoggedinUser().getId());
+        event.setUser_id(user_id);
         RestClient.get().appApi().getEventDetails(event).enqueue(new Callback<BaseModel<List<Event>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Event>>> call, Response<BaseModel<List<Event>>> response) {

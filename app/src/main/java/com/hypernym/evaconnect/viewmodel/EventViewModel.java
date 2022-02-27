@@ -53,9 +53,9 @@ public class EventViewModel extends AndroidViewModel {
         return iEventRepository.getCalendarEvents(user_id,month,year);
     }
 
-    public LiveData<BaseModel<List<Event>>> getEventDetails(int event_id)
+    public LiveData<BaseModel<List<Event>>> getEventDetails(int event_id, int user_id)
     {
-        return iEventRepository.getEventDetails(event_id);
+        return iEventRepository.getEventDetails(event_id, user_id);
     }
 
     public LiveData<BaseModel<List<Comment>>> getEventComments(int event_id)

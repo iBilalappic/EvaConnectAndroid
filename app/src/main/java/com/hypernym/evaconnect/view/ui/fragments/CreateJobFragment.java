@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,8 +46,12 @@ import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -170,7 +175,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
         createJobAdViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(CreateJobAdViewModel.class);
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(UserViewModel.class);
         setPageTitle("Create a Job Listing");
-
+User user = LoginUtils.getLoggedinUser();
         if ((getArguments() != null)) {
             setPageTitle("");
             postAd.setText("Update Job Listing");
@@ -203,6 +208,45 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
 //                int spinnerPosition = arraySectorAdapter.getPosition(companyJobAdModel.getWeeklyHours());
 //                spinner_week.setSelection(spinnerPosition);
 //            }
+        }
+
+
+
+
+        try
+        {
+            File path = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+
+            file_name=new File(path,"job_image.jpg");
+            InputStream inputStream = getResources().openRawResource(R.drawable.no_thumbnail);
+            OutputStream out=new FileOutputStream(file_name);
+            byte buf[]=new byte[1024];
+            int len;
+            while((len=inputStream.read(buf))>0)
+                out.write(buf,0,len);
+            out.close();
+            inputStream.close();
+        }
+        catch (IOException e){
+        }
+      /*  try
+        {
+            file_name=new File(user.getUser_image());
+            InputStream inputStream = getResources().openRawResource(R.drawable.no_thumbnail);
+            OutputStream out=new FileOutputStream(file_name);
+            byte buf[]=new byte[1024];
+            int len;
+            while((len=inputStream.read(buf))>0)
+                out.write(buf,0,len);
+            out.close();
+            inputStream.close();
+        }
+        catch (IOException e){}*/
+
+        if (file_name!=null) {
+            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file_name);
+            partImage = MultipartBody.Part.createFormData("job_image", file_name.getName(), reqFile);
         }
         edit_companyName.setText(LoginUtils.getUser().getCompany_name());
         getSectorFromApi(LoginUtils.getUser().getWork_aviation());
@@ -407,9 +451,9 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
                             Toast.makeText(getContext(), "Please select job sector", Toast.LENGTH_SHORT).show();
                         } else if (JobType == null) {
                             Toast.makeText(getContext(), "Please select job type", Toast.LENGTH_SHORT).show();
-                        } else if (partImage == null && mJobImage == null) {
+                        } /*else if (partImage == null && mJobImage == null) {
                             Toast.makeText(getContext(), "Please add image for job post", Toast.LENGTH_SHORT).show();
-                        } else {
+                        }*/ else {
                             validator.validate();
                         }
 
@@ -418,9 +462,9 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
                             Toast.makeText(getContext(), "Please select job sector", Toast.LENGTH_SHORT).show();
                         } else if (JobType == null) {
                             Toast.makeText(getContext(), "Please select job type", Toast.LENGTH_SHORT).show();
-                        } else if (partImage == null && companyJobAdModel.getJobImage() == null) {
+                        } /*else if (partImage == null && companyJobAdModel.getJobImage() == null) {
                             Toast.makeText(getContext(), "Please add image for job post", Toast.LENGTH_SHORT).show();
-                        } else {
+                        }*/ else {
                             validator.validate();
                         }
                     }
@@ -430,9 +474,9 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
                         Toast.makeText(getContext(), "Please select job sector", Toast.LENGTH_SHORT).show();
                     } else if (JobType == null) {
                         Toast.makeText(getContext(), "Please select job type", Toast.LENGTH_SHORT).show();
-                    } else if (partImage == null) {
+                    } /*else if (partImage == null) {
                         Toast.makeText(getContext(), "Please add image for job post", Toast.LENGTH_SHORT).show();
-                    } else {
+                    }*/ else {
                         validator.validate();
                     }
                 }
@@ -502,7 +546,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
                 hideDialog();
-                if (!simpleDialog.isShowing())
+                if (simpleDialog !=null && !simpleDialog.isShowing())
                     simpleDialog.show();
             }
 

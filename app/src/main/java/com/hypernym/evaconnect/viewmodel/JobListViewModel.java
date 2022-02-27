@@ -45,9 +45,9 @@ public class JobListViewModel extends AndroidViewModel {
     public LiveData<BaseModel<List<Object>>> apply_interview(int job_id,int sender_id,int application_id,String day,String month,String year,String hour,String minutes) {
         return iJobAdRepository.apply_interview(job_id,sender_id,application_id,day,month,year,hour,minutes);
     }
-    public LiveData<BaseModel<List<Post>>> getJob(User user, int totalpages, int currentPage)
+    public LiveData<BaseModel<List<Post>>> getJob(User user/*, int totalpages, int currentPage*/)
     {
-        return iJobAdRepository.getJob(user,totalpages,currentPage);
+        return iJobAdRepository.getJob(user/*,totalpages,currentPage*/);
     }
 
 

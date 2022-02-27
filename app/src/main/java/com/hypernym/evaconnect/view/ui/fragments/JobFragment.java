@@ -61,6 +61,9 @@ public class JobFragment extends BaseFragment implements View.OnClickListener, S
     @BindView(R.id.tv_create_job)
     TextView tv_create_job;
 
+    @BindView(R.id.tv_empty)
+    TextView tv_empty;
+
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
     private JobListViewModel jobListViewModel;
@@ -137,32 +140,6 @@ public class JobFragment extends BaseFragment implements View.OnClickListener, S
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
         }
         swipeRefresh.setOnRefreshListener(this);
-        /**
-         * add scroll listener while user reach in bottom load more will call
-         */
-        rc_job.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
-            @Override
-            protected void loadMoreItems() {
-                isLoading = true;
-                currentPage = AppConstants.TOTAL_PAGES + currentPage;
-                if (NetworkUtils.isNetworkConnected(getContext())) {
-                    callPostsApi();
-                } else {
-                    networkErrorDialog();
-                }
-            }
-
-            @Override
-            public boolean isLastPage() {
-                return isLastPage;
-            }
-
-            @Override
-            public boolean isLoading() {
-                return isLoading;
-            }
-        });
-
 
     }
 
@@ -185,12 +162,18 @@ public class JobFragment extends BaseFragment implements View.OnClickListener, S
 
     private void callPostsApi() {
         User user = LoginUtils.getLoggedinUser();
-
-        jobListViewModel.getJob(user, AppConstants.TOTAL_PAGES, currentPage).observe(this, new Observer<BaseModel<List<Post>>>() {
+        if (user.getType().equalsIgnoreCase("user")) {
+            user.setFilter("all");
+        } else {
+            user.setFilter("my_jobs");
+        }
+        jobListViewModel.getJob(user/*, AppConstants.TOTAL_PAGES, currentPage*/).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> dashboardBaseModel) {
 
                 //   homePostsAdapter.clear();
+                tv_empty.setVisibility(View.GONE);
+                rc_job.setVisibility(View.VISIBLE);
                 if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
                     for (Post post : dashboardBaseModel.getData()) {
                         if (post.getContent() == null) {
@@ -210,6 +193,9 @@ public class JobFragment extends BaseFragment implements View.OnClickListener, S
                    // postAdapter.removeLoading();
                     isLoading = false;
                     swipeRefresh.setRefreshing(false);
+                    tv_empty.setVisibility(View.VISIBLE);
+                    tv_empty.setText(dashboardBaseModel.getMessage());
+                    rc_job.setVisibility(View.GONE);
                 } else {
                     swipeRefresh.setRefreshing(false);
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));

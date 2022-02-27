@@ -319,6 +319,7 @@ public class GoingEventFragment extends BaseFragment implements View.OnClickList
             EventDetailFragment eventDetailFragment = new EventDetailFragment();
             Bundle bundle = new Bundle();
             bundle.putInt("id", posts.get(position).getId());
+            bundle.putInt("user_id", posts.get(position).getUser().getId());
             eventDetailFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, eventDetailFragment, getContext(), true);
         }
@@ -367,12 +368,12 @@ public class GoingEventFragment extends BaseFragment implements View.OnClickList
 
     @Override
     public void onEditClick(View view, int position) {
-        getEventDetails(posts.get(position).getId());
+        getEventDetails(posts.get(position).getId(), posts.get(position).getUser().getId());
 
     }
-    private void getEventDetails(int event_id) {
+    private void getEventDetails(int event_id, int user_id) {
         // invitedConnections.clear();
-        eventViewModel.getEventDetails(event_id).observe(this, new Observer<BaseModel<List<Event>>>() {
+        eventViewModel.getEventDetails(event_id, user_id).observe(this, new Observer<BaseModel<List<Event>>>() {
             @Override
             public void onChanged(BaseModel<List<Event>> listBaseModel) {
                 if(listBaseModel!=null && !listBaseModel.isError() && listBaseModel.getData().size()>0)
@@ -429,10 +430,7 @@ public class GoingEventFragment extends BaseFragment implements View.OnClickList
 
     private void callPostsApi() {
         User user = LoginUtils.getLoggedinUser();
-
-
         user.setFilter("going");
-
 
         eventViewModel.getEvent(user/*, AppConstants.TOTAL_PAGES, currentPage*/).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override

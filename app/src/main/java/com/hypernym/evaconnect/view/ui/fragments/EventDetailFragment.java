@@ -145,7 +145,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
     private CommentsAdapter commentsAdapter;
     private EventAttendeesAdapter eventAttendeesAdapter;
     private Validator validator;
-    int event_id, comment_id;
+    int event_id, comment_id, user_id;
     private Event event = new Event();
     private InvitedUsersAdapter usersAdapter;
     private List<User> invitedConnections = new ArrayList<>();
@@ -170,6 +170,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
     private void init() {
         //  showBackButton();
         event_id = getArguments().getInt("id");
+        user_id = getArguments().getInt("user_id");
         eventViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(EventViewModel.class);
         validator = new Validator(this);
         validator.setValidationListener(this);
@@ -181,7 +182,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
         AppUtils.setGlideImage(getContext(), img_user, LoginUtils.getLoggedinUser().getUser_image());
         setAttendeesAdapter();
         if (NetworkUtils.isNetworkConnected(getContext())) {
-            getEventDetails(event_id);
+            getEventDetails(event_id, user_id);
 
         } else {
             networkErrorDialog();
@@ -282,9 +283,9 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
         });
     }
 
-    private void getEventDetails(int event_id) {
+    private void getEventDetails(int event_id, int user_id) {
         invitedConnections.clear();
-        eventViewModel.getEventDetails(event_id).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<Event>>>() {
+        eventViewModel.getEventDetails(event_id, user_id).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<Event>>>() {
             @Override
             public void onChanged(BaseModel<List<Event>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
@@ -508,7 +509,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
             @Override
             public void onChanged(BaseModel<List<Comment>> listBaseModel) {
                 if (NetworkUtils.isNetworkConnected(getContext())) {
-                    getEventDetails(event_id);
+                    getEventDetails(event_id, user_id);
                     getEventComments(event_id);
                 } else {
                     networkErrorDialog();

@@ -37,6 +37,21 @@
             android:layout_height="match_parent" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+
+    <TextView
+        android:id="@+id/tv_empty"
+        android:fontFamily="@font/nunitosansbold"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="No Record Found"
+        android:textColor="@color/dark_gray_2"
+        android:textSize="18sp"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
     <TextView
         android:id="@+id/tv_create_job"
         style="@style/TextStyle.Title"

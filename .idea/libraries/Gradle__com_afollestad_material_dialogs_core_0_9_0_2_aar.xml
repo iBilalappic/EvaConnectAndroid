@@ -4,9 +4,6 @@
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/9fcb446854ef86d146f45dbb6d0e3c6f/jetified-core-0.9.0.2/jars/classes.jar!/" />
       <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/9fcb446854ef86d146f45dbb6d0e3c6f/jetified-core-0.9.0.2/res" />
       <root url="file://$APPLICATION_HOME_DIR$/jre/caches/transforms-2/files-2.1/9fcb446854ef86d146f45dbb6d0e3c6f/jetified-core-0.9.0.2/AndroidManifest.xml" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/e8287c958269338f345c0f72c8e3296d/jetified-core-0.9.0.2/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/e8287c958269338f345c0f72c8e3296d/jetified-core-0.9.0.2/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/e8287c958269338f345c0f72c8e3296d/jetified-core-0.9.0.2/res" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/com.afollestad.material-dialogs/core/0.9.0.2/fee70eb46ba44bee6085eb7cd2f13df9d89e90e1/core-0.9.0.2-javadoc.jar!/" />
