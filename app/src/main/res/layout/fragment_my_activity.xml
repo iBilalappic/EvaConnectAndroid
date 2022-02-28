@@ -65,7 +65,7 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/tab_line"
+        android:id="@+id/view_view_post"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="@drawable/ic_blue_red"

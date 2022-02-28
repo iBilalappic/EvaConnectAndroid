@@ -5,6 +5,7 @@
     android:id="@+id/ly_main"
     android:layout_width="match_parent"
     android:layout_height="92dp"
+    android:layout_marginBottom="20dp"
     android:background="@color/colorwhite">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -143,6 +144,7 @@
         android:layout_width="0dp"
         android:layout_height="10dp"
         android:layout_marginTop="8dp"
+        android:visibility="gone"
         android:background="@color/lighter_gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

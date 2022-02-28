@@ -227,21 +227,7 @@ public class EditProfileLocationFragment extends BaseFragment implements Validat
             /* edit_about_yourself.setText(userData.getBio_data());*/
             ed_country.setText(userData.getCountry());
 
-            if (userData.getCountry().equalsIgnoreCase("United Kingdom")) {
-                spinCities.setAdapter(adapterUkCities);
 
-                if (userData.getCity() != null) {
-                    int spinnerPosition = adapterUkCities.getPosition(userData.getCity());
-                    spinCities.setSelection(spinnerPosition);
-                }
-            } else if (userData.getCountry().equalsIgnoreCase("Pakistan")) {
-                spinCities.setAdapter(adapterPakCities);
-
-                if (userData.getCity() != null) {
-                    int spinnerPosition = adapterPakCities.getPosition(userData.getCity());
-                    spinCities.setSelection(spinnerPosition);
-                }
-            }
             if (userData.getDate_of_birth()!=null) {
                 setDob(userData.getDate_of_birth());
             }
@@ -299,6 +285,22 @@ public class EditProfileLocationFragment extends BaseFragment implements Validat
         if (userData.getLanguage() != null) {
             int spinnerPosition = adapterlanguages.getPosition(userData.getLanguage());
             edit_language.setSelection(spinnerPosition);
+        }
+
+        if (userData.getCountry().equalsIgnoreCase("United Kingdom")) {
+            spinCities.setAdapter(adapterUkCities);
+
+            if (userData.getCity() != null) {
+                int spinnerPosition = adapterUkCities.getPosition(userData.getCity());
+                spinCities.setSelection(spinnerPosition);
+            }
+        } else if (userData.getCountry().equalsIgnoreCase("Pakistan")) {
+            spinCities.setAdapter(adapterPakCities);
+
+            if (userData.getCity() != null) {
+                int spinnerPosition = adapterPakCities.getPosition(userData.getCity());
+                spinCities.setSelection(spinnerPosition);
+            }
         }
 
 
