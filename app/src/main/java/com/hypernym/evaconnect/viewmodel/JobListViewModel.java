@@ -72,5 +72,9 @@ public class JobListViewModel extends AndroidViewModel {
         return iJobAdRepository.deleteComment(id);
     }
 
+    public LiveData<BaseModel<Object>> setFavJob(int job_id, Boolean is_favourite_job) {
+        return iJobAdRepository.setFavJob(job_id,is_favourite_job);
+    }
+
 
 }

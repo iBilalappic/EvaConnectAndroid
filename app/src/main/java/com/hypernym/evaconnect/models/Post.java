@@ -27,6 +27,37 @@ public class Post implements Serializable {
     private String modified_datetime;
     private String post_document;
 
+    public String getOccurrence_date() {
+        return occurrence_date;
+    }
+
+    public void setOccurrence_date(String occurrence_date) {
+        this.occurrence_date = occurrence_date;
+    }
+
+    private String occurrence_date;
+
+    public String getOccurrence_time() {
+        return occurrence_time;
+    }
+
+    public void setOccurrence_time(String occurrence_time) {
+        this.occurrence_time = occurrence_time;
+    }
+
+    private String occurrence_time;
+
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    private String notes;
+
 
 
     public String getStart_date() {

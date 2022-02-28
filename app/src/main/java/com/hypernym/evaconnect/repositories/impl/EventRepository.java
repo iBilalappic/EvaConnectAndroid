@@ -32,6 +32,7 @@ public class EventRepository implements IEventRepository {
     private MutableLiveData<BaseModel<List<Comment>>> commentMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Post>>> dashboardMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<GetEventInterestedUsers>>> interestedMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<Object>> saveEventMutableLiveData = new MutableLiveData<>();
 
 
     @Override
@@ -378,5 +379,30 @@ public class EventRepository implements IEventRepository {
         });
         return commentMutableLiveData;
     }
+
+    @Override
+    public LiveData<BaseModel<Object>> saveEvent(int event_id, Boolean is_favourite_event) {
+        saveEventMutableLiveData=new MutableLiveData<>();
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("event_id", event_id);
+        body.put("user_id", LoginUtils.getUser().getId());
+        body.put("status", "active");
+        body.put("is_favourite", true);
+        RestClient.get().appApi().save_event(body).enqueue(new Callback<BaseModel<Object>>() {
+            @Override
+            public void onResponse(Call<BaseModel<Object>> call, Response<BaseModel<Object>> response) {
+                if(response.body()!=null)
+                {
+                    saveEventMutableLiveData.setValue(response.body());
+                }
+            }
+            @Override
+            public void onFailure(Call<BaseModel<Object>> call, Throwable t) {
+                saveEventMutableLiveData.setValue(null);
+            }
+        });
+        return saveEventMutableLiveData;
+    }
+
 
 }

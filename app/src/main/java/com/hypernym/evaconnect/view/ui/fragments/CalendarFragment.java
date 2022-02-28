@@ -37,6 +37,7 @@ import com.hypernym.evaconnect.view.bottomsheets.BottomsheetAttachmentSelection;
 import com.hypernym.evaconnect.view.bottomsheets.BottomsheetEventSelection;
 import com.hypernym.evaconnect.view.dialogs.EventDialog;
 import com.hypernym.evaconnect.view.dialogs.MeetingDialog;
+import com.hypernym.evaconnect.view.dialogs.NotesDialog;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.viewmodel.CalendarViewModel;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -194,20 +195,26 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
                         events = new ArrayList<>();
                         calendarMark.setDay(day);
                         colors = new ArrayList<>();
-                        if (calendarModel.getObject_type().equalsIgnoreCase("event") && !colors.contains(getContext().getResources().getColor(R.color.light_blue))) {
-                            colors.add(getContext().getResources().getColor(R.color.light_blue));
+                        if (calendarModel.getObject_type().equalsIgnoreCase("event") && !colors.contains(getContext().getResources().getColor(R.color.red))) {
+                            colors.add(getContext().getResources().getColor(R.color.red));
                         } else if (calendarModel.getObject_type().equalsIgnoreCase("meeting") && !colors.contains(getContext().getResources().getColor(R.color.light_green))) {
                             colors.add(getContext().getResources().getColor(R.color.light_green));
+                        }
+                        else if (calendarModel.getObject_type().equalsIgnoreCase("note") && !colors.contains(getContext().getResources().getColor(R.color.light_blue))) {
+                            colors.add(getContext().getResources().getColor(R.color.light_blue));
                         }
 
                         calendarMark.setColors(colors);
                         calendarMarks.add(calendarMark);
                         events.add(day);
                     } else {
-                        if (calendarModel.getObject_type().equalsIgnoreCase("event") && !calendarMark.getColors().contains(getContext().getResources().getColor(R.color.light_blue))) {
-                            calendarMark.getColors().add(getContext().getResources().getColor(R.color.light_blue));
+                        if (calendarModel.getObject_type().equalsIgnoreCase("event") && !calendarMark.getColors().contains(getContext().getResources().getColor(R.color.red))) {
+                            calendarMark.getColors().add(getContext().getResources().getColor(R.color.red));
                         } else if (calendarModel.getObject_type().equalsIgnoreCase("meeting") && !calendarMark.getColors().contains(getContext().getResources().getColor(R.color.light_green))) {
                             calendarMark.getColors().add(getContext().getResources().getColor(R.color.light_green));
+                        }
+                        else if (calendarModel.getObject_type().equalsIgnoreCase("note") && !calendarMark.getColors().contains(getContext().getResources().getColor(R.color.light_blue))) {
+                            calendarMark.getColors().add(getContext().getResources().getColor(R.color.light_blue));
                         }
 
                         calendarMark.setColors(calendarMark.getColors());
@@ -368,9 +375,8 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
     public void onItemClick(View view, int position) {
         if (eventList.get(position).getObject_type().equalsIgnoreCase("meeting")) {
             new MeetingDialog(eventList.get(position), getContext()).show();
-        } else {
-            new EventDialog(eventList.get(position), getContext()).show();
-        }
-
+        }else if (eventList.get(position).getObject_type().equalsIgnoreCase("note")) {
+            new NotesDialog(eventList.get(position), getContext()).show();} else {
+            new EventDialog(eventList.get(position), getContext()).show();}
     }
 }

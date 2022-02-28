@@ -98,5 +98,10 @@ public interface APIConstants {
     public static String GET_ALL_PENDING = "user/pending/connection/";
     public static String EMAIL_VERIFICATION_CODE = "user/verification/";
     public static String RESET_PASSWORD = "user/forgotpassword/";
+    public static String SAVE_JOB = "job/save/";
+    public static String SAVE_EVENT = "event/save/";
+    public static String CREATE_NOTES = "user/notes/";
+    public static String GET_NOTES = "user/notes/details/{id}";
+    public static String UPDATE_NOTES = "user/notes/details/{id}";
     public String GET_ALL_MYACTIVITY = "user/activity/";
 }

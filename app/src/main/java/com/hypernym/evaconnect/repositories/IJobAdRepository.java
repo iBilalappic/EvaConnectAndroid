@@ -24,5 +24,7 @@ public interface IJobAdRepository {
 
     LiveData<BaseModel<List<Comment>>> deleteComment(Integer id);
     LiveData<BaseModel<List<Comment>>> editComment(Comment comment,Integer id);
+    LiveData<BaseModel<Object>> setFavJob(int job_id, Boolean is_favourite_job);
+
 
 }

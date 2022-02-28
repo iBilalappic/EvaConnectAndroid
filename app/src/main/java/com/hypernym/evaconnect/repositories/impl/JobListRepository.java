@@ -30,6 +30,7 @@ public class JobListRepository implements IJobAdRepository {
     private MutableLiveData<BaseModel<List<Object>>> InterviewMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Post>>> dashboardMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Comment>>> commentMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<Object>> FavMutableLiveData = new MutableLiveData<>();
 
     @Override
     public LiveData<BaseModel<List<JobAd>>> getjobAd(User user) {
@@ -270,6 +271,33 @@ public class JobListRepository implements IJobAdRepository {
             }
         });
         return commentMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<Object>> setFavJob(int job_id, Boolean is_favourite_job) {
+        FavMutableLiveData = new MutableLiveData<>();
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("job_id", job_id);
+        body.put("user_id", LoginUtils.getUser().getId());
+        body.put("is_favourite", true);
+        body.put("status", "active");
+
+        RestClient.get().appApi().save_job(body).enqueue(new Callback<BaseModel<Object>>() {
+            @Override
+            public void onResponse(Call<BaseModel<Object>> call, Response<BaseModel<Object>> response) {
+                if (response.isSuccessful() && !response.body().isError())
+                    FavMutableLiveData.setValue(response.body());
+                if (response.code() == 500) {
+                    FavMutableLiveData.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<Object>> call, Throwable t) {
+                FavMutableLiveData.setValue(null);
+            }
+        });
+        return FavMutableLiveData;
     }
 
 

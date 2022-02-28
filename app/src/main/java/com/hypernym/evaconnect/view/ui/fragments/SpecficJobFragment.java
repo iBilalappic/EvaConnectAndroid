@@ -88,6 +88,11 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
     @BindView(R.id.img_like)
     ImageView img_like;
 
+    @BindView(R.id.img_favourite)
+    ImageView img_favourite;
+
+
+
     @BindView(R.id.img_comment)
     ImageView img_comment;
 
@@ -110,6 +115,8 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
     User user;
     private String user_image = "";
 
+    public Boolean is_favourite_job=false;
+
     public SpecficJobFragment() {
         // Required empty public constructor
     }
@@ -127,6 +134,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
         like_click.setOnClickListener(this);
         share_click.setOnClickListener(this);
         comment_click.setOnClickListener(this);
+        img_favourite.setOnClickListener(this);
 
         return view;
     }
@@ -152,6 +160,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
             }
             if (LoginUtils.getUser().getType().equals("company")) {
                 tv_apply.setVisibility(View.GONE);
+                img_favourite.setVisibility(View.GONE);
             } else {
                 tv_apply.setVisibility(View.VISIBLE);
             }
@@ -247,7 +256,25 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
                 bottomSheetPictureSelection.show(getActivity().getSupportFragmentManager(), bottomSheetPictureSelection.getTag());
 
                 break;
+            case R.id.img_favourite:
+                showDialog();
+                setFavJob();
+                break;
+
+
         }
+    }
+
+    private void setFavJob() {
+        jobListViewModel.setFavJob(job_id,is_favourite_job).observe(this, new Observer<BaseModel<Object>>() {
+            @Override
+            public void onChanged(BaseModel<Object> setlike) {
+                if(setlike.getData()!=null){
+                    hideDialog();
+                    img_favourite.setBackgroundResource(R.drawable.ic_star_selected);
+                }
+            }
+        });
     }
 
     private void SetJobLike(Integer id) {
