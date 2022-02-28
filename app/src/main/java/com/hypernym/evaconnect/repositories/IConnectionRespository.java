@@ -24,6 +24,7 @@ public interface IConnectionRespository {
     LiveData<BaseModel<List<Object>>> share_connection(ShareConnection connection);
     LiveData<BaseModel<List<Object>>> share_connection_event(ShareConnection connection);
     LiveData<BaseModel<List<Object>>> share_connection_post(ShareConnection connection);
+    LiveData<BaseModel<List<Object>>> share_connection_news(ShareConnection connection);
     LiveData<BaseModel<List<GetBlockedData>>> getBlockedUsers();
 
 }

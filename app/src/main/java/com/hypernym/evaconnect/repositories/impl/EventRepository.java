@@ -13,6 +13,7 @@ import com.hypernym.evaconnect.models.Meeting;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IEventRepository;
+import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 
 import java.util.HashMap;
@@ -134,11 +135,11 @@ public class EventRepository implements IEventRepository {
     }
 
     @Override
-    public LiveData<BaseModel<List<Event>>> getEventDetails(int event_id) {
+    public LiveData<BaseModel<List<Event>>> getEventDetails(int event_id, int user_id) {
         eventMutableLiveData = new MutableLiveData<>();
         Event event=new Event();
         event.setEvent_id(event_id);
-        event.setUser_id(LoginUtils.getLoggedinUser().getId());
+        event.setUser_id(user_id);
         RestClient.get().appApi().getEventDetails(event).enqueue(new Callback<BaseModel<List<Event>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Event>>> call, Response<BaseModel<List<Event>>> response) {
@@ -220,6 +221,14 @@ public class EventRepository implements IEventRepository {
     @Override
     public LiveData<BaseModel<List<Event>>> addEventAttendance(Event event) {
         eventMutableLiveData=new MutableLiveData<>();
+
+        HashMap<String, Object> data = new HashMap<String, Object>();
+        data.put("event_id", event.getEvent_id());
+        data.put("user_id", event.getUser_id());
+        data.put("status", event.getStatus());
+        data.put("attending_date", DateUtils.GetCurrentdate());
+        data.put("attendance_status", event.getAttendance_status());
+
         RestClient.get().appApi().addEventAttendance(event).enqueue(new Callback<BaseModel<List<Event>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Event>>> call, Response<BaseModel<List<Event>>> response) {
@@ -240,6 +249,8 @@ public class EventRepository implements IEventRepository {
     @Override
     public LiveData<BaseModel<List<Event>>> updateEventAttendance(Event event) {
         eventMutableLiveData=new MutableLiveData<>();
+
+
         RestClient.get().appApi().updateEventAttendance(event).enqueue(new Callback<BaseModel<List<Event>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Event>>> call, Response<BaseModel<List<Event>>> response) {
@@ -299,10 +310,14 @@ public class EventRepository implements IEventRepository {
     }
 
     @Override
-    public LiveData<BaseModel<List<Post>>> getEvent(User user, int total, int current) {
+    public LiveData<BaseModel<List<Post>>> getEvent(User user/*, int total, int current*/) {
         dashboardMutableLiveData = new MutableLiveData<>();
-        user.setUser_id(user.getId());
-        RestClient.get().appApi().getEvent(user, total, current).enqueue(new Callback<BaseModel<List<Post>>>() {
+        HashMap<String, Object> data = new HashMap<String, Object>();
+        data.put("user_id", user.getId());
+        data.put("filter", user.getFilter());
+       /* data.put("search_key", user.getSearch_key());
+        user.setUser_id(user.getId());*/
+        RestClient.get().appApi().getEvent(data/*, total, current*/).enqueue(new Callback<BaseModel<List<Post>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
                 dashboardMutableLiveData.setValue(response.body());

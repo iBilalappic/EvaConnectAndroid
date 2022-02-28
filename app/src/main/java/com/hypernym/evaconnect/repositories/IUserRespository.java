@@ -18,6 +18,7 @@ public interface IUserRespository {
     LiveData<BaseModel<List<User>>> login(User user);
     LiveData<BaseModel<List<User>>> forgotPassword(String email);
     LiveData<BaseModel<List<Object>>> resetPassword(String email, String code, String password );
+    LiveData<BaseModel<List<Object>>> editProfile(Object user, int id);
     LiveData<BaseModel<List<User>>> isEmailExist(String email);
     LiveData<BaseModel<List<AccountCheck>>> isEmailExist_linkedin(String email);
     LiveData<BaseModel<List<User>>> linkedin_login(String email, String linkedinType);
@@ -29,5 +30,6 @@ public interface IUserRespository {
     LiveData<BaseModel<List<User>>> update_password(String Oldpassword, String Newpassword);
     LiveData<BaseModel<List<User>>> userOnline( boolean is_active);
     LiveData<BaseModel<List<Stats>>> getUserStats();
+    LiveData<BaseModel<List<Object>>> deleteUser(Integer id);
 
 }

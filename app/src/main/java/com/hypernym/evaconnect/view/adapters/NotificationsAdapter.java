@@ -13,8 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.Post;
+import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
+import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 
 import java.util.ArrayList;
@@ -44,7 +46,9 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
     @Override
     public void onBindViewHolder(@NonNull NotificationsAdapter.ViewHolder holder, int position) {
-        AppUtils.setGlideImage(context, holder.profile_image, notificationsList.get(position).getUser().getUser_image());
+        User user = new User();
+        user = LoginUtils.getLoggedinUser();
+        AppUtils.setGlideImage(context, holder.profile_image,user.getUser_image());
         holder.tv_status.setText(notificationsList.get(position).getContent());
         holder.tv_date.setText(DateUtils.formatToYesterdayOrToday(notificationsList.get(position).getCreated_datetime()));
         if ( notificationsList.get(position).getContent().contains("commented")) {

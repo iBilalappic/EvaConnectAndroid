@@ -54,8 +54,15 @@ public class JobIndustryFragment extends BaseFragment implements View.OnClickLis
     @BindView(R.id.newpost)
     TextView newpost;
 
+    @BindView(R.id.tv_empty)
+    TextView tv_empty;
+
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
+
+    @BindView(R.id.tv_create_job)
+    TextView tv_create_job;
+
     private JobListViewModel jobListViewModel;
     private PostViewModel postViewModel;
     private JobHomeAdapter postAdapter;
@@ -113,88 +120,18 @@ public class JobIndustryFragment extends BaseFragment implements View.OnClickLis
         rc_job.setLayoutManager(linearLayoutManager);
         rc_job.setAdapter(postAdapter);
 
+        User user=LoginUtils.getLoggedinUser();
+        if (user.getType().equalsIgnoreCase("company")) {
+            tv_create_job.setVisibility(View.VISIBLE);
+        }else{
+            tv_create_job.setVisibility(View.GONE);
+        }
+
         RecyclerView.ItemAnimator animator = rc_job.getItemAnimator();
         if (animator instanceof SimpleItemAnimator) {
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
         }
         swipeRefresh.setOnRefreshListener(this);
-        /**
-         * add scroll listener while user reach in bottom load more will call
-         */
-        rc_job.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
-            @Override
-            protected void loadMoreItems() {
-                isLoading = true;
-                currentPage = AppConstants.TOTAL_PAGES + currentPage;
-                if (NetworkUtils.isNetworkConnected(getContext())) {
-                    callPostsApi();
-                } else {
-                    networkErrorDialog();
-                }
-            }
-
-            @Override
-            public boolean isLastPage() {
-                return isLastPage;
-            }
-
-            @Override
-            public boolean isLoading() {
-                return isLoading;
-            }
-        });
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                final OvershootInterpolator interpolator = new OvershootInterpolator();
-//                ViewCompat.animate(fab).
-//                        rotation(135f).
-//                        withLayer().
-//                        setDuration(300).
-//                        setInterpolator(interpolator).
-//                        start();
-//                /** Instantiating PopupMenu class */
-//                PopupMenu popup = new PopupMenu(getContext(), v);
-//
-//                /** Adding menu items to the popumenu */
-//                popup.getMenuInflater().inflate(R.menu.dashboard_menu, popup.getMenu());
-//
-//                popup.setOnDismissListener(new PopupMenu.OnDismissListener() {
-//                    @Override
-//                    public void onDismiss(PopupMenu menu) {
-//                        ViewCompat.animate(fab).
-//                                rotation(0f).
-//                                withLayer().
-//                                setDuration(300).
-//                                setInterpolator(interpolator).
-//                                start();
-//                    }
-//                });
-//                /** Defining menu item click listener for the popup menu */
-//                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//
-//                    @Override
-//                    public boolean onMenuItemClick(MenuItem item) {
-//
-//                        if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu1))) {
-//                            loadFragment(R.id.framelayout, new NewPostFragment(), getContext(), true);
-//                        }  else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu2))) {
-//                            loadFragment(R.id.framelayout, new ShareVideoFragment(), getContext(), true);
-//                        }
-//                        else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu3))) {
-//                            loadFragment(R.id.framelayout, new CreateEventFragment(), getContext(), true);
-//                        } else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu3))) {
-//                            loadFragment(R.id.framelayout, new ShareVideoFragment(), getContext(), true);
-//                        }
-//
-//                        return true;
-//                    }
-//                });
-//
-//                /** Showing the popup menu */
-//                popup.show();
-//            }
-//        });
 
     }
 
@@ -217,12 +154,15 @@ public class JobIndustryFragment extends BaseFragment implements View.OnClickLis
 
     private void callPostsApi() {
         User user = LoginUtils.getLoggedinUser();
+        user.setFilter("industry");
 
-        jobListViewModel.getJob(user, AppConstants.TOTAL_PAGES, currentPage).observe(this, new Observer<BaseModel<List<Post>>>() {
+        jobListViewModel.getJob(user/*, AppConstants.TOTAL_PAGES, currentPage*/).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> dashboardBaseModel) {
 
                 //   homePostsAdapter.clear();
+                tv_empty.setVisibility(View.GONE);
+                rc_job.setVisibility(View.VISIBLE);
                 if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
                     for (Post post : dashboardBaseModel.getData()) {
                         if (post.getContent() == null) {
@@ -242,6 +182,9 @@ public class JobIndustryFragment extends BaseFragment implements View.OnClickLis
                     // postAdapter.removeLoading();
                     isLoading = false;
                     swipeRefresh.setRefreshing(false);
+                    tv_empty.setVisibility(View.VISIBLE);
+                    tv_empty.setText(dashboardBaseModel.getMessage());
+                    rc_job.setVisibility(View.GONE);
                 } else {
                     swipeRefresh.setRefreshing(false);
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));

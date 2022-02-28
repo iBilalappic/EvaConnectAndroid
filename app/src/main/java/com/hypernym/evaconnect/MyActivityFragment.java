@@ -100,9 +100,9 @@ public class MyActivityFragment extends BaseFragment implements NotificationsAda
     }
 
     private void getAllNotifications() {
-        // notifications.clear();
+         notifications.clear();
 
-        homeViewModel.getAllNotifications(AppConstants.TOTAL_PAGES,currentPage).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<Post>>>() {
+        homeViewModel.getAllMyActivity(/*AppConstants.TOTAL_PAGES,currentPage*/).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() >0 && listBaseModel.getData().get(0) != null) {
@@ -140,7 +140,7 @@ public class MyActivityFragment extends BaseFragment implements NotificationsAda
                 isLoading = true;
                 currentPage= AppConstants.TOTAL_PAGES+currentPage;
                 if(NetworkUtils.isNetworkConnected(getContext())) {
-                    getAllNotifications();
+                   getAllNotifications();
                 }
                 else
                 {

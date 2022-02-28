@@ -112,7 +112,9 @@ public class ShareConnectionFragment extends BaseFragment implements ShareConnec
                         SendShareConnectionsEvent();
                     } else if (Share_type != null && Share_type.equals("post")) {
                         SendShareConnectionsPost();
-                    } else if (fragment_type.equals("JOB_FRAGMENT")) {
+                    }else if (Share_type != null && Share_type.equals("news")) {
+                            SendShareConnectionsNews();
+                    } else if (fragment_type!=null && fragment_type.equals("JOB_FRAGMENT")) {
                         SendShareConnectionsPost();
                     }
                 } else {
@@ -193,6 +195,30 @@ public class ShareConnectionFragment extends BaseFragment implements ShareConnec
         });
     }
 
+    private void SendShareConnectionsNews() {
+        share_users.clear();
+        for (User inviteConnections : shareConnections_user) {
+            share_users.add(inviteConnections.getId());
+        }
+        ShareConnection shareConnection = new ShareConnection(LoginUtils.getUser().getId(), share_users);
+        shareConnection.setObject_id(id);
+        shareConnection.setObject_type("news");
+        connectionViewModel.share_connection_news(shareConnection).observe(this, new Observer<BaseModel<List<Object>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Object>> listBaseModel) {
+                if (listBaseModel.getData() != null && !listBaseModel.isError()) {
+                    Toast.makeText(getContext(), "Successfully shared with desired connection", Toast.LENGTH_SHORT).show();
+                    if (getFragmentManager().getBackStackEntryCount() != 0) {
+                        getFragmentManager().popBackStack();
+                    }
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+                hideDialog();
+            }
+        });
+    }
+
     private void init() {
         if ((getArguments() != null)) {
             id = getArguments().getInt(Constants.DATA);
@@ -212,7 +238,7 @@ public class ShareConnectionFragment extends BaseFragment implements ShareConnec
 
 
         connectionViewModel.getConnectionByFilter(userData, AppConstants.TOTAL_PAGES, currentPage)
-                .observe(this, listBaseModel ->
+                .observe(getViewLifecycleOwner(), listBaseModel ->
                 {
                     if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
                         if (currentPage == PAGE_START) {

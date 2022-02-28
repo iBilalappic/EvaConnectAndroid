@@ -16,12 +16,15 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
+import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
@@ -124,7 +127,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
 
 
     private UserViewModel userViewModel;
-
+    Bundle bundle = new Bundle();
 
     private static final int REQUEST_PHOTO_GALLERY = 4;
     private static final int CAMERAA = 1;
@@ -135,6 +138,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
     private MultipartBody.Part partImage;
 
     User user = new User();
+    User userData = new User();
     private Validator validator;
 
     public EditProfileFragment() {
@@ -175,9 +179,24 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
 
     private void SettingUserProfile(User user) {
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(UserViewModel.class);
-        //GetUserDetails();
+        GetUserDetails();
     }
 
+    private void GetUserDetails() {
+        showDialog();
+        userViewModel.getuser_details(user.getId()).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<User>>>() {
+            @Override
+            public void onChanged(BaseModel<List<User>> listBaseModel) {
+                if (listBaseModel.getData() != null && !listBaseModel.isError()) {
+                    userData = listBaseModel.getData().get(0);
+                    LoginUtils.saveUser(listBaseModel.getData().get(0));
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+                hideDialog();
+            }
+        });
+    }
 
     @Override
     public void onValidationSucceeded() {
@@ -272,63 +291,9 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
         }
     }
 
-/*    private void setImage(Uri uri)
-    {
-        String updatedImage = ImageFilePathUtil.getPath(getActivity(), uri);
-
-        if (!TextUtils.isEmpty(updatedImage) || updatedImage != null)
-        {
-            File file = new File(updatedImage);
-            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
-
-            globalImagePath = file.getAbsolutePath();
-
-            if (file.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.IMAGE_SIZE_IN_KB) {
-                networkResponseDialog(getString(R.string.error), getString(R.string.err_image_size_large));
-                return;
-            }
-
-            if (!TextUtils.isEmpty(globalImagePath) || globalImagePath != null) {
-
-                Glide.with(this).load(loadFromFile(globalImagePath))
-                        .apply(new RequestOptions())
-                        .into(cv_profile_image);
-
-                Bitmap orignal = loadFromFile(globalImagePath);
-                File filenew = new File(globalImagePath);
-                try {
-                    FileOutputStream out = new FileOutputStream(filenew);
-                    orignal.compress(Bitmap.CompressFormat.JPEG, 50, out);
-                    out.flush();
-                    out.close();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                partImage = MultipartBody.Part.createFormData("user_image", file.getName(), reqFile);
-            }
-            else {
-                networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
-            }
-        }
-        else {
-            networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
-        }
-    }*/
-
-    private void galleryAddPics() {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        mCurrentPhotoPath=getCurrentPhotoPath();
-        File f = new File(mCurrentPhotoPath);
-        file_name = f;
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
-        getActivity().sendBroadcast(mediaScanIntent);
-    }
-
     @Override
     public void onClick(View v) {
+
         switch (v.getId()) {
             case R.id.ly_change_profile_picture:
                 EditProfilePictureFragment editProfilePictureFragment = new EditProfilePictureFragment();
@@ -337,22 +302,37 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
 
             case R.id.ly_edit_job_title:
                 EditProfileJobTitleFragment editProfileJobTitleFragment = new EditProfileJobTitleFragment();
-                loadFragment(R.id.framelayout, editProfileJobTitleFragment, getContext(), true);
+                if (userData!=null) {
+                    bundle.putSerializable(Constants.USER, userData);
+                } else {
+                    bundle.putSerializable(Constants.USER, user);
+                }
+                loadFragment_bundle(R.id.framelayout, editProfileJobTitleFragment, getContext(), true,bundle);
                 break;
 
             case R.id.ly_edit_bio:
                 EditProfileBioFragment editProfileBioFragment = new EditProfileBioFragment();
-                loadFragment(R.id.framelayout, editProfileBioFragment, getContext(), true);
+                if (userData!=null) {
+                    bundle.putSerializable(Constants.USER, userData);
+                } else {
+                    bundle.putSerializable(Constants.USER, user);
+                }
+                loadFragment_bundle(R.id.framelayout, editProfileBioFragment, getContext(), true,bundle);
                 break;
 
             case R.id.ly_change_password:
                 EditProfileChangePasswordFragment editProfileChangePasswordFragment = new EditProfileChangePasswordFragment();
-                loadFragment(R.id.framelayout, editProfileChangePasswordFragment, getContext(), true);
+                loadFragment_bundle(R.id.framelayout, editProfileChangePasswordFragment, getContext(), true,bundle);
                 break;
 
             case R.id.ly_edit_location:
                 EditProfileLocationFragment editProfileLocationFragment = new EditProfileLocationFragment();
-                loadFragment(R.id.framelayout, editProfileLocationFragment, getContext(), true);
+                if (userData!=null) {
+                    bundle.putSerializable(Constants.USER, userData);
+                } else {
+                    bundle.putSerializable(Constants.USER, user);
+                }
+                loadFragment_bundle(R.id.framelayout, editProfileLocationFragment, getContext(), true,bundle);
                 break;
 
             case R.id.img_backarrow:

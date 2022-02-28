@@ -24,7 +24,7 @@ public interface IEventRepository {
 
     LiveData<BaseModel<List<Event>>> getCalendarEvents(int user_id, String month,String year);
 
-    LiveData<BaseModel<List<Event>>> getEventDetails(int event_id);
+    LiveData<BaseModel<List<Event>>> getEventDetails(int event_id, int user_id);
 
     LiveData<BaseModel<List<Comment>>> getEventComments(int event_id);
 
@@ -42,7 +42,7 @@ public interface IEventRepository {
 
     LiveData<BaseModel<List<Event>>> deleteEvent(Post post);
 
-    LiveData<BaseModel<List<Post>>> getEvent(User user, int total, int current);
+    LiveData<BaseModel<List<Post>>> getEvent(User user/*, int total, int current*/);
 
     LiveData<BaseModel<List<Event>>> updateEvent(Event event,@Part MultipartBody.Part user_image);
 

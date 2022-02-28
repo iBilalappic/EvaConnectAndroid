@@ -71,6 +71,9 @@ public interface AppApi {
     @POST(APIConstants.LOGIN)
     Call<BaseModel<List<User>>> login(@Body User user);
 
+    @DELETE(APIConstants.DELETE_USER)
+    Call<BaseModel<List<Object>>> deleteUser(@Path("id") int id);
+
     @POST(APIConstants.BLOCK_USER)
     Call<BaseModel<List<Object>>> block(@Body Connection connection);
 
@@ -242,6 +245,12 @@ public interface AppApi {
     @POST(APIConstants.GET_ALL_NOTIFICATIONS)
     Call<BaseModel<List<Post>>> getAllNotifications(@Body Object user,@Query("limit") int limit, @Query("offset") int offset);
 
+   /* @POST(APIConstants.GET_ALL_MYACTIVITY)
+    Call<BaseModel<List<Post>>> getAllMyActivity(@Body Object user*//*,@Query("limit") int limit, @Query("offset") int offset*//*);*/
+
+    @POST(APIConstants.GET_ALL_MYACTIVITY)
+    Call<BaseModel<List<Post>>> getAllMyActivity(@Body Object user /*,@Query("limit") int limit, @Query("offset") int offset*/);
+
     @POST(APIConstants.GET_ALL_NOTIFICATIONS)
     Call<BaseModel<List<Post>>> getAllUnreadNotifications(@Body Object user);
 
@@ -372,11 +381,18 @@ public interface AppApi {
     @POST(APIConstants.POST)
     Call<BaseModel<List<Post>>> getPost(@Body User user, @Query("limit") int limit, @Query("offset") int offset);
 
+    @POST(APIConstants.POST_FILTER)
+    Call<BaseModel<List<Post>>> getPostFilter(@Body User user, @Query("limit") int limit, @Query("offset") int offset);
+
+    @PATCH(APIConstants.USER_EDIT+"{user_id}/")
+    Call<BaseModel<List<Object>>> Edit_Profile(@Path(value = "user_id") int user_id,
+                                               @Body Object user);
+
     @POST(APIConstants.EVENT)
-    Call<BaseModel<List<Post>>> getEvent(@Body User user, @Query("limit") int limit, @Query("offset") int offset);
+    Call<BaseModel<List<Post>>> getEvent(@Body Object user/*, @Query("limit") int limit, @Query("offset") int offset*/);
 
     @POST(APIConstants.JOB)
-    Call<BaseModel<List<Post>>> getJob(@Body User user, @Query("limit") int limit, @Query("offset") int offset);
+    Call<BaseModel<List<Post>>> getJob(@Body User user/*, @Query("limit") int limit, @Query("offset") int offset*/);
 
     @POST(APIConstants.NEWS)
     Call<BaseModel<List<Post>>> getNews(@Body User user, @Query("limit") int limit, @Query("offset") int offset);
@@ -388,6 +404,9 @@ public interface AppApi {
 
     @POST(APIConstants.SHARE_JOB)
     Call<BaseModel<List<Object>>> share_connection(@Body ShareConnection shareConnection);
+
+    @POST(APIConstants.SHARE_NEWS)
+    Call<BaseModel<List<Object>>> share_connection_news(@Body ShareConnection shareConnection);
 
     @POST(APIConstants.SHARE_EVENT)
     Call<BaseModel<List<Object>>> share_connection_event(@Body ShareConnection shareConnection);

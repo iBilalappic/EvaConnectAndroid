@@ -74,4 +74,9 @@ public class PostViewModel extends AndroidViewModel {
     {
         return iPostRepository.getPost(user,totalpages,currentPage);
     }
+
+    public LiveData<BaseModel<List<Post>>> getPostFilter(User user, int totalpages, int currentPage)
+    {
+        return iPostRepository.getPostFilter(user,totalpages,currentPage);
+    }
 }

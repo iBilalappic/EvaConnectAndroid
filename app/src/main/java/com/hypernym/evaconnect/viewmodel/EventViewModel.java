@@ -53,9 +53,9 @@ public class EventViewModel extends AndroidViewModel {
         return iEventRepository.getCalendarEvents(user_id,month,year);
     }
 
-    public LiveData<BaseModel<List<Event>>> getEventDetails(int event_id)
+    public LiveData<BaseModel<List<Event>>> getEventDetails(int event_id, int user_id)
     {
-        return iEventRepository.getEventDetails(event_id);
+        return iEventRepository.getEventDetails(event_id, user_id);
     }
 
     public LiveData<BaseModel<List<Comment>>> getEventComments(int event_id)
@@ -88,9 +88,9 @@ public class EventViewModel extends AndroidViewModel {
         return iEventRepository.likeEvent(event);
     }
 
-    public LiveData<BaseModel<List<Post>>> getEvent(User user, int totalpages, int currentPage)
+    public LiveData<BaseModel<List<Post>>> getEvent(User user/*, int totalpages, int currentPage*/)
     {
-        return iEventRepository.getEvent(user,totalpages,currentPage);
+        return iEventRepository.getEvent(user/*,totalpages,currentPage*/);
     }
 
     public LiveData<BaseModel<List<Event>>> updateEvent(Event event,MultipartBody.Part event_image)

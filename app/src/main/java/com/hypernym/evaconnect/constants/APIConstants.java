@@ -1,8 +1,8 @@
 package com.hypernym.evaconnect.constants;
 
 public interface APIConstants {
-   //public static String BASE_SERVER_URL="http:/67.205.178.219:8000/eva/"; //Staging
-//   public static String BASE_SERVER_URL="http://168.63.140.202:8003/eva/";
+  //public static String BASE_SERVER_URL="http:/67.205.178.219:8000/eva/"; //Staging
+  //public static String BASE_SERVER_URL="http://168.63.140.202:8003/eva/";
     public static String ONESINGAL_BASE_URL ="https://onesignal.com/";
     public static String SIGNUP="user/signup/";
     public static String LOGIN="user/login/";
@@ -13,9 +13,15 @@ public interface APIConstants {
     public static String DASHBOARD="dashboard/android/?";
     public static String DASHBOARD_SEARCH="dashboard/search/?";
     public static String POST="dashboard/post/?";
-    public static String EVENT="dashboard/event/?";
+    public static String POST_FILTER="post/filter/";
+    public static String DELETE_USER="user/details/{id}/";
+   // public static String POST="post/filter/";
+   // public static String EVENT="dashboard/event/?";
+    public static String EVENT="event/filter/";
+    public static String USER_EDIT="user/details/";
     public static String NEWS="dashboard/news/?";
-    public static String JOB="dashboard/job/?";
+   // public static String JOB="dashboard/job/?";
+    public static String JOB="job/filter/";
     public static String FRIENDCONNECTION="user/network/connection/details/{id}/";
     public static String ADD_COMMENT="post/comment/";
     public static String EDIT_COMMENT="post/comment/details/{id}/";
@@ -74,6 +80,7 @@ public interface APIConstants {
     public static String UPDATE_PASSWORD="user/changepassword/";
     public static String GET_MEETING_DETAILS="meeting/details/";
     public static String SHARE_JOB="job/share/";
+    public static String SHARE_NEWS="dashboard/share/";
     public static String SHARE_EVENT="event/share/";
     public static String SHARE_POST="post/share/";
     public static String GET_CONNECTION_BY_RECOMMENDED_USER="user/network/connection/recommendations/?";
@@ -96,4 +103,5 @@ public interface APIConstants {
     public static String CREATE_NOTES = "user/notes/";
     public static String GET_NOTES = "user/notes/details/{id}";
     public static String UPDATE_NOTES = "user/notes/details/{id}";
+    public String GET_ALL_MYACTIVITY = "user/activity/";
 }

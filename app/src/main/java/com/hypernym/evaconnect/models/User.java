@@ -24,6 +24,7 @@ public class User implements Serializable, Parcelable {
     private String about;
     private String language;
     private String country;
+    private String date_of_birth;
     private String last_name;
     private String sector;
     private String work_aviation;
@@ -144,6 +145,14 @@ public class User implements Serializable, Parcelable {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public String getDate_of_birth() {
+        return date_of_birth;
+    }
+
+    public void setDate_of_birth(String date_of_birth) {
+        this.date_of_birth = date_of_birth;
     }
 
     public String getLast_name() {

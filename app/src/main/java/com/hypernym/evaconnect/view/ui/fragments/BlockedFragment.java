@@ -105,9 +105,9 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
 
         currentPage = PAGE_START;
         swipeRefresh.setOnRefreshListener(this);
+        edt_search.setHint("Search for a Blocked User");
         initMainOptionsRecView();
         initRecyclerView();
-        setPageTitle(getString(R.string.connections));
         if (NetworkUtils.isNetworkConnected(getContext())) {
             getBlockedConnections();
         } else {
@@ -208,7 +208,7 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
                 isLoading = true;
                 currentPage = AppConstants.TOTAL_PAGES + currentPage;
                 if (NetworkUtils.isNetworkConnected(getContext())) {
-                    getConnectionByFilter(type, currentPage, false);
+                  //  getConnectionByFilter(type, currentPage, false);
                 } else {
                     networkErrorDialog();
                 }
@@ -356,9 +356,9 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
     @Override
     public void onRefresh() {
         if (NetworkUtils.isNetworkConnected(getContext())) {
-            //getBlockedConnections();
+            getBlockedConnections();
             //GetUserDetails();
-            getConnectionByFilter(type, currentPage, false);
+          //  getConnectionByFilter(type, currentPage, false);
         } else {
             networkErrorDialog();
         }
@@ -389,7 +389,7 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
 
             connectionList.clear();
             blockedAdapter.notifyDataSetChanged();
-            getConnectionByFilter(type, PAGE_START, true);
+           // getConnectionByFilter(type, PAGE_START, true);
 
         }
 

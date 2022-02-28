@@ -497,7 +497,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
     private void callPostsApi() {
         User user = LoginUtils.getLoggedinUser();
 
-        postViewModel.getPost(user, AppConstants.TOTAL_PAGES, currentPage).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<Post>>>() {
+        postViewModel.getPostFilter(user, AppConstants.TOTAL_PAGES, currentPage).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> dashboardBaseModel) {
 

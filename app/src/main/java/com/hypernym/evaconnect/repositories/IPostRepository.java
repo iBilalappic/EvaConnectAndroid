@@ -22,6 +22,8 @@ public interface IPostRepository {
 
     LiveData<BaseModel<List<Post>>> getPost(User user, int total, int current);
 
+    LiveData<BaseModel<List<Post>>> getPostFilter(User user, int total, int current);
+
     LiveData<BaseModel<List<Comment>>> editComment(Comment comment,Integer id);
 
     LiveData<BaseModel<List<Comment>>> deleteComment(Integer id);

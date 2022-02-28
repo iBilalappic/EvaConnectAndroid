@@ -34,6 +34,11 @@ public class UserViewModel extends AndroidViewModel {
         return iUserRespository.getEmailVerificationCode(email,verification_code);
     }
 
+    public LiveData<BaseModel<List<Object>>> editProfile(Object user, int id)
+    {
+        return iUserRespository.editProfile(user, id);
+    }
+
     public LiveData<BaseModel<List<Object>>> getResetPassword(String email, String verification_code,String password)
     {
         return iUserRespository.resetPassword(email,verification_code,password);
@@ -98,5 +103,9 @@ public class UserViewModel extends AndroidViewModel {
     public LiveData<BaseModel<List<Stats>>> getUserStats()
     {
         return iUserRespository.getUserStats();
+    }
+
+    public LiveData<BaseModel<List<Object>>> deleteuser(Integer id){
+        return iUserRespository.deleteUser(id);
     }
 }
