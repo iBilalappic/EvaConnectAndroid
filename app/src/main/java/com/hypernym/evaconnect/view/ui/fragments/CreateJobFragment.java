@@ -461,7 +461,7 @@ User user = LoginUtils.getLoggedinUser();
                             Toast.makeText(getContext(), "Please select job sector", Toast.LENGTH_SHORT).show();
                         } else if (JobType == null) {
                             Toast.makeText(getContext(), "Please select job type", Toast.LENGTH_SHORT).show();
-                        } else if (partImage == null) {
+                        }/* else if (partImage == null) {
                             Toast.makeText(getContext(), "Please add image for job post", Toast.LENGTH_SHORT).show();
                         }*/ else {
                             validator.validate();
@@ -472,7 +472,7 @@ User user = LoginUtils.getLoggedinUser();
                             Toast.makeText(getContext(), "Please select job sector", Toast.LENGTH_SHORT).show();
                         } else if (JobType == null) {
                             Toast.makeText(getContext(), "Please select job type", Toast.LENGTH_SHORT).show();
-                        } else if (partImage == null ) {
+                        }/* else if (partImage == null ) {
                             Toast.makeText(getContext(), "Please add image for job post", Toast.LENGTH_SHORT).show();
                         }*/ else {
                             validator.validate();

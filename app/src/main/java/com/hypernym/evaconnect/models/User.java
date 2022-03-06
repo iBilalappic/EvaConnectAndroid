@@ -116,11 +116,11 @@ public class User implements Serializable, Parcelable {
         return connection_count;
     }
 
-    public void setConnection_count(Integer connection_count) {
+    public void setConnection_count(int connection_count) {
         this.connection_count = connection_count;
     }
 
-    private Integer connection_count;
+    public int connection_count;
 
 
     public String getFacebook_image_url() {

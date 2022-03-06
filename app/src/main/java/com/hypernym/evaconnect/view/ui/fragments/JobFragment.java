@@ -305,12 +305,32 @@ public class JobFragment extends BaseFragment implements View.OnClickListener, S
 
     @Override
     public void onApplyClick(View view, int position) {
-        SpecficJobFragment specficJobFragment = new SpecficJobFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("job_id", posts.get(position).getId());
-        bundle.putString("user_image", posts.get(position).getUser().getUser_image());
-        specficJobFragment.setArguments(bundle);
-        loadFragment(R.id.framelayout, specficJobFragment, getContext(), true);
+       if(LoginUtils.getUser().getType().equals("company")){
+           CompanyApplicantFragment companyApplicantFragment = new CompanyApplicantFragment();
+           companyJobAdModel = new CompanyJobAdModel();
+           companyJobAdModel.setId(posts.get(position).getId());
+           companyJobAdModel.setJobTitle(posts.get(position).getJob_title());
+           companyJobAdModel.setJobImage(posts.get(position).getJob_image());
+           companyJobAdModel.setContent(posts.get(position).getContent());
+           companyJobAdModel.setJobSector(posts.get(position).getJob_sector());
+           companyJobAdModel.setActive_hours(posts.get(position).getActive_hours());
+           companyJobAdModel.setApplicant_count(posts.get(position).getApplicant_count());
+           companyJobAdModel.setSalary(posts.get(position).getSalary());
+           companyJobAdModel.setLocation(posts.get(position).getLocation());
+           companyJobAdModel.setPosition(posts.get(position).getPosition());
+           Bundle bundle = new Bundle();
+           bundle.putSerializable("COMPANY_AD", companyJobAdModel);
+           companyApplicantFragment.setArguments(bundle);
+           loadFragment(R.id.framelayout, companyApplicantFragment, getContext(), true);
+       } else{
+           SpecficJobFragment specficJobFragment = new SpecficJobFragment();
+           Bundle bundle = new Bundle();
+           bundle.putInt("job_id", posts.get(position).getId());
+           bundle.putString("user_image", posts.get(position).getUser().getUser_image());
+           specficJobFragment.setArguments(bundle);
+           loadFragment(R.id.framelayout, specficJobFragment, getContext(), true);
+       }
+
     }
 
     @Override

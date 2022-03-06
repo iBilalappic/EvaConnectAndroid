@@ -59,7 +59,11 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
 
     @BindView(R.id.tv_connect)
     TextView tv_connect;
+    @BindView(R.id.tv_view_post)
+    TextView tv_view_post;
 
+    @BindView(R.id.view_view_post)
+    View view_view_post;
     @BindView(R.id.layout_account_private)
     ConstraintLayout layout_account_private;
 
@@ -160,6 +164,13 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
         layout_message.setOnClickListener(this);
         init();
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        posts.clear();
+        callPostsApi();
     }
 
     private void init() {
@@ -279,10 +290,16 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                             /*  layout_disconnect.setVisibility(View.VISIBLE);*/
                             layout_block.setVisibility(View.VISIBLE);
                             layout_account_private.setVisibility(View.GONE);
+                            rc_post.setVisibility(View.VISIBLE);
+                            view_view_post.setVisibility(View.VISIBLE);
+                            tv_view_post.setVisibility(View.VISIBLE);
                         } else {
                             /* layout_disconnect.setVisibility(View.GONE);*/
                             layout_account_private.setVisibility(View.VISIBLE);
                             layout_block.setVisibility(View.GONE);
+                            rc_post.setVisibility(View.GONE);
+                            view_view_post.setVisibility(View.GONE);
+                            tv_view_post.setVisibility(View.GONE);
                         }
                     }
                 }
@@ -370,10 +387,16 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                             /* layout_disconnect.setVisibility(View.VISIBLE);*/
                             layout_block.setVisibility(View.GONE);
                             layout_account_private.setVisibility(View.GONE);
+                            rc_post.setVisibility(View.VISIBLE);
+                            view_view_post.setVisibility(View.VISIBLE);
+                            tv_view_post.setVisibility(View.VISIBLE);
                         } else {
                             /*  layout_disconnect.setVisibility(View.GONE);*/
                             layout_account_private.setVisibility(View.VISIBLE);
                             layout_block.setVisibility(View.VISIBLE);
+                            rc_post.setVisibility(View.GONE);
+                            view_view_post.setVisibility(View.GONE);
+                            tv_view_post.setVisibility(View.GONE);
                         }
                     }
                 }
@@ -442,7 +465,6 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
         if (animator instanceof SimpleItemAnimator) {
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
         }
-        callPostsApi();
         /**
          * add scroll listener while user reach in bottom load more will call
          */
@@ -594,7 +616,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
             case R.id.layout_message:
                 ChatFragment chatFragment = new ChatFragment();
                 Bundle bundlemessage = new Bundle();
-                if (argumentReceived.equalsIgnoreCase("Postuser")) {
+                if (argumentReceived.equalsIgnoreCase("PostData")) {
                     bundlemessage.putSerializable("user", post.getUser());
                 } else {
                     bundlemessage.putSerializable("user", targetUser);
@@ -711,7 +733,12 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
 
     @Override
     public void onItemClick(View view, int position) {
-
+        PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("post", posts.get(position).getId());
+        Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
+        postDetailsFragment.setArguments(bundle);
+        loadFragment(R.id.framelayout, postDetailsFragment, getContext(), true);
     }
 
     @Override

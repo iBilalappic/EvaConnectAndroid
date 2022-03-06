@@ -138,8 +138,10 @@ public class PostRepository implements IPostRepository {
     @Override
     public LiveData<BaseModel<List<Post>>> getPostFilter(User user, int total, int current) {
         dashboardMutableLiveData = new MutableLiveData<>();
-        user.setFilter("my_posts");
-        RestClient.get().appApi().getPostFilter(user, total, current).enqueue(new Callback<BaseModel<List<Post>>>() {
+        HashMap<String ,Object> body=new HashMap<>();
+        body.put("filter","my_posts");
+        body.put("user_id",LoginUtils.getUser().getId());
+        RestClient.get().appApi().getPostFilter(body, total, current).enqueue(new Callback<BaseModel<List<Post>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
                 dashboardMutableLiveData.setValue(response.body());
