@@ -79,7 +79,7 @@ public class Sender {
     @SerializedName("is_online")
     private Boolean mIs_online;
     @SerializedName("last_online_datetime")
-    private Object mLast_online_datetime;
+    private String mLast_online_datetime;
 
     public Boolean getIs_online() {
         return mIs_online;
@@ -89,11 +89,11 @@ public class Sender {
         this.mIs_online = mIs_online;
     }
 
-    public Object getLast_online_datetime() {
+    public String getLast_online_datetime() {
         return mLast_online_datetime;
     }
 
-    public void setLast_online_datetime(Object mLast_online_datetime) {
+    public void setLast_online_datetime(String mLast_online_datetime) {
         this.mLast_online_datetime = mLast_online_datetime;
     }
 

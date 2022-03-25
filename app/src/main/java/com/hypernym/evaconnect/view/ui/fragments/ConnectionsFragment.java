@@ -22,6 +22,7 @@ import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
+import com.hypernym.evaconnect.models.ConnectionModel;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
@@ -69,6 +70,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
     private ConnectionsAdapter connectionsAdapter;
     private RecommendedUser_HorizontalAdapter recommendedUser_horizontalAdapter;
     private List<User> connectionList = new ArrayList<>();
+    private List<ConnectionModel> connectedList = new ArrayList<>();
     private List<User> recommendeduserList = new ArrayList<>();
 
     private LinearLayoutManager linearLayoutManager, linearLayoutManagerHorizontal;
@@ -139,7 +141,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
     }
 
     private void initRecyclerView() {
-        connectionsAdapter = new ConnectionsAdapter(getContext(), connectionList, this);
+        connectionsAdapter = new ConnectionsAdapter(getContext(), connectedList, this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rc_connections.setLayoutManager(linearLayoutManager);
         rc_connections.setAdapter(connectionsAdapter);
@@ -152,7 +154,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
                 isLoading = true;
                 currentPage = AppConstants.TOTAL_PAGES + currentPage;
                 if (NetworkUtils.isNetworkConnected(getContext())) {
-                    getConnectionByFilter(type, currentPage, false);
+                 //   getConnectionByFilter(type, currentPage, false);
                 } else {
                     networkErrorDialog();
                 }
@@ -191,37 +193,38 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
 
        // userData.setType(mtype);
         userData.setUser_id(user.getId());
-        userData.setConnection_status("active");
+        userData.setFilter("active");
         if (edt_search.getText().toString().length() > 0)
             userData.setFirst_name(edt_search.getText().toString());
         Log.e("type", mtype);
-
-        connectionViewModel.getConnectionByFilter(userData, AppConstants.TOTAL_PAGES, currentPage).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<User>>>() {
+     //   connectedList.clear();
+        connectionViewModel.getConnected(userData, AppConstants.TOTAL_PAGES, currentPage).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<ConnectionModel>>>() {
             @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel) {
+            public void onChanged(BaseModel<List<ConnectionModel>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
-                    if (currentPage == PAGE_START) {
-                        connectionList.clear();
-                        connectionsAdapter.notifyDataSetChanged();
-                    }
-                    //
-                    connectionList.addAll(listBaseModel.getData());
+//                    if (currentPage == PAGE_START) {
+//                        connectionList.clear();
+//                        connectionsAdapter.notifyDataSetChanged();
+//                    }
+                    connectedList.clear();
+                    connectedList.addAll(listBaseModel.getData());
                     connectionsAdapter.notifyDataSetChanged();
-                    if (connectionList.size() > 0) {
-                        rc_connections.setVisibility(View.VISIBLE);
-                        empty.setVisibility(View.GONE);
-                    }
-                    isLoading = false;
+//                    if (connectionList.size() > 0) {
+                    rc_connections.setVisibility(View.VISIBLE);
+                    empty.setVisibility(View.GONE);
+                  //  }
+//                    isLoading = false;
                 } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
 
                     if(connectionList.size()==0)
                     {
+                        connectedList.clear();
                         rc_connections.setVisibility(View.GONE);
                         empty.setVisibility(View.VISIBLE);
                     }
-                    isLastPage = true;
-                    // homePostsAdapter.removeLoading();
-                    isLoading = false;
+//                    isLastPage = true;
+//                    // homePostsAdapter.removeLoading();
+//                    isLoading = false;
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
@@ -253,10 +256,10 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
                     break;
 
                 case R.id.ly_main:
-                    User user = connectionList.get(position);
+                    ConnectionModel user = connectedList.get(position);
                     PersonProfileFragment personProfileFragment = new PersonProfileFragment();
                     Bundle bundle2 = new Bundle();
-                    bundle2.putParcelable("user", user);
+                    bundle2.putInt("user_id", user.senderId);
                     loadFragment_bundle(R.id.framelayout, personProfileFragment, getContext(), true, bundle2);
                     break;
 

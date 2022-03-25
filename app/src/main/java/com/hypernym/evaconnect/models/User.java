@@ -10,7 +10,7 @@ public class User implements Serializable, Parcelable {
     private Integer id;
     private String email;
     private String password;
-    private String first_name;
+    public String first_name;
     private String bio_data;
     private String type;
     private String status;

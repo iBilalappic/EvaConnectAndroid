@@ -31,6 +31,7 @@ import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
+import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.GetPendingData;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
@@ -51,6 +52,9 @@ import java.util.List;
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 public class BaseFragment extends Fragment {
     private CustomProgressBar customProgressBar = new CustomProgressBar();
     private SimpleDialog simpleDialog;
@@ -69,6 +73,8 @@ public class BaseFragment extends Fragment {
     public static final String INTENT_ASPECT_RATIO_Y = "aspect_ratio_Y";
     public static final String INTENT_LOCK_ASPECT_RATIO = "lock_aspect_ratio";
     Intent CropIntent;
+    // mEventBus = EventBus.getDefault()
+    EventBus mEventBus= EventBus.getDefault();
 
     /**
      * Could handle back press.
@@ -93,7 +99,8 @@ public class BaseFragment extends Fragment {
     public void onResume() {
         super.onResume();
         connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
-
+        if (!mEventBus.isRegistered(this))
+            mEventBus.register(this);
 
     }
 
@@ -111,12 +118,20 @@ public class BaseFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         hideDialog();
+        mEventBus.unregister(this);
+
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         hideDialog();
+        mEventBus.unregister(this);
+
+
+    }
+    public void Unregister(){
+        mEventBus.unregister(this);
 
     }
 
@@ -500,5 +515,9 @@ public class BaseFragment extends Fragment {
 
     public void hidePostText() {
         newPost = false;
+    }
+    @Subscribe
+    public void onEvent(String mtitle) {
+
     }
 }

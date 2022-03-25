@@ -108,40 +108,40 @@ public class RecommendedAllUserFragment extends BaseFragment implements Connecti
 
     private void initRecyclerView() {
 
-        connectionsAdapter = new ConnectionsAdapter(getContext(), connectionList, this);
-        linearLayoutManager = new LinearLayoutManager(getContext());
-        rc_connections.setLayoutManager(linearLayoutManager);
-        rc_connections.setAdapter(connectionsAdapter);
-        /**
-         * add scroll listener while user reach in bottom load more will call
-         */
-        rc_connections.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
-            @Override
-            protected void loadMoreItems() {
-                isLoading = true;
-                freshpage = AppConstants.TOTAL_NEW_PAGES + freshpage;
-                if (connectionList.size()>=9) {
-                    if (NetworkUtils.isNetworkConnected(getContext())) {
-                        getConnectionByFilter(freshpage, false);
-                          isFirstload=isLoading;
-
-                    } else {
-                        networkErrorDialog();
-                    }
-                }
-
-            }
-
-            @Override
-            public boolean isLastPage() {
-                return isLastPage;
-            }
-
-            @Override
-            public boolean isLoading() {
-                return isLoading;
-            }
-        });
+//        connectionsAdapter = new ConnectionsAdapter(getContext(), connectionList, this);
+//        linearLayoutManager = new LinearLayoutManager(getContext());
+//        rc_connections.setLayoutManager(linearLayoutManager);
+//        rc_connections.setAdapter(connectionsAdapter);
+//        /**
+//         * add scroll listener while user reach in bottom load more will call
+//         */
+//        rc_connections.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
+//            @Override
+//            protected void loadMoreItems() {
+//                isLoading = true;
+//                freshpage = AppConstants.TOTAL_NEW_PAGES + freshpage;
+//                if (connectionList.size()>=9) {
+//                    if (NetworkUtils.isNetworkConnected(getContext())) {
+//                        getConnectionByFilter(freshpage, false);
+//                          isFirstload=isLoading;
+//
+//                    } else {
+//                        networkErrorDialog();
+//                    }
+//                }
+//
+//            }
+//
+//            @Override
+//            public boolean isLastPage() {
+//                return isLastPage;
+//            }
+//
+//            @Override
+//            public boolean isLoading() {
+//                return isLoading;
+//            }
+//        });
     }
 
     @Override
@@ -164,34 +164,34 @@ public class RecommendedAllUserFragment extends BaseFragment implements Connecti
         if (edt_search.getText().toString().length() > 0)
             userData.setFirst_name(edt_search.getText().toString());
 
-        connectionViewModel.getConnectionByRecommendedUser(userData, AppConstants.TOTAL_NEW_PAGES, currentPage).observe(this, new Observer<BaseModel<List<User>>>() {
-            @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
-                    if (currentPage == PAGE_START) {
-                        connectionList.clear();
-                        connectionsAdapter.notifyDataSetChanged();
-                    }
-                    connectionList.addAll(listBaseModel.getData());
-                    connectionsAdapter.notifyDataSetChanged();
-                    if (connectionList.size() > 0) {
-                        rc_connections.setVisibility(View.VISIBLE);
-                        empty.setVisibility(View.GONE);
-                    }
-                    isLoading = false;
-                } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
-                    rc_connections.setVisibility(View.VISIBLE);
-                    empty.setVisibility(View.VISIBLE);
-                    isLastPage = true;
-                    // homePostsAdapter.removeLoading();
-                    isLoading = false;
-                } else {
-                    rc_connections.setVisibility(View.GONE);
-                    empty.setVisibility(View.VISIBLE);
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-            }
-        });
+//        connectionViewModel.getConnectionByRecommendedUser(userData, AppConstants.TOTAL_NEW_PAGES, currentPage).observe(this, new Observer<BaseModel<List<User>>>() {
+//            @Override
+//            public void onChanged(BaseModel<List<User>> listBaseModel) {
+//                if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
+//                    if (currentPage == PAGE_START) {
+//                        connectionList.clear();
+//                        connectionsAdapter.notifyDataSetChanged();
+//                    }
+//                    connectionList.addAll(listBaseModel.getData());
+//                    connectionsAdapter.notifyDataSetChanged();
+//                    if (connectionList.size() > 0) {
+//                        rc_connections.setVisibility(View.VISIBLE);
+//                        empty.setVisibility(View.GONE);
+//                    }
+//                    isLoading = false;
+//                } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
+//                    rc_connections.setVisibility(View.VISIBLE);
+//                    empty.setVisibility(View.VISIBLE);
+//                    isLastPage = true;
+//                    // homePostsAdapter.removeLoading();
+//                    isLoading = false;
+//                } else {
+//                    rc_connections.setVisibility(View.GONE);
+//                    empty.setVisibility(View.VISIBLE);
+//                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+//                }
+//            }
+//        });
     }
 
     @OnClick(R.id.img_backarrow)

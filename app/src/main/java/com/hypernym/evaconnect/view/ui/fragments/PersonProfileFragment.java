@@ -26,6 +26,7 @@ import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
+import com.hypernym.evaconnect.models.ConnectionModel;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
@@ -143,6 +144,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
     private int currentPage = PAGE_START;
     private boolean isLastPage = false;
     private boolean isLoading = false;
+    private int user_id=0;
 
     public PersonProfileFragment() {
         // Required empty public constructor
@@ -192,6 +194,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
 
             targetUser = getArguments().getParcelable("user");
             post = (Post) getArguments().getSerializable("PostData");
+            user_id = getArguments().getInt("user_id");
             Log.d("TAAAG", GsonUtils.toJson(post));
 
             if (post != null) {
@@ -413,6 +416,9 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                 });
 
             }
+            else if(user_id!=0){
+                getUserDetails();
+            }
         } else {
             user = LoginUtils.getLoggedinUser();
             Log.d("TAAAG", GsonUtils.toJson(user));
@@ -498,7 +504,9 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
         int id;
         if (argumentReceived.equalsIgnoreCase("user")) {
             id = targetUser.getId();
-        } else {
+        }else if(user_id!=0){
+            id=user_id; }
+        else {
             id = post.getUser().getId();
         }
         userViewModel.getuser_details(id

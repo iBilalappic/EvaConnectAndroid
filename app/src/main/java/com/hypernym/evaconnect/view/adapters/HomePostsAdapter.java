@@ -1071,10 +1071,10 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         ((TextTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
                     ((TextTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name() );
-                    if(!posts.get(position).getUser().getType().equalsIgnoreCase("company") && posts.get(position).getUser().getDesignation()!=null && !posts.get(position).getUser().getDesignation().isEmpty())
-                    {
-                        ((TextTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation() +" at");
-                    }
+//                    if(!posts.get(position).getUser().getType().equalsIgnoreCase("company") && posts.get(position).getUser().getDesignation()!=null && !posts.get(position).getUser().getDesignation().isEmpty())
+//                    {
+//                        ((TextTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation() +" at");
+//                    }
 
                     if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
                         ((TextTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);

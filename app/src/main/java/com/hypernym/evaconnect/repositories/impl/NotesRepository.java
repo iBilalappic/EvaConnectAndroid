@@ -77,8 +77,8 @@ public class NotesRepository implements INotesRepository {
         HashMap<String, Object> body = new HashMap<>();
         body.put("occurrence_date",formattedEventDate);
         body.put("occurrence_time",time_utc);
-        body.put("modified_by_id", notes_id);
-        body.put("id", LoginUtils.getUser().getId());
+        body.put("modified_by_id", LoginUtils.getUser().getId());
+        body.put("id", notes_id);
         body.put("created_by_id", LoginUtils.getUser().getId());
         body.put("status", "active");
         body.put("title", notes_title);

@@ -7,6 +7,7 @@ import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
+import com.hypernym.evaconnect.models.ConnectionModel;
 import com.hypernym.evaconnect.models.GetBlockedData;
 import com.hypernym.evaconnect.models.GetPendingData;
 import com.hypernym.evaconnect.models.ShareConnection;
@@ -25,6 +26,7 @@ public class ConnectionRepository implements IConnectionRespository {
 
     private MutableLiveData<BaseModel<List<Connection>>> connectionMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<User>>> userMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<ConnectionModel>>> connectedMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<GetPendingData>>> pendingMutableLiveData = new MutableLiveData<>();
 
     private MutableLiveData<BaseModel<User>> connectionCountMutableLiveData = new MutableLiveData<>();
@@ -165,6 +167,23 @@ public class ConnectionRepository implements IConnectionRespository {
             }
         });
         return userMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<ConnectionModel>>> getConnected(User userData, int total, int current) {
+        connectedMutableLiveData=new MutableLiveData<>();
+
+        RestClient.get().appApi().getConnected(userData.getUser_id(),userData.getFilter(),userData.first_name).enqueue(new Callback<BaseModel<List<ConnectionModel>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<ConnectionModel>>> call, Response<BaseModel<List<ConnectionModel>>> response) {
+                connectedMutableLiveData.setValue(response.body());
+            }
+            @Override
+            public void onFailure(Call<BaseModel<List<ConnectionModel>>> call, Throwable t) {
+                connectedMutableLiveData.setValue(null);
+            }
+        });
+        return connectedMutableLiveData;
     }
 
     @Override

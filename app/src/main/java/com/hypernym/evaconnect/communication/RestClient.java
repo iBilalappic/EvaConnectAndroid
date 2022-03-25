@@ -154,7 +154,7 @@ public class RestClient {
                     if (LoginUtils.isUserLogin()) {
                         if (name.equals(AppConstants.SIMPLE_BASEURL)) {
                             _builder.header("Authorization", "token " + LoginUtils.getAuthToken(AppUtils.getApplicationContext()));
-
+                            Log.d("TAG", "intercept: "+LoginUtils.getAuthToken(AppUtils.getApplicationContext()));
                         } else {
                             _builder.header("Authorization", "Basic OGY1MDlkNzItMzljNS00ZGY2LTg5MmItMmEwOGQ2YzMwZWU4");
                         }

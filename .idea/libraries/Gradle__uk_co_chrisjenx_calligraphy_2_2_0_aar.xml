@@ -7,6 +7,9 @@
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/00c9290319504c8089412791fb120853/jetified-calligraphy-2.2.0/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/00c9290319504c8089412791fb120853/jetified-calligraphy-2.2.0/AndroidManifest.xml" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/00c9290319504c8089412791fb120853/jetified-calligraphy-2.2.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/fed24dc644faa1074485d9e7b5018859/jetified-calligraphy-2.2.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/fed24dc644faa1074485d9e7b5018859/jetified-calligraphy-2.2.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/fed24dc644faa1074485d9e7b5018859/jetified-calligraphy-2.2.0/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$APPLICATION_HOME_DIR$/jre/caches/modules-2/files-2.1/uk.co.chrisjenx/calligraphy/2.2.0/9cbe9b4d5702c21607a062681320cc59c391ad83/calligraphy-2.2.0-javadoc.jar!/" />

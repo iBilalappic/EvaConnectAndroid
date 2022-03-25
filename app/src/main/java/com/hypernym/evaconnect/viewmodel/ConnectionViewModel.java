@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
+import com.hypernym.evaconnect.models.ConnectionModel;
 import com.hypernym.evaconnect.models.GetBlockedData;
 import com.hypernym.evaconnect.models.GetPendingData;
 import com.hypernym.evaconnect.models.ShareConnection;
@@ -49,6 +50,13 @@ public class ConnectionViewModel extends AndroidViewModel {
     {
         return iConnectionRepository.getConnectionByFilter(user,total,current);
     }
+
+    public LiveData<BaseModel<List<ConnectionModel>>> getConnected(User user, int total, int current)
+    {
+        return iConnectionRepository.getConnected(user,total,current);
+    }
+
+
     public LiveData<BaseModel<List<User>>> getConnectionByRecommendedUser(User user,int total,int current)
     {
         return iConnectionRepository.getConnectionByRecommendedUser(user,total,current);

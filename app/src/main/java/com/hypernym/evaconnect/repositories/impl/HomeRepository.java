@@ -52,6 +52,7 @@ public class HomeRepository implements IHomeRepository {
         HashMap<String, Object> data = new HashMap<String, Object>();
         data.put("user_id", user.getId());
         data.put("filter", filter);
+        data.put("search_key", user.getSearch_key());
 
         RestClient.get().appApi().getDashboardSearch(data, total, current).enqueue(new Callback<BaseModel<List<Post>>>() {
             @Override

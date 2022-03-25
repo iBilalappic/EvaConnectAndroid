@@ -9,6 +9,7 @@ import com.hypernym.evaconnect.models.ChatAttachment;
 import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.Connection;
+import com.hypernym.evaconnect.models.ConnectionModel;
 import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.GetBlockedData;
 import com.hypernym.evaconnect.models.GetEventInterestedUsers;
@@ -236,8 +237,13 @@ public interface AppApi {
     @GET(APIConstants.GET_ALL_PENDING)
     Call<BaseModel<List<GetPendingData>>> getAllPending(/*@Body User user, @Query("limit") int limit, @Query("offset") int offset*/);
 
-    @POST(APIConstants.GET_CONNECTION_BY_FILTER)
+    @POST(APIConstants.GET_CONNECTION_BY_FILTER_OLD)
     Call<BaseModel<List<User>>> getConnectionByFilter(@Body User user,@Query("limit") int limit, @Query("offset") int offset);
+
+    @GET(APIConstants.GET_CONNECTION_BY_FILTER)
+        //  Call<BaseModel<List<User>>> getConnectionByFilter(@Body User user,@Query("limit") int limit, @Query("offset") int offset);
+    Call<BaseModel<List<ConnectionModel>>> getConnected(@Query("user_id") int id, @Query("filter") String filter,
+                                                        @Query("first_name") String first_name);
 
     @POST(APIConstants.SEND_NOTIFICATION)
     Call<Object> postPackets(@Body Notification_onesignal data);

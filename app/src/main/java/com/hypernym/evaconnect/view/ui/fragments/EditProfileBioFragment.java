@@ -12,10 +12,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.User;
+import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
@@ -61,6 +63,7 @@ public class EditProfileBioFragment extends BaseFragment implements View.OnClick
         img_backarrow.setOnClickListener(this);
         btn_next.setOnClickListener(this);
         user = LoginUtils.getUser();
+        userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(UserViewModel.class);
 
         if (user.getType().equalsIgnoreCase("company")) {
             tv_main_title.setText("Tell us a bit about the company");

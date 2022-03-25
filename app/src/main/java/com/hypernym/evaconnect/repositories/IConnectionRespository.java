@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
+import com.hypernym.evaconnect.models.ConnectionModel;
 import com.hypernym.evaconnect.models.GetBlockedData;
 import com.hypernym.evaconnect.models.GetPendingData;
 import com.hypernym.evaconnect.models.ShareConnection;
@@ -16,7 +17,8 @@ public interface IConnectionRespository {
     LiveData<BaseModel<List<Object>>> block(Connection connection);
     LiveData<BaseModel<List<User>>> getAllConnections(int total,int current);
     LiveData<BaseModel<List<GetPendingData>>> getAllPending(int total, int current);
-    LiveData<BaseModel<List<User>>> getConnectionByFilter(User user,int total,int current);
+    LiveData<BaseModel<List<User>>> getConnectionByFilter(User user, int total, int current);
+    LiveData<BaseModel<List<ConnectionModel>>> getConnected(User user, int total, int current);
     LiveData<BaseModel<List<User>>> getConnectionByRecommendedUser(User user,int total,int current);
     LiveData<BaseModel<User>> getConnectionCount(User user);
     LiveData<BaseModel<List<Object>>> remove_user(Integer connection_id);

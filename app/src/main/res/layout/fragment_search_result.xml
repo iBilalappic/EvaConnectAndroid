@@ -52,6 +52,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:padding="15dp"
+            android:visibility="gone"
             android:background="@android:color/transparent"
             android:hint="Search"
             android:textSize="14sp"
@@ -68,6 +69,7 @@
             android:layout_marginEnd="24dp"
             android:background="@drawable/sendbtn"
             android:gravity="center"
+            android:visibility="gone"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -127,14 +129,14 @@
             android:text="Events"
             android:textColor="@color/gray_1"
             android:textSize="12sp"
-            app:layout_constraintEnd_toStartOf="@+id/tv_posts"
+            app:layout_constraintStart_toEndOf="@+id/tv_posts"
             app:layout_constraintTop_toBottomOf="@+id/edt_search"/>
 
         <TextView
             android:id="@+id/tv_posts"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
             android:visibility="gone"
             android:layout_marginEnd="20dp"
@@ -142,7 +144,7 @@
             android:text="Posts"
             android:textColor="@color/gray_1"
             android:textSize="12sp"
-            app:layout_constraintEnd_toStartOf="@+id/tv_job"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edt_search"/>
 
         <TextView
@@ -173,7 +175,7 @@
             android:text="News"
             android:textColor="@color/gray_1"
             android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_events"
             app:layout_constraintTop_toBottomOf="@+id/edt_search">
 
         </TextView>
@@ -183,6 +185,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edt_search"
             app:tabSelectedTextColor="@color/black"
@@ -226,10 +229,11 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@color/white"
+            android:layout_marginTop="@dimen/spacing_medium"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tabLayout2" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_news" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

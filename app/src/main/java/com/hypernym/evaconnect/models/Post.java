@@ -24,6 +24,16 @@ public class Post implements Serializable {
     private int rss_news_id;
     private Integer receiver_id;
     private int modified_by_id;
+
+    public int getShare_count() {
+        return share_count;
+    }
+
+    public void setShare_count(int share_count) {
+        this.share_count = share_count;
+    }
+
+    private int share_count;
     private String modified_datetime;
     private String post_document;
 

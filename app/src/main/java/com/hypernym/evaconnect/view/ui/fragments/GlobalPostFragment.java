@@ -1,6 +1,7 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
+import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -41,7 +42,6 @@ import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.HomePostsAdapter;
 import com.hypernym.evaconnect.view.bottomsheets.BottomsheetShareSelection;
-import com.hypernym.evaconnect.view.dialogs.ShareDialog;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.EventViewModel;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
@@ -50,46 +50,22 @@ import com.hypernym.evaconnect.viewmodel.NewsViewModel;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
-
-public class SearchResultFragment extends BaseFragment implements View.OnClickListener, HomePostsAdapter.ItemClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class GlobalPostFragment  extends BaseFragment implements View.OnClickListener, HomePostsAdapter.ItemClickListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.rc_home)
     RecyclerView rc_home;
 
 
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
-
-    @BindView(R.id.edt_search)
-    EditText edt_search;
-
-    @BindView(R.id.tv_news)
-    TextView tv_news;
-
-    @BindView(R.id.tv_total_result)
-    TextView tv_total_result;
-
-    @BindView(R.id.tv_events)
-    TextView tv_events;
-
-    @BindView(R.id.tv_posts)
-    TextView tv_posts;
-
-    @BindView(R.id.tv_job)
-    TextView tv_job;
-
-
-    @BindView(R.id.tv_category)
-    TextView tv_category;
-
-    @BindView(R.id.img_backarrow)
-    ImageView img_backarrow;
+    private String search_key;
 
 
     private List<Post> posts = new ArrayList<>();
@@ -114,8 +90,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     int totalsize=0;
 
 
-    public SearchResultFragment() {
-        // Required empty public constructor
+    public GlobalPostFragment() {
     }
 
 
@@ -125,10 +100,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         View view = inflater.inflate(R.layout.fragment_search_result, container, false);
         ButterKnife.bind(this, view);
         getActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
-        tv_events.setTextColor(getContext().getResources().getColor(R.color.skyblue));
-        tv_posts.setTextColor(getContext().getResources().getColor(R.color.gray_1));
-        tv_job.setTextColor(getContext().getResources().getColor(R.color.gray_1));
-        tv_news.setTextColor(getContext().getResources().getColor(R.color.gray_1));
+        if (!mEventBus.getDefault().isRegistered(this)) mEventBus.getDefault().register(this);
 
         return view;
     }
@@ -143,19 +115,14 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         newsViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(NewsViewModel.class);
         //   currentPage = PAGE_START;
         swipeRefresh.setOnRefreshListener(this);
-        img_backarrow.setOnClickListener(this);
-        tv_events.setOnClickListener(this);
-        tv_job.setOnClickListener(this);
-        tv_posts.setOnClickListener(this);
-        tv_news.setOnClickListener(this);
+
         initRecycler();
-       // showBackButton();
-       // setPageTitle("Search Results");
+        // showBackButton();
+        // setPageTitle("Search Results");
         /**
          * add scroll listener while user reach in bottom load more will call
          */
 
-        edt_search.addTextChangedListener(new TextWatcher());
         ManapulateBundle(getArguments());
     }
 
@@ -195,15 +162,14 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     private void ManapulateBundle(Bundle arguments) {
         if (arguments != null) {
             keyword = getArguments().getString(Constants.SEARCH);
-            edt_search.setText(keyword);
         }
     }
 
     private void callPostsApi() {
         User user = LoginUtils.getLoggedinUser();
 
-        if (edt_search.getText().toString().length() > 0)
-            user.setSearch_key(edt_search.getText().toString());
+        if (search_key.length() > 0)
+            user.setSearch_key(search_key);
 
         homeViewModel.getDashboardSearch(user, AppConstants.TOTAL_PAGES, currentPage, filter).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
@@ -243,17 +209,13 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                     swipeRefresh.setRefreshing(false);
                     //  homePostsAdapter.removeLoading();
                     totalsize=totalsize+posts.size();
-                    tv_total_result.setText("Found " +totalsize+ " result in ");
-                    tv_category.setText(filter);
                     isLoading = false;
                 } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
                     isLastPage = true;
                     totalsize=0;
-                   // homePostsAdapter.removeLoading();
+                    // homePostsAdapter.removeLoading();
                     homePostsAdapter.notifyDataSetChanged();
                     swipeRefresh.setRefreshing(false);
-                    tv_total_result.setText("Found " +totalsize+ " result in ");
-                    tv_category.setText(filter);
                     isLoading = false;
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
@@ -283,68 +245,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
             case R.id.img_backarrow:
                 getActivity().onBackPressed();
                 break;
-            case R.id.tv_events:
-                if(!edt_search.getText().toString().isEmpty()){
-                    filter = "event";
-                    tv_events.setTextColor(getContext().getResources().getColor(R.color.skyblue));
-                    tv_posts.setTextColor(getContext().getResources().getColor(R.color.gray_1));
-                    tv_job.setTextColor(getContext().getResources().getColor(R.color.gray_1));
-                    tv_news.setTextColor(getContext().getResources().getColor(R.color.gray_1));
-                    currentPage = 0;
-                    posts.clear();
-                    homePostsAdapter.notifyDataSetChanged();
-                    callPostsApi();
-                }else{
-                    Toast.makeText(getContext(), "please enter keyword", Toast.LENGTH_SHORT).show();
-                }
 
-                break;
-            case R.id.tv_job:
-                if(!edt_search.getText().toString().isEmpty()) {
-                    filter = "job";
-                    tv_events.setTextColor(getContext().getResources().getColor(R.color.gray_1));
-                    tv_posts.setTextColor(getContext().getResources().getColor(R.color.gray_1));
-                    tv_job.setTextColor(getContext().getResources().getColor(R.color.skyblue));
-                    tv_news.setTextColor(getContext().getResources().getColor(R.color.gray_1));
-                    currentPage = 0;
-                    posts.clear();
-                    homePostsAdapter.notifyDataSetChanged();
-                    callPostsApi();
-                }else{
-                    Toast.makeText(getContext(), "please enter keyword", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case R.id.tv_posts:
-                if(!edt_search.getText().toString().isEmpty()) {
-                filter = "post";
-                tv_events.setTextColor(getContext().getResources().getColor(R.color.gray_1));
-                tv_posts.setTextColor(getContext().getResources().getColor(R.color.skyblue));
-                tv_job.setTextColor(getContext().getResources().getColor(R.color.gray_1));
-                tv_news.setTextColor(getContext().getResources().getColor(R.color.gray_1));
-                currentPage = 0;
-                posts.clear();
-                homePostsAdapter.notifyDataSetChanged();
-                callPostsApi();
-                }else{
-                    Toast.makeText(getContext(), "please enter keyword", Toast.LENGTH_SHORT).show();
-                }
-                break;
-
-            case R.id.tv_news:
-                if(!edt_search.getText().toString().isEmpty()) {
-                    filter = "news";
-                    tv_events.setTextColor(getContext().getResources().getColor(R.color.gray_1));
-                    tv_posts.setTextColor(getContext().getResources().getColor(R.color.skyblue));
-                    tv_job.setTextColor(getContext().getResources().getColor(R.color.gray_1));
-                    tv_news.setTextColor(getContext().getResources().getColor(R.color.gray_1));
-                    currentPage = 0;
-                    posts.clear();
-                    homePostsAdapter.notifyDataSetChanged();
-                    callPostsApi();
-                }else{
-                    Toast.makeText(getContext(), "please enter keyword", Toast.LENGTH_SHORT).show();
-                }
-                break;
 
 
         }
@@ -357,11 +258,11 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         isLastPage = false;
         homePostsAdapter.clear();
         if (NetworkUtils.isNetworkConnected(getContext())) {
-            if(edt_search.length()>0){
-                callPostsApi();
-            }else{
-                swipeRefresh.setRefreshing(false);
-            }
+//            if(edt_search.length()>0){
+//                callPostsApi();
+//            }else{
+//                swipeRefresh.setRefreshing(false);
+//            }
 
         } else {
             networkErrorDialog();
@@ -573,7 +474,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 //        shareDialog = new ShareDialog(getContext(), bundle);
 //        shareDialog.show();
         item_position=position;
-        BottomsheetShareSelection bottomSheetPictureSelection = new BottomsheetShareSelection(new YourDialogFragmentDismissHandler());
+        BottomsheetShareSelection bottomSheetPictureSelection = new BottomsheetShareSelection(new GlobalPostFragment.YourDialogFragmentDismissHandler());
         bottomSheetPictureSelection.show(getActivity().getSupportFragmentManager(), bottomSheetPictureSelection.getTag());
     }
 
@@ -817,5 +718,12 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         }
     }
 
-}
 
+    @Subscribe
+    public void onEvent(String mtitle) {
+        Log.d("TAG", "onEvent: "+mtitle);
+        search_key=mtitle;
+        callPostsApi();
+    }
+
+}

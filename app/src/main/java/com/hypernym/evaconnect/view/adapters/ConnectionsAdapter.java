@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
+import com.hypernym.evaconnect.models.ConnectionModel;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
@@ -29,12 +30,12 @@ import butterknife.ButterKnife;
 
 public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.ViewHolder> {
     private Context context;
-    private List<User> connections, originalConnections;
+    private List<ConnectionModel> connections, originalConnections;
     private ConnectionsAdapter.OnItemClickListener onItemClickListener;
     int count = 0;
     private boolean isLoaderVisible = false;
 
-    public ConnectionsAdapter(Context context, List<User> connectionList, ConnectionsAdapter.OnItemClickListener onItemClickListener) {
+    public ConnectionsAdapter(Context context, List<ConnectionModel> connectionList, ConnectionsAdapter.OnItemClickListener onItemClickListener) {
         this.context = context;
         this.connections = connectionList;
         this.onItemClickListener = onItemClickListener;
@@ -50,17 +51,19 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ConnectionsAdapter.ViewHolder holder, int position) {
-        if (!TextUtils.isEmpty(connections.get(position).getUser_image())) {
-            AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getUser_image());
+        if (!TextUtils.isEmpty(connections.get(position).sender.getUserImage())) {
+            AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).sender.getUserImage());
         }
 //        else if (connections.get(position).getIs_facebook() == 1 && !TextUtils.isEmpty(connections.get(position).getFacebook_image_url())) {
 //            AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getFacebook_image_url());
 //        } else {
 //            AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getUser_image());
 //        }
-        holder.tv_name.setText(connections.get(position).getFirst_name());
-        if (connections.get(position).getBio_data() != null && !connections.get(position).getBio_data().isEmpty()) {
-            holder.tv_designation.setText(connections.get(position).getBio_data());
+        if(connections.get(position).sender.getFirstName()!=null){
+            holder.tv_name.setText(connections.get(position).sender.getFirstName());
+        }
+        if (connections.get(position).sender.getBioData() != null && !connections.get(position).sender.getBioData().isEmpty()) {
+            holder.tv_designation.setText(connections.get(position).sender.getBioData());
         } else {
             holder.tv_designation.setText("--");
         }
@@ -72,9 +75,9 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
         }*/
 
 
-        if (connections.get(position).getCompany_name()!=null && !connections.get(position).getCompany_name().isEmpty()) {
+        if (connections.get(position).sender.getCompanyName()!=null && !connections.get(position).sender.getCompanyName().isEmpty()) {
             holder.tv_designation.setVisibility(View.VISIBLE);
-            holder.tv_designation.setText(connections.get(position).getCompany_name());
+            holder.tv_designation.setText(connections.get(position).sender.getCompanyName());
         } else {
             holder.tv_designation.setVisibility(View.GONE);
         }
@@ -100,16 +103,16 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
             }
 
         }*/
-        if(connections.get(position).isIs_online())
+        if(connections.get(position).sender.getIs_online())
         {
             holder.tv_connection_status.setText("Online");
             holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.skyblue));
         }
         else
         {
-            if(connections.get(position).getLast_online_datetime()!=null)
+            if(connections.get(position).sender.getLast_online_datetime()!=null)
             {
-                holder.tv_connection_status.setText("Last Online "+ DateUtils.formatToYesterdayOrToday(connections.get(position).getLast_online_datetime()));
+                holder.tv_connection_status.setText("Last Online "+ DateUtils.formatToYesterdayOrToday(connections.get(position).sender.getLast_online_datetime()));
                 holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.gray));
             }
             else
@@ -184,7 +187,7 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
     //This method will filter the list
     //here we are passing the filtered data
     //and assigning it to the list with notifydatasetchanged method
-    public void filterList(List<User> filterdNames) {
+    public void filterList(List<ConnectionModel> filterdNames) {
         connections.clear();
         if (filterdNames.size() > 0) {
 
@@ -204,14 +207,14 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
     public void removeLoading() {
         isLoaderVisible = false;
         int position = connections.size() - 1;
-        User item = getItem(position);
+        ConnectionModel item = getItem(position);
         if (item != null) {
             connections.remove(position);
             notifyItemRemoved(position);
         }
     }
 
-    User getItem(int position) {
+    ConnectionModel getItem(int position) {
         if (connections.size() > 0)
             return connections.get(position);
         else

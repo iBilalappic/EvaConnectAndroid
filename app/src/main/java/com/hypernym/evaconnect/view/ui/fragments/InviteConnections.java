@@ -21,6 +21,7 @@ import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.InvitedConnectionListener;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
+import com.hypernym.evaconnect.models.ConnectionModel;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.Constants;

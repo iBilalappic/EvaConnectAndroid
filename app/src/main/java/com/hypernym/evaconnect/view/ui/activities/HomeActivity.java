@@ -48,6 +48,7 @@ import com.hypernym.evaconnect.view.ui.fragments.ConnectionsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.ConnectionsTabFragment;
 import com.hypernym.evaconnect.view.ui.fragments.EditProfileFragment;
 import com.hypernym.evaconnect.view.ui.fragments.EventDetailFragment;
+import com.hypernym.evaconnect.view.ui.fragments.GlobalSearchTabfragment;
 import com.hypernym.evaconnect.view.ui.fragments.HomeFragment;
 import com.hypernym.evaconnect.view.ui.fragments.MainViewPagerFragment;
 import com.hypernym.evaconnect.view.ui.fragments.MessageFragment;
@@ -508,7 +509,7 @@ public class HomeActivity extends BaseActivity {
     public void openDialog(View view) {
        /* searchDialog = new SearchDialog(this);
         searchDialog.show();*/
-        SearchResultFragment searchResultFragment = new SearchResultFragment();
+        GlobalSearchTabfragment searchResultFragment = new GlobalSearchTabfragment();
         FragmentTransaction transaction = ( this).getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
         transaction.replace(R.id.framelayout, searchResultFragment);
@@ -655,5 +656,9 @@ public class HomeActivity extends BaseActivity {
                 findViewById(R.id.tv_back).setVisibility(View.GONE);
             super.onBackPressed();
         }
+    }
+    @Subscribe
+    public void onEvent(String mtitle) {
+
     }
 }
