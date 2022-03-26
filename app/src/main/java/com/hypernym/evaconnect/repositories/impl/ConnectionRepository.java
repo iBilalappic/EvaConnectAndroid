@@ -27,7 +27,10 @@ public class ConnectionRepository implements IConnectionRespository {
     private MutableLiveData<BaseModel<List<Connection>>> connectionMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<User>>> userMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<ConnectionModel>>> connectedMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<ConnectionModel>>> connectedFilterMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<GetPendingData>>> pendingMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<ConnectionModel>>> PendingFilterMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<GetBlockedData>>> getBlockedByFilter = new MutableLiveData<>();
 
     private MutableLiveData<BaseModel<User>> connectionCountMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> remove_userMutableLiveData = new MutableLiveData<>();
@@ -172,8 +175,10 @@ public class ConnectionRepository implements IConnectionRespository {
     @Override
     public LiveData<BaseModel<List<ConnectionModel>>> getConnected(User userData, int total, int current) {
         connectedMutableLiveData=new MutableLiveData<>();
-
-        RestClient.get().appApi().getConnected(userData.getUser_id(),userData.getFilter(),userData.first_name).enqueue(new Callback<BaseModel<List<ConnectionModel>>>() {
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("user_id",userData.getUser_id());
+        body.put("connection_status", userData.getFilter());
+        RestClient.get().appApi().getConnected(body).enqueue(new Callback<BaseModel<List<ConnectionModel>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<ConnectionModel>>> call, Response<BaseModel<List<ConnectionModel>>> response) {
                 connectedMutableLiveData.setValue(response.body());
@@ -184,6 +189,57 @@ public class ConnectionRepository implements IConnectionRespository {
             }
         });
         return connectedMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<ConnectionModel>>> getConnectedFilter(User userData) {
+        connectedFilterMutableLiveData=new MutableLiveData<>();
+
+        RestClient.get().appApi().getConnectedByFilter(userData.first_name,userData.getLast_name(),userData.getFilter(),userData.getUser_id()).enqueue(new Callback<BaseModel<List<ConnectionModel>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<ConnectionModel>>> call, Response<BaseModel<List<ConnectionModel>>> response) {
+                connectedFilterMutableLiveData.setValue(response.body());
+            }
+            @Override
+            public void onFailure(Call<BaseModel<List<ConnectionModel>>> call, Throwable t) {
+                connectedFilterMutableLiveData.setValue(null);
+            }
+        });
+        return connectedFilterMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<GetPendingData>>> getPendingFilter(User user) {
+        pendingMutableLiveData=new MutableLiveData<>();
+
+        RestClient.get().appApi().getPendingByFilter(user.first_name,user.getLast_name(),user.getFilter(),user.getUser_id()).enqueue(new Callback<BaseModel<List<GetPendingData>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<GetPendingData>>> call, Response<BaseModel<List<GetPendingData>>> response) {
+                pendingMutableLiveData.setValue(response.body());
+            }
+            @Override
+            public void onFailure(Call<BaseModel<List<GetPendingData>>> call, Throwable t) {
+                pendingMutableLiveData.setValue(null);
+            }
+        });
+        return pendingMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<GetBlockedData>>> getBlockedByFilter(User user) {
+        getBlockedByFilter=new MutableLiveData<>();
+
+        RestClient.get().appApi().getBlockedByFilter(user.first_name,user.getLast_name(),user.getFilter(),user.getUser_id()).enqueue(new Callback<BaseModel<List<GetBlockedData>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<GetBlockedData>>> call, Response<BaseModel<List<GetBlockedData>>> response) {
+                getBlockedByFilter.setValue(response.body());
+            }
+            @Override
+            public void onFailure(Call<BaseModel<List<GetBlockedData>>> call, Throwable t) {
+                getBlockedByFilter.setValue(null);
+            }
+        });
+        return getBlockedByFilter;
     }
 
     @Override

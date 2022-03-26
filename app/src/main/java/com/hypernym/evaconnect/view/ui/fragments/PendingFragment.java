@@ -26,6 +26,7 @@ import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
+import com.hypernym.evaconnect.models.ConnectionModel;
 import com.hypernym.evaconnect.models.GetPendingData;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
@@ -86,7 +87,7 @@ public class PendingFragment extends BaseFragment implements OptionsAdapter.Item
     private boolean isLastPage = false;
     private boolean isLoading = false;
     private boolean isSearchFlag = false;
-
+    User user;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -108,11 +109,16 @@ public class PendingFragment extends BaseFragment implements OptionsAdapter.Item
         swipeRefresh.setOnRefreshListener(this);
         initMainOptionsRecView();
         initRecyclerView();
+        user = LoginUtils.getLoggedinUser();
+
         setPageTitle(getString(R.string.connections));
         if (NetworkUtils.isNetworkConnected(getContext())) {
             getAllPending();
         } else {
             networkErrorDialog();
+        }
+        if(user.getType().equalsIgnoreCase("user")){
+            edt_search.setHint("Search for a Connection");
         }
         edt_search.addTextChangedListener(new TextWatcher());
 
@@ -387,13 +393,17 @@ public class PendingFragment extends BaseFragment implements OptionsAdapter.Item
             currentPage = PAGE_START;
             if (s.length() > 0) {
                 isSearchFlag = true;
+                pendingList.clear();
+                pendingAdapter.notifyDataSetChanged();
+                getConnectedFilter(true);
             } else {
                 isSearchFlag = false;
+                getAllPending();
             }
 
-            connectionList.clear();
-            pendingAdapter.notifyDataSetChanged();
-            getConnectionByFilter(type, PAGE_START, true);
+//            connectionList.clear();
+//            pendingAdapter.notifyDataSetChanged();
+//            getConnectionByFilter(type, PAGE_START, true);
 
         }
 
@@ -416,4 +426,50 @@ public class PendingFragment extends BaseFragment implements OptionsAdapter.Item
             }
         });
     }
+
+        public void getConnectedFilter(boolean isSearch) {
+
+            // showDialog();
+            User userData = new User();
+
+            // userData.setType(mtype);
+            userData.setUser_id(user.getId());
+            userData.setFilter("pending");
+            if (edt_search.getText().toString().length() > 0)
+                userData.setFirst_name(edt_search.getText().toString());
+            //   connectedList.clear();
+            connectionViewModel.getPendingFilter(userData).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<GetPendingData>>>() {
+                @Override
+                public void onChanged(BaseModel<List<GetPendingData>> listBaseModel) {
+                    if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
+    //                    if (currentPage == PAGE_START) {
+    //                        connectionList.clear();
+    //                        connectionsAdapter.notifyDataSetChanged();
+    //                    }
+                        pendingList.clear();
+                        pendingList.addAll(listBaseModel.getData());
+                        pendingAdapter.notifyDataSetChanged();
+    //                    if (connectionList.size() > 0) {
+                        rc_connections.setVisibility(View.VISIBLE);
+                        empty.setVisibility(View.GONE);
+                        //  }
+    //                    isLoading = false;
+                    } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
+
+                        if(connectionList.size()==0)
+                        {
+                            pendingList.clear();
+                            rc_connections.setVisibility(View.GONE);
+                            empty.setVisibility(View.VISIBLE);
+                        }
+    //                    isLastPage = true;
+    //                    // homePostsAdapter.removeLoading();
+    //                    isLoading = false;
+                    } else {
+                        networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                    }
+                }
+            });
+        }
+
 }

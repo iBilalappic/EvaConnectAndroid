@@ -172,7 +172,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
     public void onResume() {
         super.onResume();
         posts.clear();
-        callPostsApi();
+       // callPostsApi();
     }
 
     private void init() {
@@ -502,6 +502,8 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
         //  User user = new User();
         // user = LoginUtils.getUser();
         int id;
+
+
         if (argumentReceived.equalsIgnoreCase("user")) {
             id = targetUser.getId();
         }else if(user_id!=0){

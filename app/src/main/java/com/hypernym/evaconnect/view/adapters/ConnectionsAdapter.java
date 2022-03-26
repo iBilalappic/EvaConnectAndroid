@@ -51,22 +51,100 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ConnectionsAdapter.ViewHolder holder, int position) {
-        if (!TextUtils.isEmpty(connections.get(position).sender.getUserImage())) {
-            AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).sender.getUserImage());
+        User user = LoginUtils.getLoggedinUser();
+        if (connections.get(position).sender != null && connections.get(position).receiver != null) {
+            if (user.getId().equals(connections.get(position).senderId)) {
+                if (!TextUtils.isEmpty(connections.get(position).receiver.getUserImage())) {
+                    AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).receiver.getUserImage());
+                }
+                if (connections.get(position).receiver.getFirstName() != null) {
+                    holder.tv_name.setText(connections.get(position).receiver.getFirstName());
+                }
+                if (connections.get(position).receiver.getBioData() != null && !connections.get(position).receiver.getBioData().isEmpty()) {
+                    holder.tv_designation.setText(connections.get(position).receiver.getBioData());
+                } else {
+                    holder.tv_designation.setText("--");
+                }
+                if (connections.get(position).receiver.getIs_online()) {
+                    holder.tv_connection_status.setText("Online");
+                    holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.skyblue));
+                } else {
+                    if (connections.get(position).receiver.getIs_online() != null) {
+                        holder.tv_connection_status.setText("Last Online " + DateUtils.formatToYesterdayOrToday(connections.get(position).receiver.getLast_online_datetime()));
+                        holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.gray));
+                    } else {
+                        holder.tv_connection_status.setText("-");
+                    }
+
+                }
+
+
+            } else if (user.getId().equals(connections.get(position).receiverId)) {
+                if (!TextUtils.isEmpty(connections.get(position).sender.getUserImage())) {
+                    AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).sender.getUserImage());
+                }
+                if (connections.get(position).sender.getFirstName() != null) {
+                    holder.tv_name.setText(connections.get(position).sender.getFirstName());
+                }
+                if (connections.get(position).sender.getBioData() != null && !connections.get(position).sender.getBioData().isEmpty()) {
+                    holder.tv_designation.setText(connections.get(position).sender.getBioData());
+                } else {
+                    holder.tv_designation.setText("--");
+                }
+                if (connections.get(position).sender.getIs_online()) {
+                    holder.tv_connection_status.setText("Online");
+                    holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.skyblue));
+                } else {
+                    if (connections.get(position).sender.getIs_online() != null) {
+                        holder.tv_connection_status.setText("Last Online " + DateUtils.formatToYesterdayOrToday(connections.get(position).sender.getLast_online_datetime()));
+                        holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.gray));
+                    } else {
+                        holder.tv_connection_status.setText("-");
+                    }
+
+                }
+
+            }
+        } else {
+            if (!TextUtils.isEmpty(connections.get(position).userImage)) {
+                AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).userImage);
+            }
+            if (connections.get(position).firstName != null) {
+                holder.tv_name.setText(connections.get(position).firstName);
+            }
+            if (connections.get(position).bioData != null && !connections.get(position).bioData.isEmpty()) {
+                holder.tv_designation.setText(connections.get(position).bioData);
+            } else {
+                holder.tv_designation.setText("--");
+            }
+
+            if (connections.get(position).isOnline) {
+                holder.tv_connection_status.setText("Online");
+                holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.skyblue));
+            } else {
+                if (connections.get(position).lastOnlineDatetime != null) {
+                    holder.tv_connection_status.setText("Last Online " + DateUtils.formatToYesterdayOrToday(connections.get(position).lastOnlineDatetime));
+                    holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.gray));
+                } else {
+                    holder.tv_connection_status.setText("-");
+                }
+
+            }
         }
+
 //        else if (connections.get(position).getIs_facebook() == 1 && !TextUtils.isEmpty(connections.get(position).getFacebook_image_url())) {
 //            AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getFacebook_image_url());
 //        } else {
 //            AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getUser_image());
 //        }
-        if(connections.get(position).sender.getFirstName()!=null){
-            holder.tv_name.setText(connections.get(position).sender.getFirstName());
-        }
-        if (connections.get(position).sender.getBioData() != null && !connections.get(position).sender.getBioData().isEmpty()) {
-            holder.tv_designation.setText(connections.get(position).sender.getBioData());
-        } else {
-            holder.tv_designation.setText("--");
-        }
+//        if(connections.get(position).sender.getFirstName()!=null){
+//            holder.tv_name.setText(connections.get(position).sender.getFirstName());
+//        }
+//        if (connections.get(position).sender.getBioData() != null && !connections.get(position).sender.getBioData().isEmpty()) {
+//            holder.tv_designation.setText(connections.get(position).sender.getBioData());
+//        } else {
+//            holder.tv_designation.setText("--");
+//        }
 
         /*
         if(connections.get(position).getDesignation()!=null)
@@ -75,14 +153,14 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
         }*/
 
 
-        if (connections.get(position).sender.getCompanyName()!=null && !connections.get(position).sender.getCompanyName().isEmpty()) {
-            holder.tv_designation.setVisibility(View.VISIBLE);
-            holder.tv_designation.setText(connections.get(position).sender.getCompanyName());
-        } else {
-            holder.tv_designation.setVisibility(View.GONE);
-        }
+//        if (connections.get(position).sender.getCompanyName()!=null && !connections.get(position).sender.getCompanyName().isEmpty()) {
+//            holder.tv_designation.setVisibility(View.VISIBLE);
+//            holder.tv_designation.setText(connections.get(position).sender.getCompanyName());
+//        } else {
+//            holder.tv_designation.setVisibility(View.GONE);
+//        }
         //Hide connect option if post is from logged in user
-        User user = LoginUtils.getLoggedinUser();
+
 /*        if (connections.get(position).getId().equals(user.getId())) {
             holder.tv_connect.setVisibility(View.GONE);
         } else {
@@ -103,24 +181,24 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
             }
 
         }*/
-        if(connections.get(position).sender.getIs_online())
-        {
-            holder.tv_connection_status.setText("Online");
-            holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.skyblue));
-        }
-        else
-        {
-            if(connections.get(position).sender.getLast_online_datetime()!=null)
-            {
-                holder.tv_connection_status.setText("Last Online "+ DateUtils.formatToYesterdayOrToday(connections.get(position).sender.getLast_online_datetime()));
-                holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.gray));
-            }
-            else
-            {
-                holder.tv_connection_status.setText("-");
-            }
-
-        }
+//        if(connections.get(position).isOnline)
+//        {
+//            holder.tv_connection_status.setText("Online");
+//            holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.skyblue));
+//        }
+//        else
+//        {
+//            if(connections.get(position).lastOnlineDatetime!=null)
+//            {
+//                holder.tv_connection_status.setText("Last Online "+ DateUtils.formatToYesterdayOrToday(connections.get(position).lastOnlineDatetime));
+//                holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.gray));
+//            }
+//            else
+//            {
+//                holder.tv_connection_status.setText("-");
+//            }
+//
+//        }
 
     }
 

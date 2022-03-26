@@ -232,6 +232,53 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         });
     }
 
+
+    public void getConnectedFilter(boolean isSearch) {
+
+        // showDialog();
+        User userData = new User();
+
+        // userData.setType(mtype);
+        userData.setUser_id(user.getId());
+        userData.setFilter("active");
+        if (edt_search.getText().toString().length() > 0)
+            userData.setFirst_name(edt_search.getText().toString());
+        //   connectedList.clear();
+        connectionViewModel.getConnectedFilter(userData).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<ConnectionModel>>>() {
+            @Override
+            public void onChanged(BaseModel<List<ConnectionModel>> listBaseModel) {
+                if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
+//                    if (currentPage == PAGE_START) {
+//                        connectionList.clear();
+//                        connectionsAdapter.notifyDataSetChanged();
+//                    }
+                    connectedList.clear();
+                    connectedList.addAll(listBaseModel.getData());
+                    connectionsAdapter.notifyDataSetChanged();
+//                    if (connectionList.size() > 0) {
+                    rc_connections.setVisibility(View.VISIBLE);
+                    empty.setVisibility(View.GONE);
+                    //  }
+//                    isLoading = false;
+                } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
+
+                    if(connectionList.size()==0)
+                    {
+                        connectedList.clear();
+                        rc_connections.setVisibility(View.GONE);
+                        empty.setVisibility(View.VISIBLE);
+                    }
+//                    isLastPage = true;
+//                    // homePostsAdapter.removeLoading();
+//                    isLoading = false;
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+            }
+        });
+    }
+
+
     @Override
     public void onItemClick(View view, int position) {
         if (NetworkUtils.isNetworkConnected(getContext())) {
@@ -259,7 +306,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
                     ConnectionModel user = connectedList.get(position);
                     PersonProfileFragment personProfileFragment = new PersonProfileFragment();
                     Bundle bundle2 = new Bundle();
-                    bundle2.putInt("user_id", user.senderId);
+                    bundle2.putInt("user_id", user.id);
                     loadFragment_bundle(R.id.framelayout, personProfileFragment, getContext(), true, bundle2);
                     break;
 
@@ -327,14 +374,12 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
             currentPage = PAGE_START;
             if (s.length() > 0) {
                 isSearchFlag = true;
+                connectionList.clear();
+                connectionsAdapter.notifyDataSetChanged();
+                getConnectedFilter(true);
             } else {
                 isSearchFlag = false;
             }
-
-            connectionList.clear();
-            connectionsAdapter.notifyDataSetChanged();
-            getConnectionByFilter(type, PAGE_START, true);
-
         }
 
     }

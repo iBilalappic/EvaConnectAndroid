@@ -137,7 +137,7 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
                     connectionList.clear();
                     blockedAdapter.notifyDataSetChanged();
                 }
-                //
+                connectionList.clear();
                 connectionList.addAll(listBaseModel.getData());
                 blockedAdapter.notifyDataSetChanged();
                 if (connectionList.size() > 0) {
@@ -240,32 +240,35 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
     public void onItemClick(View view, int position, boolean isMainCatrgory) {
     }
 
-    public void getConnectionByFilter(String mtype, int currentPage, boolean isSearch) {
+    public void getConnectionByFilter( boolean isSearch) {
 
         // showDialog();
         User userData = new User();
         User user = LoginUtils.getLoggedinUser();
         // userData.setType(mtype);
         userData.setUser_id(user.getId());
+        userData.setFilter("deleted");
+
         if (edt_search.getText().toString().length() > 0)
             userData.setFirst_name(edt_search.getText().toString());
-        Log.e("type", mtype);
+//        Log.e("type", mtype);
 
-        connectionViewModel.getBlockedUsers().observe(getViewLifecycleOwner(), new Observer<BaseModel<List<GetBlockedData>>>() {
+        connectionViewModel.getBlockedByFilter(userData).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<GetBlockedData>>>() {
             @Override
             public void onChanged(BaseModel<List<GetBlockedData>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
-                    if (currentPage == PAGE_START) {
-                        connectionList.clear();
-                        blockedAdapter.notifyDataSetChanged();
-                    }
+//                    if (currentPage == PAGE_START) {
+//                        connectionList.clear();
+//                        blockedAdapter.notifyDataSetChanged();
+//                    }
                     //
+                    connectionList.clear();
                     connectionList.addAll(listBaseModel.getData());
                     blockedAdapter.notifyDataSetChanged();
-                    if (connectionList.size() > 0) {
+                  //  if (connectionList.size() > 0) {
                         rc_connections.setVisibility(View.VISIBLE);
                         empty.setVisibility(View.GONE);
-                    }
+                //    }
                     isLoading = false;
                 } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
 
@@ -274,9 +277,9 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
                         rc_connections.setVisibility(View.GONE);
                         empty.setVisibility(View.VISIBLE);
                     }
-                    isLastPage = true;
-                    // homePostsAdapter.removeLoading();
-                    isLoading = false;
+//                    isLastPage = true;
+//                    // homePostsAdapter.removeLoading();
+//                    isLoading = false;
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
@@ -383,12 +386,15 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
             currentPage = PAGE_START;
             if (s.length() > 0) {
                 isSearchFlag = true;
+                connectionList.clear();
+                blockedAdapter.notifyDataSetChanged();
+                getConnectionByFilter(true);
             } else {
                 isSearchFlag = false;
+                getBlockedConnections();
             }
 
-            connectionList.clear();
-            blockedAdapter.notifyDataSetChanged();
+
            // getConnectionByFilter(type, PAGE_START, true);
 
         }

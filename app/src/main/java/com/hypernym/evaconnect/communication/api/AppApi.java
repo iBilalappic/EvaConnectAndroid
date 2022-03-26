@@ -240,10 +240,17 @@ public interface AppApi {
     @POST(APIConstants.GET_CONNECTION_BY_FILTER_OLD)
     Call<BaseModel<List<User>>> getConnectionByFilter(@Body User user,@Query("limit") int limit, @Query("offset") int offset);
 
-    @GET(APIConstants.GET_CONNECTION_BY_FILTER)
+    @POST(APIConstants.GET_CONNECTION_BY_FILTER)
         //  Call<BaseModel<List<User>>> getConnectionByFilter(@Body User user,@Query("limit") int limit, @Query("offset") int offset);
-    Call<BaseModel<List<ConnectionModel>>> getConnected(@Query("user_id") int id, @Query("filter") String filter,
-                                                        @Query("first_name") String first_name);
+    Call<BaseModel<List<ConnectionModel>>> getConnected(@Body HashMap<String, Object> body);
+
+    @GET(APIConstants.GET_CONNECTED_BY_FILTER)
+    Call<BaseModel<List<ConnectionModel>>> getConnectedByFilter(@Query("first_name") String first_name,@Query("last_name") String last_name
+            ,@Query("filter") String filter,@Query("user_id") int user_id);
+
+    @GET(APIConstants.GET_CONNECTED_BY_FILTER)
+    Call<BaseModel<List<GetPendingData>>> getPendingByFilter(@Query("first_name") String first_name,@Query("last_name") String last_name
+            ,@Query("filter") String filter,@Query("user_id") int user_id);
 
     @POST(APIConstants.SEND_NOTIFICATION)
     Call<Object> postPackets(@Body Notification_onesignal data);
@@ -350,6 +357,10 @@ public interface AppApi {
 
     @POST(APIConstants.BLOCK_USER)
     Call<BaseModel<List<Object>>> block_user(@Body HashMap<String, Object> body);
+
+    @GET(APIConstants.GET_CONNECTED_BY_FILTER)
+    Call<BaseModel<List<GetBlockedData>>> getBlockedByFilter(@Query("first_name") String first_name,@Query("last_name") String last_name
+            ,@Query("filter") String filter,@Query("user_id") int user_id);
 
     @Multipart
     @PATCH(APIConstants.PROFILE_UPDATE)

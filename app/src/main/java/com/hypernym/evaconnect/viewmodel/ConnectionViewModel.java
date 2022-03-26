@@ -56,6 +56,19 @@ public class ConnectionViewModel extends AndroidViewModel {
         return iConnectionRepository.getConnected(user,total,current);
     }
 
+    public LiveData<BaseModel<List<ConnectionModel>>> getConnectedFilter(User user)
+    {
+        return iConnectionRepository.getConnectedFilter(user);
+    }
+    public LiveData<BaseModel<List<GetPendingData>>> getPendingFilter(User user)
+    {
+        return iConnectionRepository.getPendingFilter(user);
+    }
+    public LiveData<BaseModel<List<GetBlockedData>>> getBlockedByFilter(User user)
+    {
+        return iConnectionRepository.getBlockedByFilter(user);
+    }
+
 
     public LiveData<BaseModel<List<User>>> getConnectionByRecommendedUser(User user,int total,int current)
     {

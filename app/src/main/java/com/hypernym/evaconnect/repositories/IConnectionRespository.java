@@ -19,6 +19,10 @@ public interface IConnectionRespository {
     LiveData<BaseModel<List<GetPendingData>>> getAllPending(int total, int current);
     LiveData<BaseModel<List<User>>> getConnectionByFilter(User user, int total, int current);
     LiveData<BaseModel<List<ConnectionModel>>> getConnected(User user, int total, int current);
+    LiveData<BaseModel<List<ConnectionModel>>> getConnectedFilter(User user);
+    LiveData<BaseModel<List<GetPendingData>>> getPendingFilter(User user);
+    LiveData<BaseModel<List<GetBlockedData>>> getBlockedByFilter(User user);
+
     LiveData<BaseModel<List<User>>> getConnectionByRecommendedUser(User user,int total,int current);
     LiveData<BaseModel<User>> getConnectionCount(User user);
     LiveData<BaseModel<List<Object>>> remove_user(Integer connection_id);
