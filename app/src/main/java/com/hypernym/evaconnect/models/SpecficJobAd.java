@@ -78,6 +78,18 @@ public class SpecficJobAd implements Serializable {
     @Expose
     private String jobType;
 
+    @SerializedName("user")
+    @Expose
+    public User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public String getType() {
         return type;
     }

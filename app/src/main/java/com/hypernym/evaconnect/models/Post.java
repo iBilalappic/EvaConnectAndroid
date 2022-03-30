@@ -25,6 +25,15 @@ public class Post implements Serializable {
     private Integer receiver_id;
     private int modified_by_id;
 
+    public String getIs_attending() {
+        return is_attending;
+    }
+
+    public void setIs_attending(String is_attending) {
+        this.is_attending = is_attending;
+    }
+
+    private String is_attending;
     public int getShare_count() {
         return share_count;
     }

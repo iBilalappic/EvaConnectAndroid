@@ -6,9 +6,11 @@
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/activity_home.xml" value="0.14266304347826086" />
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/dialog_application_success.xml" value="0.4" />
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/dialog_notes.xml" value="0.13677536231884058" />
+        <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/event_type.xml" value="0.4" />
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/fragment_companyjobad.xml" value="0.13722826086956522" />
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/fragment_connections.xml" value="0.14221014492753623" />
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/fragment_connections_tab.xml" value="0.1490036231884058" />
+        <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/fragment_event_detail.xml" value="0.2" />
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/fragment_global_search_post.xml" value="0.2463768115942029" />
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/fragment_global_search_tab.xml" value="0.2463768115942029" />
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/fragment_person_detail.xml" value="0.23867753623188406" />
@@ -16,8 +18,11 @@
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/fragment_post.xml" value="0.25" />
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/fragment_search_result.xml" value="0.264" />
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/fragment_share_connection.xml" value="0.21693840579710144" />
+        <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/fragment_specfic_job_ad.xml" value="0.2" />
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/item_block.xml" value="0.4" />
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/item_connection.xml" value="0.13677536231884058" />
+        <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/item_event.xml" value="0.14221014492753623" />
+        <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/item_joblisting.xml" value="0.4" />
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/item_pending.xml" value="0.4" />
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/item_video.xml" value="0.2" />
         <entry key="..\:/Hypernym/eva-android/app/src/main/res/layout/job_type.xml" value="0.264" />

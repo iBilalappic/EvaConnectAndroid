@@ -4,10 +4,12 @@ import androidx.lifecycle.LiveData;
 
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Comment;
+import com.hypernym.evaconnect.models.EventStaus;
 import com.hypernym.evaconnect.models.GetEventInterestedUsers;
 import com.hypernym.evaconnect.models.Meeting;
 import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.Post;
+import com.hypernym.evaconnect.models.SaveEventData;
 import com.hypernym.evaconnect.models.User;
 
 import java.util.List;
@@ -48,7 +50,11 @@ public interface IEventRepository {
 
     LiveData<BaseModel<List<Comment>>> deleteComment(Integer id);
 
-    LiveData<BaseModel<Object>> saveEvent(int event_id, Boolean is_favourite_event);
+    LiveData<BaseModel<SaveEventData>> saveEvent(int event_id, Boolean is_favourite_event);
+    LiveData<BaseModel<List<Object>>> showInterestEvent(int event_id, int user_id,String status,String attendance_status);
 
+    LiveData<BaseModel<List<EventStaus>>> getEventStatus(int event_id, int user_id);
+
+    LiveData<BaseModel<List<SaveEventData>>> GetSaveEvent(int event_id, int user_id);
 
 }

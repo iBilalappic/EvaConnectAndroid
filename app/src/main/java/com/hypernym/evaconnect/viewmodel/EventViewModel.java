@@ -9,9 +9,11 @@ import androidx.lifecycle.LiveData;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.Event;
+import com.hypernym.evaconnect.models.EventStaus;
 import com.hypernym.evaconnect.models.GetEventInterestedUsers;
 import com.hypernym.evaconnect.models.Meeting;
 import com.hypernym.evaconnect.models.Post;
+import com.hypernym.evaconnect.models.SaveEventData;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IEventRepository;
 import com.hypernym.evaconnect.repositories.impl.EventRepository;
@@ -108,9 +110,23 @@ public class EventViewModel extends AndroidViewModel {
         return iEventRepository.deleteEvent(event);
     }
 
-    public LiveData<BaseModel<Object>> saveEvent(int event_id, Boolean is_favourite_event)
+    public LiveData<BaseModel<SaveEventData>> saveEvent(int event_id, Boolean is_favourite_event)
     {
         return iEventRepository.saveEvent(event_id,is_favourite_event);
+    }
+
+    public LiveData<BaseModel<List<Object>>> showInterestEvent(int event_id, int user_id,String status,String attendance_status)
+    {
+        return iEventRepository.showInterestEvent(event_id, user_id,status,attendance_status);
+    }
+
+    public LiveData<BaseModel<List<EventStaus>>> getEventStatus(int event_id, int user_id)
+    {
+        return iEventRepository.getEventStatus(event_id, user_id);
+    }
+    public LiveData<BaseModel<List<SaveEventData>>> GetsaveEvent(int event_id, int user_id)
+    {
+        return iEventRepository.GetSaveEvent(event_id,user_id);
     }
 
 

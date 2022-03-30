@@ -402,7 +402,7 @@ public class UserRepository implements IUserRespository {
     public LiveData<BaseModel<List<User>>> getuser_details(Integer id) {
         userMutableLiveData = new MutableLiveData<>();
 
-        RestClient.get().appApi().getuser_details(id).enqueue(new Callback<BaseModel<List<User>>>() {
+        RestClient.get().appApi().getuser_details(id,true).enqueue(new Callback<BaseModel<List<User>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
                 if (response.body() != null) {

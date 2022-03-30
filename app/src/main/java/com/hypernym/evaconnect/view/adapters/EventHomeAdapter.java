@@ -1,6 +1,7 @@
 package com.hypernym.evaconnect.view.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -285,6 +286,15 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
                     } else {
                         ((EventHomeAdapter.EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }*/
+                    if(posts.get(position).getIs_attending().equalsIgnoreCase("Going")){
+                        Drawable[] compoundDrawables =  ((EventTypeViewHolder) holder).tv_attending.getCompoundDrawables();
+                        Drawable leftCompoundDrawable = compoundDrawables[0];
+                        if (leftCompoundDrawable==null) {
+                            ((EventTypeViewHolder) holder).tv_attending.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
+                        }
+                    }else{
+                        ((EventTypeViewHolder) holder).tv_attending.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0); }
+
                     if (posts.get(position).getEvent_image().size() > 0) {
                         AppUtils.setGlideUrlThumbnail(mContext, ((EventHomeAdapter.EventTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
                         AppUtils.setGlideImageUrl(mContext, ((EventTypeViewHolder) holder).post_image, posts.get(position).getEvent_image().get(0));

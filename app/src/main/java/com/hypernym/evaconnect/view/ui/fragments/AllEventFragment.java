@@ -28,7 +28,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
-import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.Post;
@@ -39,7 +38,6 @@ import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.EventHomeAdapter;
 import com.hypernym.evaconnect.view.bottomsheets.BottomsheetShareSelection;
-import com.hypernym.evaconnect.view.dialogs.ShareDialog;
 import com.hypernym.evaconnect.viewmodel.EventViewModel;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
 
@@ -304,9 +302,12 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
 
             Drawable leftCompoundDrawable = compoundDrawables[0];
             if (leftCompoundDrawable==null) {
-                textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
+             //   textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
+                showInterestedApiCall(position,"Going");
             } else {
-                textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+             //   textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                showInterestedApiCall(position,"Not Going");
+
             }
 
         }else if(view.getId()==R.id.tv_interested){
@@ -323,6 +324,27 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
             eventDetailFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, eventDetailFragment, getContext(), true);
         }
+
+    }
+
+    private void showInterestedApiCall(int position, String attendee_Status) {
+        eventViewModel.showInterestEvent(posts.get(position).getId(), LoginUtils.getUser().getId(),"active",attendee_Status).observe(this, new Observer<BaseModel<List<Object>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Object>> listBaseModel) {
+                if(!listBaseModel.isError())
+                {
+
+                    callPostsApi();
+                }
+                else
+                {
+                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                }
+
+            }
+
+
+        });
 
     }
 
@@ -432,7 +454,7 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
         User user = LoginUtils.getLoggedinUser();
 
         if(user.getType().equalsIgnoreCase("user")){
-            user.setFilter("upcoming");
+            user.setFilter("all");
         }else{
             user.setFilter("my_events");
         }
@@ -443,7 +465,7 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
 
                // postAdapter.clear();
                 if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
-
+                    posts.clear();
                     tv_empty.setVisibility(View.GONE);
                     rc_event.setVisibility(View.VISIBLE);
                     for (Post post : dashboardBaseModel.getData()) {

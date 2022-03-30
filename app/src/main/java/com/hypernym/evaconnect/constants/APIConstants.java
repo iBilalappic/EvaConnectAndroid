@@ -106,4 +106,7 @@ public interface APIConstants {
     public static String GET_NOTES = "user/notes/details/{id}";
     public static String UPDATE_NOTES = "user/notes/details/{id}";
     public String GET_ALL_MYACTIVITY = "user/activity/";
+    public static String SAVE_EVENT_INTERESTED = "event/attendee/";
+    public static String EVENT_STATUS = "event/interested/status/";
+
 }

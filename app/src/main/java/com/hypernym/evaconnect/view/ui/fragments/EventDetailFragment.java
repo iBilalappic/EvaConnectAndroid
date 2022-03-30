@@ -1,6 +1,7 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,8 @@ import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.EventAttendees;
+import com.hypernym.evaconnect.models.EventStaus;
+import com.hypernym.evaconnect.models.SaveEventData;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
@@ -52,7 +55,7 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EventDetailFragment extends BaseFragment implements Validator.ValidationListener, CommentsAdapter.OnItemClickListener, View.OnClickListener{
+public class EventDetailFragment extends BaseFragment implements Validator.ValidationListener, CommentsAdapter.OnItemClickListener, View.OnClickListener {
     @BindView(R.id.tv_name)
     TextView tv_name;
 
@@ -149,7 +152,9 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
     private Event event = new Event();
     private InvitedUsersAdapter usersAdapter;
     private List<User> invitedConnections = new ArrayList<>();
-    private Boolean is_favourite_event=false;
+    private Boolean is_favourite_event ;
+    String attendee_status;
+    private int save_event_id;
 
     public EventDetailFragment() {
         // Required empty public constructor
@@ -183,7 +188,11 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
         AppUtils.setGlideImage(getContext(), img_user, LoginUtils.getLoggedinUser().getUser_image());
         setAttendeesAdapter();
         if (NetworkUtils.isNetworkConnected(getContext())) {
+            getEventStatus(event_id, user_id);
+
             getEventDetails(event_id, user_id);
+
+            getSaveEvent(event_id);
 
         } else {
             networkErrorDialog();
@@ -248,7 +257,126 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
                 }
             }
         });
+        interested.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                if(attendee_status.equalsIgnoreCase("Not Going")){
+                    showInterestedApiCall("Going");
+                }else{
+                    showInterestedApiCall("Not Going");
+                }
+            }
+        });
+        interested_header.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                if(attendee_status.equalsIgnoreCase("Not Going")){
+                    showInterestedApiCall("Going");
+                }else{
+                    showInterestedApiCall("Not Going");
+                }
+            }
+        });
+        register.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                if(attendee_status.equalsIgnoreCase("Not Going")){
+                    showInterestedApiCall("Going");
+                }else{
+                    showInterestedApiCall("Not Going");
+                }
+            }
+        });
+
+
+
     }
+
+    private void getSaveEvent(int event_id) {
+        eventViewModel.GetsaveEvent(event_id, LoginUtils.getLoggedinUser().getId()).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<SaveEventData>>>() {
+            @Override
+            public void onChanged(BaseModel<List<SaveEventData>> listBaseModel) {
+                if (!listBaseModel.isError() && listBaseModel.getData().size() > 0) {
+                    if(listBaseModel.getData().get(0).getIsFavourite()){
+                        save.setBackground(getResources().getDrawable(R.drawable.ic_star_selected));
+                        is_favourite_event=true;
+                        save_event_id=listBaseModel.getData().get(0).getId();
+                    }else {
+                        save.setBackground(getResources().getDrawable(R.drawable.ic_star_unselected));
+                        is_favourite_event=false;
+                        save_event_id=0;
+                    }
+
+                }else{
+                    save.setBackground(getResources().getDrawable(R.drawable.ic_star_unselected));
+                    is_favourite_event=false;
+                    save_event_id=0;
+                }
+
+            }
+
+        });
+
+
+    }
+
+    private void getEventStatus(int event_id, int user_id) {
+        eventViewModel.getEventStatus(event_id, LoginUtils.getLoggedinUser().getId()).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<EventStaus>>>() {
+            @Override
+            public void onChanged(BaseModel<List<EventStaus>> listBaseModel) {
+                if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
+
+                    if (listBaseModel.getData().get(0).getAttendance_status() != null && listBaseModel.getData().get(0).getAttendance_status().equalsIgnoreCase("Going")) {
+                        Drawable[] compoundDrawables = interested.getCompoundDrawables();
+                        Drawable leftCompoundDrawable = compoundDrawables[0];
+                        if (leftCompoundDrawable == null) {
+                            interested.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
+                            attendee_status= "Going";
+                            register.setText("Un Register");
+                            getEventDetails(event_id,user_id);
+
+                        }
+                    }else{
+                        interested.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                        attendee_status= "Not Going";
+                        register.setText("Register");
+                        getEventDetails(event_id,user_id);
+
+                    }
+                }else{
+                    interested.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                    attendee_status= "Not Going";
+                    register.setText("Register");
+                    getEventDetails(event_id,user_id);
+
+                }
+
+            }
+
+        });
+
+    }
+
+    private void showInterestedApiCall(String attendee_Status) {
+        eventViewModel.showInterestEvent(event_id, LoginUtils.getUser().getId(),"active",attendee_Status).observe(this, new Observer<BaseModel<List<Object>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Object>> listBaseModel) {
+                if(!listBaseModel.isError())
+                {
+                 getEventStatus(event_id,LoginUtils.getLoggedinUser().getId());
+                }
+                else
+                {
+                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                }
+
+            }
+
+
+        });
+
+    }
+
 
     private void setAttendeesAdapter() {
         usersAdapter = new InvitedUsersAdapter(getContext(), invitedConnections, false);
@@ -290,19 +418,21 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
             @Override
             public void onChanged(BaseModel<List<Event>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
+                    invitedConnections.clear();
                     event = listBaseModel.getData().get(0);
                     setEventData(listBaseModel.getData().get(0));
                     for (EventAttendees user : event.getAttendees()) {
                         invitedConnections.add(user.getUser());
                     }
 
-                    if(invitedConnections.size()>0){
+                    if (invitedConnections.size() > 0) {
                         tv_interested.setVisibility(View.VISIBLE);
-                    }else{
+                    } else {
                         tv_interested.setVisibility(View.GONE);
                     }
                     usersAdapter.notifyDataSetChanged();
                     getEventComments(event_id);
+
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
@@ -339,7 +469,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
                 }
                 tv_content.setText(event.getContent());
 
-                tv_date.setText(DateUtils.getFormattedDateDMY(event.getStart_date()) + " - " + DateUtils.getFormattedDateDMY(event.getEnd_date()) + " | " + event.getStart_time() + " - " + event.getEnd_time());
+                tv_date.setText(DateUtils.getFormattedDateDMY(event.getStart_date()) + " - " + DateUtils.getFormattedDateDMY(event.getEnd_date()) + " | " + DateUtils.getTimeUTC(event.getStart_time()) + " - " + DateUtils.getTimeUTC(event.getEnd_time()));
 
                 tv_location.setText(event.getAddress());
                 if (event.getIs_private() == 0) {
@@ -489,18 +619,32 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
     @OnClick(R.id.img_fav_event)
     public void save() {
         showDialog();
-        callSaveEventApi();
+        if(is_favourite_event){
+
+            callSaveEventApi(save_event_id,false);
+        }else{
+            callSaveEventApi(event_id, true);
+
+        }
 
     }
 
-    private void callSaveEventApi() {
-        eventViewModel.saveEvent(event_id,is_favourite_event).observe(this, new Observer<BaseModel<Object>>() {
+    private void callSaveEventApi(int event_id, Boolean is_fav) {
+        eventViewModel.saveEvent(event_id, is_fav).observe(this, new Observer<BaseModel<SaveEventData>>() {
             @Override
-            public void onChanged(BaseModel<Object> listBaseModel) {
-                if(listBaseModel!=null&&!listBaseModel.isError()){
+            public void onChanged(BaseModel<SaveEventData> listBaseModel) {
+                if (listBaseModel != null && !listBaseModel.isError()) {
+                    if(listBaseModel.getData().getIsFavourite()){
+                        save_event_id=listBaseModel.getData().getId();
+                        save.setBackground(getResources().getDrawable(R.drawable.ic_star_selected));
+
+                    }else{
+                        save.setBackground(getResources().getDrawable(R.drawable.ic_star_unselected));
+
+                    }
                     hideDialog();
-                    save.setBackground(getResources().getDrawable(R.drawable.ic_star_selected));
                 }
+                hideDialog();
             }
         });
     }
@@ -535,7 +679,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
 
     @Override
     public void onClick(View v) {
-        if(v.getId()==R.id.img_backarrow){
+        if (v.getId() == R.id.img_backarrow) {
             getActivity().onBackPressed();
         }
     }

@@ -2,7 +2,6 @@ package com.hypernym.evaconnect.view.ui.fragments;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 
-import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
@@ -27,6 +26,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.JobAd;
+import com.hypernym.evaconnect.models.SavedJobData;
 import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
@@ -36,8 +36,6 @@ import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.MyLikeAdapter;
 import com.hypernym.evaconnect.view.bottomsheets.BottomsheetShareSelection;
-import com.hypernym.evaconnect.view.dialogs.ApplicationSuccess_dialog;
-import com.hypernym.evaconnect.view.dialogs.ShareDialog;
 import com.hypernym.evaconnect.viewmodel.JobListViewModel;
 
 import java.text.DecimalFormat;
@@ -109,13 +107,14 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
     LinearLayout share_click;
 
     int job_id;
+    int Savejob_id;
     JobAd jobAd = new JobAd();
     SpecficJobAd specficJobAd=new SpecficJobAd();
     private SpecficJobAd checkLikeCount = new SpecficJobAd();
     User user;
     private String user_image = "";
 
-    public Boolean is_favourite_job=false;
+    public Boolean is_favourite_job;
 
     public SpecficJobFragment() {
         // Required empty public constructor
@@ -153,6 +152,8 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
             Log.v("user_image",user_image+"");
             job_id = getArguments().getInt("job_id");
             if (job_id != 0) {
+
+                GetSavedJob(job_id);
                 GetJob_id(job_id);
 
             } else {
@@ -167,6 +168,30 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
         }
     }
 
+    private void GetSavedJob(int job_id) {
+        jobListViewModel.getSavedJob(job_id).observe(this, new Observer<BaseModel<List<SavedJobData>>>() {
+            @Override
+            public void onChanged(BaseModel<List<SavedJobData>> getjobAd) {
+                if (getjobAd.getData().size()>0 && !getjobAd.isError()) {
+                    if(getjobAd.getData().get(0).getIsFavourite()){
+                        img_favourite.setBackgroundResource(R.drawable.ic_star_selected);
+                        is_favourite_job=true;
+                        Savejob_id=getjobAd.getData().get(0).getId();
+                    }
+
+                }else{
+                    img_favourite.setBackgroundResource(R.drawable.ic_star_unselected);
+                    is_favourite_job=false;
+                }
+//                else {
+//                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+//                }
+                hideDialog();
+            }
+        });
+
+    }
+
     private void GetJob_id(Integer id) {
         jobListViewModel.getJobId(id).observe(this, new Observer<BaseModel<List<SpecficJobAd>>>() {
             @Override
@@ -175,7 +200,7 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
                     settingData(getjobAd.getData().get(0));
                     specficJobAd=getjobAd.getData().get(0);
                     checkLikeCount = getjobAd.getData().get(0);
-                    AppUtils.setGlideImage(getContext(), profile_image, user_image);
+                    AppUtils.setGlideImage(getContext(), profile_image,getjobAd.getData().get(0).getUser().getUser_image() );
                     tv_name.setText(getjobAd.getData().get(0).getJobTitle());
                     tv_positionName.setText(getjobAd.getData().get(0).getPosition());
                     DecimalFormat myFormatter = new DecimalFormat("############");
@@ -258,20 +283,38 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
                 break;
             case R.id.img_favourite:
                 showDialog();
-                setFavJob();
+                if(is_favourite_job){
+                    setUnFavJob(false,"deleted");
+                }else{
+                    setFavJob(true, "active");
+                }
                 break;
 
 
         }
     }
 
-    private void setFavJob() {
-        jobListViewModel.setFavJob(job_id,is_favourite_job).observe(this, new Observer<BaseModel<Object>>() {
+    private void setFavJob(boolean is_favourite, String status) {
+        jobListViewModel.setFavJob(job_id,is_favourite,status).observe(this, new Observer<BaseModel<SavedJobData>>() {
+            @Override
+            public void onChanged(BaseModel<SavedJobData> setlike) {
+                if(setlike.getData()!=null){
+                    hideDialog();
+                    img_favourite.setBackgroundResource(R.drawable.ic_star_selected);
+                    Savejob_id=setlike.getData().getId();
+                    is_favourite_job=true;
+                }
+            }
+        });
+    }
+    private void setUnFavJob(boolean is_favourite, String status) {
+        jobListViewModel.setUnfavJob(Savejob_id,is_favourite,status).observe(this, new Observer<BaseModel<Object>>() {
             @Override
             public void onChanged(BaseModel<Object> setlike) {
                 if(setlike.getData()!=null){
                     hideDialog();
-                    img_favourite.setBackgroundResource(R.drawable.ic_star_selected);
+                    img_favourite.setBackgroundResource(R.drawable.ic_star_unselected);
+                    is_favourite_job=false;
                 }
             }
         });

@@ -9,6 +9,7 @@ import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.Post;
+import com.hypernym.evaconnect.models.SavedJobData;
 import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IJobAdRepository;
@@ -30,7 +31,9 @@ public class JobListRepository implements IJobAdRepository {
     private MutableLiveData<BaseModel<List<Object>>> InterviewMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Post>>> dashboardMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Comment>>> commentMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<BaseModel<Object>> FavMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<SavedJobData>> FavMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<Object>> UnFavMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<SavedJobData>>> GetSavedJobMutableLiveData = new MutableLiveData<>();
 
     @Override
     public LiveData<BaseModel<List<JobAd>>> getjobAd(User user) {
@@ -274,17 +277,17 @@ public class JobListRepository implements IJobAdRepository {
     }
 
     @Override
-    public LiveData<BaseModel<Object>> setFavJob(int job_id, Boolean is_favourite_job) {
+    public LiveData<BaseModel<SavedJobData>> setFavJob(int job_id, Boolean is_favourite_job, String status) {
         FavMutableLiveData = new MutableLiveData<>();
         HashMap<String, Object> body = new HashMap<>();
         body.put("job_id", job_id);
         body.put("user_id", LoginUtils.getUser().getId());
-        body.put("is_favourite", true);
-        body.put("status", "active");
+        body.put("is_favourite", is_favourite_job);
+        body.put("status", status);
 
-        RestClient.get().appApi().save_job(body).enqueue(new Callback<BaseModel<Object>>() {
+        RestClient.get().appApi().save_job(body).enqueue(new Callback<BaseModel<SavedJobData>>() {
             @Override
-            public void onResponse(Call<BaseModel<Object>> call, Response<BaseModel<Object>> response) {
+            public void onResponse(Call<BaseModel<SavedJobData>> call, Response<BaseModel<SavedJobData>> response) {
                 if (response.isSuccessful() && !response.body().isError())
                     FavMutableLiveData.setValue(response.body());
                 if (response.code() == 500) {
@@ -293,11 +296,57 @@ public class JobListRepository implements IJobAdRepository {
             }
 
             @Override
-            public void onFailure(Call<BaseModel<Object>> call, Throwable t) {
+            public void onFailure(Call<BaseModel<SavedJobData>> call, Throwable t) {
                 FavMutableLiveData.setValue(null);
             }
         });
         return FavMutableLiveData;
+    }
+    @Override
+    public LiveData<BaseModel<Object>> setUnfavJob(int job_id, Boolean is_favourite_job, String status) {
+        UnFavMutableLiveData = new MutableLiveData<>();
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("id", job_id);
+        body.put("is_favourite", is_favourite_job);
+        body.put("status", status);
+
+        RestClient.get().appApi().setUnfavJob(body).enqueue(new Callback<BaseModel<Object>>() {
+            @Override
+            public void onResponse(Call<BaseModel<Object>> call, Response<BaseModel<Object>> response) {
+                if (response.isSuccessful() && !response.body().isError())
+                    UnFavMutableLiveData.setValue(response.body());
+                if (response.code() == 500) {
+                    UnFavMutableLiveData.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<Object>> call, Throwable t) {
+                UnFavMutableLiveData.setValue(null);
+            }
+        });
+        return UnFavMutableLiveData;
+    }
+    @Override
+    public LiveData<BaseModel<List<SavedJobData>>> getSavedJob(int job_id) {
+        GetSavedJobMutableLiveData = new MutableLiveData<>();
+
+        RestClient.get().appApi().get_job_save("active", LoginUtils.getUser().getId(),job_id).enqueue(new Callback<BaseModel<List<SavedJobData>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<SavedJobData>>> call, Response<BaseModel<List<SavedJobData>>> response) {
+                if (response.isSuccessful() && !response.body().isError())
+                    GetSavedJobMutableLiveData.setValue(response.body());
+                if (response.code() == 500) {
+                    GetSavedJobMutableLiveData.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<SavedJobData>>> call, Throwable t) {
+                GetSavedJobMutableLiveData.setValue(null);
+            }
+        });
+        return GetSavedJobMutableLiveData;
     }
 
 

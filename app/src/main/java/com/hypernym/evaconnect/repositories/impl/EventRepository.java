@@ -8,9 +8,11 @@ import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.Event;
+import com.hypernym.evaconnect.models.EventStaus;
 import com.hypernym.evaconnect.models.GetEventInterestedUsers;
 import com.hypernym.evaconnect.models.Meeting;
 import com.hypernym.evaconnect.models.Post;
+import com.hypernym.evaconnect.models.SaveEventData;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IEventRepository;
 import com.hypernym.evaconnect.utils.DateUtils;
@@ -32,7 +34,10 @@ public class EventRepository implements IEventRepository {
     private MutableLiveData<BaseModel<List<Comment>>> commentMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Post>>> dashboardMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<GetEventInterestedUsers>>> interestedMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<BaseModel<Object>> saveEventMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<SaveEventData>> saveEventMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<SaveEventData>>> GetsaveEventMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Object>>> InterestedEventMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<EventStaus>>> eventStatusMutableLiveData = new MutableLiveData<>();
 
 
     @Override
@@ -381,28 +386,94 @@ public class EventRepository implements IEventRepository {
     }
 
     @Override
-    public LiveData<BaseModel<Object>> saveEvent(int event_id, Boolean is_favourite_event) {
+    public LiveData<BaseModel<SaveEventData>> saveEvent(int event_id, Boolean is_favourite_event) {
         saveEventMutableLiveData=new MutableLiveData<>();
         HashMap<String, Object> body = new HashMap<>();
         body.put("event_id", event_id);
         body.put("user_id", LoginUtils.getUser().getId());
         body.put("status", "active");
-        body.put("is_favourite", true);
-        RestClient.get().appApi().save_event(body).enqueue(new Callback<BaseModel<Object>>() {
+        body.put("is_favourite", is_favourite_event);
+        RestClient.get().appApi().save_event(body).enqueue(new Callback<BaseModel<SaveEventData>>() {
             @Override
-            public void onResponse(Call<BaseModel<Object>> call, Response<BaseModel<Object>> response) {
+            public void onResponse(Call<BaseModel<SaveEventData>> call, Response<BaseModel<SaveEventData>> response) {
                 if(response.body()!=null)
                 {
                     saveEventMutableLiveData.setValue(response.body());
                 }
             }
             @Override
-            public void onFailure(Call<BaseModel<Object>> call, Throwable t) {
+            public void onFailure(Call<BaseModel<SaveEventData>> call, Throwable t) {
                 saveEventMutableLiveData.setValue(null);
             }
         });
         return saveEventMutableLiveData;
     }
 
+    @Override
+    public LiveData<BaseModel<List<Object>>> showInterestEvent(int event_id, int user_id,String status,String attendance_status) {
+        InterestedEventMutableLiveData=new MutableLiveData<>();
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("event_id", event_id);
+        body.put("user_id", LoginUtils.getUser().getId());
+        body.put("status", status);
+        body.put("attendance_status", attendance_status);
+        RestClient.get().appApi().save_event_interested(body).enqueue(new Callback<BaseModel<List<Object>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+                if(response.body()!=null)
+                {
+                    InterestedEventMutableLiveData.setValue(response.body());
+                }
+            }
+            @Override
+            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+                InterestedEventMutableLiveData.setValue(null);
+            }
+        });
+        return InterestedEventMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<EventStaus>>> getEventStatus(int event_id, int user_id) {
+        eventStatusMutableLiveData = new MutableLiveData<>();
+        Event event=new Event();
+        event.setEvent_id(event_id);
+        event.setUser_id(user_id);
+        RestClient.get().appApi().get_EventStatus(user_id,event_id).enqueue(new Callback<BaseModel<List<EventStaus>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<EventStaus>>> call, Response<BaseModel<List<EventStaus>>> response) {
+                if(response.body()!=null)
+                {
+                    eventStatusMutableLiveData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<EventStaus>>> call, Throwable t) {
+                eventStatusMutableLiveData.setValue(null);
+            }
+        });
+        return eventStatusMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<SaveEventData>>> GetSaveEvent(int event_id, int user_id) {
+        GetsaveEventMutableLiveData =new MutableLiveData<>();
+
+        RestClient.get().appApi().get_save_event(LoginUtils.getLoggedinUser().getId(),event_id,true).enqueue(new Callback<BaseModel<List<SaveEventData>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<SaveEventData>>> call, Response<BaseModel<List<SaveEventData>>> response) {
+                if(response.body()!=null)
+                {
+                    GetsaveEventMutableLiveData .setValue(response.body());
+                }
+            }
+            @Override
+            public void onFailure(Call<BaseModel<List<SaveEventData>>> call, Throwable t) {
+                GetsaveEventMutableLiveData .setValue(null);
+            }
+        });
+        return GetsaveEventMutableLiveData ;
+    }
 
 }

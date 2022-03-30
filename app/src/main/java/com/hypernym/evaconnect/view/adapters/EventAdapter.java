@@ -75,7 +75,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                         holder.eventTitle.setText(events.get(position).getObject_details().getName() + " | " + events.get(position).getObject_details().getAddress());
                     }
 
-                    holder.time.setText(DateUtils.get12formant(events.get(position).getObject_details().getStart_time())+" - "+DateUtils.get12formant(events.get(position).getObject_details().getEnd_time()));
+                  //  holder.time.setText(DateUtils.get12formant(events.get(position).getObject_details().getStart_time())+" - "+DateUtils.get12formant(events.get(position).getObject_details().getEnd_time()));
+                    holder.time.setText(DateUtils.getTimeUTC(events.get(position).getObject_details().getStart_time())+" - "+DateUtils.getTimeUTC(events.get(position).getObject_details().getEnd_time()));
                     if (events.get(position).getObject_details().getStart_date() != null)
                         holder.month.setText(DateUtils.extractMonth(events.get(position).getObject_details().getStart_date()));
                     holder.type.setText(events.get(position).getObject_type());
@@ -91,7 +92,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                 if(events.get(position).getObject_details()!=null) {
                     holder.itemView.setVisibility(View.VISIBLE);
                     holder.eventTitle.setText(events.get(position).getObject_details().getName() + " | " + events.get(position).getObject_details().getAddress());
-                    holder.time.setText(DateUtils.get12formant(events.get(position).getObject_details().getStart_time()) + " - " + DateUtils.get12formant(events.get(position).getObject_details().getEnd_time()));
+                 //   holder.time.setText(DateUtils.get12formant(events.get(position).getObject_details().getStart_time()) + " - " + DateUtils.get12formant(events.get(position).getObject_details().getEnd_time()));
+                    holder.time.setText(DateUtils.getTimeUTC(events.get(position).getObject_details().getStart_time()) + " - " + DateUtils.getTimeUTC(events.get(position).getObject_details().getEnd_time()));
                     if (events.get(position).getObject_details().getStart_date() != null)
                         holder.month.setText(DateUtils.extractMonth(events.get(position).getObject_details().getStart_date()));
                     holder.type.setText(events.get(position).getObject_type());
@@ -107,7 +109,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
                     if(events.get(position).getNotes()!=null){ holder.eventTitle.setText(events.get(position).getObject_details().getTitle() + " | " + events.get(position).getObject_details().getDetails()); }
 
-                    holder.time.setText(DateUtils.get12formant(events.get(position).getObject_details().getOccurrence_time()));
+                    holder.time.setText(DateUtils.getTimeUTC(events.get(position).getObject_details().getOccurrence_time()));
 //                    if (events.get(position).getObject_details().getStart_date() != null)
                     holder.month.setText(DateUtils.extractMonth(events.get(position).getOccurrence_date()));
                     holder.type.setText(events.get(position).getObject_type());

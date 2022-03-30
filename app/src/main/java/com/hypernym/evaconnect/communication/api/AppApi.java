@@ -1,5 +1,7 @@
 package com.hypernym.evaconnect.communication.api;
 
+import android.app.usage.EventStats;
+
 import com.hypernym.evaconnect.constants.APIConstants;
 import com.hypernym.evaconnect.models.AccountCheck;
 import com.hypernym.evaconnect.models.AppliedApplicants;
@@ -11,6 +13,7 @@ import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.ConnectionModel;
 import com.hypernym.evaconnect.models.Event;
+import com.hypernym.evaconnect.models.EventStaus;
 import com.hypernym.evaconnect.models.GetBlockedData;
 import com.hypernym.evaconnect.models.GetEventInterestedUsers;
 import com.hypernym.evaconnect.models.GetPendingData;
@@ -22,10 +25,13 @@ import com.hypernym.evaconnect.models.NewSources;
 import com.hypernym.evaconnect.models.NotesData;
 import com.hypernym.evaconnect.models.Notification_onesignal;
 import com.hypernym.evaconnect.models.Post;
+import com.hypernym.evaconnect.models.SaveEventData;
+import com.hypernym.evaconnect.models.SavedJobData;
 import com.hypernym.evaconnect.models.ShareConnection;
 import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.Stats;
 import com.hypernym.evaconnect.models.User;
+import com.hypernym.evaconnect.utils.LoginUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -380,7 +386,7 @@ public interface AppApi {
     Call<BaseModel<List<User>>> update_password(@Body HashMap<String, Object> body);
 
     @GET(APIConstants.GET_USER_DETAILS)
-    Call<BaseModel<List<User>>> getuser_details(@Path("id") int user_id);
+    Call<BaseModel<List<User>>> getuser_details(@Path("id") int user_id,@Query("view") boolean view);
 
     @POST(APIConstants.GET_SECTOR)
     Call<BaseModel<List<String>>> getSector(@Body HashMap<String, Object> body);
@@ -484,10 +490,16 @@ public interface AppApi {
     Call<BaseModel<List<Stats>>> getUserStats(@Path("id") int id);
 
     @POST(APIConstants.SAVE_JOB)
-    Call<BaseModel<Object>> save_job(@Body HashMap<String, Object> body);
+    Call<BaseModel<SavedJobData>> save_job(@Body HashMap<String, Object> body);
+
+    @PATCH(APIConstants.SAVE_JOB)
+    Call<BaseModel<Object>> setUnfavJob(@Body HashMap<String, Object> body);
+
+    @GET(APIConstants.SAVE_JOB)
+    Call<BaseModel<List<SavedJobData>>> get_job_save(@Query("status") String status, @Query("user_id") int user_id, @Query("job_id") int job_id);
 
     @POST(APIConstants.SAVE_EVENT)
-    Call<BaseModel<Object>> save_event(@Body HashMap<String, Object> body);
+    Call<BaseModel<SaveEventData>> save_event(@Body HashMap<String, Object> body);
 
     @POST(APIConstants.CREATE_NOTES)
     Call<BaseModel<List<Object>>> create_notes(@Body HashMap<String, Object> body);
@@ -498,5 +510,13 @@ public interface AppApi {
     @PATCH(APIConstants.CREATE_NOTES)
     Call<BaseModel<List<Object>>> update_notes(@Body HashMap<String, Object> body);
 
+    @POST(APIConstants.SAVE_EVENT_INTERESTED)
+    Call<BaseModel<List<Object>>> save_event_interested(@Body HashMap<String, Object> body);
+
+    @GET(APIConstants.EVENT_STATUS)
+    Call<BaseModel<List<EventStaus>>> get_EventStatus(@Query("user_id") int user_id, @Query("event_id") int event_id);
+
+    @GET(APIConstants.SAVE_EVENT)
+    Call<BaseModel<List<SaveEventData>>> get_save_event(@Query("user_id") int user_id, @Query("event_id") int event_id, @Query("status") Boolean status);
 
 }

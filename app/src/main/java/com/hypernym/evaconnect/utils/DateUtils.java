@@ -666,4 +666,23 @@ public final class DateUtils {
         }
         return new Date();
     }
+    public static String getTimeUTC(String ourDate)
+    {
+        try
+        {
+            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+            formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+            Date value = formatter.parse(ourDate);
+
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("hh:mm aa");
+            dateFormatter.setTimeZone(TimeZone.getDefault());
+            ourDate = dateFormatter.format(value);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            ourDate = "00:00 am";
+        }
+        return ourDate;
+    }
 }

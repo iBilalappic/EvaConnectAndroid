@@ -170,7 +170,6 @@
                 android:layout_marginBottom="32dp"
                 android:visibility="visible"
                 android:drawablePadding="5sp"
-                android:drawableLeft="@drawable/ic_check"
                 android:fontFamily="@font/nunitosansregular"
                 android:paddingLeft="20dp"
                 android:paddingTop="8dp"

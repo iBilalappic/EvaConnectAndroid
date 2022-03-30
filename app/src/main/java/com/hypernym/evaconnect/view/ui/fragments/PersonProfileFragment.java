@@ -518,6 +518,91 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                 if (listBaseModel.getData() != null && !listBaseModel.isError()) {
                     // tv_location.setText(listBaseModel.getData().get(0).getCountry() + "," + listBaseModel.getData().get(0).getCity());
                     tv_company.setText(listBaseModel.getData().get(0).getSector() + " | " + listBaseModel.getData().get(0).getCompany_name());
+
+                    tv_name.setText(listBaseModel.getData().get(0).getFirst_name());
+
+                    if (listBaseModel.getData().get(0).getBio_data() != null && !listBaseModel.getData().get(0).getBio_data().isEmpty()) {
+                        tv_bio.setText(listBaseModel.getData().get(0).getBio_data());
+                    } else {
+                        tv_bio.setVisibility(View.GONE);
+                    }
+
+                    if (listBaseModel.getData().get(0).getDesignation() != null && !post.getUser().getDesignation().isEmpty()) {
+                        tv_profession.setText(listBaseModel.getData().get(0).getDesignation());
+                    } else {
+                        tv_profession.setText(listBaseModel.getData().get(0).getCompany_name());
+                    }
+                    tv_connections_count.setText(String.valueOf(listBaseModel.getData().get(0).getConnection_count()));
+                    if (listBaseModel.getData().get(0).getId().equals(user.getId())) {
+                        tv_connect.setVisibility(View.GONE);
+
+                        layout_account_private.setVisibility(View.GONE);
+
+                        layout_message.setVisibility(View.GONE);
+                        view3.setVisibility(View.GONE);
+
+                        /* *//* layout_disconnect.setVisibility(View.GONE);*//*
+                    view4.setVisibility(View.GONE);*/
+                        layout_block.setVisibility(View.GONE);
+
+                        layout_settings.setVisibility(View.VISIBLE);
+                        view2.setVisibility(View.GONE);
+
+                        layout_EditDetail.setVisibility(View.VISIBLE);
+                        view1.setVisibility(View.VISIBLE);
+
+                        layout_notification.setVisibility(View.VISIBLE);
+                        view0.setVisibility(View.VISIBLE);
+
+                    } else {
+                        tv_connect.setVisibility(View.VISIBLE);
+                        layout_message.setVisibility(View.VISIBLE);
+                        view3.setVisibility(View.VISIBLE);
+
+                   /* layout_disconnect.setVisibility(View.VISIBLE);
+                    view4.setVisibility(View.VISIBLE);*/
+
+                        layout_block.setVisibility(View.VISIBLE);
+
+                        layout_settings.setVisibility(View.GONE);
+                        view2.setVisibility(View.GONE);
+
+                        layout_EditDetail.setVisibility(View.GONE);
+                        view1.setVisibility(View.GONE);
+
+                        layout_notification.setVisibility(View.GONE);
+
+                        view0.setVisibility(View.GONE);
+
+//
+//                        String status = AppUtils.getConnectionStatus(getContext(), listBaseModel.getData().get(0).getIs_connected(), post.isIs_receiver());
+//                        if (status.equals(AppConstants.DELETED)) {
+//                            tv_connect.setVisibility(View.GONE);
+//                        } else {
+//                            tv_connect.setVisibility(View.VISIBLE);
+//                            layout_account_private.setVisibility(View.GONE);
+//                            tv_connect.setText(AppUtils.getConnectionStatusWithUserType(getContext(), post.getIs_connected(), post.isIs_receiver(), user.getType()));
+//                            if (AppUtils.getConnectionStatus(getContext(), post.getIs_connected(), post.isIs_receiver()).equalsIgnoreCase(AppConstants.CONNECTED)) {
+//                                /*  layout_disconnect.setVisibility(View.VISIBLE);*/
+//                                layout_block.setVisibility(View.VISIBLE);
+//                                layout_account_private.setVisibility(View.GONE);
+//                                rc_post.setVisibility(View.VISIBLE);
+//                                view_view_post.setVisibility(View.VISIBLE);
+//                                tv_view_post.setVisibility(View.VISIBLE);
+//                            } else {
+//                                /* layout_disconnect.setVisibility(View.GONE);*/
+//                                layout_account_private.setVisibility(View.VISIBLE);
+//                                layout_block.setVisibility(View.GONE);
+//                                rc_post.setVisibility(View.GONE);
+//                                view_view_post.setVisibility(View.GONE);
+//                                tv_view_post.setVisibility(View.GONE);
+//                            }
+//                        }
+                    }
+
+
+                    targetUser=listBaseModel.getData().get(0);
+
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
