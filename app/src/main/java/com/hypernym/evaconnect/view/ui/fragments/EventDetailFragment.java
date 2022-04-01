@@ -154,7 +154,6 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
     private List<User> invitedConnections = new ArrayList<>();
     private Boolean is_favourite_event ;
     String attendee_status;
-    private int save_event_id;
 
     public EventDetailFragment() {
         // Required empty public constructor
@@ -300,17 +299,17 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
                     if(listBaseModel.getData().get(0).getIsFavourite()){
                         save.setBackground(getResources().getDrawable(R.drawable.ic_star_selected));
                         is_favourite_event=true;
-                        save_event_id=listBaseModel.getData().get(0).getId();
+                       // save_event_id=listBaseModel.getData().get(0).getId();
                     }else {
                         save.setBackground(getResources().getDrawable(R.drawable.ic_star_unselected));
                         is_favourite_event=false;
-                        save_event_id=0;
+                        //save_event_id=0;
                     }
 
                 }else{
                     save.setBackground(getResources().getDrawable(R.drawable.ic_star_unselected));
                     is_favourite_event=false;
-                    save_event_id=0;
+//                    save_event_id=0;
                 }
 
             }
@@ -621,7 +620,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
         showDialog();
         if(is_favourite_event){
 
-            callSaveEventApi(save_event_id,false);
+            callSaveEventApiFalse(event_id,false);
         }else{
             callSaveEventApi(event_id, true);
 
@@ -635,11 +634,36 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
             public void onChanged(BaseModel<SaveEventData> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError()) {
                     if(listBaseModel.getData().getIsFavourite()){
-                        save_event_id=listBaseModel.getData().getId();
+//                        save_event_id=listBaseModel.getData().getevent_id();
                         save.setBackground(getResources().getDrawable(R.drawable.ic_star_selected));
+                        is_favourite_event=true;
 
                     }else{
                         save.setBackground(getResources().getDrawable(R.drawable.ic_star_unselected));
+                        is_favourite_event=false;
+
+                    }
+                    hideDialog();
+                }
+                hideDialog();
+            }
+        });
+    }
+
+
+    private void callSaveEventApiFalse(int event_id, Boolean is_fav) {
+        eventViewModel.save_event_false(event_id, is_fav).observe(this, new Observer<BaseModel<SaveEventData>>() {
+            @Override
+            public void onChanged(BaseModel<SaveEventData> listBaseModel) {
+                if (listBaseModel != null && !listBaseModel.isError()) {
+                    if(listBaseModel.getData().getIsFavourite()){
+//                        save_event_id=listBaseModel.getData().getevent_id();
+                        save.setBackground(getResources().getDrawable(R.drawable.ic_star_selected));
+                        is_favourite_event=true;
+
+                    }else{
+                        save.setBackground(getResources().getDrawable(R.drawable.ic_star_unselected));
+                        is_favourite_event=false;
 
                     }
                     hideDialog();

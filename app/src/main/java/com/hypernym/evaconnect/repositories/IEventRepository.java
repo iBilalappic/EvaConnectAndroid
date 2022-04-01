@@ -51,10 +51,13 @@ public interface IEventRepository {
     LiveData<BaseModel<List<Comment>>> deleteComment(Integer id);
 
     LiveData<BaseModel<SaveEventData>> saveEvent(int event_id, Boolean is_favourite_event);
+
     LiveData<BaseModel<List<Object>>> showInterestEvent(int event_id, int user_id,String status,String attendance_status);
 
     LiveData<BaseModel<List<EventStaus>>> getEventStatus(int event_id, int user_id);
 
     LiveData<BaseModel<List<SaveEventData>>> GetSaveEvent(int event_id, int user_id);
+
+    LiveData<BaseModel<SaveEventData>> save_event_false(int event_id, Boolean is_favourite_event);
 
 }

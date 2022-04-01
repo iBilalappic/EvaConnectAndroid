@@ -118,9 +118,13 @@ public class EnterCodeActivity extends BaseActivity implements View.OnClickListe
         Intent intent;
             if (user_type.equalsIgnoreCase("user")) {
                 intent = new Intent(EnterCodeActivity.this, NewsActivity.class);
+                LoginUtils.userLoggedIn();
+
             } else {
                 intent = new Intent(EnterCodeActivity.this, HomeActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                LoginUtils.userLoggedIn();
+
             }
             startActivity(intent);
     }

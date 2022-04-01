@@ -517,6 +517,12 @@ public interface AppApi {
     Call<BaseModel<List<EventStaus>>> get_EventStatus(@Query("user_id") int user_id, @Query("event_id") int event_id);
 
     @GET(APIConstants.SAVE_EVENT)
-    Call<BaseModel<List<SaveEventData>>> get_save_event(@Query("user_id") int user_id, @Query("event_id") int event_id, @Query("status") Boolean status);
+    Call<BaseModel<List<SaveEventData>>> get_save_event(@Query("user_id") int user_id, @Query("event_id") int event_id, @Query("status") String status);
+
+    @PATCH(APIConstants.SAVE_EVENT)
+    Call<BaseModel<SaveEventData>> save_event_false(@Body HashMap<String, Object> body);
+
+    @POST(APIConstants.VERIFY_EMAIL)
+    Call<BaseModel<List<Object>>> verify_email_token(@Body HashMap<String, Object> body);
 
 }

@@ -460,7 +460,7 @@ public class EventRepository implements IEventRepository {
     public LiveData<BaseModel<List<SaveEventData>>> GetSaveEvent(int event_id, int user_id) {
         GetsaveEventMutableLiveData =new MutableLiveData<>();
 
-        RestClient.get().appApi().get_save_event(LoginUtils.getLoggedinUser().getId(),event_id,true).enqueue(new Callback<BaseModel<List<SaveEventData>>>() {
+        RestClient.get().appApi().get_save_event(LoginUtils.getLoggedinUser().getId(),event_id,"active").enqueue(new Callback<BaseModel<List<SaveEventData>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<SaveEventData>>> call, Response<BaseModel<List<SaveEventData>>> response) {
                 if(response.body()!=null)
@@ -475,5 +475,30 @@ public class EventRepository implements IEventRepository {
         });
         return GetsaveEventMutableLiveData ;
     }
+
+    @Override
+    public LiveData<BaseModel<SaveEventData>> save_event_false(int event_id, Boolean is_favourite_event) {
+        saveEventMutableLiveData=new MutableLiveData<>();
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("event_id", event_id);
+        body.put("user_id", LoginUtils.getUser().getId());
+        body.put("status", "active");
+        body.put("is_favourite", is_favourite_event);
+        RestClient.get().appApi().save_event_false(body).enqueue(new Callback<BaseModel<SaveEventData>>() {
+            @Override
+            public void onResponse(Call<BaseModel<SaveEventData>> call, Response<BaseModel<SaveEventData>> response) {
+                if(response.body()!=null)
+                {
+                    saveEventMutableLiveData.setValue(response.body());
+                }
+            }
+            @Override
+            public void onFailure(Call<BaseModel<SaveEventData>> call, Throwable t) {
+                saveEventMutableLiveData.setValue(null);
+            }
+        });
+        return saveEventMutableLiveData;
+    }
+
 
 }

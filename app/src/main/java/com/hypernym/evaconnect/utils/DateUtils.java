@@ -685,4 +685,23 @@ public final class DateUtils {
         }
         return ourDate;
     }
+    public static String getTimeToUTC(String ourDate)
+    {
+        try
+        {
+            SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT_1);
+            formatter.setTimeZone(TimeZone.getDefault());
+            Date value = formatter.parse(ourDate);
+
+            SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT_1);
+            dateFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+            ourDate = dateFormatter.format(value);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            ourDate = "00:00 am";
+        }
+        return ourDate;
+    }
 }

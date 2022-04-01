@@ -108,5 +108,6 @@ public interface APIConstants {
     public String GET_ALL_MYACTIVITY = "user/activity/";
     public static String SAVE_EVENT_INTERESTED = "event/attendee/";
     public static String EVENT_STATUS = "event/interested/status/";
+    public static String VERIFY_EMAIL = "user/pending/verification/";
 
 }

@@ -173,18 +173,18 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
             }
             if(DateUtils.isValidTime(tv_startTime.getText().toString()))
             {
-                meeting.setStart_time(tv_startTime.getText().toString());
+                meeting.setStart_time(DateUtils.getTimeToUTC(tv_startTime.getText().toString()));
             }
             else {
-                meeting.setStart_time( DateUtils.getFormattedTime(tv_startTime.getText().toString()));
+                meeting.setStart_time( DateUtils.getTimeToUTC(tv_startTime.getText().toString()));
             }
 
             if(DateUtils.isValidTime(tv_startTime.getText().toString()))
             {
-                meeting.setEnd_time(tv_endTime.getText().toString());
+                meeting.setEnd_time(DateUtils.getTimeToUTC(tv_endTime.getText().toString()));
             }
             else {
-                meeting.setEnd_time( DateUtils.getFormattedTime(tv_endTime.getText().toString()));
+                meeting.setEnd_time( DateUtils.getTimeToUTC(tv_endTime.getText().toString()));
             }
 
              meeting.setStatus(AppConstants.USER_STATUS);

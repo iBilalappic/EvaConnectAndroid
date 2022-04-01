@@ -31,5 +31,6 @@ public interface IUserRespository {
     LiveData<BaseModel<List<User>>> userOnline( boolean is_active);
     LiveData<BaseModel<List<Stats>>> getUserStats();
     LiveData<BaseModel<List<Object>>> deleteUser(Integer id);
+    LiveData<BaseModel<List<Object>>> verify_email(String email);
 
 }

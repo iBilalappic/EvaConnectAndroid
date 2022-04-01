@@ -37,6 +37,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.hypernym.evaconnect.EnterCodeActivity;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
@@ -391,10 +392,32 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
                     }
                     createUserOnFirebase();
                     saveCredential();
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                    // set the new task and clear flags
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
+                    hideDialog();
+
+                    if(userData.getStatus()!=null&&userData.getStatus().equalsIgnoreCase("active")){
+                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                        // set the new task and clear flags
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    }else{
+                        simpleDialog = new SimpleDialog(LoginActivity.this, "Warning", "Please verify yourself", "Cancel", "Verify", new OnOneOffClickListener() {
+                            @Override
+                            public void onSingleClick(View v) {
+                                switch (v.getId()) {
+                                    case R.id.button_positive:
+
+                                       callVerifyEmail(userData);
+                                        break;
+                                    case R.id.button_negative:
+                                        break;
+                                }
+                                simpleDialog.dismiss();
+                            }
+                        });
+                        simpleDialog.show();
+
+                    }
+
                 } else if (user != null && user.isError()) {
                     hideDialog();
                     networkResponseDialog(getString(R.string.error), user.getMessage());
@@ -405,6 +428,23 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
             }
         });
     }
+
+    private void callVerifyEmail(User userdata) {
+        userViewModel.verify_email(userdata.getEmail()).observe(this, new Observer<BaseModel<List<Object>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Object>> user) {
+                Toast.makeText(LoginActivity.this, "EMAIL SENT", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(LoginActivity.this, EnterCodeActivity.class);
+                intent.putExtra("Email", userdata.getEmail());
+                intent.putExtra("user_type", userdata.getType());
+                intent.putExtra(Constants.ACTIVITY_NAME,"");
+
+                startActivity(intent);
+            }
+        });
+
+    }
+
     public void createUserOnFirebase()
     {
         FirebaseInstanceId.getInstance().getInstanceId()

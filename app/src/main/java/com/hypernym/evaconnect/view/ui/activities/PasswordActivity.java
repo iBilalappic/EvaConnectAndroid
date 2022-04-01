@@ -294,7 +294,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             if (activityName!=null && activityName.equalsIgnoreCase(Constants.FORGOT_PASSWORD)) {
                 callResetPassword(email,code,edt_password.getText().toString());
             } else {
-                user.setStatus(AppConstants.USER_STATUS);
+                user.setStatus(AppConstants.USER_STATUS_PENDING);
                 user.setPassword(edt_password.getText().toString());
                 showDialog();
                 callSignupApi();

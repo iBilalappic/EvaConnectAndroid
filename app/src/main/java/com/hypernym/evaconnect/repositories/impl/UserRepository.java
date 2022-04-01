@@ -39,6 +39,7 @@ public class UserRepository implements IUserRespository {
     private MutableLiveData<BaseModel<List<GetBlockedData>>> getBlockedUsers = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> resetPasswordMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> deleteUserMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Object>>> verifyEmailMutableLiveData = new MutableLiveData<>();
 
     @Override
     public LiveData<BaseModel<List<User>>> signup(User user, MultipartBody.Part partImage) {
@@ -444,6 +445,27 @@ public class UserRepository implements IUserRespository {
     @Override
     public LiveData<BaseModel<List<Object>>> deleteUser(Integer id) {
         RestClient.get().appApi().deleteUser(id).enqueue(new Callback<BaseModel<List<Object>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+                if (response.body()!=null){
+                    deleteUserMutableLiveData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+                deleteUserMutableLiveData.setValue(null);
+                t.printStackTrace();
+            }
+        });
+
+        return deleteUserMutableLiveData;
+    }
+    @Override
+    public LiveData<BaseModel<List<Object>>> verify_email(String email) {
+        HashMap<String, Object> body = new HashMap<String, Object>();
+        body.put("email", email);
+        RestClient.get().appApi().verify_email_token(body).enqueue(new Callback<BaseModel<List<Object>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
                 if (response.body()!=null){

@@ -7,6 +7,7 @@ public class AppConstants {
     public static final String USER_TOKEN = "Token";
     public static final String USER_AVAILABLE = "user available";
     public static final String USER_STATUS = "active";
+    public static final String USER_STATUS_PENDING = "pending";
     public static final int IMAGE_SIZE_IN_KB = 5000;
     public static final int ONE_THOUSAND_AND_TWENTY_FOUR = 1024;
     public static final int FILE_SIZE_LIMIT_IN_KB = 4000; // for video and image]'

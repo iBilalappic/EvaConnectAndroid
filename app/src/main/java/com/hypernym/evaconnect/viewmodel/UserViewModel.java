@@ -108,4 +108,7 @@ public class UserViewModel extends AndroidViewModel {
     public LiveData<BaseModel<List<Object>>> deleteuser(Integer id){
         return iUserRespository.deleteUser(id);
     }
+    public LiveData<BaseModel<List<Object>>> verify_email(String email){
+        return iUserRespository.verify_email(email);
+    }
 }
