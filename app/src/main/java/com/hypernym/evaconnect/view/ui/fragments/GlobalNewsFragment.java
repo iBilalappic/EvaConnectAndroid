@@ -62,7 +62,6 @@ public class GlobalNewsFragment extends BaseFragment implements View.OnClickList
     @BindView(R.id.rc_home)
     RecyclerView rc_home;
 
-
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
     private String search_key;

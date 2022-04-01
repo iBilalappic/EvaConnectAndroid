@@ -1,6 +1,7 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
+import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -39,9 +40,7 @@ import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.PostAdapter;
-import com.hypernym.evaconnect.view.bottomsheets.BottomsheetAttachmentSelection;
 import com.hypernym.evaconnect.view.bottomsheets.BottomsheetShareSelection;
-import com.hypernym.evaconnect.view.dialogs.ShareDialog;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
 
@@ -50,8 +49,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
 
 public class PostFragment extends BaseFragment implements View.OnClickListener,SwipeRefreshLayout.OnRefreshListener, PostAdapter.ItemClickListener {
 
@@ -116,13 +113,12 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
     }
 
     private void init() {
-        postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(PostViewModel.class);
+        postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(PostViewModel.class);
         //   currentPage = PAGE_START;
-       connectionViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
+        connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
 
        postAdapter = new PostAdapter(getContext(), posts, this);
         linearLayoutManager = new LinearLayoutManager(getContext());
-
         rc_post.setLayoutManager(linearLayoutManager);
         rc_post.setAdapter(postAdapter);
         RecyclerView.ItemAnimator animator = rc_post.getItemAnimator();

@@ -68,7 +68,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             holder.notification.setVisibility(View.VISIBLE);
             holder.tv_count.setVisibility(View.VISIBLE);
             holder.tv_count.setText(String.valueOf(networkConnectionList.get(position).getMessageCount()));
-            holder.tv_lastmsg.setTextColor(context.getResources().getColor(R.color.black));
+            holder.tv_lastmsg.setTextColor(context.getResources().getColor(com.skydoves.powermenu.R.color.black));
             holder.tv_lastmsg.setTypeface(holder.tv_lastmsg.getTypeface(), Typeface.BOLD);
         }
         else

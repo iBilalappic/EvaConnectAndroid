@@ -49,7 +49,6 @@ import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.CommentsAdapter;
 import com.hypernym.evaconnect.view.adapters.SliderImageAdapter;
 import com.hypernym.evaconnect.view.bottomsheets.BottomsheetShareSelection;
-import com.hypernym.evaconnect.view.dialogs.ShareDialog;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;

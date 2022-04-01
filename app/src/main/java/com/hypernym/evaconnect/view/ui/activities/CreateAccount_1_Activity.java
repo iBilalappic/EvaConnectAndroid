@@ -393,7 +393,7 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
                 tv_company.setBackground(getDrawable(R.drawable.rounded_button_border));
                 tv_individual.setBackground(getDrawable(R.drawable.rounded_button_red));
                 tv_company.setTextColor(getResources().getColor(R.color.gray));
-                tv_individual.setTextColor(getResources().getColor(R.color.white));
+                tv_individual.setTextColor(getResources().getColor(com.skydoves.powermenu.R.color.white));
                 layout_company.setVisibility(View.GONE);
                 layout_individual.setVisibility(View.VISIBLE);
                 img_profile.setImageDrawable(getResources().getDrawable(R.drawable.ic_user_profile));
@@ -405,7 +405,7 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
 
             case R.id.tv_company:
                 tv_company.setBackground(getDrawable(R.drawable.rounded_button_red));
-                tv_company.setTextColor(getResources().getColor(R.color.white));
+                tv_company.setTextColor(getResources().getColor(com.skydoves.powermenu.R.color.white));
                 tv_individual.setBackground(getDrawable(R.drawable.rounded_button_border));
                 tv_individual.setTextColor(getResources().getColor(R.color.gray));
                 layout_individual.setVisibility(View.GONE);
@@ -651,6 +651,7 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
 
             case RequestPermissionCode:

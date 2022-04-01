@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -44,7 +43,6 @@ import com.hypernym.evaconnect.view.dialogs.SearchDialog;
 import com.hypernym.evaconnect.view.ui.fragments.ActivityFragment;
 import com.hypernym.evaconnect.view.ui.fragments.BaseFragment;
 import com.hypernym.evaconnect.view.ui.fragments.ChatFragment;
-import com.hypernym.evaconnect.view.ui.fragments.ConnectionsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.ConnectionsTabFragment;
 import com.hypernym.evaconnect.view.ui.fragments.EditProfileFragment;
 import com.hypernym.evaconnect.view.ui.fragments.EventDetailFragment;
@@ -57,7 +55,6 @@ import com.hypernym.evaconnect.view.ui.fragments.NewPostFragment;
 import com.hypernym.evaconnect.view.ui.fragments.NotificationsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.PersonProfileFragment;
 import com.hypernym.evaconnect.view.ui.fragments.PostDetailsFragment;
-import com.hypernym.evaconnect.view.ui.fragments.SearchResultFragment;
 import com.hypernym.evaconnect.view.ui.fragments.SpecficJobFragment;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
@@ -112,8 +109,6 @@ public class HomeActivity extends BaseActivity {
     ImageView img_messages;
     @BindView(R.id.img_post)
     ImageView img_post;
-
-
 
     @BindView(R.id.tv_post)
     TextView tv_post;
@@ -342,7 +337,6 @@ public class HomeActivity extends BaseActivity {
 
     @OnClick(R.id.home_click)
     public void home() {
-
         home_selector.setImageResource(R.drawable.bottomline);
         connections_selector.setImageResource(0);
         messages_selector.setImageResource(0);

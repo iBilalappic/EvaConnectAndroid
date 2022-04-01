@@ -5,10 +5,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.hypernym.evaconnect.BuildConfig;
-import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.communication.api.AppApi;
-import com.hypernym.evaconnect.constants.APIConstants;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
@@ -24,7 +21,6 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -70,7 +66,7 @@ public class RestClient {
 
             Retrofit.Builder retrofitBuilder =
                     new Retrofit.Builder()
-                            .baseUrl(BuildConfig.BASE_SERVER_URL)
+                            .baseUrl("http:/67.205.178.219:8000/eva/")           /*BuildConfig.BASE_SERVER_URL*/
                             .client(getUnsafeOkHttpClient(AppUtils.getApplicationContext(),AppConstants.SIMPLE_BASEURL))
                             .addConverterFactory(GsonConverterFactory.create(gson));
 
@@ -90,7 +86,7 @@ public class RestClient {
 
             Retrofit.Builder retrofitBuilder =
                     new Retrofit.Builder()
-                            .baseUrl(BuildConfig.BASE_SERVER_URL)
+                            .baseUrl("http:/67.205.178.219:8000/eva/") /*BuildConfig.BASE_SERVER_URL*/
                             .client(getUnsafeOkHttpClient(AppUtils.getApplicationContext(), AppConstants.ONESIGNAL_BASEURL))
                             .addConverterFactory(GsonConverterFactory.create(gson));
 

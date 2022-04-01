@@ -173,7 +173,7 @@ public class CreateAccount_4_Activity extends BaseActivity implements View.OnCli
                 tv_commercial_aviation.setBackground(getDrawable(R.drawable.rounded_button_border));
                 tv_general_business.setBackground(getDrawable(R.drawable.rounded_button_selected));
                 tv_commercial_aviation.setTextColor(getResources().getColor(R.color.gray));
-                tv_general_business.setTextColor(getResources().getColor(R.color.white));
+                tv_general_business.setTextColor(getResources().getColor(com.skydoves.powermenu.R.color.white));
                 aviation_type = "General Aviation";
                 jobsector.clear();
                 getSectorFromApi(aviation_type);
@@ -185,7 +185,7 @@ public class CreateAccount_4_Activity extends BaseActivity implements View.OnCli
             @Override
             public void onSingleClick(View v) {
                 tv_commercial_aviation.setBackground(getDrawable(R.drawable.rounded_button_selected));
-                tv_commercial_aviation.setTextColor(getResources().getColor(R.color.white));
+                tv_commercial_aviation.setTextColor(getResources().getColor(com.skydoves.powermenu.R.color.white));
                 tv_general_business.setBackground(getDrawable(R.drawable.rounded_button_border));
                 tv_general_business.setTextColor(getResources().getColor(R.color.gray));
                 aviation_type = "Commercial Aviation";

@@ -1,13 +1,6 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,17 +11,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.hypernym.evaconnect.R;
-import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.dateTimePicker.DateTime;
 import com.hypernym.evaconnect.dateTimePicker.DateTimePicker;
 import com.hypernym.evaconnect.dateTimePicker.SimpleDateTimePicker;
 import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.MyLikesModel;
 import com.hypernym.evaconnect.models.NotesData;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.DateUtils;
-import com.hypernym.evaconnect.viewmodel.MylikesViewModel;
 import com.hypernym.evaconnect.viewmodel.NotesViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
@@ -40,7 +35,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -146,7 +140,7 @@ public class CreateNoteFragment extends BaseFragment implements View.OnClickList
                     if(viewdata.getData().get(0).isNotify){
                         setReminder = true;
                         tv_remind_me.setBackground(getResources().getDrawable(R.drawable.ic_blue_button));
-                        tv_remind_me.setTextColor(getResources().getColor(R.color.white));
+                        tv_remind_me.setTextColor(getResources().getColor(com.skydoves.powermenu.R.color.white));
                     }else{
                         setReminder = false;
                         tv_remind_me.setBackground(getResources().getDrawable(R.drawable.ic_holo_blue_button));
@@ -174,7 +168,7 @@ public class CreateNoteFragment extends BaseFragment implements View.OnClickList
             if(!setReminder) {
                 setReminder = true;
                 tv_remind_me.setBackground(getResources().getDrawable(R.drawable.ic_blue_button));
-                tv_remind_me.setTextColor(getResources().getColor(R.color.white));
+                tv_remind_me.setTextColor(getResources().getColor(com.skydoves.powermenu.R.color.white));
             }else{
                 setReminder=false;
                 tv_remind_me.setBackground(getResources().getDrawable(R.drawable.ic_holo_blue_button));
