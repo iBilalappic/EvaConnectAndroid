@@ -60,7 +60,9 @@ public class EmailVerification extends BaseActivity implements View.OnClickListe
                         Intent intent = new Intent(EmailVerification.this, EnterCodeActivity.class);
                         intent.putExtra("Email", email);
                         intent.putExtra("user_type", user_type);
-                        startActivity(intent);
+                        intent.putExtra(Constants.ACTIVITY_NAME,"");
+
+                startActivity(intent);
             }
         });
     }

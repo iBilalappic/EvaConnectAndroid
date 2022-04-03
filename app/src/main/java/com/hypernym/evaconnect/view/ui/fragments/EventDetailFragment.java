@@ -625,7 +625,6 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
             callSaveEventApi(event_id, true);
 
         }
-
     }
 
     private void callSaveEventApi(int event_id, Boolean is_fav) {
