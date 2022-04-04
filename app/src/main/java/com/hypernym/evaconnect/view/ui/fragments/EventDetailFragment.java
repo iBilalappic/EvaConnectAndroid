@@ -625,7 +625,6 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
             callSaveEventApi(event_id, true);
 
         }
-
     }
 
     private void callSaveEventApi(int event_id, Boolean is_fav) {
@@ -637,10 +636,12 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
 //                        save_event_id=listBaseModel.getData().getevent_id();
                         save.setBackground(getResources().getDrawable(R.drawable.ic_star_selected));
                         is_favourite_event=true;
+                        getSaveEvent(event_id);
 
                     }else{
                         save.setBackground(getResources().getDrawable(R.drawable.ic_star_unselected));
                         is_favourite_event=false;
+                        getSaveEvent(event_id);
 
                     }
                     hideDialog();
@@ -652,20 +653,20 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
 
 
     private void callSaveEventApiFalse(int event_id, Boolean is_fav) {
-        eventViewModel.save_event_false(event_id, is_fav).observe(this, new Observer<BaseModel<SaveEventData>>() {
+        eventViewModel.save_event_false(event_id, is_fav).observe(this, new Observer<BaseModel<List<Object>>>() {
             @Override
-            public void onChanged(BaseModel<SaveEventData> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError()) {
-                    if(listBaseModel.getData().getIsFavourite()){
-//                        save_event_id=listBaseModel.getData().getevent_id();
-                        save.setBackground(getResources().getDrawable(R.drawable.ic_star_selected));
-                        is_favourite_event=true;
-
-                    }else{
-                        save.setBackground(getResources().getDrawable(R.drawable.ic_star_unselected));
-                        is_favourite_event=false;
-
-                    }
+            public void onChanged(BaseModel<List<Object>> listBaseModel) {
+                if (!listBaseModel.isError()) {
+                    getSaveEvent(event_id);
+//                    if(listBaseModel.getData().getIsFavourite()){
+////                        save_event_id=listBaseModel.getData().getevent_id();
+//                        save.setBackground(getResources().getDrawable(R.drawable.ic_star_selected));
+//                        is_favourite_event=true;
+//                    }else{
+//                        save.setBackground(getResources().getDrawable(R.drawable.ic_star_unselected));
+//                        is_favourite_event=false;
+//
+//                    }
                     hideDialog();
                 }
                 hideDialog();

@@ -35,6 +35,7 @@ public class EventRepository implements IEventRepository {
     private MutableLiveData<BaseModel<List<Post>>> dashboardMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<GetEventInterestedUsers>>> interestedMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<SaveEventData>> saveEventMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Object>>> UpdateEventMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<SaveEventData>>> GetsaveEventMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> InterestedEventMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<EventStaus>>> eventStatusMutableLiveData = new MutableLiveData<>();
@@ -477,27 +478,27 @@ public class EventRepository implements IEventRepository {
     }
 
     @Override
-    public LiveData<BaseModel<SaveEventData>> save_event_false(int event_id, Boolean is_favourite_event) {
-        saveEventMutableLiveData=new MutableLiveData<>();
+    public LiveData<BaseModel<List<Object>>> save_event_false(int event_id, Boolean is_favourite_event) {
+        UpdateEventMutableLiveData=new MutableLiveData<>();
         HashMap<String, Object> body = new HashMap<>();
         body.put("event_id", event_id);
         body.put("user_id", LoginUtils.getUser().getId());
         body.put("status", "active");
         body.put("is_favourite", is_favourite_event);
-        RestClient.get().appApi().save_event_false(body).enqueue(new Callback<BaseModel<SaveEventData>>() {
+        RestClient.get().appApi().save_event_false(body).enqueue(new Callback<BaseModel<List<Object>>>() {
             @Override
-            public void onResponse(Call<BaseModel<SaveEventData>> call, Response<BaseModel<SaveEventData>> response) {
+            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
                 if(response.body()!=null)
                 {
-                    saveEventMutableLiveData.setValue(response.body());
+                    UpdateEventMutableLiveData.setValue(response.body());
                 }
             }
             @Override
-            public void onFailure(Call<BaseModel<SaveEventData>> call, Throwable t) {
-                saveEventMutableLiveData.setValue(null);
+            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+                UpdateEventMutableLiveData.setValue(null);
             }
         });
-        return saveEventMutableLiveData;
+        return UpdateEventMutableLiveData;
     }
 
 

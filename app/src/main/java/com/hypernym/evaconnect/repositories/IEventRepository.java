@@ -58,6 +58,6 @@ public interface IEventRepository {
 
     LiveData<BaseModel<List<SaveEventData>>> GetSaveEvent(int event_id, int user_id);
 
-    LiveData<BaseModel<SaveEventData>> save_event_false(int event_id, Boolean is_favourite_event);
+    LiveData<BaseModel<List<Object>>> save_event_false(int event_id, Boolean is_favourite_event);
 
 }

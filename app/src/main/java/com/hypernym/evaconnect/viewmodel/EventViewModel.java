@@ -129,7 +129,7 @@ public class EventViewModel extends AndroidViewModel {
         return iEventRepository.GetSaveEvent(event_id,user_id);
     }
 
-    public LiveData<BaseModel<SaveEventData>> save_event_false(int event_id, Boolean is_favourite_event)
+    public LiveData<BaseModel<List<Object>>> save_event_false(int event_id, Boolean is_favourite_event)
     {
         return iEventRepository.save_event_false(event_id,is_favourite_event);
     }
