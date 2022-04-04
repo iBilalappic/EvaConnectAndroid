@@ -113,7 +113,7 @@
     <string name="err_one_file_at_a_time">Only one image file can be selected at a time</string>
     <string name="err_internal_supported">Sorry! Files from internal storage are supported only</string>
     <string name="err_email_already_exist">An account already exists with that email. Please try another one.</string>
-    <string name="err_password">Your password cannot be empty and requires a length of between 8-30 characters.</string>
+    <string name="err_password">Your password cannot be empty and requires a length of between 8–30 characters.</string>
     <string name="err_image_size_large">The file exceeded the maximum size required by Aviation Connect. Recommended maximum size is 4MB, please try again.</string>
     <string name="err_internal_storage">This file is not present in your internal storage</string>
     <string name="err_signup">This email already exist.</string>
@@ -172,6 +172,7 @@
     <string name="shares">Shares</string>
     <string name="invite_to_follow">Invite to Follow</string>
     <string name="todo">TODO</string>
+    <string name="back">Back</string>
 
 
     <string-array name="languageSpinnerItems">

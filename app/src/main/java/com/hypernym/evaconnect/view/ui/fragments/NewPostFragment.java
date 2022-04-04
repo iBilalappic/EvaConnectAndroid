@@ -1,8 +1,10 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 
+import static android.app.Activity.RESULT_OK;
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -42,7 +44,6 @@ import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.utils.URLTextWatcher;
 import com.hypernym.evaconnect.view.adapters.AttachmentsAdapter;
-import com.hypernym.evaconnect.view.bottomsheets.BottomSheetPictureSelection;
 import com.hypernym.evaconnect.view.bottomsheets.BottomsheetAttachmentSelection;
 import com.hypernym.evaconnect.view.dialogs.LocalVideoViewDialog;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
@@ -56,6 +57,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,8 +65,6 @@ import butterknife.OnClick;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -175,11 +175,11 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
         img_backarrow.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
-               getActivity().onBackPressed();
+                requireActivity().onBackPressed();
             }
         });
-        postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(PostViewModel.class);
-        connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
+        postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(PostViewModel.class);
+        connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
         init();
         initRecyclerView();
         browsefiles.setOnClickListener(new OnOneOffClickListener() {
@@ -193,7 +193,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
             @Override
             public void onSingleClick(View v) {
                 BottomsheetAttachmentSelection bottomSheetPictureSelection = new BottomsheetAttachmentSelection(new BaseFragment.YourDialogFragmentDismissHandler());
-                bottomSheetPictureSelection.show(getActivity().getSupportFragmentManager(), bottomSheetPictureSelection.getTag());
+                bottomSheetPictureSelection.show(requireActivity().getSupportFragmentManager(), bottomSheetPictureSelection.getTag());
             }
         });
 
@@ -244,6 +244,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
         return view;
     }
 
+    @SuppressLint("SetTextI18n")
     private void init() {
         User user = LoginUtils.getLoggedinUser();
         AppUtils.setGlideImage(getContext(), profile_image, user.getUser_image());
@@ -322,21 +323,19 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
     }
 
     private void getDocumentDetails(int id) {
-        postViewModel.getPostByID(id).observe(this, new Observer<BaseModel<List<Post>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError()) {
-                    //post = listBaseModel.getData().get(0);
-                    // settingpostType();
-                    setDocumentData(listBaseModel.getData().get(0));
+        postViewModel.getPostByID(id).observe(getViewLifecycleOwner(), listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError()) {
+                //post = listBaseModel.getData().get(0);
+                // settingpostType();
+                setDocumentData(listBaseModel.getData().get(0));
 
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
         });
     }
 
+    @SuppressLint({"SetJavaScriptEnabled", "ClickableViewAccessibility"})
     private void setDocumentData(Post post) {
         edt_content.setText(post.getContent());
 //        if(post.getPost_document().size()>0)
@@ -375,39 +374,33 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
         postModel.setContent(edt_content.getText().toString());
         postModel.setDocument(video);
         postModel.setId(getArguments().getInt("post"));
-        postViewModel.editPost(postModel).observe(this, new Observer<BaseModel<List<Post>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError()) {
+        postViewModel.editPost(postModel).observe(this, listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError()) {
 
-                    newPost();
+                newPost();
 
-                    Toast.makeText(getContext(), getString(R.string.msg_post_created), Toast.LENGTH_LONG).show();
-                    // networkResponseDialog(getString(R.string.success),getString(R.string.msg_post_created));
-                    if (getFragmentManager().getBackStackEntryCount() != 0) {
-                        getFragmentManager().popBackStack();
-                    }
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                Toast.makeText(getContext(), getString(R.string.msg_post_created), Toast.LENGTH_LONG).show();
+                // networkResponseDialog(getString(R.string.success),getString(R.string.msg_post_created));
+                if (getFragmentManager().getBackStackEntryCount() != 0) {
+                    getFragmentManager().popBackStack();
                 }
-                hideDialog();
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
     }
 
 
     private void getPostDetails(int id) {
-        postViewModel.getPostByID(id).observe(this, new Observer<BaseModel<List<Post>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError()) {
-                    //post = listBaseModel.getData().get(0);
-                    // settingpostType();
-                    setPostData(listBaseModel.getData().get(0));
+        postViewModel.getPostByID(id).observe(getViewLifecycleOwner(), listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError()) {
+                //post = listBaseModel.getData().get(0);
+                // settingpostType();
+                setPostData(listBaseModel.getData().get(0));
 
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
         });
     }
@@ -434,23 +427,20 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
         postModel.setAttachments(part_images);
         postModel.setContent(edt_content.getText().toString());
         postModel.setVideo(video);
-        postViewModel.createPost(postModel).observe(this, new Observer<BaseModel<List<Post>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError()) {
+        postViewModel.createPost(postModel).observe(this, listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError()) {
 
-                    newPost();
+                newPost();
 
-                    Toast.makeText(getContext(), getString(R.string.msg_post_created), Toast.LENGTH_LONG).show();
-                    // networkResponseDialog(getString(R.string.success),getString(R.string.msg_post_created));
-                    if (getFragmentManager().getBackStackEntryCount() != 0) {
-                        getFragmentManager().popBackStack();
-                    }
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                Toast.makeText(getContext(), getString(R.string.msg_post_created), Toast.LENGTH_LONG).show();
+                // networkResponseDialog(getString(R.string.success),getString(R.string.msg_post_created));
+                if (requireFragmentManager().getBackStackEntryCount() != 0) {
+                    requireFragmentManager().popBackStack();
                 }
-                hideDialog();
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
     }
 

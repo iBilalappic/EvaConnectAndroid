@@ -1,5 +1,6 @@
 package com.hypernym.evaconnect.view.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
@@ -288,12 +289,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
             super(itemView);
             ButterKnife.bind(this, itemView);
 
-            attachment.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mClickListener.onDocumentClick(v,getAdapterPosition());
-                }
-            });
+            attachment.setOnClickListener(v -> mClickListener.onDocumentClick(v,getAdapterPosition()));
 
             tv_viewcomments.setOnClickListener(new OnOneOffClickListener() {
                 @Override
@@ -356,19 +352,9 @@ public class PostAdapter  extends RecyclerView.Adapter {
                 }
             });
 
-            tv_connect.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mClickListener.onConnectClick(v, getAdapterPosition());
-                }
-            });
+            tv_connect.setOnClickListener(v -> mClickListener.onConnectClick(v, getAdapterPosition()));
 
-            img_more.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    moreOptions(v,getAdapterPosition());
-                }
-            });
+            img_more.setOnClickListener(v -> moreOptions(v,getAdapterPosition()));
 
         }
 
@@ -676,6 +662,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.text_type, parent, false);
                 return new PostAdapter.TextTypeViewHolder(view);
             case AppConstants.IMAGE_TYPE:
+            case AppConstants.DOCUMENT_TYPE:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
                 return new PostAdapter.ImageTypeViewHolder(view);
             case AppConstants.LOADING_TYPE:
@@ -687,9 +674,6 @@ public class PostAdapter  extends RecyclerView.Adapter {
             case AppConstants.LINK_POST:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_link, parent, false);
                 return new PostAdapter.LinkTypeViewHolder(view);
-            case AppConstants.DOCUMENT_TYPE:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
-                return new PostAdapter.ImageTypeViewHolder(view);
         }
         return null;
     }
@@ -725,6 +709,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
             return null;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         Post object = posts.get(position);
@@ -762,7 +747,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                         ((PostAdapter.TextTypeViewHolder) holder).tv_company.setText(AppUtils.getConnectionsCount(posts.get(position).getUser().getTotal_connection()));
 
                     }else{
-                        ((PostAdapter.TextTypeViewHolder) holder).tv_company.setText(String.valueOf(posts.get(position).getUser().getConnection_count())+" Connections");
+                        ((PostAdapter.TextTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getConnection_count() +" Connections");
 
                     }
                     if (position == 0) {

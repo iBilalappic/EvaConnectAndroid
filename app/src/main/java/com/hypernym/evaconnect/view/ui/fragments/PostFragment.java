@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -46,6 +45,7 @@ import com.hypernym.evaconnect.viewmodel.PostViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -253,7 +253,7 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
 
         item_position=position;
         BottomsheetShareSelection bottomSheetPictureSelection = new BottomsheetShareSelection(new YourDialogFragmentDismissHandler());
-        bottomSheetPictureSelection.show(getActivity().getSupportFragmentManager(), bottomSheetPictureSelection.getTag());
+        bottomSheetPictureSelection.show(requireActivity().getSupportFragmentManager(), bottomSheetPictureSelection.getTag());
     }
 
     @Override
@@ -372,15 +372,12 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
     @Override
     public void onDeleteClick(View view, int position) {
 
-        postViewModel.deletePost(posts.get(position)).observe(this, new Observer<BaseModel<List<Post>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                if (NetworkUtils.isNetworkConnected(getContext())) {
-                    posts.clear();
-                    callPostsApi();
-                } else {
-                    networkErrorDialog();
-                }
+        postViewModel.deletePost(posts.get(position)).observe(this, listBaseModel -> {
+            if (NetworkUtils.isNetworkConnected(getContext())) {
+                posts.clear();
+                callPostsApi();
+            } else {
+                networkErrorDialog();
             }
         });
     }
@@ -388,60 +385,52 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
 
     private void callDeclineConnectApi(Connection connection) {
 
-        connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Connection>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError()) {
+        connectionViewModel.connect(connection).observe(this, listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError()) {
 
-                    onRefresh();
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
+                onRefresh();
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
     }
     private void callPostsApi() {
         User user = LoginUtils.getLoggedinUser();
 
-        postViewModel.getPost(user, AppConstants.TOTAL_PAGES, currentPage).observe(this, new Observer<BaseModel<List<Post>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Post>> dashboardBaseModel) {
+        postViewModel.getPost(user, AppConstants.TOTAL_PAGES, currentPage).observe(this, dashboardBaseModel -> {
 
-                //   homePostsAdapter.clear();
-                if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
-                    for (Post post : dashboardBaseModel.getData()) {
-                        if (post.getContent() == null) {
-                            post.setContent("");
-                        }
-                        if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() > 0) {
-                            post.setPost_type(AppConstants.IMAGE_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_video() != null) {
-                            post.setPost_type(AppConstants.VIDEO_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() == 0 && !post.isIs_url()  && post.getPost_document() == null) {
-                            post.setPost_type(AppConstants.TEXT_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("post") && post.isIs_url() && post.getPost_document() == null) {
-                            post.setPost_type(AppConstants.LINK_POST);
-                        }
-                        else if(post.getType().equalsIgnoreCase("post") && post.getPost_document() != null)
-                        {
-                            post.setPost_type(AppConstants.DOCUMENT_TYPE);
-                        }
+            //   homePostsAdapter.clear();
+            if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
+                for (Post post : dashboardBaseModel.getData()) {
+                    if (post.getContent() == null) {
+                        post.setContent("");
                     }
-                    posts.addAll(dashboardBaseModel.getData());
-                    postAdapter.notifyDataSetChanged();
-                    swipeRefresh.setRefreshing(false);
-                    postAdapter.removeLoading();
-                    isLoading = false;
-                } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
-                    isLastPage = true;
-                    postAdapter.removeLoading();
-                    isLoading = false;
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                    if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() > 0) {
+                        post.setPost_type(AppConstants.IMAGE_TYPE);
+                    } else if (post.getType().equalsIgnoreCase("post") && post.getPost_video() != null) {
+                        post.setPost_type(AppConstants.VIDEO_TYPE);
+                    } else if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() == 0 && !post.isIs_url() && post.getPost_document() == null) {
+                        post.setPost_type(AppConstants.TEXT_TYPE);
+                    } else if (post.getType().equalsIgnoreCase("post") && post.isIs_url() && post.getPost_document() == null) {
+                        post.setPost_type(AppConstants.LINK_POST);
+                    } else if (post.getType().equalsIgnoreCase("post") && post.getPost_document() != null) {
+                        post.setPost_type(AppConstants.DOCUMENT_TYPE);
+                    }
                 }
-
+                posts.addAll(dashboardBaseModel.getData());
+                postAdapter.notifyDataSetChanged();
+                swipeRefresh.setRefreshing(false);
+                postAdapter.removeLoading();
+                isLoading = false;
+            } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
+                isLastPage = true;
+                postAdapter.removeLoading();
+                isLoading = false;
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+
         });
     }
 
@@ -455,17 +444,14 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
             connection.setReceiver_id(posts.get(position).getUser().getId());
             connection.setSender_id(user.getId());
             connection.setStatus(AppConstants.STATUS_PENDING);
-            connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
-                @Override
-                public void onChanged(BaseModel<List<Connection>> listBaseModel) {
-                    if (listBaseModel != null && !listBaseModel.isError()) {
-                        text.setText("Pending");
-                        onRefresh();
-                    } else {
-                        networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                    }
-                    hideDialog();
+            connectionViewModel.connect(connection).observe(this, listBaseModel -> {
+                if (listBaseModel != null && !listBaseModel.isError()) {
+                    text.setText("Pending");
+                    onRefresh();
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
+                hideDialog();
             });
         }
     }
@@ -487,7 +473,7 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
             }
             else if(msg.what==100){
                 ShareConnectionFragment shareConnectionFragment = new ShareConnectionFragment();
-                FragmentTransaction transaction = ((AppCompatActivity) requireActivity()).getSupportFragmentManager().beginTransaction();
+                FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
                 transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
                 transaction.replace(R.id.framelayout, shareConnectionFragment);
                 Bundle bundle = new Bundle();
@@ -501,7 +487,7 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
                 }
                 transaction.commit();
             }else if(msg.what==103){
-                ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(CLIPBOARD_SERVICE);
+                ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(CLIPBOARD_SERVICE);
                 ClipData clip;
                 clip = ClipData.newPlainText("label", "https://www.evaintmedia.com/" + posts.get(item_position).getType() + "/" + posts.get(item_position).getId());
                 clipboard.setPrimaryClip(clip);

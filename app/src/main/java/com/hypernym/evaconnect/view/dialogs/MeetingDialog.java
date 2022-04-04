@@ -3,7 +3,6 @@ package com.hypernym.evaconnect.view.dialogs;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -48,27 +47,19 @@ public class MeetingDialog extends Dialog {
         tv_location.setText(event.getObject_details().getAddress());
         tv_description.setText(event.getObject_details().getContent());
         tv_createdDate.setText(DateUtils.getFormattedDateDMY(event.getObject_details().getStart_date()));
-        img_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        img_close.setOnClickListener(v -> dismiss());
 
-        btn_viewEvent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-                FragmentTransaction transaction =((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
-                MeetingDetailFragment meetingDetailFragment=new MeetingDetailFragment();
-                Bundle bundle=new Bundle();
-                bundle.putInt("id",event.getObject_id());
-                meetingDetailFragment.setArguments(bundle);
-                transaction.replace(R.id.framelayout,meetingDetailFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
+        btn_viewEvent.setOnClickListener(v -> {
+            dismiss();
+            FragmentTransaction transaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+            MeetingDetailFragment meetingDetailFragment = new MeetingDetailFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("id", event.getObject_id());
+            meetingDetailFragment.setArguments(bundle);
+            transaction.replace(R.id.framelayout, meetingDetailFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
         });
 
     }

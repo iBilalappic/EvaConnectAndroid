@@ -26,7 +26,6 @@ import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
-import com.hypernym.evaconnect.models.ConnectionModel;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
@@ -43,6 +42,7 @@ import com.hypernym.evaconnect.viewmodel.UserViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -201,8 +201,8 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                 argumentReceived = "PostData";
                 if (!TextUtils.isEmpty(post.getUser().getUser_image())) {
                     AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getUser_image());
-
                 }
+
 //            else if (post.getUser().getIs_facebook() == 1 && !TextUtils.isEmpty(post.getUser().getFacebook_image_url())){
 //                AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getFacebook_image_url());
 //            }
@@ -282,14 +282,14 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                     view0.setVisibility(View.GONE);
 
 
-                    String status = AppUtils.getConnectionStatus(getContext(), post.getIs_connected(), post.isIs_receiver());
+                    String status = AppUtils.getConnectionStatus(requireContext(), post.getIs_connected(), post.isIs_receiver());
                     if (status.equals(AppConstants.DELETED)) {
                         tv_connect.setVisibility(View.GONE);
                     } else {
                         tv_connect.setVisibility(View.VISIBLE);
                         layout_account_private.setVisibility(View.GONE);
-                        tv_connect.setText(AppUtils.getConnectionStatusWithUserType(getContext(), post.getIs_connected(), post.isIs_receiver(), user.getType()));
-                        if (AppUtils.getConnectionStatus(getContext(), post.getIs_connected(), post.isIs_receiver()).equalsIgnoreCase(AppConstants.CONNECTED)) {
+                        tv_connect.setText(AppUtils.getConnectionStatusWithUserType(requireContext(), post.getIs_connected(), post.isIs_receiver(), user.getType()));
+                        if (AppUtils.getConnectionStatus(requireContext(), post.getIs_connected(), post.isIs_receiver()).equalsIgnoreCase(AppConstants.CONNECTED)) {
                             /*  layout_disconnect.setVisibility(View.VISIBLE);*/
                             layout_block.setVisibility(View.VISIBLE);
                             layout_account_private.setVisibility(View.GONE);

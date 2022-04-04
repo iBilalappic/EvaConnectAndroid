@@ -86,13 +86,10 @@ public class SplashActivity extends BaseActivity {
                 .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.None)
                 .init();
 
-        OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
-            @Override
-            public void idsAvailable(String userId, String registrationId) {
-                Log.e("debug", "User:" + userId);
-                if (registrationId != null)
-                    Log.e("debug", "registrationId:" + registrationId);
-            }
+        OneSignal.idsAvailable((userId, registrationId) -> {
+            Log.e("debug", "User:" + userId);
+            if (registrationId != null)
+                Log.e("debug", "registrationId:" + registrationId);
         });
     }
 }

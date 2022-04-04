@@ -43,6 +43,7 @@ import com.hypernym.evaconnect.viewmodel.NewsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -117,7 +118,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void init() {
-        newsViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(NewsViewModel.class);
+        newsViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(NewsViewModel.class);
 
 
         //   currentPage = PAGE_START;
@@ -304,16 +305,13 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener, 
 
     private void likePost(Post post, int position) {
 
-        newsViewModel.likePost(post).observe(this, new Observer<BaseModel<List<Post>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError()) {
-                    postAdapter.notifyItemChanged(position);
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
+        newsViewModel.likePost(post).observe(this, listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError()) {
+                postAdapter.notifyItemChanged(position);
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
     }
 
@@ -325,7 +323,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener, 
 //        shareDialog.show();
         item_position=position;
         BottomsheetShareSelection bottomSheetPictureSelection = new BottomsheetShareSelection(new YourDialogFragmentDismissHandler());
-        bottomSheetPictureSelection.show(getActivity().getSupportFragmentManager(), bottomSheetPictureSelection.getTag());
+        bottomSheetPictureSelection.show(requireActivity().getSupportFragmentManager(), bottomSheetPictureSelection.getTag());
 
     }
 
@@ -472,7 +470,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener, 
                 whatsappIntent.setPackage("com.whatsapp");
                 whatsappIntent.putExtra(Intent.EXTRA_TEXT, "https://www.evaintmedia.com/" + posts.get(item_position).getType() + "/" + posts.get(item_position).getId());
                 try {
-                    getContext().startActivity(whatsappIntent);
+                    requireContext().startActivity(whatsappIntent);
                 } catch (android.content.ActivityNotFoundException ex) {
                     Toast.makeText(requireContext(), "Whatsapp have not been installed.", Toast.LENGTH_SHORT).show();
                 }
@@ -493,7 +491,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener, 
                 }
                 transaction.commit();
             }else if(msg.what==103){
-                ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(CLIPBOARD_SERVICE);
+                ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(CLIPBOARD_SERVICE);
                 ClipData clip;
                 clip = ClipData.newPlainText("label", "https://www.evaintmedia.com/" + posts.get(item_position).getType() + "/" + posts.get(item_position).getId());
                 clipboard.setPrimaryClip(clip);

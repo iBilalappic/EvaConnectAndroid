@@ -54,6 +54,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -133,18 +134,15 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
         rc_events.setAdapter(eventAdapter);
         showDialog();
         hideBackButton();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                hideDialog();
-                getCalendarMarksByDate(calendarView.getCurrentDate().getYear(), calendarView.getCurrentDate().getMonth(), calendarView.getCurrentDate().getDay());
-                if (NetworkUtils.isNetworkConnected(AppUtils.getApplicationContext())) {
-                    getAllCalendarMarks(calendarView.getCurrentDate().getMonth(), calendarView.getCurrentDate().getYear());
-                } else {
-                    networkErrorDialog();
-                }
-
+        new Handler().postDelayed(() -> {
+            hideDialog();
+            getCalendarMarksByDate(calendarView.getCurrentDate().getYear(), calendarView.getCurrentDate().getMonth(), calendarView.getCurrentDate().getDay());
+            if (NetworkUtils.isNetworkConnected(AppUtils.getApplicationContext())) {
+                getAllCalendarMarks(calendarView.getCurrentDate().getMonth(), calendarView.getCurrentDate().getYear());
+            } else {
+                networkErrorDialog();
             }
+
         }, 3000);
 
 
@@ -159,20 +157,17 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
         calendarModel.setUser_id(LoginUtils.getLoggedinUser().getId());
         calendarModel.setMonth(String.valueOf(month));
         calendarModel.setYear(String.valueOf(year));
-        calendarViewModel.getAllCalendarMarks(calendarModel).observe(this, new Observer<BaseModel<List<CalendarModel>>>() {
-            @Override
-            public void onChanged(BaseModel<List<CalendarModel>> listBaseModel) {
-                if (!listBaseModel.isError() && listBaseModel.getData() != null) {
-                    calendarMarks = new ArrayList<>();
-                    eventList.clear();
-                    eventAdapter.notifyDataSetChanged();
-                    setEvents(listBaseModel.getData());
-                    // makeJsonObjectRequest(listBaseModel.getData());
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-
+        calendarViewModel.getAllCalendarMarks(calendarModel).observe(requireActivity(), listBaseModel -> {
+            if (!listBaseModel.isError() && listBaseModel.getData() != null) {
+                calendarMarks = new ArrayList<>();
+                eventList.clear();
+                eventAdapter.notifyDataSetChanged();
+                setEvents(listBaseModel.getData());
+                // makeJsonObjectRequest(listBaseModel.getData());
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+
         });
     }
 
@@ -262,7 +257,7 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
                     }
                     events.add(day);
                 } catch (ParseException ex) {
-                    Log.v("Exception", ex.getLocalizedMessage());
+                    Timber.tag("Exception").v(ex.getLocalizedMessage());
                 }
 //                CalendarDay day = CalendarDay.from(2020, 3, 5);
 //
@@ -314,7 +309,7 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
     @Override
     public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
         if (selected) {
-            Log.d("TAAAF", String.valueOf(date.getDate().getDayOfMonth()));
+            Timber.d(String.valueOf(date.getDate().getDayOfMonth()));
             //   edt_note.setVisibility(View.VISIBLE);
             if (NetworkUtils.isNetworkConnected(getContext())) {
                 getCalendarMarksByDate(date.getDate().getYear(), date.getDate().getMonthValue(), date.getDate().getDayOfMonth());
@@ -337,26 +332,23 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
         CalendarModel calendarModel = new CalendarModel();
         calendarModel.setUser_id(LoginUtils.getLoggedinUser().getId());
         calendarModel.setDate(year + "-" + month + "-" + day);
-        calendarViewModel.getCalendarMarksByDate(calendarModel).observe(this, new Observer<BaseModel<List<CalendarModel>>>() {
-            @Override
-            public void onChanged(BaseModel<List<CalendarModel>> listBaseModel) {
-                if (!listBaseModel.isError() && listBaseModel.getData() != null) {
-                    eventList.clear();
-                    eventList.addAll(listBaseModel.getData());
-                    eventAdapter.notifyDataSetChanged();
-                    rc_events.setVisibility(View.VISIBLE);
-                    if (listBaseModel.getData().size() > 0) {
+        calendarViewModel.getCalendarMarksByDate(calendarModel).observe(requireActivity(), listBaseModel -> {
+            if (!listBaseModel.isError() && listBaseModel.getData() != null) {
+                eventList.clear();
+                eventList.addAll(listBaseModel.getData());
+                eventAdapter.notifyDataSetChanged();
+                rc_events.setVisibility(View.VISIBLE);
+                if (listBaseModel.getData().size() > 0) {
 
-                        tv_nothing_happened.setVisibility(View.GONE);
-                    } else {
-
-                        tv_nothing_happened.setVisibility(View.VISIBLE);
-                    }
+                    tv_nothing_happened.setVisibility(View.GONE);
                 } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
 
+                    tv_nothing_happened.setVisibility(View.VISIBLE);
+                }
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+
         });
     }
 

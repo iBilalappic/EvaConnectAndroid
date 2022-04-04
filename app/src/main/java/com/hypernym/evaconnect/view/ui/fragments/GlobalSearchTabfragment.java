@@ -1,7 +1,5 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
-import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
-
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.LayoutInflater;
@@ -23,8 +21,6 @@ import com.hypernym.evaconnect.utils.LoginUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.BindView;
 
 public class GlobalSearchTabfragment extends BaseFragment implements View.OnClickListener {
 

@@ -41,7 +41,7 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/nunitosansbold"
                 android:gravity="start"
-                android:text="Back"
+                android:text="@string/back"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:textStyle="bold" />

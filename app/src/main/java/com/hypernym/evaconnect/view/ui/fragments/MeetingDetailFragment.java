@@ -237,7 +237,7 @@ public class MeetingDetailFragment extends BaseFragment implements View.OnClickL
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.img_backarrow) {
-            (getActivity()).onBackPressed();
+            (requireActivity()).onBackPressed();
         }
     }
 }

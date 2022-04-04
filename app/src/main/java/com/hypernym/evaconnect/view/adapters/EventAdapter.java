@@ -1,5 +1,6 @@
 package com.hypernym.evaconnect.view.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -39,24 +40,22 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         return new ViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        try
-        {
+        try {
             /*if ( position == 0) {
               holder.divider.setVisibility(View.GONE);
             } else {
                 holder.divider.setVisibility(View.VISIBLE);
             }*/
 
-            if(events.get(position).getObject_type().equalsIgnoreCase("interview"))
-            {
-                if(events.get(position).getObject_details()!=null)
-                {
+            if (events.get(position).getObject_type().equalsIgnoreCase("interview")) {
+                if (events.get(position).getObject_details() != null) {
                     holder.itemView.setVisibility(View.VISIBLE);
 
-                    holder.eventTitle.setText("Job Interview at "+events.get(position).getObject_details().getCompany_name()+" - "+events.get(position).getObject_details().getPosition()
-                            +" | "+ events.get(position).getObject_details().getAddress());
+                    holder.eventTitle.setText("Job Interview at " + events.get(position).getObject_details().getCompany_name() + " - " + events.get(position).getObject_details().getPosition()
+                            + " | " + events.get(position).getObject_details().getAddress());
                     holder.time.setText(DateUtils.getFormattedEventTime(events.get(position).getObject_details().getInterview_time()));
                     if (events.get(position).getObject_details().getStart_date() != null)
                         holder.month.setText(DateUtils.extractMonth(events.get(position).getObject_details().getStart_date()));
@@ -65,18 +64,15 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                     setDayTextWithSuperScript(holder, position);
                 }
 
-            }
-            else if(events.get(position).getObject_type().equalsIgnoreCase("event"))
-            {
+            } else if (events.get(position).getObject_type().equalsIgnoreCase("event")) {
                 holder.itemView.setVisibility(View.VISIBLE);
-                if(events.get(position).getObject_details()!=null)
-                {
-                    if(events.get(position).getObject_details().getName()!=null){
+                if (events.get(position).getObject_details() != null) {
+                    if (events.get(position).getObject_details().getName() != null) {
                         holder.eventTitle.setText(events.get(position).getObject_details().getName() + " | " + events.get(position).getObject_details().getAddress());
                     }
 
-                  //  holder.time.setText(DateUtils.get12formant(events.get(position).getObject_details().getStart_time())+" - "+DateUtils.get12formant(events.get(position).getObject_details().getEnd_time()));
-                    holder.time.setText(DateUtils.getTimeUTC(events.get(position).getObject_details().getStart_time())+" - "+DateUtils.getTimeUTC(events.get(position).getObject_details().getEnd_time()));
+                    //  holder.time.setText(DateUtils.get12formant(events.get(position).getObject_details().getStart_time())+" - "+DateUtils.get12formant(events.get(position).getObject_details().getEnd_time()));
+                    holder.time.setText(DateUtils.getTimeUTC(events.get(position).getObject_details().getStart_time()) + " - " + DateUtils.getTimeUTC(events.get(position).getObject_details().getEnd_time()));
                     if (events.get(position).getObject_details().getStart_date() != null)
                         holder.month.setText(DateUtils.extractMonth(events.get(position).getObject_details().getStart_date()));
                     holder.type.setText(events.get(position).getObject_type());
@@ -85,14 +81,11 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                 }
 
 
-
-            }
-            else if(events.get(position).getObject_type().equalsIgnoreCase("meeting"))
-            {
-                if(events.get(position).getObject_details()!=null) {
+            } else if (events.get(position).getObject_type().equalsIgnoreCase("meeting")) {
+                if (events.get(position).getObject_details() != null) {
                     holder.itemView.setVisibility(View.VISIBLE);
                     holder.eventTitle.setText(events.get(position).getObject_details().getName() + " | " + events.get(position).getObject_details().getAddress());
-                 //   holder.time.setText(DateUtils.get12formant(events.get(position).getObject_details().getStart_time()) + " - " + DateUtils.get12formant(events.get(position).getObject_details().getEnd_time()));
+                    //   holder.time.setText(DateUtils.get12formant(events.get(position).getObject_details().getStart_time()) + " - " + DateUtils.get12formant(events.get(position).getObject_details().getEnd_time()));
                     holder.time.setText(DateUtils.getTimeUTC(events.get(position).getObject_details().getStart_time()) + " - " + DateUtils.getTimeUTC(events.get(position).getObject_details().getEnd_time()));
                     if (events.get(position).getObject_details().getStart_date() != null)
                         holder.month.setText(DateUtils.extractMonth(events.get(position).getObject_details().getStart_date()));
@@ -101,28 +94,26 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
                     setDayTextWithSuperScript(holder, position);
                 }
-            }
-            else if(events.get(position).getObject_type().equalsIgnoreCase("note"))
-            {
+            } else if (events.get(position).getObject_type().equalsIgnoreCase("note")) {
                 holder.itemView.setVisibility(View.VISIBLE);
 
 
-                    if(events.get(position).getNotes()!=null){ holder.eventTitle.setText(events.get(position).getObject_details().getTitle() + " | " + events.get(position).getObject_details().getDetails()); }
+                if (events.get(position).getNotes() != null) {
+                    holder.eventTitle.setText(events.get(position).getObject_details().getTitle() + " | " + events.get(position).getObject_details().getDetails());
+                }
 
-                    holder.time.setText(DateUtils.getTimeUTC(events.get(position).getObject_details().getOccurrence_time()));
+                holder.time.setText(DateUtils.getTimeUTC(events.get(position).getObject_details().getOccurrence_time()));
 //                    if (events.get(position).getObject_details().getStart_date() != null)
-                    holder.month.setText(DateUtils.extractMonth(events.get(position).getOccurrence_date()));
-                    holder.type.setText(events.get(position).getObject_type());
-                    holder.type.setTextColor(context.getResources().getColor(R.color.light_blue));
-                    setDayTextWithSuperScript(holder, position);
+                holder.month.setText(DateUtils.extractMonth(events.get(position).getOccurrence_date()));
+                holder.type.setText(events.get(position).getObject_type());
+                holder.type.setTextColor(context.getResources().getColor(R.color.light_blue));
+                setDayTextWithSuperScript(holder, position);
 
-            }
-            else{
+            } else {
                 holder.itemView.setVisibility(View.GONE);
             }
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
+            ex.getLocalizedMessage();
 
         }
 
