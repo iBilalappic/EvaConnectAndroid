@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,6 +24,7 @@ import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.Constants;
+import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 
 import java.util.ArrayList;
@@ -35,8 +35,8 @@ import butterknife.ButterKnife;
 
 public class CreateAccount_4_Activity extends BaseActivity implements View.OnClickListener {
 
-    String email, password, photourl, activity_type, user_type,path, about,
-            aviation_type = "Commercial Aviation", JobSector,username,firstname,surname,city,country,filepath, language, companyUrl;
+    String email, password, photourl, activity_type, user_type, path, about,
+            aviation_type = "Commercial Aviation", JobSector, username, firstname, surname, city, country, filepath, language, companyUrl, dob;
 
     @BindView(R.id.tv_general_business)
     TextView tv_general_business;
@@ -83,7 +83,6 @@ public class CreateAccount_4_Activity extends BaseActivity implements View.OnCli
 
 
 
-
     private List<String> jobsector = new ArrayList<>();
     ArrayAdapter<String> arraySectorAdapter;
 
@@ -99,12 +98,20 @@ public class CreateAccount_4_Activity extends BaseActivity implements View.OnCli
         tv_already_account.setOnClickListener(this);
         init();
 
-
     }
 
     private void init() {
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(this.getApplication())).get(UserViewModel.class);
-        getSectorFromApi(aviation_type);
+
+
+        if (NetworkUtils.isNetworkConnected(this)) {
+            getSectorFromApi(aviation_type);
+        } else {
+            Toast.makeText(getBaseContext(), "Check your Internet Connection", Toast.LENGTH_LONG).show();
+
+
+        }
+
         tv_general_business.setBackground(getDrawable(R.drawable.rounded_button_border));
         tv_commercial_aviation.setBackground(getDrawable(R.drawable.rounded_button_selected));
 
@@ -124,6 +131,8 @@ public class CreateAccount_4_Activity extends BaseActivity implements View.OnCli
             country = getIntent().getStringExtra("country");
             about = getIntent().getStringExtra("about");
             language = getIntent().getStringExtra("language");
+            dob = getIntent().getStringExtra("dob");
+            Log.d("dob", dob);
 
         }
         else if (!TextUtils.isEmpty(type) && type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)){
@@ -140,6 +149,8 @@ public class CreateAccount_4_Activity extends BaseActivity implements View.OnCli
             country = getIntent().getStringExtra("country");
             about = getIntent().getStringExtra("about");
             language = getIntent().getStringExtra("language");
+            dob = getIntent().getStringExtra("dob");
+            Log.d("dob", dob);
         }
         else {
             email = getIntent().getStringExtra("Email");
@@ -153,6 +164,9 @@ public class CreateAccount_4_Activity extends BaseActivity implements View.OnCli
             filepath = getIntent().getStringExtra("FilePath");
             about = getIntent().getStringExtra("about");
             language = getIntent().getStringExtra("language");
+            dob = getIntent().getStringExtra("dob");
+            Log.d("dob", dob);
+
             activity_type = "normal_type";
         }
 
@@ -166,6 +180,7 @@ public class CreateAccount_4_Activity extends BaseActivity implements View.OnCli
             title.setText("Company & Job Title");
             tv_company.setText("Which sector:");
         }
+
 
         tv_general_business.setOnClickListener(new OnOneOffClickListener() {
             @Override
@@ -219,6 +234,7 @@ public class CreateAccount_4_Activity extends BaseActivity implements View.OnCli
                         intent.putExtra("country", country);
                         intent.putExtra("about", about);
                         intent.putExtra("language", language);
+                        intent.putExtra("dob", dob);
                         intent.putExtra("jobtitle", edt_jobtitle.getText().toString());
                         intent.putExtra("companyname", edt_company.getText().toString());
                         startActivity(intent);
@@ -240,6 +256,7 @@ public class CreateAccount_4_Activity extends BaseActivity implements View.OnCli
                         intent.putExtra("city", city);
                         intent.putExtra("country", country);
                         intent.putExtra("about", about);
+                        intent.putExtra("dob", dob);
                         intent.putExtra("language", language);
                         intent.putExtra("jobtitle", edt_jobtitle.getText().toString());
                         intent.putExtra("companyname", edt_company.getText().toString());
@@ -264,6 +281,7 @@ public class CreateAccount_4_Activity extends BaseActivity implements View.OnCli
                             intent.putExtra("FilePath", filepath);
                             intent.putExtra("about", about);
                             intent.putExtra("language", language);
+                            intent.putExtra("dob", dob);
                             intent.putExtra("jobtitle", edt_jobtitle.getText().toString());
                             intent.putExtra("companyname", edt_company.getText().toString());
                             startActivity(intent);
@@ -280,6 +298,7 @@ public class CreateAccount_4_Activity extends BaseActivity implements View.OnCli
                             intent.putExtra("SurName", surname);
                             intent.putExtra("city", city);
                             intent.putExtra("country", country);
+                            intent.putExtra("dob", dob);
                             intent.putExtra("about", about);
                             intent.putExtra("language", language);
                             intent.putExtra("jobtitle", edt_jobtitle.getText().toString());
@@ -375,5 +394,11 @@ public class CreateAccount_4_Activity extends BaseActivity implements View.OnCli
                 startActivity(intent);
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        hideDialog();
     }
 }

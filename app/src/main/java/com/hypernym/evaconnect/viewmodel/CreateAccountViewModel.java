@@ -21,7 +21,7 @@ public class CreateAccountViewModel extends AndroidViewModel {
         super(application);
     }
 
-    public LiveData<BaseModel<List<City>>> hGetAllCities(String countyCode) {
+    public LiveData<List<City>> hGetAllCities(String countyCode) {
         return iCitiesRepository.hGetAllCities(countyCode);
     }
 }

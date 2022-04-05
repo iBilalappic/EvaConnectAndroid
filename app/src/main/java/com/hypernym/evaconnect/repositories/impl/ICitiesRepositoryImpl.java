@@ -18,31 +18,34 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ICitiesRepositoryImpl implements ICityRepository {
-    private MutableLiveData<BaseModel<List<City>>> citiesMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<City>> citiesMutableLiveData = new MutableLiveData<>();
 
     @Override
-    public LiveData<BaseModel<List<City>>> hGetAllCities(String countyCode) {
+    public LiveData<List<City>> hGetAllCities(String countyCode) {
         citiesMutableLiveData = new MutableLiveData<>();
 
         AppApi service = RestClientForCities.getRetrofitInstance().create(AppApi.class);
-        if (service != null) {
-            service.get_all_cities(countyCode).enqueue(new Callback<BaseModel<List<City>>>() {
-                @Override
-                public void onResponse(Call<BaseModel<List<City>>> call, Response<BaseModel<List<City>>> response) {
-                    if (response != null) {
-                        citiesMutableLiveData.setValue(response.body());
-                    }
-                }
+        Log.d("test123", "Calling Cities API");
 
-                @Override
-                public void onFailure(Call<BaseModel<List<City>>> call, Throwable t) {
-                    citiesMutableLiveData.setValue(null);
-                }
-            });
-        } else {
-            Log.d("hGetAllCities", "hGetAllCities: null");
-        }
 
+        service.get_all_cities(countyCode).enqueue(new Callback<List<City>>() {
+            @Override
+            public void onResponse(Call<List<City>> call, Response<List<City>> response) {
+
+                Log.d("test123", "onResponse");
+
+                if (response != null) {
+                    citiesMutableLiveData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<City>> call, Throwable t) {
+                Log.d("test123", "fail" + t);
+
+                citiesMutableLiveData.setValue(null);
+            }
+        });
 
         return citiesMutableLiveData;
     }

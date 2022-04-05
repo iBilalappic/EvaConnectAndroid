@@ -72,6 +72,7 @@ public interface AppApi {
                                        @Part("city") RequestBody city,
                                        @Part("last_name") RequestBody last_name,
                                        @Part("language") RequestBody language,
+                                       @Part("date_of_birth") RequestBody data_of_birth,
                                        @Part MultipartBody.Part user_image);
 
     @POST(APIConstants.LOGIN)
@@ -526,7 +527,7 @@ public interface AppApi {
 
     @Headers("X-CSCAPI-KEY: R0wzZTBVSEhOQ1YwZk5vVlZ6ZzFsYUJxbUlHVUVuQ1NrdjFRcVRZRA==")
     @GET(APIConstants.CITIES_LIST)
-    Call<BaseModel<List<City>>> get_all_cities(@Path("country_code") String countryCode);
+    Call<List<City>> get_all_cities(@Path("country_code") String countryCode);
 
 }
 

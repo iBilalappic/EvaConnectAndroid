@@ -3,6 +3,7 @@ package com.hypernym.evaconnect.view.ui.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,9 +43,9 @@ import okhttp3.RequestBody;
 
 public class PasswordActivity extends BaseActivity implements Validator.ValidationListener, View.OnClickListener {
 
-    String email, password, photourl, activity_type, user_type,path, about, language,
+    String email, password, photourl, activity_type, user_type, path, about, language,
             aviation_type, JobSector, username, firstname, surname, companyUrl,
-            city, country, filepath, jobtitle, company_name,otherJobSector, code;
+            city, country, filepath, jobtitle, company_name, otherJobSector, code, dob;
 
     private Validator validator;
 
@@ -87,6 +88,10 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
         validator = new Validator(this);
         validator.setValidationListener(this);
         init();
+
+
+        Log.d("password", "onCreate password ");
+
         img_backarrow.setOnClickListener(this);
         img_cross.setOnClickListener(this);
         tv_already_account.setOnClickListener(this);
@@ -95,7 +100,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             public void onSingleClick(View v) {
                 if (edt_password.getText().toString().equals(edt_confirmpassword.getText().toString())) {
                     validator.validate();
-                }else{
+                } else {
                     Toast.makeText(PasswordActivity.this, "Password And Confirm Password Must Be Same", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -124,13 +129,16 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             about = getIntent().getStringExtra("about");
             language = getIntent().getStringExtra("language");
             company_name = getIntent().getStringExtra("companyname");
-            otherJobSector=getIntent().getStringExtra("other_job_sector");
-            companyUrl=getIntent().getStringExtra("companyUrl");
+            otherJobSector = getIntent().getStringExtra("other_job_sector");
+            companyUrl = getIntent().getStringExtra("companyUrl");
+            dob = getIntent().getStringExtra("dob");
 
+
+            Toast.makeText(PasswordActivity.this, dob, Toast.LENGTH_SHORT).show();
 
             filepath = path;
 
-            if(filepath!=null){
+            if (filepath != null) {
                 File file = new File(filepath);
 
                 RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
@@ -157,6 +165,9 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             user.setFacebook_image_url("");
             user.setOther_sector(otherJobSector);
             user.setCompany_url(companyUrl);
+            user.setDate_of_birth(dob);
+
+            Log.d("password_dob", dob);
 
 
 //            user.setUsername(email);
@@ -251,12 +262,13 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             JobSector = getIntent().getStringExtra("job_sector");
             jobtitle = getIntent().getStringExtra("jobtitle");
             company_name = getIntent().getStringExtra("companyname");
-            otherJobSector=getIntent().getStringExtra("other_job_sector");
-            companyUrl=getIntent().getStringExtra("companyUrl");
+            otherJobSector = getIntent().getStringExtra("other_job_sector");
+            companyUrl = getIntent().getStringExtra("companyUrl");
+            dob = getIntent().getStringExtra("dob");
             activity_type = "normal_type";
             user.setLinkedin_image_url("");
             user.setFacebook_image_url("");
-            if(filepath!=null){
+            if (filepath != null) {
                 File file = new File(filepath);
 
                 RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
@@ -283,6 +295,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             user.setFacebook_image_url("");
             user.setOther_sector(otherJobSector);
             user.setCompany_url(companyUrl);
+            user.setDate_of_birth(dob);
         }
     }
 

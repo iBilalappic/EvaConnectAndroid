@@ -18,7 +18,6 @@ import android.os.Looper;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -46,10 +45,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
-import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.City;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.Constants;
+import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.MySpinnerAdapter;
 import com.hypernym.evaconnect.viewmodel.CreateAccountViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
@@ -58,8 +57,10 @@ import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -70,6 +71,8 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
         com.google.android.gms.location.LocationListener, View.OnClickListener {
     private Validator validator;
     private CreateAccountViewModel viewModel;
+    private String hCountyCodeFromLocation = "";
+    List<String> hCitiesList = new ArrayList<String>();
 
     @BindView(R.id.btn_next)
     Button btn_next;
@@ -144,47 +147,61 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
         ButterKnife.bind(this);
         tv_already_account.setOnClickListener(this);
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
         init();
-        isLocationEnabled();
+
+
+        if (NetworkUtils.isNetworkConnected(this)) {
+            showDialog();
+            isLocationEnabled();
+        } else {
+            hideDialog();
+            Toast.makeText(getBaseContext(), "Check Your Internet Connection", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void isLocationEnabled() {
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             return;
         } else {
-            Toast.makeText(this, "Turn you location ON", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Turn ON you location ", Toast.LENGTH_LONG).show();
 
             hSetDefaultCountry();
 
         }
     }
 
+
     private void hSetDefaultCountry() {
         ed_country.setText("United Kingdom");
-
         showDialog();
-        viewModel.hGetAllCities("GB").observe(this, new Observer<BaseModel<List<City>>>() {
-            @Override
-            public void onChanged(BaseModel<List<City>> response) {
-                if (response != null && !response.isError()) {
-                    hideDialog();
-                    Toast.makeText(getBaseContext(), "Success", Toast.LENGTH_LONG).show();
-                    Log.d("Cities", "onChanged: Success");
-                } else if (response != null && response.isError()) {
-                    hideDialog();
 
-                    Toast.makeText(getBaseContext(), "Error", Toast.LENGTH_LONG).show();
-                    Log.d("Cities", " Error");
+        if (hCountyCodeFromLocation.equals("")) {
+            hCountyCodeFromLocation = "GB";
+        }
 
-                } else if (response == null) {
-                    hideDialog();
-                    Toast.makeText(getBaseContext(), "Some thing went wrong", Toast.LENGTH_LONG).show();
+        if (NetworkUtils.isNetworkConnected(this)) {
+            viewModel.hGetAllCities(hCountyCodeFromLocation).observe(this, new Observer<List<City>>() {
+                @Override
+                public void onChanged(List<City> response) {
 
-                    Log.d("Cities", "Some thing went wrong");
+                    spinCities.setSelection(0);
+
+                    if (response != null) {
+                        for (int i = 0; i < response.size(); i++) {
+                            hCitiesList.add(response.get(i).name);
+                        }
+                        hideDialog();
+
+                    } else {
+                        Toast.makeText(getBaseContext(), "Some thing went wrong...", Toast.LENGTH_LONG).show();
+                        hideDialog();
+
+                    }
+
                 }
-            }
-        });
+            });
+        }
+
 
     }
 
@@ -201,11 +218,16 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
         alert.show();
     }*/
 
-
     private void init() {
         String type = getIntent().getStringExtra(Constants.ACTIVITY_NAME);
+        hSetCurrentDateTime();
 
-        viewModel = ViewModelProviders.of(this, new CustomViewModelFactory(this.getApplication(), this)).get(CreateAccountViewModel.class);
+
+        if (NetworkUtils.isNetworkConnected(this)) {
+
+            viewModel = ViewModelProviders.of(this, new CustomViewModelFactory(this.getApplication(), this)).get(CreateAccountViewModel.class);
+
+        }
 
         if ("LinkedinActivity".equals(getIntent().getStringExtra(Constants.ACTIVITY_NAME))) {
             email = getIntent().getStringExtra("Email");
@@ -259,11 +281,11 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
             @Override
             public void onSingleClick(View v) {
 
+                Log.d("nextbtn", "Click");
+
                 if (Checkpermission()) {
-                    // LaunchGallery();
                     startLocationUpdates();
                     validator.validate();
-
                 } else {
                     requestlocationpermission();
                 }
@@ -271,12 +293,10 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
         });
 
         ArrayAdapter<String> adapterUkCities = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, getResources()
-                .getStringArray(R.array.uk_cities));
+                android.R.layout.simple_spinner_item, hCitiesList);
 
         ArrayAdapter<String> adapterPakCities = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, getResources()
-                .getStringArray(R.array.pak_cities));
+                android.R.layout.simple_spinner_item, hCitiesList);
 
        /* ArrayAdapter<String> adapterlanguages = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, getResources()
@@ -284,21 +304,20 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
 
 
         MySpinnerAdapter adapterlanguages = new MySpinnerAdapter(
-               this,
+                this,
                 android.R.layout.simple_spinner_item,
                 Arrays.asList(getResources().getStringArray(R.array.languageSpinnerItems))
         );
         adapterUkCities.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         adapterPakCities.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //
         adapterlanguages.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         edit_language.setAdapter(adapterlanguages);
 
         edit_language.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?>arg0, View view, int arg2, long arg3) {
+            public void onItemSelected(AdapterView<?> arg0, View view, int arg2, long arg3) {
 
-                 selected_val=edit_language.getSelectedItem().toString();
+                selected_val = edit_language.getSelectedItem().toString();
 
             }
 
@@ -309,8 +328,6 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
             }
         });
 
-
-
         ed_country.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -319,10 +336,11 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.toString().equalsIgnoreCase("United Kingdom")) {
+                if (s.toString().equalsIgnoreCase("United Kingdom")) {
                     spinCities.setAdapter(adapterUkCities);
-
-                }else if(s.toString().equalsIgnoreCase("Pakistan")){
+                } else if (s.toString().equalsIgnoreCase("Pakistan")) {
+                    spinCities.setAdapter(adapterPakCities);
+                } else {
                     spinCities.setAdapter(adapterPakCities);
                 }
 
@@ -337,14 +355,15 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int position, long id) {
-                city = arg0.getItemAtPosition(position).toString();
-                Log.d("city", "" + city);
+                city = spinCities.getItemAtPosition(position).toString();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
             }
+
         });
+
         edit_date.setOnClickListener(v -> {
             // TODO Auto-generated method stub
             new DatePickerDialog(CreateAccount_3_Activity.this, R.style.DialogTheme, date, myCalendar
@@ -367,14 +386,21 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
         });
     }
 
-    private void updateLabel() {
-        String myFormat = "MM/dd/yy"; //In which you need put here
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        edit_date.setText(String.valueOf(DateFormat.format("dd",   myCalendar.getTime())));
-        edit_month.setText(String.valueOf(DateFormat.format("MM",   myCalendar.getTime())));
-        edit_year.setText(String.valueOf(DateFormat.format("yyyy", myCalendar.getTime())));
-        dob_str = sdf.format(myCalendar.getTime());
+    private void hSetCurrentDateTime() {
+        String date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+        String[] result = date.split("-");
+        edit_date.setText(result[0]);
+        edit_month.setText(result[1]);
+        edit_year.setText(result[2]);
+        updateLabel();
 
+    }
+
+    private void updateLabel() {
+
+        dob_str = edit_year.getText().toString() + "-" + edit_month.getText().toString() + "-" + edit_date.getText().toString();
+
+        Log.d("test123", dob_str);
       /*  String dayOfTheWeek = (String) DateFormat.format("EEEE", myCalendar.getTime()); // Thursday
         String day          = (String) DateFormat.format("dd",   myCalendar.getTime()); // 20
         String monthString  = (String) DateFormat.format("MMM",  myCalendar.getTime()); // Jun
@@ -532,6 +558,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
     }
 
     private void setAddress(Double latitude, Double longitude) {
+
         if (latitude != null && longitude != null) {
             showDialog();
             Geocoder geocoder;
@@ -558,6 +585,11 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
                     String country = addresses.get(0).getCountryName();
                     String postalCode = addresses.get(0).getPostalCode();
                     String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
+                    String countryCode = addresses.get(0).getCountryCode();
+
+                    hCountyCodeFromLocation = countryCode;
+
+                    hSetCountry();
 
                     addresses.get(0).getAdminArea();
                     Log.d("address", address);
@@ -566,7 +598,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
                     String street = splitArray[0];
                     String sector = splitArray[1];
 
-                  //  spinCities.setText(city);
+                    //  spinCities.setText(city);
                     ed_country.setText(country);
                     hideDialog();
 
@@ -575,6 +607,29 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
                 ex.printStackTrace();
             }
         }
+    }
+
+    private void hSetCountry() {
+        showDialog();
+        viewModel.hGetAllCities(hCountyCodeFromLocation).observe(this, new Observer<List<City>>() {
+            @Override
+            public void onChanged(List<City> response) {
+
+                if (response != null) {
+                    for (int i = 0; i < response.size(); i++) {
+                        hCitiesList.add(response.get(i).name);
+                        Log.d("test123", response.get(i).name);
+
+                    }
+
+                    hideDialog();
+                } else {
+                    Toast.makeText(getBaseContext(), "Some thing went wrong...", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
+
     }
 
     public boolean Checkpermission() {
@@ -598,7 +653,8 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String permissions[],
+                                           int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
 

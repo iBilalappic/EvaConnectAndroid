@@ -8,5 +8,5 @@ import com.hypernym.evaconnect.models.City;
 import java.util.List;
 
 public interface ICityRepository {
-    LiveData<BaseModel<List<City>>> hGetAllCities(String countyCode);
+    LiveData<List<City>> hGetAllCities(String countyCode);
 }
