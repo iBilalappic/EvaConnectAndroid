@@ -3,7 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/activity_create_account_1.xml" value="0.17096931320019484" />
+        <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/activity_create_account_3.xml" value="0.1984375" />
+        <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/activity_create_account_5.xml" value="0.1828125" />
         <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/activity_home.xml" value="0.1984375" />
+        <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/activity_login.xml" value="0.1984375" />
+        <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/activity_password.xml" value="0.1984375" />
         <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/activity_signup.xml" value="0.19647822057460612" />
         <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/activity_verification_code.xml" value="0.1984375" />
         <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/fragment_calendar.xml" value="0.1984375" />
@@ -19,6 +24,7 @@
         <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/item_post.xml" value="0.19427083333333334" />
         <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/item_video.xml" value="0.19427083333333334" />
         <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/text_type.xml" value="0.19427083333333334" />
+        <entry key="..\:/Users/AHSAN/AppData/Local/Android/Sdk/platforms/android-30/data/res/layout/simple_spinner_dropdown_item.xml" value="0.1984375" />
       </map>
     </option>
   </component>

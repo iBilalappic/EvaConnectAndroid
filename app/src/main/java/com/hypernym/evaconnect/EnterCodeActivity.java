@@ -1,37 +1,29 @@
 package com.hypernym.evaconnect;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.hypernym.evaconnect.constants.AppConstants;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.User;
-import com.hypernym.evaconnect.models.UserDetails;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.view.ui.activities.BaseActivity;
-import com.hypernym.evaconnect.view.ui.activities.EmailVerification;
 import com.hypernym.evaconnect.view.ui.activities.HomeActivity;
 import com.hypernym.evaconnect.view.ui.activities.LoginActivity;
 import com.hypernym.evaconnect.view.ui.activities.NewsActivity;
 import com.hypernym.evaconnect.view.ui.activities.PasswordActivity;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
-import com.onesignal.OneSignal;
 
 import java.util.List;
 

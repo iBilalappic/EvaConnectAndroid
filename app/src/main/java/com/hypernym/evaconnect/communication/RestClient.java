@@ -21,6 +21,7 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -46,6 +47,7 @@ public class RestClient {
         }
         return clientInstance;
     }
+
 
     private static synchronized RestClient _get() {
         if (clientInstance == null) {

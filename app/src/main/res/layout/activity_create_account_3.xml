@@ -156,7 +156,7 @@
             app:layout_constraintTop_toBottomOf="@+id/layout_date" />
 
 
-        <EditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/ed_country"
             style="@style/Button.border_unselected_white"
             android:layout_width="250dp"
@@ -166,6 +166,7 @@
             android:focusable="false"
             android:gravity="start|center"
             android:hint="Country"
+            android:enabled="false"
             android:textColor="@color/text_color"
             android:textColorHint="@color/gray_1"
             android:textSize="13sp"

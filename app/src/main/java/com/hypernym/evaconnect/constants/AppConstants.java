@@ -63,4 +63,5 @@ public class AppConstants {
     public static final String REQUEST_RESCHEDULE = "request_reschedule";
     public static final String USER_TYPE = "user";
     public static final String COMPANY_USER_TYPE = "company";
+
 }

@@ -1,7 +1,6 @@
 package com.hypernym.evaconnect.view.ui.activities;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;

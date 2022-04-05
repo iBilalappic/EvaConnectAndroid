@@ -1,10 +1,12 @@
 package com.hypernym.evaconnect.view.ui.activities;
 
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.CAMERA;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -19,7 +21,6 @@ import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -30,9 +31,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -44,16 +46,18 @@ import com.google.android.gms.maps.model.LatLng;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
+import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.City;
+import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.view.adapters.MySpinnerAdapter;
+import com.hypernym.evaconnect.viewmodel.CreateAccountViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
-import com.skydoves.powerspinner.IconSpinnerItem;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -62,19 +66,13 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-import static android.Manifest.permission.CAMERA;
-import static java.security.AccessController.getContext;
-
 public class CreateAccount_3_Activity extends BaseActivity implements Validator.ValidationListener,
         com.google.android.gms.location.LocationListener, View.OnClickListener {
-
-
     private Validator validator;
+    private CreateAccountViewModel viewModel;
 
     @BindView(R.id.btn_next)
     Button btn_next;
-
 
     @BindView(R.id.tv_dob)
     TextView tv_dob;
@@ -118,8 +116,6 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
     @BindView(R.id.edit_language)
     Spinner edit_language;
 
-
-
     String email, photourl, activity_type, user_type, firstname, surname, file_name, path, about, dob, city, companyUrl;
     final Calendar myCalendar = Calendar.getInstance();
 
@@ -149,45 +145,67 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
         tv_already_account.setOnClickListener(this);
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
-        isLocationEnabled();
         init();
-
-
+        isLocationEnabled();
     }
 
     private void isLocationEnabled() {
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             return;
         } else {
-            buildAlertMessageNoGps();
+            Toast.makeText(this, "Turn you location ON", Toast.LENGTH_LONG).show();
+
+            hSetDefaultCountry();
+
         }
     }
 
-    private void buildAlertMessageNoGps() {
+    private void hSetDefaultCountry() {
+        ed_country.setText("United Kingdom");
+
+        showDialog();
+        viewModel.hGetAllCities("GB").observe(this, new Observer<BaseModel<List<City>>>() {
+            @Override
+            public void onChanged(BaseModel<List<City>> response) {
+                if (response != null && !response.isError()) {
+                    hideDialog();
+                    Toast.makeText(getBaseContext(), "Success", Toast.LENGTH_LONG).show();
+                    Log.d("Cities", "onChanged: Success");
+                } else if (response != null && response.isError()) {
+                    hideDialog();
+
+                    Toast.makeText(getBaseContext(), "Error", Toast.LENGTH_LONG).show();
+                    Log.d("Cities", " Error");
+
+                } else if (response == null) {
+                    hideDialog();
+                    Toast.makeText(getBaseContext(), "Some thing went wrong", Toast.LENGTH_LONG).show();
+
+                    Log.d("Cities", "Some thing went wrong");
+                }
+            }
+        });
+
+    }
+
+  /*  private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
                 .setCancelable(false)
-                .setPositiveButton("Enable GPS", new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialog, final int id) {
-                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
+                .setPositiveButton("Enable GPS", (dialog, id) -> startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
         final AlertDialog alert = builder.create();
         alert.setCancelable(false);
         alert.setIcon(R.drawable.ic_location_disabled_black_24dp);
         alert.setCanceledOnTouchOutside(false);
         alert.show();
-    }
+    }*/
 
 
     private void init() {
         String type = getIntent().getStringExtra(Constants.ACTIVITY_NAME);
+
+        viewModel = ViewModelProviders.of(this, new CustomViewModelFactory(this.getApplication(), this)).get(CreateAccountViewModel.class);
 
         if ("LinkedinActivity".equals(getIntent().getStringExtra(Constants.ACTIVITY_NAME))) {
             email = getIntent().getStringExtra("Email");
@@ -320,44 +338,32 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int position, long id) {
                 city = arg0.getItemAtPosition(position).toString();
-                Log.d("city",""+city);
+                Log.d("city", "" + city);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
-        edit_date.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                new DatePickerDialog(CreateAccount_3_Activity.this,R.style.DialogTheme, date, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
+        edit_date.setOnClickListener(v -> {
+            // TODO Auto-generated method stub
+            new DatePickerDialog(CreateAccount_3_Activity.this, R.style.DialogTheme, date, myCalendar
+                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                    myCalendar.get(Calendar.DAY_OF_MONTH)).show();
         });
 
-        edit_month.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                new DatePickerDialog(CreateAccount_3_Activity.this,R.style.DialogTheme, date, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
+        edit_month.setOnClickListener(v -> {
+            // TODO Auto-generated method stub
+            new DatePickerDialog(CreateAccount_3_Activity.this, R.style.DialogTheme, date, myCalendar
+                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                    myCalendar.get(Calendar.DAY_OF_MONTH)).show();
         });
 
-        edit_year.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                new DatePickerDialog(CreateAccount_3_Activity.this,R.style.DialogTheme, date, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
+        edit_year.setOnClickListener(v -> {
+            // TODO Auto-generated method stub
+            new DatePickerDialog(CreateAccount_3_Activity.this, R.style.DialogTheme, date, myCalendar
+                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                    myCalendar.get(Calendar.DAY_OF_MONTH)).show();
         });
     }
 
@@ -374,7 +380,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
         String monthString  = (String) DateFormat.format("MMM",  myCalendar.getTime()); // Jun
         String monthNumber  = (String) DateFormat.format("MM",   myCalendar.getTime()); // 06
         String year         = (String) DateFormat.format("YY", myCalendar.getTime()); // 2013*/
-       /* edit_dob.setText(sdf.format(myCalendar.getTime()));*/
+        /* edit_dob.setText(sdf.format(myCalendar.getTime()));*/
     }
 
     @Override
@@ -478,7 +484,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
 
     @SuppressLint("RestrictedApi")
     protected void startLocationUpdates() {
-        showDialog();
+//        showDialog();
         // Create the location request to start receiving updates
         mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -586,8 +592,6 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
                 {
                         ACCESS_FINE_LOCATION,
                         CAMERA
-
-
                 }, RequestPermissionCode);
 
 
@@ -627,6 +631,8 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
                 break;
 
             case R.id.img_cross:
+                this.finish();
+                break;
 
             case R.id.tv_already_account:
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

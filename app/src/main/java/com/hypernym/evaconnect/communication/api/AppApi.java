@@ -1,13 +1,12 @@
 package com.hypernym.evaconnect.communication.api;
 
-import android.app.usage.EventStats;
-
 import com.hypernym.evaconnect.constants.APIConstants;
 import com.hypernym.evaconnect.models.AccountCheck;
 import com.hypernym.evaconnect.models.AppliedApplicants;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.CalendarModel;
 import com.hypernym.evaconnect.models.ChatAttachment;
+import com.hypernym.evaconnect.models.City;
 import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.Connection;
@@ -31,7 +30,6 @@ import com.hypernym.evaconnect.models.ShareConnection;
 import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.Stats;
 import com.hypernym.evaconnect.models.User;
-import com.hypernym.evaconnect.utils.LoginUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +42,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
@@ -525,4 +524,9 @@ public interface AppApi {
     @POST(APIConstants.VERIFY_EMAIL)
     Call<BaseModel<List<Object>>> verify_email_token(@Body HashMap<String, Object> body);
 
+    @Headers("X-CSCAPI-KEY: R0wzZTBVSEhOQ1YwZk5vVlZ6ZzFsYUJxbUlHVUVuQ1NrdjFRcVRZRA==")
+    @GET(APIConstants.CITIES_LIST)
+    Call<BaseModel<List<City>>> get_all_cities(@Path("country_code") String countryCode);
+
 }
+
