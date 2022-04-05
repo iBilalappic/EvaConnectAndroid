@@ -1,6 +1,7 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
+import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -16,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -46,8 +46,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
 
 public class AllEventFragment extends BaseFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, EventHomeAdapter.ItemClickListener {
 
@@ -188,7 +186,7 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onItemClick(View view, int position) {
         if (view.getId()==R.id.tv_attending) {
-            TextView textView = (TextView) view.findViewById(R.id.tv_attending);
+            TextView textView = view.findViewById(R.id.tv_attending);
             textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
 
         } else {
@@ -297,7 +295,7 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
     public void onEventItemClick(View view, int position) {
 
         if (view.getId()==R.id.tv_attending) {
-            TextView textView = (TextView) view.findViewById(R.id.tv_attending);
+            TextView textView = view.findViewById(R.id.tv_attending);
             Drawable[] compoundDrawables = textView.getCompoundDrawables();
 
             Drawable leftCompoundDrawable = compoundDrawables[0];
@@ -311,6 +309,8 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
             }
 
         }else if(view.getId()==R.id.tv_interested){
+
+
             EventInterestedFragment eventDetailFragment = new EventInterestedFragment();
             Bundle bundle = new Bundle();
             bundle.putInt("event_id", posts.get(position).getId());
@@ -328,17 +328,16 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void showInterestedApiCall(int position, String attendee_Status) {
-        eventViewModel.showInterestEvent(posts.get(position).getId(), LoginUtils.getUser().getId(),"active",attendee_Status).observe(this, new Observer<BaseModel<List<Object>>>() {
+
+        showDialog();
+        eventViewModel.showInterestEvent(posts.get(position).getId(), LoginUtils.getUser().getId(), "active", attendee_Status).observe(this, new Observer<BaseModel<List<Object>>>() {
             @Override
             public void onChanged(BaseModel<List<Object>> listBaseModel) {
-                if(!listBaseModel.isError())
-                {
-
+                if (!listBaseModel.isError()) {
+                    hideDialog();
                     callPostsApi();
-                }
-                else
-                {
-                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
 
             }
@@ -459,41 +458,38 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
             user.setFilter("my_events");
         }
 
-        eventViewModel.getEvent(user/*, AppConstants.TOTAL_PAGES, currentPage*/).observe(this, new Observer<BaseModel<List<Post>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Post>> dashboardBaseModel) {
+        eventViewModel.getEvent(user/*, AppConstants.TOTAL_PAGES, currentPage*/).observe(this, dashboardBaseModel -> {
 
-               // postAdapter.clear();
-                if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
-                    posts.clear();
-                    tv_empty.setVisibility(View.GONE);
-                    rc_event.setVisibility(View.VISIBLE);
-                    for (Post post : dashboardBaseModel.getData()) {
-                        if (post.getContent() == null) {
-                            post.setContent("");
-                        }
-                        else if (post.getType().equalsIgnoreCase("event")) {
-                            post.setPost_type(AppConstants.EVENT_TYPE);
-                        }
+            // postAdapter.clear();
+            if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
+                posts.clear();
+                tv_empty.setVisibility(View.GONE);
+                rc_event.setVisibility(View.VISIBLE);
+                for (Post post : dashboardBaseModel.getData()) {
+                    if (post.getContent() == null) {
+                        post.setContent("");
+                    } else if (post.getType().equalsIgnoreCase("event")) {
+                        post.setPost_type(AppConstants.EVENT_TYPE);
                     }
-                    posts.addAll(dashboardBaseModel.getData());
-                    postAdapter.notifyDataSetChanged();
-                    swipeRefresh.setRefreshing(false);
-                   // postAdapter.removeLoading();
-                    isLoading = false;
-                } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
-                    isLastPage = true;
-                    postAdapter.removeLoading();
-                    isLoading = false;
-                    tv_empty.setVisibility(View.VISIBLE);
-                    tv_empty.setText(dashboardBaseModel.getMessage());
-                    rc_event.setVisibility(View.GONE);
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
-
+                posts.addAll(dashboardBaseModel.getData());
+                postAdapter.notifyDataSetChanged();
+                swipeRefresh.setRefreshing(false);
+                // postAdapter.removeLoading();
+                isLoading = false;
+            } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
+                isLastPage = true;
+                postAdapter.removeLoading();
+                isLoading = false;
+                tv_empty.setVisibility(View.VISIBLE);
+                tv_empty.setText(dashboardBaseModel.getMessage());
+                rc_event.setVisibility(View.GONE);
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+
         });
+
     }
 
 
@@ -514,7 +510,7 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
             }
             else if(msg.what==100){
                 ShareConnectionFragment shareConnectionFragment = new ShareConnectionFragment();
-                FragmentTransaction transaction = ((AppCompatActivity) requireActivity()).getSupportFragmentManager().beginTransaction();
+                FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
                 transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
                 transaction.replace(R.id.framelayout, shareConnectionFragment);
                 Bundle bundle = new Bundle();

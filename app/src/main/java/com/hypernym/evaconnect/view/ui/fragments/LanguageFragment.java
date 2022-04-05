@@ -7,7 +7,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -15,17 +14,8 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
 import android.os.Looper;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -34,13 +24,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -50,15 +45,10 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.model.LatLng;
 import com.hypernym.evaconnect.R;
-import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.User;
-import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.view.adapters.MySpinnerAdapter;
-import com.hypernym.evaconnect.view.ui.activities.CreateAccount_3_Activity;
-import com.hypernym.evaconnect.view.ui.activities.CreateAccount_4_Activity;
-import com.hypernym.evaconnect.view.ui.activities.LoginActivity;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
@@ -136,6 +126,7 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
     public static int counter = 0;
     private LocationRequest mLocationRequest;
     private LocationManager locationManager;
+    User userData;
 
     DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
         // TODO Auto-generated method stub
@@ -144,11 +135,11 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
         myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         updateLabel();
     };
-    private String selected_val ="English";
-    public LanguageFragment() {
-        // Required empty public constructor
-    }
+    private String selected_val = "English";
 
+    public LanguageFragment(User userData1) {
+        userData = userData1;
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -156,9 +147,13 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
         ButterKnife.bind(this, view);
         user = LoginUtils.getUser();
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-
-        isLocationEnabled();
+        hSetValuesFromUserIntoFields();
         init();
+    }
+
+    private void hSetValuesFromUserIntoFields() {
+        ed_country.setText(userData.getCountry());
+        Toast.makeText(requireContext(), userData.getCity(), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -180,17 +175,8 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
                 .setCancelable(false)
-                .setPositiveButton("Enable GPS", new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialog, final int id) {
-                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
+                .setPositiveButton("Enable GPS", (dialog, id) -> startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
         final AlertDialog alert = builder.create();
         alert.setCancelable(false);
         alert.setIcon(R.drawable.ic_location_disabled_black_24dp);
@@ -200,8 +186,8 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
     private void init() {
 
         if (user.getType().equalsIgnoreCase("user")) {
-            layout_date.setVisibility(View.VISIBLE);
-            tv_dob.setVisibility(View.VISIBLE);
+            layout_date.setVisibility(View.GONE);
+            tv_dob.setVisibility(View.GONE);
             title.setText("Date of Birth / Location");
         } else {
             layout_date.setVisibility(View.GONE);

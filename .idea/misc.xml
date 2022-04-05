@@ -12,18 +12,24 @@
         <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/activity_password.xml" value="0.1984375" />
         <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/activity_signup.xml" value="0.19647822057460612" />
         <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/activity_verification_code.xml" value="0.1984375" />
+        <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/event_type.xml" value="0.1984375" />
         <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/fragment_calendar.xml" value="0.1984375" />
         <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/fragment_connections_tab.xml" value="0.19427083333333334" />
+        <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/fragment_edit_profile.xml" value="0.1828125" />
         <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/fragment_edit_profile_bio.xml" value="0.1984375" />
+        <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/fragment_edit_proflie_location.xml" value="0.1828125" />
         <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/fragment_global_search_tab.xml" value="0.1984375" />
+        <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/fragment_language.xml" value="0.1828125" />
         <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/fragment_meeting_detail.xml" value="0.1984375" />
         <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/fragment_new_post.xml" value="0.19427083333333334" />
         <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/fragment_post.xml" value="0.1984375" />
+        <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/fragment_post_details.xml" value="0.1984375" />
+        <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/fragment_settings.xml" value="0.1828125" />
         <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/fragment_viewpager.xml" value="0.1984375" />
         <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/item_event.xml" value="0.4466666666666667" />
         <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/item_link.xml" value="0.19427083333333334" />
         <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/item_post.xml" value="0.19427083333333334" />
-        <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/item_video.xml" value="0.19427083333333334" />
+        <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/item_video.xml" value="0.41502463054187194" />
         <entry key="..\:/Users/AHSAN/AndroidStudioProjects/Aviation_Connect/eva-android/app/src/main/res/layout/text_type.xml" value="0.19427083333333334" />
         <entry key="..\:/Users/AHSAN/AppData/Local/Android/Sdk/platforms/android-30/data/res/layout/simple_spinner_dropdown_item.xml" value="0.1984375" />
       </map>

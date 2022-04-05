@@ -38,6 +38,7 @@ public class UserRepository implements IUserRespository {
     private MutableLiveData<BaseModel<List<Object>>> deleteUserMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> verifyEmailMutableLiveData = new MutableLiveData<>();
 
+
     @Override
     public LiveData<BaseModel<List<User>>> signup(User user, MultipartBody.Part partImage) {
         userMutableLiveData = new MutableLiveData<>();
@@ -60,7 +61,8 @@ public class UserRepository implements IUserRespository {
                 RequestBody.create(MediaType.parse("text/plain"), user.getCity()),
                 RequestBody.create(MediaType.parse("text/plain"), user.getLast_name()),
                 RequestBody.create(MediaType.parse("text/plain"), user.getLanguage()),
-              /*  RequestBody.create(MediaType.parse("text/plain"), user.getCompany_url()),*/
+                RequestBody.create(MediaType.parse("text/plain"), user.getDate_of_birth()),
+                /*  RequestBody.create(MediaType.parse("text/plain"), user.getCompany_url()),*/
                 partImage).enqueue(new Callback<BaseModel<List<User>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {

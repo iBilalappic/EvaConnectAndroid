@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -66,6 +65,10 @@ public class PostAdapter  extends RecyclerView.Adapter {
 
         @BindView(R.id.tv_likecount)
         TextView tv_likecount;
+
+
+        @BindView(R.id.tv_share_counter)
+        TextView tv_share_count;
 
         @BindView(R.id.tv_comcount)
         TextView tv_comcount;
@@ -175,19 +178,9 @@ public class PostAdapter  extends RecyclerView.Adapter {
                 }
             });
 
-            tv_connect.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mClickListener.onConnectClick(v, getAdapterPosition());
-                }
-            });
+            tv_connect.setOnClickListener(v -> mClickListener.onConnectClick(v, getAdapterPosition()));
 
-            img_more.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                   moreOptions(v,getAdapterPosition());
-                }
-            });
+            img_more.setOnClickListener(v -> moreOptions(v, getAdapterPosition()));
 
         }
     }
@@ -215,6 +208,9 @@ public class PostAdapter  extends RecyclerView.Adapter {
 
         @BindView(R.id.tv_comcount)
         TextView tv_comcount;
+
+        @BindView(R.id.tv_share_counter)
+        TextView tv_share_count;
 
         @BindView(R.id.tv_createddateTime)
         TextView tv_createdDateTime;
@@ -368,6 +364,9 @@ public class PostAdapter  extends RecyclerView.Adapter {
         @BindView(R.id.tv_likecount)
         TextView tv_likecount;
 
+        @BindView(R.id.tv_share_counter)
+        TextView tv_share_count;
+
         @BindView(R.id.tv_comcount)
         TextView tv_comcount;
 
@@ -509,6 +508,9 @@ public class PostAdapter  extends RecyclerView.Adapter {
         @BindView(R.id.tv_likecount)
         TextView tv_likecount;
 
+        @BindView(R.id.tv_share_counter)
+        TextView tv_share_count;
+
         @BindView(R.id.tv_comcount)
         TextView tv_comcount;
 
@@ -628,19 +630,9 @@ public class PostAdapter  extends RecyclerView.Adapter {
                 }
             });
 
-            tv_connect.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mClickListener.onConnectClick(v, getAdapterPosition());
-                }
-            });
+            tv_connect.setOnClickListener(v -> mClickListener.onConnectClick(v, getAdapterPosition()));
 
-            img_more.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    moreOptions(v,getAdapterPosition());
-                }
-            });
+            img_more.setOnClickListener(v -> moreOptions(v, getAdapterPosition()));
 
         }
 
@@ -721,6 +713,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     }
                     ((PostAdapter.TextTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((PostAdapter.TextTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
+                    ((PostAdapter.TextTypeViewHolder) holder).tv_share_count.setText(String.valueOf(posts.get(position).getShare_count()));
                     ((PostAdapter.TextTypeViewHolder) holder).tv_createdDateTime.setText(DateUtils.getFormattedDateTime(posts.get(position).getCreated_datetime()));
 
                     // ((TextTypeViewHolder) holder).tv_content.setText(posts.get(position).getContent());
@@ -795,7 +788,6 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     break;
                 case AppConstants.IMAGE_TYPE:
 
-
                     if (String.valueOf(posts.get(position).getComment_count()).equals("0")) {
                         ((PostAdapter.ImageTypeViewHolder) holder).tv_viewcomments.setVisibility(View.GONE);
                     }
@@ -803,19 +795,18 @@ public class PostAdapter  extends RecyclerView.Adapter {
                         ((PostAdapter.ImageTypeViewHolder) holder).imageSlider.setVisibility(View.VISIBLE);
                         ((PostAdapter.ImageTypeViewHolder) holder).post_image.setVisibility(View.GONE);
                         initializeSlider(((PostAdapter.ImageTypeViewHolder) holder).imageSlider, position);
-                    } else if (posts.get(position).getPost_image().size() ==1){
+                    } else if (posts.get(position).getPost_image().size() == 1) {
                         ((PostAdapter.ImageTypeViewHolder) holder).imageSlider.setVisibility(View.GONE);
                         ((PostAdapter.ImageTypeViewHolder) holder).post_image.setVisibility(View.VISIBLE);
                         AppUtils.setGlideImageUrl(mContext, ((PostAdapter.ImageTypeViewHolder) holder).post_image, posts.get(position).getPost_image().get(0));
-                    }
-                    else
-                    {
+                    } else {
                         ((PostAdapter.ImageTypeViewHolder) holder).imageSlider.setVisibility(View.GONE);
                         ((PostAdapter.ImageTypeViewHolder) holder).post_image.setVisibility(View.GONE);
                     }
-
                     ((PostAdapter.ImageTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((PostAdapter.ImageTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
+                    ((PostAdapter.ImageTypeViewHolder) holder).tv_share_count.setText(String.valueOf(posts.get(position).getShare_count()));
+
                     ((PostAdapter.ImageTypeViewHolder) holder).tv_createdDateTime.setText(DateUtils.getFormattedDateTime(posts.get(position).getCreated_datetime()));
                     AppUtils.makeTextViewResizable(((PostAdapter.ImageTypeViewHolder) holder).tv_content, 3, posts.get(position).getContent());
                     ((PostAdapter.ImageTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
@@ -969,6 +960,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
 
                     ((PostAdapter.ImageTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((PostAdapter.ImageTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
+                    ((ImageTypeViewHolder) holder).tv_share_count.setText(String.valueOf(posts.get(position).getShare_count()));
                     ((PostAdapter.ImageTypeViewHolder) holder).tv_createdDateTime.setText(DateUtils.getFormattedDateTime(posts.get(position).getCreated_datetime()));
                     AppUtils.makeTextViewResizable(((PostAdapter.ImageTypeViewHolder) holder).tv_content, 3, posts.get(position).getContent());
                     ((PostAdapter.ImageTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
@@ -1093,6 +1085,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     }
                     ((PostAdapter.VideoTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((PostAdapter.VideoTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
+                    ((PostAdapter.VideoTypeViewHolder) holder).tv_share_count.setText(String.valueOf(posts.get(position).getShare_count()));
                     ((PostAdapter.VideoTypeViewHolder) holder).tv_createdDateTime.setText(DateUtils.getFormattedDateTime(posts.get(position).getCreated_datetime()));
                     AppUtils.makeTextViewResizable(((PostAdapter.VideoTypeViewHolder) holder).tv_content, 3, posts.get(position).getContent());
                     ((PostAdapter.VideoTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
@@ -1170,6 +1163,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     //  ((LinkTypeViewHolder) holder).img_link.setBackground(null);
                     ((PostAdapter.LinkTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((PostAdapter.LinkTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
+                    ((PostAdapter.LinkTypeViewHolder) holder).tv_share_count.setText(String.valueOf(posts.get(position).getShare_count()));
                     ((PostAdapter.LinkTypeViewHolder) holder).tv_createdDateTime.setText(DateUtils.getFormattedDateTime(posts.get(position).getCreated_datetime()));
 
                     ArrayList<String> urls = AppUtils.containsURL(posts.get(position).getContent());

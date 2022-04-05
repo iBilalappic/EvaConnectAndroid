@@ -3,6 +3,7 @@ package com.hypernym.evaconnect.view.ui.fragments;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -244,7 +245,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                 break;
 
             case R.id.ly_language_region:
-                LanguageFragment languageFragment = new LanguageFragment();
+                LanguageFragment languageFragment = new LanguageFragment(userData);
                 loadFragment(R.id.framelayout, languageFragment, getContext(), true);
                 break;
 

@@ -51,7 +51,7 @@ public final class DateUtils {
             e.printStackTrace();
         }
 
-        return mOutputDateString + " | " + mOutputTimeString;
+        return mOutputTimeString + " | " + mOutputDateString;
     }
 
     public static String getFormattedTime(String datetime) {

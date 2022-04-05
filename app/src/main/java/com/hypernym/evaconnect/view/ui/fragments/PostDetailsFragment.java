@@ -141,6 +141,9 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     @BindView(R.id.tv_goback)
     TextView tv_goback;
 
+    @BindView(R.id.tv_share_counter)
+    TextView tv_share_counter;
+
     @BindView(R.id.layout_editcomment)
     LinearLayout layout_editcomment;
 
@@ -271,6 +274,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         initializeSlider(post);
         tv_comcount.setText(String.valueOf(post.getComment_count()));
         tv_likecount.setText(String.valueOf(post.getLike_count()));
+        tv_share_counter.setText(String.valueOf(post.getShare_count()));
         tv_connections.setText(AppUtils.getConnectionsCount(post.getUser().getTotal_connection()));
         tv_createddateTime.setText(DateUtils.getFormattedDateTime(post.getCreated_datetime()));
         tv_minago.setText(DateUtils.getTimeAgo(post.getCreated_datetime()));
