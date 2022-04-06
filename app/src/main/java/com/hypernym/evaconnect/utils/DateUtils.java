@@ -20,6 +20,7 @@ public final class DateUtils {
     public static final String TIME_FORMAT_1 = "HH:mm:ss";
     public static final String DATE_INPUT_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final String DATE_INPUT_FORMAT_1 = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_FORMAT_6 = "d MMM yyyy";
 
     public static final String DATE_INPUT_FORMAT_WITHOUTTIME = "yyyy-MM-dd";
     public static final String DATE_INPUT_FORMAT_WITHOUTTIME_1 = "dd-MM-yyyy";
@@ -40,7 +41,7 @@ public final class DateUtils {
         SimpleDateFormat mOutputDateFormat =
                 new SimpleDateFormat(DATE_FORMAT_1, java.util.Locale.getDefault());
         SimpleDateFormat mOutputDateFormat1 =
-                new SimpleDateFormat(DATE_FORMAT_2, java.util.Locale.getDefault());
+                new SimpleDateFormat(DATE_FORMAT_6, java.util.Locale.getDefault());
         try {
             datetime = convertServerDateToUserTimeZone(datetime);
             mParsedDate = mInputDateFormat.parse(datetime);
@@ -51,7 +52,7 @@ public final class DateUtils {
             e.printStackTrace();
         }
 
-        return mOutputTimeString + " | " + mOutputDateString;
+        return mOutputTimeString + " at " + mOutputDateString;
     }
 
     public static String getFormattedTime(String datetime) {

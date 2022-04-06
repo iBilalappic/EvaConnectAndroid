@@ -97,15 +97,16 @@ public interface AppApi {
     @Multipart
     @POST(APIConstants.GET_POSTS)
     Call<BaseModel<List<Post>>> createPost(@Part("user_id") int user_id, @Part("content") RequestBody content,
-                                           @Part("created_by_id") int created_by_id, @Part("status") RequestBody status,@Part("is_url") boolean is_url, @Part List<MultipartBody.Part> post_image, @Part MultipartBody.Part post_video,@Part MultipartBody.Part post_document);
+                                           @Part("created_by_id") int created_by_id, @Part("status") RequestBody status, @Part("is_url") boolean is_url, @Part List<MultipartBody.Part> post_image, @Part MultipartBody.Part post_video, @Part MultipartBody.Part post_document);
 
     @Multipart
     @PATCH(APIConstants.EDIT_POST)
     Call<BaseModel<List<Post>>> editPost(@Part("modified_by_id") int modified_by_id, @Part("content") RequestBody content,
-                                         @Part("modified_datetime") RequestBody modified_datetime, @Part("is_url") boolean is_url, @Part List<MultipartBody.Part> post_image, @Part MultipartBody.Part post_video,@Part MultipartBody.Part post_document,@Path("id") int id);
+                                         @Part("modified_datetime") RequestBody modified_datetime, @Part("is_url") boolean is_url, @Part List<MultipartBody.Part> post_image, @Part MultipartBody.Part post_video, @Part MultipartBody.Part post_document, @Path("id") int id);
+
 
     @PATCH(APIConstants.EDIT_POST)
-    Call<BaseModel<List<Post>>> deletePost(@Body Post post,@Path("id") int id);
+    Call<BaseModel<List<Post>>> deletePost(@Body Post post, @Path("id") int id);
 
     @Multipart
     @POST(APIConstants.ADD_JOB_AD)
@@ -380,13 +381,15 @@ public interface AppApi {
             @Part MultipartBody.Part event_image);
 
     @PATCH(APIConstants.SETTING_UPDATE)
-    Call<BaseModel<List<User>>> setting_update(@Body HashMap<String, Object> body,@Path("user_id") int user_id);
+    Call<BaseModel<List<User>>> setting_update(@Body HashMap<String, Object> body, @Path("user_id") int user_id);
+
 
     @POST(APIConstants.UPDATE_PASSWORD)
     Call<BaseModel<List<User>>> update_password(@Body HashMap<String, Object> body);
 
     @GET(APIConstants.GET_USER_DETAILS)
-    Call<BaseModel<List<User>>> getuser_details(@Path("id") int user_id,@Query("view") boolean view);
+    Call<BaseModel<List<User>>> getuser_details(@Path("id") int user_id, @Query("view") boolean view);
+
 
     @POST(APIConstants.GET_SECTOR)
     Call<BaseModel<List<String>>> getSector(@Body HashMap<String, Object> body);
@@ -528,6 +531,12 @@ public interface AppApi {
     @Headers("X-CSCAPI-KEY: R0wzZTBVSEhOQ1YwZk5vVlZ6ZzFsYUJxbUlHVUVuQ1NrdjFRcVRZRA==")
     @GET(APIConstants.CITIES_LIST)
     Call<List<City>> get_all_cities(@Path("country_code") String countryCode);
+
+    @PATCH(APIConstants.GET_USER_DETAILS)
+    Call<BaseModel<List<Object>>> hUpdateUserLocation(
+            @Path("id") int user_id,
+            @Body User user
+    );
 
 }
 

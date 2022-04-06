@@ -236,8 +236,8 @@ public class EditProfileLocationFragment extends BaseFragment implements Validat
         }
 
         if (userData.getType().equals("user")) {
-            layout_date.setVisibility(View.VISIBLE);
-            tv_dob.setVisibility(View.VISIBLE);
+            layout_date.setVisibility(View.GONE);
+            tv_dob.setVisibility(View.GONE);
             title.setText("Date of Birth / Location");
         } else {
             layout_date.setVisibility(View.GONE);

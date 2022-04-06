@@ -36,6 +36,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -47,16 +48,21 @@ import com.google.android.gms.maps.model.LatLng;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.User;
+import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.LoginUtils;
+import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.MySpinnerAdapter;
+import com.hypernym.evaconnect.viewmodel.LocationViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -68,8 +74,8 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
         com.google.android.gms.location.LocationListener, View.OnClickListener {
 
     private Validator validator;
-    @BindView(R.id.btn_next)
-    TextView btn_next;
+    @BindView(R.id.btn_submit)
+    TextView btn_submit;
 
 
     @BindView(R.id.tv_dob)
@@ -93,8 +99,6 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
     ImageView img_cross;
 
 
-
-
     @BindView(R.id.layout_date)
     LinearLayout layout_date;
 
@@ -114,7 +118,6 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
     Spinner edit_language;
 
 
-
     String email, photourl, activity_type, user_type, firstname, surname, file_name, path, about, dob, city, companyUrl;
     final Calendar myCalendar = Calendar.getInstance();
     User user = new User();
@@ -127,6 +130,10 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
     private LocationRequest mLocationRequest;
     private LocationManager locationManager;
     User userData;
+    private LocationViewModel viewModel;
+    private String hCountyCodeFromLocation = "";
+    List<String> hCitiesList = new ArrayList<String>();
+
 
     DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
         // TODO Auto-generated method stub
@@ -135,7 +142,7 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
         myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         updateLabel();
     };
-    private String selected_val = "English";
+    private String selected_lang = "English";
 
     public LanguageFragment(User userData1) {
         userData = userData1;
@@ -145,21 +152,35 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+        locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
+
         user = LoginUtils.getUser();
-        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         hSetValuesFromUserIntoFields();
         init();
+
+        if (NetworkUtils.isNetworkConnected(requireContext())) {
+            showDialog();
+            hSearchCountryCode();
+        } else {
+            hideDialog();
+            Toast.makeText(requireContext(), "Check Your Internet Connection", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void hSetValuesFromUserIntoFields() {
-        ed_country.setText(userData.getCountry());
-        Toast.makeText(requireContext(), userData.getCity(), Toast.LENGTH_LONG).show();
+      /*  ed_country.setText(userData.getCountry());
+        Toast.makeText(requireContext(), userData.getCity(), Toast.LENGTH_LONG).show();*/
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+        viewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(LocationViewModel.class);
+
+
         return inflater.inflate(R.layout.fragment_language, container, false);
     }
 
@@ -167,8 +188,38 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             return;
         } else {
-            buildAlertMessageNoGps();
+            Toast.makeText(requireContext(), "Turn ON Location", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void hSearchCountryCode() {
+        ed_country.setText(userData.getCountry());
+        showDialog();
+
+        if (hCountyCodeFromLocation.equals("")) {
+            hCountyCodeFromLocation = "GB";
+        }
+
+        if (NetworkUtils.isNetworkConnected(requireContext())) {
+            viewModel.hGetAllCities(hCountyCodeFromLocation).observe(requireActivity(), response -> {
+
+                spinCities.setSelection(0);
+
+                if (response != null) {
+                    for (int i = 0; i < response.size(); i++) {
+                        hCitiesList.add(response.get(i).name);
+                    }
+                    hideDialog();
+
+                } else {
+                    Toast.makeText(requireContext(), "Some thing went wrong...", Toast.LENGTH_LONG).show();
+                    hideDialog();
+
+                }
+
+            });
+        }
+
     }
 
     private void buildAlertMessageNoGps() {
@@ -184,6 +235,7 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
         alert.show();
     }
     private void init() {
+        hSetCurrentDateTime();
 
         if (user.getType().equalsIgnoreCase("user")) {
             layout_date.setVisibility(View.GONE);
@@ -200,15 +252,13 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
         img_backarrow.setOnClickListener(this);
         img_cross.setOnClickListener(this);
 
-        btn_next.setOnClickListener(new OnOneOffClickListener() {
+        btn_submit.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
 
                 if (Checkpermission()) {
-                    // LaunchGallery();
                     startLocationUpdates();
                     validator.validate();
-
                 } else {
                     requestlocationpermission();
                 }
@@ -216,12 +266,10 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
         });
 
         ArrayAdapter<String> adapterUkCities = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_spinner_item, getResources()
-                .getStringArray(R.array.uk_cities));
+                android.R.layout.simple_spinner_item, hCitiesList);
 
         ArrayAdapter<String> adapterPakCities = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_spinner_item, getResources()
-                .getStringArray(R.array.pak_cities));
+                android.R.layout.simple_spinner_item, hCitiesList);
 
        /* ArrayAdapter<String> adapterlanguages = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, getResources()
@@ -243,7 +291,7 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
             @Override
             public void onItemSelected(AdapterView<?>arg0, View view, int arg2, long arg3) {
 
-                selected_val=edit_language.getSelectedItem().toString();
+                selected_lang = edit_language.getSelectedItem().toString();
 
             }
 
@@ -264,10 +312,12 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.toString().equalsIgnoreCase("United Kingdom")) {
+                if (s.toString().equalsIgnoreCase("United Kingdom")) {
                     spinCities.setAdapter(adapterUkCities);
 
-                }else if(s.toString().equalsIgnoreCase("Pakistan")){
+                } else if (s.toString().equalsIgnoreCase("Pakistan")) {
+                    spinCities.setAdapter(adapterPakCities);
+                } else {
                     spinCities.setAdapter(adapterPakCities);
                 }
 
@@ -282,45 +332,34 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int position, long id) {
-                city = arg0.getItemAtPosition(position).toString();
-                Log.d("city",""+city);
+                city = hCitiesList.get(position);
+                spinCities.setSelection(position);
+                Toast.makeText(requireContext(), "City :" + city, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
-        edit_date.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                new DatePickerDialog(getContext(),R.style.DialogTheme, date, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
+        edit_date.setOnClickListener(v -> {
+            // TODO Auto-generated method stub
+            new DatePickerDialog(getContext(), R.style.DialogTheme, date, myCalendar
+                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                    myCalendar.get(Calendar.DAY_OF_MONTH)).show();
         });
 
-        edit_month.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                new DatePickerDialog(getContext(),R.style.DialogTheme, date, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
+        edit_month.setOnClickListener(v -> {
+            // TODO Auto-generated method stub
+            new DatePickerDialog(getContext(), R.style.DialogTheme, date, myCalendar
+                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                    myCalendar.get(Calendar.DAY_OF_MONTH)).show();
         });
 
-        edit_year.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                new DatePickerDialog(getContext(),R.style.DialogTheme, date, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
+        edit_year.setOnClickListener(v -> {
+            // TODO Auto-generated method stub
+            new DatePickerDialog(getContext(), R.style.DialogTheme, date, myCalendar
+                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                    myCalendar.get(Calendar.DAY_OF_MONTH)).show();
         });
     }
 
@@ -343,13 +382,28 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
     @Override
     public void onResume() {
         super.onResume();
-
         startLocationUpdates();
     }
 
     @Override
     public void onValidationSucceeded() {
+        String country = ed_country.getText().toString();
 
+        String language = edit_language.getSelectedItem().toString();
+
+//        String city = spinCities.getSelectedItem().toString();
+
+        userData.setCountry(country);
+        userData.setLanguage(language);
+        userData.setCity("city");
+        userData.setId(LoginUtils.getUser().getId());
+
+        showDialog();
+        viewModel.hUpdateUserLocationData(userData.getId(), userData).observe(requireActivity(), object -> {
+            hideDialog();
+            Toast.makeText(requireActivity(), "Location UPDATED Successfully.", Toast.LENGTH_SHORT).show();
+            requireActivity().onBackPressed();
+        });
 
 
     }
@@ -459,6 +513,10 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
                     String street = splitArray[0];
                     String sector = splitArray[1];
 
+                    hCountyCodeFromLocation = addresses.get(0).getCountryCode();
+                    hSetCountry();
+
+                    Log.d("language_fragment", "Country :" + country);
                     //  spinCities.setText(city);
                     ed_country.setText(country);
                     hideDialog();
@@ -469,6 +527,27 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
             }
         }
     }
+
+    private void hSetCountry() {
+        showDialog();
+        viewModel.hGetAllCities(hCountyCodeFromLocation).observe(this, response -> {
+
+            if (response != null) {
+                for (int i = 0; i < response.size(); i++) {
+                    hCitiesList.add(response.get(i).name);
+                    Log.d("test123", response.get(i).name);
+
+                }
+
+                hideDialog();
+            } else {
+                Toast.makeText(requireContext(), "Some thing went wrong...", Toast.LENGTH_LONG).show();
+            }
+
+        });
+
+    }
+
 
     public boolean Checkpermission() {
 
@@ -535,5 +614,17 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
                 break;
         }
     }
+
+
+    private void hSetCurrentDateTime() {
+        String date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+        String[] result = date.split("-");
+        edit_date.setText(result[0]);
+        edit_month.setText(result[1]);
+        edit_year.setText(result[2]);
+        updateLabel();
+
+    }
+
 
 }

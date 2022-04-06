@@ -173,6 +173,7 @@
     <string name="invite_to_follow">Invite to Follow</string>
     <string name="todo">TODO</string>
     <string name="back">Back</string>
+    <string name="submit">Submit</string>
 
 
     <string-array name="languageSpinnerItems">

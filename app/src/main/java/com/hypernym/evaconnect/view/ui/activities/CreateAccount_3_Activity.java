@@ -50,7 +50,7 @@ import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.MySpinnerAdapter;
-import com.hypernym.evaconnect.viewmodel.CreateAccountViewModel;
+import com.hypernym.evaconnect.viewmodel.LocationViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
@@ -70,7 +70,7 @@ import butterknife.ButterKnife;
 public class CreateAccount_3_Activity extends BaseActivity implements Validator.ValidationListener,
         com.google.android.gms.location.LocationListener, View.OnClickListener {
     private Validator validator;
-    private CreateAccountViewModel viewModel;
+    private LocationViewModel viewModel;
     private String hCountyCodeFromLocation = "";
     List<String> hCitiesList = new ArrayList<String>();
 
@@ -149,7 +149,6 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         init();
 
-
         if (NetworkUtils.isNetworkConnected(this)) {
             showDialog();
             isLocationEnabled();
@@ -163,10 +162,8 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             return;
         } else {
-            Toast.makeText(this, "Turn ON you location ", Toast.LENGTH_LONG).show();
-
+            Toast.makeText(this, "Turn ON your location ", Toast.LENGTH_LONG).show();
             hSetDefaultCountry();
-
         }
     }
 
@@ -225,7 +222,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
 
         if (NetworkUtils.isNetworkConnected(this)) {
 
-            viewModel = ViewModelProviders.of(this, new CustomViewModelFactory(this.getApplication(), this)).get(CreateAccountViewModel.class);
+            viewModel = ViewModelProviders.of(this, new CustomViewModelFactory(this.getApplication(), this)).get(LocationViewModel.class);
 
         }
 
@@ -239,7 +236,6 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
             firstname = getIntent().getStringExtra("FirstName");
             surname = getIntent().getStringExtra("SurName");
             about = getIntent().getStringExtra("about");
-
 
         } else if (!TextUtils.isEmpty(type) && type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)) {
             email = getIntent().getStringExtra("Email");
@@ -393,7 +389,6 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
         edit_month.setText(result[1]);
         edit_year.setText(result[2]);
         updateLabel();
-
     }
 
     private void updateLabel() {
@@ -619,7 +614,6 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
                     for (int i = 0; i < response.size(); i++) {
                         hCitiesList.add(response.get(i).name);
                         Log.d("test123", response.get(i).name);
-
                     }
 
                     hideDialog();

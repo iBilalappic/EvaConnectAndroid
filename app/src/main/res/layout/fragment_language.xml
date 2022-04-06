@@ -201,6 +201,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3">
+
+
             <Spinner
                 android:id="@+id/tv_city"
                 style="?android:attr/spinnerDropDownItemStyle"
@@ -254,14 +256,14 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/btn_next"
+            android:id="@+id/btn_submit"
             style="@style/Button_selected_light_blue"
             android:layout_width="250dp"
             android:layout_marginTop="32dp"
             android:backgroundTint="@color/skyblue"
             android:gravity="center"
             android:padding="10dp"
-            android:text="@string/next"
+            android:text="@string/submit"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

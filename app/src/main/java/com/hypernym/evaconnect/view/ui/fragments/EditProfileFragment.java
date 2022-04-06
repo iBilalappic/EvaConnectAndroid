@@ -1,6 +1,8 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -38,8 +40,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.MultipartBody;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -326,7 +326,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
                 break;
 
             case R.id.ly_edit_location:
-                EditProfileLocationFragment editProfileLocationFragment = new EditProfileLocationFragment();
+                LanguageFragment editProfileLocationFragment = new LanguageFragment(userData);
                 if (userData!=null) {
                     bundle.putSerializable(Constants.USER, userData);
                 } else {
