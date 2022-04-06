@@ -35,6 +35,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -68,7 +70,8 @@ import butterknife.ButterKnife;
 
 
 public class LanguageFragment extends BaseFragment implements Validator.ValidationListener,
-        com.google.android.gms.location.LocationListener, View.OnClickListener {
+        com.google.android.gms.location.LocationListener, View.OnClickListener,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
     private Validator validator;
     @BindView(R.id.btn_submit)
@@ -130,6 +133,8 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
     private LocationViewModel viewModel;
     private String hCountyCodeFromLocation = "";
     List<String> hCitiesList = new ArrayList<String>();
+    GoogleApiClient googleApiClient;
+
 
     DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
         // TODO Auto-generated method stub
@@ -155,6 +160,7 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
 
         if (NetworkUtils.isNetworkConnected(requireContext())) {
             showDialog();
+            buildGoogleApiClient();
             isLocationEnabled();
             startLocationUpdates();
         } else {
@@ -164,6 +170,15 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
         }
 
 
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        googleApiClient = new GoogleApiClient.Builder(getContext())
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+        googleApiClient.connect();
     }
 
 
@@ -317,6 +332,7 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
         super.onResume();
 
         Log.d("fragmentlanguage", "onResume: ");
+        buildGoogleApiClient();
 
         startLocationUpdates();
     }
@@ -365,44 +381,6 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
 
         Log.d("fragmentlanguage", "startLocationUpdates: ");
 
-//        showDialog();
-        // Create the location request to start receiving updates
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(UPDATE_INTERVAL);
-        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
-
-        // Create LocationSettingsRequest object using location request
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
-        builder.addLocationRequest(mLocationRequest);
-        final LocationSettingsRequest locationSettingsRequest = builder.build();
-
-        // Check whether location settings are satisfied
-        // https://developers.google.com/android/reference/com/google/android/gms/location/SettingsClient
-        SettingsClient settingsClient = LocationServices.getSettingsClient(requireContext());
-        settingsClient.checkLocationSettings(locationSettingsRequest);
-
-        // new Google API SDK v11 uses getFusedLocationProviderClient(this)
-        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        LocationServices.getFusedLocationProviderClient(requireContext()).requestLocationUpdates(mLocationRequest, new LocationCallback() {
-                    @Override
-                    public void onLocationResult(LocationResult locationResult) {
-                        // do work here
-                        counter++;
-                        try {
-                            if (counter > 1) {
-                                onLocationChanged(locationResult.getLastLocation());
-                                LocationServices.getFusedLocationProviderClient(getApplicationContext()).removeLocationUpdates(this);
-                            }
-                        } catch (Exception ex) {
-
-                        }
-                    }
-                },
-                Looper.myLooper());
     }
 
     @Override
@@ -603,6 +581,59 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(1000 * 360000);
+        try {
+            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+        } catch (Exception ex) {
+
+        }
+        try {
+            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, mLocationRequest, this);
+        } catch (Exception ex) {
+
+        }
+
+        mLocationRequest.setNumUpdates(1);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        try {
+            LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        try {
+            LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        super.onDestroy();
+
+
     }
 
 }
