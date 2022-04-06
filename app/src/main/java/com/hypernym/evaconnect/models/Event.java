@@ -38,7 +38,6 @@ public class Event implements Serializable {
     private int is_private;
     private List<EventAttendees> attendees;
 
-
     public String getEvent_city() {
         return event_city;
     }
@@ -46,8 +45,6 @@ public class Event implements Serializable {
     public void setEvent_city(String event_city) {
         this.event_city = event_city;
     }
-
-
 
     public String getStart_time() {
         return start_time;

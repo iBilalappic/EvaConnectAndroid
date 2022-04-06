@@ -44,7 +44,6 @@ import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.CommentsAdapter;
 import com.hypernym.evaconnect.view.adapters.SliderImageAdapter;
 import com.hypernym.evaconnect.view.bottomsheets.BottomsheetShareSelection;
-import com.hypernym.evaconnect.view.dialogs.ShareDialog;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.NewsViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
@@ -189,19 +188,16 @@ public class NewsDetailsFragment extends BaseFragment implements Validator.Valid
     }
 
     private void getPostDetails(int id) {
-        newsViewModel.getNewsByID(id).observe(this, new Observer<BaseModel<List<Post>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError()) {
-                    post = listBaseModel.getData().get(0);
-                    settingpostType();
-                    setPostData(listBaseModel.getData().get(0));
-                    initRecyclerView();
-                    setclickEvents();
-                    getComments();
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
+        newsViewModel.getNewsByID(id).observe(requireActivity(), listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError()) {
+                post = listBaseModel.getData().get(0);
+                settingpostType();
+                setPostData(listBaseModel.getData().get(0));
+                initRecyclerView();
+                setclickEvents();
+                getComments();
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
         });
     }
@@ -224,7 +220,7 @@ public class NewsDetailsFragment extends BaseFragment implements Validator.Valid
 
         tv_comcount.setText(String.valueOf(post.getComment_count()));
         tv_likecount.setText(String.valueOf(post.getLike_count()));
-      //  tv_connections.setText(AppUtils.getConnectionsCount(post.getUser().getTotal_connection()));
+        //  tv_connections.setText(AppUtils.getConnectionsCount(post.getUser().getTotal_connection()));
         tv_createddateTime.setText(DateUtils.getFormattedDateTime(post.getCreated_datetime()));
         tv_minago.setText(DateUtils.getTimeAgo(post.getCreated_datetime()));
         tv_name.setText(post.getNews_source().getName());
@@ -234,14 +230,20 @@ public class NewsDetailsFragment extends BaseFragment implements Validator.Valid
 
         AppUtils.setGlideImage(getContext(), profile_image, post.getNews_source().getImage());
 
-        AppUtils.setGlideUrlThumbnail(getContext(),img_video,post.getImage());
+        Log.d("newsFragment", post.getImage().toString());
+
+        if (post.getImage().equals("http://67.205.178.219:8000/media/public/no_image.png")) {
+            img_video.setVisibility(View.GONE);
+        } else {
+            img_video.setVisibility(View.VISIBLE);
+            AppUtils.setGlideUrlThumbnail(getContext(), img_video, post.getImage());
+        }
 
         if (post.getIs_post_like() != null && post.getIs_post_like() > 0) {
             img_like.setBackground(getContext().getDrawable(R.drawable.like_selected));
         } else {
             img_like.setBackground(getContext().getDrawable(R.drawable.ic_like));
         }
-
 
 
     }
@@ -275,7 +277,7 @@ public class NewsDetailsFragment extends BaseFragment implements Validator.Valid
 
     private void getComments() {
         showDialog();
-        newsViewModel.getComments(post).observe(this, new Observer<BaseModel<List<Comment>>>() {
+        newsViewModel.getComments(post).observe(requireActivity(), new Observer<BaseModel<List<Comment>>>() {
             @Override
             public void onChanged(BaseModel<List<Comment>> listBaseModel) {
                 comments.clear();

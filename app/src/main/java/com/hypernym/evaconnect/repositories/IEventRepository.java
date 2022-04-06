@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData;
 
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Comment;
+import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.EventStaus;
 import com.hypernym.evaconnect.models.GetEventInterestedUsers;
 import com.hypernym.evaconnect.models.Meeting;
-import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.SaveEventData;
 import com.hypernym.evaconnect.models.User;
@@ -44,7 +44,7 @@ public interface IEventRepository {
 
     LiveData<BaseModel<List<Event>>> deleteEvent(Post post);
 
-    LiveData<BaseModel<List<Post>>> getEvent(User user/*, int total, int current*/);
+    LiveData<BaseModel<List<Post>>> getEvent(User user, int total, int current);
 
     LiveData<BaseModel<List<Event>>> updateEvent(Event event,@Part MultipartBody.Part user_image);
 

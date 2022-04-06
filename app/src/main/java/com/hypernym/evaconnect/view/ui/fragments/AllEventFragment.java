@@ -28,6 +28,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
+import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.Post;
@@ -136,6 +137,9 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
 
         rc_event.setLayoutManager(linearLayoutManager);
         rc_event.setAdapter(postAdapter);
+        rc_event.setAdapter(postAdapter);
+        rc_event.setHasFixedSize(true);
+        rc_event.setItemViewCacheSize(15);
         RecyclerView.ItemAnimator animator = rc_event.getItemAnimator();
         if (animator instanceof SimpleItemAnimator) {
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
@@ -144,13 +148,13 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
         /**
          * add scroll listener while user reach in bottom load more will call
          */
-       /* rc_event.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
+        rc_event.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
             @Override
             protected void loadMoreItems() {
                 isLoading = true;
                 currentPage = AppConstants.TOTAL_PAGES + currentPage;
                 if (NetworkUtils.isNetworkConnected(getContext())) {
-                   // callPostsApi();
+                    callPostsApi();
                 } else {
                     networkErrorDialog();
                 }
@@ -165,7 +169,7 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
             public boolean isLoading() {
                 return isLoading;
             }
-        });*/
+        });
 
     }
 
@@ -188,7 +192,6 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
         if (view.getId()==R.id.tv_attending) {
             TextView textView = view.findViewById(R.id.tv_attending);
             textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
-
         } else {
             PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
             Bundle bundle = new Bundle();
@@ -334,7 +337,7 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
             @Override
             public void onChanged(BaseModel<List<Object>> listBaseModel) {
                 if (!listBaseModel.isError()) {
-                    hideDialog();
+
                     callPostsApi();
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
@@ -458,7 +461,7 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
             user.setFilter("my_events");
         }
 
-        eventViewModel.getEvent(user/*, AppConstants.TOTAL_PAGES, currentPage*/).observe(this, dashboardBaseModel -> {
+        eventViewModel.getEvent(user, AppConstants.TOTAL_PAGES, currentPage).observe(this, dashboardBaseModel -> {
 
             // postAdapter.clear();
             if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
@@ -477,6 +480,7 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
                 swipeRefresh.setRefreshing(false);
                 // postAdapter.removeLoading();
                 isLoading = false;
+
             } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
                 isLastPage = true;
                 postAdapter.removeLoading();
@@ -487,6 +491,8 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
             } else {
                 networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+
+            hideDialog();
 
         });
 

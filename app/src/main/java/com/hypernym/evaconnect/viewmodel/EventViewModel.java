@@ -90,9 +90,9 @@ public class EventViewModel extends AndroidViewModel {
         return iEventRepository.likeEvent(event);
     }
 
-    public LiveData<BaseModel<List<Post>>> getEvent(User user/*, int totalpages, int currentPage*/)
+    public LiveData<BaseModel<List<Post>>> getEvent(User user, int totalpages, int currentPage)
     {
-        return iEventRepository.getEvent(user/*,totalpages,currentPage*/);
+        return iEventRepository.getEvent(user,totalpages,currentPage);
     }
 
     public LiveData<BaseModel<List<Event>>> updateEvent(Event event,MultipartBody.Part event_image)

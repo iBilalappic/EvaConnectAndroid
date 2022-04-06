@@ -437,7 +437,7 @@ public class PassedEventFragment extends BaseFragment implements View.OnClickLis
             user.setFilter("my_passed_events");
         }
 
-        eventViewModel.getEvent(user/*, AppConstants.TOTAL_PAGES, currentPage*/).observe(this, new Observer<BaseModel<List<Post>>>() {
+        eventViewModel.getEvent(user, AppConstants.TOTAL_PAGES, currentPage).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> dashboardBaseModel) {
 

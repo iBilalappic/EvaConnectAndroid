@@ -2,12 +2,12 @@ package com.hypernym.evaconnect.view.ui.fragments;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.CAMERA;
+import static com.hypernym.evaconnect.utils.AppUtils.getApplicationContext;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -15,8 +15,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,7 +31,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProviders;
@@ -134,7 +131,6 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
     private String hCountyCodeFromLocation = "";
     List<String> hCitiesList = new ArrayList<String>();
 
-
     DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
         // TODO Auto-generated method stub
         myCalendar.set(Calendar.YEAR, year);
@@ -155,28 +151,28 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
         locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
 
         user = LoginUtils.getUser();
-        hSetValuesFromUserIntoFields();
         init();
 
         if (NetworkUtils.isNetworkConnected(requireContext())) {
             showDialog();
-            hSearchCountryCode();
+            isLocationEnabled();
+            startLocationUpdates();
         } else {
             hideDialog();
             Toast.makeText(requireContext(), "Check Your Internet Connection", Toast.LENGTH_LONG).show();
+            requireActivity().onBackPressed();
         }
+
+
     }
 
-    private void hSetValuesFromUserIntoFields() {
-      /*  ed_country.setText(userData.getCountry());
-        Toast.makeText(requireContext(), userData.getCity(), Toast.LENGTH_LONG).show();*/
-    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
 
         viewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(LocationViewModel.class);
 
@@ -186,54 +182,41 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
 
     private void isLocationEnabled() {
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            Log.d("fragmentlanguage", "isLocationEnabled: ");
             return;
         } else {
-            Toast.makeText(requireContext(), "Turn ON Location", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Turn ON your location ", Toast.LENGTH_LONG).show();
         }
     }
 
-    private void hSearchCountryCode() {
-        ed_country.setText(userData.getCountry());
-        showDialog();
+    /*  private void hSearchCountryCode() {
+          ed_country.setText(userData.getCountry());
+          showDialog();
 
-        if (hCountyCodeFromLocation.equals("")) {
-            hCountyCodeFromLocation = "GB";
-        }
+          if (hCountyCodeFromLocation.equals("")) {
+              hCountyCodeFromLocation = "PK";
+          }
 
-        if (NetworkUtils.isNetworkConnected(requireContext())) {
-            viewModel.hGetAllCities(hCountyCodeFromLocation).observe(requireActivity(), response -> {
 
-                spinCities.setSelection(0);
 
-                if (response != null) {
-                    for (int i = 0; i < response.size(); i++) {
-                        hCitiesList.add(response.get(i).name);
-                    }
-                    hideDialog();
+      }
 
-                } else {
-                    Toast.makeText(requireContext(), "Some thing went wrong...", Toast.LENGTH_LONG).show();
-                    hideDialog();
+      private void buildAlertMessageNoGps() {
+          final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+          builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+                  .setCancelable(false)
+                  .setPositiveButton("Enable GPS", (dialog, id) -> startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
+                  .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+          final AlertDialog alert = builder.create();
+          alert.setCancelable(false);
+          alert.setIcon(R.drawable.ic_location_disabled_black_24dp);
+          alert.setCanceledOnTouchOutside(false);
+          alert.show();
+      }
 
-                }
+      */
 
-            });
-        }
 
-    }
-
-    private void buildAlertMessageNoGps() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
-                .setCancelable(false)
-                .setPositiveButton("Enable GPS", (dialog, id) -> startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
-        final AlertDialog alert = builder.create();
-        alert.setCancelable(false);
-        alert.setIcon(R.drawable.ic_location_disabled_black_24dp);
-        alert.setCanceledOnTouchOutside(false);
-        alert.show();
-    }
     private void init() {
         hSetCurrentDateTime();
 
@@ -265,28 +248,15 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
             }
         });
 
-        ArrayAdapter<String> adapterUkCities = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_spinner_item, hCitiesList);
-
-        ArrayAdapter<String> adapterPakCities = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_spinner_item, hCitiesList);
-
-       /* ArrayAdapter<String> adapterlanguages = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, getResources()
-                .getStringArray(R.array.languageSpinnerItems));*/
-
 
         MySpinnerAdapter adapterlanguages = new MySpinnerAdapter(
                 getActivity(),
                 android.R.layout.simple_spinner_item,
                 Arrays.asList(getResources().getStringArray(R.array.languageSpinnerItems))
         );
-        adapterUkCities.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        adapterPakCities.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //
         adapterlanguages.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         edit_language.setAdapter(adapterlanguages);
-
         edit_language.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?>arg0, View view, int arg2, long arg3) {
@@ -304,43 +274,6 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
 
 
 
-        ed_country.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().equalsIgnoreCase("United Kingdom")) {
-                    spinCities.setAdapter(adapterUkCities);
-
-                } else if (s.toString().equalsIgnoreCase("Pakistan")) {
-                    spinCities.setAdapter(adapterPakCities);
-                } else {
-                    spinCities.setAdapter(adapterPakCities);
-                }
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
-        spinCities.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> arg0, View arg1,
-                                       int position, long id) {
-                city = hCitiesList.get(position);
-                spinCities.setSelection(position);
-                Toast.makeText(requireContext(), "City :" + city, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-            }
-        });
         edit_date.setOnClickListener(v -> {
             // TODO Auto-generated method stub
             new DatePickerDialog(getContext(), R.style.DialogTheme, date, myCalendar
@@ -382,20 +315,21 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
     @Override
     public void onResume() {
         super.onResume();
+
+        Log.d("fragmentlanguage", "onResume: ");
+
         startLocationUpdates();
     }
 
     @Override
     public void onValidationSucceeded() {
         String country = ed_country.getText().toString();
-
         String language = edit_language.getSelectedItem().toString();
-
-//        String city = spinCities.getSelectedItem().toString();
+        String city = spinCities.getSelectedItem().toString();
 
         userData.setCountry(country);
         userData.setLanguage(language);
-        userData.setCity("city");
+        userData.setCity(city);
         userData.setId(LoginUtils.getUser().getId());
 
         showDialog();
@@ -404,10 +338,7 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
             Toast.makeText(requireActivity(), "Location UPDATED Successfully.", Toast.LENGTH_SHORT).show();
             requireActivity().onBackPressed();
         });
-
-
     }
-
 
     @Override
     public void onValidationFailed(List<ValidationError> errors) {
@@ -431,7 +362,10 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
 
     @SuppressLint("RestrictedApi")
     protected void startLocationUpdates() {
-        showDialog();
+
+        Log.d("fragmentlanguage", "startLocationUpdates: ");
+
+//        showDialog();
         // Create the location request to start receiving updates
         mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -445,15 +379,15 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
 
         // Check whether location settings are satisfied
         // https://developers.google.com/android/reference/com/google/android/gms/location/SettingsClient
-        SettingsClient settingsClient = LocationServices.getSettingsClient(getActivity());
+        SettingsClient settingsClient = LocationServices.getSettingsClient(requireContext());
         settingsClient.checkLocationSettings(locationSettingsRequest);
 
         // new Google API SDK v11 uses getFusedLocationProviderClient(this)
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        LocationServices.getFusedLocationProviderClient(getActivity()).requestLocationUpdates(mLocationRequest, new LocationCallback() {
+        LocationServices.getFusedLocationProviderClient(requireContext()).requestLocationUpdates(mLocationRequest, new LocationCallback() {
                     @Override
                     public void onLocationResult(LocationResult locationResult) {
                         // do work here
@@ -461,7 +395,7 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
                         try {
                             if (counter > 1) {
                                 onLocationChanged(locationResult.getLastLocation());
-                                LocationServices.getFusedLocationProviderClient(getActivity().getApplicationContext()).removeLocationUpdates(this);
+                                LocationServices.getFusedLocationProviderClient(getApplicationContext()).removeLocationUpdates(this);
                             }
                         } catch (Exception ex) {
 
@@ -471,28 +405,38 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
                 Looper.myLooper());
     }
 
-
     @Override
     public void onLocationChanged(Location location) {
         mLastLocation = new LatLng(location.getLatitude(), location.getLongitude());
-        setAddress(mLastLocation.latitude, mLastLocation.longitude);
+        setAddress(location.getLatitude(), location.getLongitude());
     }
 
     private void setAddress(Double latitude, Double longitude) {
+
+
         if (latitude != null && longitude != null) {
             showDialog();
             Geocoder geocoder;
+
+
             List<Address> addresses = null;
-            geocoder = new Geocoder(getActivity().getApplicationContext(), Locale.getDefault());
+            geocoder = new Geocoder(requireContext(), Locale.getDefault());
+
+            if (geocoder != null) {
+                try {
+                    addresses = geocoder.getFromLocation(latitude, longitude, 2); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                    Log.d("fragmentlanguage", "Address :" + addresses.get(0).toString());
+
+                } catch (IOException e) {
+
+                    e.printStackTrace();
+
+                }
+            }
 
             try {
-                addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
                 if (addresses.size() > 0) {
-                    Log.d("max", " " + addresses.get(0).getMaxAddressLineIndex());
+                    Log.d("fragmentlanguage", " " + addresses.get(0).getMaxAddressLineIndex());
 
                     String address = addresses.get(0).getAddressLine(0);
                     // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
@@ -507,7 +451,8 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
                     String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
 
                     addresses.get(0).getAdminArea();
-                    Log.d("address", address);
+                    Log.d("fragmentlanguage", address);
+
                     String[] splitArray = address.split(",");
                     String new_text = splitArray[3];
                     String street = splitArray[0];
@@ -516,63 +461,74 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
                     hCountyCodeFromLocation = addresses.get(0).getCountryCode();
                     hSetCountry();
 
-                    Log.d("language_fragment", "Country :" + country);
+                    Log.d("fragmentlanguage", hCountyCodeFromLocation);
                     //  spinCities.setText(city);
+
                     ed_country.setText(country);
+
                     hideDialog();
 
                 }
             } catch (Exception ex) {
+
+
                 ex.printStackTrace();
             }
         }
+
     }
 
     private void hSetCountry() {
         showDialog();
-        viewModel.hGetAllCities(hCountyCodeFromLocation).observe(this, response -> {
+        if (NetworkUtils.isNetworkConnected(requireContext())) {
+            viewModel.hGetAllCities(hCountyCodeFromLocation).observe(requireActivity(), response -> {
 
-            if (response != null) {
-                for (int i = 0; i < response.size(); i++) {
-                    hCitiesList.add(response.get(i).name);
-                    Log.d("test123", response.get(i).name);
+                spinCities.setSelection(0);
+
+                if (response != null) {
+                    for (int i = 0; i < response.size(); i++) {
+                        hCitiesList.add(response.get(i).name);
+                    }
+                    hideDialog();
+
+                    hSetCitySpinner();
+
+                } else {
+                    Toast.makeText(requireContext(), "Some thing went wrong...", Toast.LENGTH_LONG).show();
+                    hideDialog();
 
                 }
 
-                hideDialog();
-            } else {
-                Toast.makeText(requireContext(), "Some thing went wrong...", Toast.LENGTH_LONG).show();
-            }
-
-        });
+            });
+        }
 
     }
 
 
     public boolean Checkpermission() {
 
-        int FirstPermissionResult = ContextCompat.checkSelfPermission(getActivity(), ACCESS_FINE_LOCATION);
-        int CameraResult = ContextCompat.checkSelfPermission(getActivity(), CAMERA);
+        int FirstPermissionResult = ContextCompat.checkSelfPermission(requireContext(), ACCESS_FINE_LOCATION);
+        int CameraResult = ContextCompat.checkSelfPermission(requireContext(), CAMERA);
 
 
         return FirstPermissionResult == PackageManager.PERMISSION_GRANTED &&
                 CameraResult == PackageManager.PERMISSION_GRANTED;
     }
 
+
     private void requestlocationpermission() {
-        ActivityCompat.requestPermissions(getActivity(), new String[]
+        ActivityCompat.requestPermissions(requireActivity(), new String[]
                 {
                         ACCESS_FINE_LOCATION,
                         CAMERA
-
-
                 }, RequestPermissionCode);
 
 
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String permissions[],
+                                           int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
 
@@ -626,5 +582,27 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
 
     }
 
+
+    private void hSetCitySpinner() {
+        ArrayAdapter<String> hCitiesAdapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_spinner_item, hCitiesList);
+        hCitiesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+
+        spinCities.setAdapter(hCitiesAdapter);
+
+        spinCities.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                       int position, long id) {
+                city = hCitiesList.get(position);
+                spinCities.setSelection(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
+    }
 
 }

@@ -429,7 +429,7 @@ public class GoingEventFragment extends BaseFragment implements View.OnClickList
         User user = LoginUtils.getLoggedinUser();
         user.setFilter("going");
 
-        eventViewModel.getEvent(user/*, AppConstants.TOTAL_PAGES, currentPage*/).observe(this, new Observer<BaseModel<List<Post>>>() {
+        eventViewModel.getEvent(user, AppConstants.TOTAL_PAGES, currentPage).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> dashboardBaseModel) {
 

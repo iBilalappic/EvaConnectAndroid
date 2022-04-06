@@ -45,7 +45,6 @@ import com.hypernym.evaconnect.viewmodel.PostViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -117,10 +116,12 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
         //   currentPage = PAGE_START;
         connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
 
-       postAdapter = new PostAdapter(getContext(), posts, this);
+        postAdapter = new PostAdapter(getContext(), posts, this);
         linearLayoutManager = new LinearLayoutManager(getContext());
         rc_post.setLayoutManager(linearLayoutManager);
         rc_post.setAdapter(postAdapter);
+        rc_post.setHasFixedSize(true);
+        rc_post.setItemViewCacheSize(15);
         RecyclerView.ItemAnimator animator = rc_post.getItemAnimator();
         if (animator instanceof SimpleItemAnimator) {
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
@@ -387,7 +388,6 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
 
         connectionViewModel.connect(connection).observe(this, listBaseModel -> {
             if (listBaseModel != null && !listBaseModel.isError()) {
-
                 onRefresh();
             } else {
                 networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
@@ -396,8 +396,8 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
         });
     }
     private void callPostsApi() {
+        showDialog();
         User user = LoginUtils.getLoggedinUser();
-
         postViewModel.getPost(user, AppConstants.TOTAL_PAGES, currentPage).observe(this, dashboardBaseModel -> {
 
             //   homePostsAdapter.clear();

@@ -189,6 +189,8 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
                         }
                         hideDialog();
 
+                        hSetCitySpinner();
+
                     } else {
                         Toast.makeText(getBaseContext(), "Some thing went wrong...", Toast.LENGTH_LONG).show();
                         hideDialog();
@@ -288,15 +290,8 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
             }
         });
 
-        ArrayAdapter<String> adapterUkCities = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, hCitiesList);
 
-        ArrayAdapter<String> adapterPakCities = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, hCitiesList);
 
-       /* ArrayAdapter<String> adapterlanguages = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, getResources()
-                .getStringArray(R.array.languageSpinnerItems));*/
 
 
         MySpinnerAdapter adapterlanguages = new MySpinnerAdapter(
@@ -304,8 +299,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
                 android.R.layout.simple_spinner_item,
                 Arrays.asList(getResources().getStringArray(R.array.languageSpinnerItems))
         );
-        adapterUkCities.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        adapterPakCities.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         adapterlanguages.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         edit_language.setAdapter(adapterlanguages);
 
@@ -332,13 +326,6 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().equalsIgnoreCase("United Kingdom")) {
-                    spinCities.setAdapter(adapterUkCities);
-                } else if (s.toString().equalsIgnoreCase("Pakistan")) {
-                    spinCities.setAdapter(adapterPakCities);
-                } else {
-                    spinCities.setAdapter(adapterPakCities);
-                }
 
             }
 
@@ -699,5 +686,26 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
         }
     }
 
+    private void hSetCitySpinner() {
+        ArrayAdapter<String> hCitiesAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, hCitiesList);
+        hCitiesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+
+        spinCities.setAdapter(hCitiesAdapter);
+
+        spinCities.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                       int position, long id) {
+                city = hCitiesList.get(position);
+                spinCities.setSelection(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
+    }
 
 }

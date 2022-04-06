@@ -135,6 +135,10 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
     @BindView(R.id.interested_header)
     TextView interested_header;
 
+
+    @BindView(R.id.tv_createdby)
+    TextView tv_createdby;
+
     @BindView(R.id.img_backarrow)
     ImageView img_backarrow;
 
@@ -259,6 +263,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
         interested.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
+
                 if(attendee_status.equalsIgnoreCase("Not Going")){
                     showInterestedApiCall("Going");
                 }else{
@@ -357,14 +362,15 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
     }
 
     private void showInterestedApiCall(String attendee_Status) {
-        eventViewModel.showInterestEvent(event_id, LoginUtils.getUser().getId(),"active",attendee_Status).observe(this, new Observer<BaseModel<List<Object>>>() {
+        showDialog();
+
+        eventViewModel.showInterestEvent(event_id, LoginUtils.getUser().getId(), "active", attendee_Status).observe(this, new Observer<BaseModel<List<Object>>>() {
             @Override
             public void onChanged(BaseModel<List<Object>> listBaseModel) {
-                if(!listBaseModel.isError())
-                {
-                 getEventStatus(event_id,LoginUtils.getLoggedinUser().getId());
-                }
-                else
+                if (!listBaseModel.isError()) {
+                    getEventStatus(event_id, LoginUtils.getLoggedinUser().getId());
+                    hideDialog();
+                } else
                 {
                     networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
                 }
@@ -460,6 +466,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
 
             private void setEventData(Event event) {
                 tv_name.setText(event.getName());
+                tv_createdby.setText("Created by :" + event.getCreated_by_id());
 
                 if (event.getEvent_image().size() > 0) {
                     AppUtils.setGlideImageUrl(getContext(), img_event, event.getEvent_image().get(0));
