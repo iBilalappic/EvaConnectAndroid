@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,6 +56,10 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
 
     @BindView(R.id.newpost)
     TextView newpost;
+
+
+    @BindView(R.id.hLoading)
+    ProgressBar hloading;
 
     @BindView(R.id.tv_create_event)
     TextView tv_create_event;
@@ -148,6 +153,7 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
         /**
          * add scroll listener while user reach in bottom load more will call
          */
+
         rc_event.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
             @Override
             protected void loadMoreItems() {
@@ -454,20 +460,27 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
 
     private void callPostsApi() {
         User user = LoginUtils.getLoggedinUser();
-
+        hloading.setVisibility(View.VISIBLE);
         if(user.getType().equalsIgnoreCase("user")){
             user.setFilter("all");
         }else{
             user.setFilter("my_events");
         }
 
+
         eventViewModel.getEvent(user, AppConstants.TOTAL_PAGES, currentPage).observe(this, dashboardBaseModel -> {
 
             // postAdapter.clear();
+            hloading.setVisibility(View.GONE);
+
             if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
-                posts.clear();
-                tv_empty.setVisibility(View.GONE);
-                rc_event.setVisibility(View.VISIBLE);
+                if (dashboardBaseModel.getData().size() == 0 && currentPage == AppConstants.TOTAL_PAGES) {
+                    rc_event.setVisibility(View.GONE);
+                    tv_empty.setVisibility(View.VISIBLE);
+                } else {
+                    tv_empty.setVisibility(View.GONE);
+                    rc_event.setVisibility(View.VISIBLE);
+                }
                 for (Post post : dashboardBaseModel.getData()) {
                     if (post.getContent() == null) {
                         post.setContent("");
@@ -478,16 +491,13 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
                 posts.addAll(dashboardBaseModel.getData());
                 postAdapter.notifyDataSetChanged();
                 swipeRefresh.setRefreshing(false);
-                // postAdapter.removeLoading();
+                postAdapter.removeLoading();
                 isLoading = false;
 
             } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
                 isLastPage = true;
                 postAdapter.removeLoading();
                 isLoading = false;
-                tv_empty.setVisibility(View.VISIBLE);
-                tv_empty.setText(dashboardBaseModel.getMessage());
-                rc_event.setVisibility(View.GONE);
             } else {
                 networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }

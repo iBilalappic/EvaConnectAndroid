@@ -8,17 +8,6 @@ import android.content.ClipboardManager;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -27,6 +16,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
@@ -148,13 +146,13 @@ public class PassedEventFragment extends BaseFragment implements View.OnClickLis
         /**
          * add scroll listener while user reach in bottom load more will call
          */
-       /* rc_event.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
+        rc_event.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
             @Override
             protected void loadMoreItems() {
                 isLoading = true;
                 currentPage = AppConstants.TOTAL_PAGES + currentPage;
                 if (NetworkUtils.isNetworkConnected(getContext())) {
-                 //   callPostsApi();
+                    callPostsApi();
                 } else {
                     networkErrorDialog();
                 }
@@ -170,7 +168,7 @@ public class PassedEventFragment extends BaseFragment implements View.OnClickLis
                 return isLoading;
             }
         });
-*/
+
     }
 
 
@@ -431,45 +429,40 @@ public class PassedEventFragment extends BaseFragment implements View.OnClickLis
     private void callPostsApi() {
         User user = LoginUtils.getLoggedinUser();
 
-        if(user.getType().equalsIgnoreCase("user")){
+        if (user.getType().equalsIgnoreCase("user")) {
             user.setFilter("passed");
-        }else{
+        } else {
             user.setFilter("my_passed_events");
         }
 
-        eventViewModel.getEvent(user, AppConstants.TOTAL_PAGES, currentPage).observe(this, new Observer<BaseModel<List<Post>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Post>> dashboardBaseModel) {
-
-              //  postAdapter.clear();
-                tv_empty.setVisibility(View.GONE);
+        eventViewModel.getEvent(user, AppConstants.TOTAL_PAGES, currentPage).observe(this, dashboardBaseModel -> {
+            //  postAdapter.clear();
+            if (dashboardBaseModel.getData().size() > 0) {
                 rc_event.setVisibility(View.VISIBLE);
-                if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
-                    for (Post post : dashboardBaseModel.getData()) {
-                        if (post.getContent() == null) {
-                            post.setContent("");
-                        }
-                        else if (post.getType().equalsIgnoreCase("event")) {
-                            post.setPost_type(AppConstants.EVENT_TYPE);
-                        }
-                    }
-                    posts.addAll(dashboardBaseModel.getData());
-                    postAdapter.notifyDataSetChanged();
-                    swipeRefresh.setRefreshing(false);
-                  //  postAdapter.removeLoading();
-                    isLoading = false;
-                } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
-                    isLastPage = true;
-                    postAdapter.removeLoading();
-                    isLoading = false;
-                    tv_empty.setVisibility(View.VISIBLE);
-                    tv_empty.setText(dashboardBaseModel.getMessage());
-                    rc_event.setVisibility(View.GONE);
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-
+            } else {
+                tv_empty.setVisibility(View.GONE);
             }
+            if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
+                for (Post post : dashboardBaseModel.getData()) {
+                    if (post.getContent() == null) {
+                        post.setContent("");
+                    } else if (post.getType().equalsIgnoreCase("event")) {
+                        post.setPost_type(AppConstants.EVENT_TYPE);
+                    }
+                }
+                posts.addAll(dashboardBaseModel.getData());
+                postAdapter.notifyDataSetChanged();
+                swipeRefresh.setRefreshing(false);
+                //  postAdapter.removeLoading();
+                isLoading = false;
+            } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
+                isLastPage = true;
+                postAdapter.removeLoading();
+                isLoading = false;
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+            }
+
         });
     }
 

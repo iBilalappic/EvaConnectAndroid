@@ -1,5 +1,7 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
+import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;

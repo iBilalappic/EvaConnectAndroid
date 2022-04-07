@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,7 +50,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PostFragment extends BaseFragment implements View.OnClickListener,SwipeRefreshLayout.OnRefreshListener, PostAdapter.ItemClickListener {
+public class PostFragment extends BaseFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, PostAdapter.ItemClickListener {
 
     @BindView(R.id.rc_post)
     RecyclerView rc_post;
@@ -57,6 +58,8 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
     @BindView(R.id.newpost)
     TextView newpost;
 
+    @BindView(R.id.hLoading)
+    ProgressBar hloading;
 //    @BindView(R.id.fab)
 //    FloatingActionButton fab;
 
@@ -396,12 +399,14 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
         });
     }
     private void callPostsApi() {
-        showDialog();
+        hloading.setVisibility(View.VISIBLE);
         User user = LoginUtils.getLoggedinUser();
         postViewModel.getPost(user, AppConstants.TOTAL_PAGES, currentPage).observe(this, dashboardBaseModel -> {
 
             //   homePostsAdapter.clear();
             if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
+
+                hloading.setVisibility(View.GONE);
                 for (Post post : dashboardBaseModel.getData()) {
                     if (post.getContent() == null) {
                         post.setContent("");

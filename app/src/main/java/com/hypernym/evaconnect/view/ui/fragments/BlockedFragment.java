@@ -4,20 +4,19 @@ import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_ST
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import android.text.Editable;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
@@ -28,7 +27,6 @@ import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.GetBlockedData;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
-import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.BlockedAdapter;
@@ -340,19 +338,18 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
 
 
     private void callUnBlockUser(Connection connection, int position) {
+        showDialog();
 
-        connectionViewModel.block(connection).observe(this, new Observer<BaseModel<List<Object>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Object>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError()) {
+        connectionViewModel.block(connection).observe(this, listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError()) {
 
-                    blockedAdapter.removeAt(position);
-                   // getConnectionByFilter(type, PAGE_START, true);
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
+                blockedAdapter.removeAt(position);
+                // getConnectionByFilter(type, PAGE_START, true);
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
+            Toast.makeText(requireContext(), "User Unblocked", Toast.LENGTH_SHORT).show();
         });
     }
 

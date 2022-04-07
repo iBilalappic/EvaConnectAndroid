@@ -4,11 +4,9 @@ import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_ST
 
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -17,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hypernym.evaconnect.R;
@@ -28,13 +25,9 @@ import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.GetEventInterestedUsers;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
-import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.NetworkUtils;
-import com.hypernym.evaconnect.view.adapters.ConnectionsAdapter;
 import com.hypernym.evaconnect.view.adapters.EventInterestedUserAdapter;
 import com.hypernym.evaconnect.view.adapters.InviteConnectionsAdapter;
-import com.hypernym.evaconnect.view.adapters.OptionsAdapter;
-import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.EventViewModel;
 
 import java.util.ArrayList;

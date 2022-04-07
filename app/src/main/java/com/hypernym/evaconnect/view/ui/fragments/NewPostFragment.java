@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
@@ -57,7 +58,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -172,6 +172,10 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
         View view = inflater.inflate(R.layout.fragment_new_post, container, false);
         ButterKnife.bind(this, view);
         ButterKnife.bind(this, view);
+
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
+
         img_backarrow.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {

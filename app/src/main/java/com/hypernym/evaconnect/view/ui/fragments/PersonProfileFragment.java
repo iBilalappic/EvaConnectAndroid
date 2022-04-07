@@ -172,7 +172,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
     public void onResume() {
         super.onResume();
         posts.clear();
-       // callPostsApi();
+        // callPostsApi();
     }
 
     private void init() {

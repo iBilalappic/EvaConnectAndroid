@@ -67,6 +67,10 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
     LinearLayout ly_language_region;
 
 
+    @BindView(R.id.layout_location)
+    LinearLayout layout_location;
+
+
     User user = new User();
     User userData = new User();
     private UserViewModel userViewModel;
@@ -96,6 +100,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         ly_security.setOnClickListener(this);
         ly_news.setOnClickListener(this);
         ly_language_region.setOnClickListener(this);
+        layout_location.setOnClickListener(this);
 
         user = LoginUtils.getUser();
 /*
@@ -107,8 +112,17 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        SettingUserProfile(user);
+
+        Log.d("setting_user", user.getLanguage());
+
+    }
+
     private void SettingUserProfile(User user) {
-        userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(UserViewModel.class);
+        userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication())).get(UserViewModel.class);
         GetUserDetails();
     }
 
@@ -243,11 +257,13 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
                 RssNewsFragment rssNewsFragment = new RssNewsFragment();
                 loadFragment(R.id.framelayout, rssNewsFragment, getContext(), true);
                 break;
+            case R.id.layout_location:
 
             case R.id.ly_language_region:
                 LanguageFragment languageFragment = new LanguageFragment(userData);
                 loadFragment(R.id.framelayout, languageFragment, getContext(), true);
                 break;
+
 
             case R.id.img_backarrow:
                 getActivity().onBackPressed();

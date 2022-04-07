@@ -29,6 +29,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
+import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.Post;
@@ -146,13 +147,13 @@ public class SavedEventFragment extends BaseFragment implements View.OnClickList
         /**
          * add scroll listener while user reach in bottom load more will call
          */
-       /* rc_event.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
+        rc_event.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
             @Override
             protected void loadMoreItems() {
                 isLoading = true;
                 currentPage = AppConstants.TOTAL_PAGES + currentPage;
                 if (NetworkUtils.isNetworkConnected(getContext())) {
-                 //   callPostsApi();
+                    callPostsApi();
                 } else {
                     networkErrorDialog();
                 }
@@ -167,7 +168,7 @@ public class SavedEventFragment extends BaseFragment implements View.OnClickList
             public boolean isLoading() {
                 return isLoading;
             }
-        });*/
+        });
 
     }
 
@@ -437,31 +438,31 @@ public class SavedEventFragment extends BaseFragment implements View.OnClickList
             @Override
             public void onChanged(BaseModel<List<Post>> dashboardBaseModel) {
 
-                //postAdapter.clear();
-                tv_empty.setVisibility(View.GONE);
-                rc_event.setVisibility(View.VISIBLE);
+
                 if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
+
+
+                    if (dashboardBaseModel.getData().size() == 0 && currentPage == AppConstants.TOTAL_PAGES) {
+                        rc_event.setVisibility(View.GONE);
+                    }
+
                     for (Post post : dashboardBaseModel.getData()) {
                         if (post.getContent() == null) {
                             post.setContent("");
-                        }
-                        else if (post.getType().equalsIgnoreCase("event")) {
+                        } else if (post.getType().equalsIgnoreCase("event")) {
                             post.setPost_type(AppConstants.EVENT_TYPE);
                         }
                     }
                     posts.addAll(dashboardBaseModel.getData());
                     postAdapter.notifyDataSetChanged();
                     swipeRefresh.setRefreshing(false);
-                  //  postAdapter.removeLoading();
+                    postAdapter.removeLoading();
                     isLoading = false;
 
                 } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
                     isLastPage = true;
                     postAdapter.removeLoading();
                     isLoading = false;
-                    tv_empty.setVisibility(View.VISIBLE);
-                    tv_empty.setText(dashboardBaseModel.getMessage());
-                    rc_event.setVisibility(View.GONE);
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }

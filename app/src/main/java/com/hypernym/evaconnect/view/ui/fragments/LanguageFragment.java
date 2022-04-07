@@ -2,7 +2,6 @@ package com.hypernym.evaconnect.view.ui.fragments;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.CAMERA;
-import static com.hypernym.evaconnect.utils.AppUtils.getApplicationContext;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -14,7 +13,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Looper;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,12 +35,8 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.model.LatLng;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
@@ -188,10 +182,7 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
-
         viewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(LocationViewModel.class);
-
-
         return inflater.inflate(R.layout.fragment_language, container, false);
     }
 
@@ -203,33 +194,6 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
             Toast.makeText(requireContext(), "Turn ON your location ", Toast.LENGTH_LONG).show();
         }
     }
-
-    /*  private void hSearchCountryCode() {
-          ed_country.setText(userData.getCountry());
-          showDialog();
-
-          if (hCountyCodeFromLocation.equals("")) {
-              hCountyCodeFromLocation = "PK";
-          }
-
-
-
-      }
-
-      private void buildAlertMessageNoGps() {
-          final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-          builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
-                  .setCancelable(false)
-                  .setPositiveButton("Enable GPS", (dialog, id) -> startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
-                  .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
-          final AlertDialog alert = builder.create();
-          alert.setCancelable(false);
-          alert.setIcon(R.drawable.ic_location_disabled_black_24dp);
-          alert.setCanceledOnTouchOutside(false);
-          alert.show();
-      }
-
-      */
 
 
     private void init() {
@@ -264,29 +228,7 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
         });
 
 
-        MySpinnerAdapter adapterlanguages = new MySpinnerAdapter(
-                getActivity(),
-                android.R.layout.simple_spinner_item,
-                Arrays.asList(getResources().getStringArray(R.array.languageSpinnerItems))
-        );
-        //
-        adapterlanguages.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        edit_language.setAdapter(adapterlanguages);
-        edit_language.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?>arg0, View view, int arg2, long arg3) {
-
-                selected_lang = edit_language.getSelectedItem().toString();
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
-
-            }
-        });
-
+        hSetLanguageSpinnerItem();
 
 
         edit_date.setOnClickListener(v -> {
@@ -311,11 +253,112 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
         });
     }
 
+    private void hSetLanguageSpinnerItem() {
+
+
+        MySpinnerAdapter adapterlanguages = new MySpinnerAdapter(
+                getActivity(),
+                android.R.layout.simple_spinner_item,
+                Arrays.asList(getResources().getStringArray(R.array.languageSpinnerItems))
+        );
+        //
+        adapterlanguages.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        edit_language.setAdapter(adapterlanguages);
+
+        Log.d("language_spinner", user.getLanguage());
+
+
+        edit_language.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View view, int arg2, long arg3) {
+                selected_lang = edit_language.getSelectedItem().toString();
+                Log.d("language_spinner", "item_selected");
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+        hPrePopulateLanguageSpinner();
+    }
+
+    private void hPrePopulateLanguageSpinner() {
+        switch (user.getLanguage()) {
+            case "English": {
+                Log.d("language_spinner", user.getLanguage() + " Case");
+
+                edit_language.setSelection(0);
+            }
+            break;
+
+
+            case "Russian": {
+                Log.d("language_spinner", user.getLanguage() + " Case");
+
+                edit_language.setSelection(1);
+            }
+            break;
+
+
+            case "German": {
+                Log.d("language_spinner", user.getLanguage() + " Case");
+
+                edit_language.setSelection(2);
+            }
+            break;
+
+
+            case "French": {
+                Log.d("language_spinner", user.getLanguage() + " Case");
+
+                edit_language.setSelection(3);
+            }
+            break;
+
+            case "Turkish": {
+                Log.d("language_spinner", user.getLanguage() + " Case");
+
+                edit_language.setSelection(4);
+            }
+            break;
+
+
+            case "Italian": {
+                Log.d("language_spinner", user.getLanguage() + " Case");
+
+                edit_language.setSelection(5);
+            }
+            break;
+
+
+            case "Spanish": {
+                Log.d("language_spinner", user.getLanguage() + " Case");
+
+                edit_language.setSelection(6);
+            }
+            break;
+
+            case "Polish": {
+                Log.d("language_spinner", user.getLanguage() + " Case");
+
+                edit_language.setSelection(7);
+            }
+            break;
+
+
+        }
+
+    }
+
+
     private void updateLabel() {
         String myFormat = "MM/dd/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        edit_date.setText(String.valueOf(DateFormat.format("dd",   myCalendar.getTime())));
-        edit_month.setText(String.valueOf(DateFormat.format("MM",   myCalendar.getTime())));
+        edit_date.setText(String.valueOf(DateFormat.format("dd", myCalendar.getTime())));
+        edit_month.setText(String.valueOf(DateFormat.format("MM", myCalendar.getTime())));
         edit_year.setText(String.valueOf(DateFormat.format("yyyy", myCalendar.getTime())));
         dob_str = sdf.format(myCalendar.getTime());
 
@@ -347,12 +390,11 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
         userData.setLanguage(language);
         userData.setCity(city);
         userData.setId(LoginUtils.getUser().getId());
-
         showDialog();
         viewModel.hUpdateUserLocationData(userData.getId(), userData).observe(requireActivity(), object -> {
             hideDialog();
             Toast.makeText(requireActivity(), "Location UPDATED Successfully.", Toast.LENGTH_SHORT).show();
-            requireActivity().onBackPressed();
+            /*requireActivity().onBackPressed();*/
         });
     }
 
@@ -515,7 +557,6 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
                 if (grantResults.length > 0) {
 
                     boolean LocationPermission = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-
 
                     if (LocationPermission) {
                         startLocationUpdates();
