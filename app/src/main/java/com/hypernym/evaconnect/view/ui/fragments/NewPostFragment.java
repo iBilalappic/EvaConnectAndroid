@@ -288,6 +288,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
             post.setText("Post");
             setPageTitle("Back");
 
+
         } else {
             if (getArguments().getBoolean("isVideo")) {
                 setPageTitle("Back");

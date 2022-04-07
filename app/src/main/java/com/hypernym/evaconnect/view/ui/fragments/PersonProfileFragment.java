@@ -26,6 +26,7 @@ import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
+import com.hypernym.evaconnect.models.ConnectionModel;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
@@ -130,6 +131,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
     Post post = new Post();
     User user = new User();
     User targetUser = new User();
+    ConnectionModel connected_user = new ConnectionModel();
     private ConnectionViewModel connectionViewModel;
     private UserViewModel userViewModel;
     String argumentReceived = "";
@@ -193,6 +195,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
             //  showBackButton();
 
             targetUser = getArguments().getParcelable("user");
+            connected_user = getArguments().getParcelable("connected_user");
             post = (Post) getArguments().getSerializable("PostData");
             user_id = getArguments().getInt("user_id");
             Log.d("TAAAG", GsonUtils.toJson(post));
@@ -516,8 +519,17 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
             @Override
             public void onChanged(BaseModel<List<User>> listBaseModel) {
                 if (listBaseModel.getData() != null && !listBaseModel.isError()) {
+                    if (!TextUtils.isEmpty(listBaseModel.getData().get(0).getUser_image())) {
+                        AppUtils.setGlideImage(getContext(), profile_image, listBaseModel.getData().get(0).getUser_image());
+                    }
+                    if(listBaseModel.getData().get(0).getType()!=null&&listBaseModel.getData().get(0).getType().equalsIgnoreCase("company")){
+                        tv_company.setText(listBaseModel.getData().get(0).getWork_aviation());
+
+                    }else{
+                        tv_company.setText(listBaseModel.getData().get(0).getCompany_name()+ " | " + listBaseModel.getData().get(0).getDesignation());
+
+                    }
                     // tv_location.setText(listBaseModel.getData().get(0).getCountry() + "," + listBaseModel.getData().get(0).getCity());
-                    tv_company.setText(listBaseModel.getData().get(0).getSector() + " | " + listBaseModel.getData().get(0).getCompany_name());
 
                     tv_name.setText(listBaseModel.getData().get(0).getFirst_name());
 
@@ -527,7 +539,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                         tv_bio.setVisibility(View.GONE);
                     }
 
-                    if (listBaseModel.getData().get(0).getDesignation() != null && !post.getUser().getDesignation().isEmpty()) {
+                    if (listBaseModel.getData().get(0).getDesignation() != null && !listBaseModel.getData().get(0).getDesignation().isEmpty()) {
                         tv_profession.setText(listBaseModel.getData().get(0).getDesignation());
                     } else {
                         tv_profession.setText(listBaseModel.getData().get(0).getCompany_name());
@@ -574,30 +586,34 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
 
                         view0.setVisibility(View.GONE);
 
-//
-//                        String status = AppUtils.getConnectionStatus(getContext(), listBaseModel.getData().get(0).getIs_connected(), post.isIs_receiver());
-//                        if (status.equals(AppConstants.DELETED)) {
-//                            tv_connect.setVisibility(View.GONE);
-//                        } else {
-//                            tv_connect.setVisibility(View.VISIBLE);
-//                            layout_account_private.setVisibility(View.GONE);
-//                            tv_connect.setText(AppUtils.getConnectionStatusWithUserType(getContext(), post.getIs_connected(), post.isIs_receiver(), user.getType()));
-//                            if (AppUtils.getConnectionStatus(getContext(), post.getIs_connected(), post.isIs_receiver()).equalsIgnoreCase(AppConstants.CONNECTED)) {
-//                                /*  layout_disconnect.setVisibility(View.VISIBLE);*/
-//                                layout_block.setVisibility(View.VISIBLE);
-//                                layout_account_private.setVisibility(View.GONE);
-//                                rc_post.setVisibility(View.VISIBLE);
-//                                view_view_post.setVisibility(View.VISIBLE);
-//                                tv_view_post.setVisibility(View.VISIBLE);
-//                            } else {
-//                                /* layout_disconnect.setVisibility(View.GONE);*/
-//                                layout_account_private.setVisibility(View.VISIBLE);
-//                                layout_block.setVisibility(View.GONE);
-//                                rc_post.setVisibility(View.GONE);
-//                                view_view_post.setVisibility(View.GONE);
-//                                tv_view_post.setVisibility(View.GONE);
-//                            }
-//                        }
+                        if(connected_user!=null){
+
+                        String status = AppUtils.getConnectionStatus(getContext(), connected_user.isConnected, connected_user.isReceiver);
+                        if (status.equals(AppConstants.DELETED)) {
+                            tv_connect.setVisibility(View.GONE);
+                        } else {
+                            tv_connect.setVisibility(View.VISIBLE);
+                            layout_account_private.setVisibility(View.GONE);
+                            tv_connect.setText(AppUtils.getConnectionStatusWithUserType(getContext(), connected_user.isConnected, connected_user.isReceiver, connected_user.type));
+                            if (AppUtils.getConnectionStatus(getContext(), connected_user.isConnected, connected_user.isReceiver).equalsIgnoreCase(AppConstants.CONNECTED)) {
+                                /*  layout_disconnect.setVisibility(View.VISIBLE);*/
+                                layout_block.setVisibility(View.VISIBLE);
+                                layout_account_private.setVisibility(View.GONE);
+                                rc_post.setVisibility(View.VISIBLE);
+                                view_view_post.setVisibility(View.VISIBLE);
+                                tv_view_post.setVisibility(View.VISIBLE);
+                            } else {
+                                /* layout_disconnect.setVisibility(View.GONE);*/
+                                layout_account_private.setVisibility(View.VISIBLE);
+                                layout_block.setVisibility(View.GONE);
+                                rc_post.setVisibility(View.GONE);
+                                view_view_post.setVisibility(View.GONE);
+                                tv_view_post.setVisibility(View.GONE);
+                            }
+                         }
+
+                        }
+
                     }
 
 
@@ -706,7 +722,11 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                 RemoveUserApiCall();
                 break;
             case R.id.layout_block:
-                BlockUserApiCall(post.getUser());
+                if(connected_user!=null){
+                    BlockUserApiCall(connected_user.id);
+                }else{
+                    BlockUserApiCall(post.getUser().getId());
+                }
                 break;
             case R.id.layout_message:
                 ChatFragment chatFragment = new ChatFragment();
@@ -742,7 +762,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
         }
     }
 
-    private void BlockUserApiCall(User receiver) {
+    private void BlockUserApiCall( int receiver_id) {
 
        /* int id;
         User user;
@@ -757,7 +777,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
         Connection connection = new Connection();
         User user = LoginUtils.getLoggedinUser();
         connection.setSender_id(user.getId());
-        connection.setReceiver_id(receiver.getId());
+        connection.setReceiver_id(receiver_id);
         connection.setStatus(AppConstants.DELETED);
 
         connectionViewModel.block(connection).observe(this, new Observer<BaseModel<List<Object>>>() {

@@ -245,6 +245,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         userData.setFilter("active");
         if (edt_search.getText().toString().length() > 0)
             userData.setFirst_name(edt_search.getText().toString());
+            userData.setLast_name("");
         //   connectedList.clear();
         connectionViewModel.getConnectedFilter(userData).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<ConnectionModel>>>() {
             @Override
@@ -309,6 +310,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
                     PersonProfileFragment personProfileFragment = new PersonProfileFragment();
                     Bundle bundle2 = new Bundle();
                     bundle2.putInt("user_id", user.id);
+                    bundle2.putParcelable("connected_user", user);
                     loadFragment_bundle(R.id.framelayout, personProfileFragment, getContext(), true, bundle2);
                     break;
 
@@ -381,6 +383,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
                 getConnectedFilter(true);
             } else {
                 isSearchFlag = false;
+                getConnectionByFilter(type,currentPage,false);
             }
         }
 
