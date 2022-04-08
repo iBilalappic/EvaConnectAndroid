@@ -22,6 +22,7 @@ import com.hypernym.evaconnect.models.MyLikesModel;
 import com.hypernym.evaconnect.models.NetworkConnection;
 import com.hypernym.evaconnect.models.NewSources;
 import com.hypernym.evaconnect.models.NotesData;
+import com.hypernym.evaconnect.models.NotificationSettingsRootModel;
 import com.hypernym.evaconnect.models.Notification_onesignal;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.SaveEventData;
@@ -532,11 +533,23 @@ public interface AppApi {
     @GET(APIConstants.CITIES_LIST)
     Call<List<City>> get_all_cities(@Path("country_code") String countryCode);
 
+
+    @GET(APIConstants.PUSH_NOTI_SETTINGS)
+    Call<BaseModel<List<Object>>> hGetNotificationSettings(@Query("user_id") int user_id);
+
+
+    @POST(APIConstants.PUSH_NOTI_SETTINGS)
+    Call<BaseModel<List<Object>>> hPostSettingsDataToSerever(@Body NotificationSettingsRootModel notificationSettingsModel);
+/*
+
     @PATCH(APIConstants.GET_USER_DETAILS)
     Call<BaseModel<List<Object>>> hUpdateUserLocation(
-            @Path("id") int user_id,
-            @Body User user
-    );
+            @Path("id") int id,
+            @Body User user,
+            @Path()
+            );
+*/
+
 
 }
 

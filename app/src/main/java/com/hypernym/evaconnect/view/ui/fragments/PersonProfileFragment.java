@@ -43,7 +43,6 @@ import com.hypernym.evaconnect.viewmodel.UserViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

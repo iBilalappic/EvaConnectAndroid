@@ -110,4 +110,5 @@ public interface APIConstants {
  public static String EVENT_STATUS = "event/interested/status/";
  public static String VERIFY_EMAIL = "user/pending/verification/";
  public static String CITIES_LIST = "v1/countries/{country_code}/cities";
+ String PUSH_NOTI_SETTINGS = "user/push/notifications/";
 }

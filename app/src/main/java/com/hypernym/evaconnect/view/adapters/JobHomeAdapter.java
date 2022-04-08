@@ -411,7 +411,7 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
 
                         if(posts.get(position).getIs_applied()==1)
                         {
-                            ((JobHomeAdapter.JobTypeViewHolder) holder).tv_apply.setText("Applied");
+                            ((JobHomeAdapter.JobTypeViewHolder) holder).tv_apply.setText("Go to Ad");
                         }
                         else
                         {

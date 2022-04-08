@@ -19,6 +19,17 @@ public class Event implements Serializable {
     private String created_datetime;
     private Integer user_id;
     private String is_attending;
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
+    }
+
+    private String user_name;
+
     private Integer is_event_like;
     private int like_count;
     private int comment_count;
@@ -301,4 +312,6 @@ public class Event implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
+
+
 }

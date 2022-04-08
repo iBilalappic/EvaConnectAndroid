@@ -1,5 +1,7 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -55,8 +57,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-
-import static android.app.Activity.RESULT_OK;
 
 public class MessageFragment extends BaseFragment implements OnItemClickListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener,  AttachmentsAdapter.ItemClickListener {
 

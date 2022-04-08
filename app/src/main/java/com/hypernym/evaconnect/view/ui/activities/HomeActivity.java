@@ -13,19 +13,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.constants.AppConstants;
@@ -475,23 +471,20 @@ public class HomeActivity extends BaseActivity {
     public void createUserOnFirebase()
     {
         FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            //To do//
-                            return;
-                        }
-                        // Get the Instance ID token//
-                        String token = task.getResult().getToken();
-
-                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                        DatabaseReference userRef = databaseReference.child(AppConstants.FIREASE_USER_ENDPOINT);
-                        DatabaseReference userRefByID=userRef.child(LoginUtils.getLoggedinUser().getId().toString());
-                        userRefByID.child("imageName").setValue(LoginUtils.getLoggedinUser().getUser_image());
-                        userRefByID.child("name").setValue(LoginUtils.getLoggedinUser().getEmail());
-                        userRefByID.child("fcm-token").setValue(token);
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        //To do//
+                        return;
                     }
+                    // Get the Instance ID token//
+                    String token = task.getResult().getToken();
+
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                    DatabaseReference userRef = databaseReference.child(AppConstants.FIREASE_USER_ENDPOINT);
+                    DatabaseReference userRefByID = userRef.child(LoginUtils.getLoggedinUser().getId().toString());
+                    userRefByID.child("imageName").setValue(LoginUtils.getLoggedinUser().getUser_image());
+                    userRefByID.child("name").setValue(LoginUtils.getLoggedinUser().getEmail());
+                    userRefByID.child("fcm-token").setValue(token);
                 });
 
     }

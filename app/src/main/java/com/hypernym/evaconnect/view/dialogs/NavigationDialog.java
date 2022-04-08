@@ -23,7 +23,6 @@ import com.hypernym.evaconnect.models.Stats;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
-import com.hypernym.evaconnect.view.ui.fragments.ActivityFragment;
 import com.hypernym.evaconnect.view.ui.fragments.CalendarFragment;
 import com.hypernym.evaconnect.view.ui.fragments.JobListingFragment;
 import com.hypernym.evaconnect.view.ui.fragments.SettingsFragment;
@@ -100,7 +99,6 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
         WindowManager.LayoutParams params = this.getWindow().getAttributes();
 
 
-
         params.y = 50;
         window.setLayout(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
         this.getWindow().setAttributes(params);
@@ -108,28 +106,20 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
         gettingUserStats();
         SettingUserData();
 
-        img_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        img_close.setOnClickListener(v -> dismiss());
 
-        myactivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-                FragmentTransaction transaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
-                //ActivityFragment activityFragment=new ActivityFragment();
-                MyActivityFragment activityFragment=new MyActivityFragment();
-                Bundle bundle=new Bundle();
-                bundle.putBoolean("isNotification",true);
-                activityFragment.setArguments(bundle);
-                transaction.replace(R.id.framelayout, activityFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
+        myactivity.setOnClickListener(v -> {
+            dismiss();
+            FragmentTransaction transaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+            //ActivityFragment activityFragment=new ActivityFragment();
+            MyActivityFragment activityFragment = new MyActivityFragment();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("isNotification", true);
+            activityFragment.setArguments(bundle);
+            transaction.replace(R.id.framelayout, activityFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
         });
         logout.setOnClickListener(new View.OnClickListener() {
             @Override

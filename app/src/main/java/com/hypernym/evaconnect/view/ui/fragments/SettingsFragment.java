@@ -3,7 +3,6 @@ package com.hypernym.evaconnect.view.ui.fragments;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -112,14 +111,6 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        SettingUserProfile(user);
-
-        Log.d("setting_user", user.getLanguage());
-
-    }
 
     private void SettingUserProfile(User user) {
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication())).get(UserViewModel.class);
@@ -128,17 +119,14 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
 
     private void GetUserDetails() {
         showDialog();
-        userViewModel.getuser_details(user.getId()).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<User>>>() {
-            @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel) {
-                if (listBaseModel.getData() != null && !listBaseModel.isError()) {
-                    userData = listBaseModel.getData().get(0);
-                    LoginUtils.saveUser(listBaseModel.getData().get(0));
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
+        userViewModel.getuser_details(user.getId()).observe(getViewLifecycleOwner(), listBaseModel -> {
+            if (listBaseModel.getData() != null && !listBaseModel.isError()) {
+                userData = listBaseModel.getData().get(0);
+                LoginUtils.saveUser(listBaseModel.getData().get(0));
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
     }
 

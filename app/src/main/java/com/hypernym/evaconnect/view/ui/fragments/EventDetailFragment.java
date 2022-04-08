@@ -466,7 +466,7 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
 
             private void setEventData(Event event) {
                 tv_name.setText(event.getName());
-                tv_createdby.setText("Created by :" + event.getName());
+                tv_createdby.setText("Created by :" + event.getUser_name());
 
                 if (event.getEvent_image().size() > 0) {
                     AppUtils.setGlideImageUrl(getContext(), img_event, event.getEvent_image().get(0));

@@ -727,17 +727,14 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         User user = new User();
         user = LoginUtils.getUser();
         userViewModel.getuser_details(user.getId()
-        ).observe(this, new Observer<BaseModel<List<User>>>() {
-            @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel) {
-                if (listBaseModel.getData() != null && !listBaseModel.isError()) {
-                    swipeRefresh.setRefreshing(false);
-                    LoginUtils.saveUser(listBaseModel.getData().get(0));
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
+        ).observe(this, listBaseModel -> {
+            if (listBaseModel.getData() != null && !listBaseModel.isError()) {
+                swipeRefresh.setRefreshing(false);
+                LoginUtils.saveUser(listBaseModel.getData().get(0));
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
     }
 

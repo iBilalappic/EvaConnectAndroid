@@ -25,10 +25,8 @@ import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.ConnectionModel;
-import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
-import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
@@ -43,8 +41,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
 
 public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.ItemClickListener, ConnectionsAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.rc_connections)
@@ -192,8 +188,9 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
 
         // showDialog();
         User userData = new User();
+        swipeRefresh.setRefreshing(false);
 
-       // userData.setType(mtype);
+        // userData.setType(mtype);
         userData.setUser_id(user.getId());
         userData.setFilter("active");
         if (edt_search.getText().toString().length() > 0)
@@ -204,6 +201,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
             @Override
             public void onChanged(BaseModel<List<ConnectionModel>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
+
 //                    if (currentPage == PAGE_START) {
 //                        connectionList.clear();
 //                        connectionsAdapter.notifyDataSetChanged();
@@ -352,7 +350,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
     @Override
     public void onRefresh() {
         if (NetworkUtils.isNetworkConnected(getContext())) {
-            GetUserDetails();
+            // GetUserDetails();
             getConnectionByFilter(type, currentPage, false);
         } else {
             networkErrorDialog();
@@ -390,20 +388,25 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
     }
 
     private void GetUserDetails() {
-        User user = new User();
-        user = LoginUtils.getUser();
-        userViewModel.getuser_details(user.getId()
-        ).observe(this, new Observer<BaseModel<List<User>>>() {
-            @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel) {
-                if (listBaseModel.getData() != null && !listBaseModel.isError()) {
-                    swipeRefresh.setRefreshing(false);
-                    LoginUtils.saveUser(listBaseModel.getData().get(0));
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+        try {
+            User user = new User();
+            user = LoginUtils.getUser();
+            userViewModel.getuser_details(user.getId()
+            ).observe(this, new Observer<BaseModel<List<User>>>() {
+                @Override
+                public void onChanged(BaseModel<List<User>> listBaseModel) {
+                    if (listBaseModel.getData() != null && !listBaseModel.isError()) {
+                        swipeRefresh.setRefreshing(false);
+                        LoginUtils.saveUser(listBaseModel.getData().get(0));
+                    } else {
+                        networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                    }
+                    hideDialog();
                 }
-                hideDialog();
-            }
-        });
+            });
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
     }
 }

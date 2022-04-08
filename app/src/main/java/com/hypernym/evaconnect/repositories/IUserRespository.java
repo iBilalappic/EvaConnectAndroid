@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 
 import com.hypernym.evaconnect.models.AccountCheck;
 import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.NotificationSettingsRootModel;
 import com.hypernym.evaconnect.models.Stats;
 import com.hypernym.evaconnect.models.User;
 
@@ -53,4 +54,7 @@ public interface IUserRespository {
 
     LiveData<BaseModel<List<Object>>> verify_email(String email);
 
+    LiveData<BaseModel<List<Object>>> hGetNotificationSettings(int id);
+
+    LiveData<BaseModel<List<Object>>> hPostUserSettingData(NotificationSettingsRootModel notificationSettingsModel);
 }

@@ -7,6 +7,7 @@ import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.models.AccountCheck;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.GetBlockedData;
+import com.hypernym.evaconnect.models.NotificationSettingsRootModel;
 import com.hypernym.evaconnect.models.Stats;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IUserRespository;
@@ -36,6 +37,7 @@ public class UserRepository implements IUserRespository {
     private MutableLiveData<BaseModel<List<GetBlockedData>>> getBlockedUsers = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> resetPasswordMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> deleteUserMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Object>>> userNotificationSettings = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> updateUserLocationMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> verifyEmailMutableLiveData = new MutableLiveData<>();
 
@@ -464,7 +466,11 @@ public class UserRepository implements IUserRespository {
 
     @Override
     public LiveData<BaseModel<List<Object>>> updateUserLocation(Integer id, User userData) {
-        RestClient.get().appApi().hUpdateUserLocation(userData.getId(), userData).enqueue(new Callback<BaseModel<List<Object>>>() {
+
+/*
+        RestClient.get().appApi().hUpdateUserLocation(LoginUtils.getLoggedinUser().getId(), LoginUtils.getLoggedinUser().getId(), userData, DateUtils.GetCurrentdatetime()
+
+        ).enqueue(new Callback<BaseModel<List<Object>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
                 if (response.body() != null) {
@@ -477,7 +483,7 @@ public class UserRepository implements IUserRespository {
                 updateUserLocationMutableLiveData.setValue(null);
                 t.printStackTrace();
             }
-        });
+        });*/
 
         return updateUserLocationMutableLiveData;
     }
@@ -503,4 +509,45 @@ public class UserRepository implements IUserRespository {
 
         return deleteUserMutableLiveData;
     }
+
+    @Override
+    public LiveData<BaseModel<List<Object>>> hGetNotificationSettings(int user_id) {
+
+        RestClient.get().appApi().hGetNotificationSettings(user_id).enqueue(new Callback<BaseModel<List<Object>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+
+                userNotificationSettings.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+                userNotificationSettings.setValue(null);
+
+            }
+        });
+
+        return userNotificationSettings;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<Object>>> hPostUserSettingData(NotificationSettingsRootModel notificationSettingsModel) {
+        RestClient.get().appApi().hPostSettingsDataToSerever(notificationSettingsModel).enqueue(new Callback<BaseModel<List<Object>>>() {
+
+            @Override
+            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+
+
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+
+            }
+        });
+
+        return null;
+    }
+
+
 }
