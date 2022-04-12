@@ -6,21 +6,96 @@
     android:layout_height="match_parent"
     tools:context=".view.ui.fragments.InviteConnections">
 
-    <EditText
-        android:id="@+id/edt_search"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_header"
         android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="@dimen/spacing_medium"
-        android:background="@color/white"
-        android:fontFamily="@font/nunitosansregular"
-        android:hint="Search for Connections"
-        android:imeOptions="actionDone"
-        android:inputType="text"
-        android:textColor="@color/gray"
-        android:textSize="14sp"
+        android:layout_height="55dp"
+        android:gravity="start|center"
+        android:orientation="horizontal"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <ImageView
+            android:id="@+id/img_backarrow"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:src="@drawable/ic_arrow_left"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/nunitosansbold"
+            android:gravity="start|center"
+            android:text="Share with Connection"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/edt_search_const"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/search_bg_round"
+        android:padding="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_header">
+
+
+        <ImageView
+            android:id="@+id/hSearchImg"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/ic_search"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/gray" />
+
+        <EditText
+            android:id="@+id/edt_search"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="@dimen/spacing_medium"
+            android:background="@color/white"
+            android:backgroundTint="#FCF7F7"
+            android:fontFamily="@font/nunitosansregular"
+            android:hint="Search for Connections"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:textColor="@color/gray"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/hSearchImg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/hSearchImg"
+            app:layout_constraintTop_toTopOf="@id/hSearchImg"
+
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <ImageView
         android:id="@+id/btn_search"
@@ -30,44 +105,23 @@
         android:layout_marginEnd="24dp"
         android:background="@drawable/ic_arrow_send"
         android:gravity="center"
+        android:visibility="gone"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <LinearLayout
-        android:id="@+id/layout0"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:background="@color/lighter_gray_1"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_search">
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/nunitosansbold"
-            android:text="share (the funding of project easyjet....) with"
-            android:textSize="12sp" />
-
-
-    </LinearLayout>
-
-
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@id/btn_shareButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout0">
+        app:layout_constraintTop_toBottomOf="@+id/edt_search_const">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rc_connections"
@@ -100,7 +154,7 @@
         android:background="@drawable/button_gradient_1"
         android:elevation="10dp"
         android:padding="20dp"
-        android:text="Share with connection"
+        android:text="Share"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.Text.Bold"
         android:textColor="@color/white"

@@ -427,4 +427,10 @@
         <item name="android:fontFamily">@font/nunitosansregular</item>
         <item name="android:textSize">12sp</item>
     </style>
+
+
+    <style name="MineCustomTabText" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">8sp</item>
+        <item name="fontFamily">@font/nunitosansregular</item>
+    </style>
 </resources>

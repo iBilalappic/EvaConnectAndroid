@@ -3,20 +3,16 @@ package com.hypernym.evaconnect;
 import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
@@ -41,6 +37,7 @@ import com.hypernym.evaconnect.viewmodel.HomeViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,8 +66,8 @@ public class MyActivityFragment extends BaseFragment implements NotificationsAda
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_my_activity, container, false);
         ButterKnife.bind(this, view);
-        homeViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(HomeViewModel.class);
-        connectionViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
+        homeViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(HomeViewModel.class);
+        connectionViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(requireActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
         swipeRefreshLayout.setOnRefreshListener(this);
         initRecyclerView();
         showDialog();
@@ -84,12 +81,9 @@ public class MyActivityFragment extends BaseFragment implements NotificationsAda
         setPageTitle("Notifications");
         if(NetworkUtils.isNetworkConnected(getContext()))
         {
-            homeViewModel.notificationMarkAsRead( LoginUtils.getLoggedinUser().getId()).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<Post>>>() {
-                @Override
-                public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                    if(listBaseModel !=null && !listBaseModel.isError() && listBaseModel.getData().size() >0) {
+            homeViewModel.notificationMarkAsRead( LoginUtils.getLoggedinUser().getId()).observe(getViewLifecycleOwner(), listBaseModel -> {
+                if(listBaseModel !=null && !listBaseModel.isError() && listBaseModel.getData().size() >0) {
 
-                    }
                 }
             });
         }

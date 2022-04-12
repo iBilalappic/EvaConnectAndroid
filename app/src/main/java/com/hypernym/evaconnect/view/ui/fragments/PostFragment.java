@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,8 +57,6 @@ public class PostFragment extends BaseFragment implements View.OnClickListener, 
     @BindView(R.id.newpost)
     TextView newpost;
 
-    @BindView(R.id.hLoading)
-    ProgressBar hloading;
 //    @BindView(R.id.fab)
 //    FloatingActionButton fab;
 
@@ -399,14 +396,14 @@ public class PostFragment extends BaseFragment implements View.OnClickListener, 
         });
     }
     private void callPostsApi() {
-        hloading.setVisibility(View.VISIBLE);
+
+
         User user = LoginUtils.getLoggedinUser();
         postViewModel.getPost(user, AppConstants.TOTAL_PAGES, currentPage).observe(this, dashboardBaseModel -> {
 
             //   homePostsAdapter.clear();
             if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
 
-                hloading.setVisibility(View.GONE);
                 for (Post post : dashboardBaseModel.getData()) {
                     if (post.getContent() == null) {
                         post.setContent("");

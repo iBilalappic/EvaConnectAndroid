@@ -349,7 +349,7 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
                 networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
             hideDialog();
-            Toast.makeText(requireContext(), "User Unblocked", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Connection is unblocked successfully", Toast.LENGTH_SHORT).show();
         });
     }
 

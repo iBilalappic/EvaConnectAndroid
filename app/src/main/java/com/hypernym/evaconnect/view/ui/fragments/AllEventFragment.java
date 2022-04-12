@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,9 +56,6 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
     @BindView(R.id.newpost)
     TextView newpost;
 
-
-    @BindView(R.id.hLoading)
-    ProgressBar hloading;
 
     @BindView(R.id.tv_create_event)
     TextView tv_create_event;
@@ -460,10 +456,12 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
 
     private void callPostsApi() {
         User user = LoginUtils.getLoggedinUser();
-        hloading.setVisibility(View.VISIBLE);
-        if(user.getType().equalsIgnoreCase("user")){
+
+        showDialog();
+
+        if (user.getType().equalsIgnoreCase("user")) {
             user.setFilter("all");
-        }else{
+        } else {
             user.setFilter("my_events");
         }
 
@@ -471,7 +469,8 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
         eventViewModel.getEvent(user, AppConstants.TOTAL_PAGES, currentPage).observe(this, dashboardBaseModel -> {
 
             // postAdapter.clear();
-            hloading.setVisibility(View.GONE);
+
+            hideDialog();
 
             if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
                 if (dashboardBaseModel.getData().size() == 0 && currentPage == AppConstants.TOTAL_PAGES) {

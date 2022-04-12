@@ -1,9 +1,13 @@
 package com.hypernym.evaconnect.models;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import javax.annotation.Generated;
+
+/*
 public class ShareConnection {
     public ShareConnection( int user_id, List<Integer> share_user_id) {
 
@@ -72,4 +76,112 @@ public class ShareConnection {
 
     @SerializedName("share_user_id")
     private List<Integer> share_user_id;
+}
+*/
+
+
+@Generated("jsonschema2pojo")
+public class ShareConnection {
+
+    @SerializedName("share_user_id")
+    @Expose
+    private List<Integer> shareUserId = null;
+    @SerializedName("object_id")
+    @Expose
+    private Integer objectId;
+    @SerializedName("user_id")
+    @Expose
+    private Integer userId;
+    @SerializedName("news_id")
+    @Expose
+    private Integer newsId;
+
+
+    @SerializedName("post_id")
+    @Expose
+    private Integer postId;
+
+
+    @SerializedName("event_id")
+    @Expose
+    private Integer eventId;
+
+    public Integer getPostId() {
+        return postId;
+    }
+
+    public void setPostId(Integer postId) {
+        this.postId = postId;
+    }
+
+    public Integer getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(Integer eventId) {
+        this.eventId = eventId;
+    }
+
+    public Integer getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(Integer jobId) {
+        this.jobId = jobId;
+    }
+
+    @SerializedName("job_id")
+    @Expose
+    private Integer jobId;
+
+
+    @SerializedName("object_type")
+    @Expose
+    private String objectType;
+
+    public ShareConnection(Integer id, List<Integer> share_users) {
+        this.userId = id;
+        this.shareUserId = share_users;
+    }
+
+    public List<Integer> getShareUserId() {
+        return shareUserId;
+    }
+
+    public void setShareUserId(List<Integer> shareUserId) {
+        this.shareUserId = shareUserId;
+    }
+
+    public Integer getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(Integer objectId) {
+        this.objectId = objectId;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Integer getNewsId() {
+        return newsId;
+    }
+
+    public void setNewsId(Integer newsId) {
+        this.newsId = newsId;
+    }
+
+    public String getObjectType() {
+        return objectType;
+    }
+
+    public void setObjectType(String objectType) {
+        this.objectType = objectType;
+    }
+
 }

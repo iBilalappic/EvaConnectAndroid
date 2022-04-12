@@ -202,6 +202,8 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
             public void onChanged(BaseModel<List<ConnectionModel>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
 
+                    Log.d("Connection_in", String.valueOf(listBaseModel.getData().size()));
+
 //                    if (currentPage == PAGE_START) {
 //                        connectionList.clear();
 //                        connectionsAdapter.notifyDataSetChanged();
@@ -221,6 +223,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
                         connectedList.clear();
                         rc_connections.setVisibility(View.GONE);
                         empty.setVisibility(View.VISIBLE);
+                        empty.setText("No Connection Found");
                     }
 //                    isLastPage = true;
 //                    // homePostsAdapter.removeLoading();

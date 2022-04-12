@@ -11,11 +11,9 @@
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.jdks/caches/modules-2/files-2.1/com.jakewharton/butterknife/10.2.1/278a88aebaaffa10d31b6ab1d3bab197ef6f7c87/butterknife-10.2.1-javadoc.jar!/" />
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jakewharton/butterknife/10.2.1/278a88aebaaffa10d31b6ab1d3bab197ef6f7c87/butterknife-10.2.1-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
       <root url="jar://$USER_HOME$/.jdks/caches/modules-2/files-2.1/com.jakewharton/butterknife/10.2.1/d34b448c9d7e5c2e483c062340e58fdc3cbad98f/butterknife-10.2.1-sources.jar!/" />
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jakewharton/butterknife/10.2.1/d34b448c9d7e5c2e483c062340e58fdc3cbad98f/butterknife-10.2.1-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

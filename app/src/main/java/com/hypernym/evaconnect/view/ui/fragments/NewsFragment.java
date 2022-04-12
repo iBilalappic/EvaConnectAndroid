@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,8 +55,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener, 
     @BindView(R.id.newpost)
     TextView newpost;
 
-    @BindView(R.id.hLoading)
-    ProgressBar hloading;
 
     @BindView(R.id.tv_create_event)
     TextView tv_create_event;
@@ -428,7 +425,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener, 
     private void callPostsApi() {
         User user = LoginUtils.getLoggedinUser();
 
-        hloading.setVisibility(View.VISIBLE);
+        showDialog();
         newsViewModel.getNews(user, AppConstants.TOTAL_PAGES, currentPage).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> dashboardBaseModel) {
@@ -436,7 +433,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener, 
                 //   homePostsAdapter.clear();
                 if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
 
-                    hloading.setVisibility(View.GONE);
+                    hideDialog();
                     for (Post post : dashboardBaseModel.getData()) {
 
                         post.setPost_type(AppConstants.NEWS_TYPE);

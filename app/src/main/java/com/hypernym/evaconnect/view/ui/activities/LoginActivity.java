@@ -377,70 +377,64 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
 
     private void callLoginApi() {
 
-        userViewModel.login(user).observe(this, new Observer<BaseModel<List<User>>>() {
-            @Override
-            public void onChanged(BaseModel<List<User>> user) {
-                if (user != null && !user.isError() && user.getData().get(0) != null) {
-                    LoginUtils.userLoggedIn();
-                    User userData = user.getData().get(0);
-                    userData.setUser_id(userData.getId());
-                    LoginUtils.saveUser(user.getData().get(0));
-                    OneSignal.sendTag("email", userData.getEmail());
-                    UserDetails.username = userData.getFirst_name();
-                    if (user.getData().get(0) != null) {
-                        LoginUtils.saveUserToken(user.getData().get(0).getToken());
-                    }
-                    createUserOnFirebase();
-                    saveCredential();
-                    hideDialog();
-
-                    if(userData.getStatus()!=null&&userData.getStatus().equalsIgnoreCase("active")){
-                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                        // set the new task and clear flags
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                    }else{
-                        simpleDialog = new SimpleDialog(LoginActivity.this, "Warning", "Please verify yourself", "Cancel", "Verify", new OnOneOffClickListener() {
-                            @Override
-                            public void onSingleClick(View v) {
-                                switch (v.getId()) {
-                                    case R.id.button_positive:
-
-                                       callVerifyEmail(userData);
-                                        break;
-                                    case R.id.button_negative:
-                                        break;
-                                }
-                                simpleDialog.dismiss();
-                            }
-                        });
-                        simpleDialog.show();
-
-                    }
-
-                } else if (user != null && user.isError()) {
-                    hideDialog();
-                    networkResponseDialog(getString(R.string.error), user.getMessage());
-                } else if (user == null) {
-                    hideDialog();
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+        userViewModel.login(user).observe(this, user -> {
+            if (user != null && !user.isError() && user.getData().get(0) != null) {
+                LoginUtils.userLoggedIn();
+                User userData = user.getData().get(0);
+                userData.setUser_id(userData.getId());
+                LoginUtils.saveUser(user.getData().get(0));
+                OneSignal.sendTag("email", userData.getEmail());
+                UserDetails.username = userData.getFirst_name();
+                if (user.getData().get(0) != null) {
+                    LoginUtils.saveUserToken(user.getData().get(0).getToken());
                 }
+                createUserOnFirebase();
+                saveCredential();
+                hideDialog();
+
+                if(userData.getStatus()!=null&&userData.getStatus().equalsIgnoreCase("active")){
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                    // set the new task and clear flags
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }else{
+                    simpleDialog = new SimpleDialog(LoginActivity.this, "Warning", "Please verify yourself", "Cancel", "Verify", new OnOneOffClickListener() {
+                        @Override
+                        public void onSingleClick(View v) {
+                            switch (v.getId()) {
+                                case R.id.button_positive:
+
+                                   callVerifyEmail(userData);
+                                    break;
+                                case R.id.button_negative:
+                                    break;
+                            }
+                            simpleDialog.dismiss();
+                        }
+                    });
+                    simpleDialog.show();
+
+                }
+
+            } else if (user != null && user.isError()) {
+                hideDialog();
+                networkResponseDialog(getString(R.string.error), user.getMessage());
+            } else if (user == null) {
+                hideDialog();
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
         });
     }
 
     private void callVerifyEmail(User userdata) {
-        userViewModel.verify_email(userdata.getEmail()).observe(this, new Observer<BaseModel<List<Object>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Object>> user) {
-                Toast.makeText(LoginActivity.this, "EMAIL SENT", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(LoginActivity.this, EnterCodeActivity.class);
-                intent.putExtra("Email", userdata.getEmail());
-                intent.putExtra("user_type", userdata.getType());
-                intent.putExtra(Constants.ACTIVITY_NAME,"");
+        userViewModel.verify_email(userdata.getEmail()).observe(this, user -> {
+            Toast.makeText(LoginActivity.this, "EMAIL SENT", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(LoginActivity.this, EnterCodeActivity.class);
+            intent.putExtra("Email", userdata.getEmail());
+            intent.putExtra("user_type", userdata.getType());
+            intent.putExtra(Constants.ACTIVITY_NAME,"");
 
-                startActivity(intent);
-            }
+            startActivity(intent);
         });
 
     }

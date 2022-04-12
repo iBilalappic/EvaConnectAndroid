@@ -1,5 +1,9 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -80,10 +84,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.Manifest.permission.CAMERA;
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
-import static android.app.Activity.RESULT_OK;
-
 public class ChatFragment extends BaseFragment implements View.OnClickListener, AttachmentsAdapter.ItemClickListener, ChatAdapter.OnItemClickListener {
 
 
@@ -102,6 +102,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     @BindView(R.id.rc_attachments)
     RecyclerView rc_attachments;
+
+    @BindView(R.id.img_backarrow)
+    ImageView img_backarrow;
 
     List<String> attachments = new ArrayList<>();
     private AttachmentsAdapter attachmentsAdapter;
@@ -159,6 +162,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         ButterKnife.bind(this, view);
         sendButton.setOnClickListener(this);
         browsefiles.setOnClickListener(this);
+        img_backarrow.setOnClickListener(this);
         init();
         initViewModel();
         return view;
@@ -171,34 +175,31 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     private void init() {
         //showBackButton();
+
+
         setupRecycler(chatMessageList);
 
         attachmentsAdapter = new AttachmentsAdapter(getContext(), attachments, this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         rc_attachments.setLayoutManager(linearLayoutManager);
         rc_attachments.setAdapter(attachmentsAdapter);
-        if(getArguments()!=null && getArguments().getSerializable("user")!=null)
-        {
-            user =(User) getArguments().getSerializable("user");
+        if (getArguments() != null && getArguments().getSerializable("user") != null) {
+            user = (User) getArguments().getSerializable("user");
             setPageTitle(user.getFirst_name());
             user.setReceiver_id(user.getId());
-            if(user.getId()==null)
-            {
+            if (user.getId() == null) {
                 user.setId(LoginUtils.getLoggedinUser().getId());
             }
             user.setEmail(user.getFirst_name());
             setChatPerson(getContext(), user.getUser_image());
             findFirebaseChats(user.getId());
-        }
-        else if(getArguments().getSerializable("applicant")!=null)
-        {
-            User_applicants appliedApplicants=(User_applicants) getArguments().getSerializable("applicant");
+        } else if (getArguments().getSerializable("applicant") != null) {
+            User_applicants appliedApplicants = (User_applicants) getArguments().getSerializable("applicant");
             setPageTitle(appliedApplicants.getFirstName());
             user.setReceiver_id(appliedApplicants.getId());
             user.setId(appliedApplicants.getId());
             user.setUser_image(appliedApplicants.getUserImage());
-            if(appliedApplicants.getId()==null)
-            {
+            if (appliedApplicants.getId() == null) {
                 user.setId(LoginUtils.getLoggedinUser().getId());
             }
             user.setEmail(appliedApplicants.getFirstName());
@@ -436,23 +437,25 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
         switch (v.getId()) {
             case R.id.sendButton:
-                if(attachments.size()>0 && messageArea.getText().length()==0)
-                {
+                if (attachments.size() > 0 && messageArea.getText().length() == 0) {
                     UploadImageToFirebase();
-                }
-                else
-                {
+                } else {
                     uploadedImages = new ArrayList<>();
                     uploadedDocuments = new ArrayList<>();
-                    sendtofirebase_chat(uploadedImages,uploadedDocuments);
+                    sendtofirebase_chat(uploadedImages, uploadedDocuments);
                 }
 
                 break;
 
+            case R.id.img_backarrow:
+                getActivity().onBackPressed();
+                break;
+
+
             case R.id.browsefiles:
                 //   openPictureDialog();
                 attachments.clear();
-               // uploadedImages.clear();
+                // uploadedImages.clear();
                 //uploadedDocuments.clear();
                 MultiplePhoto.clear();
                 final OvershootInterpolator interpolator = new OvershootInterpolator();

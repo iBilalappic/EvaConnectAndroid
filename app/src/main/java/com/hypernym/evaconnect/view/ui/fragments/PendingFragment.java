@@ -451,6 +451,7 @@ public class PendingFragment extends BaseFragment implements OptionsAdapter.Item
     //                    if (connectionList.size() > 0) {
                         rc_connections.setVisibility(View.VISIBLE);
                         empty.setVisibility(View.GONE);
+
                         //  }
     //                    isLoading = false;
                     } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
@@ -460,6 +461,7 @@ public class PendingFragment extends BaseFragment implements OptionsAdapter.Item
                             pendingList.clear();
                             rc_connections.setVisibility(View.GONE);
                             empty.setVisibility(View.VISIBLE);
+                            empty.setText("No Pending Request Found");
                         }
     //                    isLastPage = true;
     //                    // homePostsAdapter.removeLoading();

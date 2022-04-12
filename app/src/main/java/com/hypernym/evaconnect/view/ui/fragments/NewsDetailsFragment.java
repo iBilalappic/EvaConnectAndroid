@@ -100,6 +100,9 @@ public class NewsDetailsFragment extends BaseFragment implements Validator.Valid
     ImageView img_share;
 
 
+    @BindView(R.id.tv_share_counter)
+    TextView tv_share_counter;
+
 
     @BindView(R.id.profile_image)
     ImageView profile_image;
@@ -220,6 +223,7 @@ public class NewsDetailsFragment extends BaseFragment implements Validator.Valid
 
         tv_comcount.setText(String.valueOf(post.getComment_count()));
         tv_likecount.setText(String.valueOf(post.getLike_count()));
+        tv_share_counter.setText(String.valueOf(post.getShare_count()));
         //  tv_connections.setText(AppUtils.getConnectionsCount(post.getUser().getTotal_connection()));
         tv_createddateTime.setText(DateUtils.getFormattedDateTime(post.getCreated_datetime()));
         tv_minago.setText(DateUtils.getTimeAgo(post.getCreated_datetime()));
