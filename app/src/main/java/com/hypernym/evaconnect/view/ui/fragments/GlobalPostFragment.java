@@ -104,13 +104,13 @@ public class GlobalPostFragment  extends BaseFragment implements View.OnClickLis
     }
 
     private void init() {
-        homeViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(HomeViewModel.class);
-        postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(PostViewModel.class);
-        connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
-        jobListViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(JobListViewModel.class);
-        eventViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(EventViewModel.class);
-        userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(UserViewModel.class);
-        newsViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(NewsViewModel.class);
+        homeViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(HomeViewModel.class);
+        postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(PostViewModel.class);
+        connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
+        jobListViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(JobListViewModel.class);
+        eventViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(EventViewModel.class);
+        userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication())).get(UserViewModel.class);
+        newsViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication())).get(NewsViewModel.class);
         //   currentPage = PAGE_START;
         swipeRefresh.setOnRefreshListener(this);
 

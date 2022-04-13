@@ -1,10 +1,12 @@
 package com.hypernym.evaconnect.models;
 
+import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.Serializable;
 
+@SuppressLint("ParcelCreator")
 public class User implements Serializable, Parcelable {
 
     private Integer id;
@@ -74,6 +76,7 @@ public class User implements Serializable, Parcelable {
     }
 
     private boolean is_shared=false;
+
     public String getConnection_status() {
         return connection_status;
     }
@@ -234,7 +237,6 @@ public class User implements Serializable, Parcelable {
     public void setIsLinkedin(Integer isLinkedin) {
         this.is_linkedin = isLinkedin;
     }
-
 
 
     public Integer getIs_facebook() {

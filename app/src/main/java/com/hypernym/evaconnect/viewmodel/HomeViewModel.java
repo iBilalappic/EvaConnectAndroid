@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.MyActivitiesModel;
 import com.hypernym.evaconnect.models.NewSources;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
@@ -38,9 +39,9 @@ public class HomeViewModel extends AndroidViewModel {
         return iHomeRepository.getAllNotifications(totalpages,currentPage);
     }
 
-    public LiveData<BaseModel<List<Post>>> getAllMyActivity(/*int totalpages,int currentPage*/)
+    public LiveData<BaseModel<List<MyActivitiesModel>>> getAllMyActivity(int totalpages,int currentPage)
     {
-        return iHomeRepository.getAllMyActivity(/*totalpages,currentPage*/);
+        return iHomeRepository.getAllMyActivity(totalpages,currentPage);
     }
 
     public LiveData<BaseModel<List<Post>>> getAllUnReadNotifications()
@@ -57,15 +58,14 @@ public class HomeViewModel extends AndroidViewModel {
         return iHomeRepository.getNewSources();
     }
 
-    public LiveData<BaseModel<List<NewSources>>> getSelectedNewSources(Integer user_id)
-    {
+    public LiveData<BaseModel<List<NewSources>>> getSelectedNewSources(Integer user_id) {
         return iHomeRepository.getSelectedNewSources(user_id);
     }
 
-    public LiveData<BaseModel<List<NewSources>>> setNewSources(List<Integer> newsSelectedids)
-    {
+    public LiveData<BaseModel<List<NewSources>>> setNewSources(List<Integer> newsSelectedids) {
         return iHomeRepository.setNewSources(newsSelectedids);
     }
+
 
 
 }

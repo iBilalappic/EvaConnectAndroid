@@ -43,6 +43,7 @@ import com.hypernym.evaconnect.viewmodel.UserViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -177,8 +178,8 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
     }
 
     private void init() {
-        connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
-        userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(UserViewModel.class);
+        connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
+        userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(UserViewModel.class);
 
         hideChatPerson();
         setPageTitle("Profile");
@@ -381,14 +382,14 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                     view0.setVisibility(View.GONE);
 
 
-                    String status = AppUtils.getConnectionStatus(getContext(), targetUser.getIs_connected(), targetUser.isIs_receiver());
+                    String status = AppUtils.getConnectionStatus(requireContext(), targetUser.getIs_connected(), targetUser.isIs_receiver());
                     if (status.equals(AppConstants.DELETED)) {
                         tv_connect.setVisibility(View.GONE);
                     } else {
                         tv_connect.setVisibility(View.VISIBLE);
                         layout_account_private.setVisibility(View.GONE);
-                        tv_connect.setText(AppUtils.getConnectionStatusWithUserType(getContext(), targetUser.getIs_connected(), targetUser.isIs_receiver(), user.getType()));
-                        if (AppUtils.getConnectionStatus(getContext(), targetUser.getIs_connected(), targetUser.isIs_receiver()).equalsIgnoreCase(AppConstants.CONNECTED)) {
+                        tv_connect.setText(AppUtils.getConnectionStatusWithUserType(requireContext(), targetUser.getIs_connected(), targetUser.isIs_receiver(), user.getType()));
+                        if (AppUtils.getConnectionStatus(requireContext(), targetUser.getIs_connected(), targetUser.isIs_receiver()).equalsIgnoreCase(AppConstants.CONNECTED)) {
                             /* layout_disconnect.setVisibility(View.VISIBLE);*/
                             layout_block.setVisibility(View.GONE);
                             layout_account_private.setVisibility(View.GONE);
@@ -461,7 +462,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
         }
 
 
-        postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(PostViewModel.class);
+        postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(PostViewModel.class);
         currentPage = PAGE_START;
 
         postAdapter = new PostAdapter(getContext(), posts, this);
@@ -587,7 +588,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
 
                         if(connected_user!=null){
 
-                        String status = AppUtils.getConnectionStatus(getContext(), connected_user.isConnected, connected_user.isReceiver);
+                        String status = AppUtils.getConnectionStatus(requireContext(), connected_user.isConnected, connected_user.isReceiver);
                         if (status.equals(AppConstants.DELETED)) {
                             tv_connect.setVisibility(View.GONE);
                         } else {

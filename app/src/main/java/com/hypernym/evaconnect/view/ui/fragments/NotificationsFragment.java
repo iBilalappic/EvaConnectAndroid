@@ -103,27 +103,24 @@ public class NotificationsFragment extends BaseFragment implements Notifications
     private void getAllNotifications() {
         // notifications.clear();
 
-        homeViewModel.getAllNotifications(AppConstants.TOTAL_PAGES,currentPage).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<Post>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() >0 && listBaseModel.getData().get(0) != null) {
-                    //  myLikesModelList.clear();
-                    notifications.addAll(listBaseModel.getData());
-                    notificationsAdapter.notifyDataSetChanged();
-                    swipeRefreshLayout.setRefreshing(false);
-                    notificationsAdapter.removeLoading();
-                    isLoading = false;
-                    //hideDialog();
-                } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
-                    isLastPage = true;
-                    notificationsAdapter.removeLoading();
-                    isLoading = false;
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
+        homeViewModel.getAllNotifications(AppConstants.TOTAL_PAGES, currentPage).observe(getViewLifecycleOwner(), listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0 && listBaseModel.getData().get(0) != null) {
+                //  myLikesModelList.clear();
+                notifications.addAll(listBaseModel.getData());
+                notificationsAdapter.notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
+                notificationsAdapter.removeLoading();
+                isLoading = false;
+                //hideDialog();
+            } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
+                isLastPage = true;
+                notificationsAdapter.removeLoading();
+                isLoading = false;
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
+            swipeRefreshLayout.setRefreshing(false);
         });
     }
 

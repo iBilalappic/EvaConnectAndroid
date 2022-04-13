@@ -193,33 +193,30 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
     }
 
     private void GetJob_id(Integer id) {
-        jobListViewModel.getJobId(id).observe(this, new Observer<BaseModel<List<SpecficJobAd>>>() {
-            @Override
-            public void onChanged(BaseModel<List<SpecficJobAd>> getjobAd) {
-                if (getjobAd != null && !getjobAd.isError()) {
-                    settingData(getjobAd.getData().get(0));
-                    specficJobAd=getjobAd.getData().get(0);
-                    checkLikeCount = getjobAd.getData().get(0);
-                    AppUtils.setGlideImage(getContext(), profile_image,getjobAd.getData().get(0).getUser().getUser_image() );
-                    tv_name.setText(getjobAd.getData().get(0).getJobTitle());
-                    tv_positionName.setText(getjobAd.getData().get(0).getPosition());
-                    DecimalFormat myFormatter = new DecimalFormat("############");
-                    tv_salaryAmount.setText("£ " + myFormatter.format(getjobAd.getData().get(0).getSalary()) + " pa");
-                    tv_description.setText(getjobAd.getData().get(0).getContent());
-                    tv_locationName.setText(getjobAd.getData().get(0).getLocation());
-                  //  tv_weeklyHoursNumber.setText(getjobAd.getData().get(0).getWeeklyHours());
+        jobListViewModel.getJobId(id).observe(this, getjobAd -> {
+            if (getjobAd != null && !getjobAd.isError()) {
+                settingData(getjobAd.getData().get(0));
+                specficJobAd=getjobAd.getData().get(0);
+                checkLikeCount = getjobAd.getData().get(0);
+                AppUtils.setGlideImage(getContext(), profile_image,getjobAd.getData().get(0).getUser().getUser_image() );
+                tv_name.setText(getjobAd.getData().get(0).getJobTitle());
+                tv_positionName.setText(getjobAd.getData().get(0).getPosition());
+                DecimalFormat myFormatter = new DecimalFormat("############");
+                tv_salaryAmount.setText("£ " + myFormatter.format(getjobAd.getData().get(0).getSalary()) + " pa");
+                tv_description.setText(getjobAd.getData().get(0).getContent());
+                tv_locationName.setText(getjobAd.getData().get(0).getLocation());
+              //  tv_weeklyHoursNumber.setText(getjobAd.getData().get(0).getWeeklyHours());
 //                    tv_createddateTime.setText(DateUtils.getFormattedDateTime(getjobAd.getData().get(0).getCreatedDatetime()));
 //                    tv_minago.setText(DateUtils.getTimeAgo(getjobAd.getData().get(0).getCreatedDatetime()));
-                    if (getjobAd.getData().get(0).getIsJobLike() != null && getjobAd.getData().get(0).getIsJobLike() > 0) {
-                        img_like.setBackground(getActivity().getDrawable(R.drawable.like_selected));
-                    } else {
-                        img_like.setBackground(getActivity().getDrawable(R.drawable.ic_like));
-                    }
+                if (getjobAd.getData().get(0).getIsJobLike() != null && getjobAd.getData().get(0).getIsJobLike() > 0) {
+                    img_like.setBackground(getActivity().getDrawable(R.drawable.like_selected));
                 } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                    img_like.setBackground(getActivity().getDrawable(R.drawable.ic_like));
                 }
-                hideDialog();
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
     }
 

@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,8 +15,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
-import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
+import com.hypernym.evaconnect.models.MyActivitiesModel;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
@@ -25,7 +24,7 @@ import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
-import com.hypernym.evaconnect.view.adapters.NotificationsAdapter;
+import com.hypernym.evaconnect.view.adapters.MyActivitiesAdapter;
 import com.hypernym.evaconnect.view.ui.activities.BaseActivity;
 import com.hypernym.evaconnect.view.ui.fragments.BaseFragment;
 import com.hypernym.evaconnect.view.ui.fragments.EventDetailFragment;
@@ -36,14 +35,14 @@ import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class MyActivityFragment extends BaseFragment implements NotificationsAdapter.OnItemClickListener,SwipeRefreshLayout.OnRefreshListener {
+public class MyActivityFragment extends BaseFragment implements MyActivitiesAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.rc_notifications)
     RecyclerView rc_notifications;
@@ -51,15 +50,16 @@ public class MyActivityFragment extends BaseFragment implements NotificationsAda
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefreshLayout;
 
-    NotificationsAdapter notificationsAdapter;
-    private List<Post> notifications = new ArrayList<>();
+    MyActivitiesAdapter notificationsAdapter;
+    private List<MyActivitiesModel> hActivitiesList = new ArrayList<>();
     private HomeViewModel homeViewModel;
     private ConnectionViewModel connectionViewModel;
-    private List<Post> posts=new ArrayList<>();
+    private List<Post> posts = new ArrayList<>();
     private int currentPage = PAGE_START;
     private boolean isLastPage = false;
     private boolean isLoading = false;
     int itemCount = 0;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -79,49 +79,21 @@ public class MyActivityFragment extends BaseFragment implements NotificationsAda
     private void readAllNotifications() {
         BaseActivity.setNotificationCount(0);
         setPageTitle("Notifications");
-        if(NetworkUtils.isNetworkConnected(getContext()))
-        {
-            homeViewModel.notificationMarkAsRead( LoginUtils.getLoggedinUser().getId()).observe(getViewLifecycleOwner(), listBaseModel -> {
-                if(listBaseModel !=null && !listBaseModel.isError() && listBaseModel.getData().size() >0) {
+        if (NetworkUtils.isNetworkConnected(getContext())) {
+            homeViewModel.notificationMarkAsRead(LoginUtils.getLoggedinUser().getId()).observe(getViewLifecycleOwner(), listBaseModel -> {
+                if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
+
 
                 }
             });
-        }
-        else
-        {
+        } else {
             networkErrorDialog();
         }
     }
 
-    private void getAllNotifications() {
-         notifications.clear();
-
-        homeViewModel.getAllMyActivity(/*AppConstants.TOTAL_PAGES,currentPage*/).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<Post>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() >0 && listBaseModel.getData().get(0) != null) {
-                    //  myLikesModelList.clear();
-                    notifications.addAll(listBaseModel.getData());
-                    notificationsAdapter.notifyDataSetChanged();
-                    swipeRefreshLayout.setRefreshing(false);
-                    notificationsAdapter.removeLoading();
-                    isLoading = false;
-                    //hideDialog();
-                } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
-                    isLastPage = true;
-                    notificationsAdapter.removeLoading();
-                    isLoading = false;
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
-    }
 
     private void initRecyclerView() {
-        notificationsAdapter = new NotificationsAdapter(getContext(), notifications, this);
+        notificationsAdapter = new MyActivitiesAdapter(getContext(), hActivitiesList, this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rc_notifications.setLayoutManager(linearLayoutManager);
         rc_notifications.setAdapter(notificationsAdapter);
@@ -132,12 +104,10 @@ public class MyActivityFragment extends BaseFragment implements NotificationsAda
             @Override
             protected void loadMoreItems() {
                 isLoading = true;
-                currentPage= AppConstants.TOTAL_PAGES+currentPage;
-                if(NetworkUtils.isNetworkConnected(getContext())) {
-                   getAllNotifications();
-                }
-                else
-                {
+                currentPage = AppConstants.TOTAL_PAGES + currentPage;
+                if (NetworkUtils.isNetworkConnected(getContext())) {
+                    getAllNotifications();
+                } else {
                     networkErrorDialog();
                 }
             }
@@ -156,33 +126,31 @@ public class MyActivityFragment extends BaseFragment implements NotificationsAda
 
     @Override
     public void onItemClick(View view, int position) {
-        if (notifications.get(position).getObject_type().equals("job")) {
+        if (hActivitiesList.get(position).getObjectType().equals("job")) {
             SpecficJobFragment specficJobFragment = new SpecficJobFragment();
             Bundle bundle = new Bundle();
 //            JobAd jobAd = new JobAd();
-//            jobAd.setId(notifications.get(position).getObject_id());
-            bundle.putInt("job_id", notifications.get(position).getObject_id());
+//            jobAd.setId(hActivitiesList.get(position).getObject_id());
+            bundle.putInt("job_id", hActivitiesList.get(position).getObjectId());
             specficJobFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, specficJobFragment, getContext(), true);
-        }else if (notifications.get(position).getObject_type().equals("post")) {
+        } else if (hActivitiesList.get(position).getObjectType().equals("post")) {
             PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
             Bundle bundle = new Bundle();
-            bundle.putInt("post", notifications.get(position).getObject_id());
-            Log.d("TAAAGNOTIFY", "" + GsonUtils.toJson(notifications.get(position)));
+            bundle.putInt("post", hActivitiesList.get(position).getObjectId());
+            Log.d("TAAAGNOTIFY", "" + GsonUtils.toJson(hActivitiesList.get(position)));
             postDetailsFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, postDetailsFragment, getContext(), true);
-        }
-        else if (notifications.get(position).getObject_type().equals("event")) {
+        } else if (hActivitiesList.get(position).getObjectType().equals("event")) {
             EventDetailFragment eventDetailsFragment = new EventDetailFragment();
             Bundle bundle = new Bundle();
-            bundle.putInt("id", notifications.get(position).getObject_id());
+            bundle.putInt("id", hActivitiesList.get(position).getObjectId());
             eventDetailsFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, eventDetailsFragment, getContext(), true);
-        }
-        else if (notifications.get(position).getObject_type().equals("meeting")) {
+        } else if (hActivitiesList.get(position).getObjectType().equals("meeting")) {
             MeetingDetailFragment meetingDetailFragment = new MeetingDetailFragment();
             Bundle bundle = new Bundle();
-            bundle.putInt("id", notifications.get(position).getObject_id());
+            bundle.putInt("id", hActivitiesList.get(position).getObjectId());
             meetingDetailFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, meetingDetailFragment, getContext(), true);
         }
@@ -194,40 +162,35 @@ public class MyActivityFragment extends BaseFragment implements NotificationsAda
         Connection connection = new Connection();
         User user = LoginUtils.getLoggedinUser();
         connection.setStatus(AppConstants.ACTIVE);
-        connection.setId(notifications.get(position).getConnection_id());
+//        connection.setId(hActivitiesList.get(position).getConnection_id());
         connection.setModified_by_id(user.getId());
         connection.setModified_datetime(DateUtils.GetCurrentdatetime());
         connection.setSender_id(LoginUtils.getLoggedinUser().getId());
-        connection.setId(notifications.get(position).getObject_id());
-        connection.setReceiver_id(notifications.get(position).getReceiver_id());
+        connection.setId(hActivitiesList.get(position).getObjectId());
+//        connection.setReceiver_id(hActivitiesList.get(position).getReceiver_id());
         callDeclineConnectApi(connection);
     }
 
     private void callDeclineConnectApi(Connection connection) {
 
         showDialog();
-        connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Connection>> listBaseModel) {
+        connectionViewModel.connect(connection).observe(this, listBaseModel -> {
 
-                hideDialog();
-                if (listBaseModel != null && !listBaseModel.isError()) {
+            hideDialog();
+            if (listBaseModel != null && !listBaseModel.isError()) {
 
-                    notifications.clear();
-                    notificationsAdapter.notifyDataSetChanged();
-                    if(NetworkUtils.isNetworkConnected(getContext())) {
-                        getAllNotifications();
-                    }
-                    else
-                    {
-                        networkErrorDialog();
-                    }
-                    //getConnectionByFilter(type, PAGE_START, true);
+                hActivitiesList.clear();
+                notificationsAdapter.notifyDataSetChanged();
+                if (NetworkUtils.isNetworkConnected(getContext())) {
+                    getAllNotifications();
                 } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                    networkErrorDialog();
                 }
-                hideDialog();
+                //getConnectionByFilter(type, PAGE_START, true);
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
     }
 
@@ -237,13 +200,45 @@ public class MyActivityFragment extends BaseFragment implements NotificationsAda
         currentPage = PAGE_START;
         isLastPage = false;
         notificationsAdapter.clear();
-        if(NetworkUtils.isNetworkConnected(getContext())) {
+        if (NetworkUtils.isNetworkConnected(getContext())) {
             getAllNotifications();
-        }
-        else
-        {
+        } else {
             networkErrorDialog();
         }
     }
 
+
+    private void getAllNotifications() {
+        showDialog();
+
+        homeViewModel.getAllMyActivity(AppConstants.TOTAL_PAGES, currentPage).observe(getViewLifecycleOwner(), listBaseModel -> {
+            hideDialog();
+            if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0 && listBaseModel.getData().get(0) != null) {
+                //  myLikesModelList.clear();
+
+
+                hSortListByCreatedTime(listBaseModel.getData());
+
+
+                //hideDialog();
+            } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
+                isLastPage = true;
+                notificationsAdapter.removeLoading();
+                isLoading = false;
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+            }
+            hideDialog();
+            swipeRefreshLayout.setRefreshing(false);
+        });
+    }
+
+    private void hSortListByCreatedTime(List<MyActivitiesModel> data) {
+        Collections.sort(data, MyActivitiesModel.DateCreaterComparator);
+        hActivitiesList.addAll(data);
+        notificationsAdapter.notifyDataSetChanged();
+        swipeRefreshLayout.setRefreshing(false);
+        notificationsAdapter.removeLoading();
+        isLoading = false;
+    }
 }

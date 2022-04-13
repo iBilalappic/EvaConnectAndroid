@@ -1,10 +1,13 @@
 package com.hypernym.evaconnect.repositories.impl;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.MyActivitiesModel;
 import com.hypernym.evaconnect.models.NewSources;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
@@ -25,6 +28,7 @@ public class HomeRepository implements IHomeRepository {
     private MutableLiveData<BaseModel<List<Post>>> myActivityMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<NewSources>>> newsoucesMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<NewSources>>> selectedNewsoucesMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<MyActivitiesModel>>> hListOfMyActivities = new MutableLiveData<>();
 
 
     @Override
@@ -89,25 +93,27 @@ public class HomeRepository implements IHomeRepository {
         return notificationMutableLiveData;
     }
 
+
     @Override
-    public LiveData<BaseModel<List<Post>>> getAllMyActivity() {
-        notificationMutableLiveData = new MutableLiveData<>();
+    public LiveData<BaseModel<List<MyActivitiesModel>>> getAllMyActivity(int totalpages, int currentPage) {
+        hListOfMyActivities = new MutableLiveData<>();
         User user = LoginUtils.getLoggedinUser();
         HashMap<String, Object> data = new HashMap<String, Object>();
         data.put("id", user.getId());
+        data.put("receiver_id", user.getId());
         // data.put("is_read",0);
-        RestClient.get().appApi().getAllMyActivity(data/*data, totalpages, currentPage*/).enqueue(new Callback<BaseModel<List<Post>>>() {
+        RestClient.get().appApi().getAllMyActivity(data, totalpages, currentPage).enqueue(new Callback<BaseModel<List<MyActivitiesModel>>>() {
             @Override
-            public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
-                notificationMutableLiveData.setValue(response.body());
+            public void onResponse(Call<BaseModel<List<MyActivitiesModel>>> call, Response<BaseModel<List<MyActivitiesModel>>> response) {
+                hListOfMyActivities.setValue(response.body());
             }
 
             @Override
-            public void onFailure(Call<BaseModel<List<Post>>> call, Throwable t) {
-                notificationMutableLiveData.setValue(null);
+            public void onFailure(Call<BaseModel<List<MyActivitiesModel>>> call, Throwable t) {
+                hListOfMyActivities.setValue(null);
             }
         });
-        return notificationMutableLiveData;
+        return hListOfMyActivities;
     }
 
     @Override
@@ -205,4 +211,6 @@ public class HomeRepository implements IHomeRepository {
         });
         return newsoucesMutableLiveData;
     }
+
+
 }

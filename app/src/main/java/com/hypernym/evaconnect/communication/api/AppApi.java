@@ -18,6 +18,7 @@ import com.hypernym.evaconnect.models.GetEventInterestedUsers;
 import com.hypernym.evaconnect.models.GetPendingData;
 import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.Meeting;
+import com.hypernym.evaconnect.models.MyActivitiesModel;
 import com.hypernym.evaconnect.models.MyLikesModel;
 import com.hypernym.evaconnect.models.NetworkConnection;
 import com.hypernym.evaconnect.models.NewSources;
@@ -270,7 +271,7 @@ public interface AppApi {
     Call<BaseModel<List<Post>>> getAllMyActivity(@Body Object user*//*,@Query("limit") int limit, @Query("offset") int offset*//*);*/
 
     @POST(APIConstants.GET_ALL_MYACTIVITY)
-    Call<BaseModel<List<Post>>> getAllMyActivity(@Body Object user /*,@Query("limit") int limit, @Query("offset") int offset*/);
+    Call<BaseModel<List<MyActivitiesModel>>> getAllMyActivity(@Body Object user ,@Query("limit") int limit, @Query("offset") int offset);
 
     @POST(APIConstants.GET_ALL_NOTIFICATIONS)
     Call<BaseModel<List<Post>>> getAllUnreadNotifications(@Body Object user);
@@ -540,6 +541,11 @@ public interface AppApi {
 
     @POST(APIConstants.PUSH_NOTI_SETTINGS)
     Call<BaseModel<List<Object>>> hPostSettingsDataToSerever(@Body NotificationSettingsRootModel notificationSettingsModel);
+
+    @POST(APIConstants.GET_ALL_MYACTIVITY)
+    Call<BaseModel<List<MyActivitiesModel>>> hGetAllMyActivity(@Body Object user);
+
+    
 /*
 
     @PATCH(APIConstants.GET_USER_DETAILS)

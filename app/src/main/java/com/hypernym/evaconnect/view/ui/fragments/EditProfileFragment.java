@@ -36,6 +36,7 @@ import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -258,7 +259,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
                         else{
                             //Do not add getActivity instead of getContext().
                             CropImage.activity(galleryImageUri)
-                                    .start(getContext(), this);
+                                    .start(requireContext(), this);
                         }
                     }
                     catch (Exception e){
@@ -282,7 +283,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
 
                     //Do not add getActivity instead of getContext().
                     CropImage.activity(SelectedImageUri)
-                            .start(getContext(), this);
+                            .start(requireContext(), this);
                 }
                 catch (Exception e){
                     e.printStackTrace();
