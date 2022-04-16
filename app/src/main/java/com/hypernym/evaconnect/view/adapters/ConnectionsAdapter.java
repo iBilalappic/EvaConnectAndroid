@@ -203,6 +203,11 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
         return connections.size();
     }
 
+    public void hSetList(List<ConnectionModel> hSearchList) {
+        connections = hSearchList;
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.profile_image)

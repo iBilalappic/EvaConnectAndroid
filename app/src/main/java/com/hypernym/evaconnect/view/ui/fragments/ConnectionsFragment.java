@@ -36,7 +36,9 @@ import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,6 +71,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
     private RecommendedUser_HorizontalAdapter recommendedUser_horizontalAdapter;
     private List<User> connectionList = new ArrayList<>();
     private List<ConnectionModel> connectedList = new ArrayList<>();
+    private List<ConnectionModel> hSearchList = new ArrayList<>();
     private List<User> recommendeduserList = new ArrayList<>();
 
     private LinearLayoutManager linearLayoutManager, linearLayoutManagerHorizontal;
@@ -197,6 +200,8 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
             userData.setFirst_name(edt_search.getText().toString());
         Log.e("type", mtype);
         //   connectedList.clear();
+
+
         connectionViewModel.getConnected(userData, AppConstants.TOTAL_PAGES, currentPage).observe(getViewLifecycleOwner(), listBaseModel -> {
             if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
 
@@ -229,6 +234,17 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
                 networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
         });
+
+    }
+
+    private void hSearchUser(String hSearch) {
+
+        if (connectionList.size() > 0) {
+            for (ConnectionModel user : connectedList) {
+                if (user.firstName.contains(hSearch)) ;
+
+            }
+        }
     }
 
 
@@ -303,43 +319,16 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
                     break;
 
                 case R.id.ly_main:
+                    ConnectionModel user = connectedList.get(position);
+                    PersonProfileFragment personProfileFragment = new PersonProfileFragment();
+                    Bundle bundle2 = new Bundle();
+                    bundle2.putInt("user_id", user.id);
+                    Log.d("connection", "onItemClick: user " + user.id);
+                    bundle2.putParcelable("connected_user", user);
+                    Log.d("connection", "onItemClick: " + GsonUtils.toJson(user));
+                    loadFragment_bundle(R.id.framelayout, personProfileFragment, getContext(), true, bundle2);
 
-
-                    Log.d("connection", "onItemClick: " + connectedList.size());
-                    Log.d("connection", "onItemClick: " + connectedList.get(position).id);
-
-                    if (edt_search.getText().toString().equals("")) {
-                        search = true;
-                    } else {
-                        search = false;
-                    }
-
-                    if (search) {
-                        ConnectionModel user = connectedList.get(position);
-                        PersonProfileFragment personProfileFragment = new PersonProfileFragment();
-                        Bundle bundle2 = new Bundle();
-                        bundle2.putInt("user_id", user.id);
-                        Log.d("connection", "onItemClick: user " + user.id);
-                        bundle2.putParcelable("connected_user", user);
-
-                        Log.d("connection", "onItemClick: " + GsonUtils.toJson(user));
-                        loadFragment_bundle(R.id.framelayout, personProfileFragment, getContext(), true, bundle2);
-                    } else {
-
-                     /*   PersonProfileFragment personProfileFragment = new PersonProfileFragment();
-                        Bundle bundle2 = new Bundle();
-                        Log.d("connection", "onItemClick: sender : " + user1.receiverId);
-                        Log.d("connection", "onItemClick: sender " + GsonUtils.toJson(user));
-
-                        bundle2.putInt("user_id", user1.receiverId);
-                        bundle2.putParcelable("connected_user", user);
-
-
-                        loadFragment_bundle(R.id.framelayout, personProfileFragment, getContext(), true, bundle2);*/
-                    }
                     break;
-
-
             }
 
         } else {
@@ -398,7 +387,12 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
 
         @Override
         public void afterTextChanged(Editable s) {
-            currentPage = PAGE_START;
+
+
+            Log.d("search", "afterTextChanged: " + s);
+
+            hFilterList(s);
+         /*   currentPage = PAGE_START;
             if (s.length() > 0) {
                 isSearchFlag = true;
                 connectionList.clear();
@@ -407,8 +401,25 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
             } else {
                 isSearchFlag = false;
                 getConnectionByFilter(type,currentPage,false);
-            }
+            }*/
         }
+
+    }
+
+    private void hFilterList(Editable s) {
+        if (!s.equals("")) {
+            hSearchList.clear();
+            for (ConnectionModel user : connectedList) {
+                if (user.firstName.toLowerCase(Locale.getDefault()).contains(s)) {
+                    hSearchList.add(user);
+                }
+            }
+            connectionsAdapter.hSetList(hSearchList);
+
+        } else {
+            connectionsAdapter.hSetList(connectedList);
+        }
+
 
     }
 
