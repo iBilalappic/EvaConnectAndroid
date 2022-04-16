@@ -161,10 +161,10 @@ public class JobListRepository implements IJobAdRepository {
     }
 
     @Override
-    public LiveData<BaseModel<List<Post>>> getJob(User user/*, int total, int current*/) {
+    public LiveData<BaseModel<List<Post>>> getJob(User user, int total, int current) {
         dashboardMutableLiveData = new MutableLiveData<>();
         user.setUser_id(user.getId());
-        RestClient.get().appApi().getJob(user/*, total, current*/).enqueue(new Callback<BaseModel<List<Post>>>() {
+        RestClient.get().appApi().getJob(user, total, current).enqueue(new Callback<BaseModel<List<Post>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
                 dashboardMutableLiveData.setValue(response.body());

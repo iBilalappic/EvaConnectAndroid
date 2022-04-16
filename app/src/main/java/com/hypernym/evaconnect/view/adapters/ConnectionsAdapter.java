@@ -248,7 +248,10 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
 
                 case R.id.ly_main:
                     if (onItemClickListener != null)
+
                         onItemClickListener.onItemClick(v, originalConnections.indexOf(connections.get(getAdapterPosition())));
+
+
                     break;
 
             }

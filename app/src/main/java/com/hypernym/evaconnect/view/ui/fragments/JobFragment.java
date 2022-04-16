@@ -163,7 +163,7 @@ public class JobFragment extends BaseFragment implements View.OnClickListener, S
         } else {
             user.setFilter("my_jobs");
         }
-        jobListViewModel.getJob(user/*, AppConstants.TOTAL_PAGES, currentPage*/).observe(this, new Observer<BaseModel<List<Post>>>() {
+        jobListViewModel.getJob(user, AppConstants.TOTAL_PAGES, currentPage).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> dashboardBaseModel) {
 

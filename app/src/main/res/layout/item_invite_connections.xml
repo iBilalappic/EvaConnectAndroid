@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ly_main"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -57,7 +56,7 @@
             android:fontFamily="@font/nunitosansregular"
             android:gravity="start"
             android:singleLine="true"
-            android:text="--"
+            android:text=""
             android:textColor="@color/colorAccent"
             android:textSize="14sp"
             app:layout_constraintEnd_toStartOf="@+id/tv_invite"
@@ -73,6 +72,7 @@
             android:ellipsize="end"
             android:maxLines="2"
             android:text="-"
+            android:visibility="gone"
             android:textSize="10sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/profile_image"
@@ -98,8 +98,8 @@
 
         <ImageView
             android:id="@+id/imageView9"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_marginEnd="35dp"
             android:contentDescription="@string/cancel_invite"
             android:src="@drawable/ic_cancel_invite"

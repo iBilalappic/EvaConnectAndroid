@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,10 +21,9 @@ import com.hypernym.evaconnect.dateTimePicker.DateTime;
 import com.hypernym.evaconnect.dateTimePicker.DateTimePicker;
 import com.hypernym.evaconnect.dateTimePicker.SimpleDateTimePicker;
 import com.hypernym.evaconnect.listeners.InvitedConnectionListener;
-import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.Meeting;
 import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.EventAttendees;
+import com.hypernym.evaconnect.models.Meeting;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.Constants;
@@ -141,7 +139,6 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
     @Override
     public void onValidationSucceeded() {
         if (NetworkUtils.isNetworkConnected(getContext())){
-            showDialog();
 
             event_attendees.clear();
             for(User inviteConnections:invitedConnections)
@@ -157,93 +154,83 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
             meeting.setName(edt_eventname.getText().toString());
             meeting.setContent(edt_description.getText().toString());
             meeting.setAddress(edt_eventCity.getText().toString());
-            if(DateUtils.isValidDate(tv_startdate.getText().toString()))
-            {
+            if (DateUtils.isValidDate(tv_startdate.getText().toString())) {
                 meeting.setStart_date(tv_startdate.getText().toString());
-            }
-            else {
+            } else {
                 meeting.setStart_date(DateUtils.getFormattedMeetingDate(tv_startdate.getText().toString()));
             }
-            if(DateUtils.isValidDate(tv_enddate.getText().toString()))
-            {
+            if (DateUtils.isValidDate(tv_enddate.getText().toString())) {
                 meeting.setEnd_date(tv_enddate.getText().toString());
+            } else {
+                meeting.setEnd_date(DateUtils.getFormattedMeetingDate(tv_enddate.getText().toString()));
             }
-            else {
-                meeting.setEnd_date( DateUtils.getFormattedMeetingDate(tv_enddate.getText().toString()));
-            }
-            if(DateUtils.isValidTime(tv_startTime.getText().toString()))
-            {
+            if (DateUtils.isValidTime(tv_startTime.getText().toString())) {
+                meeting.setStart_time(DateUtils.getTimeToUTC(tv_startTime.getText().toString()));
+            } else {
                 meeting.setStart_time(DateUtils.getTimeToUTC(tv_startTime.getText().toString()));
             }
-            else {
-                meeting.setStart_time( DateUtils.getTimeToUTC(tv_startTime.getText().toString()));
-            }
 
-            if(DateUtils.isValidTime(tv_startTime.getText().toString()))
-            {
+            if (DateUtils.isValidTime(tv_startTime.getText().toString())) {
+                meeting.setEnd_time(DateUtils.getTimeToUTC(tv_endTime.getText().toString()));
+            } else {
                 meeting.setEnd_time(DateUtils.getTimeToUTC(tv_endTime.getText().toString()));
             }
-            else {
-                meeting.setEnd_time( DateUtils.getTimeToUTC(tv_endTime.getText().toString()));
-            }
 
-             meeting.setStatus(AppConstants.USER_STATUS);
-             meeting.setAttendees(event_attendees);
+            meeting.setStatus(AppConstants.USER_STATUS);
+            meeting.setAttendees(event_attendees);
 
-            if(getArguments()!=null)
-            {
-                 meeting.setId(event.getId());
-                 meeting.setMeeting_id(event.getId());
-                 eventViewModel.updateMeeting(meeting).observe(this, new Observer<BaseModel<List<Meeting>>>() {
-                     @Override
-                     public void onChanged(BaseModel<List<Meeting>> listBaseModel) {
-                         if (listBaseModel != null && !listBaseModel.isError())
-                         {
-                             simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_meeting_updated), null, getString(R.string.ok), new View.OnClickListener() {
-                                 @Override
-                                 public void onClick(View v) {
-                                     // when meeting is successfully created remove the saved connections
-                                     PrefUtils.remove(getContext(), Constants.PERSIST_CONNECTIONS_MEETING);
 
-                                     if (getFragmentManager().getBackStackEntryCount() != 0) {
-                                         getFragmentManager().popBackStack();
-                                     }
-                                     simpleDialog.dismiss();
-                                 }
-                             });
-                             simpleDialog.show();
-                         }
-                         else {
-                             networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                         }
-                         hideDialog();
-                     }
-                 });
-            }
-            else
-            {
-                eventViewModel.createMeeting(meeting).observe(this, listBaseModel -> {
-                    if (listBaseModel != null && !listBaseModel.isError())
-                    {
-                        simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_meeting_created), null, getString(R.string.ok), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                // when meeting is successfully created remove the saved connections
-                                PrefUtils.remove(getContext(), Constants.PERSIST_CONNECTIONS_MEETING);
+            if (event_attendees.size() > 0) {
+                showDialog();
 
-                                if (getFragmentManager().getBackStackEntryCount() != 0) {
-                                    getFragmentManager().popBackStack();
+
+                if (getArguments() != null) {
+                    meeting.setId(event.getId());
+                    meeting.setMeeting_id(event.getId());
+                    eventViewModel.updateMeeting(meeting).observe(this, listBaseModel -> {
+                        if (listBaseModel != null && !listBaseModel.isError()) {
+                            simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_meeting_updated), null, getString(R.string.ok), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    // when meeting is successfully created remove the saved connections
+                                    PrefUtils.remove(getContext(), Constants.PERSIST_CONNECTIONS_MEETING);
+
+                                    if (getFragmentManager().getBackStackEntryCount() != 0) {
+                                        getFragmentManager().popBackStack();
+                                    }
+                                    simpleDialog.dismiss();
                                 }
-                                simpleDialog.dismiss();
-                            }
-                        });
-                        simpleDialog.show();
-                    }
-                    else {
-                        networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                    }
-                    hideDialog();
-                });
+                            });
+                            simpleDialog.show();
+                        } else {
+                            networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                        }
+                        hideDialog();
+                    });
+                } else {
+                    eventViewModel.createMeeting(meeting).observe(this, listBaseModel -> {
+                        if (listBaseModel != null && !listBaseModel.isError()) {
+                            simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_meeting_created), null, getString(R.string.ok), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    // when meeting is successfully created remove the saved connections
+                                    PrefUtils.remove(getContext(), Constants.PERSIST_CONNECTIONS_MEETING);
+
+                                    if (getFragmentManager().getBackStackEntryCount() != 0) {
+                                        getFragmentManager().popBackStack();
+                                    }
+                                    simpleDialog.dismiss();
+                                }
+                            });
+                            simpleDialog.show();
+                        } else {
+                            networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                        }
+                        hideDialog();
+                    });
+                }
+            } else {
+                Toast.makeText(requireContext(), "Add minimum 1 Participant, then update", Toast.LENGTH_LONG).show();
             }
 
 

@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.EventAttendees;
@@ -38,7 +39,7 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MeetingDetailFragment extends BaseFragment implements View.OnClickListener{
+public class MeetingDetailFragment extends BaseFragment {
     int meeting_id;
     MeetingViewModel meetingViewModel;
     InvitedUsersAdapter usersAdapter;
@@ -91,11 +92,27 @@ public class MeetingDetailFragment extends BaseFragment implements View.OnClickL
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_meeting_detail, container, false);
-        ButterKnife.bind(this,view);
+        View view = inflater.inflate(R.layout.fragment_meeting_detail, container, false);
+        ButterKnife.bind(this, view);
         getActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
         init();
+
+        hClickListener();
+
         return view;
+    }
+
+    private void hClickListener() {
+        img_backarrow.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+
+                (requireActivity()).onBackPressed();
+
+            }
+        });
+
+
     }
 
     @Override
@@ -106,7 +123,7 @@ public class MeetingDetailFragment extends BaseFragment implements View.OnClickL
     }
 
     private void init() {
-      //  showBackButton();
+        //  showBackButton();
         meeting_id=getArguments().getInt("id");
         meetingViewModel = ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(MeetingViewModel.class);
         setAttendeesAdapter();
@@ -167,7 +184,7 @@ public class MeetingDetailFragment extends BaseFragment implements View.OnClickL
 
                 tv_description.setText(event.getContent());
 
-                tv_createdDate.setText(DateUtils.getFormattedDateDMY(event.getStart_date()));
+                tv_createdDate.setText(DateUtils.getFormattedDateDMY(event.getStart_date()) + " - " + DateUtils.getFormattedDateDMY(event.getEnd_date()) + " | " + DateUtils.getTimeUTC(event.getStart_time()) + " - " + DateUtils.getTimeUTC(event.getEnd_time()));
 
                 tv_createdLocation.setText(event.getAddress());
                 if(event.getIs_attending()!=null && event.getIs_attending().equalsIgnoreCase("Going"))
@@ -234,10 +251,4 @@ public class MeetingDetailFragment extends BaseFragment implements View.OnClickL
         invite_people.setAdapter(usersAdapter);
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.img_backarrow) {
-            (requireActivity()).onBackPressed();
-        }
-    }
 }

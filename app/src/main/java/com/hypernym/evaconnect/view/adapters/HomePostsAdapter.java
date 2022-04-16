@@ -819,12 +819,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                 }
             });
 
-            tv_connect.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mClickListener.onConnectClick(v,getAdapterPosition());
-                }
-            });
+            tv_connect.setOnClickListener(v -> mClickListener.onConnectClick(v, getAdapterPosition()));
 
         }
 
@@ -879,6 +874,11 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
         @BindView(R.id.tv_url)
         TextView tv_url;
+
+
+        @BindView(R.id.tv_share_counter)
+        TextView tv_share_counter;
+
 
         @BindView(R.id.tv_newstitle)
         TextView tv_newstitle;
@@ -1382,6 +1382,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     ((NewsTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((NewsTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
                     ((NewsTypeViewHolder) holder).tv_createdDateTime.setText(DateUtils.getFormattedDateTime(posts.get(position).getCreated_datetime()));
+                    ((NewsTypeViewHolder) holder).tv_share_counter.setText((String.valueOf(posts.get(position).getShare_count())));
 
 
                    // AppUtils.makeTextViewResizable(((NewsTypeViewHolder) holder).tv_content, 3, posts.get(position).getContent());

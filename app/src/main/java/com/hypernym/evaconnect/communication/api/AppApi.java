@@ -420,7 +420,7 @@ public interface AppApi {
     Call<BaseModel<List<Post>>> getEvent(@Body Object user, @Query("limit") int limit, @Query("offset") int offset);
 
     @POST(APIConstants.JOB)
-    Call<BaseModel<List<Post>>> getJob(@Body User user/*, @Query("limit") int limit, @Query("offset") int offset*/);
+    Call<BaseModel<List<Post>>> getJob(@Body User user, @Query("limit") int limit, @Query("offset") int offset);
 
     @POST(APIConstants.NEWS)
     Call<BaseModel<List<Post>>> getNews(@Body User user, @Query("limit") int limit, @Query("offset") int offset);

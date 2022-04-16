@@ -173,6 +173,7 @@ deserunt mollit anim"
             android:layout_marginTop="16dp"
             android:text="Are you attending?"
             android:textColor="@color/black"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -182,6 +183,7 @@ deserunt mollit anim"
             android:layout_height="wrap_content"
             android:layout_marginStart="80dp"
             android:layout_marginTop="16dp"
+            android:visibility="gone"
             android:background="@drawable/notattending_disable"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -197,6 +199,7 @@ deserunt mollit anim"
 
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
+            android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/btn_notattending"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 

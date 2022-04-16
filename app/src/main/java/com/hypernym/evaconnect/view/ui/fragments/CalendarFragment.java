@@ -6,25 +6,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.OvershootInterpolator;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.decorators.EventDecorator;
-import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.CalendarMarks;
 import com.hypernym.evaconnect.models.CalendarModel;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
@@ -33,7 +26,6 @@ import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.EventAdapter;
 import com.hypernym.evaconnect.view.adapters.MonthAdapter;
-import com.hypernym.evaconnect.view.bottomsheets.BottomsheetAttachmentSelection;
 import com.hypernym.evaconnect.view.bottomsheets.BottomsheetEventSelection;
 import com.hypernym.evaconnect.view.dialogs.EventDialog;
 import com.hypernym.evaconnect.view.dialogs.MeetingDialog;
@@ -138,6 +130,7 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
             hideDialog();
             getCalendarMarksByDate(calendarView.getCurrentDate().getYear(), calendarView.getCurrentDate().getMonth(), calendarView.getCurrentDate().getDay());
             if (NetworkUtils.isNetworkConnected(AppUtils.getApplicationContext())) {
+                showDialog();
                 getAllCalendarMarks(calendarView.getCurrentDate().getMonth(), calendarView.getCurrentDate().getYear());
             } else {
                 networkErrorDialog();
@@ -158,9 +151,13 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
         calendarModel.setMonth(String.valueOf(month));
         calendarModel.setYear(String.valueOf(year));
         calendarViewModel.getAllCalendarMarks(calendarModel).observe(requireActivity(), listBaseModel -> {
+            hideDialog();
             if (!listBaseModel.isError() && listBaseModel.getData() != null) {
                 calendarMarks = new ArrayList<>();
                 eventList.clear();
+/*
+                eventList.addAll(listBaseModel.getData());
+*/
                 eventAdapter.notifyDataSetChanged();
                 setEvents(listBaseModel.getData());
                 // makeJsonObjectRequest(listBaseModel.getData());

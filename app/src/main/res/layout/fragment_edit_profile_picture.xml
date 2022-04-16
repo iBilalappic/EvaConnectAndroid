@@ -65,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:gravity="center"
-        android:text="Change Profile Picture"
+        android:text="Change your profile picture"
         android:textColor="@color/colorAccent"
         android:textSize="16sp"
         android:textStyle="bold"

@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -92,6 +91,7 @@ User user = new User();
                 dismiss();
                 break;
             case R.id.create_note:
+
                 loadFragment_bundle(R.id.framelayout, new CreateNoteFragment(), getContext(), true,null);
                 dismiss();
                 break;

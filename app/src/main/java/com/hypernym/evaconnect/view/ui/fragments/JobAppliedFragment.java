@@ -154,41 +154,38 @@ public class JobAppliedFragment extends BaseFragment implements View.OnClickList
     private void callPostsApi() {
         User user = LoginUtils.getLoggedinUser();
         user.setFilter("applied");
-        jobListViewModel.getJob(user/*, AppConstants.TOTAL_PAGES, currentPage*/).observe(this, new Observer<BaseModel<List<Post>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Post>> dashboardBaseModel) {
+        jobListViewModel.getJob(user, AppConstants.TOTAL_PAGES, currentPage).observe(this, dashboardBaseModel -> {
 
-                //   homePostsAdapter.clear();
-                tv_empty.setVisibility(View.GONE);
-                rc_job.setVisibility(View.VISIBLE);
-                if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
-                    for (Post post : dashboardBaseModel.getData()) {
-                        if (post.getContent() == null) {
-                            post.setContent("");
-                        }
-                        else if (post.getType().equalsIgnoreCase("job")) {
-                            post.setPost_type(AppConstants.JOB_TYPE);
-                        }
+            //   homePostsAdapter.clear();
+            tv_empty.setVisibility(View.GONE);
+            rc_job.setVisibility(View.VISIBLE);
+            if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
+                for (Post post : dashboardBaseModel.getData()) {
+                    if (post.getContent() == null) {
+                        post.setContent("");
                     }
-                    posts.addAll(dashboardBaseModel.getData());
-                    postAdapter.notifyDataSetChanged();
-                    swipeRefresh.setRefreshing(false);
-                    //  postAdapter.removeLoading();
-                    isLoading = false;
-                } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
-                    isLastPage = true;
-                    // postAdapter.removeLoading();
-                    isLoading = false;
-                    swipeRefresh.setRefreshing(false);
-                    tv_empty.setVisibility(View.VISIBLE);
-                    tv_empty.setText(dashboardBaseModel.getMessage());
-                    rc_job.setVisibility(View.GONE);
-                } else {
-                    swipeRefresh.setRefreshing(false);
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                    else if (post.getType().equalsIgnoreCase("job")) {
+                        post.setPost_type(AppConstants.JOB_TYPE);
+                    }
                 }
-
+                posts.addAll(dashboardBaseModel.getData());
+                postAdapter.notifyDataSetChanged();
+                swipeRefresh.setRefreshing(false);
+                //  postAdapter.removeLoading();
+                isLoading = false;
+            } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
+                isLastPage = true;
+                // postAdapter.removeLoading();
+                isLoading = false;
+                swipeRefresh.setRefreshing(false);
+                tv_empty.setVisibility(View.VISIBLE);
+                tv_empty.setText(dashboardBaseModel.getMessage());
+                rc_job.setVisibility(View.GONE);
+            } else {
+                swipeRefresh.setRefreshing(false);
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+
         });
     }
 

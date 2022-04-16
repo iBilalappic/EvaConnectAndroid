@@ -43,7 +43,6 @@ import com.hypernym.evaconnect.viewmodel.UserViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -178,8 +177,8 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
     }
 
     private void init() {
-        connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
-        userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(UserViewModel.class);
+        connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
+        userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(UserViewModel.class);
 
         hideChatPerson();
         setPageTitle("Profile");
@@ -198,10 +197,10 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
             connected_user = getArguments().getParcelable("connected_user");
             post = (Post) getArguments().getSerializable("PostData");
             user_id = getArguments().getInt("user_id");
-            Log.d("TAAAG", GsonUtils.toJson(post));
+            Log.d("profile", "Recived User Id : "+String.valueOf(user_id));
+
 
             if (post != null) {
-                argumentReceived = "PostData";
                 if (!TextUtils.isEmpty(post.getUser().getUser_image())) {
                     AppUtils.setGlideImage(getContext(), profile_image, post.getUser().getUser_image());
                 }
@@ -382,14 +381,14 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                     view0.setVisibility(View.GONE);
 
 
-                    String status = AppUtils.getConnectionStatus(requireContext(), targetUser.getIs_connected(), targetUser.isIs_receiver());
+                    String status = AppUtils.getConnectionStatus(getContext(), targetUser.getIs_connected(), targetUser.isIs_receiver());
                     if (status.equals(AppConstants.DELETED)) {
                         tv_connect.setVisibility(View.GONE);
                     } else {
                         tv_connect.setVisibility(View.VISIBLE);
                         layout_account_private.setVisibility(View.GONE);
-                        tv_connect.setText(AppUtils.getConnectionStatusWithUserType(requireContext(), targetUser.getIs_connected(), targetUser.isIs_receiver(), user.getType()));
-                        if (AppUtils.getConnectionStatus(requireContext(), targetUser.getIs_connected(), targetUser.isIs_receiver()).equalsIgnoreCase(AppConstants.CONNECTED)) {
+                        tv_connect.setText(AppUtils.getConnectionStatusWithUserType(getContext(), targetUser.getIs_connected(), targetUser.isIs_receiver(), user.getType()));
+                        if (AppUtils.getConnectionStatus(getContext(), targetUser.getIs_connected(), targetUser.isIs_receiver()).equalsIgnoreCase(AppConstants.CONNECTED)) {
                             /* layout_disconnect.setVisibility(View.VISIBLE);*/
                             layout_block.setVisibility(View.GONE);
                             layout_account_private.setVisibility(View.GONE);
@@ -462,11 +461,13 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
         }
 
 
-        postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(PostViewModel.class);
+        postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(PostViewModel.class);
         currentPage = PAGE_START;
-
         postAdapter = new PostAdapter(getContext(), posts, this);
         linearLayoutManager = new LinearLayoutManager(getContext());
+
+        callPostsApi();
+
 
         rc_post.setLayoutManager(linearLayoutManager);
         rc_post.setAdapter(postAdapter);
@@ -509,86 +510,88 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
 
         if (argumentReceived.equalsIgnoreCase("user")) {
             id = targetUser.getId();
-        }else if(user_id!=0){
-            id=user_id; }
-        else {
+        } else if (user_id != 0) {
+            id = user_id;
+        } else {
             id = post.getUser().getId();
         }
+
+        Log.d("profile", "getUserDetails: " + id);
+
+
         userViewModel.getuser_details(id
-        ).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<User>>>() {
-            @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel) {
-                if (listBaseModel.getData() != null && !listBaseModel.isError()) {
-                    if (!TextUtils.isEmpty(listBaseModel.getData().get(0).getUser_image())) {
-                        AppUtils.setGlideImage(getContext(), profile_image, listBaseModel.getData().get(0).getUser_image());
-                    }
-                    if(listBaseModel.getData().get(0).getType()!=null&&listBaseModel.getData().get(0).getType().equalsIgnoreCase("company")){
-                        tv_company.setText(listBaseModel.getData().get(0).getWork_aviation());
+        ).observe(getViewLifecycleOwner(), listBaseModel -> {
+            if (listBaseModel.getData() != null && !listBaseModel.isError()) {
+                if (!TextUtils.isEmpty(listBaseModel.getData().get(0).getUser_image())) {
+                    AppUtils.setGlideImage(getContext(), profile_image, listBaseModel.getData().get(0).getUser_image());
+                }
+                if (listBaseModel.getData().get(0).getType() != null && listBaseModel.getData().get(0).getType().equalsIgnoreCase("company")) {
+                    tv_company.setText(listBaseModel.getData().get(0).getWork_aviation());
 
-                    }else{
-                        tv_company.setText(listBaseModel.getData().get(0).getCompany_name()+ " | " + listBaseModel.getData().get(0).getDesignation());
+                } else {
+                    tv_company.setText(listBaseModel.getData().get(0).getCompany_name() + " | " + listBaseModel.getData().get(0).getDesignation());
 
-                    }
-                    // tv_location.setText(listBaseModel.getData().get(0).getCountry() + "," + listBaseModel.getData().get(0).getCity());
+                }
+                // tv_location.setText(listBaseModel.getData().get(0).getCountry() + "," + listBaseModel.getData().get(0).getCity());
 
-                    tv_name.setText(listBaseModel.getData().get(0).getFirst_name());
+                tv_name.setText(listBaseModel.getData().get(0).getFirst_name());
 
-                    if (listBaseModel.getData().get(0).getBio_data() != null && !listBaseModel.getData().get(0).getBio_data().isEmpty()) {
-                        tv_bio.setText(listBaseModel.getData().get(0).getBio_data());
-                    } else {
-                        tv_bio.setVisibility(View.GONE);
-                    }
+                if (listBaseModel.getData().get(0).getBio_data() != null && !listBaseModel.getData().get(0).getBio_data().isEmpty()) {
+                    tv_bio.setText(listBaseModel.getData().get(0).getBio_data());
+                } else {
+                    tv_bio.setVisibility(View.GONE);
+                }
 
-                    if (listBaseModel.getData().get(0).getDesignation() != null && !listBaseModel.getData().get(0).getDesignation().isEmpty()) {
-                        tv_profession.setText(listBaseModel.getData().get(0).getDesignation());
-                    } else {
-                        tv_profession.setText(listBaseModel.getData().get(0).getCompany_name());
-                    }
-                    tv_connections_count.setText(String.valueOf(listBaseModel.getData().get(0).getConnection_count()));
-                    if (listBaseModel.getData().get(0).getId().equals(user.getId())) {
-                        tv_connect.setVisibility(View.GONE);
+                if (listBaseModel.getData().get(0).getDesignation() != null && !listBaseModel.getData().get(0).getDesignation().isEmpty()) {
+                    tv_profession.setText(listBaseModel.getData().get(0).getDesignation());
+                } else {
+                    tv_profession.setText(listBaseModel.getData().get(0).getCompany_name());
+                }
+                tv_connections_count.setText(String.valueOf(listBaseModel.getData().get(0).getConnection_count()));
+                if (listBaseModel.getData().get(0).getId().equals(user.getId())) {
+                    tv_connect.setVisibility(View.GONE);
 
-                        layout_account_private.setVisibility(View.GONE);
+                    layout_account_private.setVisibility(View.GONE);
 
-                        layout_message.setVisibility(View.GONE);
-                        view3.setVisibility(View.GONE);
+                    layout_message.setVisibility(View.GONE);
+                    view3.setVisibility(View.GONE);
 
-                        /* *//* layout_disconnect.setVisibility(View.GONE);*//*
-                    view4.setVisibility(View.GONE);*/
-                        layout_block.setVisibility(View.GONE);
+                    /* *//* layout_disconnect.setVisibility(View.GONE);*//*
+                view4.setVisibility(View.GONE);*/
+                    layout_block.setVisibility(View.GONE);
 
-                        layout_settings.setVisibility(View.VISIBLE);
-                        view2.setVisibility(View.GONE);
+                    layout_settings.setVisibility(View.VISIBLE);
+                    view2.setVisibility(View.GONE);
 
-                        layout_EditDetail.setVisibility(View.VISIBLE);
-                        view1.setVisibility(View.VISIBLE);
+                    layout_EditDetail.setVisibility(View.VISIBLE);
+                    view1.setVisibility(View.VISIBLE);
 
-                        layout_notification.setVisibility(View.VISIBLE);
-                        view0.setVisibility(View.VISIBLE);
+                    layout_notification.setVisibility(View.VISIBLE);
+                    view0.setVisibility(View.VISIBLE);
 
-                    } else {
-                        tv_connect.setVisibility(View.VISIBLE);
-                        layout_message.setVisibility(View.VISIBLE);
-                        view3.setVisibility(View.VISIBLE);
+                } else {
+                    tv_connect.setVisibility(View.VISIBLE);
+                    layout_message.setVisibility(View.VISIBLE);
+                    view3.setVisibility(View.VISIBLE);
 
-                   /* layout_disconnect.setVisibility(View.VISIBLE);
-                    view4.setVisibility(View.VISIBLE);*/
+               /* layout_disconnect.setVisibility(View.VISIBLE);
+                view4.setVisibility(View.VISIBLE);*/
 
-                        layout_block.setVisibility(View.VISIBLE);
+                    layout_block.setVisibility(View.VISIBLE);
 
-                        layout_settings.setVisibility(View.GONE);
-                        view2.setVisibility(View.GONE);
+                    layout_settings.setVisibility(View.GONE);
+                    view2.setVisibility(View.GONE);
 
-                        layout_EditDetail.setVisibility(View.GONE);
-                        view1.setVisibility(View.GONE);
+                    layout_EditDetail.setVisibility(View.GONE);
+                    view1.setVisibility(View.GONE);
 
-                        layout_notification.setVisibility(View.GONE);
+                    layout_notification.setVisibility(View.GONE);
 
-                        view0.setVisibility(View.GONE);
+                    view0.setVisibility(View.GONE);
 
-                        if(connected_user!=null){
+                    if (connected_user != null) {
 
-                        String status = AppUtils.getConnectionStatus(requireContext(), connected_user.isConnected, connected_user.isReceiver);
+                        String status = AppUtils.getConnectionStatus(getContext(), connected_user.isConnected, connected_user.isReceiver);
                         if (status.equals(AppConstants.DELETED)) {
                             tv_connect.setVisibility(View.GONE);
                         } else {
@@ -610,62 +613,91 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                                 view_view_post.setVisibility(View.GONE);
                                 tv_view_post.setVisibility(View.GONE);
                             }
-                         }
-
                         }
 
                     }
 
-
-                    targetUser=listBaseModel.getData().get(0);
-
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
-                hideDialog();
+
+
+                targetUser = listBaseModel.getData().get(0);
+
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
     }
 
     private void callPostsApi() {
-        User user = LoginUtils.getLoggedinUser();
+        User user = new User();
+        if (post != null) {
+            Log.d("profile", "callPostsApi: Post :" + post.getCreated_by_id());
+            if (post.getCreated_by_id() != null) {
 
-        postViewModel.getPostFilter(user, AppConstants.TOTAL_PAGES, currentPage).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<Post>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Post>> dashboardBaseModel) {
-
-                //   homePostsAdapter.clear();
-                if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
-                    for (Post post : dashboardBaseModel.getData()) {
-                        if (post.getContent() == null) {
-                            post.setContent("");
-                        }
-                        if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() > 0) {
-                            post.setPost_type(AppConstants.IMAGE_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_video() != null) {
-                            post.setPost_type(AppConstants.VIDEO_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() == 0 && !post.isIs_url() && post.getPost_document() == null) {
-                            post.setPost_type(AppConstants.TEXT_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("post") && post.isIs_url() && post.getPost_document() == null) {
-                            post.setPost_type(AppConstants.LINK_POST);
-                        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_document() != null) {
-                            post.setPost_type(AppConstants.DOCUMENT_TYPE);
-                        }
-                    }
-                    posts.addAll(dashboardBaseModel.getData());
-                    postAdapter.notifyDataSetChanged();
-                    //  swipeRefresh.setRefreshing(false);
-                    postAdapter.removeLoading();
-                    isLoading = false;
-                } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
-                    isLastPage = true;
-                    postAdapter.removeLoading();
-                    isLoading = false;
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
+                user.setUser_id(post.getCreated_by_id());
 
             }
+        } else if (targetUser != null) {
+            Log.d("profile", "callPostsApi: Target : " + targetUser.getUser_id());
+
+            if (targetUser.getId() != null) {
+                user.setUser_id(targetUser.getId());
+                Log.d("profile", "callPostsApi setUser_id: Target : " + targetUser.getUser_id());
+
+            }
+
+        } else if (connected_user != null) {
+            Log.d("profile", "callPostsApi: Connection : " + connected_user.id);
+
+            if (connected_user.id != null) {
+
+                Log.d("profile", "callPostsApi setUser_id: Connection : " + connected_user.id);
+
+                user.setUser_id(connected_user.id);
+
+
+                Log.d("profile", "callPostsApi: " + GsonUtils.toJson(user));
+            }
+        }
+
+
+        postViewModel.getPostFilter(user, AppConstants.TOTAL_PAGES, currentPage).observe(getViewLifecycleOwner(), dashboardBaseModel -> {
+
+            Log.d("profile", "api call: " + GsonUtils.toJson(user));
+
+
+            //   homePostsAdapter.clear();
+            if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
+                for (Post post : dashboardBaseModel.getData()) {
+                    if (post.getContent() == null) {
+                        post.setContent("");
+                    }
+                    if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() > 0) {
+                        post.setPost_type(AppConstants.IMAGE_TYPE);
+                    } else if (post.getType().equalsIgnoreCase("post") && post.getPost_video() != null) {
+                        post.setPost_type(AppConstants.VIDEO_TYPE);
+                    } else if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() == 0 && !post.isIs_url() && post.getPost_document() == null) {
+                        post.setPost_type(AppConstants.TEXT_TYPE);
+                    } else if (post.getType().equalsIgnoreCase("post") && post.isIs_url() && post.getPost_document() == null) {
+                        post.setPost_type(AppConstants.LINK_POST);
+                    } else if (post.getType().equalsIgnoreCase("post") && post.getPost_document() != null) {
+                        post.setPost_type(AppConstants.DOCUMENT_TYPE);
+                    }
+                }
+                posts.addAll(dashboardBaseModel.getData());
+                postAdapter.notifyDataSetChanged();
+                //  swipeRefresh.setRefreshing(false);
+                postAdapter.removeLoading();
+                isLoading = false;
+            } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
+                isLastPage = true;
+                postAdapter.removeLoading();
+                isLoading = false;
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+            }
+
         });
     }
 

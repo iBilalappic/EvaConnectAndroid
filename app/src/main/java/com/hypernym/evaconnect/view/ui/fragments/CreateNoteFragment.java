@@ -111,13 +111,20 @@ public class CreateNoteFragment extends BaseFragment implements View.OnClickList
 
         tv_startTime.setText(time.format(new Date()));
         tv_startTime.setInputType(InputType.TYPE_NULL);
-        int note_id = getArguments().getInt("id");
 
-        if(note_id!=0){
-            tv_header_name.setText("Update a Note");
-            post.setText("Update");
-            getNotesDetail(note_id);
+        if(getArguments() != null){
+
+            int note_id = getArguments().getInt("id", 0);
+
+            if(note_id!=0){
+                tv_header_name.setText("Update a Note");
+                post.setText("Update");
+                getNotesDetail(note_id);
+            }
+
+
         }
+
 
 
        /* tv_enddate.setInputType(InputType.TYPE_NULL);

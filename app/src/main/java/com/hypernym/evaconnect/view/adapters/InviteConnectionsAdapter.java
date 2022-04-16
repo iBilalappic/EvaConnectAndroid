@@ -43,6 +43,12 @@ public class InviteConnectionsAdapter extends RecyclerView.Adapter<InviteConnect
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
+
+        if (connections.get(position).getIs_connected().equals("")) {
+            holder.itemView.setVisibility(View.GONE);
+        }
+
+
         if (!TextUtils.isEmpty(connections.get(position).getUser_image())) {
             AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getUser_image());
         }
@@ -55,23 +61,18 @@ public class InviteConnectionsAdapter extends RecyclerView.Adapter<InviteConnect
 
         holder.tv_name.setText(connections.get(position).getFirst_name());
 
-        if (connections.get(position).getBio_data() != null && !connections.get(position).getBio_data().isEmpty())
-        {
+        if (connections.get(position).getBio_data() != null && !connections.get(position).getBio_data().isEmpty()) {
             holder.tv_field.setText(connections.get(position).getBio_data());
-        }
-        else {
+        } else {
             holder.tv_field.setText("--");
         }
 
-        holder.tv_invite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                holder.tv_invite.setVisibility(View.GONE);
-                holder.cancel_invite.setVisibility(View.VISIBLE);
+        holder.tv_invite.setOnClickListener(v -> {
+            holder.tv_invite.setVisibility(View.GONE);
+            holder.cancel_invite.setVisibility(View.VISIBLE);
 
-                if (onItemClickListener != null)
-                    onItemClickListener.onItemClick(v, connections.indexOf(connections.get(position)), connections.get(position));
-            }
+            if (onItemClickListener != null)
+                onItemClickListener.onItemClick(v, connections.indexOf(connections.get(position)), connections.get(position));
         });
 
         holder.cancel_invite.setOnClickListener(new View.OnClickListener() {

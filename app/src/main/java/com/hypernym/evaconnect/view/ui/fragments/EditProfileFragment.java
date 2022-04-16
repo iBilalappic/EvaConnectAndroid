@@ -170,7 +170,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
             ly_edit_job_title.setVisibility(View.GONE);
             view15.setVisibility(View.GONE);
         } else {
-            tv_change_profile.setText("Change Profile Picture");
+            tv_change_profile.setText("Change your profile picture");
             tv_bio.setText("Edit Bio");
             ly_edit_job_title.setVisibility(View.VISIBLE);
             view15.setVisibility(View.VISIBLE);
@@ -179,7 +179,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
     }
 
     private void SettingUserProfile(User user) {
-        userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(UserViewModel.class);
+        userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication())).get(UserViewModel.class);
         GetUserDetails();
     }
 

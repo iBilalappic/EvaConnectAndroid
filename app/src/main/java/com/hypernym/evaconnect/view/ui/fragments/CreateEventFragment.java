@@ -1,6 +1,10 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -28,7 +32,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,7 +44,6 @@ import com.hypernym.evaconnect.dateTimePicker.DateTime;
 import com.hypernym.evaconnect.dateTimePicker.DateTimePicker;
 import com.hypernym.evaconnect.dateTimePicker.SimpleDateTimePicker;
 import com.hypernym.evaconnect.listeners.InvitedConnectionListener;
-import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.EventAttendees;
 import com.hypernym.evaconnect.models.User;
@@ -79,10 +81,6 @@ import butterknife.OnClick;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-
-import static android.Manifest.permission.CAMERA;
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
-import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -217,7 +215,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
 
         validator = new Validator(this);
         validator.setValidationListener(this);
-        eventViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(EventViewModel.class);
+        eventViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(EventViewModel.class);
       //  invitedConnections.clear();
 
         event_type_spinner.setOnItemSelectedListener(this);
@@ -390,13 +388,13 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
             eventObj.setEvent_attendeeIDs(event_attendees);
             eventObj.setRegistration_link(edt_link.getText().toString());
 
-            if (getArguments() != null) {
-                eventObj.setId(event.getId());
-                eventObj.setModified_by_id(LoginUtils.getLoggedinUser().getId());
-                eventObj.setModified_datetime(DateUtils.GetCurrentdatetime());
-                eventViewModel.updateEvent(eventObj,partImage).observe(this, new Observer<BaseModel<List<Event>>>() {
-                    @Override
-                    public void onChanged(BaseModel<List<Event>> listBaseModel) {
+
+            if (event_attendees.size() > 0) {
+                if (getArguments() != null) {
+                    eventObj.setId(event.getId());
+                    eventObj.setModified_by_id(LoginUtils.getLoggedinUser().getId());
+                    eventObj.setModified_datetime(DateUtils.GetCurrentdatetime());
+                    eventViewModel.updateEvent(eventObj, partImage).observe(this, listBaseModel -> {
                         if (listBaseModel != null && !listBaseModel.isError()) {
                             simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_event_updated), null, getString(R.string.ok), new View.OnClickListener() {
                                 @Override
@@ -414,19 +412,16 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
                             networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                         }
                         hideDialog();
-                    }
-                });
-            } else {
-                eventViewModel.createEvent(eventObj, partImage).observe(this, new Observer<BaseModel<List<Event>>>() {
-                    @Override
-                    public void onChanged(BaseModel<List<Event>> listBaseModel) {
+                    });
+                } else {
+                    eventViewModel.createEvent(eventObj, partImage).observe(this, listBaseModel -> {
                         if (listBaseModel != null && !listBaseModel.isError()) {
                             simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_event_created), null, getString(R.string.ok), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     PrefUtils.remove(getContext(), Constants.PERSIST_CONNECTIONS);
 
-                                    if (getFragmentManager().getBackStackEntryCount() != 0) {
+                                    if (requireFragmentManager().getBackStackEntryCount() != 0) {
                                         getFragmentManager().popBackStack();
                                     }
                                     simpleDialog.dismiss();
@@ -437,13 +432,12 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
                             networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                         }
                         hideDialog();
-                    }
-                });
-
+                    });
+                }
+            } else {
+                Toast.makeText(requireContext(), "Invite minimum 1 Attendees", Toast.LENGTH_LONG).show();
             }
         }
-
-
     }
 
     @Override
@@ -477,13 +471,13 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
 
     @OnClick(R.id.img_backarrow)
     public void back() {
-        getActivity().onBackPressed();
+        requireActivity().onBackPressed();
     }
 
 
 
     private void requestpermission() {
-        ActivityCompat.requestPermissions(getActivity(), new String[]
+        ActivityCompat.requestPermissions(requireActivity(), new String[]
                 {
                         READ_EXTERNAL_STORAGE,
                         CAMERA
@@ -510,7 +504,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
         if (Checkpermission()) {
             // Continue only if the File was successfully created
             if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(getContext(),
+                Uri photoURI = FileProvider.getUriForFile(requireContext(),
                         "com.hypernym.evaconnect.fileprovider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
@@ -688,7 +682,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.img_backarrow) {
-            (getActivity()).onBackPressed();
+            (requireActivity()).onBackPressed();
         }
     }
 

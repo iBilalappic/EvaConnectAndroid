@@ -1,6 +1,7 @@
 package com.hypernym.evaconnect.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -69,6 +70,7 @@ public class PostViewModel extends AndroidViewModel {
     }
 
     public LiveData<BaseModel<List<Post>>> getPostFilter(User user, int totalpages, int currentPage) {
+        Log.d("viewmodel", "getPostFilter: " + user.getUser_id());
         return iPostRepository.getPostFilter(user, totalpages, currentPage);
     }
 }
