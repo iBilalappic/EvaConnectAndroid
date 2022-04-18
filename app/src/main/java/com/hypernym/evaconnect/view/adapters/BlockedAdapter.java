@@ -57,11 +57,15 @@ public class BlockedAdapter extends RecyclerView.Adapter<BlockedAdapter.ViewHold
                 }
                 if (connections.get(position).getReceiver().getFirstName() != null) {
                     holder.tv_name.setText(connections.get(position).getReceiver().getFirstName());
+                    if (connections.get(position).getReceiver().getLastName() != null) {
+                        holder.tv_name.setText(connections.get(position).getReceiver().getFirstName() + connections.get(position).getReceiver().getLastName());
+
+                    }
                 }
                 if (connections.get(position).getReceiver().getBioData() != null && !connections.get(position).getReceiver().getBioData().isEmpty()) {
                     holder.tv_designation.setText(connections.get(position).getReceiver().getBioData());
                 } else {
-                    holder.tv_designation.setText("--");
+                    holder.tv_designation.setVisibility(View.GONE);
                 }
                 if (connections.get(position).getReceiver().getIs_online()) {
                     holder.tv_connection_status.setText("Online");
@@ -87,7 +91,7 @@ public class BlockedAdapter extends RecyclerView.Adapter<BlockedAdapter.ViewHold
                 if (connections.get(position).getSender().getBioData() != null && !connections.get(position).getSender().getBioData().isEmpty()) {
                     holder.tv_designation.setText(connections.get(position).getSender().getBioData());
                 } else {
-                    holder.tv_designation.setText("--");
+                    holder.tv_designation.setVisibility(View.GONE);
                 }
                 if (connections.get(position).getSender().getIs_online()) {
                     holder.tv_connection_status.setText("Online");
@@ -170,9 +174,15 @@ public class BlockedAdapter extends RecyclerView.Adapter<BlockedAdapter.ViewHold
 //        }
 
     }
+
     @Override
     public int getItemCount() {
         return connections.size();
+    }
+
+    public void hSetList(List<GetBlockedData> hSearchList) {
+        connections = hSearchList;
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

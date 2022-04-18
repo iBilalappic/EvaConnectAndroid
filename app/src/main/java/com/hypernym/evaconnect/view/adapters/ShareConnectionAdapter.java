@@ -27,7 +27,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ShareConnectionAdapter extends RecyclerView.Adapter<ShareConnectionAdapter.ViewHolder> {
     private Context context;
     private OnItemClickListener onItemClickListener;
-    private final List<ConnectionModel> connections;
+    private List<ConnectionModel> connections;
 
     public ShareConnectionAdapter(Context context, List<ConnectionModel> connections, OnItemClickListener onItemClickListener) {
         this.context = context;
@@ -123,6 +123,11 @@ public class ShareConnectionAdapter extends RecyclerView.Adapter<ShareConnection
     @Override
     public int getItemCount() {
         return connections.size();
+    }
+
+    public void hSetList(List<ConnectionModel> hSearchList) {
+        connections = hSearchList;
+        notifyDataSetChanged();
     }
 
     public interface OnItemClickListener {

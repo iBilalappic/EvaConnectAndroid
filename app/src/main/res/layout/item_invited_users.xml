@@ -1,74 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="70dp"
+    android:layout_height="wrap_content"
     android:paddingStart="@dimen/spacing_small"
     android:paddingEnd="@dimen/spacing_small">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/invitedUserImage"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="8dp"
-        android:src="@drawable/profile"
-        app:civ_border_color="@color/skyblue"
-        app:civ_border_width="2dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/remove"
-        android:layout_width="25dip"
-        android:layout_height="25dip"
-        android:layout_gravity="top|center_horizontal"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/ic_baseline_red"
-        android:src="@drawable/ic_baseline_close"
-        android:clickable="false"
-        android:gravity="top|center_horizontal"
-        android:text="x"
-        android:padding="5dp"
-        android:textColor="@color/white"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/invitedUserImage"
-        app:layout_constraintEnd_toEndOf="@+id/invitedUserImage"
-        app:layout_constraintTop_toTopOf="@+id/invitedUserImage" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/invitedUserImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/profile"
+            app:civ_border_color="@color/skyblue"
+            app:civ_border_width="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/remove"
+            android:layout_width="25dip"
+            android:layout_height="25dip"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/ic_baseline_red"
+            android:clickable="false"
+            android:gravity="top|center_horizontal"
+            android:padding="5dp"
+            android:src="@drawable/ic_baseline_close"
+            android:text="x"
+            android:textColor="@color/white"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/invitedUserImage"
+            app:layout_constraintEnd_toEndOf="@+id/invitedUserImage"
+            app:layout_constraintTop_toTopOf="@+id/invitedUserImage" />
 
 
-    <TextView
-        android:id="@+id/firstName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textAlignment="center"
-        android:ellipsize="end"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        android:fontFamily="@font/nunitosansregular"
-        android:text="sssksks"
-        android:maxLines="1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/invitedUserImage" />
+        <TextView
+            android:id="@+id/firstName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="@font/nunitosansregular"
+            android:gravity="center"
+            android:maxLength="20"
+            android:maxLines="1"
+            android:text="sssksksddjkdjdk"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/invitedUserImage" />
 
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorAccent"
-        android:id="@+id/tv_designation_title"
-        android:textAlignment="center"
-        android:gravity="center"
-        android:textSize="12sp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:fontFamily="@font/nunitosansregular"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/firstName"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
+        <TextView
+            android:id="@+id/tv_designation_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="@font/nunitosansregular"
+            android:gravity="center"
+            android:maxLength="20"
+            android:maxLines="1"
+            android:text="sssksksdndjdj"
+            android:textColor="@color/colorAccent"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/firstName" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

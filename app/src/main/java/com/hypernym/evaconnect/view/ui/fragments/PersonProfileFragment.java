@@ -2,6 +2,7 @@ package com.hypernym.evaconnect.view.ui.fragments;
 
 import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -432,7 +433,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
             tv_name.setText(user.getFirst_name());
 
             //  tv_location.setText(user.getCountry() + "," + user.getCity());
-            tv_company.setText(user.getSector() + " | " + user.getCompany_name());
+            tv_company.setText(user.getSector() + " | " + user.getDesignation());
             tv_connections_count.setText(String.valueOf(user.getConnection_count()));
 
 
@@ -502,6 +503,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
         });
     }
 
+    @SuppressLint("SetTextI18n")
     public void getUserDetails() {
         //  User user = new User();
         // user = LoginUtils.getUser();
@@ -634,9 +636,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
         if (post != null) {
             Log.d("profile", "callPostsApi: Post :" + post.getCreated_by_id());
             if (post.getCreated_by_id() != null) {
-
                 user.setUser_id(post.getCreated_by_id());
-
             }
         } else if (targetUser != null) {
             Log.d("profile", "callPostsApi: Target : " + targetUser.getUser_id());
@@ -686,7 +686,11 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                     }
                 }
                 posts.addAll(dashboardBaseModel.getData());
+
+
                 postAdapter.notifyDataSetChanged();
+
+
                 //  swipeRefresh.setRefreshing(false);
                 postAdapter.removeLoading();
                 isLoading = false;
@@ -698,6 +702,15 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                 networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
 
+            if (posts.size() == 0) {
+                rc_post.setVisibility(View.GONE);
+                tv_view_post.setVisibility(View.GONE);
+                view_view_post.setVisibility(View.GONE);
+            } else {
+                rc_post.setVisibility(View.VISIBLE);
+                tv_view_post.setVisibility(View.VISIBLE);
+                view_view_post.setVisibility(View.VISIBLE);
+            }
         });
     }
 
@@ -706,7 +719,6 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
         User user = LoginUtils.getLoggedinUser();
         connection.setReceiver_id(connectionItem.getId());
         connection.setSender_id(user.getId());
-
         if (!tv_connect.getText().toString().equalsIgnoreCase(AppConstants.CONNECTED) && post.getConnection_id() == null && !tv_connect.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_SENT)) {
             connection.setStatus(AppConstants.STATUS_PENDING);
             showDialog();
@@ -721,29 +733,25 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
     }
 
     private void callApi(TextView tv_connect, Connection connection, User connectionItem) {
+        connectionViewModel.connect(connection).observe(this, listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError()) {
+                if (tv_connect.getText().toString().equalsIgnoreCase(getString(R.string.connect)) ||
+                        tv_connect.getText().toString().equalsIgnoreCase(getString(R.string.invite_to_follow))) {
 
-        connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Connection>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError()) {
-                    if (tv_connect.getText().toString().equalsIgnoreCase(getString(R.string.connect)) ||
-                            tv_connect.getText().toString().equalsIgnoreCase(getString(R.string.invite_to_follow))) {
-
-                        tv_connect.setText(AppConstants.INVITED);
-                    } else {
-                        if (user.getType() != null && user.getType().equalsIgnoreCase("user")) {
-                            tv_connect.setText(AppConstants.CONNECTED);
-                        } else {
-                            tv_connect.setText(AppConstants.INVITED);
-                        }
-                    }
-                    connectionItem.setIs_connected(AppConstants.ACTIVE);
-
+                    tv_connect.setText(AppConstants.INVITED);
                 } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                    if (user.getType() != null && user.getType().equalsIgnoreCase("user")) {
+                        tv_connect.setText(AppConstants.CONNECTED);
+                    } else {
+                        tv_connect.setText(AppConstants.INVITED);
+                    }
                 }
-                hideDialog();
+                connectionItem.setIs_connected(AppConstants.ACTIVE);
+
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
     }
 
@@ -819,8 +827,9 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                     simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_block_user), null, getString(R.string.ok), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            getActivity().onBackPressed();
                             simpleDialog.dismiss();
+
+                            requireActivity().onBackPressed();
                         }
                     });
                 } else {

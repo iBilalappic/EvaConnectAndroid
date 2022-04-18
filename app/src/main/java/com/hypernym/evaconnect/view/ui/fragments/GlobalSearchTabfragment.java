@@ -72,8 +72,8 @@ public class GlobalSearchTabfragment extends BaseFragment implements View.OnClic
 //            adapter.addFragment(new PendingFragment(), "Pending");
 //        }
         adapter.addFragment(new GlobalPostFragment(), "Post");
-        adapter.addFragment(new GlobalConnectionsFragment(), "Connections");
-        adapter.addFragment(new BlockedFragment(), "Companies");
+        adapter.addFragment(new GlobalConnectionsFragment(), "Conne..");
+        adapter.addFragment(new GlobalConnectionsFragment(), "Companies");
         adapter.addFragment(new GlobalNewsFragment(), "News");
         adapter.addFragment(new GlobalEventFragment(), "Event");
 

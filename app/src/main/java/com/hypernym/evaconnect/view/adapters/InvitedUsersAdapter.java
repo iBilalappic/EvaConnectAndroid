@@ -60,7 +60,13 @@ public class InvitedUsersAdapter extends RecyclerView.Adapter<InvitedUsersAdapte
 
         if (user.getFirst_name()!=null) {
 
+
             holder.firstName.setText(user.getFirst_name());
+
+            if (user.getLast_name() != null) {
+                holder.firstName.setText(user.getFirst_name() + " "+user.getLast_name());
+
+            }
         }
 
         if (user.getDesignation() != null) {

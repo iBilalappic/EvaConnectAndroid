@@ -192,8 +192,18 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onItemClick(View view, int position) {
         if (view.getId()==R.id.tv_attending) {
+
             TextView textView = view.findViewById(R.id.tv_attending);
+
             textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
+
+            if (NetworkUtils.isNetworkConnected(getContext())) {
+                callPostsApi();
+                Log.d("allevents", "api calling ");
+            } else {
+                networkErrorDialog();
+            }
+
         } else {
             PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
             Bundle bundle = new Bundle();

@@ -55,11 +55,19 @@ public class InviteConnections extends BaseFragment implements InviteConnections
     @BindView(R.id.empty)
     TextView empty;
 
+
     @BindView(R.id.inviteButton)
     TextView inviteButton;
 
+    @BindView(R.id.header_title)
+    TextView header_title;
+
     @BindView(R.id.btn_search)
     ImageView btn_search;
+
+
+    @BindView(R.id.img_backarrow)
+    ImageView img_backarrow;
 
     private InviteConnectionsAdapter inviteConnectionsAdapter;
     private List<User> connectionList = new ArrayList<>();
@@ -105,6 +113,13 @@ public class InviteConnections extends BaseFragment implements InviteConnections
 
         edt_search.addTextChangedListener(new TextWatcher());
 
+
+        hOnClickListener();
+
+        return view;
+    }
+
+    private void hOnClickListener() {
         // avoid double click
         inviteButton.setOnClickListener(new OnOneOffClickListener() {
             @Override
@@ -126,11 +141,19 @@ public class InviteConnections extends BaseFragment implements InviteConnections
             }
         });
 
-        return view;
+        header_title.setText("Invite Connections");
+
+        img_backarrow.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+
+            }
+        });
+
     }
 
     private void getConnectionByFilter(String type, int currentPage, boolean b) {
-       // showDialog();
+        // showDialog();
         User userData = new User();
         User user = LoginUtils.getLoggedinUser();
         userData.setType(type);
@@ -144,38 +167,58 @@ public class InviteConnections extends BaseFragment implements InviteConnections
         connectionViewModel.getConnectionByFilter(userData, AppConstants.TOTAL_PAGES, currentPage)
                 .observe(getViewLifecycleOwner(), listBaseModel ->
                 {
-                    if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
-                        if (currentPage == PAGE_START ) {
-                            connectionList.clear();
-                           inviteConnectionsAdapter.notifyDataSetChanged();
-                        }
-                        if(users.size()>0)
-                        {
-                            connectionList.addAll(listBaseModel.getData());
-                            for (User user1:users)
-                            {
 
-                                for(User user2:listBaseModel.getData())
-                                {
-                                    if(user2.getId()==user1.getId())
-                                    {
+                    swipeRefresh.setRefreshing(false);
+                    if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
+                        if (currentPage == PAGE_START) {
+                            connectionList.clear();
+                            inviteConnectionsAdapter.notifyDataSetChanged();
+                        }
+                        if (users.size() > 0) {
+
+                            for (User user1 : listBaseModel.getData()) {
+
+                                if (user1.getIs_connected().equals("active")) {
+                                    Log.d("inviteconnection", "user status  : " + user1.getIs_connected());
+
+                                    connectionList.add(user1);
+                                }
+
+                            }
+
+
+                            for (User user1 : users) {
+
+                                for (User user2 : listBaseModel.getData()) {
+                                    if (user2.getId().equals(user1.getId())) {
+
+                                        Log.d("inviteconnection", "id match remove from list: " + user2.getFirst_name());
                                         connectionList.remove(user2);
-                                       // inviteConnectionsAdapter.notifyDataSetChanged();
+                                        // inviteConnectionsAdapter.notifyDataSetChanged();
                                     }
                                 }
                             }
-                           // connectionList.addAll(listBaseModel.getData());
-                        }
-                        else
-                        {
-                            connectionList.addAll(listBaseModel.getData());
-                            //inviteConnectionsAdapter.notifyDataSetChanged();
+
+                            // connectionList.addAll(listBaseModel.getData());
+                        } else {
+
+                            for (User user1 : listBaseModel.getData()) {
+
+                                if (user1.getIs_connected().equals("active")) {
+                                    Log.d("inviteconnection", "user status  : " + user1.getIs_connected());
+
+
+                                    connectionList.add(user1);
+                                }
+
+                            }
+
                         }
 
 
                         inviteConnectionsAdapter.notifyDataSetChanged();
 
-                       // PrefUtils.persistConnectionsMeeting(getContext(),new ArrayList<>());
+                        // PrefUtils.persistConnectionsMeeting(getContext(),new ArrayList<>());
                         //PrefUtils.persistConnections(getContext(),new ArrayList<>());
                         if (connectionList.size() > 0) {
                             rc_connections.setVisibility(View.VISIBLE);
@@ -247,7 +290,7 @@ public class InviteConnections extends BaseFragment implements InviteConnections
 
                 inviteButton.setText("Invite Connections to Event");
                 users=bundle.getParcelableArrayList("connections");
-             //   users=PrefUtils.getConnections(getContext());
+                //   users=PrefUtils.getConnections(getContext());
             }
         }
     }
@@ -265,18 +308,15 @@ public class InviteConnections extends BaseFragment implements InviteConnections
     }
 
     private void addConnection(User data) {
-inviteButton.setVisibility(View.GONE);
-invitedConnections.add(data);
+        inviteButton.setVisibility(View.GONE);
+        invitedConnections.add(data);
         Log.e(TAG, "onItemClick: " + GsonUtils.toJson(invitedConnections));
 
         if (fragment_type.equals(Constants.FRAGMENT_NAME_2)) {
-            if (invitedConnections.size() > 0)
-            {
+            if (invitedConnections.size() > 0) {
                 inviteButton.setText("Invite (" + invitedConnections.size() + ")" + " Connections to Event");
                 inviteButton.setVisibility(View.VISIBLE);
-            }
-            else
-            {
+            } else {
                 inviteButton.setText("Invite Connections to Event");
                 inviteButton.setVisibility(View.GONE);
             }

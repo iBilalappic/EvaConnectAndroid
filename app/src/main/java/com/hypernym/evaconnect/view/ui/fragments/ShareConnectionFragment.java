@@ -37,6 +37,7 @@ import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,6 +69,8 @@ public class ShareConnectionFragment extends BaseFragment implements ShareConnec
     private List<ConnectionModel> connectionList = new ArrayList<>();
     private List<ConnectionModel> shareConnections_user = new ArrayList<>();
     private List<Integer> share_users = new ArrayList<>();
+    private List<ConnectionModel> hSearchList = new ArrayList<>();
+
 
     private String type = "user";
     private ConnectionViewModel connectionViewModel;
@@ -387,7 +390,7 @@ public class ShareConnectionFragment extends BaseFragment implements ShareConnec
         @Override
         public void afterTextChanged(Editable s) {
             //  currentPage = PAGE_START;
-            if (s.length() > 0) {
+       /*     if (s.length() > 0) {
                 isSearchFlag = true;
             } else {
                 isSearchFlag = false;
@@ -397,7 +400,21 @@ public class ShareConnectionFragment extends BaseFragment implements ShareConnec
 
             connectionList.clear();
             shareConnectionAdapter.notifyDataSetChanged();
-            getConnectionByFilter(type, PAGE_START, true);
+            getConnectionByFilter(type, PAGE_START, true);*/
+
+
+            if (!s.equals("")) {
+                hSearchList.clear();
+                for (ConnectionModel user : connectionList) {
+                    if (user.firstName.toLowerCase(Locale.getDefault()).contains(s)) {
+                        hSearchList.add(user);
+                    }
+                }
+                shareConnectionAdapter.hSetList(hSearchList);
+
+            } else {
+                shareConnectionAdapter.hSetList(connectionList);
+            }
 
         }
 

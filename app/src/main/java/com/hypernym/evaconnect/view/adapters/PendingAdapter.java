@@ -60,7 +60,7 @@ public class PendingAdapter extends RecyclerView.Adapter<PendingAdapter.ViewHold
         if (connections.get(position).getSender().getBioData() != null && !connections.get(position).getSender().getBioData().isEmpty()) {
             holder.tv_designation.setText(connections.get(position).getSender().getBioData());
         } else {
-            holder.tv_designation.setText("--");
+            holder.tv_designation.setVisibility(View.GONE);
         }
 
         /*

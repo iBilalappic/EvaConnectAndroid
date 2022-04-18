@@ -61,8 +61,8 @@ public class InviteConnectionsAdapter extends RecyclerView.Adapter<InviteConnect
 
         holder.tv_name.setText(connections.get(position).getFirst_name());
 
-        if (connections.get(position).getBio_data() != null && !connections.get(position).getBio_data().isEmpty()) {
-            holder.tv_field.setText(connections.get(position).getBio_data());
+        if (connections.get(position).getLast_online_datetime() != null && !connections.get(position).getLast_online_datetime().isEmpty()) {
+            holder.tv_field.setText(connections.get(position).getLast_online_datetime());
         } else {
             holder.tv_field.setText("--");
         }
@@ -75,27 +75,20 @@ public class InviteConnectionsAdapter extends RecyclerView.Adapter<InviteConnect
                 onItemClickListener.onItemClick(v, connections.indexOf(connections.get(position)), connections.get(position));
         });
 
-        holder.cancel_invite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                holder.tv_invite.setVisibility(View.VISIBLE);
-                holder.cancel_invite.setVisibility(View.GONE);
+        holder.cancel_invite.setOnClickListener(v -> {
+            holder.tv_invite.setVisibility(View.VISIBLE);
+            holder.cancel_invite.setVisibility(View.GONE);
 
-                if (onItemClickListener != null)
-                    onItemClickListener.onItemClick(v, connections.indexOf(connections.get(position)), connections.get(position));
-            }
+            if (onItemClickListener != null)
+                onItemClickListener.onItemClick(v, connections.indexOf(connections.get(position)), connections.get(position));
         });
 
-        if(connections.get(position).isIs_online())
-        {
+        if (connections.get(position).isIs_online()) {
             holder.tv_connection_status.setText("Online");
             holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.skyblue));
-        }
-        else
-        {
-            if(connections.get(position).getLast_online_datetime()!=null)
-            {
-                holder.tv_connection_status.setText("Last Online "+ DateUtils.formatToYesterdayOrToday(connections.get(position).getLast_online_datetime()));
+        } else {
+            if (connections.get(position).getLast_online_datetime() != null) {
+                holder.tv_connection_status.setText("Last Online " + DateUtils.formatToYesterdayOrToday(connections.get(position).getLast_online_datetime()));
                 holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.gray));
             }
 

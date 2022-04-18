@@ -5,6 +5,7 @@ import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_ST
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,7 @@ import com.hypernym.evaconnect.viewmodel.UserViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -70,6 +72,7 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
     private RecommendedUser_HorizontalAdapter recommendedUser_horizontalAdapter;
     private List<GetBlockedData> connectionList = new ArrayList<>();
     private List<User> recommendeduserList = new ArrayList<>();
+    private List<GetBlockedData> hSearchList = new ArrayList<>();
 
     private LinearLayoutManager linearLayoutManager, linearLayoutManagerHorizontal;
     private ConnectionViewModel connectionViewModel;
@@ -251,36 +254,32 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
             userData.setFirst_name(edt_search.getText().toString());
 //        Log.e("type", mtype);
 
-        connectionViewModel.getBlockedByFilter(userData).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<GetBlockedData>>>() {
-            @Override
-            public void onChanged(BaseModel<List<GetBlockedData>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
+        connectionViewModel.getBlockedByFilter(userData).observe(getViewLifecycleOwner(), listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
 //                    if (currentPage == PAGE_START) {
 //                        connectionList.clear();
 //                        blockedAdapter.notifyDataSetChanged();
 //                    }
-                    //
-                    connectionList.clear();
-                    connectionList.addAll(listBaseModel.getData());
-                    blockedAdapter.notifyDataSetChanged();
-                  //  if (connectionList.size() > 0) {
-                        rc_connections.setVisibility(View.VISIBLE);
-                        empty.setVisibility(View.GONE);
+                //
+                connectionList.clear();
+                connectionList.addAll(listBaseModel.getData());
+                blockedAdapter.notifyDataSetChanged();
+                //  if (connectionList.size() > 0) {
+                rc_connections.setVisibility(View.VISIBLE);
+                empty.setVisibility(View.GONE);
                 //    }
-                    isLoading = false;
-                } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
+                isLoading = false;
+            } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
 
-                    if(connectionList.size()==0)
-                    {
-                        rc_connections.setVisibility(View.GONE);
-                        empty.setVisibility(View.VISIBLE);
-                    }
+                if (connectionList.size() == 0) {
+                    rc_connections.setVisibility(View.GONE);
+                    empty.setVisibility(View.VISIBLE);
+                }
 //                    isLastPage = true;
 //                    // homePostsAdapter.removeLoading();
 //                    isLoading = false;
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
         });
     }
@@ -380,7 +379,10 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
 
         @Override
         public void afterTextChanged(Editable s) {
-            currentPage = PAGE_START;
+            Log.d("blocked", "afterTextChanged: " + s);
+            hFilterList(s);
+
+         /*   currentPage = PAGE_START;
             if (s.length() > 0) {
                 isSearchFlag = true;
                 connectionList.clear();
@@ -390,11 +392,37 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
                 isSearchFlag = false;
                 getBlockedConnections();
             }
+*/
 
 
-           // getConnectionByFilter(type, PAGE_START, true);
+            // getConnectionByFilter(type, PAGE_START, true);
 
         }
+
+    }
+
+    private void hFilterList(Editable s) {
+
+        Log.d("blocked", "hFilterList: " + connectionList.size());
+
+        if (!s.equals("")) {
+            hSearchList.clear();
+            if (connectionList != null) {
+
+                for (GetBlockedData user : connectionList) {
+                    Log.d("blocked", "hFilterList: " + user.getReceiver().getFirstName());
+                    if (user.getReceiver().getFirstName().toLowerCase(Locale.getDefault()).contains(s)) {
+                        hSearchList.add(user);
+                    }
+                }
+                blockedAdapter.hSetList(hSearchList);
+
+            }
+
+        } else {
+            blockedAdapter.hSetList(connectionList);
+        }
+
 
     }
 

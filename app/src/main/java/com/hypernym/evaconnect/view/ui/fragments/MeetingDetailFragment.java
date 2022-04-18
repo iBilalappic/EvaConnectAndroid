@@ -146,36 +146,30 @@ public class MeetingDetailFragment extends BaseFragment {
         createMeetingFragment.setArguments(bundle);
         loadFragment(R.id.framelayout,createMeetingFragment,getContext(),true);
     }
+
     private void getMeetingDetails(int meeting_id) {
         meetingViewModel.getMeetingDetails(meeting_id).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<Event>>>() {
             @Override
             public void onChanged(BaseModel<List<Event>> listBaseModel) {
 
-                if(listBaseModel!=null && !listBaseModel.isError() && listBaseModel.getData().size()>0)
-                {
-                    event=listBaseModel.getData().get(0);
+                if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
+                    event = listBaseModel.getData().get(0);
                     setEventData(listBaseModel.getData().get(0));
-                    for(EventAttendees user:event.getAttendees())
-                    {
+                    for (EventAttendees user : event.getAttendees()) {
                         invitedConnections.add(user.getUser());
                     }
                     usersAdapter.notifyDataSetChanged();
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
-                else
-                {
-                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
-                }
-                if(event.getCreated_by_id()== LoginUtils.getLoggedinUser().getId())
-                {
+                if (event.getCreated_by_id() == LoginUtils.getLoggedinUser().getId()) {
                     btn_modifymeeting.setVisibility(View.VISIBLE);
                     attending_layout.setVisibility(View.GONE);
 
-                }
-                else
-                {
+                } else {
                     btn_modifymeeting.setVisibility(View.GONE);
                     attending_layout.setVisibility(View.VISIBLE);
-                  //  accept_invite.setVisibility(View.VISIBLE);
+                    //  accept_invite.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -184,29 +178,31 @@ public class MeetingDetailFragment extends BaseFragment {
 
                 tv_description.setText(event.getContent());
 
-                tv_createdDate.setText(DateUtils.getFormattedDateDMY(event.getStart_date()) + " - " + DateUtils.getFormattedDateDMY(event.getEnd_date()) + " | " + DateUtils.getTimeUTC(event.getStart_time()) + " - " + DateUtils.getTimeUTC(event.getEnd_time()));
+                tv_createdDate.setText(DateUtils.getFormattedDateDMY(event.getStart_date()) + " - " + DateUtils.getFormattedDateDMY(event.getEnd_date()) + " | " + DateUtils.getTimeUTC((event.getStart_time())) + " - " + DateUtils.getTimeUTC((event.getEnd_time())));
 
                 tv_createdLocation.setText(event.getAddress());
-                if(event.getIs_attending()!=null && event.getIs_attending().equalsIgnoreCase("Going"))
-                {
+                if (event.getIs_attending() != null && event.getIs_attending().equalsIgnoreCase("Going")) {
                     btn_notattending.setBackground(getResources().getDrawable(R.drawable.notattending_disable));
                     btn_attending.setBackground(getResources().getDrawable(R.drawable.attending_enable));
-                }
-                else
-                {
+                } else {
                     btn_notattending.setBackground(getResources().getDrawable(R.drawable.notattending_enable));
                     btn_attending.setBackground(getResources().getDrawable(R.drawable.attending_disable));
                 }
 
             }
+
+
         });
     }
+
+
+
+
     @OnClick(R.id.btn_notattending)
-    public void notAttending()
-    {
-      btn_notattending.setBackground(getResources().getDrawable(R.drawable.notattending_enable));
-      btn_attending.setBackground(getResources().getDrawable(R.drawable.attending_disable));
-        Meeting meeting=new Meeting();
+    public void notAttending() {
+        btn_notattending.setBackground(getResources().getDrawable(R.drawable.notattending_enable));
+        btn_attending.setBackground(getResources().getDrawable(R.drawable.attending_disable));
+        Meeting meeting = new Meeting();
         meeting.setUser_id(LoginUtils.getLoggedinUser().getId());
         meeting.setMeeting_id(event.getId());
         meeting.setAttendance_status("Not Going");

@@ -36,7 +36,6 @@ import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -213,7 +212,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
 //                    }
                 connectedList.clear();
                 connectedList.addAll(listBaseModel.getData());
-                connectionsAdapter.notifyDataSetChanged();
+                connectionsAdapter.hSetList(connectedList);
 //                    if (connectionList.size() > 0) {
                 rc_connections.setVisibility(View.VISIBLE);
                 empty.setVisibility(View.GONE);
@@ -319,14 +318,24 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
                     break;
 
                 case R.id.ly_main:
-                    ConnectionModel user = connectedList.get(position);
-                    PersonProfileFragment personProfileFragment = new PersonProfileFragment();
-                    Bundle bundle2 = new Bundle();
-                    bundle2.putInt("user_id", user.id);
-                    Log.d("connection", "onItemClick: user " + user.id);
-                    bundle2.putParcelable("connected_user", user);
-                    Log.d("connection", "onItemClick: " + GsonUtils.toJson(user));
-                    loadFragment_bundle(R.id.framelayout, personProfileFragment, getContext(), true, bundle2);
+
+
+                    try {
+                        ConnectionModel user = connectedList.get(position);
+                        PersonProfileFragment personProfileFragment = new PersonProfileFragment();
+                        Bundle bundle2 = new Bundle();
+                        bundle2.putInt("user_id", user.id);
+                        Log.d("connection", "onItemClick: user " + user.id);
+                        bundle2.putParcelable("connected_user", user);
+                        Log.d("connection", "onItemClick: " + GsonUtils.toJson(user));
+                        edt_search.setText("");
+                        loadFragment_bundle(R.id.framelayout, personProfileFragment, getContext(), true, bundle2);
+
+                    } catch (Exception e) {
+
+                        Log.d("connection", "onItemClick: " + position);
+
+                    }
 
                     break;
             }

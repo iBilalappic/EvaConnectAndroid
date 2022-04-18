@@ -720,7 +720,7 @@ public class GlobalNewsFragment extends BaseFragment implements View.OnClickList
 
     @Subscribe
     public void onEvent(String mtitle) {
-        Log.d("TAG", "onEvent: "+mtitle);
+        Log.d("news", "onEvent: "+mtitle);
         search_key=mtitle;
         callPostsApi();
     }

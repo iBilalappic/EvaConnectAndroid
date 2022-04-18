@@ -61,8 +61,6 @@ public class GlobalPostFragment  extends BaseFragment implements View.OnClickLis
     RecyclerView rc_home;
 
 
-    @BindView(R.id.swipeRefresh)
-    SwipeRefreshLayout swipeRefresh;
     private String search_key;
 
 
@@ -112,7 +110,6 @@ public class GlobalPostFragment  extends BaseFragment implements View.OnClickLis
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication())).get(UserViewModel.class);
         newsViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication())).get(NewsViewModel.class);
         //   currentPage = PAGE_START;
-        swipeRefresh.setOnRefreshListener(this);
 
         initRecycler();
         // showBackButton();
@@ -202,7 +199,6 @@ public class GlobalPostFragment  extends BaseFragment implements View.OnClickLis
                 }
                 posts.addAll(dashboardBaseModel.getData());
                 homePostsAdapter.notifyDataSetChanged();
-                swipeRefresh.setRefreshing(false);
                 //  homePostsAdapter.removeLoading();
                 totalsize=totalsize+posts.size();
                 isLoading = false;
@@ -211,7 +207,6 @@ public class GlobalPostFragment  extends BaseFragment implements View.OnClickLis
                 totalsize=0;
                 // homePostsAdapter.removeLoading();
                 homePostsAdapter.notifyDataSetChanged();
-                swipeRefresh.setRefreshing(false);
                 isLoading = false;
             } else {
                 networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
@@ -609,7 +604,6 @@ public class GlobalPostFragment  extends BaseFragment implements View.OnClickLis
         userViewModel.getuser_details(user.getId()
         ).observe(this, listBaseModel -> {
             if (listBaseModel.getData() != null && !listBaseModel.isError()) {
-                swipeRefresh.setRefreshing(false);
                 LoginUtils.saveUser(listBaseModel.getData().get(0));
             } else {
                 networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));

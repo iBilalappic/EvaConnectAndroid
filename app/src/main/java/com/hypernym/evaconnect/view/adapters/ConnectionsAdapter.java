@@ -59,7 +59,7 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
                 if (connections.get(position).receiver.getBioData() != null && !connections.get(position).receiver.getBioData().isEmpty()) {
                     holder.tv_designation.setText(connections.get(position).receiver.getBioData());
                 } else {
-                    holder.tv_designation.setText("--");
+                    holder.tv_designation.setVisibility(View.GONE);
                 }
                 if (connections.get(position).receiver.getIs_online()) {
                     holder.tv_connection_status.setText("Online");
@@ -71,8 +71,8 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
                     } else {
                         holder.tv_connection_status.setText("-");
                     }
-
                 }
+
 
 
             } else if (user.getId().equals(connections.get(position).receiverId)) {
@@ -80,12 +80,12 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
                     AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).sender.getUserImage());
                 }
                 if (connections.get(position).sender.getFirstName() != null) {
-                    holder.tv_name.setText(connections.get(position).sender.getFirstName());
+                    holder.tv_name.setText(connections.get(position).sender.getFirstName() + " " + connections.get(position).sender.getLastName());
                 }
                 if (connections.get(position).sender.getBioData() != null && !connections.get(position).sender.getBioData().isEmpty()) {
                     holder.tv_designation.setText(connections.get(position).sender.getBioData());
                 } else {
-                    holder.tv_designation.setText("--");
+                    holder.tv_designation.setVisibility(View.GONE);
                 }
                 if (connections.get(position).sender.getIs_online()) {
                     holder.tv_connection_status.setText("Online");
@@ -106,12 +106,17 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
                 AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).userImage);
             }
             if (connections.get(position).firstName != null) {
-                holder.tv_name.setText(connections.get(position).firstName);
+                holder.tv_name.setText(connections.get(position).firstName + " ");
+
+                if (connections.get(position).lastName != null) {
+                    holder.tv_name.setText(connections.get(position).firstName + " " + connections.get(position).lastName);
+
+                }
             }
             if (connections.get(position).bioData != null && !connections.get(position).bioData.isEmpty()) {
                 holder.tv_designation.setText(connections.get(position).bioData);
             } else {
-                holder.tv_designation.setText("--");
+                holder.tv_designation.setVisibility(View.GONE);
             }
 
             if (connections.get(position).isOnline) {
@@ -247,14 +252,15 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
                         onItemClickListener.onItemClick(v, originalConnections.indexOf(connections.get(getAdapterPosition())));
                     break;
                 case R.id.tv_decline:
-                    if (onItemClickListener != null)
+                    if (onItemClickListener != null) {
                         onItemClickListener.onItemClick(v, originalConnections.indexOf(connections.get(getAdapterPosition())));
+                    }
                     break;
 
                 case R.id.ly_main:
-                    if (onItemClickListener != null)
-
+                    if (onItemClickListener != null) {
                         onItemClickListener.onItemClick(v, originalConnections.indexOf(connections.get(getAdapterPosition())));
+                    }
 
 
                     break;

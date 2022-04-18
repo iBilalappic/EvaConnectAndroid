@@ -335,9 +335,9 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
                         Drawable leftCompoundDrawable = compoundDrawables[0];
                         if (leftCompoundDrawable == null) {
                             interested.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
-                            attendee_status= "Going";
-                            register.setText("Un Register");
-                            getEventDetails(event_id,user_id);
+                            attendee_status = "Going";
+                            register.setText("Unregister");
+                            getEventDetails(event_id, user_id);
 
                         }
                     }else{

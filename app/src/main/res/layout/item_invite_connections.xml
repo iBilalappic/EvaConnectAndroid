@@ -57,7 +57,7 @@
             android:gravity="start"
             android:singleLine="true"
             android:text=""
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/gray"
             android:textSize="14sp"
             app:layout_constraintEnd_toStartOf="@+id/tv_invite"
             app:layout_constraintStart_toStartOf="@+id/tv_name"

@@ -344,7 +344,9 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
     public void addConnections(){
         Bundle bundle = new Bundle();
         bundle.putString(Constants.FRAGMENT_TYPE, Constants.FRAGMENT_NAME_1);
-        bundle.putParcelableArrayList("connections",invitedConnections);
+        bundle.putParcelableArrayList("connections", invitedConnections);
+
+        Log.d("inviteconnection", "addConnections: " + invitedConnections.size());
         loadFragment_bundle(R.id.framelayout, new InviteConnections(this), getContext(), true, bundle);
     }
 
