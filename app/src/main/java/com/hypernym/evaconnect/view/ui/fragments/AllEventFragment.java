@@ -56,7 +56,6 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
     @BindView(R.id.newpost)
     TextView newpost;
 
-
     @BindView(R.id.tv_create_event)
     TextView tv_create_event;
 
@@ -91,6 +90,8 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
 
         ButterKnife.bind(this, view);
         tv_create_event.setOnClickListener(this);
+
+        Log.d("allevents", "onCreateView: All Event ");
         return view;
     }
 
@@ -194,15 +195,7 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
         if (view.getId()==R.id.tv_attending) {
 
             TextView textView = view.findViewById(R.id.tv_attending);
-
             textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
-
-            if (NetworkUtils.isNetworkConnected(getContext())) {
-                callPostsApi();
-                Log.d("allevents", "api calling ");
-            } else {
-                networkErrorDialog();
-            }
 
         } else {
             PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
@@ -262,16 +255,13 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void likePost(Post post, int position) {
-        postViewModel.likePost(post).observe(this, new Observer<BaseModel<List<Post>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError()) {
-                    postAdapter.notifyItemChanged(position);
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
+        postViewModel.likePost(post).observe(this, listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError()) {
+                postAdapter.notifyItemChanged(position);
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
     }
 
@@ -345,18 +335,13 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
     private void showInterestedApiCall(int position, String attendee_Status) {
 
         showDialog();
-        eventViewModel.showInterestEvent(posts.get(position).getId(), LoginUtils.getUser().getId(), "active", attendee_Status).observe(this, new Observer<BaseModel<List<Object>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Object>> listBaseModel) {
-                if (!listBaseModel.isError()) {
+        eventViewModel.showInterestEvent(posts.get(position).getId(), LoginUtils.getUser().getId(), "active", attendee_Status).observe(this, listBaseModel -> {
+            if (!listBaseModel.isError()) {
 
-                    callPostsApi();
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-
+                callPostsApi();
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
-
 
         });
 

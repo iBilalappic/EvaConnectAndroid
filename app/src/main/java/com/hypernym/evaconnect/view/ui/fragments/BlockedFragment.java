@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,7 +22,6 @@ import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
-import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.GetBlockedData;
 import com.hypernym.evaconnect.models.User;
@@ -51,7 +49,6 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
 
     @BindView(R.id.rc_maincategories)
     RecyclerView rc_maincategories;
-
 
     @BindView(R.id.edt_search)
     EditText edt_search;
@@ -128,11 +125,14 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
     }
 
     private void getBlockedConnections() {
+        showDialog();
         User userData = new User();
         User user = LoginUtils.getLoggedinUser();
         userData.setType(type);
         userData.setUser_id(user.getId());
         connectionViewModel.getBlockedUsers().observe(getViewLifecycleOwner(), listBaseModel -> {
+            hideDialog();
+
             if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
                 if (currentPage == PAGE_START) {
                     connectionList.clear();
@@ -160,6 +160,7 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
                 // homePostsAdapter.removeLoading();
                 isLoading = false;
             } else {
+                hideDialog();
                 networkResponseDialog(getString(R.string.error), listBaseModel.getMessage());
             }
         });
@@ -188,7 +189,6 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
     }*/
 
     private void initMainOptionsRecView() {
-
         recommendedUser_horizontalAdapter = new RecommendedUser_HorizontalAdapter(getContext(), recommendeduserList);
         linearLayoutManagerHorizontal = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         rc_maincategories.setLayoutManager(linearLayoutManagerHorizontal);
@@ -290,7 +290,12 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
             switch (view.getId()) {
 
                 case R.id.tv_unblock:
-                    UnBlockUser(connectionList.get(position), position);
+                    try {
+
+                        UnBlockUser(connectionList.get(position), position);
+                    } catch (Exception e) {
+                        e.getLocalizedMessage();
+                    }
                     break;
               /*  case R.id.tv_decline:
                     SettingDeclineData(connectionList.get(position));
@@ -380,7 +385,15 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
         @Override
         public void afterTextChanged(Editable s) {
             Log.d("blocked", "afterTextChanged: " + s);
-            hFilterList(s);
+
+            Log.d("blocked", "block connections :" + connectionList.size());
+
+
+            if (s.equals("")) {
+                blockedAdapter.hSetList(connectionList);
+            } else {
+                hFilterList(s);
+            }
 
          /*   currentPage = PAGE_START;
             if (s.length() > 0) {
@@ -391,8 +404,7 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
             } else {
                 isSearchFlag = false;
                 getBlockedConnections();
-            }
-*/
+            }*/
 
 
             // getConnectionByFilter(type, PAGE_START, true);
@@ -408,39 +420,39 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
         if (!s.equals("")) {
             hSearchList.clear();
             if (connectionList != null) {
-
                 for (GetBlockedData user : connectionList) {
-                    Log.d("blocked", "hFilterList: " + user.getReceiver().getFirstName());
-                    if (user.getReceiver().getFirstName().toLowerCase(Locale.getDefault()).contains(s)) {
+                    String name = user.getReceiver().getFirstName().toLowerCase(Locale.getDefault());
+                    Log.d("blocked", "Name : " + name);
+
+                    if (name.contains(s.toString().toLowerCase(Locale.getDefault()))) {
+                        Log.d("blocked", "User Found: " + user.getReceiver().getFirstName());
                         hSearchList.add(user);
                     }
                 }
+
                 blockedAdapter.hSetList(hSearchList);
 
-            }
+                Log.d("blocked", "hSearchList size: " + hSearchList.size());
 
+
+            }
         } else {
             blockedAdapter.hSetList(connectionList);
         }
-
-
     }
 
-    private void GetUserDetails() {
+    /*private void GetUserDetails() {
         User user = new User();
         user = LoginUtils.getUser();
         userViewModel.getuser_details(user.getId()
-        ).observe(this, new Observer<BaseModel<List<User>>>() {
-            @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel) {
-                if (listBaseModel.getData() != null && !listBaseModel.isError()) {
-                    swipeRefresh.setRefreshing(false);
-                    LoginUtils.saveUser(listBaseModel.getData().get(0));
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
+        ).observe(this, listBaseModel -> {
+            if (listBaseModel.getData() != null && !listBaseModel.isError()) {
+                swipeRefresh.setRefreshing(false);
+                LoginUtils.saveUser(listBaseModel.getData().get(0));
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
-    }
+    }*/
 }

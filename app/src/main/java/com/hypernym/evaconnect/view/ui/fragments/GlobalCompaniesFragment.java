@@ -44,7 +44,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GlobalConnectionsFragment extends BaseFragment implements OptionsAdapter.ItemClickListener, ConnectionsAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class GlobalCompaniesFragment extends BaseFragment implements OptionsAdapter.ItemClickListener, ConnectionsAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.rc_connections)
     RecyclerView rc_connections;
 
@@ -87,7 +87,7 @@ public class GlobalConnectionsFragment extends BaseFragment implements OptionsAd
     private String search_key;
 
 
-    public GlobalConnectionsFragment() {
+    public GlobalCompaniesFragment() {
         // Required empty public constructor
     }
 

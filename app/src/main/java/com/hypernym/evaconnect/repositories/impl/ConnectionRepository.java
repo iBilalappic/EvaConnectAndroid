@@ -183,6 +183,7 @@ public class ConnectionRepository implements IConnectionRespository {
             public void onResponse(Call<BaseModel<List<ConnectionModel>>> call, Response<BaseModel<List<ConnectionModel>>> response) {
                 connectedMutableLiveData.setValue(response.body());
             }
+
             @Override
             public void onFailure(Call<BaseModel<List<ConnectionModel>>> call, Throwable t) {
                 connectedMutableLiveData.setValue(null);
@@ -191,15 +192,38 @@ public class ConnectionRepository implements IConnectionRespository {
         return connectedMutableLiveData;
     }
 
+
+    @Override
+    public LiveData<BaseModel<List<ConnectionModel>>> getCompanies(User userData, int total, int current) {
+        connectedMutableLiveData = new MutableLiveData<>();
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("user_id", userData.getUser_id());
+        body.put("connection_status", userData.getFilter());
+        RestClient.get().appApi().getConnected(body).enqueue(new Callback<BaseModel<List<ConnectionModel>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<ConnectionModel>>> call, Response<BaseModel<List<ConnectionModel>>> response) {
+                connectedMutableLiveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<ConnectionModel>>> call, Throwable t) {
+                connectedMutableLiveData.setValue(null);
+            }
+        });
+        return connectedMutableLiveData;
+    }
+
+
     @Override
     public LiveData<BaseModel<List<ConnectionModel>>> getConnectedFilter(User userData) {
-        connectedFilterMutableLiveData=new MutableLiveData<>();
+        connectedFilterMutableLiveData = new MutableLiveData<>();
 
-        RestClient.get().appApi().getConnectedByFilter(userData.first_name,"",userData.getFilter(),userData.getUser_id()).enqueue(new Callback<BaseModel<List<ConnectionModel>>>() {
+        RestClient.get().appApi().getConnectedByFilter(userData.first_name, "", userData.getFilter(), userData.getUser_id()).enqueue(new Callback<BaseModel<List<ConnectionModel>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<ConnectionModel>>> call, Response<BaseModel<List<ConnectionModel>>> response) {
                 connectedFilterMutableLiveData.setValue(response.body());
             }
+
             @Override
             public void onFailure(Call<BaseModel<List<ConnectionModel>>> call, Throwable t) {
                 connectedFilterMutableLiveData.setValue(null);

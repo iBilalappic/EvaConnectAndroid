@@ -364,19 +364,13 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
     private void showInterestedApiCall(String attendee_Status) {
         showDialog();
 
-        eventViewModel.showInterestEvent(event_id, LoginUtils.getUser().getId(), "active", attendee_Status).observe(this, new Observer<BaseModel<List<Object>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Object>> listBaseModel) {
-                if (!listBaseModel.isError()) {
-                    getEventStatus(event_id, LoginUtils.getLoggedinUser().getId());
-                    hideDialog();
-                } else
-                {
-                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
-                }
-
+        eventViewModel.showInterestEvent(event_id, LoginUtils.getUser().getId(), "active", attendee_Status).observe(this, listBaseModel -> {
+            if (!listBaseModel.isError()) {
+                getEventStatus(event_id, LoginUtils.getLoggedinUser().getId());
+                hideDialog();
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
-
 
         });
 
@@ -503,17 +497,14 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
         event.setUser_id(LoginUtils.getLoggedinUser().getId());
         event.setAttendance_status("Going");
 
-        eventViewModel.updateEventAttendance(event).observe(this, new Observer<BaseModel<List<Event>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Event>> listBaseModel) {
-                if (listBaseModel != null && listBaseModel.getData() != null) {
-                    accept_invite.setVisibility(View.GONE);
-                    interested.setVisibility(View.VISIBLE);
-                    invitedConnections.add(LoginUtils.getLoggedinUser());
-                    usersAdapter.notifyDataSetChanged();
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
+        eventViewModel.updateEventAttendance(event).observe(this, listBaseModel -> {
+            if (listBaseModel != null && listBaseModel.getData() != null) {
+                accept_invite.setVisibility(View.GONE);
+                interested.setVisibility(View.VISIBLE);
+                invitedConnections.add(LoginUtils.getLoggedinUser());
+                usersAdapter.notifyDataSetChanged();
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
         });
     }
@@ -525,17 +516,14 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
         event.setStatus(AppConstants.ACTIVE);
         event.setUser_id(LoginUtils.getLoggedinUser().getId());
         event.setAttendance_status("Going");
-        eventViewModel.addEventAttendance(event).observe(this, new Observer<BaseModel<List<Event>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Event>> listBaseModel) {
-                if (listBaseModel != null && listBaseModel.getData() != null) {
-                    accept_invite.setVisibility(View.GONE);
-                    interested.setVisibility(View.VISIBLE);
-                    invitedConnections.add(LoginUtils.getLoggedinUser());
-                    usersAdapter.notifyDataSetChanged();
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
+        eventViewModel.addEventAttendance(event).observe(this, listBaseModel -> {
+            if (listBaseModel != null && listBaseModel.getData() != null) {
+                accept_invite.setVisibility(View.GONE);
+                interested.setVisibility(View.VISIBLE);
+                invitedConnections.add(LoginUtils.getLoggedinUser());
+                usersAdapter.notifyDataSetChanged();
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
         });
     }
@@ -561,21 +549,18 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
         comment.setCreated_by_id(user.getId());
         comment.setStatus(AppConstants.STATUS_ACTIVE);
         comment.setEvent_id(event_id);
-        eventViewModel.addComment(comment).observe(this, new Observer<BaseModel<List<Comment>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Comment>> listBaseModel) {
-                if (!listBaseModel.isError()) {
-                    // Toast.makeText(getContext(), getString(R.string.msg_comment_created), Toast.LENGTH_LONG).show();
-                    edt_comment.setText("");
-                    //networkResponseDialog(getString(R.string.success),getString(R.string.msg_comment_created));
+        eventViewModel.addComment(comment).observe(this, listBaseModel -> {
+            if (!listBaseModel.isError()) {
+                // Toast.makeText(getContext(), getString(R.string.msg_comment_created), Toast.LENGTH_LONG).show();
+                edt_comment.setText("");
+                //networkResponseDialog(getString(R.string.success),getString(R.string.msg_comment_created));
 //                        if(comments.size()>0)
 //                            rc_comments.smoothScrollToPosition(comments.size() - 1);
-                    getEventComments(event_id);
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
+                getEventComments(event_id);
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
     }
 

@@ -188,7 +188,8 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
 
     public void getConnectionByFilter(String mtype, int currentPage, boolean isSearch) {
 
-        // showDialog();
+
+        showDialog();
         User userData = new User();
         swipeRefresh.setRefreshing(false);
 
@@ -202,6 +203,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
 
 
         connectionViewModel.getConnected(userData, AppConstants.TOTAL_PAGES, currentPage).observe(getViewLifecycleOwner(), listBaseModel -> {
+            hideDialog();
             if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
 
                 Log.d("Connection_in", String.valueOf(listBaseModel.getData().size()));
@@ -230,6 +232,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
 //                    // homePostsAdapter.removeLoading();
 //                    isLoading = false;
             } else {
+                hideDialog();
                 networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
         });

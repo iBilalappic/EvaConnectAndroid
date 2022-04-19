@@ -329,7 +329,7 @@ public class CalendarFragment extends BaseFragment implements MonthAdapter.ItemC
         CalendarModel calendarModel = new CalendarModel();
         calendarModel.setUser_id(LoginUtils.getLoggedinUser().getId());
         calendarModel.setDate(year + "-" + month + "-" + day);
-        calendarViewModel.getCalendarMarksByDate(calendarModel).observe(getViewLifecycleOwner(), listBaseModel -> {
+        calendarViewModel.getCalendarMarksByDate(calendarModel).observe(requireActivity(), listBaseModel -> {
             if (!listBaseModel.isError() && listBaseModel.getData() != null) {
                 eventList.clear();
                 eventList.addAll(listBaseModel.getData());

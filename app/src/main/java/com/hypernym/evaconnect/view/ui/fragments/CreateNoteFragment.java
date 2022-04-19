@@ -13,15 +13,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.dateTimePicker.DateTime;
 import com.hypernym.evaconnect.dateTimePicker.DateTimePicker;
 import com.hypernym.evaconnect.dateTimePicker.SimpleDateTimePicker;
-import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.NotesData;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.viewmodel.NotesViewModel;
@@ -121,8 +118,6 @@ public class CreateNoteFragment extends BaseFragment implements View.OnClickList
                 post.setText("Update");
                 getNotesDetail(note_id);
             }
-
-
         }
 
 
@@ -133,26 +128,23 @@ public class CreateNoteFragment extends BaseFragment implements View.OnClickList
     }
 
     private void getNotesDetail(int note_id) {
-        notesViewModel.get_notes(note_id).observe(requireActivity(), new Observer<BaseModel<List<NotesData>>>() {
-            @Override
-            public void onChanged(BaseModel<List<NotesData>> viewdata) {
-                if(viewdata!=null&&!viewdata.isError()){
+        notesViewModel.get_notes(note_id).observe(requireActivity(), viewdata -> {
+            if (viewdata != null && !viewdata.isError()) {
 
-                    hideDialog();
+                hideDialog();
 //                    tv_startdate.setText(dateformat.format(viewdata.getData().get(0).occurrenceDate));
 //                    tv_startTime.setText(time.format(viewdata.getData().get(0).occurrenceTime));
-                    edt_content.setText(viewdata.getData().get(0).details);
-                    edt_eventname.setText(viewdata.getData().get(0).title);
-                    notes_id=viewdata.getData().get(0).objectId;
-                    if(viewdata.getData().get(0).isNotify){
-                        setReminder = true;
-                        tv_remind_me.setBackground(getResources().getDrawable(R.drawable.ic_blue_button));
-                        tv_remind_me.setTextColor(getResources().getColor(com.skydoves.powermenu.R.color.white));
-                    }else{
-                        setReminder = false;
-                        tv_remind_me.setBackground(getResources().getDrawable(R.drawable.ic_holo_blue_button));
-                        tv_remind_me.setTextColor(getResources().getColor(R.color.skyblue));
-                    }
+                edt_content.setText(viewdata.getData().get(0).details);
+                edt_eventname.setText(viewdata.getData().get(0).title);
+                notes_id = viewdata.getData().get(0).objectId;
+                if (viewdata.getData().get(0).isNotify) {
+                    setReminder = true;
+                    tv_remind_me.setBackground(getResources().getDrawable(R.drawable.ic_blue_button));
+                    tv_remind_me.setTextColor(getResources().getColor(com.skydoves.powermenu.R.color.white));
+                } else {
+                    setReminder = false;
+                    tv_remind_me.setBackground(getResources().getDrawable(R.drawable.ic_holo_blue_button));
+                    tv_remind_me.setTextColor(getResources().getColor(R.color.skyblue));
                 }
             }
         });
@@ -189,14 +181,11 @@ public class CreateNoteFragment extends BaseFragment implements View.OnClickList
     }
 
     private void callNotesApi() {
-        notesViewModel.create_notes(DateUtils.getFormattedMeetingDate(tv_startdate.getText().toString()),DateUtils.getTime_utc(tv_startTime.getText().toString())
-        ,edt_content.getText().toString(),edt_eventname.getText().toString(),setReminder).observe(this, new Observer<BaseModel<List<Object>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Object>> viewdata) {
-                if(!viewdata.isError()){
-                    hideDialog();
-                    getActivity().onBackPressed();
-                }
+        notesViewModel.create_notes(DateUtils.getFormattedMeetingDate(tv_startdate.getText().toString()), DateUtils.getTimeToUTC(tv_startTime.getText().toString())
+                , edt_content.getText().toString(), edt_eventname.getText().toString(), setReminder).observe(this, viewdata -> {
+            if (!viewdata.isError()) {
+                hideDialog();
+                requireActivity().onBackPressed();
             }
         });
     }
@@ -227,7 +216,7 @@ public class CreateNoteFragment extends BaseFragment implements View.OnClickList
     }
 
     @Override
-    public void DateTimeSet(Date date) throws ParseException {
+    public void DateTimeSet(Date date) {
         Date selectedDate = null;
         Date endDate = null;
         DateTime mDateTime = new DateTime(date);
@@ -286,14 +275,11 @@ public class CreateNoteFragment extends BaseFragment implements View.OnClickList
     }
 
     private void callUpdateNoteApi() {
-        notesViewModel.update_notes(DateUtils.getFormattedMeetingDate(tv_startdate.getText().toString()),DateUtils.getTime_utc(tv_startTime.getText().toString())
-                ,edt_content.getText().toString(),edt_eventname.getText().toString(),setReminder,notes_id).observe(this, new Observer<BaseModel<List<Object>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Object>> viewdata) {
-                if(!viewdata.isError()){
-                    hideDialog();
-                    getActivity().onBackPressed();
-                }
+        notesViewModel.update_notes(DateUtils.getFormattedMeetingDate(tv_startdate.getText().toString()), DateUtils.getTimeToUTC(tv_startTime.getText().toString())
+                , edt_content.getText().toString(), edt_eventname.getText().toString(), setReminder, notes_id).observe(this, viewdata -> {
+            if (!viewdata.isError()) {
+                hideDialog();
+                requireActivity().onBackPressed();
             }
         });
     }

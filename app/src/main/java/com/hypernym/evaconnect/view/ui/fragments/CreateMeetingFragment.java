@@ -147,7 +147,6 @@ public class CreateMeetingFragment extends BaseFragment implements Validator.Val
             }
             Meeting meeting=new Meeting();
             meeting.setUser_id( LoginUtils.getLoggedinUser().getId());
-
             meeting.setModified_by_id( LoginUtils.getLoggedinUser().getId());
             meeting.setModified_datetime(DateUtils.GetCurrentdatetime());
             meeting.setCreated_by_id(LoginUtils.getLoggedinUser().getId());

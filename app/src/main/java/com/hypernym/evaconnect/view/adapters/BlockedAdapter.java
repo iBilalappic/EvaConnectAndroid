@@ -58,7 +58,7 @@ public class BlockedAdapter extends RecyclerView.Adapter<BlockedAdapter.ViewHold
                 if (connections.get(position).getReceiver().getFirstName() != null) {
                     holder.tv_name.setText(connections.get(position).getReceiver().getFirstName());
                     if (connections.get(position).getReceiver().getLastName() != null) {
-                        holder.tv_name.setText(connections.get(position).getReceiver().getFirstName() + connections.get(position).getReceiver().getLastName());
+                        holder.tv_name.setText(connections.get(position).getReceiver().getFirstName()+ " " + connections.get(position).getReceiver().getLastName());
 
                     }
                 }
