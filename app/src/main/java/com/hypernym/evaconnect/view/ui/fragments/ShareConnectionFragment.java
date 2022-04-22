@@ -147,7 +147,7 @@ public class ShareConnectionFragment extends BaseFragment implements ShareConnec
     private void SendShareConnections() {
         share_users.clear();
         for (ConnectionModel inviteConnections : shareConnections_user) {
-            share_users.add(inviteConnections.connectionId);
+            share_users.add(inviteConnections.id);
         }
         ShareConnection shareConnection = new ShareConnection(LoginUtils.getUser().getId(), share_users);
         shareConnection.setObjectId(id);
@@ -173,7 +173,7 @@ public class ShareConnectionFragment extends BaseFragment implements ShareConnec
     private void SendShareConnectionsEvent() {
         share_users.clear();
         for (ConnectionModel inviteConnections : shareConnections_user) {
-            share_users.add(inviteConnections.connectionId);
+            share_users.add(inviteConnections.id);
         }
         ShareConnection shareConnection = new ShareConnection(LoginUtils.getUser().getId(), share_users);
         shareConnection.setObjectId(id);
@@ -196,7 +196,7 @@ public class ShareConnectionFragment extends BaseFragment implements ShareConnec
 
         share_users.clear();
         for (ConnectionModel inviteConnections : shareConnections_user) {
-            share_users.add(inviteConnections.connectionId);
+            share_users.add(inviteConnections.id);
         }
         ShareConnection shareConnection = new ShareConnection(LoginUtils.getUser().getId(), share_users);
         shareConnection.setObjectId(id);
@@ -226,7 +226,7 @@ public class ShareConnectionFragment extends BaseFragment implements ShareConnec
     private void SendShareConnectionsNews() {
         share_users.clear();
         for (ConnectionModel inviteConnections : shareConnections_user) {
-            share_users.add(inviteConnections.connectionId);
+            share_users.add(inviteConnections.id);
         }
 
         ShareConnection shareConnection = new ShareConnection(LoginUtils.getUser().getId(), share_users);
