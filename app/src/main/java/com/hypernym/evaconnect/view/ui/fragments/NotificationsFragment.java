@@ -109,12 +109,12 @@ public class NotificationsFragment extends BaseFragment implements Notifications
                 notifications.addAll(listBaseModel.getData());
                 notificationsAdapter.notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
-                notificationsAdapter.removeLoading();
+//                notificationsAdapter.removeLoading();
                 isLoading = false;
                 //hideDialog();
             } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
                 isLastPage = true;
-                notificationsAdapter.removeLoading();
+//                notificationsAdapter.removeLoading();
                 isLoading = false;
             } else {
                 networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));

@@ -4,13 +4,6 @@ import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_ST
 
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +12,12 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
@@ -408,23 +407,6 @@ public class PendingFragment extends BaseFragment implements OptionsAdapter.Item
 
     }
 
-    private void GetUserDetails() {
-        User user = new User();
-        user = LoginUtils.getUser();
-        userViewModel.getuser_details(user.getId()
-        ).observe(this, new Observer<BaseModel<List<User>>>() {
-            @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel) {
-                if (listBaseModel.getData() != null && !listBaseModel.isError()) {
-                    swipeRefresh.setRefreshing(false);
-                    LoginUtils.saveUser(listBaseModel.getData().get(0));
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
-            }
-        });
-    }
 
         public void getConnectedFilter(boolean isSearch) {
 

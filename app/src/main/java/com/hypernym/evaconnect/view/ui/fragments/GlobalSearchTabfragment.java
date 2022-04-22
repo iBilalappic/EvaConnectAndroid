@@ -27,6 +27,7 @@ public class GlobalSearchTabfragment extends BaseFragment implements View.OnClic
     EditText edt_search;
 
     User user = new User();
+
     public GlobalSearchTabfragment() {
         // Required empty public constructor
     }
@@ -65,17 +66,20 @@ public class GlobalSearchTabfragment extends BaseFragment implements View.OnClic
 
 
         GlobalSearchTabfragment.Adapter adapter = new GlobalSearchTabfragment.Adapter(getChildFragmentManager());
-//        if (user != null && user.getType().equals("company")) {
-//            adapter.addFragment(new ConnectionsFragment(), "Followers");
-//        }else {
-//            adapter.addFragment(new ConnectionsFragment(), "Connected");
-//            adapter.addFragment(new PendingFragment(), "Pending");
-//        }
-        adapter.addFragment(new GlobalPostFragment(), "Post");
-        adapter.addFragment(new GlobalConnectionsFragment(), "Conne..");
-        adapter.addFragment(new GlobalConnectionsFragment(), "Companies");
-        adapter.addFragment(new GlobalNewsFragment(), "News");
-        adapter.addFragment(new GlobalEventFragment(), "Event");
+
+
+        if (user != null && user.getType().equals("company")) {
+            adapter.addFragment(new GlobalPostFragment(), "Post");
+            adapter.addFragment(new GlobalConnectionsFragment(), "Followers");
+            adapter.addFragment(new GlobalEventFragment(), "Event");
+        } else {
+            adapter.addFragment(new GlobalPostFragment(), "Post");
+            adapter.addFragment(new GlobalConnectionsFragment(), "Conne..");
+            adapter.addFragment(new GlobalConnectionsFragment(), "Comp..");
+            adapter.addFragment(new GlobalNewsFragment(), "News");
+            adapter.addFragment(new GlobalEventFragment(), "Event");
+
+        }
 
         viewPager.setAdapter(adapter);
 
@@ -128,11 +132,8 @@ public class GlobalSearchTabfragment extends BaseFragment implements View.OnClic
 
         @Override
         public void afterTextChanged(Editable s) {
-          //  currentPage = PAGE_START;
-            if (s.length() > 0) {
+            //  currentPage = PAGE_START;
                 mEventBus.post(s.toString());
-            } else {
-            }
 
 
         }

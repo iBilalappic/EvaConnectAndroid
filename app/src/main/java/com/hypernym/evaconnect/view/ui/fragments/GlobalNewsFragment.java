@@ -170,57 +170,54 @@ public class GlobalNewsFragment extends BaseFragment implements View.OnClickList
         if (search_key.length() > 0)
             user.setSearch_key(search_key);
 
-        homeViewModel.getDashboardSearch(user, AppConstants.TOTAL_PAGES, currentPage, filter).observe(this, new Observer<BaseModel<List<Post>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Post>> dashboardBaseModel) {
+        homeViewModel.getDashboardSearch(user, AppConstants.TOTAL_PAGES, currentPage, filter).observe(this, dashboardBaseModel -> {
 
-                //   homePostsAdapter.clear();
-                if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
+            //   homePostsAdapter.clear();
+            if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
 
-                    if (currentPage == PAGE_START) {
-                        posts.clear();
-                        homePostsAdapter.notifyDataSetChanged();
-                    }
-                    totalsize=0;
-
-                    for (Post post : dashboardBaseModel.getData()) {
-                        if (post.getContent() == null) {
-                            post.setContent("");
-                        }
-                        if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() > 0) {
-                            post.setPost_type(AppConstants.IMAGE_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_video() != null) {
-                            post.setPost_type(AppConstants.VIDEO_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() == 0 && !post.isIs_url()) {
-                            post.setPost_type(AppConstants.TEXT_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("event")) {
-                            post.setPost_type(AppConstants.EVENT_TYPE); }
-                        else if (post.getType().equalsIgnoreCase("news")) {
-                            post.setPost_type(AppConstants.NEWS_TYPE); }
-                        else if (post.getType().equalsIgnoreCase("job")) {
-                            post.setPost_type(AppConstants.JOB_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("post") && post.isIs_url()) {
-                            post.setPost_type(AppConstants.LINK_POST);
-                        }
-                    }
-                    posts.addAll(dashboardBaseModel.getData());
+                if (currentPage == PAGE_START) {
+                    posts.clear();
                     homePostsAdapter.notifyDataSetChanged();
-                    swipeRefresh.setRefreshing(false);
-                    //  homePostsAdapter.removeLoading();
-                    totalsize=totalsize+posts.size();
-                    isLoading = false;
-                } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
-                    isLastPage = true;
-                    totalsize=0;
-                    // homePostsAdapter.removeLoading();
-                    homePostsAdapter.notifyDataSetChanged();
-                    swipeRefresh.setRefreshing(false);
-                    isLoading = false;
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
+                totalsize = 0;
 
+                for (Post post : dashboardBaseModel.getData()) {
+                    if (post.getContent() == null) {
+                        post.setContent("");
+                    }
+                    if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() > 0) {
+                        post.setPost_type(AppConstants.IMAGE_TYPE);
+                    } else if (post.getType().equalsIgnoreCase("post") && post.getPost_video() != null) {
+                        post.setPost_type(AppConstants.VIDEO_TYPE);
+                    } else if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() == 0 && !post.isIs_url()) {
+                        post.setPost_type(AppConstants.TEXT_TYPE);
+                    } else if (post.getType().equalsIgnoreCase("event")) {
+                        post.setPost_type(AppConstants.EVENT_TYPE);
+                    } else if (post.getType().equalsIgnoreCase("news")) {
+                        post.setPost_type(AppConstants.NEWS_TYPE);
+                    } else if (post.getType().equalsIgnoreCase("job")) {
+                        post.setPost_type(AppConstants.JOB_TYPE);
+                    } else if (post.getType().equalsIgnoreCase("post") && post.isIs_url()) {
+                        post.setPost_type(AppConstants.LINK_POST);
+                    }
+                }
+                posts.addAll(dashboardBaseModel.getData());
+                homePostsAdapter.notifyDataSetChanged();
+                swipeRefresh.setRefreshing(false);
+                //  homePostsAdapter.removeLoading();
+                totalsize = totalsize + posts.size();
+                isLoading = false;
+            } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
+                isLastPage = true;
+                totalsize = 0;
+                // homePostsAdapter.removeLoading();
+                homePostsAdapter.notifyDataSetChanged();
+                swipeRefresh.setRefreshing(false);
+                isLoading = false;
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+
         });
     }
 
@@ -628,7 +625,7 @@ public class GlobalNewsFragment extends BaseFragment implements View.OnClickList
     private void GetUserDetails() {
         User user = new User();
         user = LoginUtils.getUser();
-        userViewModel.getuser_details(user.getId()
+        userViewModel.getuser_details(user.getId(), false
         ).observe(this, new Observer<BaseModel<List<User>>>() {
             @Override
             public void onChanged(BaseModel<List<User>> listBaseModel) {
@@ -720,9 +717,15 @@ public class GlobalNewsFragment extends BaseFragment implements View.OnClickList
 
     @Subscribe
     public void onEvent(String mtitle) {
-        Log.d("news", "onEvent: "+mtitle);
-        search_key=mtitle;
-        callPostsApi();
+        Log.d("news", "onEvent: " + mtitle);
+
+        if (!mtitle.equals("")) {
+            search_key = mtitle;
+            callPostsApi();
+            rc_home.setVisibility(View.VISIBLE);
+        } else {
+            rc_home.setVisibility(View.GONE);
+        }
     }
 
 }

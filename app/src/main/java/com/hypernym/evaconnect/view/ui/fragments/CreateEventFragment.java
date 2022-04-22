@@ -187,6 +187,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
         super.onResume();
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -223,7 +224,7 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
         setPageTitle(getString(R.string.action1));
         if(getArguments()!=null)
         {
-            initRecyclerview(false);
+            initRecyclerview(true);
             setPageTitle("Update Event");
             post.setText("Update Event");
             event=(Event) getArguments().getSerializable("event");
@@ -658,6 +659,8 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
             {
                 invitedConnections.add(user);
             }
+
+
         }
 
        //invitedConnections.addAll(connections);
@@ -668,7 +671,6 @@ public class CreateEventFragment extends BaseFragment implements DateTimePicker.
     }
     private boolean checkUserExist(User user)
     {
-
         for (User user1: invitedConnections)
         {
             if(user1.getId().equals(user.getId()))

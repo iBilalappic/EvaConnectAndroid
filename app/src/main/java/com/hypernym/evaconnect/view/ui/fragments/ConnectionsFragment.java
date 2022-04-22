@@ -435,23 +435,5 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
 
     }
 
-    private void GetUserDetails() {
-        try {
-            User user = new User();
-            user = LoginUtils.getUser();
-            userViewModel.getuser_details(user.getId()
-            ).observe(this, listBaseModel -> {
-                if (listBaseModel.getData() != null && !listBaseModel.isError()) {
-                    swipeRefresh.setRefreshing(false);
-                    LoginUtils.saveUser(listBaseModel.getData().get(0));
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
-            });
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-
-    }
+    
 }

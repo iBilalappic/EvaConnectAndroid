@@ -423,11 +423,11 @@ public class PostFragment extends BaseFragment implements View.OnClickListener, 
                 posts.addAll(dashboardBaseModel.getData());
                 postAdapter.notifyDataSetChanged();
                 swipeRefresh.setRefreshing(false);
-                postAdapter.removeLoading();
+//                postAdapter.removeLoading();
                 isLoading = false;
             } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
                 isLastPage = true;
-                postAdapter.removeLoading();
+//                postAdapter.removeLoading();
                 isLoading = false;
             } else {
                 networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));

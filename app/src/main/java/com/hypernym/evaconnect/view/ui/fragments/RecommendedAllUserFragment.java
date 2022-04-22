@@ -1,5 +1,7 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
+import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,7 +20,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
-import com.hypernym.evaconnect.listeners.PaginationScrollListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.User;
@@ -36,8 +37,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
 
 public class RecommendedAllUserFragment extends BaseFragment implements ConnectionsAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.rc_connections)
@@ -304,18 +303,15 @@ public class RecommendedAllUserFragment extends BaseFragment implements Connecti
     private void GetUserDetails() {
         User user = new User();
         user = LoginUtils.getUser();
-        userViewModel.getuser_details(user.getId()
-        ).observe(this, new Observer<BaseModel<List<User>>>() {
-            @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel) {
-                if (listBaseModel.getData() != null && !listBaseModel.isError()) {
-                    swipeRefresh.setRefreshing(false);
-                    LoginUtils.saveUser(listBaseModel.getData().get(0));
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
+        userViewModel.getuser_details(user.getId(), false
+        ).observe(this, listBaseModel -> {
+            if (listBaseModel.getData() != null && !listBaseModel.isError()) {
+                swipeRefresh.setRefreshing(false);
+                LoginUtils.saveUser(listBaseModel.getData().get(0));
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
     }
 }

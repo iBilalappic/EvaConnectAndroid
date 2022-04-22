@@ -157,6 +157,12 @@ public class Post implements Serializable {
     private Double salary;
     private String job_image;
     private Integer applicant_count;
+
+    public Integer getAttendees() {
+        return attendees;
+    }
+
+    private Integer attendees;
     private Integer is_job_like;
     private List<String> event_image;
 

@@ -30,6 +30,7 @@ import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.ConnectionsAdapter;
+import com.hypernym.evaconnect.view.adapters.ConnectionsCompaniesAdapter;
 import com.hypernym.evaconnect.view.adapters.OptionsAdapter;
 import com.hypernym.evaconnect.view.adapters.RecommendedUser_HorizontalAdapter;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
@@ -67,10 +68,12 @@ public class GlobalCompaniesFragment extends BaseFragment implements OptionsAdap
     SwipeRefreshLayout swipeRefresh;
 
 
+    String filter = "companies";
+
     private Boolean search;
-    private ConnectionsAdapter connectionsAdapter;
+    private ConnectionsCompaniesAdapter connectionsAdapter;
     private RecommendedUser_HorizontalAdapter recommendedUser_horizontalAdapter;
-    private List<User> connectionList = new ArrayList<>();
+    private List<ConnectionModel> connectionList = new ArrayList<>();
     private List<ConnectionModel> connectedList = new ArrayList<>();
     private List<ConnectionModel> hSearchList = new ArrayList<>();
     private List<User> recommendeduserList = new ArrayList<>();
@@ -112,11 +115,11 @@ public class GlobalCompaniesFragment extends BaseFragment implements OptionsAdap
         swipeRefresh.setOnRefreshListener(this);
         initMainOptionsRecView();
         initRecyclerView();
-        if (NetworkUtils.isNetworkConnected(getContext())) {
+      /*  if (NetworkUtils.isNetworkConnected(getContext())) {
             getConnectionByFilter(type, currentPage, false);
         } else {
             networkErrorDialog();
-        }
+        }*/
 
         if (user.getType().equalsIgnoreCase("user")) {
             edt_search.setHint("Search for a Connection");
@@ -145,7 +148,7 @@ public class GlobalCompaniesFragment extends BaseFragment implements OptionsAdap
     }
 
     private void initRecyclerView() {
-        connectionsAdapter = new ConnectionsAdapter(getContext(), connectedList, this);
+        connectionsAdapter = new ConnectionsCompaniesAdapter(getContext(), connectedList, this::onItemClick);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rc_connections.setLayoutManager(linearLayoutManager);
         rc_connections.setAdapter(connectionsAdapter);
@@ -158,7 +161,7 @@ public class GlobalCompaniesFragment extends BaseFragment implements OptionsAdap
                 isLoading = true;
                 currentPage = AppConstants.TOTAL_PAGES + currentPage;
                 if (NetworkUtils.isNetworkConnected(getContext())) {
-                    //   getConnectionByFilter(type, currentPage, false);
+                    //  getConnectionByFilter(type, currentPage, false);
                 } else {
                     networkErrorDialog();
                 }
@@ -193,50 +196,52 @@ public class GlobalCompaniesFragment extends BaseFragment implements OptionsAdap
     public void getConnectionByFilter(String mtype, int currentPage, boolean isSearch) {
 
         // showDialog();
-        User userData = new User();
-        swipeRefresh.setRefreshing(false);
 
-        // userData.setType(mtype);
-        userData.setUser_id(user.getId());
-        userData.setFilter("active");
-        if (edt_search.getText().toString().length() > 0)
-            userData.setFirst_name(edt_search.getText().toString());
-        Log.e("type", mtype);
-        //   connectedList.clear();
+        if (!search_key.equals("")) {
+
+            User user = LoginUtils.getLoggedinUser();
+
+            swipeRefresh.setRefreshing(false);
+
+            if (search_key.length() > 0)
+                user.setSearch_key(search_key);
+            Log.e("company", mtype);
+            //   connectedList.clear();
 
 
-        connectionViewModel.getCompanies(userData, AppConstants.TOTAL_PAGES, currentPage).observe(getViewLifecycleOwner(), listBaseModel -> {
-            if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
+            connectionViewModel.getCompanies(user, AppConstants.TOTAL_PAGES, currentPage, filter).observe(getViewLifecycleOwner(), listBaseModel -> {
+                if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
 
-                Log.d("Connection_in", String.valueOf(listBaseModel.getData().size()));
+                    Log.d("company", String.valueOf(listBaseModel.getData().size()));
 
-//                    if (currentPage == PAGE_START) {
-//                        connectionList.clear();
-//                        connectionsAdapter.notifyDataSetChanged();
-//                    }
-                connectedList.clear();
-                connectedList.addAll(listBaseModel.getData());
-                connectionsAdapter.hSetList(connectedList);
-//                    if (connectionList.size() > 0) {
-                rc_connections.setVisibility(View.GONE);
-                empty.setVisibility(View.GONE);
-                //  }
-//                    isLoading = false;
-            } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
-
-                if (connectionList.size() == 0) {
                     connectedList.clear();
-                    rc_connections.setVisibility(View.GONE);
-                    empty.setVisibility(View.VISIBLE);
-                    empty.setText("No Connection Found");
-                }
+                    connectedList.addAll(listBaseModel.getData());
+                    connectionsAdapter.hSetList(connectedList);
+                    rc_connections.setVisibility(View.VISIBLE);
+                    empty.setVisibility(View.GONE);
+
+
+                } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
+
+                    if (connectionList.size() == 0) {
+                        connectedList.clear();
+                        rc_connections.setVisibility(View.GONE);
+                        empty.setVisibility(View.VISIBLE);
+                        empty.setText("No Connection Found");
+                    }
 //                    isLastPage = true;
 //                    // homePostsAdapter.removeLoading();
 //                    isLoading = false;
-            } else {
-                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-            }
-        });
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }
+            });
+
+        } else {
+            empty.setVisibility(View.VISIBLE);
+            rc_connections.setVisibility(View.GONE);
+        }
+
 
     }
 
@@ -251,52 +256,6 @@ public class GlobalCompaniesFragment extends BaseFragment implements OptionsAdap
     }
 
 
-    public void getConnectedFilter(boolean isSearch) {
-
-        // showDialog();
-        User userData = new User();
-
-        // userData.setType(mtype);
-        userData.setUser_id(user.getId());
-        userData.setFilter("active");
-        if (edt_search.getText().toString().length() > 0)
-            userData.setFirst_name(edt_search.getText().toString());
-        userData.setLast_name("");
-        //   connectedList.clear();
-        connectionViewModel.getConnectedFilter(userData).observe(getViewLifecycleOwner(), listBaseModel -> {
-            if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
-//                    if (currentPage == PAGE_START) {
-//                        connectionList.clear();
-//                        connectionsAdapter.notifyDataSetChanged();
-//                    }
-                connectedList.clear();
-
-
-                connectedList.addAll(listBaseModel.getData());
-                Log.d("TAG", "getConnectedFilter: " + connectedList.size());
-
-                connectionsAdapter.notifyDataSetChanged();
-//                    if (connectionList.size() > 0) {
-                rc_connections.setVisibility(View.VISIBLE);
-                empty.setVisibility(View.GONE);
-                //  }
-//                    isLoading = false;
-            } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
-
-                if (connectionList.size() == 0) {
-                    connectedList.clear();
-                    rc_connections.setVisibility(View.GONE);
-                    empty.setVisibility(View.VISIBLE);
-                }
-//                    isLastPage = true;
-//                    // homePostsAdapter.removeLoading();
-//                    isLoading = false;
-            } else {
-                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-            }
-        });
-    }
-
 
     @Override
     public void onItemClick(View view, int position) {
@@ -307,7 +266,7 @@ public class GlobalCompaniesFragment extends BaseFragment implements OptionsAdap
                     break;
 
                 case R.id.tv_connect:
-                    TextView textView = (TextView) view;
+                 /*   TextView textView = (TextView) view;
                     callConnectApi(textView, connectionList.get(position));
                     //GetUserDetails();
                     if (textView.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_ACCEPT)) {
@@ -319,17 +278,19 @@ public class GlobalCompaniesFragment extends BaseFragment implements OptionsAdap
                         connection.setModified_datetime(DateUtils.GetCurrentdatetime());
                         callDeclineConnectApi(connection);
                     }
-                    break;
+                    break;*/
 
                 case R.id.ly_main:
 
 
                     try {
                         ConnectionModel user = connectedList.get(position);
+
+
                         PersonProfileFragment personProfileFragment = new PersonProfileFragment();
                         Bundle bundle2 = new Bundle();
                         bundle2.putInt("user_id", user.id);
-                        Log.d("connection", "onItemClick: user " + user.id);
+                        Log.d("connection", "onItemClick: user " + user);
                         bundle2.putParcelable("connected_user", user);
                         Log.d("connection", "onItemClick: " + GsonUtils.toJson(user));
                         loadFragment_bundle(R.id.framelayout, personProfileFragment, getContext(), true, bundle2);
@@ -348,11 +309,12 @@ public class GlobalCompaniesFragment extends BaseFragment implements OptionsAdap
         }
     }
 
-    private void SettingDeclineData(User connectionItem) {
+
+    private void SettingDeclineData(ConnectionModel connectionItem) {
         Connection connection = new Connection();
         User user = LoginUtils.getLoggedinUser();
         connection.setStatus(AppConstants.REQUEST_DECLINE);
-        connection.setId(connectionItem.getConnection_id());
+        connection.setId(connectionItem.connectionId);
         connection.setModified_by_id(user.getId());
         connection.setModified_datetime(DateUtils.GetCurrentdatetime());
         callDeclineConnectApi(connection);
@@ -401,19 +363,6 @@ public class GlobalCompaniesFragment extends BaseFragment implements OptionsAdap
         public void afterTextChanged(Editable s) {
 
 
-            Log.d("search", "afterTextChanged: " + s);
-
-            hFilterList(s);
-         /*   currentPage = PAGE_START;
-            if (s.length() > 0) {
-                isSearchFlag = true;
-                connectionList.clear();
-                connectionsAdapter.notifyDataSetChanged();
-                getConnectedFilter(true);
-            } else {
-                isSearchFlag = false;
-                getConnectionByFilter(type,currentPage,false);
-            }*/
         }
 
     }
@@ -435,7 +384,7 @@ public class GlobalCompaniesFragment extends BaseFragment implements OptionsAdap
 
     }
 
-    private void GetUserDetails() {
+  /*  private void GetUserDetails() {
         try {
             User user = new User();
             user = LoginUtils.getUser();
@@ -453,32 +402,28 @@ public class GlobalCompaniesFragment extends BaseFragment implements OptionsAdap
             exception.printStackTrace();
         }
 
-    }
+    }*/
 
     @Subscribe
     public void onEvent(String mtitle) {
-        Log.d("news", "onEvent: " + mtitle);
-        search_key = mtitle;
-        hFilterList(search_key);
+        Log.d("company", "onEvent: " + mtitle);
 
-    }
-
-    private void hFilterList(String s) {
-        if (!s.equals("")) {
-            hSearchList.clear();
-            for (ConnectionModel user : connectedList) {
-                if (user.firstName.toLowerCase(Locale.getDefault()).contains(s)) {
-                    hSearchList.add(user);
-                }
-            }
-            rc_connections.setVisibility(View.VISIBLE);
-
-            connectionsAdapter.hSetList(hSearchList);
-
-        } else {
+        if (mtitle.equals("")) {
             rc_connections.setVisibility(View.GONE);
             empty.setVisibility(View.VISIBLE);
+        } else {
+            rc_connections.setVisibility(View.VISIBLE);
+            empty.setVisibility(View.GONE);
+            search_key = mtitle;
+
+            //call api here
+
+            getConnectionByFilter(type, currentPage, false);
+
         }
+
+
     }
+
 
 }

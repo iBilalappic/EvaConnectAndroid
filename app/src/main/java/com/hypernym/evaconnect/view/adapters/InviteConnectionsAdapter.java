@@ -59,10 +59,10 @@ public class InviteConnectionsAdapter extends RecyclerView.Adapter<InviteConnect
 //            AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getUser_image());
 //        }
 
-        holder.tv_name.setText(connections.get(position).getFirst_name());
+        holder.tv_name.setText(connections.get(position).getFirst_name() + " " + connections.get(position).getLast_name());
 
-        if (connections.get(position).getLast_online_datetime() != null && !connections.get(position).getLast_online_datetime().isEmpty()) {
-            holder.tv_field.setText(connections.get(position).getLast_online_datetime());
+        if (connections.get(position).getDesignation() != null && !connections.get(position).getDesignation().isEmpty()) {
+            holder.tv_field.setText(connections.get(position).getDesignation());
         } else {
             holder.tv_field.setText("--");
         }

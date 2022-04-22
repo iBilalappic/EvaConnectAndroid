@@ -726,7 +726,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     private void GetUserDetails() {
         User user = new User();
         user = LoginUtils.getUser();
-        userViewModel.getuser_details(user.getId()
+        userViewModel.getuser_details(user.getId()  ,false
         ).observe(this, listBaseModel -> {
             if (listBaseModel.getData() != null && !listBaseModel.isError()) {
                 swipeRefresh.setRefreshing(false);

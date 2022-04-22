@@ -601,7 +601,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     private void GetUserDetails() {
         User user = new User();
         user = LoginUtils.getUser();
-        userViewModel.getuser_details(user.getId()
+        userViewModel.getuser_details(user.getId(), false
         ).observe(this, new Observer<BaseModel<List<User>>>() {
             @Override
             public void onChanged(BaseModel<List<User>> listBaseModel) {

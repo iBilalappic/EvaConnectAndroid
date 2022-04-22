@@ -1,7 +1,5 @@
 package com.hypernym.evaconnect.repositories.impl;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 

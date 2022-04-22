@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 
 import com.hypernym.evaconnect.models.AccountCheck;
 import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.IsBlocked;
 import com.hypernym.evaconnect.models.NotificationSettingsRootModel;
 import com.hypernym.evaconnect.models.Stats;
 import com.hypernym.evaconnect.models.User;
@@ -36,7 +37,7 @@ public interface IUserRespository {
 
     LiveData<BaseModel<List<Object>>> profile_update(int id, String designation, String companyname, String firstname, MultipartBody.Part partImage);
 
-    LiveData<BaseModel<List<User>>> getuser_details(Integer id);
+    LiveData<BaseModel<List<User>>> getuser_details(Integer id, boolean view);
 
     LiveData<BaseModel<List<String>>> getSector(String name);
 
@@ -57,4 +58,6 @@ public interface IUserRespository {
     LiveData<BaseModel<List<Object>>> hGetNotificationSettings(int id);
 
     LiveData<BaseModel<List<Object>>> hPostUserSettingData(NotificationSettingsRootModel notificationSettingsModel);
+
+    LiveData<BaseModel<List<IsBlocked>>> hCheckBlockedOrNOt(int hMyID, int hID);
 }

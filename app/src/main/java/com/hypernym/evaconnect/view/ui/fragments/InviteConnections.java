@@ -65,9 +65,9 @@ public class InviteConnections extends BaseFragment implements InviteConnections
     @BindView(R.id.btn_search)
     ImageView btn_search;
 
-
     @BindView(R.id.img_backarrow)
     ImageView img_backarrow;
+
 
     private InviteConnectionsAdapter inviteConnectionsAdapter;
     private List<User> connectionList = new ArrayList<>();
@@ -121,6 +121,16 @@ public class InviteConnections extends BaseFragment implements InviteConnections
 
     private void hOnClickListener() {
         // avoid double click
+
+
+        img_backarrow.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+
+
         inviteButton.setOnClickListener(new OnOneOffClickListener() {
             @Override
             public void onSingleClick(View v) {
@@ -186,6 +196,7 @@ public class InviteConnections extends BaseFragment implements InviteConnections
 
                             }
 
+/*
 
                             for (User user1 : users) {
 
@@ -198,6 +209,7 @@ public class InviteConnections extends BaseFragment implements InviteConnections
                                     }
                                 }
                             }
+*/
 
                             // connectionList.addAll(listBaseModel.getData());
                         } else {

@@ -102,69 +102,6 @@ public class EditProfileJobTitleFragment extends BaseFragment implements  View.O
         });
     }
 
-    private void GetUserDetails() {
-        showDialog();
-        userViewModel.getuser_details(user.getId()
-        ).observe(this, new Observer<BaseModel<List<User>>>() {
-            @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel)
-            {
-                if (listBaseModel.getData() != null && !listBaseModel.isError())
-                {
-/*                    if (!TextUtils.isEmpty(listBaseModel.getData().get(0).getUser_image()))
-                    {
-                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getUser_image());
-                    }*/
-//                    else if (listBaseModel.getData().get(0).getIs_facebook() == 1 && !TextUtils.isEmpty(listBaseModel.getData().get(0).getFacebook_image_url())) {
-//                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getFacebook_image_url());
-//                    }
-//                    else {
-//                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getUser_image());
-//                    }
-
-                    city = listBaseModel.getData().get(0).getCountry();
-                    country = listBaseModel.getData().get(0).getCity();
-                    first_name = listBaseModel.getData().get(0).getFirst_name();
-
-                    if (listBaseModel.getData().get(0).getDesignation()!=null
-                            && listBaseModel.getData().get(0).getDesignation().isEmpty()) {
-                        edt_jobtitle.setText(listBaseModel.getData().get(0).getDesignation());
-                    }
-
-                    if(listBaseModel.getData().get(0).getSector().equalsIgnoreCase("Other"))
-                    {
-                        sector = listBaseModel.getData().get(0).getOther_sector();
-                    }
-                    else
-                    {
-                        sector = listBaseModel.getData().get(0).getSector();
-                    }
-
-                    if(listBaseModel.getData().get(0).getType().equalsIgnoreCase("company"))
-                    {
-                        /*lbl_title.setVisibility(View.GONE);
-                        edt_designation.setVisibility(View.GONE);
-                        img_view2.setVisibility(View.GONE);*/
-                    }
-                    else
-                    {
-                        edt_jobtitle.setText(listBaseModel.getData().get(0).getDesignation());
-/*                        lbl_title.setVisibility(View.VISIBLE);
-                        edt_designation.setVisibility(View.VISIBLE);
-                        img_view2.setVisibility(View.VISIBLE);*/
-                    }
-
-
-                    company = listBaseModel.getData().get(0).getCompany_name();
-                    first_name = listBaseModel.getData().get(0).getFirst_name();
-                    LoginUtils.saveUser(listBaseModel.getData().get(0));
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
-            }
-        });
-    }
 
     @Override
     public void onClick(View v) {

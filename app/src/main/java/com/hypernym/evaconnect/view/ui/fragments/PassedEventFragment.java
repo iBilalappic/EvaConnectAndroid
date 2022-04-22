@@ -457,7 +457,7 @@ public class PassedEventFragment extends BaseFragment implements View.OnClickLis
                 isLoading = false;
             } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
                 isLastPage = true;
-                postAdapter.removeLoading();
+//                postAdapter.removeLoading();
                 isLoading = false;
             } else {
                 networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));

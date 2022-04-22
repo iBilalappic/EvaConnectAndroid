@@ -69,34 +69,26 @@ public class EventDialog extends Dialog {
             tv_title.setText(event.getObject_details().getName());
             tv_location.setText(event.getObject_details().getAddress());
             tv_description.setText(event.getObject_details().getContent());
-            tv_createdby.setText("Created By "+event.getObject_details().getUser().getFirst_name());
+            tv_createdby.setText("Created By " + event.getObject_details().getUser().getFirst_name());
             tv_event_type.setVisibility(View.GONE);
             tv_createdDate.setText(DateUtils.getFormattedDateDMY(event.getObject_details().getStart_date()));
 
-          //  btn_viewEvent.setText("View Meeting");
+            //  btn_viewEvent.setText("View Meeting");
         }
 
-        img_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        img_close.setOnClickListener(v -> dismiss());
 
-        btn_viewEvent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-                FragmentTransaction transaction =((AppCompatActivity)context).getSupportFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
-                EventDetailFragment eventDetailFragment=new EventDetailFragment();
-                Bundle bundle=new Bundle();
-                bundle.putInt("id",event.getObject_id());
-                eventDetailFragment.setArguments(bundle);
-                transaction.replace(R.id.framelayout,eventDetailFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
+        btn_viewEvent.setOnClickListener(v -> {
+            dismiss();
+            FragmentTransaction transaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+            EventDetailFragment eventDetailFragment = new EventDetailFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("id", event.getObject_id());
+            eventDetailFragment.setArguments(bundle);
+            transaction.replace(R.id.framelayout, eventDetailFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
         });
 
     }

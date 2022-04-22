@@ -205,7 +205,7 @@ public class GlobalConnectionsFragment extends BaseFragment implements OptionsAd
         //   connectedList.clear();
 
 
-        connectionViewModel.getCompanies(userData, AppConstants.TOTAL_PAGES, currentPage).observe(getViewLifecycleOwner(), listBaseModel -> {
+        connectionViewModel.getConnected(userData, AppConstants.TOTAL_PAGES, currentPage).observe(getViewLifecycleOwner(), listBaseModel -> {
             if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
 
                 Log.d("Connection_in", String.valueOf(listBaseModel.getData().size()));
@@ -401,39 +401,12 @@ public class GlobalConnectionsFragment extends BaseFragment implements OptionsAd
         public void afterTextChanged(Editable s) {
 
 
-            Log.d("search", "afterTextChanged: " + s);
-
-            hFilterList(s);
-         /*   currentPage = PAGE_START;
-            if (s.length() > 0) {
-                isSearchFlag = true;
-                connectionList.clear();
-                connectionsAdapter.notifyDataSetChanged();
-                getConnectedFilter(true);
-            } else {
-                isSearchFlag = false;
-                getConnectionByFilter(type,currentPage,false);
-            }*/
         }
 
     }
 
-    private void hFilterList(Editable s) {
-        if (!s.equals("")) {
-            hSearchList.clear();
-            for (ConnectionModel user : connectedList) {
-                if (user.firstName.toLowerCase(Locale.getDefault()).contains(s)) {
-                    hSearchList.add(user);
-                }
-            }
-            connectionsAdapter.hSetList(hSearchList);
 
-        } else {
-            connectionsAdapter.hSetList(connectedList);
-        }
-
-
-    }
+/*
 
     private void GetUserDetails() {
         try {
@@ -454,12 +427,22 @@ public class GlobalConnectionsFragment extends BaseFragment implements OptionsAd
         }
 
     }
+*/
 
     @Subscribe
     public void onEvent(String mtitle) {
         Log.d("news", "onEvent: " + mtitle);
-        search_key = mtitle;
-        hFilterList(search_key);
+
+        if (mtitle.equals("")) {
+
+            Log.d("connectionsearch", "titile is empty ");
+            rc_connections.setVisibility(View.GONE);
+            empty.setVisibility(View.VISIBLE);
+        } else {
+            Log.d("connectionsearch", "titile :" + mtitle);
+            search_key = mtitle;
+            hFilterList(search_key);
+        }
 
     }
 
@@ -471,8 +454,10 @@ public class GlobalConnectionsFragment extends BaseFragment implements OptionsAd
                     hSearchList.add(user);
                 }
             }
-            rc_connections.setVisibility(View.VISIBLE);
 
+
+            rc_connections.setVisibility(View.VISIBLE);
+            empty.setVisibility(View.GONE);
             connectionsAdapter.hSetList(hSearchList);
 
         } else {
@@ -480,5 +465,6 @@ public class GlobalConnectionsFragment extends BaseFragment implements OptionsAd
             empty.setVisibility(View.VISIBLE);
         }
     }
+
 
 }

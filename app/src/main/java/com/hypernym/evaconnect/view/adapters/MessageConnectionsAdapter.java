@@ -74,19 +74,16 @@ public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.tv_field.setText(connections.get(position).getBio_data());
         }
         else {
-        holder.tv_field.setText("--");
+        holder.tv_field.setVisibility(View.GONE);
         }
 
-        holder.tv_invite.setOnClickListener(new View.OnClickListener() {
-@Override
-public void onClick(View v) {
-      //  holder.tv_invite.setVisibility(View.GONE);
-      //  holder.cancel_invite.setVisibility(View.VISIBLE);
+        holder.tv_invite.setOnClickListener(v -> {
+              //  holder.tv_invite.setVisibility(View.GONE);
+              //  holder.cancel_invite.setVisibility(View.VISIBLE);
 
-        if (onItemClickListener != null)
-        onItemClickListener.onItemClick(v, connections.indexOf(connections.get(position)), connections.get(position));
-        }
-        });
+                if (onItemClickListener != null)
+                onItemClickListener.onItemClick(v, connections.indexOf(connections.get(position)), connections.get(position));
+                });
 
 
         }

@@ -169,57 +169,54 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
         if (search_key.length() > 0)
             user.setSearch_key(search_key);
 
-        homeViewModel.getDashboardSearch(user, AppConstants.TOTAL_PAGES, currentPage, filter).observe(this, new Observer<BaseModel<List<Post>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Post>> dashboardBaseModel) {
+        homeViewModel.getDashboardSearch(user, AppConstants.TOTAL_PAGES, currentPage, filter).observe(this, dashboardBaseModel -> {
 
-                //   homePostsAdapter.clear();
-                if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
+            //   homePostsAdapter.clear();
+            if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
 
-                    if (currentPage == PAGE_START) {
-                        posts.clear();
-                        homePostsAdapter.notifyDataSetChanged();
-                    }
-                    totalsize=0;
-
-                    for (Post post : dashboardBaseModel.getData()) {
-                        if (post.getContent() == null) {
-                            post.setContent("");
-                        }
-                        if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() > 0) {
-                            post.setPost_type(AppConstants.IMAGE_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_video() != null) {
-                            post.setPost_type(AppConstants.VIDEO_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() == 0 && !post.isIs_url()) {
-                            post.setPost_type(AppConstants.TEXT_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("event")) {
-                            post.setPost_type(AppConstants.EVENT_TYPE); }
-                        else if (post.getType().equalsIgnoreCase("news")) {
-                            post.setPost_type(AppConstants.NEWS_TYPE); }
-                        else if (post.getType().equalsIgnoreCase("job")) {
-                            post.setPost_type(AppConstants.JOB_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("post") && post.isIs_url()) {
-                            post.setPost_type(AppConstants.LINK_POST);
-                        }
-                    }
-                    posts.addAll(dashboardBaseModel.getData());
+                if (currentPage == PAGE_START) {
+                    posts.clear();
                     homePostsAdapter.notifyDataSetChanged();
-                    swipeRefresh.setRefreshing(false);
-                    //  homePostsAdapter.removeLoading();
-                    totalsize=totalsize+posts.size();
-                    isLoading = false;
-                } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
-                    isLastPage = true;
-                    totalsize=0;
-                    // homePostsAdapter.removeLoading();
-                    homePostsAdapter.notifyDataSetChanged();
-                    swipeRefresh.setRefreshing(false);
-                    isLoading = false;
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
+                totalsize = 0;
 
+                for (Post post : dashboardBaseModel.getData()) {
+                    if (post.getContent() == null) {
+                        post.setContent("");
+                    }
+                    if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() > 0) {
+                        post.setPost_type(AppConstants.IMAGE_TYPE);
+                    } else if (post.getType().equalsIgnoreCase("post") && post.getPost_video() != null) {
+                        post.setPost_type(AppConstants.VIDEO_TYPE);
+                    } else if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() == 0 && !post.isIs_url()) {
+                        post.setPost_type(AppConstants.TEXT_TYPE);
+                    } else if (post.getType().equalsIgnoreCase("event")) {
+                        post.setPost_type(AppConstants.EVENT_TYPE);
+                    } else if (post.getType().equalsIgnoreCase("news")) {
+                        post.setPost_type(AppConstants.NEWS_TYPE);
+                    } else if (post.getType().equalsIgnoreCase("job")) {
+                        post.setPost_type(AppConstants.JOB_TYPE);
+                    } else if (post.getType().equalsIgnoreCase("post") && post.isIs_url()) {
+                        post.setPost_type(AppConstants.LINK_POST);
+                    }
+                }
+                posts.addAll(dashboardBaseModel.getData());
+                homePostsAdapter.notifyDataSetChanged();
+                swipeRefresh.setRefreshing(false);
+                //  homePostsAdapter.removeLoading();
+                totalsize = totalsize + posts.size();
+                isLoading = false;
+            } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
+                isLastPage = true;
+                totalsize = 0;
+                // homePostsAdapter.removeLoading();
+                homePostsAdapter.notifyDataSetChanged();
+                swipeRefresh.setRefreshing(false);
+                isLoading = false;
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+
         });
     }
 
@@ -243,7 +240,6 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
             case R.id.img_backarrow:
                 getActivity().onBackPressed();
                 break;
-
 
 
         }
@@ -270,17 +266,14 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     public void onItemClick(View view, int position) {
-        if(!posts.get(position).getType().equalsIgnoreCase("news"))
-        {
+        if (!posts.get(position).getType().equalsIgnoreCase("news")) {
             PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
             Bundle bundle = new Bundle();
             bundle.putInt("post", posts.get(position).getId());
             Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
             postDetailsFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, postDetailsFragment, getContext(), true);
-        }
-        else
-        {
+        } else {
             NewsDetailsFragment postDetailsFragment = new NewsDetailsFragment();
             Bundle bundle = new Bundle();
             bundle.putInt("post", posts.get(position).getId());
@@ -374,19 +367,18 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
             networkErrorDialog();
         }
     }
+
     private void likeNews(Post post, int position) {
-        newsViewModel.likePost(post).observe(this, new Observer<BaseModel<List<Post>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError()) {
-                    homePostsAdapter.notifyItemChanged(position);
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
+        newsViewModel.likePost(post).observe(this, listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError()) {
+                homePostsAdapter.notifyItemChanged(position);
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
     }
+
     @Override
     public void onJobLikeClick(View view, int position, TextView likeCount) {
         if (posts.get(position).getIs_job_like() != null && posts.get(position).getIs_job_like() > 0) {
@@ -398,34 +390,31 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
 
     private void SetJobLike(Integer id, int position) {
 
-        jobListViewModel.setJobLike(LoginUtils.getUser(), id, "like").observe(this, new Observer<BaseModel<List<Object>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Object>> setlike) {
-                Post post = posts.get(position);
-                post.setAction(AppConstants.LIKE);
-                if (post.getIs_job_like() == null) {
-                    post.setIs_job_like(1);
-                    if (post.getLike_count() == null)
-                        post.setLike_count(0);
-                    else
-                        post.setLike_count(post.getLike_count() + 1);
-                } else {
-                    post.setIs_job_like(post.getIs_job_like() + 1);
-                    if (post.getLike_count() == null)
-                        post.setLike_count(0);
-                    else
-                        post.setLike_count(post.getLike_count() + 1);
-                }
-                homePostsAdapter.notifyItemChanged(position);
+        jobListViewModel.setJobLike(LoginUtils.getUser(), id, "like").observe(this, setlike -> {
+            Post post = posts.get(position);
+            post.setAction(AppConstants.LIKE);
+            if (post.getIs_job_like() == null) {
+                post.setIs_job_like(1);
+                if (post.getLike_count() == null)
+                    post.setLike_count(0);
+                else
+                    post.setLike_count(post.getLike_count() + 1);
+            } else {
+                post.setIs_job_like(post.getIs_job_like() + 1);
+                if (post.getLike_count() == null)
+                    post.setLike_count(0);
+                else
+                    post.setLike_count(post.getLike_count() + 1);
+            }
+            homePostsAdapter.notifyItemChanged(position);
 //                if (setlike != null && !setlike.isError()) {
-                //     onRefresh();
+            //     onRefresh();
 //                } else {
 //                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
 //                }
 
-                hideDialog();
+            hideDialog();
 
-            }
         });
     }
 
@@ -494,16 +483,13 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     public void onURLClick(View view, int position,String type) {
-        if(type.equalsIgnoreCase("news"))
-        {
+        if (type.equalsIgnoreCase("news")) {
             LoadUrlFragment loadUrlFragment = new LoadUrlFragment();
             Bundle bundle = new Bundle();
             bundle.putString("url", posts.get(position).getLink());
             loadUrlFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, loadUrlFragment, getContext(), true);
-        }
-        else
-        {
+        } else {
             LoadUrlFragment loadUrlFragment = new LoadUrlFragment();
             Bundle bundle = new Bundle();
             bundle.putString("url", posts.get(position).getContent());
@@ -523,8 +509,7 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     public void onApplyClick(View view, int position) {
-        if(posts.get(position).getIs_applied()==0)
-        {
+        if (posts.get(position).getIs_applied() == 0) {
             SpecficJobFragment specficJobFragment = new SpecficJobFragment();
             Bundle bundle = new Bundle();
             bundle.putInt("job_id", posts.get(position).getId());
@@ -589,16 +574,13 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
         event.setCreated_by_id(LoginUtils.getLoggedinUser().getId());
         event.setAction(post.getAction());
         event.setStatus(AppConstants.ACTIVE);
-        eventViewModel.likeEvent(event).observe(this, new Observer<BaseModel<List<Event>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Event>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError()) {
-                    homePostsAdapter.notifyItemChanged(position);
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
+        eventViewModel.likeEvent(event).observe(this, listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError()) {
+                homePostsAdapter.notifyItemChanged(position);
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
     }
 
@@ -610,16 +592,13 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
             connection.setReceiver_id(posts.get(position).getUser().getId());
             connection.setSender_id(user.getId());
             connection.setStatus(AppConstants.STATUS_PENDING);
-            connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
-                @Override
-                public void onChanged(BaseModel<List<Connection>> listBaseModel) {
-                    if (listBaseModel != null && !listBaseModel.isError()) {
-                        text.setText("Request Sent");
-                    } else {
-                        networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                    }
-                    hideDialog();
+            connectionViewModel.connect(connection).observe(this, listBaseModel -> {
+                if (listBaseModel != null && !listBaseModel.isError()) {
+                    text.setText("Request Sent");
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
+                hideDialog();
             });
         }
     }
@@ -627,18 +606,15 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
     private void GetUserDetails() {
         User user = new User();
         user = LoginUtils.getUser();
-        userViewModel.getuser_details(user.getId()
-        ).observe(this, new Observer<BaseModel<List<User>>>() {
-            @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel) {
-                if (listBaseModel.getData() != null && !listBaseModel.isError()) {
-                    swipeRefresh.setRefreshing(false);
-                    LoginUtils.saveUser(listBaseModel.getData().get(0));
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
+        userViewModel.getuser_details(user.getId(), false
+        ).observe(this, listBaseModel -> {
+            if (listBaseModel.getData() != null && !listBaseModel.isError()) {
+                swipeRefresh.setRefreshing(false);
+                LoginUtils.saveUser(listBaseModel.getData().get(0));
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
     }
 
@@ -690,8 +666,7 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
                 } catch (android.content.ActivityNotFoundException ex) {
                     Toast.makeText(requireContext(), "Whatsapp have not been installed.", Toast.LENGTH_SHORT).show();
                 }
-            }
-            else if(msg.what==100){
+            } else if (msg.what == 100) {
                 ShareConnectionFragment shareConnectionFragment = new ShareConnectionFragment();
                 FragmentTransaction transaction = ((AppCompatActivity) requireActivity()).getSupportFragmentManager().beginTransaction();
                 transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
@@ -699,7 +674,7 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
                 Bundle bundle = new Bundle();
                 {
                     bundle.putInt(Constants.DATA, posts.get(item_position).getId());
-                    bundle.putString(Constants.TYPE,  posts.get(item_position).getType());
+                    bundle.putString(Constants.TYPE, posts.get(item_position).getType());
                 }
                 shareConnectionFragment.setArguments(bundle);
                 if (true) {
@@ -719,9 +694,17 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
 
     @Subscribe
     public void onEvent(String mtitle) {
-        Log.d("TAG", "onEvent: "+mtitle);
-        search_key=mtitle;
-        callPostsApi();
+        Log.d("TAG", "onEvent: " + mtitle);
+
+        if (mtitle.equals("")) {
+            rc_home.setVisibility(View.GONE);
+        } else {
+            rc_home.setVisibility(View.VISIBLE);
+
+            search_key = mtitle;
+            callPostsApi();
+        }
+
     }
 
 }

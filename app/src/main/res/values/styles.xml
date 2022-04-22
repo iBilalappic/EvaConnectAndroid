@@ -430,7 +430,8 @@
 
 
     <style name="MineCustomTabText" parent="TextAppearance.Design.Tab">
-        <item name="android:textSize">8sp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textAllCaps">false</item>
         <item name="fontFamily">@font/nunitosansregular</item>
     </style>
 </resources>

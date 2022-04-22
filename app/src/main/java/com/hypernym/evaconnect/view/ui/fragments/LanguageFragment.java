@@ -486,10 +486,13 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
 
                     ed_country.setText(country);
 
+                    Toast.makeText(requireContext(), hCountyCodeFromLocation, Toast.LENGTH_SHORT).show();
+
                     hideDialog();
 
                 }
             } catch (Exception ex) {
+                Log.d("fragmentlanguage", ex.getLocalizedMessage());
 
 
                 ex.printStackTrace();

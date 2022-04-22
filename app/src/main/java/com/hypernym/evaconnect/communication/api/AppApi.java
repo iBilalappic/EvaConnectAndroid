@@ -16,6 +16,7 @@ import com.hypernym.evaconnect.models.EventStaus;
 import com.hypernym.evaconnect.models.GetBlockedData;
 import com.hypernym.evaconnect.models.GetEventInterestedUsers;
 import com.hypernym.evaconnect.models.GetPendingData;
+import com.hypernym.evaconnect.models.IsBlocked;
 import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.Meeting;
 import com.hypernym.evaconnect.models.MyActivitiesModel;
@@ -304,6 +305,8 @@ public interface AppApi {
                                              @Part("end_date") RequestBody end_date,
                                              @Part("start_time") RequestBody start_time,
                                              @Part("end_time") RequestBody end_time,
+                                             @Part("event_start_datetime") RequestBody event_start_datetime,
+                                             @Part("event_end_datetime") RequestBody event_end_datetime,
                                              @Part("name") RequestBody event_name,
                                              @Part("registration_link") RequestBody registration_link,
                                              @Part("is_private") int is_private,
@@ -545,6 +548,14 @@ public interface AppApi {
     @POST(APIConstants.GET_ALL_MYACTIVITY)
     Call<BaseModel<List<MyActivitiesModel>>> hGetAllMyActivity(@Body Object user);
 
+
+    @POST(APIConstants.GET_CONNECTION_BY_FILTER_OLD)
+    Call<BaseModel<List<ConnectionModel>>> getCompanies(@Body Object user, @Query("limit") int limit, @Query("offset") int offset);
+
+
+    @GET(APIConstants.GET_CONNECTED_BY_STATUS)
+    Call<BaseModel<List<IsBlocked>>> hGetBlockedUserInfo(@Query("user_id") int user_id, @Query("target_user_key") int target_user);
+    
     
 /*
 

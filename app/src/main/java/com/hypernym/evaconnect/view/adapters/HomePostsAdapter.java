@@ -1,5 +1,6 @@
 package com.hypernym.evaconnect.view.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.GestureDetector;
@@ -160,12 +161,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                 }
             });
 
-            tv_connect.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mClickListener.onConnectClick(v,getAdapterPosition());
-                }
-            });
+            tv_connect.setOnClickListener(v -> mClickListener.onConnectClick(v, getAdapterPosition()));
 
         }
     }
@@ -203,8 +199,21 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.comment_click)
         LinearLayout comment_click;
 
+
         @BindView(R.id.img_share)
         ImageView img_share;
+
+        @BindView(R.id.tv_interested)
+        TextView tv_interested;
+
+
+        @BindView(R.id.tv_detail)
+        TextView tv_detail;
+
+
+        @BindView(R.id.tv_created_time)
+        TextView tv_created_time;
+
 
         @BindView(R.id.share_click)
         LinearLayout share_click;
@@ -280,6 +289,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     //  mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
+
 
         }
 
@@ -538,12 +548,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                 }
             });
 
-            tv_connect.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mClickListener.onConnectClick(v,getAdapterPosition());
-                }
-            });
+            tv_connect.setOnClickListener(v -> mClickListener.onConnectClick(v, getAdapterPosition()));
 
         }
 
@@ -1031,7 +1036,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         Post object = posts.get(position);
         if (object != null && object.getType() != null) {
             switch (object.getPost_type()) {
@@ -1164,6 +1169,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     }
                     break;
                 case AppConstants.EVENT_TYPE:
+
                     if (String.valueOf(posts.get(position).getComment_count()).equals("0")) {
                         ((EventTypeViewHolder) holder).tv_viewcomments.setVisibility(View.GONE);
                     }
@@ -1172,8 +1178,15 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
 
                     ((EventTypeViewHolder) holder).tv_address.setText(String.valueOf(posts.get(position).getAddress()));
-                    ((EventTypeViewHolder) holder).tv_date.setText(DateUtils.eventDate(posts.get(position).getStart_date(),posts.get(position).getEnd_date()));
-/*                    if (posts.get(position).getIs_event_like() != null && posts.get(position).getIs_event_like() > 0) {
+                    ((EventTypeViewHolder) holder).tv_date.setText(DateUtils.eventDate(posts.get(position).getStart_date(), posts.get(position).getEnd_date()));
+
+                    ((EventTypeViewHolder) holder).tv_created_time.setText(DateUtils.getFormattedDateDMY(object.getStart_date()) + " - " + DateUtils.getFormattedDateDMY(object.getEnd_date()) + " | " + DateUtils.getTimeUTC(object.getStart_time()) + " - " + DateUtils.getTimeUTC(object.getEnd_time()));
+                    ((EventTypeViewHolder) holder).tv_interested.setVisibility(View.GONE);
+
+
+
+
+                    /*                    if (posts.get(position).getIs_event_like() != null && posts.get(position).getIs_event_like() > 0) {
                         ((EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.like_selected));
                     } else {
                         ((EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));

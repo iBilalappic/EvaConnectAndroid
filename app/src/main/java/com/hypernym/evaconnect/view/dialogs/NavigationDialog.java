@@ -18,12 +18,14 @@ import androidx.fragment.app.FragmentTransaction;
 import com.hypernym.evaconnect.MyActivityFragment;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.communication.RestClient;
+import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Stats;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.view.ui.fragments.CalendarFragment;
+import com.hypernym.evaconnect.view.ui.fragments.GlobalSearchTabfragment;
 import com.hypernym.evaconnect.view.ui.fragments.JobListingFragment;
 import com.hypernym.evaconnect.view.ui.fragments.SettingsFragment;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
@@ -38,10 +40,14 @@ import retrofit2.Response;
 public class NavigationDialog extends Dialog implements View.OnClickListener {
 
     private ImageView img_close;
-    private LinearLayout editProfile, notifications, mJoblisting, myactivity, calendar ,settings, lay_designation;
+    private LinearLayout editProfile, notifications, mJoblisting, myactivity, calendar, settings, lay_designation;
     private TextView logout, tv_name, tv_designation, tv_at,
             tv_company, tv_location, tv_connections_count, tv_notication_count, tv_calender_event, tv_joblisting;
+
+    private ImageView image_search;
     private Context context;
+
+
     private CircleImageView profile_image;
     User user = new User();
     UserViewModel userViewModel;
@@ -71,6 +77,7 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
         tv_notication_count = findViewById(R.id.tv_notication_count);
         tv_calender_event = findViewById(R.id.tv_calender_event);
         tv_joblisting = findViewById(R.id.tv_joblisting);
+        image_search = findViewById(R.id.image_search);
         profile_image = findViewById(R.id.profile_image);
 //        notifications=findViewById(R.id.notifications);
         mJoblisting=findViewById(R.id.joblisting);
@@ -90,6 +97,7 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
         }else{
             lay_designation.setVisibility(View.GONE);
         }
+
 
 
         WindowManager.LayoutParams wlp = window.getAttributes();
@@ -121,13 +129,10 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
             transaction.addToBackStack(null);
             transaction.commit();
         });
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
+        logout.setOnClickListener(v -> {
+            dismiss();
 
-                AppUtils.logout(context);
-            }
+            AppUtils.logout(context);
         });
 //        notifications.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -155,16 +160,26 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
             }
         });
 
-        calendar.setOnClickListener(new View.OnClickListener() {
+        calendar.setOnClickListener(v -> {
+            dismiss();
+            FragmentTransaction transaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+            transaction.replace(R.id.framelayout, new CalendarFragment());
+            transaction.addToBackStack(null);
+            transaction.commit();
+
+        });
+
+        image_search.setOnClickListener(new OnOneOffClickListener() {
             @Override
-            public void onClick(View v) {
-                dismiss();
+            public void onSingleClick(View v) {
+                GlobalSearchTabfragment searchResultFragment = new GlobalSearchTabfragment();
                 FragmentTransaction transaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
                 transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
-                transaction.replace(R.id.framelayout, new CalendarFragment());
+                transaction.replace(R.id.framelayout, searchResultFragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
-
+                dismiss();
             }
         });
     }

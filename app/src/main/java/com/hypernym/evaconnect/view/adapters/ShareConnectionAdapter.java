@@ -55,10 +55,10 @@ public class ShareConnectionAdapter extends RecyclerView.Adapter<ShareConnection
                 if (connections.get(position).receiver.getFirstName() != null) {
                     holder.tv_name.setText(connections.get(position).receiver.getFirstName());
                 }
-                if (connections.get(position).receiver.getBioData() != null && !connections.get(position).receiver.getBioData().isEmpty()) {
-                    holder.tv_field.setText(connections.get(position).receiver.getBioData());
+                if (connections.get(position).receiver.getDesignation() != null && !connections.get(position).receiver.getDesignation().isEmpty()) {
+                    holder.tv_field.setText(connections.get(position).receiver.getDesignation());
                 } else {
-                    holder.tv_field.setText("--");
+                    holder.tv_field.setVisibility(View.GONE);
                 }
 
 
@@ -69,10 +69,10 @@ public class ShareConnectionAdapter extends RecyclerView.Adapter<ShareConnection
                 if (connections.get(position).sender.getFirstName() != null) {
                     holder.tv_name.setText(connections.get(position).sender.getFirstName());
                 }
-                if (connections.get(position).sender.getBioData() != null && !connections.get(position).sender.getBioData().isEmpty()) {
-                    holder.tv_field.setText(connections.get(position).sender.getBioData());
+                if (connections.get(position).sender.getDesignation() != null && !connections.get(position).sender.getDesignation().isEmpty()) {
+                    holder.tv_field.setText(connections.get(position).sender.getDesignation());
                 } else {
-                    holder.tv_field.setText("--");
+                    holder.tv_field.setVisibility(View.GONE);
                 }
 
 
@@ -84,10 +84,10 @@ public class ShareConnectionAdapter extends RecyclerView.Adapter<ShareConnection
             if (connections.get(position).firstName != null) {
                 holder.tv_name.setText(connections.get(position).firstName);
             }
-            if (connections.get(position).bioData != null && !connections.get(position).bioData.isEmpty()) {
-                holder.tv_field.setText(connections.get(position).bioData);
+            if (connections.get(position).designation != null && !connections.get(position).designation.equals("")) {
+                holder.tv_field.setText(connections.get(position).designation.toString());
             } else {
-                holder.tv_field.setText("--");
+                holder.tv_field.setVisibility(View.GONE);
             }
         }
 

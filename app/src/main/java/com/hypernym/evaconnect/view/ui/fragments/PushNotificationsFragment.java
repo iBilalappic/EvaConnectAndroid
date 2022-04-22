@@ -265,33 +265,30 @@ public class PushNotificationsFragment extends BaseFragment implements View.OnCl
 
     private void GetUserDetails() {
         showDialog();
-        userViewModel.getuser_details(user.getId()).observe(this, new Observer<BaseModel<List<User>>>() {
-            @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel) {
-                if (listBaseModel.getData() != null && !listBaseModel.isError()) {
-                    if (!TextUtils.isEmpty(listBaseModel.getData().get(0).getUser_image())) {
-                       // AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getUser_image());
-                    }
+        userViewModel.getuser_details(user.getId(), false).observe(this, listBaseModel -> {
+            if (listBaseModel.getData() != null && !listBaseModel.isError()) {
+                if (!TextUtils.isEmpty(listBaseModel.getData().get(0).getUser_image())) {
+                    // AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getUser_image());
+                }
 //                    else if (listBaseModel.getData().get(0).getIs_facebook() == 1 && !TextUtils.isEmpty(listBaseModel.getData().get(0).getFacebook_image_url())) {
 //                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getFacebook_image_url());
 //                    } else {
 //                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getUser_image());
 //                    }
-                  //  tv_location.setText(listBaseModel.getData().get(0).getCountry() + "," + listBaseModel.getData().get(0).getCity());
-                  //  tv_name.setText(listBaseModel.getData().get(0).getFirst_name());
-                    notification_check = listBaseModel.getData().get(0).getIs_notifications();
-                    if (notification_check == 1) {
-                        switch_push.setChecked(true);
-                    } else {
-                        switch_push.setChecked(false);
-                    }
-
-                    LoginUtils.saveUser(listBaseModel.getData().get(0));
+                //  tv_location.setText(listBaseModel.getData().get(0).getCountry() + "," + listBaseModel.getData().get(0).getCity());
+                //  tv_name.setText(listBaseModel.getData().get(0).getFirst_name());
+                notification_check = listBaseModel.getData().get(0).getIs_notifications();
+                if (notification_check == 1) {
+                    switch_push.setChecked(true);
                 } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                    switch_push.setChecked(false);
                 }
-                hideDialog();
+
+                LoginUtils.saveUser(listBaseModel.getData().get(0));
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
     }
 

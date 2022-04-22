@@ -53,8 +53,8 @@ public class ConnectionViewModel extends AndroidViewModel {
     }
 
 
-    public LiveData<BaseModel<List<ConnectionModel>>> getCompanies(User user, int total, int current) {
-        return iConnectionRepository.getCompanies(user, total, current);
+    public LiveData<BaseModel<List<ConnectionModel>>> getCompanies(User user, int total, int current ,String filter) {
+        return iConnectionRepository.getCompanies(user, total, current , filter);
     }
 
 

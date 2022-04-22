@@ -3,6 +3,7 @@ package com.hypernym.evaconnect.view.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,8 @@ public class InvitedUsersAdapter extends RecyclerView.Adapter<InvitedUsersAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         User user = invitedUsers.get(position);
 
+        Log.d("adapter", "onBindViewHolder: ");
+
         if (!TextUtils.isEmpty(user.getUser_image())) {
             AppUtils.setGlideImage(context, holder.invitedUserImage, user.getUser_image());
 
@@ -60,18 +63,14 @@ public class InvitedUsersAdapter extends RecyclerView.Adapter<InvitedUsersAdapte
 
         if (user.getFirst_name()!=null) {
 
+            holder.firstName.setText(user.getFirst_name() + " "+user.getLast_name());
 
-            holder.firstName.setText(user.getFirst_name());
 
-            if (user.getLast_name() != null) {
-                holder.firstName.setText(user.getFirst_name() + " "+user.getLast_name());
-
-            }
         }
 
         if (user.getDesignation() != null) {
 
-            holder.tv_designation_title.setText(user.getDesignation());
+            holder.tv_designation_title.setText(user.getCompany_name());
 
         }  else {
 

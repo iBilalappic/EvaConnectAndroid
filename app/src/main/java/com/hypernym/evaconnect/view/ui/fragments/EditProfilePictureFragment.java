@@ -6,22 +6,19 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -34,7 +31,6 @@ import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
-import com.mobsandgeeks.saripaar.Validator;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.File;
@@ -103,17 +99,12 @@ public class EditProfilePictureFragment extends BaseFragment implements View.OnC
 
     private void GetUserDetails() {
         showDialog();
-        userViewModel.getuser_details(user.getId()
-        ).observe(this, new Observer<BaseModel<List<User>>>() {
-            @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel)
-            {
-                if (listBaseModel.getData() != null && !listBaseModel.isError())
-                {
-                    if (!TextUtils.isEmpty(listBaseModel.getData().get(0).getUser_image()))
-                    {
-                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getUser_image());
-                    }
+        userViewModel.getuser_details(user.getId(), false
+        ).observe(getViewLifecycleOwner(), listBaseModel -> {
+            if (listBaseModel.getData() != null && !listBaseModel.isError()) {
+                if (!TextUtils.isEmpty(listBaseModel.getData().get(0).getUser_image())) {
+                    AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getUser_image());
+                }
 //                    else if (listBaseModel.getData().get(0).getIs_facebook() == 1 && !TextUtils.isEmpty(listBaseModel.getData().get(0).getFacebook_image_url())) {
 //                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getFacebook_image_url());
 //                    }
@@ -121,47 +112,40 @@ public class EditProfilePictureFragment extends BaseFragment implements View.OnC
 //                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getUser_image());
 //                    }
 
-                    city = listBaseModel.getData().get(0).getCountry();
-                    country = listBaseModel.getData().get(0).getCity();
-                    first_name = listBaseModel.getData().get(0).getFirst_name();
+                city = listBaseModel.getData().get(0).getCountry();
+                country = listBaseModel.getData().get(0).getCity();
+                first_name = listBaseModel.getData().get(0).getFirst_name();
 
-                    if (listBaseModel.getData().get(0).getDesignation()!=null
-                    && listBaseModel.getData().get(0).getDesignation().isEmpty()) {
-                        designation= listBaseModel.getData().get(0).getDesignation();
-                    }
-
-                    if(listBaseModel.getData().get(0).getSector().equalsIgnoreCase("Other"))
-                    {
-                        sector = listBaseModel.getData().get(0).getOther_sector();
-                    }
-                    else
-                    {
-                        sector = listBaseModel.getData().get(0).getSector();
-                    }
-
-                    if(listBaseModel.getData().get(0).getType().equalsIgnoreCase("company"))
-                    {
-                        /*lbl_title.setVisibility(View.GONE);
-                        edt_designation.setVisibility(View.GONE);
-                        img_view2.setVisibility(View.GONE);*/
-                    }
-                    else
-                    {
-                        designation= listBaseModel.getData().get(0).getDesignation();
-/*                        lbl_title.setVisibility(View.VISIBLE);
-                        edt_designation.setVisibility(View.VISIBLE);
-                        img_view2.setVisibility(View.VISIBLE);*/
-                    }
-
-
-                    company = listBaseModel.getData().get(0).getCompany_name();
-                    first_name = listBaseModel.getData().get(0).getFirst_name();
-                    LoginUtils.saveUser(listBaseModel.getData().get(0));
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                if (listBaseModel.getData().get(0).getDesignation() != null
+                        && listBaseModel.getData().get(0).getDesignation().isEmpty()) {
+                    designation = listBaseModel.getData().get(0).getDesignation();
                 }
-                hideDialog();
+
+                if (listBaseModel.getData().get(0).getSector().equalsIgnoreCase("Other")) {
+                    sector = listBaseModel.getData().get(0).getOther_sector();
+                } else {
+                    sector = listBaseModel.getData().get(0).getSector();
+                }
+
+                if (listBaseModel.getData().get(0).getType().equalsIgnoreCase("company")) {
+                    /*lbl_title.setVisibility(View.GONE);
+                    edt_designation.setVisibility(View.GONE);
+                    img_view2.setVisibility(View.GONE);*/
+                } else {
+                    designation = listBaseModel.getData().get(0).getDesignation();
+/*                        lbl_title.setVisibility(View.VISIBLE);
+                    edt_designation.setVisibility(View.VISIBLE);
+                    img_view2.setVisibility(View.VISIBLE);*/
+                }
+
+
+                company = listBaseModel.getData().get(0).getCompany_name();
+                first_name = listBaseModel.getData().get(0).getFirst_name();
+                LoginUtils.saveUser(listBaseModel.getData().get(0));
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
     }
 

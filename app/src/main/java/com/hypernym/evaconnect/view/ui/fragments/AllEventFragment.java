@@ -394,38 +394,30 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
     }
     private void getEventDetails(int event_id, int user_id) {
        // invitedConnections.clear();
-        eventViewModel.getEventDetails(event_id, user_id).observe(this, new Observer<BaseModel<List<Event>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Event>> listBaseModel) {
-                if(listBaseModel!=null && !listBaseModel.isError() && listBaseModel.getData().size()>0)
-                {
-                    CreateEventFragment createEventFragment=new CreateEventFragment();
-                    Bundle bundle=new Bundle();
-                    bundle.putSerializable("event",listBaseModel.getData().get(0));
-                    createEventFragment.setArguments(bundle);
-                    loadFragment(R.id.framelayout,createEventFragment,getContext(),true);
-                }
-                else
-                {
-                    networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
-                }
-
+        eventViewModel.getEventDetails(event_id, user_id).observe(this, listBaseModel -> {
+            if(listBaseModel!=null && !listBaseModel.isError() && listBaseModel.getData().size()>0)
+            {
+                CreateEventFragment createEventFragment=new CreateEventFragment();
+                Bundle bundle=new Bundle();
+                bundle.putSerializable("event",listBaseModel.getData().get(0));
+                createEventFragment.setArguments(bundle);
+                loadFragment(R.id.framelayout,createEventFragment,getContext(),true);
             }
-
+            else
+            {
+                networkResponseDialog(getString(R.string.error),getString(R.string.err_unknown));
+            }
 
         });
     }
     @Override
     public void onDeleteClick(View view, int position) {
-        eventViewModel.deleteEvent(posts.get(position)).observe(this, new Observer<BaseModel<List<Event>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Event>> listBaseModel) {
-                if (NetworkUtils.isNetworkConnected(getContext())) {
-                    posts.clear();
-                    callPostsApi();
-                } else {
-                    networkErrorDialog();
-                }
+        eventViewModel.deleteEvent(posts.get(position)).observe(this, listBaseModel -> {
+            if (NetworkUtils.isNetworkConnected(getContext())) {
+                posts.clear();
+                callPostsApi();
+            } else {
+                networkErrorDialog();
             }
         });
     }
@@ -436,16 +428,13 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
         event.setCreated_by_id(LoginUtils.getLoggedinUser().getId());
         event.setAction(post.getAction());
         event.setStatus(AppConstants.ACTIVE);
-        eventViewModel.likeEvent(event).observe(this, new Observer<BaseModel<List<Event>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Event>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError()) {
-                    postAdapter.notifyItemChanged(position);
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
+        eventViewModel.likeEvent(event).observe(this, listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError()) {
+                postAdapter.notifyItemChanged(position);
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
     }
 
@@ -457,7 +446,7 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
         if (user.getType().equalsIgnoreCase("user")) {
             user.setFilter("all");
         } else {
-            user.setFilter("my_events");
+            user.setFilter("all");
         }
 
 
@@ -465,7 +454,6 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
 
             // postAdapter.clear();
 
-            hideDialog();
 
             if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
                 if (dashboardBaseModel.getData().size() == 0 && currentPage == AppConstants.TOTAL_PAGES) {
@@ -485,12 +473,12 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
                 posts.addAll(dashboardBaseModel.getData());
                 postAdapter.notifyDataSetChanged();
                 swipeRefresh.setRefreshing(false);
-                postAdapter.removeLoading();
+//                postAdapter.removeLoading();
                 isLoading = false;
 
             } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
                 isLastPage = true;
-                postAdapter.removeLoading();
+//                postAdapter.removeLoading();
                 isLoading = false;
             } else {
                 networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));

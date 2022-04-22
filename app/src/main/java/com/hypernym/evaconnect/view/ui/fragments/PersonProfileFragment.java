@@ -185,6 +185,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
         setPageTitle("Profile");
         user = LoginUtils.getLoggedinUser();
 
+
         if (user.getType() != null && user.getType().equalsIgnoreCase("company")) {
             tv_connections.setText("Followers");
         } else {
@@ -433,7 +434,14 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
             tv_name.setText(user.getFirst_name());
 
             //  tv_location.setText(user.getCountry() + "," + user.getCity());
-            tv_company.setText(user.getSector() + " | " + user.getDesignation());
+
+            if (user.getSector() != null) {
+
+                if (user.getDesignation() != null) {
+
+                    tv_company.setText(user.getSector() + " | " + user.getDesignation());
+                }
+            }
             tv_connections_count.setText(String.valueOf(user.getConnection_count()));
 
 
@@ -503,6 +511,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
         });
     }
 
+
     @SuppressLint("SetTextI18n")
     public void getUserDetails() {
         //  User user = new User();
@@ -521,8 +530,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
         Log.d("profile", "getUserDetails: " + id);
 
 
-        userViewModel.getuser_details(id
-        ).observe(getViewLifecycleOwner(), listBaseModel -> {
+        userViewModel.getuser_details(id, true).observe(getViewLifecycleOwner(), listBaseModel -> {
             if (listBaseModel.getData() != null && !listBaseModel.isError()) {
                 if (!TextUtils.isEmpty(listBaseModel.getData().get(0).getUser_image())) {
                     AppUtils.setGlideImage(getContext(), profile_image, listBaseModel.getData().get(0).getUser_image());
@@ -604,14 +612,12 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                                 /*  layout_disconnect.setVisibility(View.VISIBLE);*/
                                 layout_block.setVisibility(View.VISIBLE);
                                 layout_account_private.setVisibility(View.GONE);
-                                rc_post.setVisibility(View.VISIBLE);
                                 view_view_post.setVisibility(View.VISIBLE);
                                 tv_view_post.setVisibility(View.VISIBLE);
                             } else {
                                 /* layout_disconnect.setVisibility(View.GONE);*/
                                 layout_account_private.setVisibility(View.VISIBLE);
                                 layout_block.setVisibility(View.GONE);
-                                rc_post.setVisibility(View.GONE);
                                 view_view_post.setVisibility(View.GONE);
                                 tv_view_post.setVisibility(View.GONE);
                             }
@@ -692,17 +698,17 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
 
 
                 //  swipeRefresh.setRefreshing(false);
-                postAdapter.removeLoading();
+//                postAdapter.removeLoading();
                 isLoading = false;
             } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
                 isLastPage = true;
-                postAdapter.removeLoading();
+//                postAdapter.removeLoading();
                 isLoading = false;
             } else {
                 networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
 
-            if (posts.size() == 0) {
+         /*   if (posts.size() == 0) {
                 rc_post.setVisibility(View.GONE);
                 tv_view_post.setVisibility(View.GONE);
                 view_view_post.setVisibility(View.GONE);
@@ -710,7 +716,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                 rc_post.setVisibility(View.VISIBLE);
                 tv_view_post.setVisibility(View.VISIBLE);
                 view_view_post.setVisibility(View.VISIBLE);
-            }
+            }*/
         });
     }
 
@@ -762,22 +768,34 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                 RemoveUserApiCall();
                 break;
             case R.id.layout_block:
-                if(connected_user!=null){
+                if (connected_user != null) {
                     BlockUserApiCall(connected_user.id);
-                }else{
+                } else {
                     BlockUserApiCall(post.getUser().getId());
                 }
                 break;
             case R.id.layout_message:
-                ChatFragment chatFragment = new ChatFragment();
-                Bundle bundlemessage = new Bundle();
-                if (argumentReceived.equalsIgnoreCase("PostData")) {
-                    bundlemessage.putSerializable("user", post.getUser());
+
+                if (tv_connect.getText().toString().equals("Connected")) {
+                    Log.d("message", "Connected");
+
+
+                    ChatFragment chatFragment = new ChatFragment();
+                    Bundle bundlemessage = new Bundle();
+                    if (argumentReceived.equalsIgnoreCase("PostData")) {
+                        bundlemessage.putSerializable("user", post.getUser());
+                    } else {
+                        bundlemessage.putSerializable("user", targetUser);
+                    }
+                    chatFragment.setArguments(bundlemessage);
+                    loadFragment(R.id.framelayout, chatFragment, getContext(), true);
                 } else {
-                    bundlemessage.putSerializable("user", targetUser);
+                    Log.d("message", "no Connected");
+
+                    Toast.makeText(requireContext(), "Only connected user can chat.", Toast.LENGTH_SHORT).show();
                 }
-                chatFragment.setArguments(bundlemessage);
-                loadFragment(R.id.framelayout, chatFragment, getContext(), true);
+
+
                 break;
             case R.id.layout_EditDetail:
                 EditProfileFragment editProfileFragment = new EditProfileFragment();
@@ -820,32 +838,23 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
         connection.setReceiver_id(receiver_id);
         connection.setStatus(AppConstants.DELETED);
 
-        connectionViewModel.block(connection).observe(this, new Observer<BaseModel<List<Object>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Object>> listBaseModel) {
-                if (!listBaseModel.isError()) {
-                    simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_block_user), null, getString(R.string.ok), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            simpleDialog.dismiss();
+        connectionViewModel.block(connection).observe(this, listBaseModel -> {
+            if (!listBaseModel.isError()) {
+                simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_block_user), null, getString(R.string.ok), v -> {
+                    simpleDialog.dismiss();
 
-                            requireActivity().onBackPressed();
-                        }
-                    });
-                } else {
+                    requireActivity().onBackPressed();
+                });
+            } else {
 
-                    simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), "Your connection is already block", null, getString(R.string.ok), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            getActivity().onBackPressed();
-                            simpleDialog.dismiss();
-                        }
-                    });
-                }
-                hideDialog();
-                simpleDialog.show();
-                simpleDialog.setCancelable(false);
+                simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), "Your connection is already block", null, getString(R.string.ok), v -> {
+                    getActivity().onBackPressed();
+                    simpleDialog.dismiss();
+                });
             }
+            hideDialog();
+            simpleDialog.show();
+            simpleDialog.setCancelable(false);
         });
 
 

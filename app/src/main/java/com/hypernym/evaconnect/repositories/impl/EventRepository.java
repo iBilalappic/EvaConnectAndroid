@@ -1,5 +1,7 @@
 package com.hypernym.evaconnect.repositories.impl;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -108,31 +110,59 @@ public class EventRepository implements IEventRepository {
     @Override
     public LiveData<BaseModel<List<Event>>> createEvent(Event event, MultipartBody.Part user_image) {
         eventMutableLiveData = new MutableLiveData<>();
-        RestClient.get().appApi().createEvent(LoginUtils.getLoggedinUser().getId(),LoginUtils.getLoggedinUser().getId(),
-                RequestBody.create(MediaType.parse("text/plain"),event.getContent()),
+        RestClient.get().appApi().createEvent(LoginUtils.getLoggedinUser().getId(), LoginUtils.getLoggedinUser().getId(),
+                RequestBody.create(MediaType.parse("text/plain"), event.getContent()),
                 RequestBody.create(MediaType.parse("text/plain"), AppConstants.ACTIVE),
                 RequestBody.create(MediaType.parse("text/plain"), event.getEvent_city()),
                 RequestBody.create(MediaType.parse("text/plain"), event.getStart_date()),
                 RequestBody.create(MediaType.parse("text/plain"), event.getEnd_date()),
                 RequestBody.create(MediaType.parse("text/plain"), event.getStart_time()),
                 RequestBody.create(MediaType.parse("text/plain"), event.getEnd_time()),
+                RequestBody.create(MediaType.parse("text/plain"), hConcatDateTime(event.getStart_date(), event.getStart_time())),
+                RequestBody.create(MediaType.parse("text/plain"), hConcatDateTime(event.getEnd_date(), event.getEnd_time())),
                 RequestBody.create(MediaType.parse("text/plain"), event.getName()),
                 RequestBody.create(MediaType.parse("text/plain"), event.getRegistration_link()),
-                event.getIs_private(),  event.getEvent_attendeeIDs(),user_image)
+                event.getIs_private(), event.getEvent_attendeeIDs(), user_image)
                 .enqueue(new Callback<BaseModel<List<Event>>>() {
-            @Override
-            public void onResponse(Call<BaseModel<List<Event>>> call, Response<BaseModel<List<Event>>> response) {
-                if(response.body()!=null)
-                {
-                    eventMutableLiveData.setValue(response.body());
-                }
-            }
-            @Override
-            public void onFailure(Call<BaseModel<List<Event>>> call, Throwable t) {
-                eventMutableLiveData.setValue(null);
-            }
-        });
+                    @Override
+                    public void onResponse(Call<BaseModel<List<Event>>> call, Response<BaseModel<List<Event>>> response) {
+                        if (response.body() != null) {
+                            eventMutableLiveData.setValue(response.body());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<BaseModel<List<Event>>> call, Throwable t) {
+                        eventMutableLiveData.setValue(null);
+                    }
+                });
         return eventMutableLiveData;
+    }
+
+    private String hConcatDateTime(String date, String time) {
+
+        String newTime = "";
+
+        if (time.contains("AM")) {
+
+            newTime = time.replace("AM", "");
+            Log.d("finalstr", "Remove  AM:" + newTime);
+
+        } else if (time.contains("PM")) {
+            newTime = time.replace("PM", "");
+            Log.d("finalstr", "Remove  PM:" + newTime);
+        }
+
+        if (time.contains(" ")) {
+            time.replace(" ", "");
+        }
+
+
+        String finalStr = date.trim() + " " + newTime.trim();
+
+        Log.d("finalstr", "hConcatDateTime: " + finalStr);
+
+        return finalStr;
     }
 
     @Override
@@ -143,7 +173,7 @@ public class EventRepository implements IEventRepository {
     @Override
     public LiveData<BaseModel<List<Event>>> getEventDetails(int event_id, int user_id) {
         eventMutableLiveData = new MutableLiveData<>();
-        Event event=new Event();
+        Event event = new Event();
         event.setEvent_id(event_id);
         event.setUser_id(user_id);
         RestClient.get().appApi().getEventDetails(event).enqueue(new Callback<BaseModel<List<Event>>>() {

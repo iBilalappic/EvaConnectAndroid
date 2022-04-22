@@ -4,13 +4,13 @@ import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_ST
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +20,6 @@ import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.InvitedConnectionListener;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
-import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.GetEventInterestedUsers;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
@@ -31,6 +30,7 @@ import com.hypernym.evaconnect.viewmodel.EventViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,6 +52,7 @@ public class EventInterestedFragment extends BaseFragment implements InviteConne
 
     private EventInterestedUserAdapter inviteConnectionsAdapter;
     private List<GetEventInterestedUsers> connectionList = new ArrayList<>();
+    private List<GetEventInterestedUsers> hSearchList = new ArrayList<>();
     private EventViewModel eventViewModel;
 
     private int currentPage = PAGE_START;
@@ -79,11 +80,11 @@ public class EventInterestedFragment extends BaseFragment implements InviteConne
         eventViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(EventViewModel.class);
         currentPage = PAGE_START;
 
-      //  init();
+        //  init();
         initRecyclerView();
 
         if (NetworkUtils.isNetworkConnected(getContext())) {
-          //  getConnectionByFilter(type, currentPage, false);
+            //  getConnectionByFilter(type, currentPage, false);
             init();
         } else {
             networkErrorDialog();
@@ -108,8 +109,8 @@ public class EventInterestedFragment extends BaseFragment implements InviteConne
                 isLoading = true;
                 currentPage = AppConstants.TOTAL_PAGES + currentPage;
                 if (NetworkUtils.isNetworkConnected(getContext())) {
-                   // getConnectionByFilter(type, currentPage, false);
-                  //  init();
+                    // getConnectionByFilter(type, currentPage, false);
+                    //  init();
                 } else {
                     networkErrorDialog();
                 }
@@ -137,35 +138,31 @@ public class EventInterestedFragment extends BaseFragment implements InviteConne
 
     private void getInterestedEvent(int event_id) {
 
-        eventViewModel.getEventInterested(event_id).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<GetEventInterestedUsers>>>() {
-            @Override
-            public void onChanged(BaseModel<List<GetEventInterestedUsers>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
+        eventViewModel.getEventInterested(event_id).observe(getViewLifecycleOwner(), listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
 /*                    if (currentPage == PAGE_START) {
-                        connectionList.clear();
-                        inviteConnectionsAdapter.notifyDataSetChanged();
-                    }*/
-                    //
-                    connectionList.addAll(listBaseModel.getData());
+                    connectionList.clear();
                     inviteConnectionsAdapter.notifyDataSetChanged();
-                    if (connectionList.size() > 0) {
-                        rc_interested.setVisibility(View.VISIBLE);
-                        empty.setVisibility(View.GONE);
-                    }
-                    isLoading = false;
-                } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
-
-                    if(connectionList.size()==0)
-                    {
-                        rc_interested.setVisibility(View.GONE);
-                        empty.setVisibility(View.VISIBLE);
-                    }
-                    isLastPage = true;
-                    // homePostsAdapter.removeLoading();
-                    isLoading = false;
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                }*/
+                //
+                connectionList.addAll(listBaseModel.getData());
+                inviteConnectionsAdapter.notifyDataSetChanged();
+                if (connectionList.size() > 0) {
+                    rc_interested.setVisibility(View.VISIBLE);
+                    empty.setVisibility(View.GONE);
                 }
+                isLoading = false;
+            } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
+
+                if (connectionList.size() == 0) {
+                    rc_interested.setVisibility(View.GONE);
+                    empty.setVisibility(View.VISIBLE);
+                }
+                isLastPage = true;
+                // homePostsAdapter.removeLoading();
+                isLoading = false;
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
         });
     }
@@ -202,17 +199,53 @@ public class EventInterestedFragment extends BaseFragment implements InviteConne
         @Override
         public void afterTextChanged(Editable s) {
             currentPage = PAGE_START;
-            if (s.length() > 0) {
-                isSearchFlag = true;
-            } else {
+
+            if (s.equals("")) {
+                rc_interested.setVisibility(View.VISIBLE);
                 isSearchFlag = false;
+                inviteConnectionsAdapter.hSetList(connectionList);
+            } else {
+                rc_interested.setVisibility(View.GONE);
+                hFilterList(s);
+                isSearchFlag = true;
             }
 
-            connectionList.clear();
-            inviteConnectionsAdapter.notifyDataSetChanged();
-           // getConnectionByFilter(type, PAGE_START, true);
+
+            // getConnectionByFilter(type, PAGE_START, true);
 
         }
+
+    }
+
+    private void hFilterList(Editable s) {
+
+
+        Log.d("intrested", "hFilterList: " + connectionList.size());
+
+        if (!s.equals("")) {
+            hSearchList.clear();
+            if (connectionList != null) {
+                for (GetEventInterestedUsers user : connectionList) {
+                    String name = user.getUser().first_name.toLowerCase(Locale.getDefault());
+                    Log.d("intrested", "Name : " + name);
+
+                    if (name.contains(s.toString().toLowerCase(Locale.getDefault()))) {
+                        Log.d("intrested", "User Found: " + user.getUser().getFirst_name());
+                        hSearchList.add(user);
+                    }
+                }
+
+                inviteConnectionsAdapter.hSetList(hSearchList);
+
+                Log.d("intrested", "hSearchList size: " + hSearchList.size());
+
+
+            }
+        } else {
+            inviteConnectionsAdapter.hSetList(connectionList);
+        }
+
+        rc_interested.setVisibility(View.VISIBLE);
 
     }
 }

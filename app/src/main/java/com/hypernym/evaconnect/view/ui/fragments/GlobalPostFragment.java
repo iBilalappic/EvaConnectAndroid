@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,7 +27,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
-import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Connection;
 import com.hypernym.evaconnect.models.Event;
 import com.hypernym.evaconnect.models.Post;
@@ -38,7 +36,7 @@ import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
-import com.hypernym.evaconnect.view.adapters.HomePostsAdapter;
+import com.hypernym.evaconnect.view.adapters.PostAdapter;
 import com.hypernym.evaconnect.view.bottomsheets.BottomsheetShareSelection;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.EventViewModel;
@@ -56,16 +54,20 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GlobalPostFragment  extends BaseFragment implements View.OnClickListener, HomePostsAdapter.ItemClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class GlobalPostFragment extends BaseFragment implements View.OnClickListener, PostAdapter.ItemClickListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.rc_home)
     RecyclerView rc_home;
+
+
+    @BindView(R.id.swipeRefresh)
+    SwipeRefreshLayout swipeRefreshLayout;
 
 
     private String search_key;
 
 
     private List<Post> posts = new ArrayList<>();
-    private HomePostsAdapter homePostsAdapter;
+    private PostAdapter homePostsAdapter;
     private LinearLayoutManager linearLayoutManager;
     private HomeViewModel homeViewModel;
     private PostViewModel postViewModel;
@@ -122,7 +124,7 @@ public class GlobalPostFragment  extends BaseFragment implements View.OnClickLis
     }
 
     private void initRecycler() {
-        homePostsAdapter = new HomePostsAdapter(getContext(), posts, this);
+        homePostsAdapter = new PostAdapter(getContext(), posts, this);
         linearLayoutManager = new LinearLayoutManager(getContext());
         rc_home.setLayoutManager(linearLayoutManager);
         rc_home.setAdapter(homePostsAdapter);
@@ -135,6 +137,8 @@ public class GlobalPostFragment  extends BaseFragment implements View.OnClickLis
                 if (posts.size() >= 9) {
                     if (NetworkUtils.isNetworkConnected(getContext())) {
                         callPostsApi();
+                        swipeRefreshLayout.setRefreshing(false);
+
                     } else {
                         networkErrorDialog();
                     }
@@ -168,6 +172,7 @@ public class GlobalPostFragment  extends BaseFragment implements View.OnClickLis
 
         homeViewModel.getDashboardSearch(user, AppConstants.TOTAL_PAGES, currentPage, filter).observe(this, dashboardBaseModel -> {
 
+            swipeRefreshLayout.setRefreshing(false);
             //   homePostsAdapter.clear();
             if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
 
@@ -235,9 +240,6 @@ public class GlobalPostFragment  extends BaseFragment implements View.OnClickLis
             case R.id.img_backarrow:
                 getActivity().onBackPressed();
                 break;
-
-
-
         }
     }
 
@@ -248,11 +250,12 @@ public class GlobalPostFragment  extends BaseFragment implements View.OnClickLis
         isLastPage = false;
         homePostsAdapter.clear();
         if (NetworkUtils.isNetworkConnected(getContext())) {
-//            if(edt_search.length()>0){
-//                callPostsApi();
-//            }else{
-//                swipeRefresh.setRefreshing(false);
-//            }
+            if (search_key.equals("")) {
+                swipeRefreshLayout.setRefreshing(false);
+            } else {
+                swipeRefreshLayout.setRefreshing(false);
+                callPostsApi();
+            }
 
         } else {
             networkErrorDialog();
@@ -280,6 +283,11 @@ public class GlobalPostFragment  extends BaseFragment implements View.OnClickLis
             postDetailsFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, postDetailsFragment, getContext(), true);
         }
+
+    }
+
+    @Override
+    public void onDocumentClick(View view, int position) {
 
     }
 
@@ -324,48 +332,48 @@ public class GlobalPostFragment  extends BaseFragment implements View.OnClickLis
         }
     }
 
-    @Override
-    public void onNewsLikeClick(View view, int position, TextView likeCount) {
-        //showDialog();
-        Post post = posts.get(position);
-        User user = LoginUtils.getLoggedinUser();
-        post.setRss_news_id(post.getId());
-        post.setCreated_by_id(user.getId());
-        if (post.getIs_news_like() == null || post.getIs_news_like() < 1) {
-            post.setAction(AppConstants.LIKE);
-            if (post.getIs_news_like() == null) {
-                post.setIs_news_like(1);
-                if (post.getLike_count() == null)
-                    post.setLike_count(0);
-                else
-                    post.setLike_count(post.getLike_count() + 1);
-            } else {
-                post.setIs_news_like(post.getIs_news_like() + 1);
-                if (post.getLike_count() == null)
-                    post.setLike_count(0);
-                else
-                    post.setLike_count(post.getLike_count() + 1);
-            }
-        } else {
-            post.setAction(AppConstants.UNLIKE);
-            if (post.getIs_news_like() > 0) {
-                post.setIs_news_like(post.getIs_news_like() - 1);
-                post.setLike_count(post.getLike_count() - 1);
-            } else {
-                post.setIs_news_like(0);
-                post.setLike_count(0);
-            }
+    /*  @Override
+      public void onNewsLikeClick(View view, int position, TextView likeCount) {
+          //showDialog();
+          Post post = posts.get(position);
+          User user = LoginUtils.getLoggedinUser();
+          post.setRss_news_id(post.getId());
+          post.setCreated_by_id(user.getId());
+          if (post.getIs_news_like() == null || post.getIs_news_like() < 1) {
+              post.setAction(AppConstants.LIKE);
+              if (post.getIs_news_like() == null) {
+                  post.setIs_news_like(1);
+                  if (post.getLike_count() == null)
+                      post.setLike_count(0);
+                  else
+                      post.setLike_count(post.getLike_count() + 1);
+              } else {
+                  post.setIs_news_like(post.getIs_news_like() + 1);
+                  if (post.getLike_count() == null)
+                      post.setLike_count(0);
+                  else
+                      post.setLike_count(post.getLike_count() + 1);
+              }
+          } else {
+              post.setAction(AppConstants.UNLIKE);
+              if (post.getIs_news_like() > 0) {
+                  post.setIs_news_like(post.getIs_news_like() - 1);
+                  post.setLike_count(post.getLike_count() - 1);
+              } else {
+                  post.setIs_news_like(0);
+                  post.setLike_count(0);
+              }
 
-        }
-        Log.d("Listing status", post.getAction() + " count" + post.getIs_post_like());
-        if (NetworkUtils.isNetworkConnected(getContext())) {
+          }
+          Log.d("Listing status", post.getAction() + " count" + post.getIs_post_like());
+          if (NetworkUtils.isNetworkConnected(getContext())) {
 
-            likeNews(post, position);
+              likeNews(post, position);
 
-        } else {
-            networkErrorDialog();
-        }
-    }
+          } else {
+              networkErrorDialog();
+          }
+      }*/
     private void likeNews(Post post, int position) {
         newsViewModel.likePost(post).observe(this, listBaseModel -> {
             if (listBaseModel != null && !listBaseModel.isError()) {
@@ -376,14 +384,14 @@ public class GlobalPostFragment  extends BaseFragment implements View.OnClickLis
             hideDialog();
         });
     }
-    @Override
+   /* @Override
     public void onJobLikeClick(View view, int position, TextView likeCount) {
         if (posts.get(position).getIs_job_like() != null && posts.get(position).getIs_job_like() > 0) {
             SetJobUnLike(posts.get(position).getId(), position);
         } else {
             SetJobLike(posts.get(position).getId(), position);
         }
-    }
+    }*/
 
     private void SetJobLike(Integer id, int position) {
 
@@ -468,30 +476,50 @@ public class GlobalPostFragment  extends BaseFragment implements View.OnClickLis
     }
 
     @Override
+    public void onMoreClick(View view, int position) {
+
+    }
+
+    @Override
+    public void onEditClick(View view, int position) {
+
+    }
+
+    @Override
+    public void onDeleteClick(View view, int position) {
+
+    }
+
+    @Override
     public void onVideoClick(View view, int position) {
         AppUtils.playVideo(getContext(), posts.get(position).getPost_video());
     }
 
     @Override
-    public void onURLClick(View view, int position,String type) {
-        if(type.equalsIgnoreCase("news"))
-        {
-            LoadUrlFragment loadUrlFragment = new LoadUrlFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("url", posts.get(position).getLink());
-            loadUrlFragment.setArguments(bundle);
-            loadFragment(R.id.framelayout, loadUrlFragment, getContext(), true);
-        }
-        else
-        {
-            LoadUrlFragment loadUrlFragment = new LoadUrlFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("url", posts.get(position).getContent());
-            loadUrlFragment.setArguments(bundle);
-            loadFragment(R.id.framelayout, loadUrlFragment, getContext(), true);
-        }
+    public void onURLClick(View view, int position) {
+
     }
 
+    /* @Override
+     public void onURLClick(View view, int position,String type) {
+         if(type.equalsIgnoreCase("news"))
+         {
+             LoadUrlFragment loadUrlFragment = new LoadUrlFragment();
+             Bundle bundle = new Bundle();
+             bundle.putString("url", posts.get(position).getLink());
+             loadUrlFragment.setArguments(bundle);
+             loadFragment(R.id.framelayout, loadUrlFragment, getContext(), true);
+         }
+         else
+         {
+             LoadUrlFragment loadUrlFragment = new LoadUrlFragment();
+             Bundle bundle = new Bundle();
+             bundle.putString("url", posts.get(position).getContent());
+             loadUrlFragment.setArguments(bundle);
+             loadFragment(R.id.framelayout, loadUrlFragment, getContext(), true);
+         }
+     }
+ */
     @Override
     public void onProfileClick(View view, int position) {
         PersonProfileFragment personDetailFragment = new PersonProfileFragment();
@@ -501,20 +529,20 @@ public class GlobalPostFragment  extends BaseFragment implements View.OnClickLis
         loadFragment(R.id.framelayout, personDetailFragment, getContext(), true);
     }
 
-    @Override
-    public void onApplyClick(View view, int position) {
-        if(posts.get(position).getIs_applied()==0)
-        {
-            SpecficJobFragment specficJobFragment = new SpecficJobFragment();
-            Bundle bundle = new Bundle();
-            bundle.putInt("job_id", posts.get(position).getId());
-            specficJobFragment.setArguments(bundle);
-            loadFragment(R.id.framelayout, specficJobFragment, getContext(), true);
-        }
+    /* @Override
+     public void onApplyClick(View view, int position) {
+         if(posts.get(position).getIs_applied()==0)
+         {
+             SpecficJobFragment specficJobFragment = new SpecficJobFragment();
+             Bundle bundle = new Bundle();
+             bundle.putInt("job_id", posts.get(position).getId());
+             specficJobFragment.setArguments(bundle);
+             loadFragment(R.id.framelayout, specficJobFragment, getContext(), true);
+         }
 
-    }
-
-    @Override
+     }
+ */
+   /* @Override
     public void onEventItemClick(View view, int position) {
         EventDetailFragment eventDetailFragment = new EventDetailFragment();
         Bundle bundle = new Bundle();
@@ -562,7 +590,7 @@ public class GlobalPostFragment  extends BaseFragment implements View.OnClickLis
             networkErrorDialog();
         }
     }
-
+*/
     private void likeEvent(Post post, int position) {
         Event event = new Event();
         event.setEvent_id(post.getEvent_id());
@@ -601,7 +629,7 @@ public class GlobalPostFragment  extends BaseFragment implements View.OnClickLis
     private void GetUserDetails() {
         User user = new User();
         user = LoginUtils.getUser();
-        userViewModel.getuser_details(user.getId()
+        userViewModel.getuser_details(user.getId(), false
         ).observe(this, listBaseModel -> {
             if (listBaseModel.getData() != null && !listBaseModel.isError()) {
                 LoginUtils.saveUser(listBaseModel.getData().get(0));
@@ -637,6 +665,7 @@ public class GlobalPostFragment  extends BaseFragment implements View.OnClickLis
             } else {
                 posts.clear();
                 homePostsAdapter.notifyDataSetChanged();
+
                 isSearchFlag = false;
             }
 
@@ -689,9 +718,17 @@ public class GlobalPostFragment  extends BaseFragment implements View.OnClickLis
 
     @Subscribe
     public void onEvent(String mtitle) {
-        Log.d("TAG", "onEvent: "+mtitle);
-        search_key=mtitle;
-        callPostsApi();
+        Log.d("TAG", "onEvent: " + mtitle);
+
+        if (mtitle.equals("")) {
+
+            posts.clear();
+            homePostsAdapter.notifyDataSetChanged();
+        } else {
+
+            search_key = mtitle;
+            callPostsApi();
+        }
     }
 
 }

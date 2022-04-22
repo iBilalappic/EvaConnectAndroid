@@ -34,6 +34,7 @@ public interface APIConstants {
  public static String GET_CONNECTION_BY_FILTER_OLD = "user/network/connection/filter/";
  public static String GET_CONNECTION_BY_FILTER = "user/network/connection/filter/?";
  public static String GET_CONNECTED_BY_FILTER = "user/connection/filter/?";
+ public static String GET_CONNECTED_BY_STATUS = "user/connection/status/?";
  public static String GET_ALL_NOTIFICATIONS = "user/notifications/filter/?";
  public static String NOTIFICATION_MARKS_AS_READ = "user/notifications/details/?";
  public static String GET_POST_BY_ID = "post/details/";

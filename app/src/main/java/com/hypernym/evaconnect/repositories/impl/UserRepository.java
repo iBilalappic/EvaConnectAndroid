@@ -7,6 +7,7 @@ import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.models.AccountCheck;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.GetBlockedData;
+import com.hypernym.evaconnect.models.IsBlocked;
 import com.hypernym.evaconnect.models.NotificationSettingsRootModel;
 import com.hypernym.evaconnect.models.Stats;
 import com.hypernym.evaconnect.models.User;
@@ -40,6 +41,7 @@ public class UserRepository implements IUserRespository {
     private MutableLiveData<BaseModel<List<Object>>> userNotificationSettings = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> updateUserLocationMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> verifyEmailMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<IsBlocked>>> blockedUserLiveData = new MutableLiveData<>();
 
 
     @Override
@@ -402,10 +404,10 @@ public class UserRepository implements IUserRespository {
     }
 
     @Override
-    public LiveData<BaseModel<List<User>>> getuser_details(Integer id) {
+    public LiveData<BaseModel<List<User>>> getuser_details(Integer id, boolean view) {
         userMutableLiveData = new MutableLiveData<>();
 
-        RestClient.get().appApi().getuser_details(id,true).enqueue(new Callback<BaseModel<List<User>>>() {
+        RestClient.get().appApi().getuser_details(id, view).enqueue(new Callback<BaseModel<List<User>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
                 if (response.body() != null) {
@@ -547,6 +549,27 @@ public class UserRepository implements IUserRespository {
         });
 
         return null;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<IsBlocked>>> hCheckBlockedOrNOt(int hMyID, int hID) {
+        blockedUserLiveData = new MutableLiveData<>();
+
+        RestClient.get().appApi().hGetBlockedUserInfo(hMyID, hID).enqueue(new Callback<BaseModel<List<IsBlocked>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<IsBlocked>>> call, Response<BaseModel<List<IsBlocked>>> response) {
+                blockedUserLiveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<IsBlocked>>> call, Throwable t) {
+                blockedUserLiveData.postValue(null);
+
+            }
+        });
+
+        return blockedUserLiveData;
+
     }
 
 

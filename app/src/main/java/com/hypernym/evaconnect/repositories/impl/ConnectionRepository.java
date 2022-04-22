@@ -1,5 +1,7 @@
 package com.hypernym.evaconnect.repositories.impl;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -27,6 +29,7 @@ public class ConnectionRepository implements IConnectionRespository {
     private MutableLiveData<BaseModel<List<Connection>>> connectionMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<User>>> userMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<ConnectionModel>>> connectedMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<ConnectionModel>>> companiesConnectedMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<ConnectionModel>>> connectedFilterMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<GetPendingData>>> pendingMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<ConnectionModel>>> PendingFilterMutableLiveData = new MutableLiveData<>();
@@ -194,25 +197,28 @@ public class ConnectionRepository implements IConnectionRespository {
 
 
     @Override
-    public LiveData<BaseModel<List<ConnectionModel>>> getCompanies(User userData, int total, int current) {
-        connectedMutableLiveData = new MutableLiveData<>();
-        HashMap<String, Object> body = new HashMap<>();
-        body.put("user_id", userData.getUser_id());
-        body.put("connection_status", userData.getFilter());
-        RestClient.get().appApi().getConnected(body).enqueue(new Callback<BaseModel<List<ConnectionModel>>>() {
+    public LiveData<BaseModel<List<ConnectionModel>>> getCompanies(User user, int total, int current, String filter) {
+        companiesConnectedMutableLiveData = new MutableLiveData<>();
+        HashMap<String, Object> data = new HashMap<String, Object>();
+        data.put("user_id", user.getId());
+        data.put("filter", filter);
+        data.put("search_key", user.getSearch_key());
+
+        RestClient.get().appApi().getCompanies(data, total, current).enqueue(new Callback<BaseModel<List<ConnectionModel>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<ConnectionModel>>> call, Response<BaseModel<List<ConnectionModel>>> response) {
-                connectedMutableLiveData.setValue(response.body());
+
+                Log.d("companies", "responce in repo : " + response.body());
+                companiesConnectedMutableLiveData.setValue(response.body());
             }
 
             @Override
             public void onFailure(Call<BaseModel<List<ConnectionModel>>> call, Throwable t) {
-                connectedMutableLiveData.setValue(null);
+                companiesConnectedMutableLiveData.setValue(null);
             }
         });
-        return connectedMutableLiveData;
+        return companiesConnectedMutableLiveData;
     }
-
 
     @Override
     public LiveData<BaseModel<List<ConnectionModel>>> getConnectedFilter(User userData) {
@@ -406,4 +412,5 @@ public class ConnectionRepository implements IConnectionRespository {
         });
         return share_connection;
     }
+
 }

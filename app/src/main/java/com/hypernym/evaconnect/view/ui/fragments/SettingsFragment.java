@@ -119,7 +119,7 @@ public class SettingsFragment extends BaseFragment implements View.OnClickListen
 
     private void GetUserDetails() {
         showDialog();
-        userViewModel.getuser_details(user.getId()).observe(getViewLifecycleOwner(), listBaseModel -> {
+        userViewModel.getuser_details(user.getId(), false).observe(getViewLifecycleOwner(), listBaseModel -> {
             if (listBaseModel.getData() != null && !listBaseModel.isError()) {
                 userData = listBaseModel.getData().get(0);
                 LoginUtils.saveUser(listBaseModel.getData().get(0));

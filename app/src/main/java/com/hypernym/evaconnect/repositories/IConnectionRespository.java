@@ -25,7 +25,7 @@ public interface IConnectionRespository {
 
     LiveData<BaseModel<List<ConnectionModel>>> getConnected(User user, int total, int current);
 
-    LiveData<BaseModel<List<ConnectionModel>>> getCompanies(User user, int total, int current);
+    LiveData<BaseModel<List<ConnectionModel>>> getCompanies(User user, int total, int current, String filter);
 
     LiveData<BaseModel<List<ConnectionModel>>> getConnectedFilter(User user);
 

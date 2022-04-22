@@ -1,5 +1,6 @@
 package com.hypernym.evaconnect.view.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -44,7 +45,7 @@ public class EventInterestedUserAdapter extends RecyclerView.Adapter<EventIntere
     }
 
     @Override
-    public void onBindViewHolder(@NonNull EventInterestedUserAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull EventInterestedUserAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         User user = invitedUsers.get(position).getUser();
 
         if (!TextUtils.isEmpty(user.getUser_image())) {
@@ -71,16 +72,23 @@ public class EventInterestedUserAdapter extends RecyclerView.Adapter<EventIntere
                     onItemClickListener.onItemClick(v, position, user);
             }
         });
-        if (user.getBio_data() != null) {
-            if (user.getBio_data().length() > 7) {
-                holder.tv_designation_title.setText(user.getBio_data().substring(0, 7));
+        if (user.getDesignation() != null) {
+            if (user.getDesignation().length() > 7) {
+                holder.tv_designation_title.setText(user.getDesignation().substring(0, 7));
             } else {
-                holder.tv_designation_title.setText(user.getBio_data());
+                holder.tv_designation_title.setText(user.getDesignation());
             }
         } else if (user.getDesignation() != null) {
             holder.tv_designation_title.setText(user.getDesignation());
         }
         holder.remove.setVisibility(View.GONE);
+
+    }
+
+    public void hSetList(List<GetEventInterestedUsers> hSearchList) {
+        invitedUsers = hSearchList;
+
+        notifyDataSetChanged();
 
     }
 

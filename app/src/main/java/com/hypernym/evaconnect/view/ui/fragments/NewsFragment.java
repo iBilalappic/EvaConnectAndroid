@@ -441,11 +441,11 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener, 
                     posts.addAll(dashboardBaseModel.getData());
                     postAdapter.notifyDataSetChanged();
                     swipeRefresh.setRefreshing(false);
-                    postAdapter.removeLoading();
+//                    postAdapter.removeLoading();
                     isLoading = false;
                 } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
                     isLastPage = true;
-                    postAdapter.removeLoading();
+//                    postAdapter.removeLoading();
                     swipeRefresh.setRefreshing(false);
                     isLoading = false;
                 } else {
