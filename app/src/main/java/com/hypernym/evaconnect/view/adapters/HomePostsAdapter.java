@@ -683,12 +683,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                 }
             });
 
-            tv_connect.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mClickListener.onConnectClick(v,getAdapterPosition());
-                }
-            });
+            tv_connect.setOnClickListener(v -> mClickListener.onConnectClick(v, getAdapterPosition()));
 
         }
     }

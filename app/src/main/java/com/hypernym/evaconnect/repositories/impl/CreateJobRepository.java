@@ -1,5 +1,7 @@
 package com.hypernym.evaconnect.repositories.impl;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -50,13 +52,16 @@ public class CreateJobRepository implements ICreateJobAdRepository {
             public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
                 if (response.isSuccessful() && !response.body().isError())
                     MessageMutableLiveData.setValue(response.body());
+                Log.d("jobs", "onResponse: sucess");
                 if (response.code() == 500) {
                     MessageMutableLiveData.setValue(null);
+
                 }
             }
 
             @Override
             public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+                Log.d("jobs", "onResponse: fail");
 
                 MessageMutableLiveData.setValue(null);
             }

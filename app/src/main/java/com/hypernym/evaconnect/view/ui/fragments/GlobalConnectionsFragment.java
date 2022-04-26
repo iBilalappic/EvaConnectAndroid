@@ -15,7 +15,6 @@ import android.widget.TextView;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
@@ -44,7 +43,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GlobalConnectionsFragment extends BaseFragment implements OptionsAdapter.ItemClickListener, ConnectionsAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class GlobalConnectionsFragment extends BaseFragment implements OptionsAdapter.ItemClickListener, ConnectionsAdapter.OnItemClickListener{
     @BindView(R.id.rc_connections)
     RecyclerView rc_connections;
 
@@ -62,9 +61,6 @@ public class GlobalConnectionsFragment extends BaseFragment implements OptionsAd
     @BindView(R.id.tv_seeAll)
     TextView tv_seeAll;
 
-
-    @BindView(R.id.swipeRefresh)
-    SwipeRefreshLayout swipeRefresh;
 
 
     private Boolean search;
@@ -109,7 +105,6 @@ public class GlobalConnectionsFragment extends BaseFragment implements OptionsAd
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(UserViewModel.class);
         user = LoginUtils.getLoggedinUser();
         currentPage = PAGE_START;
-        swipeRefresh.setOnRefreshListener(this);
         initMainOptionsRecView();
         initRecyclerView();
         if (NetworkUtils.isNetworkConnected(getContext())) {
@@ -194,8 +189,8 @@ public class GlobalConnectionsFragment extends BaseFragment implements OptionsAd
 
         // showDialog();
         User userData = new User();
-        swipeRefresh.setRefreshing(false);
 
+        showDialog();
         // userData.setType(mtype);
         userData.setUser_id(user.getId());
         userData.setFilter("active");
@@ -207,7 +202,7 @@ public class GlobalConnectionsFragment extends BaseFragment implements OptionsAd
 
         connectionViewModel.getConnected(userData, AppConstants.TOTAL_PAGES, currentPage).observe(getViewLifecycleOwner(), listBaseModel -> {
             if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
-
+                hideDialog();
                 Log.d("Connection_in", String.valueOf(listBaseModel.getData().size()));
 
 //                    if (currentPage == PAGE_START) {
@@ -250,6 +245,16 @@ public class GlobalConnectionsFragment extends BaseFragment implements OptionsAd
         }
     }
 
+   /* @Override
+    public void onResume() {
+        super.onResume();
+        init();
+        if (NetworkUtils.isNetworkConnected(getContext())) {
+            GetUserDetails();
+        } else {
+            networkErrorDialog();
+        }
+    }*/
 
     public void getConnectedFilter(boolean isSearch) {
 
@@ -373,15 +378,6 @@ public class GlobalConnectionsFragment extends BaseFragment implements OptionsAd
         });
     }
 
-    @Override
-    public void onRefresh() {
-        if (NetworkUtils.isNetworkConnected(getContext())) {
-            // GetUserDetails();
-            getConnectionByFilter(type, currentPage, false);
-        } else {
-            networkErrorDialog();
-        }
-    }
 
     public class TextWatcher implements android.text.TextWatcher {
 

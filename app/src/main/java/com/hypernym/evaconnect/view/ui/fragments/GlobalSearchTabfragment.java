@@ -27,6 +27,7 @@ public class GlobalSearchTabfragment extends BaseFragment implements View.OnClic
     EditText edt_search;
 
     User user = new User();
+    TabLayout tabs;
 
     public GlobalSearchTabfragment() {
         // Required empty public constructor
@@ -41,9 +42,11 @@ public class GlobalSearchTabfragment extends BaseFragment implements View.OnClic
         // Setting ViewPager for each Tabs
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         edt_search = (EditText) view.findViewById(R.id.edt_search);
+        tabs = view.findViewById(R.id.tabLayout2);
         setupViewPager(viewPager);
         // Set Tabs inside Toolbar
-        TabLayout tabs = (TabLayout) view.findViewById(R.id.tabLayout2);
+
+
         tabs.setupWithViewPager(viewPager);
         edt_search.addTextChangedListener(new GlobalSearchTabfragment.TextWatcher());
 
@@ -69,15 +72,20 @@ public class GlobalSearchTabfragment extends BaseFragment implements View.OnClic
 
 
         if (user != null && user.getType().equals("company")) {
-            adapter.addFragment(new GlobalPostFragment(), "Post");
+            adapter.addFragment(new GlobalPostFragment(), "Posts");
             adapter.addFragment(new GlobalConnectionsFragment(), "Followers");
-            adapter.addFragment(new GlobalEventFragment(), "Event");
+            adapter.addFragment(new GlobalEventFragment(), "Events");
+            tabs.setTabMode(TabLayout.MODE_FIXED);
+
         } else {
-            adapter.addFragment(new GlobalPostFragment(), "Post");
-            adapter.addFragment(new GlobalConnectionsFragment(), "Conne..");
-            adapter.addFragment(new GlobalConnectionsFragment(), "Comp..");
+            adapter.addFragment(new GlobalPostFragment(), "Posts");
+            adapter.addFragment(new GlobalConnectionsFragment(), "Connections");
+            adapter.addFragment(new GlobalConnectionsFragment(), "Companies");
             adapter.addFragment(new GlobalNewsFragment(), "News");
-            adapter.addFragment(new GlobalEventFragment(), "Event");
+            adapter.addFragment(new GlobalEventFragment(), "Events");
+
+            tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
+
 
         }
 

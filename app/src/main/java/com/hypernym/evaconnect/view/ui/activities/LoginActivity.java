@@ -1,5 +1,7 @@
 package com.hypernym.evaconnect.view.ui.activities;
 
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -154,27 +156,21 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
             }
         });
 
-        btn_linkedin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getBaseContext(), LinkedinActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-            }
+        btn_linkedin.setOnClickListener(v -> {
+            Intent intent = new Intent(getBaseContext(), LinkedinActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
         });
-        findViewById(R.id.rootview).setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-                //Find the currently focused view, so we can grab the correct window token from it.
-                View view = getCurrentFocus();
-                //If no view currently has focus, create a new one, just so we can grab a window token from it
-                if (view == null) {
-                    view = new View(LoginActivity.this);
-                }
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                return true;
+        findViewById(R.id.rootview).setOnTouchListener((View v, @SuppressLint("ClickableViewAccessibility") MotionEvent event) -> {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+            //Find the currently focused view, so we can grab the correct window token from it.
+            View view = getCurrentFocus();
+            //If no view currently has focus, create a new one, just so we can grab a window token from it
+            if (view == null) {
+                view = new View(LoginActivity.this);
             }
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            return true;
         });
 
     }
@@ -198,7 +194,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
         btn_facebook.registerCallback(facebookCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Log.e(TAG, "onSuccess: " + loginResult.getAccessToken());
+                Log.e("facebook", "onSuccess: " + loginResult.getAccessToken());
 
                 // using the access token call the facebook graph api to get the user's profile information
                 requestUserProfile(loginResult.getAccessToken());
@@ -206,13 +202,13 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
 
             @Override
             public void onCancel() {
-                Log.e(TAG, "facebook login cancelled by the user");
+                Log.e("facebook", "facebook login cancelled by the user");
             }
 
             @Override
             public void onError(FacebookException error) {
                 error.printStackTrace();
-                Log.e(TAG, "onError: " + error.getMessage());
+                Log.e("facebook", "onError: " + error.getMessage());
             }
         });
     }
@@ -227,10 +223,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
                     String email = object.getString(AppConstants.EMAIL);
                     String id = object.getString(AppConstants.ID);
                     String facebook_photo = AppConstants.FACEBOOK_PIC_BASE_URL + id + AppConstants.FACEBOOK_PIC_URL;
-
 //                    String image_path = null;
-
-
 
                     Glide.with(this)
                             .asBitmap()
@@ -239,7 +232,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
                                 @Override
                                 public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
 
-//                                    image_path=ImageFilePathUtil.saveImage(resource);
+//                                   image_path=ImageFilePathUtil.saveImage(resource);
 
                                     checkUserExist(email, facebook_photo,ImageFilePathUtil.SaveImage(resource,"Profile.png"));
                                 }

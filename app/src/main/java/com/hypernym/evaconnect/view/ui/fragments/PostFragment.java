@@ -165,6 +165,7 @@ public class PostFragment extends BaseFragment implements View.OnClickListener, 
         postAdapter.clear();
         if (NetworkUtils.isNetworkConnected(getContext())) {
             callPostsApi();
+            swipeRefresh.setRefreshing(false);
         } else {
             networkErrorDialog();
         }
@@ -231,6 +232,7 @@ public class PostFragment extends BaseFragment implements View.OnClickListener, 
         }
 
     }
+
     private void likePost(Post post, int position) {
         postViewModel.likePost(post).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
@@ -252,7 +254,7 @@ public class PostFragment extends BaseFragment implements View.OnClickListener, 
 //        shareDialog = new ShareDialog(getContext(),bundle);
 //        shareDialog.show();
 
-        item_position=position;
+        item_position = position;
         BottomsheetShareSelection bottomSheetPictureSelection = new BottomsheetShareSelection(new YourDialogFragmentDismissHandler());
         bottomSheetPictureSelection.show(requireActivity().getSupportFragmentManager(), bottomSheetPictureSelection.getTag());
     }
@@ -285,7 +287,7 @@ public class PostFragment extends BaseFragment implements View.OnClickListener, 
         TextView text = (TextView) view;
         if (NetworkUtils.isNetworkConnected(getContext())) {
 
-            if(text.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_ACCEPT)){
+            if (text.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_ACCEPT)) {
                 Connection connection = new Connection();
                 User user = LoginUtils.getLoggedinUser();
                 connection.setStatus(AppConstants.ACTIVE);
@@ -293,12 +295,9 @@ public class PostFragment extends BaseFragment implements View.OnClickListener, 
                 connection.setModified_by_id(user.getId());
                 connection.setModified_datetime(DateUtils.GetCurrentdatetime());
                 callDeclineConnectApi(connection);
-            }
-            else
-            {
+            } else {
                 callConnectApi(text, position);
             }
-
 
 
         } else {
@@ -328,23 +327,23 @@ public class PostFragment extends BaseFragment implements View.OnClickListener, 
             NewPostFragment newPostFragment = new NewPostFragment();
             Bundle bundle = new Bundle();
             bundle.putInt("post", posts.get(position).getId());
-            bundle.putBoolean("isEdit",true);
+            bundle.putBoolean("isEdit", true);
             Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
             newPostFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
         } else if (posts.get(position).getType().equalsIgnoreCase("post") && posts.get(position).getPost_video() != null) {
-            NewPostFragment newPostFragment=new NewPostFragment();
-            Bundle bundle=new Bundle();
-            bundle.putInt("post", posts.get(position).getId());
-            bundle.putBoolean("isVideo",true);
-            bundle.putBoolean("isEdit",true);
-            newPostFragment.setArguments(bundle);
-            loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
-        } else if (posts.get(position).getType().equalsIgnoreCase("post") && posts.get(position).getPost_image().size() == 0 && !posts.get(position).isIs_url() && posts.get(position).getPost_document()==null) {
             NewPostFragment newPostFragment = new NewPostFragment();
             Bundle bundle = new Bundle();
             bundle.putInt("post", posts.get(position).getId());
-            bundle.putBoolean("isEdit",true);
+            bundle.putBoolean("isVideo", true);
+            bundle.putBoolean("isEdit", true);
+            newPostFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
+        } else if (posts.get(position).getType().equalsIgnoreCase("post") && posts.get(position).getPost_image().size() == 0 && !posts.get(position).isIs_url() && posts.get(position).getPost_document() == null) {
+            NewPostFragment newPostFragment = new NewPostFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("post", posts.get(position).getId());
+            bundle.putBoolean("isEdit", true);
             Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
             newPostFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
@@ -352,17 +351,16 @@ public class PostFragment extends BaseFragment implements View.OnClickListener, 
             NewPostFragment newPostFragment = new NewPostFragment();
             Bundle bundle = new Bundle();
             bundle.putInt("post", posts.get(position).getId());
-            bundle.putBoolean("isEdit",true);
+            bundle.putBoolean("isEdit", true);
             Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
             newPostFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
-        }
-        else if (posts.get(position).getType().equalsIgnoreCase("post") && posts.get(position).getPost_document()!=null) {
+        } else if (posts.get(position).getType().equalsIgnoreCase("post") && posts.get(position).getPost_document() != null) {
             NewPostFragment newPostFragment = new NewPostFragment();
             Bundle bundle = new Bundle();
             bundle.putInt("post", posts.get(position).getId());
-            bundle.putBoolean("isEdit",true);
-            bundle.putBoolean("document_type",true);
+            bundle.putBoolean("isEdit", true);
+            bundle.putBoolean("document_type", true);
             Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
             newPostFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
@@ -395,6 +393,7 @@ public class PostFragment extends BaseFragment implements View.OnClickListener, 
             hideDialog();
         });
     }
+
     private void callPostsApi() {
 
 
@@ -437,7 +436,6 @@ public class PostFragment extends BaseFragment implements View.OnClickListener, 
     }
 
 
-
     private void callConnectApi(TextView text, int position) {
         if (text.getText().toString().equalsIgnoreCase(getString(R.string.connect))) {
             showDialog();
@@ -466,14 +464,13 @@ public class PostFragment extends BaseFragment implements View.OnClickListener, 
                 Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
                 whatsappIntent.setType("text/plain");
                 whatsappIntent.setPackage("com.whatsapp");
-                    whatsappIntent.putExtra(Intent.EXTRA_TEXT, "https://www.evaintmedia.com/" + posts.get(item_position).getType() + "/" + posts.get(item_position).getId());
+                whatsappIntent.putExtra(Intent.EXTRA_TEXT, "https://www.evaintmedia.com/" + posts.get(item_position).getType() + "/" + posts.get(item_position).getId());
                 try {
                     getContext().startActivity(whatsappIntent);
                 } catch (android.content.ActivityNotFoundException ex) {
                     Toast.makeText(requireContext(), "Whatsapp have not been installed.", Toast.LENGTH_SHORT).show();
                 }
-            }
-            else if(msg.what==100){
+            } else if (msg.what == 100) {
                 ShareConnectionFragment shareConnectionFragment = new ShareConnectionFragment();
                 FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
                 transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
@@ -481,14 +478,14 @@ public class PostFragment extends BaseFragment implements View.OnClickListener, 
                 Bundle bundle = new Bundle();
                 {
                     bundle.putInt(Constants.DATA, posts.get(item_position).getId());
-                    bundle.putString(Constants.TYPE,  posts.get(item_position).getType());
+                    bundle.putString(Constants.TYPE, posts.get(item_position).getType());
                 }
                 shareConnectionFragment.setArguments(bundle);
                 if (true) {
                     transaction.addToBackStack(null);
                 }
                 transaction.commit();
-            }else if(msg.what==103){
+            } else if (msg.what == 103) {
                 ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(CLIPBOARD_SERVICE);
                 ClipData clip;
                 clip = ClipData.newPlainText("label", "https://www.evaintmedia.com/" + posts.get(item_position).getType() + "/" + posts.get(item_position).getId());

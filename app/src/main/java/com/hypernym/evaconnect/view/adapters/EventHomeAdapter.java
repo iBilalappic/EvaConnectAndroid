@@ -286,18 +286,26 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
                     }
                     ((EventHomeAdapter.EventTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((EventHomeAdapter.EventTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
-                    ((EventHomeAdapter.EventTypeViewHolder) holder).tv_interested.setText(String.valueOf(posts.get(position).getAttendees()) + " interested");
+                    if (posts.get(position).getAttendees() != null) {
+                        ((EventHomeAdapter.EventTypeViewHolder) holder).tv_interested.setText(String.valueOf(posts.get(position).getAttendees()) + " interested");
+                    } else {
+                        ((EventHomeAdapter.EventTypeViewHolder) holder).tv_interested.setText(String.valueOf(0) + " interested");
+
+                    }
                     ((EventHomeAdapter.EventTypeViewHolder) holder).tv_created_time.setText(DateUtils.getFormattedDateDMY(object.getStart_date()) + " - " + DateUtils.getFormattedDateDMY(object.getEnd_date()) + " | " + DateUtils.getTimeUTC(object.getStart_time()) + " - " + DateUtils.getTimeUTC(object.getEnd_time()));
 
-                    if (posts.get(position).getIs_attending().equalsIgnoreCase("Going")) {
-                        Drawable[] compoundDrawables = ((EventTypeViewHolder) holder).tv_attending.getCompoundDrawables();
-                        Drawable leftCompoundDrawable = compoundDrawables[0];
-                        if (leftCompoundDrawable == null) {
-                            ((EventTypeViewHolder) holder).tv_attending.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
+                    if (posts.get(position).getIs_attending() != null) {
+                        if (posts.get(position).getIs_attending().equalsIgnoreCase("Going")) {
+                            Drawable[] compoundDrawables = ((EventTypeViewHolder) holder).tv_attending.getCompoundDrawables();
+                            Drawable leftCompoundDrawable = compoundDrawables[0];
+                            if (leftCompoundDrawable == null) {
+                                ((EventTypeViewHolder) holder).tv_attending.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
+                            }
+                        } else {
+                            ((EventTypeViewHolder) holder).tv_attending.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                         }
-                    } else {
-                        ((EventTypeViewHolder) holder).tv_attending.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                     }
+
 
                     if (posts.get(position).getEvent_image().size() > 0) {
                         AppUtils.setGlideUrlThumbnail(mContext, ((EventHomeAdapter.EventTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
@@ -309,7 +317,7 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
 
 
                     ((EventTypeViewHolder) holder).tv_address.setText(posts.get(position).getAddress());
-                    ((EventTypeViewHolder) holder).tv_date.setText(DateUtils.eventDate(posts.get(position).getStart_date(),posts.get(position).getEnd_date()));
+                    ((EventTypeViewHolder) holder).tv_date.setText(DateUtils.eventDate(posts.get(position).getStart_date(), posts.get(position).getEnd_date()));
                     //
                     ((EventHomeAdapter.EventTypeViewHolder) holder).tv_name.setText(posts.get(position).getName());
                     ((EventHomeAdapter.EventTypeViewHolder) holder).tv_location.setText(posts.get(position).getAddress());

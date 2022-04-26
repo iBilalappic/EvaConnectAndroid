@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/image_search"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_gravity="right|end"
         android:padding="10dp"
         android:src="@drawable/ic_search"
@@ -22,8 +22,8 @@
 
     <ImageView
         android:id="@+id/img_close"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_gravity="right|end"
         android:src="@drawable/ic_close"
         android:padding="6dp"

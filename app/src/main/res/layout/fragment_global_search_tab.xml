@@ -77,11 +77,15 @@
             app:tabTextColor="@color/gray_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAlignment="center"
+            app:tabGravity="fill"
+            app:tabMode="auto"
             app:layout_constraintEnd_toEndOf="parent"
             app:tabTextAppearance="@style/CustomTextAppearanceTab"
             app:tabSelectedTextColor="@color/skyblue"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edt_search">
+
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -98,15 +102,6 @@
                 android:text="Wednesday" />
 
 
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Thursday" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Friday" />
         </com.google.android.material.tabs.TabLayout>
 
         <androidx.viewpager.widget.ViewPager

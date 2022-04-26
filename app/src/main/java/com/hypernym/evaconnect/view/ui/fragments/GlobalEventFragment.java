@@ -23,7 +23,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
@@ -38,7 +37,7 @@ import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
-import com.hypernym.evaconnect.view.adapters.HomePostsAdapter;
+import com.hypernym.evaconnect.view.adapters.EventHomeAdapter;
 import com.hypernym.evaconnect.view.bottomsheets.BottomsheetShareSelection;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.EventViewModel;
@@ -56,18 +55,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GlobalEventFragment extends BaseFragment implements View.OnClickListener, HomePostsAdapter.ItemClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class GlobalEventFragment extends BaseFragment implements View.OnClickListener, EventHomeAdapter.ItemClickListener {
     @BindView(R.id.rc_home)
     RecyclerView rc_home;
 
-
-    @BindView(R.id.swipeRefresh)
-    SwipeRefreshLayout swipeRefresh;
     private String search_key;
-
-
     private List<Post> posts = new ArrayList<>();
-    private HomePostsAdapter homePostsAdapter;
+    private EventHomeAdapter homePostsAdapter;
     private LinearLayoutManager linearLayoutManager;
     private HomeViewModel homeViewModel;
     private PostViewModel postViewModel;
@@ -112,7 +106,6 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(UserViewModel.class);
         newsViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(NewsViewModel.class);
         //   currentPage = PAGE_START;
-        swipeRefresh.setOnRefreshListener(this);
 
         initRecycler();
         // showBackButton();
@@ -125,7 +118,7 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
     }
 
     private void initRecycler() {
-        homePostsAdapter = new HomePostsAdapter(getContext(), posts, this);
+        homePostsAdapter = new EventHomeAdapter(getContext(), posts, this);
         linearLayoutManager = new LinearLayoutManager(getContext());
         rc_home.setLayoutManager(linearLayoutManager);
         rc_home.setAdapter(homePostsAdapter);
@@ -164,13 +157,15 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
     }
 
     private void callPostsApi() {
+
+        showDialog();
         User user = LoginUtils.getLoggedinUser();
 
         if (search_key.length() > 0)
             user.setSearch_key(search_key);
 
         homeViewModel.getDashboardSearch(user, AppConstants.TOTAL_PAGES, currentPage, filter).observe(this, dashboardBaseModel -> {
-
+            hideDialog();
             //   homePostsAdapter.clear();
             if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
 
@@ -202,7 +197,6 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
                 }
                 posts.addAll(dashboardBaseModel.getData());
                 homePostsAdapter.notifyDataSetChanged();
-                swipeRefresh.setRefreshing(false);
                 //  homePostsAdapter.removeLoading();
                 totalsize = totalsize + posts.size();
                 isLoading = false;
@@ -211,7 +205,6 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
                 totalsize = 0;
                 // homePostsAdapter.removeLoading();
                 homePostsAdapter.notifyDataSetChanged();
-                swipeRefresh.setRefreshing(false);
                 isLoading = false;
             } else {
                 networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
@@ -225,13 +218,11 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
     public void onResume() {
         super.onResume();
         init();
-        //   onRefresh();
         if (NetworkUtils.isNetworkConnected(getContext())) {
             GetUserDetails();
         } else {
             networkErrorDialog();
         }
-
     }
 
     @Override
@@ -245,24 +236,6 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
         }
     }
 
-    @Override
-    public void onRefresh() {
-        itemCount = 0;
-        currentPage = PAGE_START;
-        isLastPage = false;
-        homePostsAdapter.clear();
-        if (NetworkUtils.isNetworkConnected(getContext())) {
-//            if(edt_search.length()>0){
-//                callPostsApi();
-//            }else{
-//                swipeRefresh.setRefreshing(false);
-//            }
-
-        } else {
-            networkErrorDialog();
-        }
-
-    }
 
     @Override
     public void onItemClick(View view, int position) {
@@ -325,48 +298,6 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
         }
     }
 
-    @Override
-    public void onNewsLikeClick(View view, int position, TextView likeCount) {
-        //showDialog();
-        Post post = posts.get(position);
-        User user = LoginUtils.getLoggedinUser();
-        post.setRss_news_id(post.getId());
-        post.setCreated_by_id(user.getId());
-        if (post.getIs_news_like() == null || post.getIs_news_like() < 1) {
-            post.setAction(AppConstants.LIKE);
-            if (post.getIs_news_like() == null) {
-                post.setIs_news_like(1);
-                if (post.getLike_count() == null)
-                    post.setLike_count(0);
-                else
-                    post.setLike_count(post.getLike_count() + 1);
-            } else {
-                post.setIs_news_like(post.getIs_news_like() + 1);
-                if (post.getLike_count() == null)
-                    post.setLike_count(0);
-                else
-                    post.setLike_count(post.getLike_count() + 1);
-            }
-        } else {
-            post.setAction(AppConstants.UNLIKE);
-            if (post.getIs_news_like() > 0) {
-                post.setIs_news_like(post.getIs_news_like() - 1);
-                post.setLike_count(post.getLike_count() - 1);
-            } else {
-                post.setIs_news_like(0);
-                post.setLike_count(0);
-            }
-
-        }
-        Log.d("Listing status", post.getAction() + " count" + post.getIs_post_like());
-        if (NetworkUtils.isNetworkConnected(getContext())) {
-
-            likeNews(post, position);
-
-        } else {
-            networkErrorDialog();
-        }
-    }
 
     private void likeNews(Post post, int position) {
         newsViewModel.likePost(post).observe(this, listBaseModel -> {
@@ -482,21 +413,10 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
     }
 
     @Override
-    public void onURLClick(View view, int position,String type) {
-        if (type.equalsIgnoreCase("news")) {
-            LoadUrlFragment loadUrlFragment = new LoadUrlFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("url", posts.get(position).getLink());
-            loadUrlFragment.setArguments(bundle);
-            loadFragment(R.id.framelayout, loadUrlFragment, getContext(), true);
-        } else {
-            LoadUrlFragment loadUrlFragment = new LoadUrlFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("url", posts.get(position).getContent());
-            loadUrlFragment.setArguments(bundle);
-            loadFragment(R.id.framelayout, loadUrlFragment, getContext(), true);
-        }
+    public void onURLClick(View view, int position) {
+
     }
+
 
     @Override
     public void onProfileClick(View view, int position) {
@@ -568,6 +488,16 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
         }
     }
 
+    @Override
+    public void onEditClick(View view, int position) {
+
+    }
+
+    @Override
+    public void onDeleteClick(View view, int position) {
+
+    }
+
     private void likeEvent(Post post, int position) {
         Event event = new Event();
         event.setEvent_id(post.getEvent_id());
@@ -609,7 +539,6 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
         userViewModel.getuser_details(user.getId(), false
         ).observe(this, listBaseModel -> {
             if (listBaseModel.getData() != null && !listBaseModel.isError()) {
-                swipeRefresh.setRefreshing(false);
                 LoginUtils.saveUser(listBaseModel.getData().get(0));
             } else {
                 networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));

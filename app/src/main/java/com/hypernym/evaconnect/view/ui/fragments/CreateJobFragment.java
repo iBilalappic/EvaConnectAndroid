@@ -1,5 +1,7 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -20,23 +22,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
-import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.CompanyJobAdModel;
-import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
-import com.hypernym.evaconnect.view.dialogs.ApplicationSuccess_dialog;
 import com.hypernym.evaconnect.view.dialogs.JobSuccess_dialog;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.viewmodel.CreateJobAdViewModel;
@@ -46,9 +44,7 @@ import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,8 +60,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-
-import static android.app.Activity.RESULT_OK;
 
 public class CreateJobFragment extends BaseFragment implements View.OnClickListener, Validator.ValidationListener {
 
@@ -185,11 +179,13 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
         createJobAdViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(CreateJobAdViewModel.class);
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(UserViewModel.class);
         setPageTitle("Create a Job Listing");
-User user = LoginUtils.getLoggedinUser();
+
+
+        User user = LoginUtils.getLoggedinUser();
         if ((getArguments() != null)) {
             setPageTitle("");
             postAd.setText("Update Job Listing");
-           // setPageTitle("Update Job Listing");
+            // setPageTitle("Update Job Listing");
             //  showBackButton();
             job_id = getArguments().getInt("job_id");
             if (job_id != 0) {
@@ -266,34 +262,30 @@ User user = LoginUtils.getLoggedinUser();
     }
 
     private void GetJob_id(Integer id) {
-        jobListViewModel.getJobId(id).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<SpecficJobAd>>>() {
-            @Override
-            public void onChanged(BaseModel<List<SpecficJobAd>> getjobAd) {
-                if (getjobAd != null && !getjobAd.isError()) {
-                    edit_companyName.setText(LoginUtils.getUser().getCompany_name());
-                    edit_jobtitle.setText(getjobAd.getData().get(0).getJobTitle());
-                    edit_jobpostion.setText(getjobAd.getData().get(0).getPosition());
-                    edit_Location.setText(getjobAd.getData().get(0).getLocation());
-                    mJobImage = getjobAd.getData().get(0).getJobImage();
-                    companyJobAdModel.setJobSector(getjobAd.getData().get(0).getJobSector());
-                    AppUtils.setGlideImage(getContext(), profile_image, getjobAd.getData().get(0).getJobImage());
-                    //  String SalaryInt = getsplitstring(String.valueOf(companyJobAdModel.getSalary()));
-                    DecimalFormat myFormatter = new DecimalFormat("############");
-                    edit_amount.setText(myFormatter.format(getjobAd.getData().get(0).getSalary()));
-                    edit_jobdescription.setText(getjobAd.getData().get(0).getContent());
-                    companyJobAdModel.setJobType(getjobAd.getData().get(0).getJobType());
-                    getSectorFromApi(LoginUtils.getUser().getWork_aviation());
-                    getJobTypes();
+        jobListViewModel.getJobId(id).observe(getViewLifecycleOwner(), getjobAd -> {
+            if (getjobAd != null && !getjobAd.isError()) {
+                edit_companyName.setText(LoginUtils.getUser().getCompany_name());
+                edit_jobtitle.setText(getjobAd.getData().get(0).getJobTitle());
+                edit_jobpostion.setText(getjobAd.getData().get(0).getPosition());
+                edit_Location.setText(getjobAd.getData().get(0).getLocation());
+                mJobImage = getjobAd.getData().get(0).getJobImage();
+                companyJobAdModel.setJobSector(getjobAd.getData().get(0).getJobSector());
+                AppUtils.setGlideImage(getContext(), profile_image, getjobAd.getData().get(0).getJobImage());
+                //  String SalaryInt = getsplitstring(String.valueOf(companyJobAdModel.getSalary()));
+                DecimalFormat myFormatter = new DecimalFormat("############");
+                edit_amount.setText(myFormatter.format(getjobAd.getData().get(0).getSalary()));
+                edit_jobdescription.setText(getjobAd.getData().get(0).getContent());
+                companyJobAdModel.setJobType(getjobAd.getData().get(0).getJobType());
+                getSectorFromApi(LoginUtils.getUser().getWork_aviation());
+                getJobTypes();
 
 
+                // getSectorFromApi(LoginUtils.getUser().getWork_aviation());
 
-                    // getSectorFromApi(LoginUtils.getUser().getWork_aviation());
-
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
     }
 
@@ -334,34 +326,28 @@ User user = LoginUtils.getLoggedinUser();
 
 
     private void getSectorFromApi(String aviation_type) {
-        userViewModel.getSector(aviation_type).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<String>>>() {
-            @Override
-            public void onChanged(BaseModel<List<String>> listBaseModel) {
-                if (listBaseModel.getData() != null && !listBaseModel.isError()) {
-                    mSpinnerJobsector.addAll(listBaseModel.getData());
-                    SettingJobSectorSpinner();
-                    Log.d("TAAAG", "" + mSpinnerJobsector);
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
+        userViewModel.getSector(aviation_type).observe(getViewLifecycleOwner(), listBaseModel -> {
+            if (listBaseModel.getData() != null && !listBaseModel.isError()) {
+                mSpinnerJobsector.addAll(listBaseModel.getData());
+                SettingJobSectorSpinner();
+                Log.d("TAAAG", "" + mSpinnerJobsector);
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
     }
 
     private void getJobTypes() {
-        createJobAdViewModel.getJobType().observe(getViewLifecycleOwner(), new Observer<BaseModel<List<String>>>() {
-            @Override
-            public void onChanged(BaseModel<List<String>> listBaseModel) {
-                if (listBaseModel.getData() != null && !listBaseModel.isError()) {
-                    mSpinnerJobtype.addAll(listBaseModel.getData());
-                    SettingJobTypeSpinner();
-                    Log.d("TAAAG", "" + mSpinnerJobtype);
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
+        createJobAdViewModel.getJobType().observe(getViewLifecycleOwner(), listBaseModel -> {
+            if (listBaseModel.getData() != null && !listBaseModel.isError()) {
+                mSpinnerJobtype.addAll(listBaseModel.getData());
+                SettingJobTypeSpinner();
+                Log.d("TAAAG", "" + mSpinnerJobtype);
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
     }
 
@@ -511,27 +497,23 @@ User user = LoginUtils.getLoggedinUser();
                 edit_jobdescription.getText().toString(),
                 edit_Location.getText().toString(),
                 edit_jobtitle.getText().toString(),
-                edit_jobpostion.getText().toString(), JobType,JobDuration).observe(this, new Observer<BaseModel<List<Object>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Object>> getnetworkconnection) {
-                if (getnetworkconnection != null && !getnetworkconnection.isError()) {
-                    simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_jobAd_update), null, getString(R.string.ok), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            getActivity().onBackPressed();
-                            //loadFragment(R.id.framelayout, new JobListingFragment(), getContext(), false);
-                            simpleDialog.dismiss();
-                        }
-                    });
-                    hideDialog();
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
+                edit_jobpostion.getText().toString(), JobType, JobDuration).observe(this, getnetworkconnection -> {
+            if (getnetworkconnection != null && !getnetworkconnection.isError()) {
+                simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_jobAd_update), null, getString(R.string.ok), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getActivity().onBackPressed();
+                        //loadFragment(R.id.framelayout, new JobListingFragment(), getContext(), false);
+                        simpleDialog.dismiss();
+                    }
+                });
                 hideDialog();
-                if (!simpleDialog.isShowing())
-                    simpleDialog.show();
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
-
+            hideDialog();
+            if (!simpleDialog.isShowing())
+                simpleDialog.show();
         });
     }
 
@@ -539,29 +521,29 @@ User user = LoginUtils.getLoggedinUser();
         showDialog();
         User user = LoginUtils.getLoggedinUser();
         // edit_jobtitle.setText(edit_jobpostion.getText().toString() + " for " + edit_companyName.getText().toString());
+
+
         createJobAdViewModel.createJobAd(user, partImage, JobSector,
                 Integer.parseInt(edit_amount.getText().toString()),
                 edit_companyName.getText().toString(),
                 edit_jobdescription.getText().toString(),
                 edit_Location.getText().toString(),
                 edit_jobtitle.getText().toString(),
-                edit_jobpostion.getText().toString(), JobType,JobDuration).observe(this, new Observer<BaseModel<List<Object>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Object>> getnetworkconnection) {
-                if (getnetworkconnection != null && !getnetworkconnection.isError()) {
-                    jobSuccess_dialog = new JobSuccess_dialog(requireActivity(),getContext());
-                    jobSuccess_dialog.show();
-                    hideDialog();
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
+                edit_jobpostion.getText().toString(), JobType, JobDuration).observe(this, getnetworkconnection -> {
+            if (getnetworkconnection != null && !getnetworkconnection.isError()) {
+                jobSuccess_dialog = new JobSuccess_dialog(requireActivity(), getContext());
+                jobSuccess_dialog.show();
                 hideDialog();
-                if (simpleDialog !=null && !simpleDialog.isShowing())
-                    simpleDialog.show();
+            } else if (getnetworkconnection.isError()) {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
-
+            hideDialog();
+            if (simpleDialog != null && !simpleDialog.isShowing())
+                simpleDialog.show();
         });
+
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

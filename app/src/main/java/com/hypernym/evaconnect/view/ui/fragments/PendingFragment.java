@@ -152,6 +152,7 @@ public class PendingFragment extends BaseFragment implements OptionsAdapter.Item
     }
 
     private void getAllPending() {
+        swipeRefresh.setRefreshing(true);
         showDialog();
         connectionViewModel.getAllPending(AppConstants.TOTAL_PAGES, currentPage).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<GetPendingData>>>() {
             @Override
@@ -236,6 +237,9 @@ public class PendingFragment extends BaseFragment implements OptionsAdapter.Item
 
     public void getConnectionByFilter(String mtype, int currentPage, boolean isSearch) {
 
+        swipeRefresh.setRefreshing(
+                true
+        );
         // showDialog();
         User userData = new User();
         User user = LoginUtils.getLoggedinUser();
@@ -245,38 +249,37 @@ public class PendingFragment extends BaseFragment implements OptionsAdapter.Item
             userData.setFirst_name(edt_search.getText().toString());
         Log.e("type", mtype);
 
-        connectionViewModel.getConnectionByFilter(userData, AppConstants.TOTAL_PAGES, currentPage).observe(this, new Observer<BaseModel<List<User>>>() {
-            @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
-                    if (currentPage == PAGE_START) {
-                        connectionList.clear();
-                        pendingAdapter.notifyDataSetChanged();
-                    }
-                    //
-                    connectionList.addAll(listBaseModel.getData());
-                    pendingAdapter.notifyDataSetChanged();
-                    if (connectionList.size() > 0) {
-                        rc_connections.setVisibility(View.VISIBLE);
-                        empty.setVisibility(View.GONE);
-                    }else{
-                        rc_connections.setVisibility(View.GONE);
-                        empty.setVisibility(View.VISIBLE);
-                    }
-                    isLoading = false;
-                } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
+        connectionViewModel.getConnectionByFilter(userData, AppConstants.TOTAL_PAGES, currentPage).observe(this, listBaseModel -> {
 
-                    if(connectionList.size()==0)
-                    {
-                        rc_connections.setVisibility(View.GONE);
-                        empty.setVisibility(View.VISIBLE);
-                    }
-                    isLastPage = true;
-                    // homePostsAdapter.removeLoading();
-                    isLoading = false;
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+            swipeRefresh.setRefreshing(false);
+
+            if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
+                if (currentPage == PAGE_START) {
+                    connectionList.clear();
+                    pendingAdapter.notifyDataSetChanged();
                 }
+                //
+                connectionList.addAll(listBaseModel.getData());
+                pendingAdapter.notifyDataSetChanged();
+                if (connectionList.size() > 0) {
+                    rc_connections.setVisibility(View.VISIBLE);
+                    empty.setVisibility(View.GONE);
+                } else {
+                    rc_connections.setVisibility(View.GONE);
+                    empty.setVisibility(View.VISIBLE);
+                }
+                isLoading = false;
+            } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
+
+                if (connectionList.size() == 0) {
+                    rc_connections.setVisibility(View.GONE);
+                    empty.setVisibility(View.VISIBLE);
+                }
+                isLastPage = true;
+                // homePostsAdapter.removeLoading();
+                isLoading = false;
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
         });
     }
@@ -346,19 +349,16 @@ public class PendingFragment extends BaseFragment implements OptionsAdapter.Item
 
     private void callDeclineConnectApi(Connection connection, int position) {
 
-        connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Connection>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError()) {
+        connectionViewModel.connect(connection).observe(this, listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError()) {
 
-                    //pendingList.clear();
-                    pendingAdapter.removeAt(position);
-                   // getConnectionByFilter(type, PAGE_START, true);
-                } else {
-                    networkResponseDialog(getString(R.string.error), listBaseModel.getMessage());
-                }
-                hideDialog();
+                //pendingList.clear();
+                pendingAdapter.removeAt(position);
+                // getConnectionByFilter(type, PAGE_START, true);
+            } else {
+                networkResponseDialog(getString(R.string.error), listBaseModel.getMessage());
             }
+            hideDialog();
         });
     }
 

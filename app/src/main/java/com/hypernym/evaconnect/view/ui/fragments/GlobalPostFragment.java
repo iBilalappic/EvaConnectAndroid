@@ -22,7 +22,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
@@ -54,13 +53,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GlobalPostFragment extends BaseFragment implements View.OnClickListener, PostAdapter.ItemClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class GlobalPostFragment extends BaseFragment implements View.OnClickListener, PostAdapter.ItemClickListener/*, SwipeRefreshLayout.OnRefreshListener*/ {
     @BindView(R.id.rc_home)
     RecyclerView rc_home;
-
-
-    @BindView(R.id.swipeRefresh)
-    SwipeRefreshLayout swipeRefreshLayout;
 
 
     private String search_key;
@@ -100,6 +95,7 @@ public class GlobalPostFragment extends BaseFragment implements View.OnClickList
         getActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
         if (!mEventBus.getDefault().isRegistered(this)) mEventBus.getDefault().register(this);
 
+
         return view;
     }
 
@@ -137,7 +133,6 @@ public class GlobalPostFragment extends BaseFragment implements View.OnClickList
                 if (posts.size() >= 9) {
                     if (NetworkUtils.isNetworkConnected(getContext())) {
                         callPostsApi();
-                        swipeRefreshLayout.setRefreshing(false);
 
                     } else {
                         networkErrorDialog();
@@ -166,21 +161,23 @@ public class GlobalPostFragment extends BaseFragment implements View.OnClickList
 
     private void callPostsApi() {
         User user = LoginUtils.getLoggedinUser();
+        showDialog();
+
 
         if (search_key.length() > 0)
             user.setSearch_key(search_key);
 
         homeViewModel.getDashboardSearch(user, AppConstants.TOTAL_PAGES, currentPage, filter).observe(this, dashboardBaseModel -> {
-
-            swipeRefreshLayout.setRefreshing(false);
             //   homePostsAdapter.clear();
+            hideDialog();
+
             if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
 
                 if (currentPage == PAGE_START) {
                     posts.clear();
                     homePostsAdapter.notifyDataSetChanged();
                 }
-                totalsize=0;
+                totalsize = 0;
 
                 for (Post post : dashboardBaseModel.getData()) {
                     if (post.getContent() == null) {
@@ -225,7 +222,6 @@ public class GlobalPostFragment extends BaseFragment implements View.OnClickList
     public void onResume() {
         super.onResume();
         init();
-        //   onRefresh();
         if (NetworkUtils.isNetworkConnected(getContext())) {
             GetUserDetails();
         } else {
@@ -243,8 +239,9 @@ public class GlobalPostFragment extends BaseFragment implements View.OnClickList
         }
     }
 
-    @Override
+ /*   @Override
     public void onRefresh() {
+
         itemCount = 0;
         currentPage = PAGE_START;
         isLastPage = false;
@@ -253,7 +250,6 @@ public class GlobalPostFragment extends BaseFragment implements View.OnClickList
             if (search_key.equals("")) {
                 swipeRefreshLayout.setRefreshing(false);
             } else {
-                swipeRefreshLayout.setRefreshing(false);
                 callPostsApi();
             }
 
@@ -261,7 +257,7 @@ public class GlobalPostFragment extends BaseFragment implements View.OnClickList
             networkErrorDialog();
         }
 
-    }
+    }*/
 
     @Override
     public void onItemClick(View view, int position) {

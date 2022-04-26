@@ -41,8 +41,11 @@
     <string name="closeDrawer">closeDrawer</string>
     <string name="my_likes">My Likes</string>
 
-    <string name="facebook_app_id">341587646805344</string>
-    <string name="fb_login_protocol_scheme">fb341587646805344</string>
+
+    <string name="facebook_app_id">653314819291495</string>
+    <string name="fb_login_protocol_scheme">fb653314819291495</string>
+    <string name="facebook_client_token">c7b178c85173503d76273408c78995ea</string>
+
 
     <string name="calendar">Calender</string>
     <string name="job_listings">Jobs</string>

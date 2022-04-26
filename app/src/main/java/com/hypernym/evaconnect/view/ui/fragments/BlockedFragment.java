@@ -255,8 +255,12 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
 //        Log.e("type", mtype);
 
         connectionViewModel.getBlockedByFilter(userData).observe(getViewLifecycleOwner(), listBaseModel -> {
+            swipeRefresh.setRefreshing(false);
+
+
             if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
-//                    if (currentPage == PAGE_START) {
+//
+//                   if (currentPage == PAGE_START) {
 //                        connectionList.clear();
 //                        blockedAdapter.notifyDataSetChanged();
 //                    }

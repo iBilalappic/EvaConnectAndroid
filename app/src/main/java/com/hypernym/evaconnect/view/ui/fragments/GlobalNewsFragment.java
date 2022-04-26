@@ -23,7 +23,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
@@ -58,14 +57,10 @@ import butterknife.ButterKnife;
 
 
 
-public class GlobalNewsFragment extends BaseFragment implements View.OnClickListener, HomePostsAdapter.ItemClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class GlobalNewsFragment extends BaseFragment implements View.OnClickListener, HomePostsAdapter.ItemClickListener/*, SwipeRefreshLayout.OnRefreshListener*/ {
     @BindView(R.id.rc_home)
     RecyclerView rc_home;
-
-    @BindView(R.id.swipeRefresh)
-    SwipeRefreshLayout swipeRefresh;
     private String search_key;
-
 
     private List<Post> posts = new ArrayList<>();
     private HomePostsAdapter homePostsAdapter;
@@ -113,7 +108,6 @@ public class GlobalNewsFragment extends BaseFragment implements View.OnClickList
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(UserViewModel.class);
         newsViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(NewsViewModel.class);
         //   currentPage = PAGE_START;
-        swipeRefresh.setOnRefreshListener(this);
 
         initRecycler();
         // showBackButton();
@@ -166,12 +160,13 @@ public class GlobalNewsFragment extends BaseFragment implements View.OnClickList
 
     private void callPostsApi() {
         User user = LoginUtils.getLoggedinUser();
+        showDialog();
 
         if (search_key.length() > 0)
             user.setSearch_key(search_key);
 
         homeViewModel.getDashboardSearch(user, AppConstants.TOTAL_PAGES, currentPage, filter).observe(this, dashboardBaseModel -> {
-
+            hideDialog();
             //   homePostsAdapter.clear();
             if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
 
@@ -203,7 +198,6 @@ public class GlobalNewsFragment extends BaseFragment implements View.OnClickList
                 }
                 posts.addAll(dashboardBaseModel.getData());
                 homePostsAdapter.notifyDataSetChanged();
-                swipeRefresh.setRefreshing(false);
                 //  homePostsAdapter.removeLoading();
                 totalsize = totalsize + posts.size();
                 isLoading = false;
@@ -212,7 +206,6 @@ public class GlobalNewsFragment extends BaseFragment implements View.OnClickList
                 totalsize = 0;
                 // homePostsAdapter.removeLoading();
                 homePostsAdapter.notifyDataSetChanged();
-                swipeRefresh.setRefreshing(false);
                 isLoading = false;
             } else {
                 networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
@@ -226,6 +219,8 @@ public class GlobalNewsFragment extends BaseFragment implements View.OnClickList
     public void onResume() {
         super.onResume();
         init();
+
+        callPostsApi();
         //   onRefresh();
         if (NetworkUtils.isNetworkConnected(getContext())) {
             GetUserDetails();
@@ -246,8 +241,7 @@ public class GlobalNewsFragment extends BaseFragment implements View.OnClickList
 
         }
     }
-
-    @Override
+   /* @Override
     public void onRefresh() {
         itemCount = 0;
         currentPage = PAGE_START;
@@ -264,7 +258,7 @@ public class GlobalNewsFragment extends BaseFragment implements View.OnClickList
             networkErrorDialog();
         }
 
-    }
+    }*/
 
     @Override
     public void onItemClick(View view, int position) {
@@ -630,7 +624,6 @@ public class GlobalNewsFragment extends BaseFragment implements View.OnClickList
             @Override
             public void onChanged(BaseModel<List<User>> listBaseModel) {
                 if (listBaseModel.getData() != null && !listBaseModel.isError()) {
-                    swipeRefresh.setRefreshing(false);
                     LoginUtils.saveUser(listBaseModel.getData().get(0));
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
