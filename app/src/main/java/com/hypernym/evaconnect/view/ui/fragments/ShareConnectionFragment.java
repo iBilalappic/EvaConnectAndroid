@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,7 +22,6 @@ import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.listeners.PaginationScrollListener;
-import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.ConnectionModel;
 import com.hypernym.evaconnect.models.ShareConnection;
 import com.hypernym.evaconnect.models.User;
@@ -151,6 +149,7 @@ public class ShareConnectionFragment extends BaseFragment implements ShareConnec
         }
         ShareConnection shareConnection = new ShareConnection(LoginUtils.getUser().getId(), share_users);
         shareConnection.setObjectId(id);
+        shareConnection.setPostId(id);
         shareConnection.setObjectType("Job");
         connectionViewModel.share_connection(shareConnection).observe(this, listBaseModel -> {
             try {
@@ -177,6 +176,7 @@ public class ShareConnectionFragment extends BaseFragment implements ShareConnec
         }
         ShareConnection shareConnection = new ShareConnection(LoginUtils.getUser().getId(), share_users);
         shareConnection.setObjectId(id);
+        shareConnection.setEventId(id);
         shareConnection.setObjectType("Event");
         connectionViewModel.share_connection_event(shareConnection).observe(this, listBaseModel -> {
             if (listBaseModel.getData() != null && !listBaseModel.isError()) {
@@ -231,6 +231,7 @@ public class ShareConnectionFragment extends BaseFragment implements ShareConnec
 
         ShareConnection shareConnection = new ShareConnection(LoginUtils.getUser().getId(), share_users);
         shareConnection.setObjectId(id);
+        shareConnection.setNewsId(id);
         shareConnection.setObjectType("news");
 
         connectionViewModel.share_connection_news(shareConnection).observe(this, listBaseModel -> {
@@ -275,39 +276,36 @@ public class ShareConnectionFragment extends BaseFragment implements ShareConnec
             userData.setFirst_name(edt_search.getText().toString());
         Log.e("type", mtype);
         //   connectedList.clear();
-        connectionViewModel.getConnected(userData, AppConstants.TOTAL_PAGES, currentPage).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<ConnectionModel>>>() {
-            @Override
-            public void onChanged(BaseModel<List<ConnectionModel>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
+        connectionViewModel.getConnected(userData, AppConstants.TOTAL_PAGES, currentPage).observe(getViewLifecycleOwner(), listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
 
-                    Log.d("Connection_in", String.valueOf(listBaseModel.getData().size()));
+                Log.d("Connection_in", String.valueOf(listBaseModel.getData().size()));
 
 //                    if (currentPage == PAGE_START) {
 //                        connectionList.clear();
 //                        connectionsAdapter.notifyDataSetChanged();
 //                    }
-                    connectionList.clear();
-                    connectionList.addAll(listBaseModel.getData());
-                    shareConnectionAdapter.notifyDataSetChanged();
+                connectionList.clear();
+                connectionList.addAll(listBaseModel.getData());
+                shareConnectionAdapter.notifyDataSetChanged();
 //                    if (connectionList.size() > 0) {
-                    rc_connections.setVisibility(View.VISIBLE);
-                    empty.setVisibility(View.GONE);
-                    //  }
+                rc_connections.setVisibility(View.VISIBLE);
+                empty.setVisibility(View.GONE);
+                //  }
 //                    isLoading = false;
-                } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
+            } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
 
-                    if (connectionList.size() == 0) {
-                        connectionList.clear();
-                        rc_connections.setVisibility(View.GONE);
-                        empty.setVisibility(View.VISIBLE);
-                        empty.setText("No Connection Found");
-                    }
+                if (connectionList.size() == 0) {
+                    connectionList.clear();
+                    rc_connections.setVisibility(View.GONE);
+                    empty.setVisibility(View.VISIBLE);
+                    empty.setText("No Connection Found");
+                }
 //                    isLastPage = true;
 //                    // homePostsAdapter.removeLoading();
 //                    isLoading = false;
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
         });
     }

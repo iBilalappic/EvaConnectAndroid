@@ -80,7 +80,7 @@ public class GlobalSearchTabfragment extends BaseFragment implements View.OnClic
         } else {
             adapter.addFragment(new GlobalPostFragment(), "Posts");
             adapter.addFragment(new GlobalConnectionsFragment(), "Connections");
-            adapter.addFragment(new GlobalConnectionsFragment(), "Companies");
+            adapter.addFragment(new GlobalCompaniesFragment(), "Companies");
             adapter.addFragment(new GlobalNewsFragment(), "News");
             adapter.addFragment(new GlobalEventFragment(), "Events");
 

@@ -44,9 +44,9 @@ public class LinkedinActivity extends BaseActivity {
 
     /****FILL THIS WITH YOUR INFORMATION*********/
 //This is the public api key of our application
-    private static final String API_KEY = "81nb3i17mke494";
+    private static final String API_KEY = "78okebxe7a5n5a";
     //This is the private api key of our application
-    private static final String SECRET_KEY = "aHpwMPXwy6zJn7Zh";
+    private static final String SECRET_KEY = "MPQndhHTJBp6tJOC";
     //This is any string we want to use. This will be used for avoiding CSRF attacks. You can generate one here: http://strongpasswordgenerator.com/
     private static final String STATE = "E3ZYKC1T6H2yP4z";
     //This is the url that LinkedIn Auth process will redirect to. We can put whatever we want that starts with http:// or https:// .

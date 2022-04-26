@@ -436,7 +436,7 @@ public interface AppApi {
     @POST(APIConstants.SHARE_JOB)
     Call<BaseModel<List<Object>>> share_connection(@Body ShareConnection shareConnection);
 
-    @POST(APIConstants.SHARE_NEWS)
+    @POST(APIConstants.SHARE_POST)
     Call<BaseModel<List<Object>>> share_connection_news(@Body ShareConnection shareConnection);
 
     @POST(APIConstants.SHARE_EVENT)

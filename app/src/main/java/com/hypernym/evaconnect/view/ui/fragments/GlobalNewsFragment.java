@@ -162,56 +162,60 @@ public class GlobalNewsFragment extends BaseFragment implements View.OnClickList
         User user = LoginUtils.getLoggedinUser();
         showDialog();
 
-        if (search_key.length() > 0)
-            user.setSearch_key(search_key);
 
-        homeViewModel.getDashboardSearch(user, AppConstants.TOTAL_PAGES, currentPage, filter).observe(this, dashboardBaseModel -> {
-            hideDialog();
-            //   homePostsAdapter.clear();
-            if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
+        if (search_key != null) {
+            if (search_key.length() > 0)
+                user.setSearch_key(search_key);
 
-                if (currentPage == PAGE_START) {
-                    posts.clear();
+            homeViewModel.getDashboardSearch(user, AppConstants.TOTAL_PAGES, currentPage, filter).observe(this, dashboardBaseModel -> {
+                hideDialog();
+                //   homePostsAdapter.clear();
+                if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
+
+                    if (currentPage == PAGE_START) {
+                        posts.clear();
+                        homePostsAdapter.notifyDataSetChanged();
+                    }
+                    totalsize = 0;
+
+                    for (Post post : dashboardBaseModel.getData()) {
+                        if (post.getContent() == null) {
+                            post.setContent("");
+                        }
+                        if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() > 0) {
+                            post.setPost_type(AppConstants.IMAGE_TYPE);
+                        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_video() != null) {
+                            post.setPost_type(AppConstants.VIDEO_TYPE);
+                        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() == 0 && !post.isIs_url()) {
+                            post.setPost_type(AppConstants.TEXT_TYPE);
+                        } else if (post.getType().equalsIgnoreCase("event")) {
+                            post.setPost_type(AppConstants.EVENT_TYPE);
+                        } else if (post.getType().equalsIgnoreCase("news")) {
+                            post.setPost_type(AppConstants.NEWS_TYPE);
+                        } else if (post.getType().equalsIgnoreCase("job")) {
+                            post.setPost_type(AppConstants.JOB_TYPE);
+                        } else if (post.getType().equalsIgnoreCase("post") && post.isIs_url()) {
+                            post.setPost_type(AppConstants.LINK_POST);
+                        }
+                    }
+                    posts.addAll(dashboardBaseModel.getData());
                     homePostsAdapter.notifyDataSetChanged();
+                    //  homePostsAdapter.removeLoading();
+                    totalsize = totalsize + posts.size();
+                    isLoading = false;
+                } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
+                    isLastPage = true;
+                    totalsize = 0;
+                    // homePostsAdapter.removeLoading();
+                    homePostsAdapter.notifyDataSetChanged();
+                    isLoading = false;
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
-                totalsize = 0;
 
-                for (Post post : dashboardBaseModel.getData()) {
-                    if (post.getContent() == null) {
-                        post.setContent("");
-                    }
-                    if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() > 0) {
-                        post.setPost_type(AppConstants.IMAGE_TYPE);
-                    } else if (post.getType().equalsIgnoreCase("post") && post.getPost_video() != null) {
-                        post.setPost_type(AppConstants.VIDEO_TYPE);
-                    } else if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() == 0 && !post.isIs_url()) {
-                        post.setPost_type(AppConstants.TEXT_TYPE);
-                    } else if (post.getType().equalsIgnoreCase("event")) {
-                        post.setPost_type(AppConstants.EVENT_TYPE);
-                    } else if (post.getType().equalsIgnoreCase("news")) {
-                        post.setPost_type(AppConstants.NEWS_TYPE);
-                    } else if (post.getType().equalsIgnoreCase("job")) {
-                        post.setPost_type(AppConstants.JOB_TYPE);
-                    } else if (post.getType().equalsIgnoreCase("post") && post.isIs_url()) {
-                        post.setPost_type(AppConstants.LINK_POST);
-                    }
-                }
-                posts.addAll(dashboardBaseModel.getData());
-                homePostsAdapter.notifyDataSetChanged();
-                //  homePostsAdapter.removeLoading();
-                totalsize = totalsize + posts.size();
-                isLoading = false;
-            } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
-                isLastPage = true;
-                totalsize = 0;
-                // homePostsAdapter.removeLoading();
-                homePostsAdapter.notifyDataSetChanged();
-                isLoading = false;
-            } else {
-                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-            }
+            });
+        }
 
-        });
     }
 
 

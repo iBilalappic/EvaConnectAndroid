@@ -131,7 +131,6 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
         userData.setType(type);
         userData.setUser_id(user.getId());
         connectionViewModel.getBlockedUsers().observe(getViewLifecycleOwner(), listBaseModel -> {
-            hideDialog();
 
             if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
                 if (currentPage == PAGE_START) {
@@ -151,8 +150,7 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
                 isLoading = false;
             } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
 
-                if(connectionList.size()==0)
-                {
+                if (connectionList.size() == 0) {
                     rc_connections.setVisibility(View.GONE);
                     empty.setVisibility(View.VISIBLE);
                 }
@@ -160,9 +158,13 @@ public class BlockedFragment extends BaseFragment implements OptionsAdapter.Item
                 // homePostsAdapter.removeLoading();
                 isLoading = false;
             } else {
-                hideDialog();
                 networkResponseDialog(getString(R.string.error), listBaseModel.getMessage());
             }
+
+            hideDialog();
+
+            swipeRefresh.setRefreshing(false);
+
         });
     }
 

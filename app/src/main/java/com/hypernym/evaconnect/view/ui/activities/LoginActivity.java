@@ -114,6 +114,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     private CallbackManager facebookCallbackManager;
     String value;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -161,7 +162,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         });
-        findViewById(R.id.rootview).setOnTouchListener((View v, @SuppressLint("ClickableViewAccessibility") MotionEvent event) -> {
+        findViewById(R.id.rootview).setOnTouchListener((View v , @SuppressLint("ClickableViewAccessibility") MotionEvent event) -> {
             InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
             //Find the currently focused view, so we can grab the correct window token from it.
             View view = getCurrentFocus();

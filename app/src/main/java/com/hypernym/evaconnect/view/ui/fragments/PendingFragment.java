@@ -154,30 +154,29 @@ public class PendingFragment extends BaseFragment implements OptionsAdapter.Item
     private void getAllPending() {
         swipeRefresh.setRefreshing(true);
         showDialog();
-        connectionViewModel.getAllPending(AppConstants.TOTAL_PAGES, currentPage).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<GetPendingData>>>() {
-            @Override
-            public void onChanged(BaseModel<List<GetPendingData>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError()) {
-                    pendingList.clear();
-                    pendingList.addAll(listBaseModel.getData());
-                    pendingAdapter.notifyDataSetChanged();
-                    if (connectionList.size() > 0) {
-                        rc_connections.setVisibility(View.VISIBLE);
-                        empty.setVisibility(View.GONE);
-                    }else{
-                        rc_connections.setVisibility(View.GONE);
-                        empty.setVisibility(View.VISIBLE);
-                    }
-                    isLoading = false;
-                } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
-                    isLastPage = true;
-                    // homePostsAdapter.removeLoading();
-                    isLoading = false;
+        connectionViewModel.getAllPending(AppConstants.TOTAL_PAGES, currentPage).observe(getViewLifecycleOwner(), listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError()) {
+                pendingList.clear();
+                pendingList.addAll(listBaseModel.getData());
+                pendingAdapter.notifyDataSetChanged();
+                if (connectionList.size() > 0) {
+                    rc_connections.setVisibility(View.VISIBLE);
+                    empty.setVisibility(View.GONE);
                 } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                    rc_connections.setVisibility(View.GONE);
+                    empty.setVisibility(View.VISIBLE);
                 }
-                hideDialog();
+                isLoading = false;
+            } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
+                isLastPage = true;
+                // homePostsAdapter.removeLoading();
+                isLoading = false;
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
+            swipeRefresh.setRefreshing(false);
+
         });
     }
 

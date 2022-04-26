@@ -64,9 +64,6 @@ public class GlobalCompaniesFragment extends BaseFragment implements OptionsAdap
     TextView tv_seeAll;
 
 
-    @BindView(R.id.swipeRefresh)
-    SwipeRefreshLayout swipeRefresh;
-
 
     String filter = "companies";
 
@@ -112,7 +109,6 @@ public class GlobalCompaniesFragment extends BaseFragment implements OptionsAdap
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(UserViewModel.class);
         user = LoginUtils.getLoggedinUser();
         currentPage = PAGE_START;
-        swipeRefresh.setOnRefreshListener(this);
         initMainOptionsRecView();
         initRecyclerView();
       /*  if (NetworkUtils.isNetworkConnected(getContext())) {
@@ -161,7 +157,7 @@ public class GlobalCompaniesFragment extends BaseFragment implements OptionsAdap
                 isLoading = true;
                 currentPage = AppConstants.TOTAL_PAGES + currentPage;
                 if (NetworkUtils.isNetworkConnected(getContext())) {
-                    //  getConnectionByFilter(type, currentPage, false);
+                      getConnectionByFilter(type, currentPage, false);
                 } else {
                     networkErrorDialog();
                 }
@@ -197,49 +193,51 @@ public class GlobalCompaniesFragment extends BaseFragment implements OptionsAdap
 
         // showDialog();
 
-        if (!search_key.equals("")) {
+        if (search_key != null) {
+            if (!search_key.equals("")) {
 
-            User user = LoginUtils.getLoggedinUser();
+                User user = LoginUtils.getLoggedinUser();
 
-            swipeRefresh.setRefreshing(false);
-
-            if (search_key.length() > 0)
-                user.setSearch_key(search_key);
-            Log.e("company", mtype);
-            //   connectedList.clear();
-
-
-            connectionViewModel.getCompanies(user, AppConstants.TOTAL_PAGES, currentPage, filter).observe(getViewLifecycleOwner(), listBaseModel -> {
-                if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
-
-                    Log.d("company", String.valueOf(listBaseModel.getData().size()));
-
-                    connectedList.clear();
-                    connectedList.addAll(listBaseModel.getData());
-                    connectionsAdapter.hSetList(connectedList);
-                    rc_connections.setVisibility(View.VISIBLE);
-                    empty.setVisibility(View.GONE);
+                if (search_key.length() > 0)
+                    user.setSearch_key(search_key);
+                Log.e("company", mtype);
+                //   connectedList.clear();
 
 
-                } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
+                connectionViewModel.getCompanies(user, AppConstants.TOTAL_PAGES, currentPage, filter).observe(getViewLifecycleOwner(), listBaseModel -> {
+                    if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
 
-                    if (connectionList.size() == 0) {
+                        Log.d("company", String.valueOf(listBaseModel.getData().size()));
+
                         connectedList.clear();
-                        rc_connections.setVisibility(View.GONE);
-                        empty.setVisibility(View.VISIBLE);
-                        empty.setText("No Connection Found");
-                    }
+                        connectionsAdapter.notifyDataSetChanged();
+                        connectedList.addAll(listBaseModel.getData());
+                        connectionsAdapter.hSetList(connectedList);
+                        rc_connections.setVisibility(View.VISIBLE);
+                        empty.setVisibility(View.GONE);
+
+
+                    } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
+
+                        if (connectionList.size() == 0) {
+                            connectedList.clear();
+                            connectionsAdapter.notifyDataSetChanged();
+                            rc_connections.setVisibility(View.GONE);
+                            empty.setVisibility(View.VISIBLE);
+                            empty.setText("No Connection Found");
+                        }
 //                    isLastPage = true;
 //                    // homePostsAdapter.removeLoading();
 //                    isLoading = false;
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-            });
+                    } else {
+                        networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                    }
+                });
 
-        } else {
-            empty.setVisibility(View.VISIBLE);
-            rc_connections.setVisibility(View.GONE);
+            } else {
+                empty.setVisibility(View.VISIBLE);
+                rc_connections.setVisibility(View.GONE);
+            }
         }
 
 
