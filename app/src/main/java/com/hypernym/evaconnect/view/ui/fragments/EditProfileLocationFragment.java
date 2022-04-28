@@ -407,16 +407,13 @@ public class EditProfileLocationFragment extends BaseFragment implements Validat
         body.put("language", userData.getLanguage());
         body.put("modified_by_id", userData.getId());
         body.put("modified_datetime", DateUtils.GetCurrentdatetime());
-        userViewModel.editProfile(body, userData.getId()).observe(this, new Observer<BaseModel<List<Object>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Object>> listBaseModel) {
-                if (!listBaseModel.isError()) {
-                    getActivity().onBackPressed();
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
+        userViewModel.editProfile(body, userData.getId()).observe(this, listBaseModel -> {
+            if (!listBaseModel.isError()) {
+                getActivity().onBackPressed();
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
     }
 

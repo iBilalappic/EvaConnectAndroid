@@ -18,8 +18,6 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
@@ -33,17 +31,13 @@ import com.facebook.GraphRequest;
 import com.facebook.login.LoginBehavior;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.hypernym.evaconnect.EnterCodeActivity;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
-import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.models.UserDetails;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
@@ -59,6 +53,13 @@ import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Password;
 import com.onesignal.OneSignal;
+import com.ssw.linkedinmanager.dto.LinkedInAccessToken;
+import com.ssw.linkedinmanager.dto.LinkedInEmailAddress;
+import com.ssw.linkedinmanager.dto.LinkedInUserProfile;
+import com.ssw.linkedinmanager.events.LinkedInManagerResponse;
+import com.ssw.linkedinmanager.events.LinkedInUserLoginDetailsResponse;
+import com.ssw.linkedinmanager.events.LinkedInUserLoginValidationResponse;
+import com.ssw.linkedinmanager.ui.LinkedInRequestManager;
 
 import org.json.JSONException;
 
@@ -68,7 +69,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class LoginActivity extends BaseActivity implements Validator.ValidationListener {
+public class LoginActivity extends BaseActivity implements Validator.ValidationListener, LinkedInManagerResponse {
     @BindView(R.id.tv_signup)
     TextView tv_signup;
 
@@ -104,7 +105,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
     private Boolean saveLogin;
-    private String username,password;
+    private String username, password;
 
     private Validator validator;
     private UserViewModel userViewModel;
@@ -114,6 +115,8 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     private CallbackManager facebookCallbackManager;
     String value;
 
+    private LinkedInRequestManager linkedInRequestManager;
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +125,8 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
         ButterKnife.bind(this);
 
         initFacebookLogin();
+
+        linkedInRequestManager = new LinkedInRequestManager(this, this, "77bx4v2e0qv4yv", "7Wez2dGZP5leqzcb", "https%3A%2F%2Fwww.google.com", true);
 
 
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
@@ -161,6 +166,10 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
             Intent intent = new Intent(getBaseContext(), LinkedinActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
+
+//            startLinkedInSignIn();
+
+
         });
         findViewById(R.id.rootview).setOnTouchListener((View v , @SuppressLint("ClickableViewAccessibility") MotionEvent event) -> {
             InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -350,21 +359,17 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
 
     private void isEmailExist() {
 
-        userViewModel.isEmailExist(user.getUsername()).observe(this, new Observer<BaseModel<List<User>>>() {
-            @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().get(0) != null) {
-                    networkResponseDialog(getString(R.string.error),listBaseModel.getMessage());
-                      //  callLoginApi();
-                } else {
-                    hideDialog();
+        userViewModel.isEmailExist(user.getUsername()).observe(this, listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().get(0) != null) {
+                networkResponseDialog(getString(R.string.error), listBaseModel.getMessage());
+                //  callLoginApi();
+            } else {
+                hideDialog();
 
-                    Intent intent = new Intent(getBaseContext(), CreateAccount_1_Activity.class);
-                    intent.putExtra("Email", edt_email.getText().toString());
-                    startActivity(intent);
-                }
+                Intent intent = new Intent(getBaseContext(), CreateAccount_1_Activity.class);
+                intent.putExtra("Email", edt_email.getText().toString());
+                startActivity(intent);
             }
-
         });
 
     }
@@ -436,23 +441,20 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     public void createUserOnFirebase()
     {
         FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            //To do//
-                            return;
-                        }
-                        // Get the Instance ID token//
-                        String token = task.getResult().getToken();
-
-                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                        DatabaseReference userRef = databaseReference.child(AppConstants.FIREASE_USER_ENDPOINT);
-                        DatabaseReference userRefByID=userRef.child(LoginUtils.getLoggedinUser().getId().toString());
-                        userRefByID.child("imageName").setValue(LoginUtils.getLoggedinUser().getUser_image());
-                        userRefByID.child("name").setValue(LoginUtils.getLoggedinUser().getEmail());
-                        userRefByID.child("fcm-token").setValue(token);
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        //To do//
+                        return;
                     }
+                    // Get the Instance ID token//
+                    String token = task.getResult().getToken();
+
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                    DatabaseReference userRef = databaseReference.child(AppConstants.FIREASE_USER_ENDPOINT);
+                    DatabaseReference userRefByID = userRef.child(LoginUtils.getLoggedinUser().getId().toString());
+                    userRefByID.child("imageName").setValue(LoginUtils.getLoggedinUser().getUser_image());
+                    userRefByID.child("name").setValue(LoginUtils.getLoggedinUser().getEmail());
+                    userRefByID.child("fcm-token").setValue(token);
                 });
 
     }
@@ -472,4 +474,121 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
             }
         }
     }
+
+
+    private void startLinkedInSignIn() {
+        linkedInRequestManager.showAuthenticateView(LinkedInRequestManager.MODE_BOTH_OPTIONS);
+
+        //LinkedInRequestManager.MODE_BOTH_OPTIONS - can get email and user profile data with user profile image
+        //LinkedInRequestManager.MODE_EMAIL_ADDRESS_ONLY - can get only the user profile email address
+        //LinkedInRequestManager.MODE_LITE_PROFILE_ONLY - can get the user profile details with profile image
+    }
+
+    private void closeAuthenticationView() {
+        linkedInRequestManager.dismissAuthenticateView();
+    }
+
+
+    @Override
+    public void onGetAccessTokenFailed() {
+
+        Log.d("linkedin", "onGetAccessTokenFailed: ");
+    }
+
+    @Override
+    public void onGetAccessTokenSuccess(LinkedInAccessToken linkedInAccessToken) {
+        Log.d("linkedin", "onGetAccessTokenSuccess: ");
+    }
+
+    @Override
+    public void onGetCodeFailed() {
+        Log.d("linkedin", "onGetCodeFailed: ");
+    }
+
+    @Override
+    public void onGetCodeSuccess(String code) {
+        Log.d("linkedin", "onGetCodeSuccess: ");
+    }
+
+    @Override
+    public void onGetProfileDataFailed() {
+        Log.d("linkedin", "onGetProfileDataFailed: ");
+    }
+
+    @Override
+    public void onGetProfileDataSuccess(LinkedInUserProfile linkedInUserProfile) {
+
+        Log.d("linkedin", "onGetProfileDataSuccess: " + linkedInUserProfile.getUserName().getFirstName().getLocalized().getEn_US());
+        Log.d("linkedin", "onGetProfileDataSuccess: " + linkedInUserProfile.getUserName().getLastName().getLocalized().getEn_US());
+        Log.d("linkedin", "onGetProfileDataSuccess: " + linkedInUserProfile.getImageURL().toString());
+
+
+        linkedInRequestManager.dismissAuthenticateView();
+    }
+
+    @Override
+    public void onGetEmailAddressFailed() {
+
+    }
+
+    @Override
+    public void onGetEmailAddressSuccess(LinkedInEmailAddress linkedInEmailAddress) {
+        Log.d("linkedin", "onGetEmailAddressSuccess: ");
+
+    }
+
+    private void isUserLoggedIn() {
+        linkedInRequestManager.isLoggedIn(new LinkedInUserLoginValidationResponse() {
+            @Override
+            public void activeLogin() {
+                //Session token is active. can use to get data from linkedin
+            }
+
+            @Override
+            public void tokenExpired() {
+                //token has been expired. need to obtain a new code
+            }
+
+            @Override
+            public void notLogged() {
+                //user is not logged into the application
+            }
+        });
+    }
+
+    private void logout() {
+        //logout the user
+        linkedInRequestManager.logout();
+    }
+
+
+    private void checkUserLoggedPermissions() {
+        linkedInRequestManager.getLoggedRequestedMode(new LinkedInUserLoginDetailsResponse() {
+            @Override
+            public void loggedMode(int mode) {
+                //user is already logged in. active token. mode is available
+                switch (mode) {
+                    case LinkedInRequestManager.MODE_LITE_PROFILE_ONLY:
+                        break;
+
+                    case LinkedInRequestManager.MODE_EMAIL_ADDRESS_ONLY:
+                        break;
+
+                    case LinkedInRequestManager.MODE_BOTH_OPTIONS:
+                        break;
+                }
+            }
+
+            @Override
+            public void tokenExpired() {
+                //token has been expired. need to obtain a new code
+            }
+
+            @Override
+            public void notLogged() {
+                //user is not logged into the application
+            }
+        });
+    }
+
 }

@@ -1,5 +1,8 @@
 package com.hypernym.evaconnect.view.ui.activities;
 
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -28,7 +31,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.util.PatternsCompat;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
@@ -36,8 +38,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
-import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
@@ -61,9 +61,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-
-import static android.Manifest.permission.CAMERA;
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 
 public class CreateAccount_1_Activity extends BaseActivity implements Validator.ValidationListener, View.OnClickListener {
 
@@ -141,7 +138,7 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
 
     private String userType = "user";
 
-    String email, password, photourl, activity_type,path;
+    String email, password, photourl, activity_type, path, fName, lName;
 
 
     @Override
@@ -191,11 +188,19 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
             email = getIntent().getStringExtra("Email");
             photourl = getIntent().getStringExtra("Photo");
             path = getIntent().getStringExtra("Path");
+
+            Log.d("sign_up", "Create Activity 1: " + photourl);
+            Log.d("sign_up", "Create Activity 1: " + path);
+
+            fName = getIntent().getStringExtra("firstName");
+            lName = getIntent().getStringExtra("lastName");
             activity_type = "LinkedinActivity";
             Glide.with(this).load(photourl).into(img_profile);
             tv_upload_image.setEnabled(false);
             edt_email.setText(email);
             edt_email.setEnabled(false);
+            edt_firstname.setText(fName);
+            edt_surname.setText(lName);
 
         }
         else if (!TextUtils.isEmpty(type) && type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)){
@@ -252,59 +257,55 @@ public class CreateAccount_1_Activity extends BaseActivity implements Validator.
 
     private void isEmailExist() {
 
-        userViewModel.isEmailExist(edt_email.getText().toString()).observe(this, new Observer<BaseModel<List<User>>>() {
-            @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().get(0) != null) {
-                    networkResponseDialog(getString(R.string.error),listBaseModel.getMessage());
-                    //  callLoginApi();
-                } else {
-                    hideDialog();
+        userViewModel.isEmailExist(edt_email.getText().toString()).observe(this, listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().get(0) != null) {
+                networkResponseDialog(getString(R.string.error), listBaseModel.getMessage());
+                //  callLoginApi();
+            } else {
+                hideDialog();
 
-                    if(file_name!=null){
-                        if (!userType.equalsIgnoreCase("company")) {
-                            Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
-                            intent.putExtra("Email", edt_email.getText().toString());
-                            intent.putExtra("FirstName", edt_firstname.getText().toString());
-                            intent.putExtra("SurName", edt_surname.getText().toString());
-                            intent.putExtra("FilePath", file_name.toString());
-                            intent.putExtra("userType", userType);
-                            intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-                            startActivity(intent);
-                        } else {
-                            Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
-                            intent.putExtra("Email", edt_email_company.getText().toString());
-                            intent.putExtra("FirstName", edt_companyname.getText().toString());
-                            intent.putExtra("companyUrl", edt_companyurl.getText().toString());
-                            intent.putExtra("FilePath", file_name.toString());
-                            intent.putExtra("SurName", "");
-                            intent.putExtra("userType", userType);
-                            intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-                            startActivity(intent);
-                        }
-                    }else{
-                        if (!userType.equalsIgnoreCase("company")) {
-                            Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
-                            intent.putExtra("Email", edt_email.getText().toString());
-                            intent.putExtra("FirstName", edt_firstname.getText().toString());
-                            intent.putExtra("SurName", edt_surname.getText().toString());
-                            intent.putExtra("userType", userType);
-                            intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-                            startActivity(intent);
-                        } else {
-                            Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
-                            intent.putExtra("Email", edt_email_company.getText().toString());
-                            intent.putExtra("FirstName", edt_companyname.getText().toString());
-                            intent.putExtra("companyUrl", edt_companyurl.getText().toString());
-                            intent.putExtra("SurName", "");
-                            intent.putExtra("userType", userType);
-                            intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
-                            startActivity(intent);
-                        }
+                if (file_name != null) {
+                    if (!userType.equalsIgnoreCase("company")) {
+                        Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
+                        intent.putExtra("Email", edt_email.getText().toString());
+                        intent.putExtra("FirstName", edt_firstname.getText().toString());
+                        intent.putExtra("SurName", edt_surname.getText().toString());
+                        intent.putExtra("FilePath", file_name.toString());
+                        intent.putExtra("userType", userType);
+                        intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
+                        intent.putExtra("Email", edt_email_company.getText().toString());
+                        intent.putExtra("FirstName", edt_companyname.getText().toString());
+                        intent.putExtra("companyUrl", edt_companyurl.getText().toString());
+                        intent.putExtra("FilePath", file_name.toString());
+                        intent.putExtra("SurName", "");
+                        intent.putExtra("userType", userType);
+                        intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+                        startActivity(intent);
+                    }
+                } else {
+                    if (!userType.equalsIgnoreCase("company")) {
+                        Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
+                        intent.putExtra("Email", edt_email.getText().toString());
+                        intent.putExtra("FirstName", edt_firstname.getText().toString());
+                        intent.putExtra("SurName", edt_surname.getText().toString());
+                        intent.putExtra("userType", userType);
+                        intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(CreateAccount_1_Activity.this, CreateAccount_2_Activity.class);
+                        intent.putExtra("Email", edt_email_company.getText().toString());
+                        intent.putExtra("FirstName", edt_companyname.getText().toString());
+                        intent.putExtra("companyUrl", edt_companyurl.getText().toString());
+                        intent.putExtra("SurName", "");
+                        intent.putExtra("userType", userType);
+                        intent.putExtra(Constants.ACTIVITY_NAME, activity_type);
+                        startActivity(intent);
                     }
                 }
             }
-
         });
 
     }

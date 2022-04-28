@@ -593,22 +593,19 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
 
     private void hSetCountry() {
         showDialog();
-        viewModel.hGetAllCities(hCountyCodeFromLocation).observe(this, new Observer<List<City>>() {
-            @Override
-            public void onChanged(List<City> response) {
+        viewModel.hGetAllCities(hCountyCodeFromLocation).observe(this, response -> {
 
-                if (response != null) {
-                    for (int i = 0; i < response.size(); i++) {
-                        hCitiesList.add(response.get(i).name);
-                        Log.d("test123", response.get(i).name);
-                    }
-
-                    hideDialog();
-                } else {
-                    Toast.makeText(getBaseContext(), "Some thing went wrong...", Toast.LENGTH_LONG).show();
+            if (response != null) {
+                for (int i = 0; i < response.size(); i++) {
+                    hCitiesList.add(response.get(i).name);
+                    Log.d("test123", response.get(i).name);
                 }
 
+                hideDialog();
+            } else {
+                Toast.makeText(getBaseContext(), "Some thing went wrong...", Toast.LENGTH_LONG).show();
             }
+
         });
 
     }

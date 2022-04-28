@@ -12,6 +12,8 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
@@ -44,15 +46,16 @@ public class LinkedinActivity extends BaseActivity {
 
     /****FILL THIS WITH YOUR INFORMATION*********/
 //This is the public api key of our application
-    private static final String API_KEY = "78okebxe7a5n5a";
+    private static final String API_KEY = "77bx4v2e0qv4yv";
     //This is the private api key of our application
-    private static final String SECRET_KEY = "MPQndhHTJBp6tJOC";
+    private static final String SECRET_KEY = "7Wez2dGZP5leqzcb";
     //This is any string we want to use. This will be used for avoiding CSRF attacks. You can generate one here: http://strongpasswordgenerator.com/
     private static final String STATE = "E3ZYKC1T6H2yP4z";
     //This is the url that LinkedIn Auth process will redirect to. We can put whatever we want that starts with http:// or https:// .
 //We use a made up url that we will intercept when redirecting. Avoid Uppercases.
-    private static final String REDIRECT_URI = "https://www.google.com";
-    private static final String SCOPES = "r_liteprofile%20r_emailaddress%20w_member_social";
+    private static final String REDIRECT_URI = "https%3A%2F%2Fwww.google.com";
+    private static final String REDIRECT_URI_SIMPLE = "https://www.google.com";
+    private static final String SCOPES = "r_liteprofile%20r_emailaddress";
     /*********************************************/
 
 //These are constants used for build the urls
@@ -60,7 +63,7 @@ public class LinkedinActivity extends BaseActivity {
     private static final String ACCESS_TOKEN_URL = "https://www.linkedin.com/uas/oauth2/accessToken";
     String profileUrl = "https://api.linkedin.com/v2/me?projection=(id,firstName,lastName,profilePicture(displayImage~:playableStreams))";
     String emailAddress = "https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))";
-    String path="";
+    String path = "";
     private WebView webView;
     private static final String SECRET_KEY_PARAM = "client_secret";
     private static final String RESPONSE_TYPE_PARAM = "response_type";
@@ -111,7 +114,7 @@ public class LinkedinActivity extends BaseActivity {
             public boolean shouldOverrideUrlLoading(WebView view, String authorizationUrl) {
                 //This method will be called when the Auth proccess redirect to our RedirectUri.
                 //We will check the url looking for our RedirectUri.
-                if (authorizationUrl.startsWith(REDIRECT_URI)) {
+                if (authorizationUrl.startsWith(REDIRECT_URI_SIMPLE)) {
                     Log.i("Authorize", "");
                     Uri uri = Uri.parse(authorizationUrl);
                     //We take from the url the authorizationToken and the state token. We have to check that the state token returned by the Service is the same we sent.
@@ -255,10 +258,13 @@ public class LinkedinActivity extends BaseActivity {
             }
             if (status) {
                 //If everything went Ok, change to another activity.
+                Log.d("Authorize", "onPostExecute: Status : " + status);
                 SharedPreferences preferences = LinkedinActivity.this.getSharedPreferences("user_info", 0);
                 accessToken = preferences.getString("accessToken", null);
                 try {
                     if (accessToken != null) {
+                        Log.d("Authorize", "onPostExecute: Access Token : " + accessToken);
+
                         new GetProfileRequestAsyncTask().execute(profileUrl);
                     }
                 } catch (Exception e) {
@@ -280,14 +286,11 @@ public class LinkedinActivity extends BaseActivity {
 
         @Override
         protected JSONObject doInBackground(String... urls) {
+
             if (urls.length > 0) {
                 try {
-
-
-
                     sendGetRequest(profileUrl, accessToken);
                     sendGetRequestForEmail(emailAddress, accessToken);
-
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -298,18 +301,22 @@ public class LinkedinActivity extends BaseActivity {
 
         @Override
         protected void onPostExecute(JSONObject data) {
-            if (pd != null && pd.isShowing()) {
-                pd.dismiss();
-            }
-            if (data != null) {
+
+
+            pd.dismiss();
+
+
+            
+           /* if (data != null) {
 
                 try {
                     String welcomeTextString = String.format("Welcome %1$s %2$s, You are a %3$s", data.getString("firstName"), data.getString("lastName"), data.getString("headline"));
 
+                    Toast.makeText(getBaseContext(), welcomeTextString, Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     Log.e("Authorize", "Error Parsing json " + e.getLocalizedMessage());
                 }
-            }
+            }*/
         }
 
 
@@ -329,33 +336,31 @@ public class LinkedinActivity extends BaseActivity {
             jsonString.append(line);
         }
         JSONObject jsonObject = new JSONObject(jsonString.toString());
-        Log.d("Complete json object", jsonObject.toString());
+        Log.d("Authorize", jsonObject.toString());
         try {
             linkedInUserId = jsonObject.getString("id");
             String country = jsonObject.getJSONObject("firstName").getJSONObject("preferredLocale").getString("country");
             String language = jsonObject.getJSONObject("firstName").getJSONObject("preferredLocale").getString("language");
             String getFirstnameKey = language + "_" + country;
             linkedInUserFirstName = jsonObject.getJSONObject("firstName").getJSONObject("localized").getString(getFirstnameKey);
-            linkedInUserLastName = jsonObject.getJSONObject("firstName").getJSONObject("localized").getString(getFirstnameKey);
+            linkedInUserLastName = jsonObject.getJSONObject("lastName").getJSONObject("localized").getString(getFirstnameKey);
             linkedInUserProfile = jsonObject.getJSONObject("profilePicture").getJSONObject("displayImage~").getJSONArray("elements").getJSONObject(0).getJSONArray("identifiers").getJSONObject(0).getString("identifier");
-            Log.d("PROFILE",""+linkedInUserProfile);
+            Log.d("ttt", "First name : " + linkedInUserFirstName);
+            Log.d("ttt", "Last name  :" + linkedInUserLastName);
+            Log.d("ttt", "Profile    :" + linkedInUserProfile);
 
 
-
-
-            Glide.with(LinkedinActivity.this)
+            Glide.with(this)
                     .asBitmap()
                     .load(linkedInUserProfile)
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
-                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-
-//                                    image_path=ImageFilePathUtil.saveImage(resource);
-
-                            path= ImageFilePathUtil.SaveImage(resource,"LinkedinProfile.png");
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                            path = ImageFilePathUtil.SaveImage(resource, "Profile.png");
 
                         }
                     });
+
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -364,6 +369,7 @@ public class LinkedinActivity extends BaseActivity {
     }
 
     private void sendGetRequestForEmail(String urlString, String accessToken) throws Exception {
+
         URL url = new URL(urlString);
         HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
         con.setRequestMethod("GET");
@@ -378,11 +384,19 @@ public class LinkedinActivity extends BaseActivity {
         }
         JSONObject jsonObject = new JSONObject(jsonString.toString());
         linkedInUserEmailAddress = jsonObject.getJSONArray("elements").getJSONObject(0).getJSONObject("handle~").getString("emailAddress");
-        Log.d("email json object", linkedInUserEmailAddress);
+        Log.d("ttt", "Email :" + linkedInUserEmailAddress);
         Intent intent = new Intent(LinkedinActivity.this, BlankActivity.class);
         intent.putExtra("Email", linkedInUserEmailAddress);
+        Log.d("ttt", "email :" + linkedInUserEmailAddress);
         intent.putExtra("Photo", linkedInUserProfile);
+        Log.d("ttt", "profile :" + linkedInUserProfile);
         intent.putExtra("Path", path);
+        Log.d("ttt", "Path :" + path);
+
+
+        intent.putExtra("firstName", linkedInUserFirstName);
+        intent.putExtra("lastName", linkedInUserLastName);
+
         startActivity(intent);
         pd.dismiss();
         // CheckUserExist(linkedInUserEmailAddress);

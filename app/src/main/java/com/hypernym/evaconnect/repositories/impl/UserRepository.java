@@ -1,5 +1,7 @@
 package com.hypernym.evaconnect.repositories.impl;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -72,12 +74,19 @@ public class UserRepository implements IUserRespository {
             @Override
             public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
                 if (response.body() != null) {
+
+                    Log.d("sign_up", "onResponse: " + response.body());
+
                     userMutableLiveData.postValue(response.body());
                 }
             }
 
             @Override
             public void onFailure(Call<BaseModel<List<User>>> call, Throwable t) {
+
+                Log.d("sign_up", "onFailure: " + t.getMessage());
+                t.printStackTrace();
+
                 userMutableLiveData.postValue(null);
             }
         });

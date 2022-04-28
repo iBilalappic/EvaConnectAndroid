@@ -112,6 +112,9 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
 
         type = getIntent().getStringExtra(Constants.ACTIVITY_NAME);
 
+
+        Log.d("activity_type", "init: " + type);
+
         if ("LinkedinActivity".equals(getIntent().getStringExtra(Constants.ACTIVITY_NAME))) {
             email = getIntent().getStringExtra("Email");
             photourl = getIntent().getStringExtra("Photo");
@@ -134,15 +137,16 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             dob = getIntent().getStringExtra("dob");
 
 
-            Toast.makeText(PasswordActivity.this, dob, Toast.LENGTH_SHORT).show();
 
             filepath = path;
 
             if (filepath != null) {
                 File file = new File(filepath);
-
                 RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
                 partImage = MultipartBody.Part.createFormData("user_image", file.getName(), reqFile);
+
+                Log.d("sign_up", "init:" + partImage.body());
+                Log.d("sign_up", "file path :" + filepath);
             }
 
 
@@ -161,13 +165,11 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             user.setCountry(country);
             user.setCompany_name(company_name);
             user.setDesignation(jobtitle);
-            user.setLinkedin_image_url("");
+            user.setLinkedin_image_url(filepath);
             user.setFacebook_image_url("");
             user.setOther_sector(otherJobSector);
             user.setCompany_url(companyUrl);
             user.setDate_of_birth(dob);
-
-            Log.d("password_dob", dob);
 
 
 //            user.setUsername(email);
@@ -207,13 +209,15 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             about = getIntent().getStringExtra("about");
             language = getIntent().getStringExtra("language");
             company_name = getIntent().getStringExtra("companyname");
-            otherJobSector=getIntent().getStringExtra("other_job_sector");
-            companyUrl=getIntent().getStringExtra("companyUrl");
+            otherJobSector = getIntent().getStringExtra("other_job_sector");
+            companyUrl = getIntent().getStringExtra("companyUrl");
+            dob = getIntent().getStringExtra("dob");
+
             filepath = path;
 
-            if(filepath!=null){
+            if (filepath != null) {
                 File file = new File(filepath);
-
+                Log.d("sign_up", "init: " + filepath);
                 RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
                 partImage = MultipartBody.Part.createFormData("user_image", file.getName(), reqFile);
             }
@@ -238,6 +242,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             user.setFacebook_image_url("");
             user.setOther_sector(otherJobSector);
             user.setCompany_url(companyUrl);
+            user.setDate_of_birth(dob);
 
 
 
@@ -268,9 +273,9 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             activity_type = "normal_type";
             user.setLinkedin_image_url("");
             user.setFacebook_image_url("");
+
             if (filepath != null) {
                 File file = new File(filepath);
-
                 RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
                 partImage = MultipartBody.Part.createFormData("user_image", file.getName(), reqFile);
             }
@@ -301,14 +306,13 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
 
     @Override
     public void onValidationSucceeded() {
-
         if (NetworkUtils.isNetworkConnected(this)) {
             if (activityName!=null && activityName.equalsIgnoreCase(Constants.FORGOT_PASSWORD)) {
                 callResetPassword(email,code,edt_password.getText().toString());
             } else {
                 user.setStatus(AppConstants.USER_STATUS_PENDING);
                 user.setPassword(edt_password.getText().toString());
-                showDialog();
+//                showDialog();
                 callSignupApi();
             }
         } else {
@@ -343,48 +347,55 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
         });
     }
     public void callSignupApi() {
-        userViewModel.signUp(user, partImage).observe(this, new Observer<BaseModel<List<User>>>() {
-            @Override
-            public void onChanged(BaseModel<List<User>> logins) {
+//        showDialog();
+
+        if (partImage != null) {
+            Log.d("sign_up", "callSignupApi: " + partImage);
+
+
+            userViewModel.signUp(user, partImage).observe(this, logins -> {
+
                 if (logins != null && !logins.isError()) {
+                    hideDialog();
                     LoginUtils.saveUser(user);
 
                     if ("LinkedinActivity".equals(getIntent().getStringExtra(Constants.ACTIVITY_NAME))) {
-//                          JustLoginApiCall();
+                        Log.d("activity_type", "callSignupApi: ");
 
-                        callLoginApi();
+                        JustLoginApiCall();
 
-                    }
-                    else if (type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)){
-//                        loginWithFacebook();
+//                    callLoginApi();
 
-                        callLoginApi();
-                    }
-                    else {
+                    } else if (type.equals(AppConstants.FACEBOOK_LOGIN_TYPE)) {
+                        Log.d("activity_type", "callSignupApi: ");
+                        loginWithFacebook();
+
+//                    callLoginApi();
+                    } else {
                         callLoginApi();
                     }
 
                 } else {
-                    hideDialog();
                     try {
                         if (logins != null) {
                             logins.getException();
-                        simpleDialog = networkResponseDialog(getString(R.string.error), logins.getMessage());
+                            simpleDialog = networkResponseDialog(getString(R.string.error), logins.getMessage());
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
-            }
-        });
+            });
+        } else {
+            Log.d("sign_up", "part image is null :" + partImage);
+        }
+
     }
 
     private void callLoginApi() {
         showDialog();
-        userViewModel.login(user).observe(this, new Observer<BaseModel<List<User>>>() {
-            @Override
-            public void onChanged(BaseModel<List<User>> user) {
-                if (user != null && !user.isError() && user.getData().get(0) != null) {
+        userViewModel.login(user).observe(this, user -> {
+            if (user != null && !user.isError() && user.getData().get(0) != null) {
 
 
 //                    LoginUtils.userLoggedIn();
@@ -398,63 +409,63 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
 //                    }
 
 
-                    LoginUtils.userLoggedIn();
+                LoginUtils.userLoggedIn();
 
-                    User userData = user.getData().get(0);
-                    userData.setUser_id(userData.getId());
-                    LoginUtils.saveUser(user.getData().get(0));
-                    OneSignal.sendTag("email", userData.getEmail());
-                    UserDetails.username = userData.getFirst_name();
-                    if (user.getData().get(0) != null) {
-                        LoginUtils.saveUserToken(user.getData().get(0).getToken());
-                    }
-                  //  simpleDialog.dismiss();
-                    Intent intent = new Intent(PasswordActivity.this, EmailVerification.class);
-                    intent.putExtra("Email",email);
-                    intent.putExtra("user_type",user_type);
-                    // set the new task and clear flags
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-
-                } else if (user != null && user.isError()) {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_login));
-                } else if (user == null) {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                User userData = user.getData().get(0);
+                userData.setUser_id(userData.getId());
+                LoginUtils.saveUser(user.getData().get(0));
+                OneSignal.sendTag("email", userData.getEmail());
+                UserDetails.username = userData.getFirst_name();
+                if (user.getData().get(0) != null) {
+                    LoginUtils.saveUserToken(user.getData().get(0).getToken());
                 }
-                hideDialog();
+                //  simpleDialog.dismiss();
+                Intent intent = new Intent(PasswordActivity.this, EmailVerification.class);
+                intent.putExtra("Email", email);
+                intent.putExtra("user_type", user_type);
+                // set the new task and clear flags
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+
+            } else if (user != null && user.isError()) {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_login));
+            } else if (user == null) {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
     }
 
     private void JustLoginApiCall() {
+        Log.d("activity_type", "JustLoginApiCall: ");
 
         if (NetworkUtils.isNetworkConnected(this)) {
-//            showDialog();
-            userViewModel.linkedin_login(email, Constants.LINKEDIN_TYPE).observe(this, new Observer<BaseModel<List<User>>>() {
-                @Override
-                public void onChanged(BaseModel<List<User>> listBaseModel) {
-                    LoginUtils.userLoggedIn();
-                    User userData = listBaseModel.getData().get(0);
-                    userData.setUser_id(userData.getId());
-                    LoginUtils.saveUser(listBaseModel.getData().get(0));
-                    OneSignal.sendTag("email", userData.getEmail());
-                    UserDetails.username = userData.getFirst_name();
+            showDialog();
 
-                    if (listBaseModel.getData().get(0) != null) {
-                        LoginUtils.saveUserToken(listBaseModel.getData().get(0).getToken());
-                    }
-                    Intent intent = new Intent(PasswordActivity.this, EmailVerification.class);
-                    // set the new task and clear flags
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
+            userViewModel.linkedin_login(email, Constants.LINKEDIN_TYPE).observe(this, listBaseModel -> {
+                LoginUtils.userLoggedIn();
+                User userData = listBaseModel.getData().get(0);
+                userData.setUser_id(userData.getId());
+                LoginUtils.saveUser(listBaseModel.getData().get(0));
+                OneSignal.sendTag("email", userData.getEmail());
+                UserDetails.username = userData.getFirst_name();
+
+                if (listBaseModel.getData().get(0) != null) {
+                    LoginUtils.saveUserToken(listBaseModel.getData().get(0).getToken());
                 }
+                Intent intent = new Intent(PasswordActivity.this, EmailVerification.class);
+                // set the new task and clear flags
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
             });
         }
     }
 
     private void loginWithFacebook() {
+        Log.d("activity_type", "loginWithFacebook: ");
         if (NetworkUtils.isNetworkConnected(this))
         {
+            showDialog();
             userViewModel.facebookLogin(email, Constants.FACEBOOK_TYPE).observe(this, listBaseModel -> {
                 LoginUtils.userLoggedIn();
                 User userData = listBaseModel.getData().get(0);
