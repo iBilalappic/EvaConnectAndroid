@@ -1,6 +1,7 @@
 package com.hypernym.evaconnect.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -16,62 +17,60 @@ import com.hypernym.evaconnect.repositories.impl.PostRepository;
 import java.util.List;
 
 public class PostViewModel extends AndroidViewModel {
-    private IPostRepository iPostRepository=new PostRepository();
+    private IPostRepository iPostRepository = new PostRepository();
 
     public PostViewModel(@NonNull Application application) {
         super(application);
     }
 
-    public LiveData<BaseModel<List<Post>>> createPost(Post post)
-    {
+    public LiveData<BaseModel<List<Post>>> createPost(Post post) {
         return iPostRepository.createPost(post);
     }
 
-    public LiveData<BaseModel<List<Post>>> editPost(Post post)
-    {
+    public LiveData<BaseModel<List<Post>>> editPost(Post post) {
         return iPostRepository.editPost(post);
     }
 
-    public LiveData<BaseModel<List<Post>>> deletePost(Post post)
-    {
+    public LiveData<BaseModel<List<Post>>> deletePost(Post post) {
         return iPostRepository.deletePost(post);
     }
-    public LiveData<BaseModel<List<Post>>> deleteJob(Post post)
-    {
+
+    public LiveData<BaseModel<List<Post>>> deleteJob(Post post) {
         return iPostRepository.deleteJob(post);
     }
 
 
-    public LiveData<BaseModel<List<Comment>>> addComment(Comment comment)
-    {
+    public LiveData<BaseModel<List<Comment>>> addComment(Comment comment) {
         return iPostRepository.addComment(comment);
     }
 
-    public LiveData<BaseModel<List<Comment>>> editComment(Comment comment,Integer id)
-    {
-        return iPostRepository.editComment(comment,id);
+    public LiveData<BaseModel<List<Comment>>> editComment(Comment comment, Integer id) {
+        return iPostRepository.editComment(comment, id);
     }
 
-    public LiveData<BaseModel<List<Comment>>> deleteComment(Integer id)
-    {
+    public LiveData<BaseModel<List<Comment>>> deleteComment(Integer id) {
         return iPostRepository.deleteComment(id);
     }
 
 
-    public LiveData<BaseModel<List<Post>>> likePost(Post post)
-    {
+    public LiveData<BaseModel<List<Post>>> likePost(Post post) {
         return iPostRepository.likePost(post);
     }
-    public LiveData<BaseModel<List<Comment>>> getComments(Post post)
-    {
+
+    public LiveData<BaseModel<List<Comment>>> getComments(Post post) {
         return iPostRepository.getComments(post);
     }
-    public LiveData<BaseModel<List<Post>>> getPostByID(int id)
-    {
+
+    public LiveData<BaseModel<List<Post>>> getPostByID(int id) {
         return iPostRepository.getPostById(id);
     }
-    public LiveData<BaseModel<List<Post>>> getPost(User user, int totalpages, int currentPage)
-    {
-        return iPostRepository.getPost(user,totalpages,currentPage);
+
+    public LiveData<BaseModel<List<Post>>> getPost(User user, int totalpages, int currentPage) {
+        return iPostRepository.getPost(user, totalpages, currentPage);
+    }
+
+    public LiveData<BaseModel<List<Post>>> getPostFilter(User user, int totalpages, int currentPage) {
+        Log.d("viewmodel", "getPostFilter: " + user.getUser_id());
+        return iPostRepository.getPostFilter(user, totalpages, currentPage);
     }
 }

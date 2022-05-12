@@ -17,6 +17,8 @@
     <string name="reset">Reset my password</string>
     <string name="email">Email</string>
     <string name="upload_an_image_of_you">Upload image</string>
+    <string name="dialog_title">Confirmation</string>
+    <string name="dialog_message">Are you sure you want to delete this account?</string>
     <string name="desc_forgot_password">Once you have submitted the detials of the desired account, please check your email to reset your password</string>
 
     <string name="createJoblist">Create Job Listing</string>
@@ -32,18 +34,21 @@
     <string name="tab_time">Time</string>
     <string name="notifications">Notifications</string>
     <string name="view_comments">View Comments</string>
-    <string name="tap_here_to_comment">Write a reply</string>
+    <string name="tap_here_to_comment">Write a comment</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="openDrawer">openDrawer</string>
     <string name="closeDrawer">closeDrawer</string>
     <string name="my_likes">My Likes</string>
 
-    <string name="facebook_app_id">341587646805344</string>
-    <string name="fb_login_protocol_scheme">fb341587646805344</string>
+
+    <string name="facebook_app_id">653314819291495</string>
+    <string name="fb_login_protocol_scheme">fb653314819291495</string>
+    <string name="facebook_client_token">c7b178c85173503d76273408c78995ea</string>
+
 
     <string name="calendar">Calender</string>
-    <string name="job_listings">Job Listings</string>
+    <string name="job_listings">Jobs</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="settings">Settings</string>
     <string name="logout">Yes</string>
@@ -62,6 +67,7 @@
     <string name="button_ok">Yes</string>
     <string name="confirmation">Confirmation</string>
     <string name="button_yes">YES</string>
+    <string name="success_msg_user_deleted">Your account has been deleted successfully</string>
     <string name="button_no">NO</string>
     <string name="attending">Attending?</string>
     <string name="apply">Apply</string>
@@ -88,6 +94,7 @@
 
     <string name="msg_jobAd">Your Job Ad has been created successfully.</string>
     <string name="msg_jobAd_update">Your Job Ad has been Updated successfully.</string>
+    <string name="msg_jobAd_create">Your Job Ad has been Created successfully.</string>
     <string name="msg_remove_user">Your connection has been removed successfully.</string>
     <string name="msg_block_user">This user has been block successfully.</string>
     <string name="msg_event_created">Your Event has been created successfully.</string>
@@ -109,7 +116,7 @@
     <string name="err_one_file_at_a_time">Only one image file can be selected at a time</string>
     <string name="err_internal_supported">Sorry! Files from internal storage are supported only</string>
     <string name="err_email_already_exist">An account already exists with that email. Please try another one.</string>
-    <string name="err_password">Your password cannot be empty and requires a length of between 8-30 characters.</string>
+    <string name="err_password">Your password cannot be empty and requires a length of between 8–30 characters.</string>
     <string name="err_image_size_large">The file exceeded the maximum size required by Aviation Connect. Recommended maximum size is 4MB, please try again.</string>
     <string name="err_internal_storage">This file is not present in your internal storage</string>
     <string name="err_signup">This email already exist.</string>
@@ -160,5 +167,28 @@
     <string name="delete_event">Delete Event</string>
     <string name="edit_job">Edit Job</string>
     <string name="delete_job">Delete Job</string>
+    <string name="large_dummy_text">Airside International is a quarterly magazine aimed at informing airports, airport authorities, airlines, ground service providers, GSE manufacturers and users, as well as reporting on airport infrastructure developments. The magazine is a response to airside infrastructure growth worldwide, of which is always continuing to progress. New airside development brings with it the requirement for new installations, new service providers, new equipment and new technologies. Airside International is a quarterly magazine aimed at informing airports, airport authorities, airlines, ground service providers, GSE manufacturers and users, as well as reporting on airport infrastructure developments. The magazine is a response to airside infrastructure growth worldwide, of which is always continuing to progress. New airside development brings with it the requirement for new installations, new service providers, new equipment and new technologies. Airside International is a quarterly magazine aimed at informing airports, airport authorities, airlines, ground service providers, GSE manufacturers and users, as well as reporting on airport infrastructure developments. The magazine is a response to airside infrastructure growth worldwide, of which is always continuing to progress. New airside development brings with it the requirement for new installations, new service providers, new equipment and new technologies.</string>
+    <string name="help">Help</string>
+    <string name="tell_us_about_comapny">Tell us a bit about the company</string>
+    <string name="tell_us_about_yourself">Tell us a bit about yourself</string>
+    <string name="four_us_and_canadian_airlines_have_awarded_new_ground_handling_contracts_to_worldwide_flight_services_wfs_in_the_us_lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_sed_do_eiusmod_tempor_incididunt_ut_labore_et_dolore_magna_aliqua_ut_enim_ad_minim_veniam_quis_nostrud_exercitation_ullamco_laboris_nisi_ut_aliquip_ex_ea_commodo_consequat_duis_aute_irure_dolor_in_reprehenderit_in_voluptate_velit_esse_cillum_dolore_eu_fugiat_nulla_pariatur_excepteur_sint_occaecat_cupidatat_non_proident_sunt_in_culpa_qui_officia_deserunt_mollit_anim">Four US and Canadian airlines have awarded new ground handling contracts to Worldwide Flight Services (WFS) in the US... Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim</string>
+    <string name="shares">Shares</string>
+    <string name="invite_to_follow">Invite to Follow</string>
+    <string name="todo">TODO</string>
+    <string name="back">Back</string>
+    <string name="submit">Submit</string>
+
+
+    <string-array name="languageSpinnerItems">
+        <item>English</item>
+        <item>Russian</item>
+        <item>German</item>
+        <item>French</item>
+        <item>Turkish</item>
+        <item>Italian</item>
+        <item>Spanish</item>
+        <item>Polish</item>
+    </string-array>
+
 </resources>
 

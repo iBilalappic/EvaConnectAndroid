@@ -163,7 +163,7 @@ public class ShareVideoFragment extends BaseFragment implements AttachmentsAdapt
         tv_address.setText(user.getCity()+" , "+user.getCountry());
         // getConnectionCount();
 
-        showBackButton();
+     //   showBackButton();
         if(getArguments().getBoolean("isVideo"))
         {
             setPageTitle(getString(R.string.menu2));

@@ -5,10 +5,13 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.RingtoneManager;
 import android.media.ThumbnailUtils;
@@ -18,7 +21,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.Gravity;
@@ -27,6 +33,7 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.AnyRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -57,6 +64,7 @@ import com.shockwave.pdfium.PdfiumCore;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -187,6 +195,48 @@ public final class AppUtils {
         }
         return connectionStatus;
     }
+
+    public static String getConnectionStatusWithUserType(Context context,String status,boolean isreceiver, String userType)
+    {
+        String connectionStatus=context.getString(R.string.connect);
+        if(status!=null)
+        {
+            switch (status)
+            {
+                case AppConstants.NOT_CONNECTED:
+
+                    if (userType!=null && userType.equalsIgnoreCase("company")) {
+                        connectionStatus=context.getString(R.string.invite_to_follow);
+                    } else {
+                        connectionStatus=context.getString(R.string.connect);
+                    }
+                    break;
+                case AppConstants.ACTIVE:
+                    /*if (userType!=null && userType.equalsIgnoreCase("company")) {
+                        connectionStatus=AppConstants.INVITED;
+                    } else {*/
+                        connectionStatus=AppConstants.CONNECTED;
+                   // }
+                    break;
+                case AppConstants.DELETED:
+                    connectionStatus=AppConstants.DELETED;
+                    break;
+                case AppConstants.PENDING:
+                    if(isreceiver)
+                    {
+                        connectionStatus=AppConstants.REQUEST_ACCEPT;
+                    }
+                    else
+                    {
+                        if (userType!=null && userType.equalsIgnoreCase("company")) {
+                        connectionStatus=AppConstants.INVITED; }
+                        else { connectionStatus=AppConstants.REQUEST_SENT; }
+                    }
+                    break;
+            }
+        }
+        return connectionStatus;
+    }
     public static void setLikeCount(Context context,TextView likeCount,String type,ImageView img_like)
     {
         if(type.equalsIgnoreCase(AppConstants.UNLIKE))
@@ -292,9 +342,14 @@ public final class AppUtils {
                 obs.removeGlobalOnLayoutListener(this);
                 if (tv.getLineCount() > maxLine) {
                     int lineEndIndex = tv.getLayout().getLineEnd(maxLine);
-                    String text = tv.getText().subSequence(0, lineEndIndex - maxLine) + "...See More";
-                    tv.setText(text);
+                    String text = tv.getText().subSequence(0, lineEndIndex - maxLine) + "... Tap to see more";
 
+                    if(text != null && text.contains("Tap to see more"))
+                    {
+                        Spannable spannable = new SpannableString(text);
+                        spannable.setSpan(new ForegroundColorSpan(Color.GRAY), text.indexOf("Tap to see more"), text.indexOf("Tap to see more") + "Tap to see more".length(),Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        tv.setText(spannable);
+                    }
                 }
             }
         });
@@ -475,4 +530,9 @@ public final class AppUtils {
         }
     }
 
+
+//    public static Uri getURLForResource (int resourceId) {
+//        //use BuildConfig.APPLICATION_ID instead of R.class.getPackage().getName() if both are not same
+//        return Uri.parse("android.resource://"+R.class.getPackage().getName()+"/" +resourceId);
+//    }
 }

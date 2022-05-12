@@ -82,7 +82,7 @@ public class MessageDialogAdapter extends RecyclerView.Adapter<MessageDialogAdap
             tv_lastmsg = (TextView) itemView.findViewById(R.id.tv_lastmsg);
             mtextview22 = (TextView) itemView.findViewById(R.id.textView22);
             mImageview6 = (CircleImageView) itemView.findViewById(R.id.imageView6);
-            constraintLayout = (ConstraintLayout) itemView.findViewById(R.id.linearLayout6);
+            constraintLayout = (ConstraintLayout) itemView.findViewById(R.id.ly_main);
             tv_minago=itemView.findViewById(R.id.tv_minago);
         }
     }

@@ -1,12 +1,22 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
+import static android.content.Context.CLIPBOARD_SERVICE;
+import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
+
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,11 +34,12 @@ import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.PostAdapter;
-import com.hypernym.evaconnect.view.dialogs.ShareDialog;
+import com.hypernym.evaconnect.view.bottomsheets.BottomsheetShareSelection;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
 
@@ -38,9 +49,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
-
-public class PostFragment extends BaseFragment implements View.OnClickListener,SwipeRefreshLayout.OnRefreshListener, PostAdapter.ItemClickListener {
+public class PostFragment extends BaseFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, PostAdapter.ItemClickListener {
 
     @BindView(R.id.rc_post)
     RecyclerView rc_post;
@@ -57,6 +66,7 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
     private PostAdapter postAdapter;
     private List<Post> posts = new ArrayList<>();
     int itemCount = 0;
+    int item_position;
     private LinearLayoutManager linearLayoutManager;
     private int currentPage = PAGE_START;
     private boolean isLastPage = false;
@@ -102,14 +112,16 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
     }
 
     private void init() {
-        postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(PostViewModel.class);
+        postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(PostViewModel.class);
         //   currentPage = PAGE_START;
-       connectionViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
+        connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
+
         postAdapter = new PostAdapter(getContext(), posts, this);
         linearLayoutManager = new LinearLayoutManager(getContext());
-
         rc_post.setLayoutManager(linearLayoutManager);
         rc_post.setAdapter(postAdapter);
+        rc_post.setHasFixedSize(true);
+        rc_post.setItemViewCacheSize(15);
         RecyclerView.ItemAnimator animator = rc_post.getItemAnimator();
         if (animator instanceof SimpleItemAnimator) {
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
@@ -141,59 +153,6 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
             }
         });
 
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                final OvershootInterpolator interpolator = new OvershootInterpolator();
-//                ViewCompat.animate(fab).
-//                        rotation(135f).
-//                        withLayer().
-//                        setDuration(300).
-//                        setInterpolator(interpolator).
-//                        start();
-//                /** Instantiating PopupMenu class */
-//                PopupMenu popup = new PopupMenu(getContext(), v);
-//
-//                /** Adding menu items to the popumenu */
-//                popup.getMenuInflater().inflate(R.menu.dashboard_menu, popup.getMenu());
-//
-//                popup.setOnDismissListener(new PopupMenu.OnDismissListener() {
-//                    @Override
-//                    public void onDismiss(PopupMenu menu) {
-//                        ViewCompat.animate(fab).
-//                                rotation(0f).
-//                                withLayer().
-//                                setDuration(300).
-//                                setInterpolator(interpolator).
-//                                start();
-//                    }
-//                });
-//                /** Defining menu item click listener for the popup menu */
-//                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//
-//                    @Override
-//                    public boolean onMenuItemClick(MenuItem item) {
-//
-//                        if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu1))) {
-//                            loadFragment(R.id.framelayout, new NewPostFragment(), getContext(), true);
-//                        }  else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu2))) {
-//                            loadFragment(R.id.framelayout, new ShareVideoFragment(), getContext(), true);
-//                        }
-//                        else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu3))) {
-//                            loadFragment(R.id.framelayout, new CreateEventFragment(), getContext(), true);
-//                        } else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu3))) {
-//                            loadFragment(R.id.framelayout, new ShareVideoFragment(), getContext(), true);
-//                        }
-//
-//                        return true;
-//                    }
-//                });
-//
-//                /** Showing the popup menu */
-//                popup.show();
-//            }
-//        });
-
 
     }
 
@@ -206,6 +165,7 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
         postAdapter.clear();
         if (NetworkUtils.isNetworkConnected(getContext())) {
             callPostsApi();
+            swipeRefresh.setRefreshing(false);
         } else {
             networkErrorDialog();
         }
@@ -272,6 +232,7 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
         }
 
     }
+
     private void likePost(Post post, int position) {
         postViewModel.likePost(post).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
@@ -287,11 +248,15 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
     }
 
     public void onShareClick(View view, int position) {
-        ShareDialog shareDialog;
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("PostData",posts.get(position));
-        shareDialog = new ShareDialog(getContext(),bundle);
-        shareDialog.show();
+//        ShareDialog shareDialog;
+//        Bundle bundle = new Bundle();
+//        bundle.putSerializable("PostData",posts.get(position));
+//        shareDialog = new ShareDialog(getContext(),bundle);
+//        shareDialog.show();
+
+        item_position = position;
+        BottomsheetShareSelection bottomSheetPictureSelection = new BottomsheetShareSelection(new YourDialogFragmentDismissHandler());
+        bottomSheetPictureSelection.show(requireActivity().getSupportFragmentManager(), bottomSheetPictureSelection.getTag());
     }
 
     @Override
@@ -322,7 +287,7 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
         TextView text = (TextView) view;
         if (NetworkUtils.isNetworkConnected(getContext())) {
 
-            if(text.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_ACCEPT)){
+            if (text.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_ACCEPT)) {
                 Connection connection = new Connection();
                 User user = LoginUtils.getLoggedinUser();
                 connection.setStatus(AppConstants.ACTIVE);
@@ -330,12 +295,9 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
                 connection.setModified_by_id(user.getId());
                 connection.setModified_datetime(DateUtils.GetCurrentdatetime());
                 callDeclineConnectApi(connection);
-            }
-            else
-            {
+            } else {
                 callConnectApi(text, position);
             }
-
 
 
         } else {
@@ -365,22 +327,23 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
             NewPostFragment newPostFragment = new NewPostFragment();
             Bundle bundle = new Bundle();
             bundle.putInt("post", posts.get(position).getId());
-            bundle.putBoolean("isEdit",true);
+            bundle.putBoolean("isEdit", true);
             Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
             newPostFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
         } else if (posts.get(position).getType().equalsIgnoreCase("post") && posts.get(position).getPost_video() != null) {
-            NewPostFragment newPostFragment=new NewPostFragment();
-            Bundle bundle=new Bundle();
-            bundle.putBoolean("isVideo",true);
-            bundle.putBoolean("isEdit",true);
-            newPostFragment.setArguments(bundle);
-            loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
-        } else if (posts.get(position).getType().equalsIgnoreCase("post") && posts.get(position).getPost_image().size() == 0 && !posts.get(position).isIs_url() && posts.get(position).getPost_document()==null) {
             NewPostFragment newPostFragment = new NewPostFragment();
             Bundle bundle = new Bundle();
             bundle.putInt("post", posts.get(position).getId());
-            bundle.putBoolean("isEdit",true);
+            bundle.putBoolean("isVideo", true);
+            bundle.putBoolean("isEdit", true);
+            newPostFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
+        } else if (posts.get(position).getType().equalsIgnoreCase("post") && posts.get(position).getPost_image().size() == 0 && !posts.get(position).isIs_url() && posts.get(position).getPost_document() == null) {
+            NewPostFragment newPostFragment = new NewPostFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("post", posts.get(position).getId());
+            bundle.putBoolean("isEdit", true);
             Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
             newPostFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
@@ -388,16 +351,16 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
             NewPostFragment newPostFragment = new NewPostFragment();
             Bundle bundle = new Bundle();
             bundle.putInt("post", posts.get(position).getId());
-            bundle.putBoolean("isEdit",true);
+            bundle.putBoolean("isEdit", true);
             Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
             newPostFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
-        }
-        else if (posts.get(position).getType().equalsIgnoreCase("post") && posts.get(position).getPost_document()!=null) {
-            ShareArticleFragment newPostFragment = new ShareArticleFragment();
+        } else if (posts.get(position).getType().equalsIgnoreCase("post") && posts.get(position).getPost_document() != null) {
+            NewPostFragment newPostFragment = new NewPostFragment();
             Bundle bundle = new Bundle();
             bundle.putInt("post", posts.get(position).getId());
-            bundle.putBoolean("isEdit",true);
+            bundle.putBoolean("isEdit", true);
+            bundle.putBoolean("document_type", true);
             Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
             newPostFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
@@ -408,15 +371,12 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
     @Override
     public void onDeleteClick(View view, int position) {
 
-        postViewModel.deletePost(posts.get(position)).observe(this, new Observer<BaseModel<List<Post>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                if (NetworkUtils.isNetworkConnected(getContext())) {
-                    posts.clear();
-                    callPostsApi();
-                } else {
-                    networkErrorDialog();
-                }
+        postViewModel.deletePost(posts.get(position)).observe(this, listBaseModel -> {
+            if (NetworkUtils.isNetworkConnected(getContext())) {
+                posts.clear();
+                callPostsApi();
+            } else {
+                networkErrorDialog();
             }
         });
     }
@@ -424,63 +384,56 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
 
     private void callDeclineConnectApi(Connection connection) {
 
-        connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Connection>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError()) {
-
-                    onRefresh();
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
+        connectionViewModel.connect(connection).observe(this, listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError()) {
+                onRefresh();
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
     }
+
     private void callPostsApi() {
+
+
         User user = LoginUtils.getLoggedinUser();
+        postViewModel.getPost(user, AppConstants.TOTAL_PAGES, currentPage).observe(this, dashboardBaseModel -> {
 
-        postViewModel.getPost(user, AppConstants.TOTAL_PAGES, currentPage).observe(this, new Observer<BaseModel<List<Post>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Post>> dashboardBaseModel) {
+            //   homePostsAdapter.clear();
+            if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
 
-                //   homePostsAdapter.clear();
-                if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
-                    for (Post post : dashboardBaseModel.getData()) {
-                        if (post.getContent() == null) {
-                            post.setContent("");
-                        }
-                        if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() > 0) {
-                            post.setPost_type(AppConstants.IMAGE_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_video() != null) {
-                            post.setPost_type(AppConstants.VIDEO_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() == 0 && !post.isIs_url()  && post.getPost_document() == null) {
-                            post.setPost_type(AppConstants.TEXT_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("post") && post.isIs_url() && post.getPost_document() == null) {
-                            post.setPost_type(AppConstants.LINK_POST);
-                        }
-                        else if(post.getType().equalsIgnoreCase("post") && post.getPost_document() != null)
-                        {
-                            post.setPost_type(AppConstants.DOCUMENT_TYPE);
-                        }
+                for (Post post : dashboardBaseModel.getData()) {
+                    if (post.getContent() == null) {
+                        post.setContent("");
                     }
-                    posts.addAll(dashboardBaseModel.getData());
-                    postAdapter.notifyDataSetChanged();
-                    swipeRefresh.setRefreshing(false);
-                    postAdapter.removeLoading();
-                    isLoading = false;
-                } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
-                    isLastPage = true;
-                    postAdapter.removeLoading();
-                    isLoading = false;
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                    if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() > 0) {
+                        post.setPost_type(AppConstants.IMAGE_TYPE);
+                    } else if (post.getType().equalsIgnoreCase("post") && post.getPost_video() != null) {
+                        post.setPost_type(AppConstants.VIDEO_TYPE);
+                    } else if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() == 0 && !post.isIs_url() && post.getPost_document() == null) {
+                        post.setPost_type(AppConstants.TEXT_TYPE);
+                    } else if (post.getType().equalsIgnoreCase("post") && post.isIs_url() && post.getPost_document() == null) {
+                        post.setPost_type(AppConstants.LINK_POST);
+                    } else if (post.getType().equalsIgnoreCase("post") && post.getPost_document() != null) {
+                        post.setPost_type(AppConstants.DOCUMENT_TYPE);
+                    }
                 }
-
+                posts.addAll(dashboardBaseModel.getData());
+                postAdapter.notifyDataSetChanged();
+                swipeRefresh.setRefreshing(false);
+//                postAdapter.removeLoading();
+                isLoading = false;
+            } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
+                isLastPage = true;
+//                postAdapter.removeLoading();
+                isLoading = false;
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+
         });
     }
-
 
 
     private void callConnectApi(TextView text, int position) {
@@ -491,18 +444,54 @@ public class PostFragment extends BaseFragment implements View.OnClickListener,S
             connection.setReceiver_id(posts.get(position).getUser().getId());
             connection.setSender_id(user.getId());
             connection.setStatus(AppConstants.STATUS_PENDING);
-            connectionViewModel.connect(connection).observe(this, new Observer<BaseModel<List<Connection>>>() {
-                @Override
-                public void onChanged(BaseModel<List<Connection>> listBaseModel) {
-                    if (listBaseModel != null && !listBaseModel.isError()) {
-                        text.setText("Pending");
-                        onRefresh();
-                    } else {
-                        networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                    }
-                    hideDialog();
+            connectionViewModel.connect(connection).observe(this, listBaseModel -> {
+                if (listBaseModel != null && !listBaseModel.isError()) {
+                    text.setText("Pending");
+                    onRefresh();
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
+                hideDialog();
             });
+        }
+    }
+
+    protected class YourDialogFragmentDismissHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 102) {
+                Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
+                whatsappIntent.setType("text/plain");
+                whatsappIntent.setPackage("com.whatsapp");
+                whatsappIntent.putExtra(Intent.EXTRA_TEXT, "https://www.evaintmedia.com/" + posts.get(item_position).getType() + "/" + posts.get(item_position).getId());
+                try {
+                    getContext().startActivity(whatsappIntent);
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(requireContext(), "Whatsapp have not been installed.", Toast.LENGTH_SHORT).show();
+                }
+            } else if (msg.what == 100) {
+                ShareConnectionFragment shareConnectionFragment = new ShareConnectionFragment();
+                FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+                transaction.replace(R.id.framelayout, shareConnectionFragment);
+                Bundle bundle = new Bundle();
+                {
+                    bundle.putInt(Constants.DATA, posts.get(item_position).getId());
+                    bundle.putString(Constants.TYPE, posts.get(item_position).getType());
+                }
+                shareConnectionFragment.setArguments(bundle);
+                if (true) {
+                    transaction.addToBackStack(null);
+                }
+                transaction.commit();
+            } else if (msg.what == 103) {
+                ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(CLIPBOARD_SERVICE);
+                ClipData clip;
+                clip = ClipData.newPlainText("label", "https://www.evaintmedia.com/" + posts.get(item_position).getType() + "/" + posts.get(item_position).getId());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(requireContext(), "link copied", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

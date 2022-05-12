@@ -1,29 +1,27 @@
 package com.hypernym.evaconnect.view.ui.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.constants.AppConstants;
@@ -42,13 +40,15 @@ import com.hypernym.evaconnect.view.dialogs.SearchDialog;
 import com.hypernym.evaconnect.view.ui.fragments.ActivityFragment;
 import com.hypernym.evaconnect.view.ui.fragments.BaseFragment;
 import com.hypernym.evaconnect.view.ui.fragments.ChatFragment;
-import com.hypernym.evaconnect.view.ui.fragments.ConnectionsFragment;
+import com.hypernym.evaconnect.view.ui.fragments.ConnectionsTabFragment;
 import com.hypernym.evaconnect.view.ui.fragments.EditProfileFragment;
 import com.hypernym.evaconnect.view.ui.fragments.EventDetailFragment;
+import com.hypernym.evaconnect.view.ui.fragments.GlobalSearchTabfragment;
 import com.hypernym.evaconnect.view.ui.fragments.HomeFragment;
 import com.hypernym.evaconnect.view.ui.fragments.MainViewPagerFragment;
 import com.hypernym.evaconnect.view.ui.fragments.MessageFragment;
 import com.hypernym.evaconnect.view.ui.fragments.MyLikesFragment;
+import com.hypernym.evaconnect.view.ui.fragments.NewPostFragment;
 import com.hypernym.evaconnect.view.ui.fragments.NotificationsFragment;
 import com.hypernym.evaconnect.view.ui.fragments.PersonProfileFragment;
 import com.hypernym.evaconnect.view.ui.fragments.PostDetailsFragment;
@@ -104,6 +104,11 @@ public class HomeActivity extends BaseActivity {
 
     @BindView(R.id.img_messages)
     ImageView img_messages;
+    @BindView(R.id.img_post)
+    ImageView img_post;
+
+    @BindView(R.id.tv_post)
+    TextView tv_post;
 
     @BindView(R.id.message_click)
     LinearLayout message_click;
@@ -132,6 +137,9 @@ public class HomeActivity extends BaseActivity {
     @BindView(R.id.home_selector)
     ImageView home_selector;
 
+    @BindView(R.id.post_selector)
+    ImageView post_selector;
+
     @BindView(R.id.messages_selector)
     ImageView messages_selector;
 
@@ -150,7 +158,7 @@ public class HomeActivity extends BaseActivity {
     UserViewModel userViewModel;
 
 
-
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,10 +167,11 @@ public class HomeActivity extends BaseActivity {
         home_selector.setImageResource(R.drawable.bottomline);
         createUserOnFirebase();
 
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
 
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getApplication(), this)).get(UserViewModel.class);
-        if(getIntent().getExtras()!=null && getIntent().getExtras().getString("chat_room_id")!=null)
-        {
+        if (getIntent().getExtras() != null && getIntent().getExtras().getString("chat_room_id") != null) {
             img_home.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
             img_connections.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
             img_messages.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
@@ -177,9 +186,7 @@ public class HomeActivity extends BaseActivity {
             bundle.putString("chat_room_id", getIntent().getExtras().getString("chat_room_id"));
             chatFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, chatFragment, this, false);
-        }
-        else
-        {
+        } else {
             // img_home.setImageDrawable(getDrawable(R.drawable.home_selected));
             img_home.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
             tv_home.setTextColor(ContextCompat.getColor(this, R.color.skyblue));
@@ -274,11 +281,8 @@ public class HomeActivity extends BaseActivity {
 
     private void setUserOnline() {
         Log.d("APPLICATION","APPLICATION ONLINE");
-        userViewModel.userOnline(true).observe(this, new Observer<BaseModel<List<User>>>() {
-            @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel) {
+        userViewModel.userOnline(true).observe(this, listBaseModel -> {
 
-            }
         });
     }
 
@@ -289,16 +293,48 @@ public class HomeActivity extends BaseActivity {
         badge_notification.setText(String.valueOf(count));
         badge_notification.setVisibility(View.GONE);
     }
+//
+//    NewPostFragment newPostFragment=new NewPostFragment();
+//    Bundle bundle=new Bundle();
+//                    bundle.putBoolean("isVideo",true);
+//                    newPostFragment.setArguments(bundle);
+//    loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
 
+    @OnClick(R.id.post_click)
+    public void post() {
 
+        post_selector.setImageResource(R.drawable.bottomline);
+        home_selector.setImageResource(0);
+        connections_selector.setImageResource(0);
+        messages_selector.setImageResource(0);
+        profile_selector.setImageResource(0);
+
+        img_post.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
+        tv_post.setTextColor(ContextCompat.getColor(this, R.color.skyblue));
+        img_home.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+        tv_home.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+        tv_connections.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+        tv_message.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+        tv_profile.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+        img_connections.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+        img_messages.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+        img_logout.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+
+        NewPostFragment newPostFragment=new NewPostFragment();
+        Bundle bundle=new Bundle();
+        bundle.putBoolean("isVideo",true);
+        newPostFragment.setArguments(bundle);
+        loadFragment(R.id.framelayout, newPostFragment, this, true);
+
+    }
 
     @OnClick(R.id.home_click)
     public void home() {
-
         home_selector.setImageResource(R.drawable.bottomline);
         connections_selector.setImageResource(0);
         messages_selector.setImageResource(0);
         profile_selector.setImageResource(0);
+        post_selector.setImageResource(0);
 
         img_home.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
         tv_home.setTextColor(ContextCompat.getColor(this, R.color.skyblue));
@@ -329,22 +365,25 @@ public class HomeActivity extends BaseActivity {
         connections_selector.setImageResource(R.drawable.bottomline);
         messages_selector.setImageResource(0);
         profile_selector.setImageResource(0);
+        post_selector.setImageResource(0);
 
 
         img_home.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
         img_connections.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
         img_messages.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
         img_logout.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+        img_post.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
 
         tv_home.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
         tv_connections.setTextColor(ContextCompat.getColor(this, R.color.skyblue));
         tv_message.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
         tv_profile.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+        tv_post.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
 
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.framelayout);
-        if (f instanceof ConnectionsFragment) {
+        if (f instanceof ConnectionsTabFragment) {
         } else {
-            ConnectionsFragment fragment = new ConnectionsFragment();
+            ConnectionsTabFragment fragment = new ConnectionsTabFragment();
             loadFragment(R.id.framelayout, fragment, this, true);
         }
         //   tv_back.setVisibility(View.GONE);
@@ -358,17 +397,20 @@ public class HomeActivity extends BaseActivity {
         connections_selector.setImageResource(0);
         messages_selector.setImageResource(R.drawable.bottomline);
         profile_selector.setImageResource(0);
+        post_selector.setImageResource(0);
 
 
         img_home.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
         img_connections.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
         img_messages.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
         img_logout.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+        img_post.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
 
         tv_home.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
         tv_connections.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
         tv_message.setTextColor(ContextCompat.getColor(this, R.color.skyblue));
         tv_profile.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+        tv_post.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
 
 
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.framelayout);
@@ -394,15 +436,18 @@ public class HomeActivity extends BaseActivity {
         connections_selector.setImageResource(0);
         messages_selector.setImageResource(0);
         profile_selector.setImageResource(R.drawable.bottomline);
+        post_selector.setImageResource(0);
 
         img_home.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
         img_connections.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
         img_messages.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
         img_logout.setColorFilter(ContextCompat.getColor(this, R.color.skyblue));
+        img_post.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
 
         tv_home.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
         tv_connections.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
         tv_message.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+        tv_post.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
         tv_profile.setTextColor(ContextCompat.getColor(this, R.color.skyblue));
 
 
@@ -426,32 +471,37 @@ public class HomeActivity extends BaseActivity {
     public void createUserOnFirebase()
     {
         FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            //To do//
-                            return;
-                        }
-                        // Get the Instance ID token//
-                        String token = task.getResult().getToken();
-
-                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                        DatabaseReference userRef = databaseReference.child(AppConstants.FIREASE_USER_ENDPOINT);
-                        DatabaseReference userRefByID=userRef.child(LoginUtils.getLoggedinUser().getId().toString());
-                        userRefByID.child("imageName").setValue(LoginUtils.getLoggedinUser().getUser_image());
-                        userRefByID.child("name").setValue(LoginUtils.getLoggedinUser().getEmail());
-                        userRefByID.child("fcm-token").setValue(token);
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        //To do//
+                        return;
                     }
+                    // Get the Instance ID token//
+                    String token = task.getResult().getToken();
+
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                    DatabaseReference userRef = databaseReference.child(AppConstants.FIREASE_USER_ENDPOINT);
+                    DatabaseReference userRefByID = userRef.child(LoginUtils.getLoggedinUser().getId().toString());
+                    userRefByID.child("imageName").setValue(LoginUtils.getLoggedinUser().getUser_image());
+                    userRefByID.child("name").setValue(LoginUtils.getLoggedinUser().getEmail());
+                    userRefByID.child("fcm-token").setValue(token);
                 });
 
     }
 
     @OnClick(R.id.toolbarSearch)
     public void openDialog(View view) {
-        searchDialog = new SearchDialog(this);
-        searchDialog.show();
-
+       /* searchDialog = new SearchDialog(this);
+        searchDialog.show();*/
+        GlobalSearchTabfragment searchResultFragment = new GlobalSearchTabfragment();
+        FragmentTransaction transaction = ( this).getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+        transaction.replace(R.id.framelayout, searchResultFragment);
+        transaction.addToBackStack(null);
+/*        Bundle bundle = new Bundle();
+        bundle.putString(Constants.SEARCH,edt_keyword.getText().toString());
+        searchResultFragment.setArguments(bundle);*/
+        transaction.commit();
 
     }
     //
@@ -563,7 +613,8 @@ public class HomeActivity extends BaseActivity {
 
 
 
-        } else if (fragment instanceof MyLikesFragment || fragment instanceof ConnectionsFragment || fragment instanceof EditProfileFragment || fragment instanceof NotificationsFragment || fragment instanceof MessageFragment) {
+        } else if (fragment instanceof MyLikesFragment || fragment instanceof ConnectionsTabFragment || fragment instanceof EditProfileFragment || fragment instanceof NotificationsFragment || fragment instanceof MessageFragment
+        || fragment instanceof NewPostFragment) {
 //            img_home.setImageDrawable(getDrawable(R.drawable.home_selected));
 //            img_connections.setImageDrawable(getDrawable(R.drawable.connections));
 //            img_messages.setImageDrawable(getDrawable(R.drawable.messages));
@@ -573,11 +624,13 @@ public class HomeActivity extends BaseActivity {
             img_connections.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
             img_messages.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
             img_logout.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
+            img_post.setColorFilter(ContextCompat.getColor(this, R.color.gray_1));
 
             tv_home.setTextColor(ContextCompat.getColor(this, R.color.skyblue));
             tv_connections.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
             tv_message.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
             tv_profile.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
+            tv_post.setTextColor(ContextCompat.getColor(this, R.color.gray_1));
 
 
             super.onBackPressed();
@@ -587,5 +640,9 @@ public class HomeActivity extends BaseActivity {
                 findViewById(R.id.tv_back).setVisibility(View.GONE);
             super.onBackPressed();
         }
+    }
+    @Subscribe
+    public void onEvent(String mtitle) {
+
     }
 }

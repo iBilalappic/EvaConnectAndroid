@@ -1,16 +1,18 @@
 package com.hypernym.evaconnect.models;
 
+import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.Serializable;
 
+@SuppressLint("ParcelCreator")
 public class User implements Serializable, Parcelable {
 
     private Integer id;
     private String email;
     private String password;
-    private String first_name;
+    public String first_name;
     private String bio_data;
     private String type;
     private String status;
@@ -21,7 +23,10 @@ public class User implements Serializable, Parcelable {
     private String linkedin_image_url;
     private String facebook_image_url;
     private String city;
+    private String about;
+    private String language;
     private String country;
+    private String date_of_birth;
     private String last_name;
     private String sector;
     private String work_aviation;
@@ -34,6 +39,7 @@ public class User implements Serializable, Parcelable {
     private boolean is_online;
     private String last_online_datetime;
     private String other_sector;
+    private String company_url;
 
     public String getSearch_key() {
         return search_key;
@@ -41,6 +47,14 @@ public class User implements Serializable, Parcelable {
 
     public void setSearch_key(String search_key) {
         this.search_key = search_key;
+    }
+
+    public String getAbout() {
+        return about;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
     }
 
     private String search_key;
@@ -62,6 +76,7 @@ public class User implements Serializable, Parcelable {
     }
 
     private boolean is_shared=false;
+
     public String getConnection_status() {
         return connection_status;
     }
@@ -104,11 +119,11 @@ public class User implements Serializable, Parcelable {
         return connection_count;
     }
 
-    public void setConnection_count(Integer connection_count) {
+    public void setConnection_count(int connection_count) {
         this.connection_count = connection_count;
     }
 
-    private Integer connection_count;
+    public int connection_count;
 
 
     public String getFacebook_image_url() {
@@ -133,6 +148,14 @@ public class User implements Serializable, Parcelable {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public String getDate_of_birth() {
+        return date_of_birth;
+    }
+
+    public void setDate_of_birth(String date_of_birth) {
+        this.date_of_birth = date_of_birth;
     }
 
     public String getLast_name() {
@@ -214,7 +237,6 @@ public class User implements Serializable, Parcelable {
     public void setIsLinkedin(Integer isLinkedin) {
         this.is_linkedin = isLinkedin;
     }
-
 
 
     public Integer getIs_facebook() {
@@ -394,5 +416,21 @@ public class User implements Serializable, Parcelable {
 
     public void setOther_sector(String other_sector) {
         this.other_sector = other_sector;
+    }
+
+    public String getCompany_url() {
+        return company_url;
+    }
+
+    public void setCompany_url(String company_url) {
+        this.company_url = company_url;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 }

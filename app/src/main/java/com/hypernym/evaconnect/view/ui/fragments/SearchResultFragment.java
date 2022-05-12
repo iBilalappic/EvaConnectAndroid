@@ -1,6 +1,14 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
+import static android.content.Context.CLIPBOARD_SERVICE;
+import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
+
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,7 +41,7 @@ import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.HomePostsAdapter;
-import com.hypernym.evaconnect.view.dialogs.ShareDialog;
+import com.hypernym.evaconnect.view.bottomsheets.BottomsheetShareSelection;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.EventViewModel;
 import com.hypernym.evaconnect.viewmodel.HomeViewModel;
@@ -45,8 +55,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
 
 public class SearchResultFragment extends BaseFragment implements View.OnClickListener, HomePostsAdapter.ItemClickListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.rc_home)
@@ -95,10 +103,11 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     private boolean isLoading = false;
     private boolean isSearchFlag = false;
     int itemCount = 0;
+    int item_position ;
     private List<Post> notifications = new ArrayList<>();
     private JobListViewModel jobListViewModel;
     private UserViewModel userViewModel;
-    String filter = "event";
+    String filter = "post";
     String keyword;
     int totalsize=0;
 
@@ -136,9 +145,10 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         tv_events.setOnClickListener(this);
         tv_job.setOnClickListener(this);
         tv_posts.setOnClickListener(this);
+        tv_news.setOnClickListener(this);
         initRecycler();
-        showBackButton();
-        setPageTitle("Search Results");
+       // showBackButton();
+       // setPageTitle("Search Results");
         /**
          * add scroll listener while user reach in bottom load more will call
          */
@@ -217,8 +227,10 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                         } else if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() == 0 && !post.isIs_url()) {
                             post.setPost_type(AppConstants.TEXT_TYPE);
                         } else if (post.getType().equalsIgnoreCase("event")) {
-                            post.setPost_type(AppConstants.EVENT_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("job")) {
+                            post.setPost_type(AppConstants.EVENT_TYPE); }
+                        else if (post.getType().equalsIgnoreCase("news")) {
+                            post.setPost_type(AppConstants.NEWS_TYPE); }
+                        else if (post.getType().equalsIgnoreCase("job")) {
                             post.setPost_type(AppConstants.JOB_TYPE);
                         } else if (post.getType().equalsIgnoreCase("post") && post.isIs_url()) {
                             post.setPost_type(AppConstants.LINK_POST);
@@ -315,6 +327,24 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                     Toast.makeText(getContext(), "please enter keyword", Toast.LENGTH_SHORT).show();
                 }
                 break;
+
+            case R.id.tv_news:
+                if(!edt_search.getText().toString().isEmpty()) {
+                    filter = "news";
+                    tv_events.setTextColor(getContext().getResources().getColor(R.color.gray_1));
+                    tv_posts.setTextColor(getContext().getResources().getColor(R.color.skyblue));
+                    tv_job.setTextColor(getContext().getResources().getColor(R.color.gray_1));
+                    tv_news.setTextColor(getContext().getResources().getColor(R.color.gray_1));
+                    currentPage = 0;
+                    posts.clear();
+                    homePostsAdapter.notifyDataSetChanged();
+                    callPostsApi();
+                }else{
+                    Toast.makeText(getContext(), "please enter keyword", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+
         }
     }
 
@@ -535,11 +565,14 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
     @Override
     public void onShareClick(View view, int position) {
-        ShareDialog shareDialog;
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("PostData", posts.get(position));
-        shareDialog = new ShareDialog(getContext(), bundle);
-        shareDialog.show();
+//        ShareDialog shareDialog;
+//        Bundle bundle = new Bundle();
+//        bundle.putSerializable("PostData", posts.get(position));
+//        shareDialog = new ShareDialog(getContext(), bundle);
+//        shareDialog.show();
+        item_position=position;
+        BottomsheetShareSelection bottomSheetPictureSelection = new BottomsheetShareSelection(new YourDialogFragmentDismissHandler());
+        bottomSheetPictureSelection.show(getActivity().getSupportFragmentManager(), bottomSheetPictureSelection.getTag());
     }
 
     @Override
@@ -693,18 +726,15 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     private void GetUserDetails() {
         User user = new User();
         user = LoginUtils.getUser();
-        userViewModel.getuser_details(user.getId()
-        ).observe(this, new Observer<BaseModel<List<User>>>() {
-            @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel) {
-                if (listBaseModel.getData() != null && !listBaseModel.isError()) {
-                    swipeRefresh.setRefreshing(false);
-                    LoginUtils.saveUser(listBaseModel.getData().get(0));
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
+        userViewModel.getuser_details(user.getId()  ,false
+        ).observe(this, listBaseModel -> {
+            if (listBaseModel.getData() != null && !listBaseModel.isError()) {
+                swipeRefresh.setRefreshing(false);
+                LoginUtils.saveUser(listBaseModel.getData().get(0));
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
     }
 
@@ -739,6 +769,47 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
         }
 
+    }
+
+
+    protected class YourDialogFragmentDismissHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 102) {
+                Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
+                whatsappIntent.setType("text/plain");
+                whatsappIntent.setPackage("com.whatsapp");
+                whatsappIntent.putExtra(Intent.EXTRA_TEXT, "https://www.evaintmedia.com/" + posts.get(item_position).getType() + "/" + posts.get(item_position).getId());
+                try {
+                    getContext().startActivity(whatsappIntent);
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(requireContext(), "Whatsapp have not been installed.", Toast.LENGTH_SHORT).show();
+                }
+            }
+            else if(msg.what==100){
+                ShareConnectionFragment shareConnectionFragment = new ShareConnectionFragment();
+                FragmentTransaction transaction = ((AppCompatActivity) requireActivity()).getSupportFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+                transaction.replace(R.id.framelayout, shareConnectionFragment);
+                Bundle bundle = new Bundle();
+                {
+                    bundle.putInt(Constants.DATA, posts.get(item_position).getId());
+                    bundle.putString(Constants.TYPE,  posts.get(item_position).getType());
+                }
+                shareConnectionFragment.setArguments(bundle);
+                if (true) {
+                    transaction.addToBackStack(null);
+                }
+                transaction.commit();
+            }else if(msg.what==103){
+                ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(CLIPBOARD_SERVICE);
+                ClipData clip;
+                clip = ClipData.newPlainText("label", "https://www.evaintmedia.com/" + posts.get(item_position).getType() + "/" + posts.get(item_position).getId());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(requireContext(), "link copied", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
 }

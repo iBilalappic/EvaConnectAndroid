@@ -1,5 +1,6 @@
 package com.hypernym.evaconnect.view.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -12,8 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.models.ConnectionModel;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.utils.LoginUtils;
 
 import java.util.List;
 
@@ -24,9 +27,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ShareConnectionAdapter extends RecyclerView.Adapter<ShareConnectionAdapter.ViewHolder> {
     private Context context;
     private OnItemClickListener onItemClickListener;
-    private List<User> connections;
+    private List<ConnectionModel> connections;
 
-    public ShareConnectionAdapter(Context context, List<User> connections, OnItemClickListener onItemClickListener) {
+    public ShareConnectionAdapter(Context context, List<ConnectionModel> connections, OnItemClickListener onItemClickListener) {
         this.context = context;
         this.connections = connections;
         this.onItemClickListener = onItemClickListener;
@@ -40,54 +43,70 @@ public class ShareConnectionAdapter extends RecyclerView.Adapter<ShareConnection
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ShareConnectionAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ShareConnectionAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
-        if (!TextUtils.isEmpty(connections.get(position).getUser_image())) {
-            AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getUser_image());
-        }
-//        else if (connections.get(position).getIs_facebook() == 1 && !TextUtils.isEmpty(connections.get(position).getFacebook_image_url())) {
-//            AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getFacebook_image_url());
-//        } else {
-//            AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getUser_image());
-//        }
 
-        holder.tv_name.setText(connections.get(position).getFirst_name());
+        User user = LoginUtils.getLoggedinUser();
+        if (connections.get(position).sender != null && connections.get(position).receiver != null) {
+            if (user.getId().equals(connections.get(position).senderId)) {
+                if (!TextUtils.isEmpty(connections.get(position).receiver.getUserImage())) {
+                    AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).receiver.getUserImage());
+                }
+                if (connections.get(position).receiver.getFirstName() != null) {
+                    holder.tv_name.setText(connections.get(position).receiver.getFirstName());
+                }
+                if (connections.get(position).receiver.getDesignation() != null && !connections.get(position).receiver.getDesignation().isEmpty()) {
+                    holder.tv_field.setText(connections.get(position).receiver.getDesignation());
+                } else {
+                    holder.tv_field.setVisibility(View.GONE);
+                }
 
-        if (connections.get(position).getBio_data() != null && !connections.get(position).getBio_data().isEmpty()) {
-            holder.tv_field.setText(connections.get(position).getBio_data());
-        } else {
-            holder.tv_field.setText("--");
-        }
-//
-//        if (connections.get(position).isIs_shared()) {
-//            holder.tv_invite.setVisibility(View.GONE);
-//            holder.cancel_invite.setVisibility(View.VISIBLE);
-//        } else {
-//            holder.tv_invite.setVisibility(View.VISIBLE);
-//            holder.cancel_invite.setVisibility(View.GONE);
-//        }
-        holder.tv_invite.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                holder.tv_invite.setVisibility(View.GONE);
-                holder.cancel_invite.setVisibility(View.VISIBLE);
+            } else if (user.getId().equals(connections.get(position).receiverId)) {
+                if (!TextUtils.isEmpty(connections.get(position).sender.getUserImage())) {
+                    AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).sender.getUserImage());
+                }
+                if (connections.get(position).sender.getFirstName() != null) {
+                    holder.tv_name.setText(connections.get(position).sender.getFirstName());
+                }
+                if (connections.get(position).sender.getDesignation() != null && !connections.get(position).sender.getDesignation().isEmpty()) {
+                    holder.tv_field.setText(connections.get(position).sender.getDesignation());
+                } else {
+                    holder.tv_field.setVisibility(View.GONE);
+                }
 
-                if (onItemClickListener != null)
-                    // connections.get(position).setIs_shared(true);
-                    onItemClickListener.onItemClick(v, connections.indexOf(connections.get(position)), connections.get(position));
+
             }
+        } else {
+            if (!TextUtils.isEmpty(connections.get(position).userImage)) {
+                AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).userImage);
+            }
+            if (connections.get(position).firstName != null) {
+                holder.tv_name.setText(connections.get(position).firstName);
+            }
+            if (connections.get(position).designation != null && !connections.get(position).designation.equals("")) {
+                holder.tv_field.setText(connections.get(position).designation.toString());
+            } else {
+                holder.tv_field.setVisibility(View.GONE);
+            }
+        }
+
+
+        holder.tv_invite.setOnClickListener(v -> {
+            holder.tv_invite.setVisibility(View.GONE);
+            holder.cancel_invite.setVisibility(View.VISIBLE);
+
+            if (onItemClickListener != null)
+                // connections.get(position).setIs_shared(true);
+                onItemClickListener.onItemClick(v, connections.indexOf(connections.get(position)), connections.get(position));
         });
 
-        holder.cancel_invite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                holder.tv_invite.setVisibility(View.VISIBLE);
-                holder.cancel_invite.setVisibility(View.GONE);
+        holder.cancel_invite.setOnClickListener(v -> {
+            holder.tv_invite.setVisibility(View.VISIBLE);
+            holder.cancel_invite.setVisibility(View.GONE);
 
-                if (onItemClickListener != null)
-                    onItemClickListener.onItemClick(v, connections.indexOf(connections.get(position)), connections.get(position));
-            }
+            if (onItemClickListener != null)
+                onItemClickListener.onItemClick(v, connections.indexOf(connections.get(position)), connections.get(position));
         });
     }
 
@@ -106,8 +125,13 @@ public class ShareConnectionAdapter extends RecyclerView.Adapter<ShareConnection
         return connections.size();
     }
 
+    public void hSetList(List<ConnectionModel> hSearchList) {
+        connections = hSearchList;
+        notifyDataSetChanged();
+    }
+
     public interface OnItemClickListener {
-        void onItemClick(View view, int position, User data);
+        void onItemClick(View view, int position, ConnectionModel data);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -120,8 +144,6 @@ public class ShareConnectionAdapter extends RecyclerView.Adapter<ShareConnection
         @BindView(R.id.tv_field)
         TextView tv_field;
 
-        @BindView(R.id.tv_connection_status)
-        TextView tv_connection_status;
 
         @BindView(R.id.tv_share)
         TextView tv_invite;
@@ -135,7 +157,7 @@ public class ShareConnectionAdapter extends RecyclerView.Adapter<ShareConnection
         }
     }
 
-    User getItem(int position) {
+    ConnectionModel getItem(int position) {
         if (connections.size() > 0)
             return connections.get(position);
         else

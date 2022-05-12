@@ -9,6 +9,7 @@
     <color name="dark_black">#000</color>
     <color name="light_gray">#EBE9E9</color>
     <color name="gray">#BDBABA</color>
+    <color name="grayish_black_text">#565656</color>
     <color name="calendar_selection_colour">#5894DD</color>
     <color name="calendar_meetings">#2ECC71</color>
     <color name="calendar_meetings_button">#5BD78F</color>
@@ -46,7 +47,8 @@
     <color name="light_blue">#5894DD</color>
     <color name="light_green">#2ECC71</color>
     <color name="lighter_green">#59E098</color>
-
+    <color name="seperator_white">#F7F6FA</color>
+    <color name="dark_gray_text">#565656</color>
 
 
 </resources>

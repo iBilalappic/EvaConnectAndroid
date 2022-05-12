@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.ui.fragments.NewPostFragment">
+
+
+        <LinearLayout
+            android:id="@+id/layout_header"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:gravity="start|center"
+            android:orientation="horizontal"
+            android:background="#FCFBFF"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <ImageView
+                android:id="@+id/img_backarrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:src="@drawable/ic_arrow_left" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="1"
+                android:id="@+id/tv_header_name"
+                android:fontFamily="@font/nunitosansbold"
+                android:gravity="end"
+                android:text="Create a Note"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_large"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="Title"
+            android:textAppearance="@style/TextAppearance.Text.Bold"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_header" />
+
+        <EditText
+            android:id="@+id/edt_eventname"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="top|left"
+            android:maxLength="50"
+            android:textSize="14sp"
+            android:textColorHint="#B4B4B4"
+            android:hint="e-g Appointment, Client, Event, Conference Call, Personal, Staff Meeting"
+            android:backgroundTint="#5894DD"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title"
+            />
+
+        <ImageView
+            android:id="@+id/clock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_clock"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_startdate"
+            app:layout_constraintBottom_toBottomOf="@id/tv_startdate"
+            android:layout_marginStart="@dimen/spacing_large"
+
+            app:tint="@color/black" />
+
+        <EditText
+            android:id="@+id/tv_startdate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColorHint="#B4B4B4"
+            android:hint="15:00"
+            android:textColor="@color/black"
+            android:drawablePadding="8dp"
+            android:backgroundTint="#F6F6F6"
+            android:textSize="14sp"
+            android:textAppearance="@style/TextAppearance.Text.Regular"
+            app:layout_constraintEnd_toStartOf="@id/tv_startTime"
+            app:layout_constraintStart_toEndOf="@id/clock"
+            app:layout_constraintTop_toBottomOf="@id/edt_eventname"
+            android:layout_marginStart="@dimen/spacing_xsmall"
+            android:layout_marginTop="@dimen/spacing_large"
+            />
+
+        <EditText
+            android:id="@+id/tv_startTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColorHint="#B4B4B4"
+            android:hint="15:00"
+            android:textColor="@color/black"
+            android:drawablePadding="8dp"
+            android:textSize="14sp"
+            android:padding="12dp"
+            android:backgroundTint="#F6F6F6"
+            android:layout_marginEnd="@dimen/spacing_large"
+            android:textAppearance="@style/TextAppearance.Text.Regular"
+            app:layout_constraintStart_toEndOf="@id/tv_startdate"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_startdate"
+            android:layout_marginStart="@dimen/spacing_large"
+            app:layout_constraintBottom_toBottomOf="@id/tv_startdate"
+            />
+
+        <EditText
+            android:id="@+id/tv_enddate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="End date"
+            android:textColor="@color/black"
+            android:drawablePadding="8dp"
+            android:backgroundTint="#F6F6F6"
+            android:visibility="gone"
+            android:textSize="14sp"
+            android:textAppearance="@style/TextAppearance.Text.Regular"
+            app:layout_constraintEnd_toStartOf="@id/tv_endTime"
+            app:layout_constraintStart_toStartOf="@id/tv_startdate"
+            app:layout_constraintTop_toBottomOf="@id/tv_startdate"
+            android:layout_marginTop="@dimen/spacing_medium"
+            />
+
+        <EditText
+            android:id="@+id/tv_endTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="End time"
+            android:textColor="@color/black"
+            android:drawablePadding="8dp"
+            android:visibility="gone"
+            android:textSize="14sp"
+            android:textColorHint="#B4B4B4"
+            android:padding="12dp"
+            android:backgroundTint="#F6F6F6"
+            android:layout_marginEnd="@dimen/spacing_large"
+            android:textAppearance="@style/TextAppearance.Text.Regular"
+            app:layout_constraintStart_toEndOf="@id/tv_enddate"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_enddate"
+            android:layout_marginStart="@dimen/spacing_large"
+            app:layout_constraintBottom_toBottomOf="@id/tv_enddate"
+            />
+
+        <ImageView
+            android:id="@+id/location_icon"
+            android:layout_width="20dp"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_location_black"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="@dimen/spacing_large"
+            app:layout_constraintTop_toTopOf="@id/edt_eventlocation"
+            app:layout_constraintBottom_toBottomOf="@id/edt_eventlocation"
+            app:layout_constraintVertical_bias="0.50"
+            />
+
+        <EditText
+            android:id="@+id/edt_eventlocation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_small"
+            android:layout_marginTop="@dimen/spacing_large"
+            android:backgroundTint="#F6F6F6"
+            android:drawablePadding="8dp"
+            android:hint="Location"
+            android:visibility="gone"
+            android:padding="10dp"
+            android:layout_marginEnd="@dimen/spacing_large"
+            android:textAppearance="@style/TextAppearance.Text.Regular"
+            android:textColor="@color/black"
+            android:textColorHint="#B4B4B4"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/location_icon"
+            app:layout_constraintTop_toBottomOf="@id/tv_enddate" />
+
+        <ImageView
+            android:id="@+id/icon_pen"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_large"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/ic_edit_black_24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/edt_content" />
+
+        <EditText
+            android:id="@+id/edt_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="#F6F6F6"
+            android:drawablePadding="8dp"
+            android:hint="Details"
+            android:padding="10dp"
+            android:inputType="textMultiLine"
+            android:textAppearance="@style/TextAppearance.Text.Regular"
+            android:textColor="@color/black"
+            android:textColorHint="#B4B4B4"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toStartOf="@+id/tv_remind_me"
+            app:layout_constraintStart_toEndOf="@+id/icon_pen"
+            app:layout_constraintTop_toBottomOf="@id/tv_remind_me" />
+
+        <TextView
+            android:id="@+id/invited"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Invite attendee"
+            android:textSize="12sp"
+            android:visibility="gone"
+            android:textAppearance="@style/TextAppearance.Text.Bold"
+            app:layout_constraintTop_toBottomOf="@id/edt_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="@dimen/spacing_large"
+            android:layout_marginEnd="16dp"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/invite_people_meeting"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="16dp"
+            android:scrollbars="none"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@+id/add1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/invited" />
+
+        <ImageView
+            android:id="@+id/add1"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginEnd="16dp"
+            android:paddingTop="4dp"
+            android:visibility="gone"
+            android:src="@drawable/iconadd"
+            app:layout_constraintBottom_toBottomOf="@id/invite_people_meeting"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/invite_people_meeting"
+            app:layout_constraintVertical_bias="0.35" />
+
+        <ImageView
+            android:id="@+id/add2"
+            android:layout_width="48dp"
+            android:layout_height="45dp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/add1"
+            app:layout_constraintEnd_toEndOf="@id/add1"
+            app:layout_constraintTop_toTopOf="@id/add1"
+            app:layout_constraintBottom_toBottomOf="@id/add1"
+            android:src="@drawable/circle"
+            />
+
+        <TextView
+            android:id="@+id/post"
+            style="@style/TextStyle.Title"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/button_gradient_1"
+            android:drawablePadding="10dp"
+            android:gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="10dp"
+            android:text="Done"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/invite_people_meeting"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/tv_remind_me"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/ic_holo_blue_button"
+            android:gravity="center"
+            android:paddingTop="13dp"
+            android:paddingBottom="14dp"
+            android:text="Remind me"
+            android:textColor="@color/skyblue"
+            android:textSize="11sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_startTime" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

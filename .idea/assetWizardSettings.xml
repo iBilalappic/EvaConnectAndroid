@@ -178,7 +178,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/image/ic_edit_black_24dp.xml" />
+                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/check/baseline_check_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -188,8 +188,9 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_edit_black_24dp" />
-                            <entry key="sourceFile" value="C:\Users\METIS_1" />
+                            <entry key="color" value="ff9898" />
+                            <entry key="outputName" value="ic_tick" />
+                            <entry key="sourceFile" value="C:\Users\metis\Desktop\Group 892.svg" />
                           </map>
                         </option>
                       </PersistentState>

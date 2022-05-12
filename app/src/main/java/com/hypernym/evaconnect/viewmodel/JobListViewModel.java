@@ -11,6 +11,7 @@ import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.Post;
+import com.hypernym.evaconnect.models.SavedJobData;
 import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IJobAdRepository;
@@ -70,6 +71,17 @@ public class JobListViewModel extends AndroidViewModel {
     public LiveData<BaseModel<List<Comment>>> deleteComment(Integer id)
     {
         return iJobAdRepository.deleteComment(id);
+    }
+
+    public LiveData<BaseModel<SavedJobData>> setFavJob(int job_id, Boolean is_favourite_job, String status) {
+        return iJobAdRepository.setFavJob(job_id,is_favourite_job,status);
+    }
+    public LiveData<BaseModel<Object>> setUnfavJob(int job_id, Boolean is_favourite_job, String status) {
+        return iJobAdRepository.setUnfavJob(job_id,is_favourite_job,status);
+    }
+
+    public LiveData<BaseModel<List<SavedJobData>>> getSavedJob(int job_id) {
+        return iJobAdRepository.getSavedJob(job_id);
     }
 
 

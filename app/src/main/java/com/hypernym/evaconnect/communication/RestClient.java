@@ -5,10 +5,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.hypernym.evaconnect.BuildConfig;
-import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.communication.api.AppApi;
-import com.hypernym.evaconnect.constants.APIConstants;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
@@ -51,6 +48,7 @@ public class RestClient {
         return clientInstance;
     }
 
+
     private static synchronized RestClient _get() {
         if (clientInstance == null) {
             clientInstance = new RestClient();
@@ -70,7 +68,7 @@ public class RestClient {
 
             Retrofit.Builder retrofitBuilder =
                     new Retrofit.Builder()
-                            .baseUrl(BuildConfig.BASE_SERVER_URL)
+                            .baseUrl("http:/67.205.178.219:8000/eva/")           /*BuildConfig.BASE_SERVER_URL*/
                             .client(getUnsafeOkHttpClient(AppUtils.getApplicationContext(),AppConstants.SIMPLE_BASEURL))
                             .addConverterFactory(GsonConverterFactory.create(gson));
 
@@ -90,7 +88,7 @@ public class RestClient {
 
             Retrofit.Builder retrofitBuilder =
                     new Retrofit.Builder()
-                            .baseUrl(BuildConfig.BASE_SERVER_URL)
+                            .baseUrl("http:/67.205.178.219:8000/eva/") /*BuildConfig.BASE_SERVER_URL*/
                             .client(getUnsafeOkHttpClient(AppUtils.getApplicationContext(), AppConstants.ONESIGNAL_BASEURL))
                             .addConverterFactory(GsonConverterFactory.create(gson));
 
@@ -154,7 +152,7 @@ public class RestClient {
                     if (LoginUtils.isUserLogin()) {
                         if (name.equals(AppConstants.SIMPLE_BASEURL)) {
                             _builder.header("Authorization", "token " + LoginUtils.getAuthToken(AppUtils.getApplicationContext()));
-
+                            Log.d("TAG", "intercept: "+LoginUtils.getAuthToken(AppUtils.getApplicationContext()));
                         } else {
                             _builder.header("Authorization", "Basic OGY1MDlkNzItMzljNS00ZGY2LTg5MmItMmEwOGQ2YzMwZWU4");
                         }

@@ -20,6 +20,7 @@ public final class DateUtils {
     public static final String TIME_FORMAT_1 = "HH:mm:ss";
     public static final String DATE_INPUT_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final String DATE_INPUT_FORMAT_1 = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_FORMAT_6 = "d MMM yyyy";
 
     public static final String DATE_INPUT_FORMAT_WITHOUTTIME = "yyyy-MM-dd";
     public static final String DATE_INPUT_FORMAT_WITHOUTTIME_1 = "dd-MM-yyyy";
@@ -40,7 +41,7 @@ public final class DateUtils {
         SimpleDateFormat mOutputDateFormat =
                 new SimpleDateFormat(DATE_FORMAT_1, java.util.Locale.getDefault());
         SimpleDateFormat mOutputDateFormat1 =
-                new SimpleDateFormat(DATE_FORMAT_2, java.util.Locale.getDefault());
+                new SimpleDateFormat(DATE_FORMAT_6, java.util.Locale.getDefault());
         try {
             datetime = convertServerDateToUserTimeZone(datetime);
             mParsedDate = mInputDateFormat.parse(datetime);
@@ -51,7 +52,7 @@ public final class DateUtils {
             e.printStackTrace();
         }
 
-        return mOutputDateString + " | " + mOutputTimeString;
+        return mOutputTimeString + " at " + mOutputDateString;
     }
 
     public static String getFormattedTime(String datetime) {
@@ -136,6 +137,45 @@ public final class DateUtils {
         }
 
         return mOutputTimeString;
+    }
+
+    public static String eventDate(String date1, String date2) {
+        Date mParsedDate;
+        Date mParsedDate2;
+        String mOutputDateString = "";
+        String mOutputTimeString = "";
+        String mOutputTimeString2 = "";
+
+        SimpleDateFormat mInputDateFormat =
+                new SimpleDateFormat(DATE_INPUT_FORMAT_WITHOUTTIME, java.util.Locale.getDefault());
+
+        SimpleDateFormat mOutputDateFormat1 =
+                new SimpleDateFormat(DATE_FORMAT_2, java.util.Locale.getDefault());
+        try {
+
+            mParsedDate = mInputDateFormat.parse(date1);
+            mOutputTimeString = mOutputDateFormat1.format(mParsedDate);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        SimpleDateFormat mInputDateFormat2 =
+                new SimpleDateFormat(DATE_INPUT_FORMAT_WITHOUTTIME, java.util.Locale.getDefault());
+
+        SimpleDateFormat mOutputDateFormat2 =
+                new SimpleDateFormat(DATE_FORMAT_2, java.util.Locale.getDefault());
+        try {
+
+            mParsedDate2 = mInputDateFormat2.parse(date2);
+            mOutputTimeString2 = mOutputDateFormat2.format(mParsedDate2);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return mOutputTimeString + " - " + mOutputTimeString2;
     }
 
     public static String getFormattedDateDMY(String datetime) {
@@ -626,5 +666,43 @@ public final class DateUtils {
             // handle the failure
         }
         return new Date();
+    }
+    public static String getTimeUTC(String ourDate)
+    {
+        try
+        {
+            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+            formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+            Date value = formatter.parse(ourDate);
+
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("hh:mm aa");
+            dateFormatter.setTimeZone(TimeZone.getDefault());
+            ourDate = dateFormatter.format(value);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            ourDate = "00:00 am";
+        }
+        return ourDate;
+    }
+    public static String getTimeToUTC(String ourDate)
+    {
+        try
+        {
+            SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT_1);
+            formatter.setTimeZone(TimeZone.getDefault());
+            Date value = formatter.parse(ourDate);
+
+            SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT_1);
+            dateFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+            ourDate = dateFormatter.format(value);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            ourDate = "00:00 am";
+        }
+        return ourDate;
     }
 }

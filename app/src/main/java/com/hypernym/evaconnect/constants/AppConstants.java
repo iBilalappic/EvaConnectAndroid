@@ -1,11 +1,13 @@
 package com.hypernym.evaconnect.constants;
 
 public class AppConstants {
+    public static final String INVITED = "Invited";
     public static String OS="android";
     public static final String USER = "user";
     public static final String USER_TOKEN = "Token";
     public static final String USER_AVAILABLE = "user available";
     public static final String USER_STATUS = "active";
+    public static final String USER_STATUS_PENDING = "pending";
     public static final int IMAGE_SIZE_IN_KB = 5000;
     public static final int ONE_THOUSAND_AND_TWENTY_FOUR = 1024;
     public static final int FILE_SIZE_LIMIT_IN_KB = 4000; // for video and image]'
@@ -61,4 +63,5 @@ public class AppConstants {
     public static final String REQUEST_RESCHEDULE = "request_reschedule";
     public static final String USER_TYPE = "user";
     public static final String COMPANY_USER_TYPE = "company";
+
 }

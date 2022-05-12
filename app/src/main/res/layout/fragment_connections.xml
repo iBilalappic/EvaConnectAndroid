@@ -1,23 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout5"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/seperator_white"
     tools:context=".view.ui.fragments.ConnectionsFragment">
+
+    <View
+        android:id="@+id/view24"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@drawable/ic_blue_red"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/edt_search"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:background="@color/white"
-        android:hint="@string/hint_search"
-        android:padding="15dp"
+        android:padding="16dp"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/view24" />
 
     <ImageView
         android:id="@+id/btn_addcomment"
@@ -39,6 +49,7 @@
         android:layout_height="wrap_content"
         android:background="@color/lighter_gray_2"
         android:orientation="horizontal"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edt_search">
@@ -81,15 +92,26 @@
         android:id="@+id/rc_maincategories"
         android:layout_width="match_parent"
         android:layout_height="140dp"
+        android:visibility="gone"
         android:background="@color/lighter_gray_2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout" />
 
+    <View
+        android:id="@+id/view23"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/seperator_white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edt_search" />
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -100,7 +122,8 @@
             android:id="@+id/rc_connections"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@color/lighter_gray" />
+
+            android:background="@color/seperator_white" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <TextView
@@ -110,7 +133,10 @@
         android:layout_gravity="center"
         android:drawablePadding="5dp"
         android:gravity="center"
+        android:background="@color/white"
         android:text="No Result Found"
+        android:padding="5dp"
+        android:fontFamily="@font/nunitosansregular"
         android:textColor="@android:color/black"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"

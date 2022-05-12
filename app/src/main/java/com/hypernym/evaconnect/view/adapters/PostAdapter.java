@@ -1,9 +1,9 @@
 package com.hypernym.evaconnect.view.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -66,8 +66,16 @@ public class PostAdapter  extends RecyclerView.Adapter {
         @BindView(R.id.tv_likecount)
         TextView tv_likecount;
 
+
+        @BindView(R.id.tv_share_counter)
+        TextView tv_share_count;
+
         @BindView(R.id.tv_comcount)
         TextView tv_comcount;
+
+
+        @BindView(R.id.textView14)
+        TextView tv_comment;
 
         @BindView(R.id.img_like)
         ImageView img_like;
@@ -114,6 +122,12 @@ public class PostAdapter  extends RecyclerView.Adapter {
         @BindView(R.id.share_click)
         LinearLayout share_click;
 
+        @BindView(R.id.tv_share_text)
+        TextView tv_share_click;
+
+        @BindView(R.id.textView10)
+        TextView tv_like_click;
+
         @BindView(R.id.like_click)
         LinearLayout like_click;
 
@@ -135,7 +149,29 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
                 }
             });
+
             comment_click.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+
+            tv_comment.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+
+            tv_like_click.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+
+            tv_share_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onItemClick(v, getAdapterPosition());
@@ -174,19 +210,9 @@ public class PostAdapter  extends RecyclerView.Adapter {
                 }
             });
 
-            tv_connect.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mClickListener.onConnectClick(v, getAdapterPosition());
-                }
-            });
+            tv_connect.setOnClickListener(v -> mClickListener.onConnectClick(v, getAdapterPosition()));
 
-            img_more.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                   moreOptions(v,getAdapterPosition());
-                }
-            });
+            img_more.setOnClickListener(v -> moreOptions(v, getAdapterPosition()));
 
         }
     }
@@ -212,8 +238,21 @@ public class PostAdapter  extends RecyclerView.Adapter {
         @BindView(R.id.tv_likecount)
         TextView tv_likecount;
 
+        @BindView(R.id.textView14)
+        TextView tv_comment;
+
+        @BindView(R.id.tv_share_text)
+        TextView tv_share_click;
+
+        @BindView(R.id.textView10)
+        TextView tv_like_click;
+
+
         @BindView(R.id.tv_comcount)
         TextView tv_comcount;
+
+        @BindView(R.id.tv_share_counter)
+        TextView tv_share_count;
 
         @BindView(R.id.tv_createddateTime)
         TextView tv_createdDateTime;
@@ -288,12 +327,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
             super(itemView);
             ButterKnife.bind(this, itemView);
 
-            attachment.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mClickListener.onDocumentClick(v,getAdapterPosition());
-                }
-            });
+            attachment.setOnClickListener(v -> mClickListener.onDocumentClick(v,getAdapterPosition()));
 
             tv_viewcomments.setOnClickListener(new OnOneOffClickListener() {
                 @Override
@@ -313,6 +347,28 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
+
+            tv_comment.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+
+            tv_like_click.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+
+            tv_share_click.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+
             share_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
@@ -356,19 +412,9 @@ public class PostAdapter  extends RecyclerView.Adapter {
                 }
             });
 
-            tv_connect.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mClickListener.onConnectClick(v, getAdapterPosition());
-                }
-            });
+            tv_connect.setOnClickListener(v -> mClickListener.onConnectClick(v, getAdapterPosition()));
 
-            img_more.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    moreOptions(v,getAdapterPosition());
-                }
-            });
+            img_more.setOnClickListener(v -> moreOptions(v,getAdapterPosition()));
 
         }
 
@@ -381,6 +427,20 @@ public class PostAdapter  extends RecyclerView.Adapter {
 
         @BindView(R.id.tv_likecount)
         TextView tv_likecount;
+
+
+        @BindView(R.id.textView14)
+        TextView tv_comment;
+
+        @BindView(R.id.tv_share_text)
+        TextView tv_share_click;
+
+        @BindView(R.id.textView10)
+        TextView tv_like_click;
+
+
+        @BindView(R.id.tv_share_counter)
+        TextView tv_share_count;
 
         @BindView(R.id.tv_comcount)
         TextView tv_comcount;
@@ -455,12 +515,38 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
                 }
             });
+
             comment_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
+
+            tv_comment.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+
+
+            tv_share_click.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+
+
+            tv_like_click.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+
+
             share_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
@@ -522,6 +608,20 @@ public class PostAdapter  extends RecyclerView.Adapter {
 
         @BindView(R.id.tv_likecount)
         TextView tv_likecount;
+
+
+        @BindView(R.id.textView14)
+        TextView tv_comment;
+
+        @BindView(R.id.tv_share_text)
+        TextView tv_share_click;
+
+        @BindView(R.id.textView10)
+        TextView tv_like_click;
+
+
+        @BindView(R.id.tv_share_counter)
+        TextView tv_share_count;
 
         @BindView(R.id.tv_comcount)
         TextView tv_comcount;
@@ -604,6 +704,32 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
+
+
+            tv_like_click.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+
+
+            tv_comment.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+
+
+            tv_share_click.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
+
+
             share_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
@@ -642,19 +768,9 @@ public class PostAdapter  extends RecyclerView.Adapter {
                 }
             });
 
-            tv_connect.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mClickListener.onConnectClick(v, getAdapterPosition());
-                }
-            });
+            tv_connect.setOnClickListener(v -> mClickListener.onConnectClick(v, getAdapterPosition()));
 
-            img_more.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    moreOptions(v,getAdapterPosition());
-                }
-            });
+            img_more.setOnClickListener(v -> moreOptions(v, getAdapterPosition()));
 
         }
 
@@ -676,6 +792,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.text_type, parent, false);
                 return new PostAdapter.TextTypeViewHolder(view);
             case AppConstants.IMAGE_TYPE:
+            case AppConstants.DOCUMENT_TYPE:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
                 return new PostAdapter.ImageTypeViewHolder(view);
             case AppConstants.LOADING_TYPE:
@@ -687,9 +804,6 @@ public class PostAdapter  extends RecyclerView.Adapter {
             case AppConstants.LINK_POST:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_link, parent, false);
                 return new PostAdapter.LinkTypeViewHolder(view);
-            case AppConstants.DOCUMENT_TYPE:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
-                return new PostAdapter.ImageTypeViewHolder(view);
         }
         return null;
     }
@@ -725,6 +839,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
             return null;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         Post object = posts.get(position);
@@ -736,6 +851,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     }
                     ((PostAdapter.TextTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((PostAdapter.TextTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
+                    ((PostAdapter.TextTypeViewHolder) holder).tv_share_count.setText(String.valueOf(posts.get(position).getShare_count()));
                     ((PostAdapter.TextTypeViewHolder) holder).tv_createdDateTime.setText(DateUtils.getFormattedDateTime(posts.get(position).getCreated_datetime()));
 
                     // ((TextTypeViewHolder) holder).tv_content.setText(posts.get(position).getContent());
@@ -758,24 +874,38 @@ public class PostAdapter  extends RecyclerView.Adapter {
 
                     ((PostAdapter.TextTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
 
-                    ((PostAdapter.TextTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getUser().getTotal_connection()));
+                    if(posts.get(position).getUser().getTotal_connection()!=null){
+                        ((PostAdapter.TextTypeViewHolder) holder).tv_company.setText(AppUtils.getConnectionsCount(posts.get(position).getUser().getTotal_connection()));
+
+                    }else{
+                        ((PostAdapter.TextTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getConnection_count() +" Connections");
+
+                    }
                     if (position == 0) {
                         ((PostAdapter.TextTypeViewHolder) holder).top_image.setVisibility(View.GONE);
                     } else {
                         ((PostAdapter.TextTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
-                    ((PostAdapter.TextTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name());
-                   if(posts.get(position).getUser().getDesignation()!=null)
-                   {
-                       ((PostAdapter.TextTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation() +" at ");
-                   }
+
+    /*                if (posts.get(position).getUser().getType()!=null && posts.get(position).getUser().getCompany_name()!=null && posts.get(position).getUser().getType().equalsIgnoreCase("user")) {
+                        ((TextTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getConnection_count() + " Connections");
+                    } else {
+                        ((TextTypeViewHolder) holder).tv_company.setVisibility(View.GONE);
+                    }*/
+                    //For visible connection
+                  /*  if(posts.get(position).getUser().getType()!=null && !posts.get(position).getUser().getType().isEmpty()  && posts.get(position).getUser().getType().equalsIgnoreCase("user") )
+                   {*/
+//                       ((TextTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getTotal_connection() + " Connections");
+                  /* }else {
+                        ((TextTypeViewHolder) holder).tv_company.setVisibility(View.GONE);
+                    }*/
 
                     if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
                         ((TextTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
                         ((TextTypeViewHolder) holder).img_more.setVisibility(View.VISIBLE);
                     } else {
                         ((TextTypeViewHolder) holder).img_more.setVisibility(View.GONE);
-                        ((PostAdapter.TextTypeViewHolder) holder).tv_connect.setVisibility(View.VISIBLE);
+                        ((PostAdapter.TextTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
                         String connectionstatus = AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver());
                         ((PostAdapter.TextTypeViewHolder) holder).tv_connect.setText(AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver()));
                         if (connectionstatus.equals(AppConstants.REQUEST_ACCEPT)) {
@@ -796,7 +926,6 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     break;
                 case AppConstants.IMAGE_TYPE:
 
-
                     if (String.valueOf(posts.get(position).getComment_count()).equals("0")) {
                         ((PostAdapter.ImageTypeViewHolder) holder).tv_viewcomments.setVisibility(View.GONE);
                     }
@@ -804,19 +933,18 @@ public class PostAdapter  extends RecyclerView.Adapter {
                         ((PostAdapter.ImageTypeViewHolder) holder).imageSlider.setVisibility(View.VISIBLE);
                         ((PostAdapter.ImageTypeViewHolder) holder).post_image.setVisibility(View.GONE);
                         initializeSlider(((PostAdapter.ImageTypeViewHolder) holder).imageSlider, position);
-                    } else if (posts.get(position).getPost_image().size() ==1){
+                    } else if (posts.get(position).getPost_image().size() == 1) {
                         ((PostAdapter.ImageTypeViewHolder) holder).imageSlider.setVisibility(View.GONE);
                         ((PostAdapter.ImageTypeViewHolder) holder).post_image.setVisibility(View.VISIBLE);
                         AppUtils.setGlideImageUrl(mContext, ((PostAdapter.ImageTypeViewHolder) holder).post_image, posts.get(position).getPost_image().get(0));
-                    }
-                    else
-                    {
+                    } else {
                         ((PostAdapter.ImageTypeViewHolder) holder).imageSlider.setVisibility(View.GONE);
                         ((PostAdapter.ImageTypeViewHolder) holder).post_image.setVisibility(View.GONE);
                     }
-
                     ((PostAdapter.ImageTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((PostAdapter.ImageTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
+                    ((PostAdapter.ImageTypeViewHolder) holder).tv_share_count.setText(String.valueOf(posts.get(position).getShare_count()));
+
                     ((PostAdapter.ImageTypeViewHolder) holder).tv_createdDateTime.setText(DateUtils.getFormattedDateTime(posts.get(position).getCreated_datetime()));
                     AppUtils.makeTextViewResizable(((PostAdapter.ImageTypeViewHolder) holder).tv_content, 3, posts.get(position).getContent());
                     ((PostAdapter.ImageTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
@@ -837,25 +965,36 @@ public class PostAdapter  extends RecyclerView.Adapter {
 //                    }
 
                     ((PostAdapter.ImageTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
-                    ((PostAdapter.ImageTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getUser().getTotal_connection()));
+                    if(posts.get(position).getUser().getTotal_connection()!=null){
+                        ((PostAdapter.ImageTypeViewHolder) holder).tv_company.setText(AppUtils.getConnectionsCount(posts.get(position).getUser().getTotal_connection()));
 
+                    }else{
+                        ((PostAdapter.ImageTypeViewHolder) holder).tv_company.setText(String.valueOf(posts.get(position).getUser().getConnection_count())+" Connections");
+
+                    }
                     if (position == 0) {
                         ((PostAdapter.ImageTypeViewHolder) holder).top_image.setVisibility(View.GONE);
                     } else {
                         ((PostAdapter.ImageTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
-                    ((PostAdapter.ImageTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name());
-                  if(posts.get(position).getUser().getDesignation()!=null)
-                  {
-                      ((PostAdapter.ImageTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation() +" at ");
-                  }
+/*                    if (posts.get(position).getUser().getType()!=null && posts.get(position).getUser().getCompany_name()!=null && posts.get(position).getUser().getType().equalsIgnoreCase("user")) {
+                        ((PostAdapter.ImageTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getConnection_count() + " Connections");
+                    } else {
+                        ((PostAdapter.ImageTypeViewHolder) holder).tv_company.setVisibility(View.GONE);
+                    }*/
+                   /* if(posts.get(position).getUser().getType()!=null && !posts.get(position).getUser().getType().isEmpty()  && posts.get(position).getUser().getType().equalsIgnoreCase("user") )
+                    {*/
+                      //  ((ImageTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getTotal_connection() + " Connections");
+                   /* }else {
+                        ((ImageTypeViewHolder) holder).tv_company.setVisibility(View.GONE);
+                    }*/
 
                     if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
                         ((ImageTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
                         ((ImageTypeViewHolder) holder).img_more.setVisibility(View.VISIBLE);
                     } else {
                         ((ImageTypeViewHolder) holder).img_more.setVisibility(View.GONE);
-                        ((PostAdapter.ImageTypeViewHolder) holder).tv_connect.setVisibility(View.VISIBLE);
+                        ((PostAdapter.ImageTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
                         String connectionstatus = AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver());
                         ((PostAdapter.ImageTypeViewHolder) holder).tv_connect.setText(AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver()));
                         if (connectionstatus.equals(AppConstants.REQUEST_ACCEPT)) {
@@ -959,6 +1098,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
 
                     ((PostAdapter.ImageTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((PostAdapter.ImageTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
+                    ((ImageTypeViewHolder) holder).tv_share_count.setText(String.valueOf(posts.get(position).getShare_count()));
                     ((PostAdapter.ImageTypeViewHolder) holder).tv_createdDateTime.setText(DateUtils.getFormattedDateTime(posts.get(position).getCreated_datetime()));
                     AppUtils.makeTextViewResizable(((PostAdapter.ImageTypeViewHolder) holder).tv_content, 3, posts.get(position).getContent());
                     ((PostAdapter.ImageTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
@@ -979,24 +1119,35 @@ public class PostAdapter  extends RecyclerView.Adapter {
 //                    }
 
                     ((PostAdapter.ImageTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
-                    ((PostAdapter.ImageTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getUser().getTotal_connection()));
+                    if(posts.get(position).getUser().getTotal_connection()!=null){
+                        ((PostAdapter.ImageTypeViewHolder) holder).tv_company.setText(AppUtils.getConnectionsCount(posts.get(position).getUser().getTotal_connection()));
 
+                    }else{
+                        ((PostAdapter.ImageTypeViewHolder) holder).tv_company.setText(String.valueOf(posts.get(position).getUser().getConnection_count())+" Connections");
+
+                    }
                     if (position == 0) {
                         ((PostAdapter.ImageTypeViewHolder) holder).top_image.setVisibility(View.GONE);
                     } else {
                         ((PostAdapter.ImageTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
-                    ((PostAdapter.ImageTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name());
-                    if(posts.get(position).getUser().getDesignation()!=null)
-                    {
-                        ((PostAdapter.ImageTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation() +" at ");
-                    }
+/*                    if (posts.get(position).getUser().getType()!=null && posts.get(position).getUser().getCompany_name()!=null && posts.get(position).getUser().getType().equalsIgnoreCase("user")) {
+                        ((ImageTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getConnection_count() + " Connections");
+                    } else {
+                        ((ImageTypeViewHolder) holder).tv_company.setVisibility(View.GONE);
+                    }*/
+                   /* if(posts.get(position).getUser().getType()!=null && !posts.get(position).getUser().getType().isEmpty()  && posts.get(position).getUser().getType().equalsIgnoreCase("user") )
+                    {*/
+//                        ((ImageTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getTotal_connection() + " Connections");
+                    /*}else {
+                        ((ImageTypeViewHolder) holder).tv_company.setVisibility(View.GONE);
+                    }*/
                     if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
                         ((ImageTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
                         ((ImageTypeViewHolder) holder).img_more.setVisibility(View.VISIBLE);
                     } else {
                         ((ImageTypeViewHolder) holder).img_more.setVisibility(View.GONE);
-                        ((PostAdapter.ImageTypeViewHolder) holder).tv_connect.setVisibility(View.VISIBLE);
+                        ((PostAdapter.ImageTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
                         String connectionstatus = AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver());
                         ((PostAdapter.ImageTypeViewHolder) holder).tv_connect.setText(AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver()));
                         if (connectionstatus.equals(AppConstants.REQUEST_ACCEPT)) {
@@ -1072,6 +1223,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     }
                     ((PostAdapter.VideoTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((PostAdapter.VideoTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
+                    ((PostAdapter.VideoTypeViewHolder) holder).tv_share_count.setText(String.valueOf(posts.get(position).getShare_count()));
                     ((PostAdapter.VideoTypeViewHolder) holder).tv_createdDateTime.setText(DateUtils.getFormattedDateTime(posts.get(position).getCreated_datetime()));
                     AppUtils.makeTextViewResizable(((PostAdapter.VideoTypeViewHolder) holder).tv_content, 3, posts.get(position).getContent());
                     ((PostAdapter.VideoTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
@@ -1092,19 +1244,30 @@ public class PostAdapter  extends RecyclerView.Adapter {
 //                    }
 
                     ((PostAdapter.VideoTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
-                    ((PostAdapter.VideoTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getUser().getTotal_connection()));
+                    if(posts.get(position).getUser().getTotal_connection()!=null){
+                        ((PostAdapter.VideoTypeViewHolder) holder).tv_company.setText(AppUtils.getConnectionsCount(posts.get(position).getUser().getTotal_connection()));
 
+                    }else{
+                        ((PostAdapter.VideoTypeViewHolder) holder).tv_company.setText(String.valueOf(posts.get(position).getUser().getConnection_count())+ " Connections");
+
+                    }
                     if (position == 0) {
                         ((PostAdapter.VideoTypeViewHolder) holder).top_image.setVisibility(View.GONE);
                     } else {
                         ((PostAdapter.VideoTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
                     AppUtils.setGlideVideoThumbnail(mContext, ((PostAdapter.VideoTypeViewHolder) holder).img_video, posts.get(position).getPost_video());
-                    ((PostAdapter.VideoTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name());
-                    if(posts.get(position).getUser().getDesignation()!=null)
-                    {
-                        ((PostAdapter.VideoTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation()+" at ");
-                    }
+/*                    if (posts.get(position).getUser().getType()!=null && posts.get(position).getUser().getCompany_name()!=null && posts.get(position).getUser().getType().equalsIgnoreCase("user")) {
+                        ((VideoTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getConnection_count() + " Connections");
+                    } else {
+                        ((VideoTypeViewHolder) holder).tv_company.setVisibility(View.GONE);
+                    }*/
+                    /*if(posts.get(position).getUser().getType()!=null && !posts.get(position).getUser().getType().isEmpty()  && posts.get(position).getUser().getType().equalsIgnoreCase("user"))
+                    {*/
+//                        ((VideoTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getTotal_connection() + " Connections");
+                    /*}else {
+                        ((VideoTypeViewHolder) holder).tv_company.setVisibility(View.GONE);
+                    }*/
 
 
                     if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
@@ -1112,7 +1275,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                         ((VideoTypeViewHolder) holder).img_more.setVisibility(View.VISIBLE);
                     } else {
                         ((VideoTypeViewHolder) holder).img_more.setVisibility(View.GONE);
-                        ((PostAdapter.VideoTypeViewHolder) holder).tv_connect.setVisibility(View.VISIBLE);
+                        ((PostAdapter.VideoTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
                         String connectionstatus = AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver());
                         ((PostAdapter.VideoTypeViewHolder) holder).tv_connect.setText(AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver()));
                         if (connectionstatus.equals(AppConstants.REQUEST_ACCEPT)) {
@@ -1138,11 +1301,13 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     //  ((LinkTypeViewHolder) holder).img_link.setBackground(null);
                     ((PostAdapter.LinkTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((PostAdapter.LinkTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
+                    ((PostAdapter.LinkTypeViewHolder) holder).tv_share_count.setText(String.valueOf(posts.get(position).getShare_count()));
                     ((PostAdapter.LinkTypeViewHolder) holder).tv_createdDateTime.setText(DateUtils.getFormattedDateTime(posts.get(position).getCreated_datetime()));
 
                     ArrayList<String> urls = AppUtils.containsURL(posts.get(position).getContent());
                     if (urls.size() > 0) {
                         // AppUtils.showUrlEmbeddedView(urls.get(0),((LinkTypeViewHolder) holder).img_link);
+                        //AppUtils.customUrlEmbeddedView(getContext(), URLs.get(0), img_video);
                         AppUtils.customUrlEmbeddedView(((PostAdapter.LinkTypeViewHolder) holder).img_link.getContext(), urls.get(0), ((PostAdapter.LinkTypeViewHolder) holder).img_link);
 
                         AppUtils.makeTextViewResizable(((PostAdapter.LinkTypeViewHolder) holder).link, 1, urls.get(0));
@@ -1173,22 +1338,29 @@ public class PostAdapter  extends RecyclerView.Adapter {
 //                    }
 
                     ((PostAdapter.LinkTypeViewHolder) holder).tv_name.setText(posts.get(position).getUser().getFirst_name());
-                    ((PostAdapter.LinkTypeViewHolder) holder).tv_connections.setText(AppUtils.getConnectionsCount(posts.get(position).getUser().getTotal_connection()));
+                    if(posts.get(position).getUser().getTotal_connection()!=null){
+                        ((PostAdapter.LinkTypeViewHolder) holder).tv_company.setText(AppUtils.getConnectionsCount(posts.get(position).getUser().getTotal_connection()));
 
+                    }else{
+                        ((PostAdapter.LinkTypeViewHolder) holder).tv_company.setText(String.valueOf(posts.get(position).getUser().getConnection_count())+" Connections");
+
+                    }
                     if (position == 0) {
                         ((PostAdapter.LinkTypeViewHolder) holder).top_image.setVisibility(View.GONE);
                     } else {
                         ((PostAdapter.LinkTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
-                    ((PostAdapter.LinkTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name());
-                    if(posts.get(position).getUser().getDesignation()!=null){
-//                        if(posts.get(position).getUser().getType().equalsIgnoreCase("company"))
-//                        {
-                            ((PostAdapter.LinkTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation()+" at");
-                       // }
-                    }else{
-                        ((PostAdapter.LinkTypeViewHolder) holder).tv_designation.setText("--");
-                    }
+                   /* if (posts.get(position).getUser().getType()!=null && posts.get(position).getUser().getCompany_name()!=null && posts.get(position).getUser().getType().equalsIgnoreCase("user")) {
+                        ((LinkTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getConnection_count() + " Connections");
+                    } else {
+                        ((LinkTypeViewHolder) holder).tv_company.setVisibility(View.GONE);
+                    }*/
+                  /*  if(posts.get(position).getUser().getType()!=null && !posts.get(position).getUser().getType().isEmpty()  && posts.get(position).getUser().getType().equalsIgnoreCase("user") )
+                    {*/
+//                        ((LinkTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getTotal_connection() + " Connections");
+                   /* }else {
+                        ((LinkTypeViewHolder) holder).tv_company.setVisibility(View.GONE);
+                    }*/
 
 
                     if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
@@ -1196,7 +1368,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                         ((LinkTypeViewHolder) holder).img_more.setVisibility(View.VISIBLE);
                     } else {
                         ((LinkTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
-                        ((PostAdapter.LinkTypeViewHolder) holder).tv_connect.setVisibility(View.VISIBLE);
+                        ((PostAdapter.LinkTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
                         String connectionstatus = AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver());
                         ((PostAdapter.LinkTypeViewHolder) holder).tv_connect.setText(AppUtils.getConnectionStatus(mContext, posts.get(position).getIs_connected(), posts.get(position).isIs_receiver()));
                         if (connectionstatus.equals(AppConstants.REQUEST_ACCEPT)) {

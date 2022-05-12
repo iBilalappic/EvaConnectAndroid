@@ -56,7 +56,7 @@ public class NewsActivity extends BaseActivity implements Validator.ValidationLi
     @BindView(R.id.img_backarrow)
     ImageView img_backarrow;
 
-    @BindView(R.id.textView4)
+    @BindView(R.id.ed_code)
     TextView textView4;
 
     @BindView(R.id.btn_next)

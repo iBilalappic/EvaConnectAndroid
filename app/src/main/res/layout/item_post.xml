@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout2"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -34,7 +33,7 @@
         android:id="@+id/profile_layout"
         android:layout_width="53dp"
         android:layout_height="53dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -70,7 +69,7 @@
         android:maxLines="1"
         android:text="Ed Hunter"
         android:textColor="@color/black"
-        android:textSize="13sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/profile_layout"
         app:layout_constraintTop_toTopOf="@+id/profile_layout" />
@@ -124,6 +123,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text=""
+        android:visibility="gone"
         app:layout_constraintStart_toEndOf="@+id/profile_layout"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
@@ -132,12 +132,13 @@
         style="@style/TextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="3dp"
         android:ellipsize="end"
         android:singleLine="true"
-        android:textColor="#EF8080"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toStartOf="@+id/tv_connect"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/tv_designation"
+        app:layout_constraintStart_toStartOf="@+id/tv_name"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
     <TextView
@@ -188,21 +189,20 @@
         android:id="@+id/attachment"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:background="@drawable/layout_border"
         android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/cardView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/cardView"
         app:layout_constraintTop_toBottomOf="@+id/tv_content">
 
         <WebView
             android:id="@+id/attachment_preview"
             android:layout_width="match_parent"
             android:layout_height="160dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="5dp"
             android:focusableInTouchMode="false"
             android:touchscreenBlocksFocus="false"
@@ -241,15 +241,19 @@
     <ImageView
         android:id="@+id/post_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:adjustViewBounds="true"
         android:background="@color/gray"
-        android:visibility="gone"
+        android:scaleType="centerCrop"
         android:src="@drawable/no_thumbnail"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/cardView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/cardView"
-        app:layout_constraintTop_toBottomOf="@+id/tv_content"/>
+        app:layout_constraintTop_toBottomOf="@+id/tv_content" />
 
 
 
@@ -265,7 +269,7 @@
          />
 
 
-    <androidx.cardview.widget.CardView
+    <RelativeLayout
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -294,33 +298,46 @@
 <!--                app:layout_constraintStart_toStartOf="parent"-->
 <!--                app:layout_constraintTop_toTopOf="parent" />-->
 
-            <com.smarteist.autoimageslider.SliderView
-                android:id="@+id/slider_images"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_slide_images"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:adjustViewBounds="true"
-                android:background="@color/gray"
-                android:scaleType="fitXY"
-                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:maxHeight="200dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 app:layout_constraintBottom_toTopOf="@id/view2"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:sliderAnimationDuration="600"
-                app:sliderAutoCycleDirection="back_and_forth"
-                app:sliderAutoCycleEnabled="true"
-                app:sliderCircularHandlerEnabled="true"
-                app:sliderIndicatorAnimationDuration="600"
-                app:sliderIndicatorGravity="right|bottom"
-                app:sliderIndicatorMargin="15dp"
-                app:sliderIndicatorOrientation="horizontal"
-                app:sliderIndicatorPadding="3dp"
-                app:sliderIndicatorRadius="2dp"
-                app:sliderIndicatorSelectedColor="@color/btn_border"
-                app:sliderIndicatorUnselectedColor="@color/colorwhite"
-                app:sliderScrollTimeInSec="1"
-                app:sliderStartAutoCycle="true" />
+                app:layout_constraintStart_toStartOf="parent">
 
+                <com.smarteist.autoimageslider.SliderView
+                    android:id="@+id/slider_images"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    android:layout_marginTop="5dp"
+                    android:adjustViewBounds="true"
+                    android:background="@color/gray"
+                    android:scaleType="fitCenter"
+                    android:visibility="visible"
+
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:sliderAnimationDuration="600"
+                    app:sliderAutoCycleDirection="back_and_forth"
+                    app:sliderAutoCycleEnabled="true"
+                    app:sliderCircularHandlerEnabled="true"
+                    app:sliderIndicatorAnimationDuration="600"
+                    app:sliderIndicatorGravity="left|bottom"
+                    app:sliderIndicatorMargin="15dp"
+                    app:sliderIndicatorOrientation="horizontal"
+                    app:sliderIndicatorPadding="3dp"
+                    app:sliderIndicatorRadius="2dp"
+                    app:sliderIndicatorSelectedColor="@color/colorAccent"
+                    app:sliderIndicatorUnselectedColor="#FC8F8E8E"
+                    app:sliderScrollTimeInSec="1"
+                    app:sliderStartAutoCycle="true" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
             <View
                 android:id="@+id/view2"
                 android:layout_width="0dp"
@@ -328,58 +345,37 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/slider_images" />
+                app:layout_constraintTop_toBottomOf="@+id/layout_slide_images" />
 
             <TextView
                 android:id="@+id/tv_likecount"
                 style="@style/TextStyle"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="50dp"
                 android:fontFamily="@font/nunitosansbold"
                 android:text="58"
                 android:textColor="@color/skyblue"
-                android:textSize="11sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/slider_images" />
+                app:layout_constraintTop_toBottomOf="@+id/layout_slide_images" />
 
             <TextView
                 android:id="@+id/textView10"
                 style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="50dp"
-                android:fontFamily="@font/nunitosansbold"
                 android:paddingLeft="5dp"
                 android:text="@string/likes"
                 android:textColor="@color/skyblue"
-                android:textSize="11sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tv_likecount"
-                app:layout_constraintTop_toBottomOf="@+id/slider_images" />
+                app:layout_constraintTop_toTopOf="@+id/tv_likecount" />
 
-            <TextView
-                android:id="@+id/textView11"
-                style="@style/TextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_small"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="50dp"
-                android:fontFamily="@font/nunitosansbold"
-                android:text="@string/amp"
-                android:textColor="@color/skyblue"
-                android:textSize="11sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textView10"
-                app:layout_constraintTop_toBottomOf="@+id/slider_images" />
 
             <TextView
                 android:id="@+id/tv_comcount"
@@ -387,67 +383,94 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/spacing_small"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="50dp"
-                android:fontFamily="@font/nunitosansbold"
                 android:text="03"
                 android:textColor="@color/skyblue"
-                android:textSize="11sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textView11"
-                app:layout_constraintTop_toBottomOf="@+id/slider_images" />
+                app:layout_constraintStart_toEndOf="@+id/textView10"
+                app:layout_constraintTop_toTopOf="@+id/textView10" />
 
             <TextView
                 android:id="@+id/textView14"
                 style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="50dp"
                 android:fontFamily="@font/nunitosansbold"
                 android:paddingLeft="5dp"
                 android:text="@string/comments"
                 android:textColor="@color/skyblue"
-                android:textSize="11sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tv_comcount"
-                app:layout_constraintTop_toBottomOf="@+id/slider_images" />
+                app:layout_constraintTop_toTopOf="@+id/tv_comcount" />
+
+            <TextView
+                android:id="@+id/tv_share_counter"
+                style="@style/TextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:fontFamily="@font/nunitosansbold"
+                android:text="0"
+                android:textColor="@color/skyblue"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/textView14"
+                app:layout_constraintTop_toTopOf="@+id/textView14" />
+
+            <TextView
+                android:id="@+id/tv_share_text"
+                style="@style/TextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunitosansbold"
+                android:paddingLeft="5dp"
+                android:text="@string/shares"
+                android:textColor="@color/skyblue"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/tv_share_counter"
+                app:layout_constraintTop_toTopOf="@+id/tv_share_counter" />
 
 
             <TextView
                 android:id="@+id/tv_createddateTime"
                 style="@style/TextStyle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="50dp"
+                android:layout_marginEnd="20dp"
                 android:fontFamily="@font/nunitosansregular"
-                android:text="12:04pm | 12 jan"
+                android:gravity="end"
+                android:text="1 dec 2900 at 10:22 am"
                 android:textColor="#000000"
-                android:textSize="10sp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@+id/tv_share_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/slider_images" />
+                app:layout_constraintTop_toBottomOf="@+id/layout_slide_images" />
 
 
             <View
                 android:id="@+id/view4"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="11dp"
+                android:layout_marginEnd="16dp"
                 android:background="@color/gray_1"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view2" />
 
 
             <LinearLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="32dp"
                 android:layout_marginTop="1dp"
+                android:layout_marginEnd="32dp"
                 android:baselineAligned="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -457,12 +480,13 @@
                     android:id="@+id/like_click"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:paddingLeft="10dp"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:paddingLeft="10dp">
+
                     <ImageView
                         android:id="@+id/img_like"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:layout_gravity="center"
                         android:layout_marginEnd="@dimen/spacing_medium"
                         android:layout_weight="0"
@@ -479,10 +503,10 @@
                         android:textSize="12sp" />
 
 
-
                     <View
                         android:layout_width="1dp"
                         android:layout_height="30dp"
+                        android:visibility="gone"
                         android:layout_marginEnd="@dimen/spacing_medium"
                         android:background="@color/gray_light" />
 
@@ -494,13 +518,14 @@
                     android:id="@+id/comment_click"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:paddingLeft="10dp"
-                    android:layout_weight="1.2">
+                    android:layout_weight="1"
+                    android:layout_marginStart="16dp"
+                    android:paddingLeft="10dp">
 
                     <ImageView
                         android:id="@+id/img_comment"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:layout_gravity="center"
                         android:layout_marginEnd="@dimen/spacing_medium"
                         android:layout_weight="0"
@@ -516,10 +541,12 @@
                         android:textColor="@color/gray_1"
                         android:textSize="12sp" />
 
+
                     <View
                         android:layout_width="1dp"
                         android:layout_height="30dp"
                         android:layout_marginEnd="@dimen/spacing_medium"
+                        android:visibility="gone"
                         android:background="@color/gray_light" />
 
 
@@ -530,17 +557,20 @@
                     android:id="@+id/share_click"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="16dp"
-                    android:paddingLeft="10dp"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:layout_marginStart="16dp"
+                    android:paddingLeft="10dp">
+
                     <ImageView
                         android:id="@+id/img_share"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:layout_gravity="center"
                         android:layout_marginEnd="@dimen/spacing_medium"
                         android:layout_weight="0"
                         android:background="@drawable/ic_share" />
+
+
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="30dp"
@@ -551,6 +581,7 @@
                         android:textColor="@color/gray_1"
                         android:textSize="12sp" />
 
+
                 </LinearLayout>
 
 
@@ -560,7 +591,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    </androidx.cardview.widget.CardView>
+    </RelativeLayout>
 
 
     <TextView
@@ -568,18 +599,16 @@
         style="@style/TextStyle.Title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="12dp"
-        android:ellipsize="end"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="20dp"
         android:fontFamily="@font/nunitosansregular"
-        android:maxLines="3"
         android:text="“Things you’d never hear in a ticket office” … Let’s play a game of mock the week, or the LinkedIn version of Mock the Week. I’ll Start: https://lnkd.in… see more"
         android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="16.5sp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_connect"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/profile_layout"
         app:layout_constraintTop_toBottomOf="@+id/profile_layout" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

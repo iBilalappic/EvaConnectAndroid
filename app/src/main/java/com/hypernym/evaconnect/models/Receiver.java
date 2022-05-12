@@ -1,176 +1,374 @@
+
 package com.hypernym.evaconnect.models;
 
-import com.google.gson.annotations.Expose;
+import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
+@Generated("net.hexar.json2pojo")
+@SuppressWarnings("unused")
+public class Receiver {
 
-public class Receiver implements Serializable {
-
-    @SerializedName("id")
-    @Expose
-    private Integer id;
-    @SerializedName("first_name")
-    @Expose
-    private String firstName;
-    @SerializedName("is_connected")
-    @Expose
-    private Object isConnected;
-    @SerializedName("last_name")
-    @Expose
-    private Object lastName;
+    @SerializedName("address")
+    private Object mAddress;
     @SerializedName("bio_data")
-    @Expose
-    private String bioData;
-    @SerializedName("email")
-    @Expose
-    private String email;
-    @SerializedName("unique_code")
-    @Expose
-    private String uniqueCode;
-    @SerializedName("username")
-    @Expose
-    private String username;
-    @SerializedName("date_of_birth")
-    @Expose
-    private Object dateOfBirth;
-    @SerializedName("verification_pin")
-    @Expose
-    private Integer verificationPin;
-    @SerializedName("user_image")
-    @Expose
-    private String userImage;
-    @SerializedName("os")
-    @Expose
-    private String os;
-    @SerializedName("type")
-    @Expose
-    private String type;
+    private String mBioData;
+    @SerializedName("city")
+    private String mCity;
+    @SerializedName("company_name")
+    private String mCompanyName;
+    @SerializedName("company_url")
+    private Object mCompanyUrl;
+    @SerializedName("connection_count")
+    private Long mConnectionCount;
+    @SerializedName("connection_id")
+    private Object mConnectionId;
+    @SerializedName("country")
+    private String mCountry;
     @SerializedName("created_by_id")
-    @Expose
-    private Object createdById;
+    private Object mCreatedById;
+    @SerializedName("date_of_birth")
+    private Object mDateOfBirth;
+    @SerializedName("designation")
+    private String mDesignation;
+    @SerializedName("email")
+    private String mEmail;
+    @SerializedName("facebook_image_url")
+    private Object mFacebookImageUrl;
+    @SerializedName("field")
+    private Object mField;
+    @SerializedName("first_name")
+    private String mFirstName;
+    @SerializedName("id")
+    private Long mId;
+    @SerializedName("is_connected")
+    private Object mIsConnected;
+    @SerializedName("is_facebook")
+    private Long mIsFacebook;
+    @SerializedName("is_linkedin")
+    private Long mIsLinkedin;
+    @SerializedName("is_notifications")
+    private Long mIsNotifications;
+    @SerializedName("is_receiver")
+    private Object mIsReceiver;
+    @SerializedName("language")
+    private String mLanguage;
+    @SerializedName("last_name")
+    private String mLastName;
+    @SerializedName("linkedin_image_url")
+    private Object mLinkedinImageUrl;
+    @SerializedName("os")
+    private String mOs;
+    @SerializedName("other_sector")
+    private Object mOtherSector;
+    @SerializedName("sector")
+    private String mSector;
     @SerializedName("status")
-    @Expose
-    private String status;
+    private String mStatus;
+    @SerializedName("type")
+    private String mType;
+    @SerializedName("unique_code")
+    private String mUniqueCode;
+    @SerializedName("user_image")
+    private String mUserImage;
+    @SerializedName("username")
+    private String mUsername;
+    @SerializedName("verification_pin")
+    private Long mVerificationPin;
+    @SerializedName("work_aviation")
+    private String mWorkAviation;
+    @SerializedName("is_online")
+    private Boolean mIs_online;
+    @SerializedName("last_online_datetime")
+    private String mLast_online_datetime;
 
-    public Integer getId() {
-        return id;
+    public Boolean getIs_online() {
+        return mIs_online;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIs_online(Boolean mIs_online) {
+        this.mIs_online = mIs_online;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getLast_online_datetime() {
+        return mLast_online_datetime;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setLast_online_datetime(String mLast_online_datetime) {
+        this.mLast_online_datetime = mLast_online_datetime;
     }
 
-    public Object getIsConnected() {
-        return isConnected;
+
+
+    public Object getAddress() {
+        return mAddress;
     }
 
-    public void setIsConnected(Object isConnected) {
-        this.isConnected = isConnected;
-    }
-
-    public Object getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(Object lastName) {
-        this.lastName = lastName;
+    public void setAddress(Object address) {
+        mAddress = address;
     }
 
     public String getBioData() {
-        return bioData;
+        return mBioData;
     }
 
     public void setBioData(String bioData) {
-        this.bioData = bioData;
+        mBioData = bioData;
     }
 
-    public String getEmail() {
-        return email;
+    public String getCity() {
+        return mCity;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setCity(String city) {
+        mCity = city;
     }
 
-    public String getUniqueCode() {
-        return uniqueCode;
+    public String getCompanyName() {
+        return mCompanyName;
     }
 
-    public void setUniqueCode(String uniqueCode) {
-        this.uniqueCode = uniqueCode;
+    public void setCompanyName(String companyName) {
+        mCompanyName = companyName;
     }
 
-    public String getUsername() {
-        return username;
+    public Object getCompanyUrl() {
+        return mCompanyUrl;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setCompanyUrl(Object companyUrl) {
+        mCompanyUrl = companyUrl;
     }
 
-    public Object getDateOfBirth() {
-        return dateOfBirth;
+    public Long getConnectionCount() {
+        return mConnectionCount;
     }
 
-    public void setDateOfBirth(Object dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setConnectionCount(Long connectionCount) {
+        mConnectionCount = connectionCount;
     }
 
-    public Integer getVerificationPin() {
-        return verificationPin;
+    public Object getConnectionId() {
+        return mConnectionId;
     }
 
-    public void setVerificationPin(Integer verificationPin) {
-        this.verificationPin = verificationPin;
+    public void setConnectionId(Object connectionId) {
+        mConnectionId = connectionId;
     }
 
-    public String getUserImage() {
-        return userImage;
+    public String getCountry() {
+        return mCountry;
     }
 
-    public void setUserImage(String userImage) {
-        this.userImage = userImage;
-    }
-
-    public String getOs() {
-        return os;
-    }
-
-    public void setOs(String os) {
-        this.os = os;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+    public void setCountry(String country) {
+        mCountry = country;
     }
 
     public Object getCreatedById() {
-        return createdById;
+        return mCreatedById;
     }
 
     public void setCreatedById(Object createdById) {
-        this.createdById = createdById;
+        mCreatedById = createdById;
+    }
+
+    public Object getDateOfBirth() {
+        return mDateOfBirth;
+    }
+
+    public void setDateOfBirth(Object dateOfBirth) {
+        mDateOfBirth = dateOfBirth;
+    }
+
+    public String getDesignation() {
+        return mDesignation;
+    }
+
+    public void setDesignation(String designation) {
+        mDesignation = designation;
+    }
+
+    public String getEmail() {
+        return mEmail;
+    }
+
+    public void setEmail(String email) {
+        mEmail = email;
+    }
+
+    public Object getFacebookImageUrl() {
+        return mFacebookImageUrl;
+    }
+
+    public void setFacebookImageUrl(Object facebookImageUrl) {
+        mFacebookImageUrl = facebookImageUrl;
+    }
+
+    public Object getField() {
+        return mField;
+    }
+
+    public void setField(Object field) {
+        mField = field;
+    }
+
+    public String getFirstName() {
+        return mFirstName;
+    }
+
+    public void setFirstName(String firstName) {
+        mFirstName = firstName;
+    }
+
+    public Long getId() {
+        return mId;
+    }
+
+    public void setId(Long id) {
+        mId = id;
+    }
+
+    public Object getIsConnected() {
+        return mIsConnected;
+    }
+
+    public void setIsConnected(Object isConnected) {
+        mIsConnected = isConnected;
+    }
+
+    public Long getIsFacebook() {
+        return mIsFacebook;
+    }
+
+    public void setIsFacebook(Long isFacebook) {
+        mIsFacebook = isFacebook;
+    }
+
+    public Long getIsLinkedin() {
+        return mIsLinkedin;
+    }
+
+    public void setIsLinkedin(Long isLinkedin) {
+        mIsLinkedin = isLinkedin;
+    }
+
+    public Long getIsNotifications() {
+        return mIsNotifications;
+    }
+
+    public void setIsNotifications(Long isNotifications) {
+        mIsNotifications = isNotifications;
+    }
+
+    public Object getIsReceiver() {
+        return mIsReceiver;
+    }
+
+    public void setIsReceiver(Object isReceiver) {
+        mIsReceiver = isReceiver;
+    }
+
+    public String getLanguage() {
+        return mLanguage;
+    }
+
+    public void setLanguage(String language) {
+        mLanguage = language;
+    }
+
+    public String getLastName() {
+        return mLastName;
+    }
+
+    public void setLastName(String lastName) {
+        mLastName = lastName;
+    }
+
+    public Object getLinkedinImageUrl() {
+        return mLinkedinImageUrl;
+    }
+
+    public void setLinkedinImageUrl(Object linkedinImageUrl) {
+        mLinkedinImageUrl = linkedinImageUrl;
+    }
+
+    public String getOs() {
+        return mOs;
+    }
+
+    public void setOs(String os) {
+        mOs = os;
+    }
+
+    public Object getOtherSector() {
+        return mOtherSector;
+    }
+
+    public void setOtherSector(Object otherSector) {
+        mOtherSector = otherSector;
+    }
+
+    public String getSector() {
+        return mSector;
+    }
+
+    public void setSector(String sector) {
+        mSector = sector;
     }
 
     public String getStatus() {
-        return status;
+        return mStatus;
     }
 
     public void setStatus(String status) {
-        this.status = status;
+        mStatus = status;
+    }
+
+    public String getType() {
+        return mType;
+    }
+
+    public void setType(String type) {
+        mType = type;
+    }
+
+    public String getUniqueCode() {
+        return mUniqueCode;
+    }
+
+    public void setUniqueCode(String uniqueCode) {
+        mUniqueCode = uniqueCode;
+    }
+
+    public String getUserImage() {
+        return mUserImage;
+    }
+
+    public void setUserImage(String userImage) {
+        mUserImage = userImage;
+    }
+
+    public String getUsername() {
+        return mUsername;
+    }
+
+    public void setUsername(String username) {
+        mUsername = username;
+    }
+
+    public Long getVerificationPin() {
+        return mVerificationPin;
+    }
+
+    public void setVerificationPin(Long verificationPin) {
+        mVerificationPin = verificationPin;
+    }
+
+    public String getWorkAviation() {
+        return mWorkAviation;
+    }
+
+    public void setWorkAviation(String workAviation) {
+        mWorkAviation = workAviation;
     }
 
 }

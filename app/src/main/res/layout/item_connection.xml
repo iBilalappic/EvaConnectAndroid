@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearLayout6"
+    android:id="@+id/ly_main"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/colorwhite"
@@ -10,18 +10,19 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
 
         <View
             android:id="@+id/view5"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:background="@color/gray"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
 
 
         <RelativeLayout
@@ -37,76 +38,84 @@
             app:layout_constraintTop_toBottomOf="@+id/view5">
 
 
-
             <de.hdodenhof.circleimageview.CircleImageView
-                android:background="@android:color/transparent"
+                android:layout_width="50dp"
 
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="50dp"
+                android:background="@android:color/transparent"
                 android:src="@drawable/white_chatbg"
                 app:civ_border_color="@color/skyblue"
-                app:civ_border_width="2dp"
-                />
+                app:civ_border_width="2dp" />
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:padding="2dp"
+                android:id="@+id/profile_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/profile_image"
-                app:civ_border_color="@color/white"
+                android:padding="2dp"
                 android:src="@drawable/profile"
-                app:civ_border_width="2dp"
-                />
+                app:civ_border_color="@color/white"
+                app:civ_border_width="2dp" />
         </RelativeLayout>
-
-
-
-
 
 
         <TextView
             android:id="@+id/tv_name"
-            style="@style/TextStyle"
-            android:layout_width="150dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
             android:ellipsize="end"
             android:fontFamily="@font/nunitosansbold"
             android:maxLines="1"
             android:text="Derek J. Sine"
             android:textColor="@color/black"
-            android:textSize="12sp"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_field"
+            app:layout_constraintEnd_toStartOf="@+id/tv_view_profile"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/profile_layout"
-            app:layout_constraintTop_toBottomOf="@+id/view5" />
-        <TextView
-            android:textColor="@color/black"
-            android:id="@+id/location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:ellipsize="end"
-            android:fontFamily="@font/nunitosansregular"
-            android:maxLines="2"
-            android:text=""
-            android:textSize="12sp"
-            app:layout_constraintStart_toEndOf="@+id/profile_layout"
-            app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
 
 
         <TextView
-            android:gravity="start"
-            android:textColor="@color/colorAccent"
             android:id="@+id/tv_field"
-            android:layout_width="50dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:ellipsize="end"
             android:fontFamily="@font/nunitosansregular"
-           android:singleLine="true"
+            android:gravity="start"
+            android:singleLine="true"
             android:text="--"
-            android:textSize="12sp"
-            app:layout_constraintStart_toEndOf="@+id/location"
+            android:textColor="@color/colorAccent"
+            android:textSize="14sp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/tv_connection_status"
+            app:layout_constraintEnd_toStartOf="@+id/tv_view_profile"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/tv_name"
             app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+
+
+        <TextView
+            android:id="@+id/tv_view_profile"
+            style="@style/Button_border_light_blue"
+            android:layout_width="112dp"
+            android:layout_height="37dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/nunitosansregular"
+            android:gravity="center"
+            android:paddingLeft="15dp"
+            android:paddingTop="5dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="5dp"
+            android:text="View Profile"
+            android:textColor="@color/skyblue"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="@+id/profile_layout"
+            app:layout_constraintEnd_toStartOf="@+id/tv_decline"
+            app:layout_constraintTop_toTopOf="@+id/profile_layout" />
 
         <TextView
             android:id="@+id/tv_connect"
@@ -123,6 +132,7 @@
             android:text="Connected"
             android:textColor="@color/skyblue"
             android:textSize="9sp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tv_decline"
             app:layout_constraintTop_toTopOf="parent" />
@@ -148,21 +158,32 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+
+
+
         <TextView
             android:id="@+id/tv_connection_status"
             style="@style/TextAppearance.Text.Regular"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="13dp"
             android:layout_marginStart="18dp"
             android:layout_marginEnd="8dp"
             android:ellipsize="end"
             android:maxLines="2"
             android:text="-"
             android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tv_connect"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/profile_layout"
             app:layout_constraintTop_toBottomOf="@+id/tv_field" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
+    <View
+        android:id="@+id/view23"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/seperator_white" />
 </LinearLayout>

@@ -28,7 +28,7 @@
             android:id="@+id/profile_layout"
             android:layout_width="53dp"
             android:layout_height="53dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -161,6 +161,7 @@
                     android:id="@+id/view2"
                     android:layout_width="0dp"
                     android:layout_height="25dp"
+                    android:layout_marginStart="20dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -237,15 +238,44 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/tv_share_counter"
+                    style="@style/TextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:fontFamily="@font/nunitosansbold"
+                    android:text="0"
+                    android:textColor="@color/skyblue"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/textView14"
+                    app:layout_constraintTop_toTopOf="@+id/textView14" />
+
+                <TextView
+                    android:id="@+id/tv_share_text"
+                    style="@style/TextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunitosansbold"
+                    android:paddingLeft="5dp"
+                    android:text="@string/shares"
+                    android:textColor="@color/skyblue"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/tv_share_counter"
+                    app:layout_constraintTop_toTopOf="@+id/tv_share_counter" />
+
+
+                <TextView
                     android:id="@+id/tv_createddateTime"
                     style="@style/TextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="50dp"
-                    android:fontFamily="@font/nunitosansregular"
                     android:text="12:04pm | 12 jan"
+                    android:textColor="@color/black"
+                    android:textSize="10sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -253,8 +283,11 @@
                     android:id="@+id/view4"
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:layout_marginTop="@dimen/spacing_medium"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
                     android:background="@color/gray_1"
+                    android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view2" />
@@ -383,6 +416,7 @@
             android:layout_marginTop="16dp"
             android:adjustViewBounds="true"
             android:elevation="2dp"
+            android:visibility="gone"
             android:foregroundGravity="center"
             android:minHeight="200dp"
             app:layout_constraintEnd_toEndOf="parent"

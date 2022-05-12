@@ -1,6 +1,8 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 
+import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -48,8 +50,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -60,7 +60,6 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
 
     @BindView(R.id.newpost)
     TextView newpost;
-
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
 
@@ -168,48 +167,43 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     private void callPostsApi() {
         User user = LoginUtils.getLoggedinUser();
 
-        homeViewModel.getDashboard(user, AppConstants.TOTAL_PAGES, currentPage).observe(this, new Observer<BaseModel<List<Post>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Post>> dashboardBaseModel) {
+        homeViewModel.getDashboard(user, AppConstants.TOTAL_PAGES, currentPage).observe(this, dashboardBaseModel -> {
 
-                //   homePostsAdapter.clear();
-                if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
-                    for (Post post : dashboardBaseModel.getData()) {
-                        if (post.getContent() == null) {
-                            post.setContent("");
-                        }
-                        if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() > 0) {
-                            post.setPost_type(AppConstants.IMAGE_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_video() != null) {
-                            post.setPost_type(AppConstants.VIDEO_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() == 0 && !post.isIs_url()) {
-                            post.setPost_type(AppConstants.TEXT_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("event")) {
-                            post.setPost_type(AppConstants.EVENT_TYPE);
-                        } else if (post.getType().equalsIgnoreCase("job")) {
-                            post.setPost_type(AppConstants.JOB_TYPE);
-                        }
-                     else if (post.getType().equalsIgnoreCase("news")) {
+            //   homePostsAdapter.clear();
+            if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
+                for (Post post : dashboardBaseModel.getData()) {
+                    if (post.getContent() == null) {
+                        post.setContent("");
+                    }
+                    if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() > 0) {
+                        post.setPost_type(AppConstants.IMAGE_TYPE);
+                    } else if (post.getType().equalsIgnoreCase("post") && post.getPost_video() != null) {
+                        post.setPost_type(AppConstants.VIDEO_TYPE);
+                    } else if (post.getType().equalsIgnoreCase("post") && post.getPost_image().size() == 0 && !post.isIs_url()) {
+                        post.setPost_type(AppConstants.TEXT_TYPE);
+                    } else if (post.getType().equalsIgnoreCase("event")) {
+                        post.setPost_type(AppConstants.EVENT_TYPE);
+                    } else if (post.getType().equalsIgnoreCase("job")) {
+                        post.setPost_type(AppConstants.JOB_TYPE);
+                    } else if (post.getType().equalsIgnoreCase("news")) {
                         post.setPost_type(AppConstants.NEWS_TYPE);
+                    } else if (post.getType().equalsIgnoreCase("post") && post.isIs_url()) {
+                        post.setPost_type(AppConstants.LINK_POST);
                     }
-                        else if (post.getType().equalsIgnoreCase("post") && post.isIs_url()) {
-                            post.setPost_type(AppConstants.LINK_POST);
-                        }
-                    }
-                    posts.addAll(dashboardBaseModel.getData());
-                    homePostsAdapter.notifyDataSetChanged();
-                    swipeRefresh.setRefreshing(false);
-                    homePostsAdapter.removeLoading();
-                    isLoading = false;
-                } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
-                    isLastPage = true;
-                    homePostsAdapter.removeLoading();
-                    isLoading = false;
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
-
+                posts.addAll(dashboardBaseModel.getData());
+                homePostsAdapter.notifyDataSetChanged();
+                swipeRefresh.setRefreshing(false);
+                homePostsAdapter.removeLoading();
+                isLoading = false;
+            } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
+                isLastPage = true;
+                homePostsAdapter.removeLoading();
+                isLoading = false;
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+
         });
     }
 
@@ -340,55 +334,49 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
 
     private void SetJobLike(Integer id, int position) {
 
-        jobListViewModel.setJobLike(LoginUtils.getUser(), id, "like").observe(this, new Observer<BaseModel<List<Object>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Object>> setlike) {
-                Post post = posts.get(position);
-                post.setAction(AppConstants.LIKE);
-                if (post.getIs_job_like() == null) {
-                    post.setIs_job_like(1);
-                    if (post.getLike_count() == null)
-                        post.setLike_count(0);
-                    else
-                        post.setLike_count(post.getLike_count() + 1);
-                } else {
-                    post.setIs_job_like(post.getIs_job_like() + 1);
-                    if (post.getLike_count() == null)
-                        post.setLike_count(0);
-                    else
-                        post.setLike_count(post.getLike_count() + 1);
-                }
-                homePostsAdapter.notifyItemChanged(position);
+        jobListViewModel.setJobLike(LoginUtils.getUser(), id, "like").observe(this, setlike -> {
+            Post post = posts.get(position);
+            post.setAction(AppConstants.LIKE);
+            if (post.getIs_job_like() == null) {
+                post.setIs_job_like(1);
+                if (post.getLike_count() == null)
+                    post.setLike_count(0);
+                else
+                    post.setLike_count(post.getLike_count() + 1);
+            } else {
+                post.setIs_job_like(post.getIs_job_like() + 1);
+                if (post.getLike_count() == null)
+                    post.setLike_count(0);
+                else
+                    post.setLike_count(post.getLike_count() + 1);
+            }
+            homePostsAdapter.notifyItemChanged(position);
 //                if (setlike != null && !setlike.isError()) {
-                //     onRefresh();
+            //     onRefresh();
 //                } else {
 //                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
 //                }
 
-                hideDialog();
+            hideDialog();
 
-            }
         });
     }
 
     private void SetJobUnLike(Integer id, int position) {
-        jobListViewModel.setJobLike(LoginUtils.getUser(), id, "unlike").observe(this, new Observer<BaseModel<List<Object>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Object>> setlike) {
-                // onRefresh();
-                Post post = posts.get(position);
-                post.setAction(AppConstants.UNLIKE);
-                if (post.getIs_job_like() > 0) {
-                    post.setIs_job_like(post.getIs_job_like() - 1);
-                    post.setLike_count(post.getLike_count() - 1);
-                } else {
-                    post.setIs_job_like(0);
-                    post.setLike_count(0);
-                }
-
-                homePostsAdapter.notifyItemChanged(position);
-                hideDialog();
+        jobListViewModel.setJobLike(LoginUtils.getUser(), id, "unlike").observe(this, setlike -> {
+            // onRefresh();
+            Post post = posts.get(position);
+            post.setAction(AppConstants.UNLIKE);
+            if (post.getIs_job_like() > 0) {
+                post.setIs_job_like(post.getIs_job_like() - 1);
+                post.setLike_count(post.getLike_count() - 1);
+            } else {
+                post.setIs_job_like(0);
+                post.setLike_count(0);
             }
+
+            homePostsAdapter.notifyItemChanged(position);
+            hideDialog();
         });
     }
 
@@ -613,7 +601,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     private void GetUserDetails() {
         User user = new User();
         user = LoginUtils.getUser();
-        userViewModel.getuser_details(user.getId()
+        userViewModel.getuser_details(user.getId(), false
         ).observe(this, new Observer<BaseModel<List<User>>>() {
             @Override
             public void onChanged(BaseModel<List<User>> listBaseModel) {

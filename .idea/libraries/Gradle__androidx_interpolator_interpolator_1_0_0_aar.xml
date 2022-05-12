@@ -1,13 +1,17 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.interpolator:interpolator:1.0.0@aar">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/84f07fdd4fefdd8abbf15739982c14dd/interpolator-1.0.0/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/84f07fdd4fefdd8abbf15739982c14dd/interpolator-1.0.0/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/84f07fdd4fefdd8abbf15739982c14dd/interpolator-1.0.0/res" />
+      <root url="file://$USER_HOME$/.jdks/caches/transforms-3/17ae8880c573fb00297b9a046542dcfe/transformed/interpolator-1.0.0/res" />
+      <root url="file://$USER_HOME$/.jdks/caches/transforms-3/4d82bb69e4df6047ef396b40443c2a45/transformed/interpolator-1.0.0/res" />
+      <root url="file://$USER_HOME$/.jdks/caches/transforms-3/17ae8880c573fb00297b9a046542dcfe/transformed/interpolator-1.0.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.jdks/caches/transforms-3/17ae8880c573fb00297b9a046542dcfe/transformed/interpolator-1.0.0/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/17ae8880c573fb00297b9a046542dcfe/transformed/interpolator-1.0.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/17ae8880c573fb00297b9a046542dcfe/transformed/interpolator-1.0.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/17ae8880c573fb00297b9a046542dcfe/transformed/interpolator-1.0.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.interpolator/interpolator/1.0.0/fefd5e3cbc479b6b4a9532d05688a1e659e8d3d2/interpolator-1.0.0-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.jdks/caches/modules-2/files-2.1/androidx.interpolator/interpolator/1.0.0/fefd5e3cbc479b6b4a9532d05688a1e659e8d3d2/interpolator-1.0.0-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

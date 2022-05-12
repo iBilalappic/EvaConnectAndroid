@@ -7,23 +7,21 @@
     app:contentInsetLeft="0dp"
     app:contentInsetStart="0dp"
     app:contentInsetEnd="0dp"
-    app:contentInsetRight="0dp"
-    >
+    app:contentInsetRight="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-
+        android:id="@+id/main_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
 
         <ImageView
-
             android:id="@+id/imageView5"
-            android:layout_width="150dp"
-            android:layout_height="0dp"
+            android:layout_width="170dp"
+            android:layout_height="56dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="8dp"
             android:src="@drawable/ic_toolbar_icon"
+            app:layout_constraintBottom_toTopOf="@+id/seprator_line"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,8 +33,9 @@
             android:layout_marginEnd="3dp"
             android:gravity="right"
             android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView5"
             app:layout_constraintEnd_toStartOf="@+id/toolbarlayout"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="@+id/imageView5">
 
             <ImageView
                 android:id="@+id/img_search"
@@ -54,12 +53,12 @@
             android:id="@+id/toolbarlayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
             android:layout_marginRight="10dp"
             android:gravity="right"
             android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView5"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="@+id/imageView5">
 
             <ImageView
                 android:id="@+id/img_menu"
@@ -86,8 +85,8 @@
             <ImageView
                 android:id="@+id/back"
                 style="@style/TextStyle.Black"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
                 android:layout_marginStart="16dp"
                 android:background="@drawable/back"
                 android:gravity="center"
@@ -101,10 +100,15 @@
             <TextView
                 android:id="@+id/tv_title"
                 style="@style/TextStyle.Title"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
                 android:gravity="center"
-                android:padding="5dp"
+                android:padding="3dp"
+                android:textSize="18sp"
+                android:text="@string/individual"
+                android:fontFamily="@font/nunitosansbold"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -133,10 +137,12 @@
             android:id="@+id/seprator_line"
             android:layout_width="match_parent"
             android:layout_height="2dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/ic_blue_red"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+            app:layout_constraintTop_toBottomOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

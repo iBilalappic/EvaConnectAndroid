@@ -1,11 +1,16 @@
 package com.hypernym.evaconnect.repositories.impl;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.models.AccountCheck;
 import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.GetBlockedData;
+import com.hypernym.evaconnect.models.IsBlocked;
+import com.hypernym.evaconnect.models.NotificationSettingsRootModel;
 import com.hypernym.evaconnect.models.Stats;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IUserRespository;
@@ -28,8 +33,18 @@ public class UserRepository implements IUserRespository {
     private MutableLiveData<BaseModel<List<User>>> LinkedinLoginMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<User>>> facebookLoginMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> ProfileUpdateMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Object>>> EditProfileMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Object>>> EmailVerificationCode = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<String>>> SectorMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Stats>>> statMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<GetBlockedData>>> getBlockedUsers = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Object>>> resetPasswordMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Object>>> deleteUserMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Object>>> userNotificationSettings = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Object>>> updateUserLocationMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Object>>> verifyEmailMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<IsBlocked>>> blockedUserLiveData = new MutableLiveData<>();
+
 
     @Override
     public LiveData<BaseModel<List<User>>> signup(User user, MultipartBody.Part partImage) {
@@ -52,22 +67,50 @@ public class UserRepository implements IUserRespository {
                 RequestBody.create(MediaType.parse("text/plain"), user.getCountry()),
                 RequestBody.create(MediaType.parse("text/plain"), user.getCity()),
                 RequestBody.create(MediaType.parse("text/plain"), user.getLast_name()),
+                RequestBody.create(MediaType.parse("text/plain"), user.getLanguage()),
+                RequestBody.create(MediaType.parse("text/plain"), user.getDate_of_birth()),
+                /*  RequestBody.create(MediaType.parse("text/plain"), user.getCompany_url()),*/
                 partImage).enqueue(new Callback<BaseModel<List<User>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
                 if (response.body() != null) {
+
+                    Log.d("sign_up", "onResponse: " + response.body());
+
                     userMutableLiveData.postValue(response.body());
                 }
             }
 
             @Override
             public void onFailure(Call<BaseModel<List<User>>> call, Throwable t) {
+
+                Log.d("sign_up", "onFailure: " + t.getMessage());
+                t.printStackTrace();
+
                 userMutableLiveData.postValue(null);
             }
         });
         return userMutableLiveData;
     }
 
+    @Override
+    public LiveData<BaseModel<List<Object>>> getEmailVerificationCode(String email, int verification_code) {
+        EmailVerificationCode = new MutableLiveData<>();
+        RestClient.get().appApi().getEmailVerificationCode(email,verification_code).enqueue(new Callback<BaseModel<List<Object>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+                if (response.body() != null) {
+                    EmailVerificationCode.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+                EmailVerificationCode.setValue(null);
+            }
+        });
+        return EmailVerificationCode;
+    }
 
     @Override
     public LiveData<BaseModel<List<User>>> login(User user) {
@@ -175,12 +218,13 @@ public class UserRepository implements IUserRespository {
         return statMutableLiveData;
     }
 
+
     @Override
     public LiveData<BaseModel<List<User>>> forgotPassword(String email) {
         userMutableLiveData = new MutableLiveData<>();
         User user = new User();
         user.setUsername(email);
-        RestClient.get().appApi().forgotPassword(user).enqueue(new Callback<BaseModel<List<User>>>() {
+        RestClient.get().appApi().forgotPassword(email).enqueue(new Callback<BaseModel<List<User>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
                 if (response.body() != null) {
@@ -194,6 +238,58 @@ public class UserRepository implements IUserRespository {
             }
         });
         return userMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<Object>>> resetPassword(String email, String code, String password ) {
+        resetPasswordMutableLiveData = new MutableLiveData<>();
+
+        HashMap<String, Object> body = new HashMap<String, Object>();
+        body.put("email", email);
+        body.put("verification_code", code);
+        body.put("new_password", password);
+
+
+        RestClient.get().appApi().getResetPassword(body).enqueue(new Callback<BaseModel<List<Object>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+                if (response.body() != null) {
+                    resetPasswordMutableLiveData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+                resetPasswordMutableLiveData.setValue(null);
+            }
+        });
+        return resetPasswordMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<Object>>> editProfile (Object user, int id) {
+        resetPasswordMutableLiveData = new MutableLiveData<>();
+
+       /* HashMap<String, Object> body = new HashMap<String, Object>();
+        body.put("email", email);
+        body.put("verification_code", code);
+        body.put("new_password", password);*/
+
+
+        RestClient.get().appApi().Edit_Profile(id, user).enqueue(new Callback<BaseModel<List<Object>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+                if (response.body() != null) {
+                    resetPasswordMutableLiveData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+                resetPasswordMutableLiveData.setValue(null);
+            }
+        });
+        return resetPasswordMutableLiveData;
     }
 
     @Override
@@ -317,10 +413,10 @@ public class UserRepository implements IUserRespository {
     }
 
     @Override
-    public LiveData<BaseModel<List<User>>> getuser_details(Integer id) {
+    public LiveData<BaseModel<List<User>>> getuser_details(Integer id, boolean view) {
         userMutableLiveData = new MutableLiveData<>();
 
-        RestClient.get().appApi().getuser_details(id).enqueue(new Callback<BaseModel<List<User>>>() {
+        RestClient.get().appApi().getuser_details(id, view).enqueue(new Callback<BaseModel<List<User>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<User>>> call, Response<BaseModel<List<User>>> response) {
                 if (response.body() != null) {
@@ -358,4 +454,132 @@ public class UserRepository implements IUserRespository {
         return SectorMutableLiveData;
 
     }
+
+    @Override
+    public LiveData<BaseModel<List<Object>>> deleteUser(Integer id) {
+        RestClient.get().appApi().deleteUser(id).enqueue(new Callback<BaseModel<List<Object>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+                if (response.body()!=null){
+                    deleteUserMutableLiveData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+                deleteUserMutableLiveData.setValue(null);
+                t.printStackTrace();
+            }
+        });
+
+        return deleteUserMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<Object>>> updateUserLocation(Integer id, User userData) {
+
+/*
+        RestClient.get().appApi().hUpdateUserLocation(LoginUtils.getLoggedinUser().getId(), LoginUtils.getLoggedinUser().getId(), userData, DateUtils.GetCurrentdatetime()
+
+        ).enqueue(new Callback<BaseModel<List<Object>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+                if (response.body() != null) {
+                    updateUserLocationMutableLiveData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+                updateUserLocationMutableLiveData.setValue(null);
+                t.printStackTrace();
+            }
+        });*/
+
+        return updateUserLocationMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<Object>>> verify_email(String email) {
+        HashMap<String, Object> body = new HashMap<String, Object>();
+        body.put("email", email);
+        RestClient.get().appApi().verify_email_token(body).enqueue(new Callback<BaseModel<List<Object>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+                if (response.body() != null) {
+                    deleteUserMutableLiveData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+                deleteUserMutableLiveData.setValue(null);
+                t.printStackTrace();
+            }
+        });
+
+        return deleteUserMutableLiveData;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<Object>>> hGetNotificationSettings(int user_id) {
+
+        RestClient.get().appApi().hGetNotificationSettings(user_id).enqueue(new Callback<BaseModel<List<Object>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+
+                userNotificationSettings.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+                userNotificationSettings.setValue(null);
+
+            }
+        });
+
+        return userNotificationSettings;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<Object>>> hPostUserSettingData(NotificationSettingsRootModel notificationSettingsModel) {
+        RestClient.get().appApi().hPostSettingsDataToSerever(notificationSettingsModel).enqueue(new Callback<BaseModel<List<Object>>>() {
+
+            @Override
+            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+
+
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+
+            }
+        });
+
+        return null;
+    }
+
+    @Override
+    public LiveData<BaseModel<List<IsBlocked>>> hCheckBlockedOrNOt(int hMyID, int hID) {
+        blockedUserLiveData = new MutableLiveData<>();
+
+        RestClient.get().appApi().hGetBlockedUserInfo(hMyID, hID).enqueue(new Callback<BaseModel<List<IsBlocked>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<IsBlocked>>> call, Response<BaseModel<List<IsBlocked>>> response) {
+                blockedUserLiveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<IsBlocked>>> call, Throwable t) {
+                blockedUserLiveData.postValue(null);
+
+            }
+        });
+
+        return blockedUserLiveData;
+
+    }
+
+
 }

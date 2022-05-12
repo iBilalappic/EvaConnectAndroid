@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout2"
-    android:clipToPadding="false"
-    android:background="@color/page_bg"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/page_bg"
+    android:clipToPadding="false">
 
     <View
         android:id="@+id/view6"
@@ -26,8 +26,10 @@
         android:background="@color/colorwhite"
         app:layout_constraintBottom_toBottomOf="@+id/view"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <RelativeLayout
         android:id="@+id/profile_layout"
@@ -59,19 +61,22 @@
 
     <TextView
         android:id="@+id/tv_name"
-        android:layout_width="150dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:ellipsize="end"
         android:fontFamily="@font/nunitosansbold"
         android:maxLines="1"
         android:text="Ed Hunter"
         android:textColor="@color/black"
-        android:textSize="13sp"
+        android:textSize="18sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/tv_company"
+        app:layout_constraintEnd_toStartOf="@+id/tv_connect"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/profile_layout"
-        app:layout_constraintTop_toTopOf="@+id/profile_layout" />
+        app:layout_constraintTop_toTopOf="@+id/profile_layout"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/tv_connect"
@@ -116,16 +121,18 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
     <TextView
-        android:ellipsize="end"
-        android:singleLine="true"
-        app:layout_constraintEnd_toStartOf="@+id/tv_connect"
         android:id="@+id/tv_company"
         style="@style/TextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:textColor="#EF8080"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="@color/black"
         android:textSize="12sp"
+
+        app:layout_constraintBottom_toBottomOf="@+id/profile_layout"
+        app:layout_constraintEnd_toStartOf="@+id/tv_connect"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/tv_designation"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
@@ -135,8 +142,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:visibility="gone"
         android:text="465,345 connections"
+        android:visibility="gone"
         app:layout_constraintStart_toEndOf="@+id/profile_layout"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
@@ -176,15 +183,15 @@
         android:gravity="center"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:visibility="gone"
         android:text="@string/view_comments"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view" />
 
 
-    <androidx.cardview.widget.CardView
+    <RelativeLayout
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -215,14 +222,13 @@
                 style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="42dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="4dp"
                 android:fontFamily="@font/nunitosansbold"
                 android:text="58"
                 android:textColor="@color/skyblue"
-                android:textSize="11sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/view2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -231,29 +237,14 @@
                 style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:paddingLeft="5dp"
                 android:text="@string/likes"
                 android:textColor="@color/skyblue"
-                android:textSize="11sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/tv_likecount"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/tv_likecount" />
 
-            <TextView
-                android:id="@+id/textView11"
-                style="@style/TextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_small"
-                android:layout_marginTop="4dp"
-                android:fontFamily="@font/nunitosansbold"
-                android:text="@string/amp"
-                android:textColor="@color/skyblue"
-                android:textSize="11sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/textView10"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_comcount"
@@ -261,49 +252,81 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/spacing_small"
-                android:layout_marginTop="5dp"
                 android:text="03"
                 android:textColor="@color/skyblue"
-                android:textSize="11sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/textView11"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toEndOf="@+id/textView10"
+                app:layout_constraintTop_toTopOf="@+id/textView10" />
 
             <TextView
                 android:id="@+id/textView14"
                 style="@style/TextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:fontFamily="@font/nunitosansbold"
                 android:paddingLeft="5dp"
                 android:text="@string/comments"
                 android:textColor="@color/skyblue"
-                android:textSize="11sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/tv_comcount"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/tv_comcount" />
+
+            <TextView
+                android:id="@+id/tv_share_counter"
+                style="@style/TextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:fontFamily="@font/nunitosansbold"
+                android:text="0"
+                android:textColor="@color/skyblue"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/textView14"
+                app:layout_constraintTop_toTopOf="@+id/textView14" />
+
+            <TextView
+                android:id="@+id/tv_share_text"
+                style="@style/TextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunitosansbold"
+                android:paddingLeft="5dp"
+                android:text="@string/shares"
+                android:textColor="@color/skyblue"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/tv_share_counter"
+                app:layout_constraintTop_toTopOf="@+id/tv_share_counter" />
+
+
 
             <TextView
                 android:id="@+id/tv_createddateTime"
-                style="@style/TextStyle.Title"
-                android:layout_width="wrap_content"
+                style="@style/TextStyle"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="50dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="20dp"
                 android:fontFamily="@font/nunitosansregular"
-                android:text="12:04pm | 12 jan"
-                android:textSize="10sp"
-                android:textColor="@color/black"
+                android:gravity="end"
+                android:text="1 dec 2900 at 10:22 am"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@+id/tv_share_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/layout_slide_images" />
+
 
             <View
                 android:id="@+id/view4"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginTop="@dimen/spacing_medium"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="11dp"
+                android:layout_marginEnd="16dp"
                 android:background="@color/gray_1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -314,8 +337,9 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="32dp"
                 android:layout_marginTop="1dp"
+                android:layout_marginEnd="32dp"
                 android:baselineAligned="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -325,8 +349,9 @@
                     android:id="@+id/like_click"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:paddingLeft="10dp"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:paddingLeft="10dp">
+
                     <ImageView
                         android:id="@+id/img_like"
                         android:layout_width="18dp"
@@ -335,6 +360,7 @@
                         android:layout_marginEnd="@dimen/spacing_medium"
                         android:layout_weight="0"
                         android:background="@drawable/ic_like" />
+
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="30dp"
@@ -342,16 +368,16 @@
                         android:fontFamily="@font/nunitosansregular"
                         android:gravity="center_vertical"
                         android:text="Like"
-                        android:textSize="12sp"
-                        android:textColor="@color/gray_1" />
-
+                        android:textColor="@color/gray_1"
+                        android:textSize="12sp" />
 
 
                     <View
                         android:layout_width="1dp"
                         android:layout_height="30dp"
                         android:layout_marginEnd="@dimen/spacing_medium"
-                        android:background="@color/gray_light" />
+                        android:background="@color/gray_light"
+                        android:visibility="gone" />
 
 
                 </LinearLayout>
@@ -361,8 +387,10 @@
                     android:id="@+id/comment_click"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:paddingLeft="10dp"
-                    android:layout_weight="1.2">
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:paddingLeft="10dp">
+
                     <ImageView
                         android:id="@+id/img_comment"
                         android:layout_width="18dp"
@@ -371,6 +399,7 @@
                         android:layout_marginEnd="@dimen/spacing_medium"
                         android:layout_weight="0"
                         android:background="@drawable/ic_comment" />
+
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="30dp"
@@ -378,16 +407,16 @@
                         android:fontFamily="@font/nunitosansregular"
                         android:gravity="center_vertical"
                         android:text="Comment"
-                        android:textSize="12sp"
-                        android:textColor="@color/gray_1" />
-
+                        android:textColor="@color/gray_1"
+                        android:textSize="12sp" />
 
 
                     <View
                         android:layout_width="1dp"
                         android:layout_height="30dp"
                         android:layout_marginEnd="@dimen/spacing_medium"
-                        android:background="@color/gray_light" />
+                        android:background="@color/gray_light"
+                        android:visibility="gone" />
 
 
                 </LinearLayout>
@@ -397,9 +426,9 @@
                     android:id="@+id/share_click"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="16dp"
-                    android:paddingLeft="10dp"
-                    android:layout_weight="1">
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:paddingLeft="10dp">
 
                     <ImageView
                         android:id="@+id/img_share"
@@ -418,9 +447,8 @@
                         android:fontFamily="@font/nunitosansregular"
                         android:gravity="center_vertical"
                         android:text="Share"
-                        android:textSize="12sp"
-                        android:textColor="@color/gray_1" />
-
+                        android:textColor="@color/gray_1"
+                        android:textSize="12sp" />
 
 
                 </LinearLayout>
@@ -429,7 +457,7 @@
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+    </RelativeLayout>
 
 
     <TextView
@@ -437,16 +465,15 @@
         style="@style/TextStyle.Title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="2dp"
-        android:ellipsize="end"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="20dp"
         android:fontFamily="@font/nunitosansregular"
-        android:maxLines="3"
         android:text="“Things you’d never hear in a ticket office” … Let’s play a game of mock the week, or the LinkedIn version of Mock the Week. I’ll Start: https://lnkd.in… see more"
         android:textColor="@color/black"
-        android:textSize="13.5sp"
+        android:textSize="16.5sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_layout" />
 

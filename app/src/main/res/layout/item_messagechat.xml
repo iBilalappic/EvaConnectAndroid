@@ -33,7 +33,7 @@
     </androidx.recyclerview.widget.RecyclerView>
 
     <LinearLayout
-        android:id="@+id/layout1"
+        android:id="@+id/lay_designation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_extra_large"
@@ -100,7 +100,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout1">
+        app:layout_constraintTop_toBottomOf="@+id/lay_designation">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -115,7 +115,7 @@
                 android:background="@drawable/rounded_button_border"
                 android:gravity="center"
                 android:text="Accept"
-                android:visibility="visible"></TextView>
+                android:visibility="visible"/>
 
             <TextView
                 android:id="@+id/tv_decline"
@@ -126,7 +126,7 @@
                 android:background="@drawable/rounded_button_nobackground"
                 android:gravity="center"
                 android:text="Decline"
-                android:visibility="visible"></TextView>
+                android:visibility="visible"/>
 
             <TextView
                 android:id="@+id/tv_declineText"
@@ -135,7 +135,7 @@
                 android:layout_marginStart="15dp"
                 android:gravity="center"
                 android:text="You have declined this interview"
-                android:visibility="gone"></TextView>
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/tv_acceptText"
@@ -145,7 +145,7 @@
                 android:gravity="center"
                 android:maxLines="2"
                 android:visibility="gone"
-                android:text="You have accepted this interview. Your calendar has been updated."></TextView>
+                android:text="You have accepted this interview. Your calendar has been updated."/>
 
             <TextView
                 android:id="@+id/tv_rescheduleText"
@@ -181,7 +181,7 @@
 
     <LinearLayout
         android:id="@+id/layout2"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_extra_large"
         android:layout_marginEnd="@dimen/spacing_extra_large"
@@ -260,7 +260,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout1">
+        app:layout_constraintTop_toBottomOf="@+id/lay_designation">
 
     </androidx.recyclerview.widget.RecyclerView>
 

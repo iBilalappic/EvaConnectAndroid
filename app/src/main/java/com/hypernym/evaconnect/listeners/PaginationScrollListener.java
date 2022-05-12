@@ -4,8 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hypernym.evaconnect.constants.AppConstants;
-
 public abstract class PaginationScrollListener extends RecyclerView.OnScrollListener {
     public static int PAGE_START = 0;
     @NonNull

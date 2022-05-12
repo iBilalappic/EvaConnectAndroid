@@ -1,6 +1,8 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 
+import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
+
 import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -33,8 +36,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -52,6 +53,7 @@ public class MessageConnectionFragment extends BaseFragment implements MessageCo
 
     @BindView(R.id.btn_search)
     ImageView btn_search;
+
 
     private MessageConnectionsAdapter messageConnectionsAdapter;
     private List<User> connectionList = new ArrayList<>();
@@ -87,6 +89,7 @@ public class MessageConnectionFragment extends BaseFragment implements MessageCo
 
         edt_search.addTextChangedListener(new MessageConnectionFragment.TextWatcher());
 
+
         return view;
     }
 
@@ -103,7 +106,7 @@ public class MessageConnectionFragment extends BaseFragment implements MessageCo
         Log.e("type", type);
 
         connectionViewModel.getConnectionByFilter(userData, AppConstants.TOTAL_PAGES, currentPage)
-                .observe(this, listBaseModel ->
+                .observe(getViewLifecycleOwner(), listBaseModel ->
                 {
                     if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
                         if (currentPage == PAGE_START) {
@@ -170,8 +173,8 @@ public class MessageConnectionFragment extends BaseFragment implements MessageCo
     }
 
     private void init() {
-        showBackButton();
-        setPageTitle("Your Connections");
+       // showBackButton();
+       // setPageTitle("Your Connections");
 
         Bundle bundle = getArguments();
         if (bundle != null) {

@@ -24,8 +24,58 @@ public class Post implements Serializable {
     private int rss_news_id;
     private Integer receiver_id;
     private int modified_by_id;
+
+    public String getIs_attending() {
+        return is_attending;
+    }
+
+    public void setIs_attending(String is_attending) {
+        this.is_attending = is_attending;
+    }
+
+    private String is_attending;
+    public int getShare_count() {
+        return share_count;
+    }
+
+    public void setShare_count(int share_count) {
+        this.share_count = share_count;
+    }
+
+    private int share_count;
     private String modified_datetime;
     private String post_document;
+
+    public String getOccurrence_date() {
+        return occurrence_date;
+    }
+
+    public void setOccurrence_date(String occurrence_date) {
+        this.occurrence_date = occurrence_date;
+    }
+
+    private String occurrence_date;
+
+    public String getOccurrence_time() {
+        return occurrence_time;
+    }
+
+    public void setOccurrence_time(String occurrence_time) {
+        this.occurrence_time = occurrence_time;
+    }
+
+    private String occurrence_time;
+
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    private String notes;
 
 
 
@@ -69,6 +119,26 @@ public class Post implements Serializable {
     private Integer total_connection;
     private String action;
     private String type;
+
+    public String getJob_type() {
+        return job_type;
+    }
+
+    public void setJob_type(String job_type) {
+        this.job_type = job_type;
+    }
+
+    private String job_type;
+
+    public int getActive_hours() {
+        return active_hours;
+    }
+
+    public void setActive_hours(int active_hours) {
+        this.active_hours = active_hours;
+    }
+
+    private int active_hours;
     private String is_connected;
     private MultipartBody.Part video;
     private String post_video;
@@ -87,6 +157,12 @@ public class Post implements Serializable {
     private Double salary;
     private String job_image;
     private Integer applicant_count;
+
+    public Integer getAttendees() {
+        return attendees;
+    }
+
+    private Integer attendees;
     private Integer is_job_like;
     private List<String> event_image;
 

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,6 +26,9 @@ import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.view.dialogs.CustomProgressBar;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.view.ui.fragments.ActivityFragment;
+import com.hypernym.evaconnect.view.ui.fragments.ConnectionsTabFragment;
+import com.hypernym.evaconnect.view.ui.fragments.EventTabsFragment;
+import com.hypernym.evaconnect.view.ui.fragments.JobViewPagerFragment;
 import com.hypernym.evaconnect.view.ui.fragments.MainViewPagerFragment;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 
@@ -43,7 +47,7 @@ public class BaseActivity extends AppCompatActivity {
     public void showDialog() {
 
         if (customProgressBar != null && !customProgressBar.isShowing())
-            customProgressBar.showProgress(this, true);
+            customProgressBar.showProgress(this, false);
     }
 
     public void hideDialog() {
@@ -101,15 +105,25 @@ public class BaseActivity extends AppCompatActivity {
         hideDialog();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+       // getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+    }
 
     public void loadFragment(int id, Fragment fragment, Context context, boolean isBack) {
         FragmentTransaction transaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
         //     transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
         transaction.replace(id, fragment);
-        findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
-        if (fragment instanceof MainViewPagerFragment || fragment instanceof ActivityFragment) {
+       //
+        if (fragment instanceof MainViewPagerFragment || fragment instanceof ActivityFragment
+                || fragment instanceof ConnectionsTabFragment) {
             findViewById(R.id.seprator_line).setVisibility(View.GONE);
+        }else{
+            findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
         }
+
+
         if (isBack) {
             transaction.addToBackStack(null);
         }

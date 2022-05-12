@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,10 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.AppliedApplicants;
-import com.hypernym.evaconnect.models.MyLikesModel;
 import com.hypernym.evaconnect.utils.AppUtils;
-import com.hypernym.evaconnect.utils.DateUtils;
-import com.hypernym.evaconnect.viewmodel.AppliedApplicantViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +57,7 @@ public class AppliedApplicantAdapter extends RecyclerView.Adapter<AppliedApplica
         } else {
             holder.tv_view.setText("View");
             holder.tv_view.setTextColor(context.getResources().getColor(R.color.skyblue));
-            holder.tv_name.setTextColor(context.getResources().getColor(R.color.black));
+            holder.tv_name.setTextColor(context.getResources().getColor(com.skydoves.powermenu.R.color.black));
             holder.tv_view.setBackgroundResource(R.drawable.rounded_button_border_blue);
         }
     }

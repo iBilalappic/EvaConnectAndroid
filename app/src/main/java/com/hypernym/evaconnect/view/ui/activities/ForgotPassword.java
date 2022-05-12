@@ -11,13 +11,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hypernym.evaconnect.EnterCodeActivity;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
@@ -41,7 +44,7 @@ public class ForgotPassword extends BaseActivity implements Validator.Validation
     EditText edt_email;
 
     @BindView(R.id.btn_reset)
-    Button btn_reset;
+    TextView btn_reset;
 
     @BindView(R.id.layout_arrow)
     LinearLayout layout_arrow;
@@ -76,8 +79,9 @@ public class ForgotPassword extends BaseActivity implements Validator.Validation
     public void onValidationSucceeded() {
         if(NetworkUtils.isNetworkConnected(this))
         {
-            showDialog();
+            //showDialog();
             callForgotPassApi();
+
         }
         else
         {
@@ -93,7 +97,11 @@ public class ForgotPassword extends BaseActivity implements Validator.Validation
             public void onChanged(BaseModel<List<User>> user) {
                 if(user !=null && !user.isError())
                 {
-                  networkResponseDialog(getString(R.string.success),getString(R.string.msg_forgotpass));
+                 // networkResponseDialog(getString(R.string.success),getString(R.string.msg_forgotpass));
+                    Intent intent = new Intent(ForgotPassword.this, EnterCodeActivity.class);
+                    intent.putExtra(Constants.ACTIVITY_NAME,Constants.FORGOT_PASSWORD);
+                    intent.putExtra("Email",edt_email.getText().toString());
+                    startActivity(intent);
                 }
                  else if(user.isError())
                 {

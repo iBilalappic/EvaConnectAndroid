@@ -15,16 +15,19 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.hypernym.evaconnect.MyActivityFragment;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.communication.RestClient;
+import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.Stats;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
-import com.hypernym.evaconnect.view.ui.fragments.ActivityFragment;
 import com.hypernym.evaconnect.view.ui.fragments.CalendarFragment;
+import com.hypernym.evaconnect.view.ui.fragments.GlobalSearchTabfragment;
 import com.hypernym.evaconnect.view.ui.fragments.JobListingFragment;
+import com.hypernym.evaconnect.view.ui.fragments.SettingsFragment;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 
 import java.util.List;
@@ -37,10 +40,14 @@ import retrofit2.Response;
 public class NavigationDialog extends Dialog implements View.OnClickListener {
 
     private ImageView img_close;
-    private LinearLayout editProfile, notifications, mJoblisting, myactivity, calendar;
-    private TextView logout, tv_name, tv_designation,
+    private LinearLayout editProfile, notifications, mJoblisting, myactivity, calendar, settings, lay_designation;
+    private TextView logout, tv_name, tv_designation, tv_at,
             tv_company, tv_location, tv_connections_count, tv_notication_count, tv_calender_event, tv_joblisting;
+
+    private ImageView image_search;
     private Context context;
+
+
     private CircleImageView profile_image;
     User user = new User();
     UserViewModel userViewModel;
@@ -66,19 +73,31 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
         tv_company = findViewById(R.id.tv_company);
         tv_location = findViewById(R.id.tv_location);
         tv_connections_count = findViewById(R.id.tv_connections_count);
+        lay_designation = findViewById(R.id.lay_designation);
         tv_notication_count = findViewById(R.id.tv_notication_count);
         tv_calender_event = findViewById(R.id.tv_calender_event);
         tv_joblisting = findViewById(R.id.tv_joblisting);
+        image_search = findViewById(R.id.image_search);
         profile_image = findViewById(R.id.profile_image);
 //        notifications=findViewById(R.id.notifications);
         mJoblisting=findViewById(R.id.joblisting);
         calendar = findViewById(R.id.calendar);
         myactivity = findViewById(R.id.layout_myactivity);
+        tv_at = findViewById(R.id.tv_at);
+        settings = findViewById(R.id.settings);
         mJoblisting.setOnClickListener(this);
+        settings.setOnClickListener(this);
         // mLike.setOnClickListener(this);
         setCanceledOnTouchOutside(true);
         setCancelable(true);
         Window window = getWindow();
+
+        if(user.getType().equalsIgnoreCase("user")){
+            mJoblisting.setVisibility(View.GONE);
+        }else{
+            lay_designation.setVisibility(View.GONE);
+        }
+
 
 
         WindowManager.LayoutParams wlp = window.getAttributes();
@@ -88,7 +107,6 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
         WindowManager.LayoutParams params = this.getWindow().getAttributes();
 
 
-
         params.y = 50;
         window.setLayout(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
         this.getWindow().setAttributes(params);
@@ -96,35 +114,25 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
         gettingUserStats();
         SettingUserData();
 
-        img_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        img_close.setOnClickListener(v -> dismiss());
 
-        myactivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-                FragmentTransaction transaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
-                ActivityFragment activityFragment=new ActivityFragment();
-                Bundle bundle=new Bundle();
-                bundle.putBoolean("isNotification",true);
-                activityFragment.setArguments(bundle);
-                transaction.replace(R.id.framelayout, activityFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
+        myactivity.setOnClickListener(v -> {
+            dismiss();
+            FragmentTransaction transaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+            //ActivityFragment activityFragment=new ActivityFragment();
+            MyActivityFragment activityFragment = new MyActivityFragment();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("isNotification", true);
+            activityFragment.setArguments(bundle);
+            transaction.replace(R.id.framelayout, activityFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
         });
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
+        logout.setOnClickListener(v -> {
+            dismiss();
 
-                AppUtils.logout(context);
-            }
+            AppUtils.logout(context);
         });
 //        notifications.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -138,16 +146,40 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
 //            }
 //        });
 
-        calendar.setOnClickListener(new View.OnClickListener() {
+
+        settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
                 FragmentTransaction transaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
                 transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
-                transaction.replace(R.id.framelayout, new CalendarFragment());
+                transaction.replace(R.id.framelayout, new SettingsFragment());
                 transaction.addToBackStack(null);
                 transaction.commit();
 
+            }
+        });
+
+        calendar.setOnClickListener(v -> {
+            dismiss();
+            FragmentTransaction transaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+            transaction.replace(R.id.framelayout, new CalendarFragment());
+            transaction.addToBackStack(null);
+            transaction.commit();
+
+        });
+
+        image_search.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                GlobalSearchTabfragment searchResultFragment = new GlobalSearchTabfragment();
+                FragmentTransaction transaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+                transaction.replace(R.id.framelayout, searchResultFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+                dismiss();
             }
         });
     }
@@ -176,12 +208,13 @@ public class NavigationDialog extends Dialog implements View.OnClickListener {
         if (user != null && user.getType().equals("company")) {
             tv_calender_event.setText("Calendar and Events");
             tv_joblisting.setText("My Jobs");
-
+            tv_name.setText(user.getFirst_name());
         } else {
             tv_calender_event.setText("Calendar");
             tv_joblisting.setText("Job Listings");
+            tv_name.setText(user.getFirst_name() + " " + user.getLast_name());
         }
-        tv_name.setText(user.getFirst_name() + " " + user.getLast_name());
+
         if(user.getDesignation()!=null)
         {
             tv_designation.setText(user.getDesignation());

@@ -47,8 +47,8 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:src="@drawable/ic_close"
-                android:tint="@color/black"
-                android:visibility="visible" />
+                android:visibility="visible"
+                app:tint="@color/black" />
 
         </LinearLayout>
 
@@ -62,201 +62,407 @@
             app:layout_constraintTop_toBottomOf="@+id/layout_header" />
 
 
-        <TextView
-            android:id="@+id/textView2"
-            style="@style/TextStyle.Title"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/main_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="113dp"
-            android:text="Whats's your name?"
-            android:textColor="@color/colorAccent"
-            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_company">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_individual"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    style="@style/TextStyle.Title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:gravity="center"
+                    android:text="What is your name?"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
-        <EditText
-            android:id="@+id/edt_firstname"
-            style="@style/EditText"
-            android:layout_width="250dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:backgroundTint="@color/colorwhite"
-            android:gravity="center"
-            android:hint="First Name"
-            android:maxLength="100"
-            android:paddingLeft="10dp"
-            android:textColor="@color/text_color"
-            android:textColorHint="@color/gray_1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+                <EditText
+                    android:id="@+id/edt_firstname"
+                    style="@style/EditText"
+                    android:layout_width="250dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="16dp"
+                    android:backgroundTint="@color/colorwhite"
+                    android:gravity="center"
+                    android:hint="First Name"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:paddingLeft="10dp"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/gray_1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
-        <ImageView
-            android:id="@+id/img_view0"
-            style="@style/EditText.LineRedBlack"
-            android:layout_width="250dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edt_firstname" />
-
-
-        <EditText
-            android:id="@+id/edt_surname"
-            style="@style/EditText"
-            android:layout_width="250dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:backgroundTint="@color/colorwhite"
-            android:gravity="center"
-            android:hint="Surname"
-            android:maxLength="100"
-            android:paddingLeft="10dp"
-            android:textColor="@color/text_color"
-            android:textColorHint="@color/gray_1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edt_firstname" />
-
-        <EditText
-            android:id="@+id/edt_email"
-            style="@style/EditText"
-            android:layout_width="250dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:backgroundTint="@color/colorwhite"
-            android:gravity="center"
-            android:hint="Email"
-            android:maxLength="100"
-            android:paddingLeft="10dp"
-            android:textColor="@color/text_color"
-            android:textColorHint="@color/gray_1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edt_surname" />
-        <ImageView
-            android:id="@+id/img_view2"
-            style="@style/EditText.LineRedBlack"
-            android:layout_width="250dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edt_email" />
-
-        <ImageView
-            android:id="@+id/img_view1"
-            style="@style/EditText.LineRedBlack"
-            android:layout_width="250dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edt_surname" />
+                <ImageView
+                    android:id="@+id/img_view0"
+                    style="@style/EditText.LineRedBlack"
+                    android:layout_width="250dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edt_firstname" />
 
 
+                <EditText
+                    android:id="@+id/edt_surname"
+                    style="@style/EditText"
+                    android:layout_width="250dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:backgroundTint="@color/colorwhite"
+                    android:gravity="center"
+                    android:hint="Surname"
+                    android:inputType="text"
+                    android:maxLength="100"
+                    android:maxLines="1"
+                    android:paddingLeft="10dp"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/gray_1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edt_firstname" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    style="@style/TextStyle.Title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:gravity="center"
+                    android:text="What is your Email?"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edt_surname" />
+
+                <EditText
+                    android:id="@+id/edt_email"
+                    style="@style/EditText"
+                    android:layout_width="250dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="16dp"
+                    android:backgroundTint="@color/colorwhite"
+                    android:gravity="center"
+                    android:hint="Email Address"
+                    android:inputType="textEmailAddress"
+                    android:maxLength="100"
+                    android:maxLines="1"
+                    android:paddingLeft="10dp"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/gray_1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+                <ImageView
+                    android:id="@+id/img_view2"
+                    style="@style/EditText.LineRedBlack"
+                    android:layout_width="250dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edt_email" />
+
+                <ImageView
+                    android:id="@+id/img_view1"
+                    style="@style/EditText.LineRedBlack"
+                    android:layout_width="250dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edt_surname" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_company"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/textView5"
+                    style="@style/TextStyle.Title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:gravity="center"
+                    android:text="Company name?"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <EditText
+                    android:id="@+id/edt_companyname"
+                    style="@style/EditText"
+                    android:layout_width="250dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="16dp"
+                    android:backgroundTint="@color/colorwhite"
+                    android:gravity="center"
+                    android:hint="Company"
+                    android:inputType="text"
+                    android:maxLength="100"
+                    android:maxLines="1"
+                    android:paddingLeft="10dp"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/gray_1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+                <ImageView
+                    android:id="@+id/img_view3"
+                    style="@style/EditText.LineRedBlack"
+                    android:layout_width="250dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edt_companyname" />
+
+
+                <TextView
+                    android:id="@+id/textView7"
+                    style="@style/TextStyle.Title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center"
+                    android:text="Website"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edt_companyname" />
+
+
+                <EditText
+                    android:id="@+id/edt_companyurl"
+                    style="@style/EditText"
+                    android:layout_width="250dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="16dp"
+                    android:backgroundTint="@color/colorwhite"
+                    android:gravity="center"
+                    android:hint="Url"
+                    android:inputType="text"
+                    android:maxLength="100"
+                    android:maxLines="1"
+                    android:paddingLeft="10dp"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/gray_1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+                <ImageView
+                    android:id="@+id/img_view6"
+                    style="@style/EditText.LineRedBlack"
+                    android:layout_width="250dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edt_companyurl" />
+
+                <TextView
+                    android:id="@+id/textView6"
+                    style="@style/TextStyle.Title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center"
+                    android:text="What is your Email?"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edt_companyurl" />
+
+                <EditText
+                    android:id="@+id/edt_email_company"
+                    style="@style/EditText"
+                    android:layout_width="250dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="16dp"
+                    android:backgroundTint="@color/colorwhite"
+                    android:gravity="center"
+                    android:hint="Email Address"
+                    android:inputType="text"
+                    android:maxLength="100"
+                    android:maxLines="1"
+                    android:paddingLeft="10dp"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/gray_1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+
+                <ImageView
+                    android:id="@+id/img_view4"
+                    style="@style/EditText.LineRedBlack"
+                    android:layout_width="250dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edt_email_company" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <!--&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/ed_code"
             style="@style/TextStyle"
-            android:layout_width="120dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="24dp"
             android:gravity="center"
-            android:text="Which of these describes you best?"
+            android:text="Which one describes you best?"
             android:textColor="@color/colorAccent"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_view2" />
+            app:layout_constraintTop_toBottomOf="@+id/layout_header" />
 
 
-        <Button
+        <TextView
             android:id="@+id/tv_company"
             style="@style/Button.border_unselected_white"
             android:layout_width="112dp"
-
+            android:layout_height="37dp"
             android:layout_marginTop="32dp"
+            android:layout_marginEnd="13dp"
+            android:gravity="center"
             android:text="@string/company"
             app:layout_constraintEnd_toStartOf="@+id/tv_individual"
+            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+            app:layout_constraintTop_toBottomOf="@+id/ed_code" />
 
-        <Button
+        <TextView
             android:id="@+id/tv_individual"
             style="@style/Button.border_selected_red"
-            android:layout_width="wrap_content"
+            android:layout_width="112dp"
+            android:layout_height="37dp"
+            android:layout_marginStart="13dp"
             android:layout_marginTop="32dp"
+            android:gravity="center"
+            android:paddingLeft="0dp"
+            android:paddingTop="0dp"
+            android:paddingRight="0dp"
             android:text="@string/individual"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_company"
-            app:layout_constraintTop_toBottomOf="@+id/textView4" />
-
+            app:layout_constraintTop_toBottomOf="@+id/ed_code" />
 
 
         <RelativeLayout
+            android:id="@+id/profile_layout"
             android:layout_width="111dp"
             android:layout_height="111dp"
-            android:layout_marginTop="40dp"
             android:layout_marginStart="8dp"
-            android:id="@+id/profile_layout"
+            android:layout_marginTop="40dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_individual">
-
+            app:layout_constraintTop_toBottomOf="@+id/main_layout">
 
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:background="@android:color/transparent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@android:color/transparent"
                 android:src="@drawable/white_chatbg"
                 app:civ_border_color="@color/skyblue"
-                app:civ_border_width="2dp"
-                />
+                app:civ_border_width="2dp" />
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:padding="2dp"
+                android:id="@+id/img_profile"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/img_profile"
+                android:padding="2dp"
                 android:src="@drawable/ic_user_profile"
                 app:civ_border_color="@color/white"
-                app:civ_border_width="2dp"
-                />
+                app:civ_border_width="2dp" />
         </RelativeLayout>
-
-
-
-
 
 
         <TextView
             android:id="@+id/tv_upload_image"
             style="@style/Button.border_unselected_white"
-            android:layout_width="152dp"
-            android:layout_height="50dp"
+            android:layout_width="112dp"
+            android:layout_height="37dp"
             android:layout_marginTop="18dp"
+            android:fontFamily="@font/nunitosansregular"
             android:gravity="center"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
             android:text="@string/upload_an_image_of_you"
             android:textColor="#3C3F5C"
+            android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profile_layout" />

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.hypernym.evaconnect.communication.RestClient;
 import com.hypernym.evaconnect.models.BaseModel;
+import com.hypernym.evaconnect.models.MyActivitiesModel;
 import com.hypernym.evaconnect.models.NewSources;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
@@ -22,7 +23,10 @@ public class HomeRepository implements IHomeRepository {
 
     private MutableLiveData<BaseModel<List<Post>>> dashboardMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Post>>> notificationMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Post>>> myActivityMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<NewSources>>> newsoucesMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<NewSources>>> selectedNewsoucesMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<MyActivitiesModel>>> hListOfMyActivities = new MutableLiveData<>();
 
 
     @Override
@@ -43,6 +47,7 @@ public class HomeRepository implements IHomeRepository {
         return dashboardMutableLiveData;
     }
 
+
     @Override
     public LiveData<BaseModel<List<Post>>> getDashboardSearch(User user, int total, int current, String filter) {
         dashboardMutableLiveData = new MutableLiveData<>();
@@ -50,6 +55,7 @@ public class HomeRepository implements IHomeRepository {
         data.put("user_id", user.getId());
         data.put("filter", filter);
         data.put("search_key", user.getSearch_key());
+
         RestClient.get().appApi().getDashboardSearch(data, total, current).enqueue(new Callback<BaseModel<List<Post>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Post>>> call, Response<BaseModel<List<Post>>> response) {
@@ -83,6 +89,29 @@ public class HomeRepository implements IHomeRepository {
             }
         });
         return notificationMutableLiveData;
+    }
+
+
+    @Override
+    public LiveData<BaseModel<List<MyActivitiesModel>>> getAllMyActivity(int totalpages, int currentPage) {
+        hListOfMyActivities = new MutableLiveData<>();
+        User user = LoginUtils.getLoggedinUser();
+        HashMap<String, Object> data = new HashMap<String, Object>();
+        data.put("id", user.getId());
+        data.put("receiver_id", user.getId());
+        // data.put("is_read",0);
+        RestClient.get().appApi().getAllMyActivity(data, totalpages, currentPage).enqueue(new Callback<BaseModel<List<MyActivitiesModel>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<MyActivitiesModel>>> call, Response<BaseModel<List<MyActivitiesModel>>> response) {
+                hListOfMyActivities.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<MyActivitiesModel>>> call, Throwable t) {
+                hListOfMyActivities.setValue(null);
+            }
+        });
+        return hListOfMyActivities;
     }
 
     @Override
@@ -143,6 +172,23 @@ public class HomeRepository implements IHomeRepository {
     }
 
     @Override
+    public LiveData<BaseModel<List<NewSources>>> getSelectedNewSources(Integer user_id) {
+        selectedNewsoucesMutableLiveData = new MutableLiveData<>();
+        RestClient.get().appApi().getSelectedNewSources(user_id).enqueue(new Callback<BaseModel<List<NewSources>>>() {
+            @Override
+            public void onResponse(Call<BaseModel<List<NewSources>>> call, Response<BaseModel<List<NewSources>>> response) {
+                selectedNewsoucesMutableLiveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<BaseModel<List<NewSources>>> call, Throwable t) {
+                selectedNewsoucesMutableLiveData.setValue(null);
+            }
+        });
+        return selectedNewsoucesMutableLiveData;
+    }
+
+    @Override
     public LiveData<BaseModel<List<NewSources>>> setNewSources(List<Integer> newsSelectedids) {
         newsoucesMutableLiveData = new MutableLiveData<>();
         HashMap<String, Object> data = new HashMap<String, Object>();
@@ -163,4 +209,6 @@ public class HomeRepository implements IHomeRepository {
         });
         return newsoucesMutableLiveData;
     }
+
+
 }

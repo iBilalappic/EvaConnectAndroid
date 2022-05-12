@@ -8,51 +8,96 @@
     android:background="@color/page_bg"
     tools:context=".view.ui.fragments.HomeFragment">
 
+    <View
+        android:id="@+id/seperator"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@drawable/ic_blue_red"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/seperator"
+        app:layout_constraintBottom_toTopOf="@+id/tv_create_event">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rc_event"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rc_event"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        app:cardCornerRadius="20dp"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
+    <TextView
+        android:id="@+id/tv_create_event"
+        style="@style/TextStyle.Title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/button_gradient_1"
+        android:drawablePadding="10dp"
+        android:gravity="center"
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="10dp"
+        android:text="Create Event"
+        android:textColor="@color/white"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+    <TextView
+        android:id="@+id/tv_empty"
+        android:fontFamily="@font/nunitosansbold"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="No Record Found"
+        android:textColor="@color/dark_gray_2"
+        android:textSize="18sp"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:id="@+id/newpost"
-            style="@style/TextStyle.Title"
-            android:layout_width="185dp"
-            android:layout_height="40dp"
-            android:drawableLeft="@drawable/ic_pen"
-            android:background="@drawable/button_gradient"
-            android:drawablePadding="10dp"
-            android:paddingLeft="20dp"
-            android:paddingTop="10dp"
-            android:gravity="center"
-            android:paddingRight="20dp"
-            android:paddingBottom="10dp"
-            android:textColor="@color/white"
-            android:text="Post something"/>
-    </androidx.cardview.widget.CardView>
+    <TextView
+        android:id="@+id/newpost"
+        style="@style/TextStyle.Title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/button_gradient_1"
+        android:drawablePadding="10dp"
+        android:gravity="center"
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        android:visibility="gone"
+        android:paddingRight="20dp"
+        android:paddingBottom="10dp"
+        android:text="Create Event"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="uk_cities" >
+        <item>Birmingham</item>
+        <item>Manchester</item>
+        <item>London</item>
+
+    </string-array>
+
+    <string-array name="pak_cities" >
+        <item>Islamabad</item>
+        <item>Lahore</item>
+        <item>Karachi</item>
+        <item>Rawalpindi</item>
+    </string-array>
+</resources>

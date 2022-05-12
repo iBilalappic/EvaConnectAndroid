@@ -9,9 +9,7 @@ import androidx.lifecycle.LiveData;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IApplicaitonSubmitRepository;
-import com.hypernym.evaconnect.repositories.ICreateJobAdRepository;
 import com.hypernym.evaconnect.repositories.impl.ApplicationSubmitRepository;
-import com.hypernym.evaconnect.repositories.impl.CreateJobRepository;
 
 import java.util.List;
 

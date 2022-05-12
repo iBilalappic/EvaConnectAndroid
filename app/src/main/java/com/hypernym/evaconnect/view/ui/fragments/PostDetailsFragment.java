@@ -1,7 +1,14 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 
+import static android.content.Context.CLIPBOARD_SERVICE;
+
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,8 +23,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,12 +42,13 @@ import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.CommentsAdapter;
 import com.hypernym.evaconnect.view.adapters.SliderImageAdapter;
-import com.hypernym.evaconnect.view.dialogs.ShareDialog;
+import com.hypernym.evaconnect.view.bottomsheets.BottomsheetShareSelection;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
@@ -59,10 +70,13 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PostDetailsFragment extends BaseFragment implements Validator.ValidationListener,CommentsAdapter.OnItemClickListener {
+public class PostDetailsFragment extends BaseFragment implements Validator.ValidationListener,CommentsAdapter.OnItemClickListener,View.OnClickListener {
 
     @BindView(R.id.rc_comments)
     RecyclerView rc_comments;
+
+    @BindView(R.id.img_backarrow)
+    ImageView img_backarrow;
 
     @NotEmpty
     @BindView(R.id.edt_comment)
@@ -112,6 +126,9 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     @BindView(R.id.tv_connect)
     TextView tv_connect;
 
+    @BindView(R.id.cv)
+    CardView cv;
+
     @BindView(R.id.img_video)
     ImageView img_video;
 
@@ -123,6 +140,9 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
 
     @BindView(R.id.tv_goback)
     TextView tv_goback;
+
+    @BindView(R.id.tv_share_counter)
+    TextView tv_share_counter;
 
     @BindView(R.id.layout_editcomment)
     LinearLayout layout_editcomment;
@@ -163,6 +183,7 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_post_details, container, false);
         ButterKnife.bind(this, view);
+        img_backarrow.setOnClickListener(this);
         init();
 
         postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(PostViewModel.class);
@@ -184,18 +205,21 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
         img_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShareDialog shareDialog;
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("PostData",post);
-                shareDialog = new ShareDialog(getContext(),bundle);
-                shareDialog.show();
+//                ShareDialog shareDialog;
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("PostData",post);
+//                shareDialog = new ShareDialog(getContext(),bundle);
+//                shareDialog.show();
+                BottomsheetShareSelection bottomSheetPictureSelection = new BottomsheetShareSelection(new YourDialogFragmentDismissHandler());
+                bottomSheetPictureSelection.show(getActivity().getSupportFragmentManager(), bottomSheetPictureSelection.getTag());
+
             }
         });
         return view;
     }
 
     private void getPostDetails(int id) {
-        postViewModel.getPostByID(id).observe(this, new Observer<BaseModel<List<Post>>>() {
+        postViewModel.getPostByID(id).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError()) {
@@ -242,14 +266,15 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
     private void init() {
         validator = new Validator(this);
         validator.setValidationListener(this);
-        setPageTitle("Post Details");
-        showBackButton();
+        //setPageTitle("Post Details");
+        //showBackButton();
     }
 
     private void setPostData(Post post) {
         initializeSlider(post);
         tv_comcount.setText(String.valueOf(post.getComment_count()));
         tv_likecount.setText(String.valueOf(post.getLike_count()));
+        tv_share_counter.setText(String.valueOf(post.getShare_count()));
         tv_connections.setText(AppUtils.getConnectionsCount(post.getUser().getTotal_connection()));
         tv_createddateTime.setText(DateUtils.getFormattedDateTime(post.getCreated_datetime()));
         tv_minago.setText(DateUtils.getTimeAgo(post.getCreated_datetime()));
@@ -299,17 +324,19 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
             img_like.setBackground(getContext().getDrawable(R.drawable.ic_like));
         }
         slider_images_detail.setVisibility(View.GONE);
-        img_video.setVisibility(View.GONE);
-        img_play.setVisibility(View.GONE);
+        cv.setVisibility(View.GONE);
         link.setVisibility(View.GONE);
         if (post.getPost_type() == AppConstants.IMAGE_TYPE) {
             slider_images_detail.setVisibility(View.VISIBLE);
         } else if (post.getPost_type() == AppConstants.VIDEO_TYPE) {
-            img_video.setVisibility(View.VISIBLE);
-            img_play.setVisibility(View.VISIBLE);
+            cv.setVisibility(View.VISIBLE);
+
             AppUtils.setGlideVideoThumbnail(getContext(), img_video, post.getPost_video());
         } else if (post.getPost_type() == AppConstants.LINK_POST) {
+
+            cv.setVisibility(View.VISIBLE);
             img_video.setVisibility(View.VISIBLE);
+            img_play.setVisibility(View.GONE);
             ArrayList<String> URLs = AppUtils.containsURL(post.getContent().toString());
             if (URLs.size() > 0) {
                 AppUtils.customUrlEmbeddedView(getContext(), URLs.get(0), img_video);
@@ -543,7 +570,54 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
        });
     }
 
+    @Override
+    public void onClick(View v) {
+        if(v.getId()==R.id.img_backarrow)
+        {
+            getActivity().onBackPressed();
+        }
+    }
 
+
+    protected class YourDialogFragmentDismissHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 102) {
+                Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
+                whatsappIntent.setType("text/plain");
+                whatsappIntent.setPackage("com.whatsapp");
+                whatsappIntent.putExtra(Intent.EXTRA_TEXT, "https://www.evaintmedia.com/" + post.getType() + "/" + post.getId());
+                try {
+                    getContext().startActivity(whatsappIntent);
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(requireContext(), "Whatsapp have not been installed.", Toast.LENGTH_SHORT).show();
+                }
+            }
+            else if(msg.what==100){
+                ShareConnectionFragment shareConnectionFragment = new ShareConnectionFragment();
+                FragmentTransaction transaction = ((AppCompatActivity) requireActivity()).getSupportFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+                transaction.replace(R.id.framelayout, shareConnectionFragment);
+                Bundle bundle = new Bundle();
+                {
+                    bundle.putInt(Constants.DATA, post.getId());
+                    bundle.putString(Constants.TYPE,  post.getType());
+                }
+                shareConnectionFragment.setArguments(bundle);
+                if (true) {
+                    transaction.addToBackStack(null);
+                }
+                transaction.commit();
+            }else if(msg.what==103){
+                ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(CLIPBOARD_SERVICE);
+                ClipData clip;
+                clip = ClipData.newPlainText("label", "https://www.evaintmedia.com/" + post.getType() + "/" + post.getId());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(requireContext(), "link copied", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
 
     @Override

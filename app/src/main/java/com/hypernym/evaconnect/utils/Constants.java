@@ -16,6 +16,11 @@ public class Constants {
     public static final String SUBMITTED = "Submitted ";
     public static final String ACTIVITY_NAME = "activity_name ";
 
+    public static final String HELP = "help";
+    public static final String TERMS_AND_CONDITION = "terms and condition";
+    public static final String COOKIES_POLICY = "cookie policy";
+
+
     public static final String FRAGMENT_NAME_1 = "meetings";
     public static final String FRAGMENT_TYPE = "fragment_type";
     public static final String FRAGMENT_NAME_2 = "events";
@@ -23,4 +28,6 @@ public class Constants {
     public static final String FACEBOOK_TYPE = "facebook";
     public static final String TYPE = "type";
     public static final String SEARCH = "search";
+    public static final String FORGOT_PASSWORD = "forgot_password";
+    public static final String USER = "user";
 }

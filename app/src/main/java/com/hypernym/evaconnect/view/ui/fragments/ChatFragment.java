@@ -1,5 +1,9 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -20,6 +24,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.lifecycle.Observer;
@@ -46,6 +51,7 @@ import com.hypernym.evaconnect.models.ChatMessage;
 import com.hypernym.evaconnect.models.Contents;
 import com.hypernym.evaconnect.models.Data;
 import com.hypernym.evaconnect.models.Filter;
+import com.hypernym.evaconnect.models.IsBlocked;
 import com.hypernym.evaconnect.models.NetworkConnection;
 import com.hypernym.evaconnect.models.Notification_onesignal;
 import com.hypernym.evaconnect.models.User;
@@ -60,6 +66,7 @@ import com.hypernym.evaconnect.view.adapters.ChatAdapter;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.viewmodel.JobListViewModel;
 import com.hypernym.evaconnect.viewmodel.MessageViewModel;
+import com.hypernym.evaconnect.viewmodel.UserViewModel;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -80,10 +87,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.Manifest.permission.CAMERA;
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
-import static android.app.Activity.RESULT_OK;
-
 public class ChatFragment extends BaseFragment implements View.OnClickListener, AttachmentsAdapter.ItemClickListener, ChatAdapter.OnItemClickListener {
 
 
@@ -96,12 +99,28 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @BindView(R.id.sendButton)
     TextView sendButton;
 
+
+    @BindView(R.id.include)
+    ConstraintLayout include;
+
+
+    @BindView(R.id.hBlockLayout)
+    ConstraintLayout hBlockLayout;
+
+
+    @BindView(R.id.hNotConnected)
+    ConstraintLayout hNotConnected;
+
+
     @BindView(R.id.browsefiles)
     ImageView browsefiles;
 
 
     @BindView(R.id.rc_attachments)
     RecyclerView rc_attachments;
+
+    @BindView(R.id.img_backarrow)
+    ImageView img_backarrow;
 
     List<String> attachments = new ArrayList<>();
     private AttachmentsAdapter attachmentsAdapter;
@@ -133,17 +152,19 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private int Hour, Minutes;
     private JobListViewModel jobListViewModel;
     private MessageViewModel messageViewModel;
-    private ChatAttachment chatAttachment=new ChatAttachment();
+    private ChatAttachment chatAttachment = new ChatAttachment();
     List<String> uploadedImages = new ArrayList<>();
     List<String> uploadedDocuments = new ArrayList<>();
-    User user =new User();
+    User user = new User();
+    private UserViewModel userViewModel;
+
 
     public ChatFragment() {
         // Required empty public constructor
     }
 
     FirebaseStorage storage = FirebaseStorage.getInstance();
-  //  StorageReference storageRef = storage.getReferenceFromUrl("gs://evaconnect-df08d.appspot.com");    //change the url according to your firebase app
+    //  StorageReference storageRef = storage.getReferenceFromUrl("gs://evaconnect-df08d.appspot.com");    //change the url according to your firebase app
 
 
     @Override
@@ -159,72 +180,76 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         ButterKnife.bind(this, view);
         sendButton.setOnClickListener(this);
         browsefiles.setOnClickListener(this);
+        img_backarrow.setOnClickListener(this);
+
+        Log.d("chat", "onCreateView Chat ");
+
+
         init();
-        initViewModel();
         return view;
     }
 
     private void initViewModel() {
+        userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(UserViewModel.class);
         jobListViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(JobListViewModel.class);
-        messageViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(MessageViewModel.class);
+        messageViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(MessageViewModel.class);
     }
 
     private void init() {
-        showBackButton();
+
+        initViewModel();
+
+        //showBackButton();
+        User hMe = LoginUtils.getLoggedinUser();
+
+
         setupRecycler(chatMessageList);
 
         attachmentsAdapter = new AttachmentsAdapter(getContext(), attachments, this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         rc_attachments.setLayoutManager(linearLayoutManager);
         rc_attachments.setAdapter(attachmentsAdapter);
-        if(getArguments()!=null && getArguments().getSerializable("user")!=null)
-        {
-            user =(User) getArguments().getSerializable("user");
+
+        if (getArguments() != null && getArguments().getSerializable("user") != null) {
+
+            user = (User) getArguments().getSerializable("user");
+            Log.d("chat", GsonUtils.toJson(user));
+
             setPageTitle(user.getFirst_name());
             user.setReceiver_id(user.getId());
-            if(user.getId()==null)
-            {
+            if (user.getId() == null) {
                 user.setId(LoginUtils.getLoggedinUser().getId());
             }
             user.setEmail(user.getFirst_name());
             setChatPerson(getContext(), user.getUser_image());
             findFirebaseChats(user.getId());
-        }
-        else if(getArguments().getSerializable("applicant")!=null)
-        {
-            User_applicants appliedApplicants=(User_applicants) getArguments().getSerializable("applicant");
+        } else if (getArguments().getSerializable("applicant") != null) {
+            User_applicants appliedApplicants = (User_applicants) getArguments().getSerializable("applicant");
+
             setPageTitle(appliedApplicants.getFirstName());
             user.setReceiver_id(appliedApplicants.getId());
             user.setId(appliedApplicants.getId());
             user.setUser_image(appliedApplicants.getUserImage());
-            if(appliedApplicants.getId()==null)
-            {
+            if (appliedApplicants.getId() == null) {
                 user.setId(LoginUtils.getLoggedinUser().getId());
             }
             user.setEmail(appliedApplicants.getFirstName());
             user.setFirst_name(appliedApplicants.getFirstName());
             setChatPerson(getContext(), appliedApplicants.getUserImage());
             findFirebaseChats(appliedApplicants.getId());
-        }
-        else if(getArguments().getSerializable("chat_room_id")!=null)
-        {
-            String chat_id=(String) getArguments().getSerializable("chat_room_id");
+        } else if (getArguments().getSerializable("chat_room_id") != null) {
+            String chat_id = (String) getArguments().getSerializable("chat_room_id");
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
             ////////////////////////GET USER DATA////////////////////////////////
             DatabaseReference chatRef = databaseReference.child(AppConstants.FIREASE_CHAT_ENDPOINT);
             chatRef.child(chat_id).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if(dataSnapshot!=null)
-                    {
-                        for(DataSnapshot dataSnapshot1: dataSnapshot.child("members").getChildren())
-                        {
-                            if(dataSnapshot1.getKey().equalsIgnoreCase(LoginUtils.getLoggedinUser().getId().toString()))
-                            {
-                               // findFirebaseChats(LoginUtils.getLoggedinUser().getId());
-                            }
-                            else
-                            {
+                    if (dataSnapshot != null) {
+                        for (DataSnapshot dataSnapshot1 : dataSnapshot.child("members").getChildren()) {
+                            if (dataSnapshot1.getKey().equalsIgnoreCase(LoginUtils.getLoggedinUser().getId().toString())) {
+                                // findFirebaseChats(LoginUtils.getLoggedinUser().getId());
+                            } else {
                                 setPageTitle(dataSnapshot1.getValue().toString());
                                 user.setEmail(dataSnapshot1.getValue().toString());
                                 user.setId(Integer.parseInt(dataSnapshot1.getKey()));
@@ -236,13 +261,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         if (dataSnapshot.getValue() != null) {
 
-                                          //  networkConnection.setUserImage(dataSnapshot.child("imageName").getValue().toString());
+                                            //  networkConnection.setUserImage(dataSnapshot.child("imageName").getValue().toString());
 
                                             user.setUser_image(dataSnapshot.child("imageName").getValue().toString());
 
-                                            showBackButton();
+                                            //showBackButton();
 
-                                            setChatPerson(getContext(),user.getUser_image());
+                                            setChatPerson(getContext(), user.getUser_image());
                                             findFirebaseChats(user.getId());
                                         }
                                     }
@@ -265,18 +290,19 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
                 }
             });
-        }
-        else
-        {
-            NetworkConnection networkConnection=(NetworkConnection) getArguments().getSerializable(Constants.DATA);
+        } else {
+            NetworkConnection networkConnection = (NetworkConnection) getArguments().getSerializable(Constants.DATA);
             setPageTitle(networkConnection.getName());
             user.setEmail(networkConnection.getName());
             user.setId(networkConnection.getReceiverId());
             user.setReceiver_id(networkConnection.getReceiverId());
             user.setChatID(networkConnection.getChatID());
             user.setUser_image(networkConnection.getUserImage());
-            setChatPerson(getContext(),networkConnection.getUserImage());
+            setChatPerson(getContext(), networkConnection.getUserImage());
             settingFireBaseChat(networkConnection);
+
+            hCallBlockCheckerAPI(hMe.getId(), user.getId());
+
         }
 
     }
@@ -291,18 +317,18 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 if (dataSnapshot.getValue() != null && dataSnapshot.hasChild("chats")) {
-                    for (DataSnapshot childSnapshot: dataSnapshot.child("chats").getChildren()) {
-                        NetworkConnection networkConnection=new NetworkConnection();
-                        String key=childSnapshot.getKey();
+                    for (DataSnapshot childSnapshot : dataSnapshot.child("chats").getChildren()) {
+                        NetworkConnection networkConnection = new NetworkConnection();
+                        String key = childSnapshot.getKey();
                         DatabaseReference chats = databaseReference.child(AppConstants.FIREASE_CHAT_ENDPOINT);
                         chats.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.getValue() != null) {
-                                    String otherMember=null;
-                                    DataSnapshot members=dataSnapshot.child("members");
+                                    String otherMember = null;
+                                    DataSnapshot members = dataSnapshot.child("members");
                                     for (DataSnapshot member : members.getChildren()) {
-                                        if(member.getKey().equalsIgnoreCase(LoginUtils.getLoggedinUser().getId().toString())) {
+                                        if (member.getKey().equalsIgnoreCase(LoginUtils.getLoggedinUser().getId().toString())) {
                                             networkConnection.setChatID(key);
                                             user.setChatID(key);
                                             settingFireBaseChat(networkConnection);
@@ -350,70 +376,64 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         });
 
         DatabaseReference userRef = databaseReference.child(AppConstants.FIREASE_MESSAGES_ENDPOINT);
-        DatabaseReference roomChats=userRef.child(message.getChatID());
+        DatabaseReference roomChats = userRef.child(message.getChatID());
 
         roomChats.addChildEventListener(new ChildEventListener() {
-         @Override
-          public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-              if (dataSnapshot.getValue() != null) {
-                ChatMessage chatMessage =new ChatMessage();
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                if (dataSnapshot.getValue() != null) {
+                    ChatMessage chatMessage = new ChatMessage();
 
-                chatMessage.setName(dataSnapshot.child("name").getValue().toString());
-                chatMessage.setSenderID(dataSnapshot.child("senderID").getValue().toString());
-                chatMessage.setCreated_datetime(dataSnapshot.child("timestamp").getValue().toString());
-                if(dataSnapshot.child("images").getValue()!=null)
-                {
-                    DataSnapshot images=dataSnapshot.child("images");
-                    List<String> imageList=new ArrayList<>();
-                    for(DataSnapshot image: images.getChildren())
-                    {
-                        imageList.add(image.getValue().toString());
+                    chatMessage.setName(dataSnapshot.child("name").getValue().toString());
+                    chatMessage.setSenderID(dataSnapshot.child("senderID").getValue().toString());
+                    chatMessage.setCreated_datetime(dataSnapshot.child("timestamp").getValue().toString());
+                    if (dataSnapshot.child("images").getValue() != null) {
+                        DataSnapshot images = dataSnapshot.child("images");
+                        List<String> imageList = new ArrayList<>();
+                        for (DataSnapshot image : images.getChildren()) {
+                            imageList.add(image.getValue().toString());
+                        }
+                        chatMessage.setChatImages(imageList);
+                    } else {
+                        chatMessage.setMessage(dataSnapshot.child("message").getValue().toString());
                     }
-                    chatMessage.setChatImages(imageList);
-                }
-                else
-                {
-                    chatMessage.setMessage(dataSnapshot.child("message").getValue().toString());
-                }
-                if(dataSnapshot.child("documents").getValue()!=null)
-                {
-                    DataSnapshot documents=dataSnapshot.child("documents");
-                    List<String> documentList=new ArrayList<>();
-                    for(DataSnapshot image: documents.getChildren())
-                    {
-                        documentList.add(image.getValue().toString());
+                    if (dataSnapshot.child("documents").getValue() != null) {
+                        DataSnapshot documents = dataSnapshot.child("documents");
+                        List<String> documentList = new ArrayList<>();
+                        for (DataSnapshot image : documents.getChildren()) {
+                            documentList.add(image.getValue().toString());
+                        }
+                        chatMessage.setChatDocuments(documentList);
                     }
-                    chatMessage.setChatDocuments(documentList);
+                    chatMessageList.add(chatMessage);
                 }
-                chatMessageList.add(chatMessage);
+                hideDialog();
+                chatAdapter.notifyDataSetChanged();
+                if (chatMessageList.size() > 0) {
+                    rc_chat.smoothScrollToPosition(chatMessageList.size() - 1);
+                }
             }
-            hideDialog();
-            chatAdapter.notifyDataSetChanged();
-        if (chatMessageList.size() > 0) {
-            rc_chat.smoothScrollToPosition(chatMessageList.size() - 1);
-        }
-    }
 
-    @Override
-    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-    }
+            }
 
-    @Override
-    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
-    }
+            }
 
-    @Override
-    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-    }
+            }
 
-    @Override
-    public void onCancelled(@NonNull DatabaseError databaseError) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-    }
-});
+            }
+        });
 
 
     }
@@ -436,23 +456,25 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
         switch (v.getId()) {
             case R.id.sendButton:
-                if(attachments.size()>0 && messageArea.getText().length()==0)
-                {
+                if (attachments.size() > 0 && messageArea.getText().length() == 0) {
                     UploadImageToFirebase();
-                }
-                else
-                {
+                } else {
                     uploadedImages = new ArrayList<>();
                     uploadedDocuments = new ArrayList<>();
-                    sendtofirebase_chat(uploadedImages,uploadedDocuments);
+                    sendtofirebase_chat(uploadedImages, uploadedDocuments);
                 }
 
                 break;
 
+            case R.id.img_backarrow:
+                getActivity().onBackPressed();
+                break;
+
+
             case R.id.browsefiles:
                 //   openPictureDialog();
                 attachments.clear();
-               // uploadedImages.clear();
+                // uploadedImages.clear();
                 //uploadedDocuments.clear();
                 MultiplePhoto.clear();
                 final OvershootInterpolator interpolator = new OvershootInterpolator();
@@ -491,10 +513,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                             intent.addCategory(Intent.CATEGORY_OPENABLE);
                             intent.setType("image/*");
                             startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_PHOTO_GALLERY);
-                        }  else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.camera))) {
+                        } else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.camera))) {
                             takePhotoFromCamera();
-                        }
-                        else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.document))) {
+                        } else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.document))) {
                             if (Checkpermission()) {
                                 LaunchGallery();
                             } else {
@@ -553,10 +574,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
 
-    private void sendtofirebase_chat(List<String> uploadedImages,List<String> uploadedDocuments) {
+    private void sendtofirebase_chat(List<String> uploadedImages, List<String> uploadedDocuments) {
         messageText = messageArea.getText().toString();
 
-        if (uploadedImages.size() > 0 || uploadedDocuments.size()>0|| messageText.length() > 0) {
+        if (uploadedImages.size() > 0 || uploadedDocuments.size() > 0 || messageText.length() > 0) {
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
             //Insertion in chats node
             DatabaseReference chatRef = databaseReference.child(AppConstants.FIREASE_CHAT_ENDPOINT);
@@ -568,35 +589,34 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             lastMessageMap.put("timestamp", Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis());
             lastMessageMap.put("images", uploadedImages);
             lastMessageMap.put("documents", uploadedDocuments);
-            if(chatMessageList.size()==0)
-            {
-                chatMap.put("lastMessage",lastMessageMap);
+            if (chatMessageList.size() == 0) {
+                chatMap.put("lastMessage", lastMessageMap);
                 //ADD members if it is first message
                 Map<String, Object> membersMap = new HashMap<String, Object>();
-                membersMap.put(LoginUtils.getLoggedinUser().getId().toString(),LoginUtils.getLoggedinUser().getFirst_name());
+                membersMap.put(LoginUtils.getLoggedinUser().getId().toString(), LoginUtils.getLoggedinUser().getFirst_name());
                 membersMap.put(user.getReceiver_id().toString(), user.getFirst_name());
-                chatMap.put("members",membersMap);
+                chatMap.put("members", membersMap);
 
-                String key =  chatRef.push().getKey();
+                String key = chatRef.push().getKey();
                 user.setChatID(key);
                 chatRef.child(key).setValue(chatMap);
 
                 //Insertion in Messages node
                 DatabaseReference messagesRef = databaseReference.child(AppConstants.FIREASE_MESSAGES_ENDPOINT);
 
-                Log.d("KEY IS....",key);
+                Log.d("KEY IS....", key);
                 messagesRef.child(key).push().setValue(lastMessageMap);
 
                 DatabaseReference userRef = databaseReference.child(AppConstants.FIREASE_USER_ENDPOINT);
-                DatabaseReference userRefByID=userRef.child(LoginUtils.getLoggedinUser().getId().toString());
-                DatabaseReference otheruserRefByID=userRef.child(user.getReceiver_id().toString());
+                DatabaseReference userRefByID = userRef.child(LoginUtils.getLoggedinUser().getId().toString());
+                DatabaseReference otheruserRefByID = userRef.child(user.getReceiver_id().toString());
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("last_update_time", new Date().getTime());
-               // map.put("unread",false);
+                // map.put("unread",false);
 
                 Map<String, Object> receivermap = new HashMap<String, Object>();
                 receivermap.put("last_update_time", new Date().getTime());
-               // receivermap.put("unread",true);
+                // receivermap.put("unread",true);
 
                 userRefByID.child("chats").child(key).setValue(map);
 
@@ -605,9 +625,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 otheruserRefByID.child("imageName").setValue(user.getUser_image());
                 networkConnection.setChatID(key);
                 settingFireBaseChat(networkConnection);
-            }
-            else
-            {
+            } else {
 
                 chatRef.child(user.getChatID()).child("lastMessage").setValue(lastMessageMap);
                 //Insertion in Messages node
@@ -615,19 +633,19 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 messagesRef.child(user.getChatID()).push().setValue(lastMessageMap);
 
                 DatabaseReference userRef = databaseReference.child(AppConstants.FIREASE_USER_ENDPOINT);
-                DatabaseReference userRefByID=userRef.child(LoginUtils.getLoggedinUser().getId().toString());
-                DatabaseReference otheruserRefByID=userRef.child(user.getReceiver_id().toString());
+                DatabaseReference userRefByID = userRef.child(LoginUtils.getLoggedinUser().getId().toString());
+                DatabaseReference otheruserRefByID = userRef.child(user.getReceiver_id().toString());
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("last_update_time", new Date().getTime());
-              //  map.put("unread",false);
+                //  map.put("unread",false);
 
                 Map<String, Object> receivermap = new HashMap<String, Object>();
                 receivermap.put("last_update_time", new Date().getTime());
-                receivermap.put("unread",true);
+                receivermap.put("unread", true);
 
 
                 otheruserRefByID.child("chats").child(user.getChatID()).setValue(receivermap);
-               userRefByID.child("chats").child(user.getChatID()).setValue(map);
+                userRefByID.child("chats").child(user.getChatID()).setValue(map);
                 networkConnection.setChatID(user.getChatID());
 
             }
@@ -642,7 +660,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 //            chatMessageList.add(chatMessage);
 //            chatAdapter.notifyDataSetChanged();
 
-          //  sendNotification(user.getEmail());
+            //  sendNotification(user.getEmail());
 
             messageArea.setText("");
             messageArea.requestFocus();
@@ -674,7 +692,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 //        } else {
 //            filter.value = networkConnection.getSender().getEmail();
 //        }
-        filter.value=email;
+        filter.value = email;
         //filter.value = networkConnection.getReceiver().getEmail();
         request.filters = new ArrayList<>();
         request.filters.add(filter);
@@ -704,29 +722,28 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             uploadedImages = new ArrayList<>();
             uploadedDocuments = new ArrayList<>();
             //for (int i = 0; i < MultiplePhoto.size(); i++) {
-                // MultiplePhoto.add(Uri.parse(String.valueOf(attachments)));
-                attachments.clear();
-                rc_attachments.setVisibility(View.GONE);
-                chatAttachment.setCreated_by_id(LoginUtils.getLoggedinUser().getId());
-                chatAttachment.setChat_image(MultiplePhoto);
-                chatAttachment.setStatus(AppConstants.ACTIVE);
+            // MultiplePhoto.add(Uri.parse(String.valueOf(attachments)));
+            attachments.clear();
+            rc_attachments.setVisibility(View.GONE);
+            chatAttachment.setCreated_by_id(LoginUtils.getLoggedinUser().getId());
+            chatAttachment.setChat_image(MultiplePhoto);
+            chatAttachment.setStatus(AppConstants.ACTIVE);
 
-                messageViewModel.uploadAttachment(chatAttachment).observe(this, new Observer<BaseModel<ChatAttachment>>() {
-                    @Override
-                    public void onChanged(BaseModel<ChatAttachment> listBaseModel) {
-                        if (listBaseModel != null && !listBaseModel.isError()) {
-                                uploadedImages.addAll(listBaseModel.getData().getImages());
-                                uploadedDocuments.addAll(listBaseModel.getData().getDocuments());
-                                sendtofirebase_chat(uploadedImages,uploadedDocuments);
-                        }
-                        else {
-                            networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                        }
+            messageViewModel.uploadAttachment(chatAttachment).observe(this, new Observer<BaseModel<ChatAttachment>>() {
+                @Override
+                public void onChanged(BaseModel<ChatAttachment> listBaseModel) {
+                    if (listBaseModel != null && !listBaseModel.isError()) {
+                        uploadedImages.addAll(listBaseModel.getData().getImages());
+                        uploadedDocuments.addAll(listBaseModel.getData().getDocuments());
+                        sendtofirebase_chat(uploadedImages, uploadedDocuments);
+                    } else {
+                        networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                     }
+                }
 
 
-                });
-          //  }
+            });
+            //  }
 
         }
 
@@ -751,12 +768,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
                     currentPhotoPath = GalleryImage;
 
-                    if(tempFile.toString().equalsIgnoreCase("File path not found"))
-                    {
+                    if (tempFile.toString().equalsIgnoreCase("File path not found")) {
                         networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_storage));
-                    }
-                    else
-                    {
+                    } else {
                         if (tempFile.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.FILE_SIZE_LIMIT_IN_KB) {
                             networkResponseDialog(getString(R.string.error), getString(R.string.err_image_size_large));
                             return;
@@ -793,9 +807,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 exc.printStackTrace();
                 Log.e(getClass().getName(), "exc: " + exc.getMessage());
             }
-        }
-        else if(requestCode == REQUEST_DOCUMENTS && resultCode == RESULT_OK)
-        {
+        } else if (requestCode == REQUEST_DOCUMENTS && resultCode == RESULT_OK) {
             try {
                 if (data != null && data.getData() != null) {
 
@@ -810,12 +822,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
                     currentPhotoPath = GalleryImage;
 
-                    if(tempFile.toString().equalsIgnoreCase("File path not found"))
-                    {
+                    if (tempFile.toString().equalsIgnoreCase("File path not found")) {
                         networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_storage));
-                    }
-                    else
-                    {
+                    } else {
                         if (tempFile.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.FILE_SIZE_LIMIT_IN_KB) {
                             networkResponseDialog(getString(R.string.error), getString(R.string.err_image_size_large));
                             return;
@@ -852,8 +861,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 exc.printStackTrace();
                 Log.e(getClass().getName(), "exc: " + exc.getMessage());
             }
-        }
-            else {
+        } else {
             if (requestCode == CAMERAA && resultCode == RESULT_OK) {
 
                 //mIsProfileImageAdded = true;
@@ -918,6 +926,42 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 break;
 
         }
+
+    }
+
+
+    private void hCallBlockCheckerAPI(int mID, int tID) {
+        Log.d("block", "onChanged: " + "API CALL" + mID + " " + tID);
+
+
+        userViewModel.hCheckBlock(mID, tID).observe(requireActivity(), new Observer<BaseModel<List<IsBlocked>>>() {
+            @Override
+            public void onChanged(BaseModel<List<IsBlocked>> listBaseModel) {
+
+                if (listBaseModel.getData().get(0) != null) {
+
+                    //check if true then show blocked layout else dont show
+                    if (listBaseModel.getData().get(0).isIs_blocked()) {
+                        hBlockLayout.setVisibility(View.VISIBLE);
+                        include.setVisibility(View.GONE);
+
+                    } else {
+                        hBlockLayout.setVisibility(View.GONE);
+                        include.setVisibility(View.VISIBLE);
+                    }
+
+
+                } else {
+                    Log.d("block", "onChanged: null");
+
+                    hBlockLayout.setVisibility(View.GONE);
+                    include.setVisibility(View.VISIBLE);
+
+                }
+
+            }
+        });
+
 
     }
 

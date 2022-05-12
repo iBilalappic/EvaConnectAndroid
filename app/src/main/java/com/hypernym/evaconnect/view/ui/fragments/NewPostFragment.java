@@ -1,6 +1,9 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 
+import static android.app.Activity.RESULT_OK;
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -13,12 +16,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -38,6 +45,7 @@ import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.utils.URLTextWatcher;
 import com.hypernym.evaconnect.view.adapters.AttachmentsAdapter;
+import com.hypernym.evaconnect.view.bottomsheets.BottomsheetAttachmentSelection;
 import com.hypernym.evaconnect.view.dialogs.LocalVideoViewDialog;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
@@ -57,8 +65,6 @@ import butterknife.OnClick;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -98,6 +104,9 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
     @BindView(R.id.img_play)
     ImageView img_play;
 
+    @BindView(R.id.img_add_post)
+    ImageView img_add_post;
+
     @BindView(R.id.uev)
     URLEmbeddedView urlEmbeddedView;
 
@@ -106,6 +115,24 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
 
     @BindView(R.id.tv_recordvideo)
     TextView tv_recordvideo;
+
+    @BindView(R.id.attachment)
+    ConstraintLayout attachment;
+
+    @BindView(R.id.attachment_preview)
+    ImageView webView;
+
+    @BindView(R.id.img_removeAttachment)
+    ImageView img_removeAttachment;
+
+    @BindView(R.id.tv_filename)
+    TextView tv_filename;
+
+    @BindView(R.id.img_backarrow)
+    ImageView img_backarrow;
+
+    @BindView(R.id.loadimage)
+    WebView loadimage;
 
 
     private AttachmentsAdapter attachmentsAdapter;
@@ -127,6 +154,12 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
     private SimpleDialog simpleDialog;
     private ConnectionViewModel connectionViewModel;
     Uri SelectedImageUri;
+
+    MultipartBody.Part part_images_document = null;
+    private List<File> MultipleFile = new ArrayList<>();
+    private static final int REQUEST_DOCUMENTS = 5;
+
+
     public NewPostFragment() {
         // Required empty public constructor
     }
@@ -138,8 +171,19 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_new_post, container, false);
         ButterKnife.bind(this, view);
-        postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(PostViewModel.class);
-        connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
+        ButterKnife.bind(this, view);
+
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
+
+        img_backarrow.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                requireActivity().onBackPressed();
+            }
+        });
+        postViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(PostViewModel.class);
+        connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
         init();
         initRecyclerView();
         browsefiles.setOnClickListener(new OnOneOffClickListener() {
@@ -148,6 +192,15 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                 LaunchGallery();
             }
         });
+
+        img_add_post.setOnClickListener(new OnOneOffClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                BottomsheetAttachmentSelection bottomSheetPictureSelection = new BottomsheetAttachmentSelection(new BaseFragment.YourDialogFragmentDismissHandler());
+                bottomSheetPictureSelection.show(requireActivity().getSupportFragmentManager(), bottomSheetPictureSelection.getTag());
+            }
+        });
+
 
         camera.setOnClickListener(new OnOneOffClickListener() {
             @Override
@@ -162,14 +215,22 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                 if (edt_content.getText().length() > 0 || part_images.size() > 0 || video != null) {
                     if (NetworkUtils.isNetworkConnected(getContext())) {
 
-                        if (getArguments()!=null && getArguments().getBoolean("isEdit")) {
+                        if (getArguments() != null && getArguments().getBoolean("document_type")) {
+                            if (getArguments() != null && getArguments().getBoolean("isEdit")) {
+                                upDateDocument();
+                            } else {
+                                createPost();
+                            }
+                        } else {
+                            if (getArguments() != null && getArguments().getBoolean("isEdit")) {
 
-                            updatePost();
+                                updatePost();
+                            } else {
+                                createPost();
+                            }
                         }
-                        else
-                        {
-                            createPost();
-                        }
+
+
                     } else {
                         networkErrorDialog();
                     }
@@ -187,6 +248,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
         return view;
     }
 
+    @SuppressLint("SetTextI18n")
     private void init() {
         User user = LoginUtils.getLoggedinUser();
         AppUtils.setGlideImage(getContext(), profile_image, user.getUser_image());
@@ -202,38 +264,50 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
 //            AppUtils.setGlideImage(getContext(), profile_image, user.getUser_image());
 //        }
         tv_name.setText(user.getFirst_name());
-        if(user.getDesignation()!=null)
-        {
-            tv_designation.setText(user.getDesignation()+" at ");
+        if (user.getDesignation() != null) {
+            tv_designation.setText(user.getDesignation() + " at ");
         }
 
         tv_company.setText(user.getCompany_name());
-        tv_address.setText(user.getCity()+" , "+user.getCountry());
-       // getConnectionCount();
+        tv_address.setText(user.getCity() + " , " + user.getCountry());
+        // getConnectionCount();
 
-        showBackButton();
+       // showBackButton();
         setPostButton();
-        if(getArguments().getBoolean("isVideo"))
-        {
-            setPageTitle(getString(R.string.menu2));
-            post.setText(getString(R.string.menu2));
-            tv_recordvideo.setVisibility(View.VISIBLE);
-            camera.setVisibility(View.GONE);
+
+        if (getArguments().getBoolean("document_type")) {
+            webView.setVisibility(View.INVISIBLE);
+
+            loadimage.setVisibility(View.VISIBLE);
+
+            getDocumentDetails(getArguments().getInt("post"));
+
+            attachment.setVisibility(View.VISIBLE);
+
+            post.setBackground(getResources().getDrawable(R.drawable.button_gradient_1));
+            post.setText("Post");
+            setPageTitle("Back");
 
 
+        } else {
+            if (getArguments().getBoolean("isVideo")) {
+                setPageTitle("Back");
+                post.setText("Post");
+                tv_recordvideo.setVisibility(View.VISIBLE);
+                camera.setVisibility(View.GONE);
+            } else {
+                setPageTitle("Back");
+                post.setText("Post");
+                tv_recordvideo.setVisibility(View.GONE);
+                camera.setVisibility(View.VISIBLE);
+            }
+            if (getArguments().getBoolean("isEdit")) {
+                getPostDetails(getArguments().getInt("post"));
+                post.setText("Post");
+            }
         }
-       else
-        {
-            setPageTitle(getString(R.string.What_will_you_write_about));
-            post.setText("Create Post");
-            tv_recordvideo.setVisibility(View.GONE);
-            camera.setVisibility(View.VISIBLE);
-        }
-       if(getArguments().getBoolean("isEdit"))
-       {
-           getPostDetails(getArguments().getInt("post"));
-           post.setText("Update Post");
-       }
+
+
         edt_content.addTextChangedListener(new URLTextWatcher(getActivity(), edt_content, urlEmbeddedView));
         edt_content.addTextChangedListener(new TextWatcher() {
             @Override
@@ -253,28 +327,93 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
         });
     }
 
-    private void getPostDetails(int id) {
-        postViewModel.getPostByID(id).observe(this, new Observer<BaseModel<List<Post>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError()) {
-                    //post = listBaseModel.getData().get(0);
-                   // settingpostType();
-                    setPostData(listBaseModel.getData().get(0));
+    private void getDocumentDetails(int id) {
+        postViewModel.getPostByID(id).observe(getViewLifecycleOwner(), listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError()) {
+                //post = listBaseModel.getData().get(0);
+                // settingpostType();
+                setDocumentData(listBaseModel.getData().get(0));
 
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
         });
     }
 
-    private void setPostData(Post post)
-    {
+    @SuppressLint({"SetJavaScriptEnabled", "ClickableViewAccessibility"})
+    private void setDocumentData(Post post) {
         edt_content.setText(post.getContent());
-        if(post.getPost_image().size()>0)
-        {
-            attachments.add(post.getPost_image().get(0));
+//        if(post.getPost_document().size()>0)
+//        {
+
+        edt_content.setText(post.getContent());
+
+        loadimage.setWebViewClient(new WebViewClient());
+        loadimage.getSettings().setSupportZoom(false);
+        loadimage.getSettings().setJavaScriptEnabled(true);
+        loadimage.getSettings().getAllowFileAccess();
+        loadimage.getSettings().getAllowUniversalAccessFromFileURLs();
+        loadimage.getSettings().getAllowFileAccessFromFileURLs();
+        loadimage.setOnTouchListener(null);
+
+        // cv_url = getArguments().getString("applicant_cv");
+        loadimage.loadUrl("https://docs.google.com/gview?embedded=true&url=" + post.getPost_document());
+        String fileName = post.getPost_document().substring(post.getPost_document().lastIndexOf('/') + 1);
+        tv_filename.setText(fileName);
+//            attachments.add(post.getPost_image().get(0));
+//            attachmentsAdapter.notifyDataSetChanged();
+//            rc_attachments.setVisibility(View.VISIBLE);
+//        }
+
+    }
+
+
+    private void upDateDocument() {
+        showDialog();
+        ArrayList<String> urlList = AppUtils.containsURL(edt_content.getText().toString());
+        if (urlList.size() > 0) {
+            postModel.setIs_url(true);
+        } else {
+            postModel.setIs_url(false);
+        }
+        postModel.setContent(edt_content.getText().toString());
+        postModel.setDocument(video);
+        postModel.setId(getArguments().getInt("post"));
+        postViewModel.editPost(postModel).observe(this, listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError()) {
+
+                newPost();
+
+                Toast.makeText(getContext(), getString(R.string.msg_post_created), Toast.LENGTH_LONG).show();
+                // networkResponseDialog(getString(R.string.success),getString(R.string.msg_post_created));
+                if (getFragmentManager().getBackStackEntryCount() != 0) {
+                    getFragmentManager().popBackStack();
+                }
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+            }
+            hideDialog();
+        });
+    }
+
+
+    private void getPostDetails(int id) {
+        postViewModel.getPostByID(id).observe(getViewLifecycleOwner(), listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError()) {
+                //post = listBaseModel.getData().get(0);
+                // settingpostType();
+                setPostData(listBaseModel.getData().get(0));
+
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+            }
+        });
+    }
+
+    private void setPostData(Post post) {
+        edt_content.setText(post.getContent());
+        if (post.getPost_image().size() > 0) {
+            attachments.addAll(post.getPost_image());
             attachmentsAdapter.notifyDataSetChanged();
             rc_attachments.setVisibility(View.VISIBLE);
         }
@@ -293,23 +432,20 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
         postModel.setAttachments(part_images);
         postModel.setContent(edt_content.getText().toString());
         postModel.setVideo(video);
-        postViewModel.createPost(postModel).observe(this, new Observer<BaseModel<List<Post>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError()) {
+        postViewModel.createPost(postModel).observe(this, listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError()) {
 
-                    newPost();
+                newPost();
 
-                    Toast.makeText(getContext(), getString(R.string.msg_post_created), Toast.LENGTH_LONG).show();
-                    // networkResponseDialog(getString(R.string.success),getString(R.string.msg_post_created));
-                    if (getFragmentManager().getBackStackEntryCount() != 0) {
-                        getFragmentManager().popBackStack();
-                    }
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                Toast.makeText(getContext(), getString(R.string.msg_post_created), Toast.LENGTH_LONG).show();
+                // networkResponseDialog(getString(R.string.success),getString(R.string.msg_post_created));
+                if (requireFragmentManager().getBackStackEntryCount() != 0) {
+                    requireFragmentManager().popBackStack();
                 }
-                hideDialog();
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
     }
 
@@ -325,16 +461,13 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
         super.onActivityResult(requestCode, resultCode, data);
         // Result code is RESULT_OK only if the user selects an Image
 
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE)
-        {
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
-            if (resultCode == RESULT_OK)
-            {
+            if (resultCode == RESULT_OK) {
                 // add updated cropped image in recyclerview.
                 addUpdatedImaged(result);
-            }
-            else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 if (result != null) {
                     Exception error = result.getError();
                     error.printStackTrace();
@@ -348,11 +481,10 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                     Uri SelectedImageUri = data.getData();
                     GalleryImage = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
 
-                    if (TextUtils.isEmpty(GalleryImage)){
+                    if (TextUtils.isEmpty(GalleryImage)) {
                         networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
                         return;
-                    }
-                    else{
+                    } else {
                         mProfileImageDecodableString = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
                         Log.e(getClass().getName(), "image file path: " + GalleryImage);
 
@@ -377,8 +509,14 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                                         AppUtils.setGlideVideoThumbnail(getContext(), img_video, currentPhotoPath);
                                         video = MultipartBody.Part.createFormData("post_video", file_name.getName(), reqFile);
                                         setPostButton();
-                                    }
-                                    else {
+                                        attachments.clear();
+                                        attachmentsAdapter.notifyDataSetChanged();
+                                        rc_attachments.setVisibility(View.GONE);
+                                        attachment.setVisibility(View.GONE);
+                                        img_removeAttachment.setVisibility(View.GONE);
+
+
+                                    } else {
                                         //Do not add getActivity instead of getContext().
                                         CropImage.activity(SelectedImageUri)
                                                 .start(getContext(), this);
@@ -426,6 +564,12 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                                 AppUtils.setGlideVideoThumbnail(getContext(), img_video, currentPhotoPath);
                                 video = MultipartBody.Part.createFormData("post_video", file_name.getName(), reqFile);
                                 setPostButton();
+                                attachments.clear();
+                                attachmentsAdapter.notifyDataSetChanged();
+                                rc_attachments.setVisibility(View.GONE);
+                                attachment.setVisibility(View.GONE);
+                                img_removeAttachment.setVisibility(View.GONE);
+
 
                             } else {
                                 networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
@@ -441,26 +585,87 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                 exc.printStackTrace();
                 Log.e(getClass().getName(), "exc: " + exc.getMessage());
             }
-        }
-        else if (requestCode == CAMERAA)
-        {
+        } else if (requestCode == REQUEST_DOCUMENTS && resultCode == RESULT_OK) {
+            try {
+                if (data != null && data.getData() != null) {
+
+                    SelectedImageUri = data.getData();
+
+                    // ImageFilePathUtil.checkFileType(".pdf");
+                    GalleryImage = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
+                    mProfileImageDecodableString = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
+                    Log.e(getClass().getName(), "image file path: " + GalleryImage);
+
+                    tempFile = new File(GalleryImage);
+
+                    currentPhotoPath = GalleryImage;
+
+                    if (tempFile.toString().equalsIgnoreCase("File path not found")) {
+                        networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_storage));
+                    } else {
+                        if (tempFile.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.FILE_SIZE_LIMIT_IN_KB) {
+                            networkResponseDialog(getString(R.string.error), getString(R.string.err_image_size_large));
+                            return;
+                        } else {
+                            if (photoVar == null) {
+                                MultipleFile.add(tempFile);
+                                Log.e(getClass().getName(), "file path details: " + tempFile.getName() + " " + tempFile.getAbsolutePath() + "length" + tempFile.length());
+
+                                // photoVar = GalleryImage;
+                                file_name = new File(ImageFilePathUtil.getPath(getActivity(), SelectedImageUri));
+                                RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file_name);
+
+                                video = MultipartBody.Part.createFormData("post_document", file_name.getName(), reqFile);
+                                //  MultiplePhoto.add(partImage);
+                                //Drawable drawable = (Drawable)new BitmapDrawable(getResources(),);
+                                webView.setImageBitmap(AppUtils.generateImageFromPdf(SelectedImageUri, getContext()));
+                                loadimage.setVisibility(View.GONE);
+                                webView.setVisibility(View.VISIBLE);
+                                img_video.setVisibility(View.GONE);
+                                img_play.setVisibility(View.GONE);
+
+                                tv_filename.setText(file_name.getName());
+                                img_removeAttachment.setVisibility(View.VISIBLE);
+                                attachment.setVisibility(View.VISIBLE);
+                                //  attachment_preview.loadUrl(SelectedImageUri.toString());
+                                attachments.clear();
+                                attachmentsAdapter.notifyDataSetChanged();
+                                rc_attachments.setVisibility(View.GONE);
+                                setPostButton();
+                                if (!TextUtils.isEmpty(currentPhotoPath) || currentPhotoPath != null) {
+
+                                } else {
+                                    networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
+                                }
+                            } else {
+                                networkResponseDialog(getString(R.string.error), getString(R.string.err_one_file_at_a_time));
+                                return;
+                            }
+                        }
+                    }
+
+                } else {
+                    Toast.makeText(getActivity(), "Something went wrong while retrieving image", Toast.LENGTH_SHORT).show();
+                }
+            } catch (Exception exc) {
+                exc.printStackTrace();
+                Log.e(getClass().getName(), "exc: " + exc.getMessage());
+            }
+        } else if (requestCode == CAMERAA) {
             try {
                 SelectedImageUri = Uri.fromFile(galleryAddPic());
 
                 CropImage.activity(SelectedImageUri)
                         .start(getContext(), this);
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        else if(requestCode==3)
-        {
+        } else if (requestCode == 3) {
             ///IMAGE CROPPING FROM GALLERY////////////////
-         //  SelectedImageUri = data.getParcelableExtra("path");
-          //  SelectedImageUri=(Uri) data.getExtras().get("data");
+            //  SelectedImageUri = data.getParcelableExtra("path");
+            //  SelectedImageUri=(Uri) data.getExtras().get("data");
             SelectedImageUri = getPickImageResultUri(data);
-           // SelectedImageUri= data.getParcelableExtra("path");
+            // SelectedImageUri= data.getParcelableExtra("path");
             GalleryImage = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
             mProfileImageDecodableString = ImageFilePathUtil.getPath(getActivity(), SelectedImageUri);
             Log.e(getClass().getName(), "image file path: " + GalleryImage);
@@ -485,12 +690,21 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                             AppUtils.setGlideVideoThumbnail(getContext(), img_video, currentPhotoPath);
                             video = MultipartBody.Part.createFormData("post_video", file_name.getName(), reqFile);
                             setPostButton();
+                            attachments.clear();
+                            attachmentsAdapter.notifyDataSetChanged();
+                            rc_attachments.setVisibility(View.GONE);
+                            img_removeAttachment.setVisibility(View.GONE);
+
+
                         } else {
                             attachments.add(currentPhotoPath);
                             attachmentsAdapter.notifyDataSetChanged();
                             rc_attachments.setVisibility(View.VISIBLE);
                             img_video.setVisibility(View.GONE);
                             img_play.setVisibility(View.GONE);
+                            attachment.setVisibility(View.GONE);
+                            img_removeAttachment.setVisibility(View.GONE);
+
                             part_images.add(MultipartBody.Part.createFormData("post_image", file_name.getName(), reqFile));
                             setPostButton();
                         }
@@ -503,9 +717,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                     return;
                 }
             }
-        }
-        else if(requestCode==5)
-        {
+        } else if (requestCode == 6) {
             File file = galleryAddPic();
             RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
             // imgName = file_name.getName();
@@ -522,8 +734,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                 orignal.compress(Bitmap.CompressFormat.JPEG, 50, out);
                 out.flush();
                 out.close();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             if (!TextUtils.isEmpty(globalImagePath) || globalImagePath != null) {
@@ -533,6 +744,13 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                     AppUtils.setGlideVideoThumbnail(getContext(), img_video, globalImagePath);
                     video = MultipartBody.Part.createFormData("post_video", file_name.getName(), reqFile);
                     setPostButton();
+                    attachments.clear();
+                    attachmentsAdapter.notifyDataSetChanged();
+                    rc_attachments.setVisibility(View.GONE);
+                    attachment.setVisibility(View.GONE);
+
+                    img_removeAttachment.setVisibility(View.GONE);
+
                 } else {
 
                     attachments.add(globalImagePath);
@@ -540,6 +758,9 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                     rc_attachments.setVisibility(View.VISIBLE);
                     img_video.setVisibility(View.GONE);
                     img_play.setVisibility(View.GONE);
+                    attachment.setVisibility(View.GONE);
+                    img_removeAttachment.setVisibility(View.GONE);
+
                     part_images.add(MultipartBody.Part.createFormData("post_image", file.getName(), reqFile));
                     setPostButton();
                 }
@@ -550,12 +771,11 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
     // add updated cropped image in recyclerview.
     private void addUpdatedImaged(CropImage.ActivityResult result) {
         try {
-            if (result != null)
-            {
+            if (result != null) {
                 Uri resultUri = result.getUri();
                 String updatedImage = ImageFilePathUtil.getPath(getActivity(), resultUri);
 
-                if (!TextUtils.isEmpty(updatedImage)){
+                if (!TextUtils.isEmpty(updatedImage)) {
                     File file = new File(updatedImage);
                     RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
 
@@ -564,12 +784,14 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                     rc_attachments.setVisibility(View.VISIBLE);
                     img_video.setVisibility(View.GONE);
                     img_play.setVisibility(View.GONE);
+                    attachment.setVisibility(View.GONE);
+                    img_removeAttachment.setVisibility(View.GONE);
+
                     part_images.add(MultipartBody.Part.createFormData("post_image", file.getName(), reqFile));
                     setPostButton();
                 }
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -597,8 +819,16 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
 
     @OnClick(R.id.img_video)
     public void playVideo() {
-        LocalVideoViewDialog videoViewDialog=new LocalVideoViewDialog(getContext(),currentPhotoPath);
+        LocalVideoViewDialog videoViewDialog = new LocalVideoViewDialog(getContext(), currentPhotoPath);
         videoViewDialog.show();
+    }
+
+    @OnClick(R.id.img_removeAttachment)
+    public void removeAttachment() {
+        attachment.setVisibility(View.GONE);
+        img_removeAttachment.setVisibility(View.GONE);
+        video = null;
+        setPostButton();
     }
 
     @Override
@@ -611,7 +841,7 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
                         attachments.remove(position);
                         attachmentsAdapter.notifyDataSetChanged();
                         part_images.remove(position);
-                      //  setPostButton();
+                        setPostButton();
                         break;
                     case R.id.button_negative:
                         break;
@@ -653,11 +883,12 @@ public class NewPostFragment extends BaseFragment implements AttachmentsAdapter.
             }
         });
     }
+
     public void setPostButton() {
         if (edt_content.getText().length() > 0 || part_images.size() > 0 || video != null) {
-            post.setBackground(getResources().getDrawable(R.drawable.button_bg));
+            post.setBackgroundResource(R.drawable.button_gradient_1);
         } else {
-            post.setBackground(getResources().getDrawable(R.drawable.button_unfocused));
+            post.setBackgroundResource(R.color.gray);
         }
     }
 

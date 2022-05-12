@@ -12,10 +12,10 @@ import retrofit2.http.Part;
 
 public interface ICreateJobAdRepository {
     LiveData<BaseModel<List<Object>>> createJobAd(User user, @Part MultipartBody.Part user_image,
-    String jobSector,int amount,String companyName,String jobDescription,String Locaiton,String jobtitle,String postion,String jobType);
+                                                  String jobSector, int amount, String companyName, String jobDescription, String Locaiton, String jobtitle, String postion, String jobType, String jobduration);
 
-    LiveData<BaseModel<List<Object>>> UpdateJobAd(int job_id,User user, @Part MultipartBody.Part user_image,
-                                                  String jobSector,int amount,String companyName,String jobDescription,String Locaiton,String jobtitle,String postion,String jobType);
+    LiveData<BaseModel<List<Object>>> UpdateJobAd(int job_id, User user, @Part MultipartBody.Part user_image,
+                                                  String jobSector, int amount, String companyName, String jobDescription, String Locaiton, String jobtitle, String postion, String jobType, String jobDuration);
 
     LiveData<BaseModel<List<String>>> getJobType();
 }

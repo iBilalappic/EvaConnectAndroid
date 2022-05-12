@@ -1,5 +1,7 @@
 package com.hypernym.evaconnect.repositories.impl;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -28,7 +30,7 @@ public class CreateJobRepository implements ICreateJobAdRepository {
     public LiveData<BaseModel<List<Object>>> createJobAd(User user, MultipartBody.Part partImage,
                                                          String jobSector, int amount,
                                                          String companyName, String jobDescription,
-                                                         String Location, String jobtitle, String postion,String jobtype) {
+                                                         String Location, String jobtitle, String postion, String jobtype, String jobduration) {
         MessageMutableLiveData = new MutableLiveData<>();
 //        HashMap<String, Object> body = new HashMap<>();
 //        body.put("user_id",user_id);
@@ -43,19 +45,24 @@ public class CreateJobRepository implements ICreateJobAdRepository {
                 amount,
                 user.getId(),
                 RequestBody.create(MediaType.parse("text/plain"), DateUtils.GetCurrentdate()),
-                RequestBody.create(MediaType.parse("text/plain"), jobtype),21,
-                partImage,RequestBody.create(MediaType.parse("text/plain"),companyName)).enqueue(new Callback<BaseModel<List<Object>>>() {
+                RequestBody.create(MediaType.parse("text/plain"), jobtype),Integer.parseInt(jobduration),
+                partImage,
+                RequestBody.create(MediaType.parse("text/plain"),companyName)).enqueue(new Callback<BaseModel<List<Object>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
                 if (response.isSuccessful() && !response.body().isError())
                     MessageMutableLiveData.setValue(response.body());
+                Log.d("jobs", "onResponse: sucess");
                 if (response.code() == 500) {
                     MessageMutableLiveData.setValue(null);
+
                 }
             }
 
             @Override
             public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+                Log.d("jobs", "onResponse: fail");
+
                 MessageMutableLiveData.setValue(null);
             }
         });
@@ -66,7 +73,7 @@ public class CreateJobRepository implements ICreateJobAdRepository {
     public LiveData<BaseModel<List<Object>>> UpdateJobAd(int job_id, User user, MultipartBody.Part partImage,
                                                          String jobSector, int amount,
                                                          String companyName, String jobDescription,
-                                                         String Location, String jobtitle, String postion,String jobtype) {
+                                                         String Location, String jobtitle, String postion, String jobtype, String jobDuration) {
         UpdateMutableLiveData = new MutableLiveData<>();
 //        HashMap<String, Object> body = new HashMap<>();
 //        body.put("user_id",user_id);
@@ -78,7 +85,7 @@ public class CreateJobRepository implements ICreateJobAdRepository {
                 RequestBody.create(MediaType.parse("text/plain"), jobDescription),
                 RequestBody.create(MediaType.parse("text/plain"), Location), amount, user.getId(),
                 RequestBody.create(MediaType.parse("text/plain"), DateUtils.GetCurrentdatetime()),
-                RequestBody.create(MediaType.parse("text/plain"), jobtype),21,
+                RequestBody.create(MediaType.parse("text/plain"), jobtype),Integer.parseInt(jobDuration),
                 partImage).enqueue(new Callback<BaseModel<List<Object>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {

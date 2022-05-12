@@ -6,13 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
-import com.hypernym.evaconnect.constants.AppConstants;
+import com.hypernym.evaconnect.models.ConnectionModel;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.DateUtils;
@@ -25,12 +26,12 @@ import butterknife.ButterKnife;
 
 public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.ViewHolder> {
     private Context context;
-    private List<User> connections, originalConnections;
+    private List<ConnectionModel> connections, originalConnections;
     private ConnectionsAdapter.OnItemClickListener onItemClickListener;
     int count = 0;
     private boolean isLoaderVisible = false;
 
-    public ConnectionsAdapter(Context context, List<User> connectionList, ConnectionsAdapter.OnItemClickListener onItemClickListener) {
+    public ConnectionsAdapter(Context context, List<ConnectionModel> connectionList, ConnectionsAdapter.OnItemClickListener onItemClickListener) {
         this.context = context;
         this.connections = connectionList;
         this.onItemClickListener = onItemClickListener;
@@ -46,32 +47,122 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ConnectionsAdapter.ViewHolder holder, int position) {
-        if (!TextUtils.isEmpty(connections.get(position).getUser_image())) {
-            AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getUser_image());
+        User user = LoginUtils.getLoggedinUser();
+        if (connections.get(position).sender != null && connections.get(position).receiver != null) {
+            if (user.getId().equals(connections.get(position).senderId)) {
+                if (!TextUtils.isEmpty(connections.get(position).receiver.getUserImage())) {
+                    AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).receiver.getUserImage());
+                }
+                if (connections.get(position).receiver.getFirstName() != null) {
+                    holder.tv_name.setText(connections.get(position).receiver.getFirstName());
+                }
+                if (connections.get(position).receiver.getDesignation() != null && !connections.get(position).receiver.getDesignation().isEmpty()) {
+                    holder.tv_designation.setText(connections.get(position).receiver.getDesignation());
+                } else {
+                    holder.tv_designation.setVisibility(View.GONE);
+                }
+                if (connections.get(position).receiver.getIs_online()) {
+                    holder.tv_connection_status.setText("Online");
+                    holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.skyblue));
+                } else {
+                    if (connections.get(position).receiver.getIs_online() != null) {
+                        holder.tv_connection_status.setText("Last Online " + DateUtils.formatToYesterdayOrToday(connections.get(position).receiver.getLast_online_datetime()));
+                        holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.gray));
+                    } else {
+                        holder.tv_connection_status.setText("-");
+                    }
+                }
+
+
+
+            } else if (user.getId().equals(connections.get(position).receiverId)) {
+                if (!TextUtils.isEmpty(connections.get(position).sender.getUserImage())) {
+                    AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).sender.getUserImage());
+                }
+                if (connections.get(position).sender.getFirstName() != null) {
+                    holder.tv_name.setText(connections.get(position).sender.getFirstName() + " " + connections.get(position).sender.getLastName());
+                }
+                if (connections.get(position).sender.getDesignation() != null && !connections.get(position).sender.getDesignation().isEmpty()) {
+                    holder.tv_designation.setText(connections.get(position).sender.getDesignation());
+                } else {
+                    holder.tv_designation.setVisibility(View.GONE);
+                }
+                if (connections.get(position).sender.getIs_online()) {
+                    holder.tv_connection_status.setText("Online");
+                    holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.skyblue));
+                } else {
+                    if (connections.get(position).sender.getIs_online() != null) {
+                        holder.tv_connection_status.setText("Last Online " + DateUtils.formatToYesterdayOrToday(connections.get(position).sender.getLast_online_datetime()));
+                        holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.gray));
+                    } else {
+                        holder.tv_connection_status.setText("-");
+                    }
+
+                }
+
+            }
+        } else {
+            if (!TextUtils.isEmpty(connections.get(position).userImage)) {
+                AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).userImage);
+            }
+            if (connections.get(position).firstName != null) {
+                holder.tv_name.setText(connections.get(position).firstName + " ");
+
+                if (connections.get(position).lastName != null) {
+                    holder.tv_name.setText(connections.get(position).firstName + " " + connections.get(position).lastName);
+
+                }
+            }
+            if (connections.get(position).designation != null && !connections.get(position).designation.equals("")) {
+                holder.tv_designation.setText(connections.get(position).designation.toString());
+            } else {
+                holder.tv_designation.setVisibility(View.GONE);
+            }
+
+            if (connections.get(position).isOnline) {
+                holder.tv_connection_status.setText("Online");
+                holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.skyblue));
+            } else {
+                if (connections.get(position).lastOnlineDatetime != null) {
+                    holder.tv_connection_status.setText("Last Online " + DateUtils.formatToYesterdayOrToday(connections.get(position).lastOnlineDatetime));
+                    holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.gray));
+                } else {
+                    holder.tv_connection_status.setText("-");
+                }
+
+            }
         }
+
 //        else if (connections.get(position).getIs_facebook() == 1 && !TextUtils.isEmpty(connections.get(position).getFacebook_image_url())) {
 //            AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getFacebook_image_url());
 //        } else {
 //            AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).getUser_image());
 //        }
-        holder.tv_name.setText(connections.get(position).getFirst_name());
-        if (connections.get(position).getBio_data() != null && !connections.get(position).getBio_data().isEmpty()) {
-            holder.tv_designation.setText(connections.get(position).getBio_data());
-        } else {
-            holder.tv_designation.setText("--");
-        }
+//        if(connections.get(position).sender.getFirstName()!=null){
+//            holder.tv_name.setText(connections.get(position).sender.getFirstName());
+//        }
+//        if (connections.get(position).sender.getBioData() != null && !connections.get(position).sender.getBioData().isEmpty()) {
+//            holder.tv_designation.setText(connections.get(position).sender.getBioData());
+//        } else {
+//            holder.tv_designation.setText("--");
+//        }
 
-
+        /*
         if(connections.get(position).getDesignation()!=null)
         {
             holder.location.setText(connections.get(position).getDesignation()+" at ");
-        }
+        }*/
 
 
-        holder.tv_designation.setText(connections.get(position).getCompany_name());
+//        if (connections.get(position).sender.getCompanyName()!=null && !connections.get(position).sender.getCompanyName().isEmpty()) {
+//            holder.tv_designation.setVisibility(View.VISIBLE);
+//            holder.tv_designation.setText(connections.get(position).sender.getCompanyName());
+//        } else {
+//            holder.tv_designation.setVisibility(View.GONE);
+//        }
         //Hide connect option if post is from logged in user
-        User user = LoginUtils.getLoggedinUser();
-        if (connections.get(position).getId().equals(user.getId())) {
+
+/*        if (connections.get(position).getId().equals(user.getId())) {
             holder.tv_connect.setVisibility(View.GONE);
         } else {
             holder.tv_connect.setVisibility(View.VISIBLE);
@@ -90,31 +181,36 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
                 holder.tv_decline.setVisibility(View.GONE);
             }
 
-        }
-        if(connections.get(position).isIs_online())
-        {
-            holder.tv_connection_status.setText("Online");
-            holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.skyblue));
-        }
-        else
-        {
-            if(connections.get(position).getLast_online_datetime()!=null)
-            {
-                holder.tv_connection_status.setText("Last Online "+ DateUtils.formatToYesterdayOrToday(connections.get(position).getLast_online_datetime()));
-                holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.gray));
-            }
-            else
-            {
-                holder.tv_connection_status.setText("-");
-            }
-
-        }
+        }*/
+//        if(connections.get(position).isOnline)
+//        {
+//            holder.tv_connection_status.setText("Online");
+//            holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.skyblue));
+//        }
+//        else
+//        {
+//            if(connections.get(position).lastOnlineDatetime!=null)
+//            {
+//                holder.tv_connection_status.setText("Last Online "+ DateUtils.formatToYesterdayOrToday(connections.get(position).lastOnlineDatetime));
+//                holder.tv_connection_status.setTextColor(context.getResources().getColor(R.color.gray));
+//            }
+//            else
+//            {
+//                holder.tv_connection_status.setText("-");
+//            }
+//
+//        }
 
     }
 
     @Override
     public int getItemCount() {
         return connections.size();
+    }
+
+    public void hSetList(List<ConnectionModel> hSearchList) {
+        connections = hSearchList;
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -137,15 +233,15 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
         @BindView(R.id.tv_connection_status)
         TextView tv_connection_status;
 
-        @BindView(R.id.location)
-        TextView location;
-
+        @BindView(R.id.ly_main)
+        LinearLayout ly_main;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             tv_connect.setOnClickListener(this);
             tv_decline.setOnClickListener(this);
+            ly_main.setOnClickListener(this);
         }
 
         @Override
@@ -156,9 +252,19 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
                         onItemClickListener.onItemClick(v, originalConnections.indexOf(connections.get(getAdapterPosition())));
                     break;
                 case R.id.tv_decline:
-                    if (onItemClickListener != null)
+                    if (onItemClickListener != null) {
                         onItemClickListener.onItemClick(v, originalConnections.indexOf(connections.get(getAdapterPosition())));
+                    }
                     break;
+
+                case R.id.ly_main:
+                    if (onItemClickListener != null) {
+                        onItemClickListener.onItemClick(v, originalConnections.indexOf(connections.get(getAdapterPosition())));
+                    }
+
+
+                    break;
+
             }
 
 //            if (onItemClickListener != null)
@@ -169,7 +275,7 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
     //This method will filter the list
     //here we are passing the filtered data
     //and assigning it to the list with notifydatasetchanged method
-    public void filterList(List<User> filterdNames) {
+    public void filterList(List<ConnectionModel> filterdNames) {
         connections.clear();
         if (filterdNames.size() > 0) {
 
@@ -189,14 +295,14 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
     public void removeLoading() {
         isLoaderVisible = false;
         int position = connections.size() - 1;
-        User item = getItem(position);
+        ConnectionModel item = getItem(position);
         if (item != null) {
             connections.remove(position);
             notifyItemRemoved(position);
         }
     }
 
-    User getItem(int position) {
+    ConnectionModel getItem(int position) {
         if (connections.size() > 0)
             return connections.get(position);
         else

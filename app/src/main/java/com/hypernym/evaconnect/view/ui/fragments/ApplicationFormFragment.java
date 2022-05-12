@@ -1,9 +1,12 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,9 +20,11 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.hypernym.evaconnect.BuildConfig;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.models.BaseModel;
@@ -29,13 +34,26 @@ import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.AppUtils;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
+import com.hypernym.evaconnect.view.dialogs.ApplicationSuccess_dialog;
+import com.hypernym.evaconnect.view.dialogs.SearchDialog;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.viewmodel.ApplicationSubmitViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.reflect.Array;
+import java.net.URI;
+import java.nio.ByteBuffer;
 import java.util.List;
 
 import butterknife.BindView;
@@ -84,6 +102,7 @@ public class ApplicationFormFragment extends BaseFragment implements View.OnClic
     @BindView(R.id.img_backarrow)
     ImageView img_backarrow;
 
+    ApplicationSuccess_dialog applicationSuccess_dialog;
 
     String mProfileImageDecodableString;
     private File tempFile, file_name;
@@ -92,6 +111,8 @@ public class ApplicationFormFragment extends BaseFragment implements View.OnClic
     MultipartBody.Part partImage;
     private Validator validator;
     private ApplicationSubmitViewModel applicationSubmitViewModel;
+
+    private static final int OPEN_DIRECTORY_REQUEST_CODE = 1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -109,8 +130,8 @@ public class ApplicationFormFragment extends BaseFragment implements View.OnClic
     }
 
     private void init() {
-        setPageTitle("Job Details");
-         showBackButton();
+       // setPageTitle("Job Details");
+       //  showBackButton();
         if ((getArguments() != null)) {
 
             jobAd = (JobAd) getArguments().getSerializable("JOB_AD");
@@ -152,16 +173,20 @@ public class ApplicationFormFragment extends BaseFragment implements View.OnClic
             @Override
             public void onChanged(BaseModel<List<Object>> getnetworkconnection) {
                 if (getnetworkconnection != null && !getnetworkconnection.isError()) {
-                    simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_application_form), null, getString(R.string.ok), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // onBackPressed();
-                            if (getFragmentManager().getBackStackEntryCount() != 0) {
-                                getFragmentManager().popBackStack();
-                            }
-                            simpleDialog.dismiss();
-                        }
-                    });
+                    applicationSuccess_dialog = new ApplicationSuccess_dialog(requireActivity(),getContext());
+                    applicationSuccess_dialog.show();
+
+//                    simpleDialog = new SimpleDialog(getActivity(), getString(R.string.success), getString(R.string.msg_application_form), null, getString(R.string.ok), new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                             onBackPressed();
+//
+//                            if (getFragmentManager().getBackStackEntryCount() != 0) {
+//                                getFragmentManager().popBackStack();
+//                            }
+//                            simpleDialog.dismiss();
+//                        }
+//                    });
                     hideDialog();
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
@@ -229,9 +254,9 @@ public class ApplicationFormFragment extends BaseFragment implements View.OnClic
                 if (data != null && data.getData() != null) {
                     Uri SelectedImageUri = data.getData();
 
-                    mProfileImageDecodableString = ImageFilePathUtil.getPath(getContext(), SelectedImageUri);
+                    mProfileImageDecodableString = SelectedImageUri.getPath();
 
-                    tempFile = new File(mProfileImageDecodableString);
+                    tempFile = getFile(getActivity(),SelectedImageUri);
 
                     Log.e(getClass().getName(), "file path details: " + tempFile.getName() + " " + tempFile.getAbsolutePath() + "length" + tempFile.length());
 
@@ -251,7 +276,7 @@ public class ApplicationFormFragment extends BaseFragment implements View.OnClic
                         if (photoVar == null) {
                             currentPhotoPath = mProfileImageDecodableString;
                             // photoVar = GalleryImage;
-                            file_name = new File(ImageFilePathUtil.getPath(getContext(), SelectedImageUri));
+                            file_name = getFile(getActivity(),SelectedImageUri);
                             RequestBody reqFile = RequestBody.create(MediaType.parse("file/*"), file_name);
                             partImage = MultipartBody.Part.createFormData("application_attachment", file_name.getName(), reqFile);
                             if (!TextUtils.isEmpty(currentPhotoPath) || currentPhotoPath != null) {
@@ -275,6 +300,43 @@ public class ApplicationFormFragment extends BaseFragment implements View.OnClic
                 Log.e(getClass().getName(), "exc: " + exc.getMessage());
             }
         }
+    }
+
+
+    public static File getFile(Context context, Uri uri) throws IOException {
+        File destinationFilename = new File(context.getFilesDir().getPath() + File.separatorChar + queryName(context, uri));
+        try (InputStream ins = context.getContentResolver().openInputStream(uri)) {
+            createFileFromStream(ins, destinationFilename);
+        } catch (Exception ex) {
+            Log.e("Save File", ex.getMessage());
+            ex.printStackTrace();
+        }
+        return destinationFilename;
+    }
+
+    public static void createFileFromStream(InputStream ins, File destination) {
+        try (OutputStream os = new FileOutputStream(destination)) {
+            byte[] buffer = new byte[4096];
+            int length;
+            while ((length = ins.read(buffer)) > 0) {
+                os.write(buffer, 0, length);
+            }
+            os.flush();
+        } catch (Exception ex) {
+            Log.e("Save File", ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+
+    private static String queryName(Context context, Uri uri) {
+        Cursor returnCursor =
+                context.getContentResolver().query(uri, null, null, null, null);
+        assert returnCursor != null;
+        int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+        returnCursor.moveToFirst();
+        String name = returnCursor.getString(nameIndex);
+        returnCursor.close();
+        return name;
     }
 
     @Override

@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hypernym.evaconnect.R;
@@ -73,6 +74,9 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
         @BindView(R.id.tv_name)
         TextView tv_name;
 
+        @BindView(R.id.linearLayout2)
+        ConstraintLayout linearLayout2;
+
         @BindView(R.id.profile_image)
         ImageView profile_image;
 
@@ -81,6 +85,23 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
 
         @BindView(R.id.tv_apply)
         TextView tv_apply;
+
+        @BindView(R.id.tv_content)
+        TextView tv_content;
+
+        @BindView(R.id.tv_salary_amount)
+        TextView tv_salary_amount;
+
+        @BindView(R.id.tv_location_1)
+        TextView tv_location_1;
+
+        @BindView(R.id.tv_total_applicant)
+        TextView tv_total_applicant;
+        @BindView(R.id.tv_active_time)
+        TextView tv_active_time;
+
+        @BindView(R.id.tv_shift_time)
+        TextView tv_shift_time;
 
         @BindView(R.id.view6)
         View top_image;
@@ -93,6 +114,20 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
 
         @BindView(R.id.share_click)
         LinearLayout share_click;
+
+        @BindView(R.id.layout_job_shift_time)
+        LinearLayout layout_job_shift_time;
+
+        @BindView(R.id.layout_location)
+        LinearLayout layout_location ;
+
+        @BindView(R.id.layout_salary_amount)
+        LinearLayout layout_salary_amount;
+
+        @BindView(R.id.layout_applicants)
+        LinearLayout layout_applicants;
+        @BindView(R.id.layout_active_time)
+        LinearLayout layout_active_time;
 
         @BindView(R.id.img_more)
         ImageView img_more;
@@ -138,10 +173,22 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
                 }
             });
 
+            linearLayout2.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onApplyClick(v, getAdapterPosition());
+                }
+            });
             tv_name.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     mClickListener.onApplyClick(v, getAdapterPosition());
+                }
+            });
+            layout_applicants.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
             img_more.setOnClickListener(new OnOneOffClickListener() {
@@ -303,13 +350,17 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
                         ((JobHomeAdapter.JobTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }
 
-                    AppUtils.setGlideImage(mContext, ((JobHomeAdapter.JobTypeViewHolder) holder).profile_image, posts.get(position).getJob_image());
+                    AppUtils.setGlideImage(mContext, ((JobHomeAdapter.JobTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
                     ((JobHomeAdapter.JobTypeViewHolder) holder).tv_name.setText(posts.get(position).getJob_title());
                     DecimalFormat myFormatter = new DecimalFormat("############");
 
-                    ((JobHomeAdapter.JobTypeViewHolder) holder).tv_location.setText(posts.get(position).getJob_sector()
-                            +" | "+ posts.get(position).getLocation()+" | "+"£ "+myFormatter.format(posts.get((position)).getSalary())+" PA");
+                    ((JobHomeAdapter.JobTypeViewHolder) holder).tv_location.setText(posts.get(position).getPosition());
                    // ((JobHomeAdapter.JobTypeViewHolder) holder).tv_salary.setText("£ " + myFormatter.format(posts.get(position).getSalary()) + " pa");
+
+                    ((JobHomeAdapter.JobTypeViewHolder) holder).tv_location_1.setText(posts.get(position).getLocation());
+                    ((JobTypeViewHolder) holder).tv_shift_time.setText(posts.get(position).getJob_type());
+                    ((JobHomeAdapter.JobTypeViewHolder) holder).tv_salary_amount.setText("£ "+myFormatter.format(posts.get((position)).getSalary()));
+
                     if (position == 0) {
                         ((JobHomeAdapter.JobTypeViewHolder) holder).top_image.setVisibility(View.GONE);
                     } else {
@@ -326,16 +377,45 @@ public class JobHomeAdapter extends RecyclerView.Adapter {
                         ((JobTypeViewHolder) holder).tv_apply.setVisibility(View.VISIBLE);
                     }
                     if (LoginUtils.getUser() != null && LoginUtils.getUser().getType().equals("company")) {
+
                         ((JobHomeAdapter.JobTypeViewHolder) holder).tv_apply.setVisibility(View.GONE);
+                        ((JobHomeAdapter.JobTypeViewHolder) holder).layout_job_shift_time.setVisibility(View.GONE);
+                        ((JobTypeViewHolder) holder).layout_salary_amount.setVisibility(View.GONE);
+                        ((JobHomeAdapter.JobTypeViewHolder) holder).layout_location.setVisibility(View.GONE);
+                        ((JobHomeAdapter.JobTypeViewHolder) holder).layout_applicants.setVisibility(View.VISIBLE);
+                        ((JobTypeViewHolder) holder).layout_active_time.setVisibility(View.VISIBLE);
+                        if(posts.get(position).getApplicant_count()==null||posts.get(position).getApplicant_count()==0){
+                            ((JobHomeAdapter.JobTypeViewHolder) holder).tv_total_applicant.setText("0 Applicants");
+                        }else{
+                            ((JobHomeAdapter.JobTypeViewHolder) holder).tv_total_applicant.setText(posts.get(position).getApplicant_count()+" Applicants");
+                        }
+                        if(posts.get(position).getActive_hours()!=0){
+                            ((JobTypeViewHolder) holder).tv_active_time.setText("Active for "+posts.get(position).getActive_hours()+" hrs");
+                        }else{
+                            ((JobHomeAdapter.JobTypeViewHolder) holder).tv_active_time.setText("0 hrs");
+                        }
+                        if(posts.get(position).getContent()!=null){
+                            ((JobTypeViewHolder) holder).tv_content.setVisibility(View.VISIBLE);
+                            ((JobTypeViewHolder) holder).tv_content.setText(posts.get(position).getContent());
+                        }
+                       // ((JobHomeAdapter.JobTypeViewHolder) holder).top_image.setVisibility(View.GONE);
                     } else {
                         ((JobHomeAdapter.JobTypeViewHolder) holder).tv_apply.setVisibility(View.VISIBLE);
+                        ((JobHomeAdapter.JobTypeViewHolder) holder).layout_job_shift_time.setVisibility(View.VISIBLE);
+                        ((JobTypeViewHolder) holder).layout_salary_amount.setVisibility(View.VISIBLE);
+                        ((JobHomeAdapter.JobTypeViewHolder) holder).layout_location.setVisibility(View.VISIBLE);
+                        ((JobHomeAdapter.JobTypeViewHolder) holder).layout_applicants.setVisibility(View.GONE);
+                        ((JobTypeViewHolder) holder).layout_active_time.setVisibility(View.GONE);
+                        ((JobTypeViewHolder) holder).tv_content.setVisibility(View.GONE);
+                       // ((JobHomeAdapter.JobTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
+
                         if(posts.get(position).getIs_applied()==1)
                         {
-                            ((JobHomeAdapter.JobTypeViewHolder) holder).tv_apply.setText("Applied");
+                            ((JobHomeAdapter.JobTypeViewHolder) holder).tv_apply.setText("Go to Ad");
                         }
                         else
                         {
-                            ((JobHomeAdapter.JobTypeViewHolder) holder).tv_apply.setText("Apply");
+                            ((JobHomeAdapter.JobTypeViewHolder) holder).tv_apply.setText("Go to Ad");
                             ((JobHomeAdapter.JobTypeViewHolder) holder).tv_apply.setOnClickListener(new OnOneOffClickListener() {
                                 @Override
                                 public void onSingleClick(View v) {

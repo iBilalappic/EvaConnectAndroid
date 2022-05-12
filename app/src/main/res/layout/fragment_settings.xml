@@ -8,10 +8,13 @@
     android:background="@color/lighter_gray_1"
     tools:context=".view.ui.fragments.PersonDetailFragment">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp">
+        android:layout_gravity="top"
+        android:layout_marginBottom="30dp"
+        android:visibility="visible">
 
 
         <LinearLayout
@@ -19,8 +22,8 @@
             android:layout_width="0dp"
             android:layout_height="55dp"
             android:gravity="start|center"
-            android:visibility="gone"
             android:orientation="horizontal"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -30,262 +33,547 @@
                 android:id="@+id/img_backarrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:padding="20dp"
                 android:src="@drawable/ic_arrow_left" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
                 android:layout_marginEnd="20dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/nunitosansbold"
-                android:gravity="center"
-                android:text="Edit Settings"
+                android:gravity="start"
+                android:text="Back"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
+
         </LinearLayout>
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView_Main"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="5dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layout_header">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="178dp"
-                android:elevation="@dimen/spacing_large"
-                android:background="@color/white">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/profile_image"
-                    android:layout_width="91dp"
-                    android:layout_height="91dp"
-                    android:layout_marginStart="20dp"
-                    android:src="@drawable/profile"
-                    app:civ_border_color="@color/skyblue"
-                    app:civ_border_overlay="true"
-                    app:civ_border_width="2dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_name"
-                    style="@style/TextStyle"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="28dp"
-                    android:layout_marginTop="20dp"
-                    android:ellipsize="end"
-
-                    android:fontFamily="@font/nunitosansbold"
-                    android:maxLines="1"
-                    android:text="Ed Hunter"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toEndOf="@+id/profile_image"
-                    app:layout_constraintTop_toTopOf="@+id/profile_image" />
-
-                <TextView
-                    android:id="@+id/tv_location"
-                    style="@style/TextStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="28dp"
-                    android:fontFamily="@font/nunitosansbold"
-                    android:text="London,United kingdom"
-                    android:textColor="@color/gray"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toEndOf="@+id/profile_image"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_name" />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <TextView
-            android:id="@+id/lbl_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="45dp"
-            android:layout_marginEnd="40dp"
-            android:fontFamily="@font/nunitosansregular"
-            android:text="email"
-            android:visibility="gone"
-            android:textColor="@color/gray"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView_Main" />
-
-
-        <EditText
-            android:id="@+id/edt_email"
-            style="@style/EditText"
-            android:layout_width="260dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginEnd="10dp"
-            android:backgroundTint="@color/colorwhite"
-            android:fontFamily="@font/nunitosansbold"
-            android:gravity="start|center"
-            android:paddingLeft="10dp"
-            android:enabled="false"
-            android:textColor="@color/gray_1"
-            android:textColorHint="@color/black"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView_Main" />
-
         <View
-            android:id="@+id/img_view0"
+            android:id="@+id/view13"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="@dimen/spacing_large"
-            android:layout_marginEnd="20dp"
-            android:background="@color/gray_1"
+            android:background="#1D000000"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edt_email" />
-
+            app:layout_constraintTop_toBottomOf="@+id/layout_header" />
 
         <TextView
-            android:id="@+id/lbl_password"
-            android:layout_width="wrap_content"
+            android:id="@+id/title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="25dp"
-            android:fontFamily="@font/nunitosansregular"
-            android:text="password"
-            android:visibility="gone"
-            android:textColor="@color/gray"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_view0" />
-
-
-        <TextView
-            android:id="@+id/tv_password"
-            style="@style/EditText"
-            android:layout_width="260dp"
-            android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="30dp"
-            android:backgroundTint="@color/colorwhite"
+            android:layout_marginEnd="16dp"
             android:fontFamily="@font/nunitosansbold"
-            android:gravity="start|center"
-            android:inputType="textPassword"
-            android:maxLength="100"
-            android:hint="Password"
-            android:paddingLeft="10dp"
-            android:textColor="@color/gray_1"
-            android:textColorHint="@color/black"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_view0" />
 
-        <View
-            android:id="@+id/img_view1"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="@dimen/spacing_large"
-            android:layout_marginEnd="20dp"
-            android:background="@color/gray_1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_password" />
-
-        <TextView
-            android:id="@+id/tv_pushNotification"
-            style="@style/EditText"
-            android:layout_width="260dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="30dp"
-            android:backgroundTint="@color/colorwhite"
-            android:fontFamily="@font/nunitosansbold"
-            android:gravity="start|center"
-            android:maxLength="100"
-            android:text="Push Notifcations"
-            android:paddingLeft="10dp"
+            android:text="Settings"
             android:textColor="@color/black"
-            android:textColorHint="@color/black"
-            android:textStyle="bold"
+            android:textSize="27sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_view1" />
+            app:layout_constraintTop_toBottomOf="@+id/view13" />
 
         <View
-            android:id="@+id/img_view2"
+            android:id="@+id/view14"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="@dimen/spacing_large"
-            android:layout_marginEnd="20dp"
-            android:background="@color/gray_1"
+            android:layout_height="2dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/ic_blue_red"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_pushNotification" />
+            app:layout_constraintTop_toBottomOf="@+id/title" />
 
-
-
-
-
-
-
-        <TextView
-            android:id="@+id/btn_save"
-            style="@style/Button_selected_red"
-            android:layout_width="250dp"
-            android:layout_height="41dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="24dp"
-            android:fontFamily="@font/nunitosansregular"
-            android:gravity="center"
-            android:visibility="gone"
-            android:text="Save Changes"
+        <LinearLayout
+            android:id="@+id/ly_profile"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:gravity="center_vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_view2" />
+            app:layout_constraintTop_toBottomOf="@+id/view14">
 
 
-        <TextView
-            android:id="@+id/tv_updated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:fontFamily="@font/nunitosansregular"
-            android:text="Updated!"
-            android:textColor="#59E098"
-            android:visibility="gone"
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="14sp"
+                android:layout_marginStart="20dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/black"
+                android:fontFamily="@font/nunitosansbold"
+                android:text="Profile" />
+
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:layout_marginEnd="20dp"
+                android:gravity="end"
+                />
+
+            <ImageView
+                android:id="@+id/imageView12"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:layout_marginEnd="20dp"
+                android:gravity="end"
+
+                android:src="@drawable/ic_grey_arrow" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/view15"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/ic_blue_red"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_save" />
+            app:layout_constraintTop_toBottomOf="@+id/ly_profile" />
 
-
-        <TextView
-            android:id="@+id/tv_text_manage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="30dp"
-            android:fontFamily="@font/nunitosansbold"
-            android:text="or Manage your profile here"
-            android:textColor="#545454"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <LinearLayout
+            android:id="@+id/ly_notification"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:gravity="center_vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_save"></TextView>
+            app:layout_constraintTop_toBottomOf="@+id/view15">
 
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="14sp"
+                android:layout_marginStart="20dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/black"
+                android:fontFamily="@font/nunitosansbold"
+                android:text="Notification" />
+
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:layout_marginEnd="20dp"
+                android:gravity="end"
+                />
+
+            <ImageView
+
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:layout_marginEnd="20dp"
+                android:gravity="end"
+
+                android:src="@drawable/ic_grey_arrow" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/view16"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/ic_blue_red"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ly_notification" />
+
+        <LinearLayout
+            android:id="@+id/ly_news"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:gravity="center_vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view16">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="14sp"
+                android:layout_marginStart="20dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/black"
+                android:fontFamily="@font/nunitosansbold"
+                android:text="RSS Feed Sources" />
+
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:layout_marginEnd="20dp"
+                android:gravity="end"
+                />
+
+            <ImageView
+
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:layout_marginEnd="20dp"
+                android:gravity="end"
+
+                android:src="@drawable/ic_grey_arrow" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/view17"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/ic_blue_red"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ly_news" />
+
+        <LinearLayout
+            android:id="@+id/ly_security"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:gravity="center_vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view17">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="14sp"
+                android:layout_marginStart="20dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/black"
+                android:fontFamily="@font/nunitosansbold"
+                android:text="Security" />
+
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:layout_marginEnd="20dp"
+                android:gravity="end"
+                />
+
+            <ImageView
+
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:layout_marginEnd="20dp"
+                android:gravity="end"
+
+                android:src="@drawable/ic_grey_arrow" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/view18"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/ic_blue_red"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ly_security" />
+
+
+        <LinearLayout
+            android:id="@+id/ly_help"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:gravity="center_vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view18">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="14sp"
+                android:layout_marginStart="20dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/black"
+                android:fontFamily="@font/nunitosansbold"
+                android:text="Help" />
+
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:layout_marginEnd="20dp"
+                android:gravity="end"
+                />
+
+            <ImageView
+
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:layout_marginEnd="20dp"
+                android:gravity="end"
+
+                android:src="@drawable/ic_grey_arrow" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/view19"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="8dp"
+            android:visibility="visible"
+            android:background="@drawable/ic_blue_red"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ly_help" />
+
+        <LinearLayout
+            android:id="@+id/ly_language_region"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:visibility="visible"
+            android:gravity="center_vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view19">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="14sp"
+                android:layout_marginStart="20dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/black"
+                android:fontFamily="@font/nunitosansbold"
+                android:text="Language &amp; Region" />
+
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:layout_marginEnd="20dp"
+                android:gravity="end"
+                />
+
+            <ImageView
+
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:layout_marginEnd="20dp"
+                android:gravity="end"
+
+                android:src="@drawable/ic_grey_arrow" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/ic_blue_red"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ly_language_region" />
+
+        <LinearLayout
+            android:id="@+id/layout_location"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            android:weightSum="2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/nunitosansbold"
+                android:gravity="center_vertical"
+                android:text="Location"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="0.7"
+                android:gravity="end" />
+
+            <ImageView
+
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="0.3"
+                android:gravity="end"
+
+                android:src="@drawable/ic_grey_arrow" />
+        </LinearLayout>
+
+
+        <View
+            android:id="@+id/view20"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/ic_blue_red"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_location" />
+
+
+        <LinearLayout
+            android:id="@+id/ly_term_condition"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:gravity="center_vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view20">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="14sp"
+                android:layout_marginStart="20dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/black"
+                android:fontFamily="@font/nunitosansbold"
+                android:text="Term of Services" />
+
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:layout_marginEnd="20dp"
+                android:gravity="end"
+                />
+
+            <ImageView
+
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:layout_marginEnd="20dp"
+                android:gravity="end"
+
+                android:src="@drawable/ic_grey_arrow" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/view21"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/ic_blue_red"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ly_term_condition" />
+
+
+        <LinearLayout
+            android:id="@+id/ly_cookie"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:gravity="center_vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view21">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="14sp"
+                android:layout_marginStart="20dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/black"
+                android:fontFamily="@font/nunitosansbold"
+                android:text="Cookie Policy" />
+
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:layout_marginEnd="20dp"
+                android:gravity="end"
+                />
+
+            <ImageView
+
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:layout_marginEnd="20dp"
+                android:gravity="end"
+
+                android:src="@drawable/ic_grey_arrow" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/view22"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/ic_blue_red"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ly_cookie" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 
 </ScrollView>

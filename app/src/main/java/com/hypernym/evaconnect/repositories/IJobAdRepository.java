@@ -7,6 +7,7 @@ import com.hypernym.evaconnect.models.Comment;
 import com.hypernym.evaconnect.models.CompanyJobAdModel;
 import com.hypernym.evaconnect.models.JobAd;
 import com.hypernym.evaconnect.models.Post;
+import com.hypernym.evaconnect.models.SavedJobData;
 import com.hypernym.evaconnect.models.SpecficJobAd;
 import com.hypernym.evaconnect.models.User;
 
@@ -24,5 +25,9 @@ public interface IJobAdRepository {
 
     LiveData<BaseModel<List<Comment>>> deleteComment(Integer id);
     LiveData<BaseModel<List<Comment>>> editComment(Comment comment,Integer id);
+    LiveData<BaseModel<SavedJobData>> setFavJob(int job_id, Boolean is_favourite_job, String status);
+    LiveData<BaseModel<Object>> setUnfavJob(int job_id, Boolean is_favourite_job, String status);
+    LiveData<BaseModel<List<SavedJobData>>> getSavedJob(int job_id);
+
 
 }

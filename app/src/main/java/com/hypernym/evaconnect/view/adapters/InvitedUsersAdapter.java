@@ -1,10 +1,13 @@
 package com.hypernym.evaconnect.view.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -42,8 +45,10 @@ public class InvitedUsersAdapter extends RecyclerView.Adapter<InvitedUsersAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         User user = invitedUsers.get(position);
+
+        Log.d("adapter", "onBindViewHolder: ");
 
         if (!TextUtils.isEmpty(user.getUser_image())) {
             AppUtils.setGlideImage(context, holder.invitedUserImage, user.getUser_image());
@@ -56,46 +61,40 @@ public class InvitedUsersAdapter extends RecyclerView.Adapter<InvitedUsersAdapte
 //            AppUtils.setGlideImage(context, holder.invitedUserImage, user.getUser_image());
 //        }
 
-        if (user.getFirst_name()!=null)
-        {
-            if (user.getFirst_name().length() > 7)
-                holder.firstName.setText(user.getFirst_name().substring(0, 7));
-            else
-                holder.firstName.setText(user.getFirst_name());
+        if (user.getFirst_name()!=null) {
+
+            holder.firstName.setText(user.getFirst_name() + " "+user.getLast_name());
+
+
         }
 
-        if (user.getBio_data() != null)
-        {
-            if (user.getBio_data().length() > 7){
-                holder.tv_designation_title.setText(user.getBio_data().substring(0, 7));
-            }
-            else{
-                holder.tv_designation_title.setText(user.getBio_data());
-            }
+        if (user.getDesignation() != null) {
+
+            holder.tv_designation_title.setText(user.getCompany_name());
+
+        }  else {
+
+            holder.tv_designation_title.setText(user.getBio_data());
         }
-        if(isRemoveable)
-        {
+        if (isRemoveable) {
             holder.remove.setVisibility(View.VISIBLE);
-            holder.remove.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                  simpleDialog = new SimpleDialog(context, context.getString(R.string.confirmation), context.getString(R.string.msg_remove_invite), context.getString(R.string.button_no), context.getString(R.string.button_yes), new OnOneOffClickListener() {
-                        @Override
-                        public void onSingleClick(View v) {
-                            switch (v.getId()) {
-                                case R.id.button_positive:
-                                    invitedUsers.remove(position);
-                                    notifyDataSetChanged();
-                                    //  SelectedImageUri = null;
-                                    break;
-                                case R.id.button_negative:
-                                    break;
-                            }
-                            simpleDialog.dismiss();
+            holder.remove.setOnClickListener(v -> {
+                simpleDialog = new SimpleDialog(context, context.getString(R.string.confirmation), context.getString(R.string.msg_remove_invite), context.getString(R.string.button_no), context.getString(R.string.button_yes), new OnOneOffClickListener() {
+                    @Override
+                    public void onSingleClick(View v) {
+                        switch (v.getId()) {
+                            case R.id.button_positive:
+                                invitedUsers.remove(position);
+                                notifyDataSetChanged();
+                                //  SelectedImageUri = null;
+                                break;
+                            case R.id.button_negative:
+                                break;
                         }
-                    });
-                    simpleDialog.show();
-                }
+                        simpleDialog.dismiss();
+                    }
+                });
+                simpleDialog.show();
             });
         }
         else
@@ -127,7 +126,7 @@ public class InvitedUsersAdapter extends RecyclerView.Adapter<InvitedUsersAdapte
         TextView tv_designation_title;
 
         @BindView(R.id.remove)
-        TextView remove;
+        ImageView remove;
 
         @BindView(R.id.firstName)
         TextView firstName;

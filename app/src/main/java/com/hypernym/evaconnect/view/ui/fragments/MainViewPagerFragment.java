@@ -3,7 +3,6 @@ package com.hypernym.evaconnect.view.ui.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
@@ -19,6 +18,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.hypernym.evaconnect.R;
+import com.hypernym.evaconnect.utils.LoginUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,27 +43,27 @@ public class MainViewPagerFragment extends BaseFragment implements FloatingActio
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_viewpager, container, false);
         ButterKnife.bind(this,view);
-        requireActivity().findViewById(R.id.seprator_line).setVisibility(View.GONE);
         hideBackButton();
         sectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
-        mViewPager = (ViewPager) view.findViewById(R.id.container);
+        mViewPager = view.findViewById(R.id.container);
         mViewPager.setAdapter(sectionsPagerAdapter);
         mViewPager.setCurrentItem(0);
         TabLayout tabLayout = view.findViewById(R.id.tabs);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setupWithViewPager(mViewPager);
+        tabLayout.setSelectedTabIndicator(getResources().getDrawable(R.drawable.bottomline));
+        tabLayout.setTabIndicatorFullWidth(false);
+
         fab.setOnClickListener(this);
 
         if(getnewPost())
         {
             newpostcheck.setVisibility(View.VISIBLE);
 
-            newpostcheck.postDelayed(new Runnable() {
-                public void run() {
-                    newpostcheck.setVisibility(View.GONE);
-                    hidePostText();
-                }
+            newpostcheck.postDelayed(() -> {
+                newpostcheck.setVisibility(View.GONE);
+                hidePostText();
             }, 3000);
 
         }
@@ -93,9 +93,13 @@ public class MainViewPagerFragment extends BaseFragment implements FloatingActio
                 case 0:
                      return new PostFragment();
                 case 1:
-                     return new EventFragment();
+                     return new EventTabsFragment();
                 case 2:
-                    return new JobFragment();
+                    if(LoginUtils.getUser().getType()!=null&&LoginUtils.getUser().getType().equalsIgnoreCase("company")){
+                        return new JobFragment();
+                    }else{
+                        return new JobViewPagerFragment();
+                    }
                 case 3:
                     return new NewsFragment();
             }
@@ -104,7 +108,11 @@ public class MainViewPagerFragment extends BaseFragment implements FloatingActio
 
         @Override
         public int getCount() {
-            return 4;
+            if(LoginUtils.getUser()!=null && LoginUtils.getUser().getType().equalsIgnoreCase("company")){
+                return 3;
+            }else{
+                return 4;
+            }
         }
 
         @Override
@@ -138,43 +146,34 @@ public class MainViewPagerFragment extends BaseFragment implements FloatingActio
         /** Adding menu items to the popumenu */
         popup.getMenuInflater().inflate(R.menu.dashboard_menu, popup.getMenu());
 
-        popup.setOnDismissListener(new PopupMenu.OnDismissListener() {
-            @Override
-            public void onDismiss(PopupMenu menu) {
-                ViewCompat.animate(fab).
-                        rotation(0f).
-                        withLayer().
-                        setDuration(300).
-                        setInterpolator(interpolator).
-                        start();
-            }
-        });
+        popup.setOnDismissListener(menu -> ViewCompat.animate(fab).
+                rotation(0f).
+                withLayer().
+                setDuration(300).
+                setInterpolator(interpolator).
+                start());
         /** Defining menu item click listener for the popup menu */
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                //    Toast.makeText(getContext(), item.getGroupId()+"You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
-                if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu1))) {
-                    NewPostFragment newPostFragment=new NewPostFragment();
-                    Bundle bundle=new Bundle();
-                    bundle.putBoolean("isVideo",false);
-                    newPostFragment.setArguments(bundle);
-                    loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
-                }  else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu2))) {
-                    NewPostFragment newPostFragment=new NewPostFragment();
-                    Bundle bundle=new Bundle();
-                    bundle.putBoolean("isVideo",true);
-                    newPostFragment.setArguments(bundle);
-                    loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
-                }
-                else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu3))) {
-                    loadFragment(R.id.framelayout, new CreateEventFragment(), getContext(), true);
-                } else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu4))) {
-                    loadFragment(R.id.framelayout, new ShareArticleFragment(), getContext(), true);
-                }
-                return true;
+        popup.setOnMenuItemClickListener(item -> {
+            //    Toast.makeText(getContext(), item.getGroupId()+"You selected the action : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+            if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu1))) {
+                NewPostFragment newPostFragment=new NewPostFragment();
+                Bundle bundle=new Bundle();
+                bundle.putBoolean("isVideo",false);
+                newPostFragment.setArguments(bundle);
+                loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
+            }  else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu2))) {
+                NewPostFragment newPostFragment=new NewPostFragment();
+                Bundle bundle=new Bundle();
+                bundle.putBoolean("isVideo",true);
+                newPostFragment.setArguments(bundle);
+                loadFragment(R.id.framelayout, newPostFragment, getContext(), true);
             }
+            else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu3))) {
+                loadFragment(R.id.framelayout, new CreateEventFragment(), getContext(), true);
+            } else if (item.getTitle().toString().equalsIgnoreCase(getString(R.string.menu4))) {
+                loadFragment(R.id.framelayout, new ShareArticleFragment(), getContext(), true);
+            }
+            return true;
         });
 
         /** Showing the popup menu */

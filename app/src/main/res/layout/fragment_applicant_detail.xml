@@ -13,14 +13,13 @@
             android:id="@+id/layout_header"
             android:layout_width="0dp"
             android:layout_height="55dp"
-            android:background="@color/lighter_gray_2"
-            android:elevation="2dp"
-            android:visibility="gone"
             android:gravity="start|center"
             android:orientation="horizontal"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
+
 
             <ImageView
                 android:id="@+id/img_backarrow"
@@ -32,21 +31,32 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
                 android:layout_marginEnd="20dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/nunitosansbold"
-                android:gravity="end|center"
-                android:text="Job Applicant"
+                android:gravity="end"
+                android:text="Job Details"
                 android:textColor="@color/black"
                 android:textSize="12sp" />
 
+
         </LinearLayout>
+
+        <View
+            android:id="@+id/view13"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#1D000000"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_header" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout0"
             android:layout_width="match_parent"
-            android:layout_height="128dp"
+            android:layout_height="98dp"
             android:background="@color/colorwhite"
             android:elevation="2dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -55,34 +65,30 @@
 
 
             <RelativeLayout
+                android:id="@+id/profile_layout"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
-                android:id="@+id/profile_layout"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_width="50dp"
-                android:layout_height="50dp">
-
+                app:layout_constraintTop_toTopOf="parent">
 
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:background="@android:color/transparent"
-
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
                     android:src="@drawable/ic_profile_1"
                     app:civ_border_color="@color/skyblue"
-                    app:civ_border_width="2dp"
-                    />
+                    app:civ_border_width="2dp" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:padding="2dp"
+                    android:id="@+id/profile_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/profile_image"
+                    android:padding="2dp"
                     app:civ_border_color="@color/white"
-                    app:civ_border_width="2dp"
-                    />
+                    app:civ_border_width="2dp" />
             </RelativeLayout>
 
             <TextView
@@ -129,6 +135,7 @@
                 android:paddingRight="15dp"
                 android:text="Edit"
                 android:textColor="@color/skyblue"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -140,6 +147,7 @@
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
                 android:src="@drawable/ic_clock_1"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/profile_layout" />
 
@@ -152,6 +160,7 @@
                 android:text="26 Applicant"
                 android:textColor="@color/black"
                 android:textSize="12sp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/img_1"
                 app:layout_constraintStart_toEndOf="@+id/img_1"
                 app:layout_constraintTop_toTopOf="@+id/img_1" />
@@ -164,6 +173,7 @@
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="20dp"
                 android:src="@drawable/ic_clock_1"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tv_totalapplicant"
                 app:layout_constraintTop_toBottomOf="@+id/profile_layout" />
@@ -178,6 +188,7 @@
                 android:text="Active for 24 hrs"
                 android:textColor="@color/black"
                 android:textSize="12sp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/img_2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/img_2"
@@ -194,8 +205,9 @@
             app:layout_constraintTop_toBottomOf="@+id/layout0" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_cover_letter"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -205,42 +217,41 @@
                 android:id="@+id/hidden_layout"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:foreground="@drawable/layout_overlay"
                 android:orientation="vertical"
                 android:visibility="gone"
-                android:foreground="@drawable/layout_overlay"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"></LinearLayout>
+
             <RelativeLayout
+                android:id="@+id/profile_image_applicant_layout"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
-                android:id="@+id/profile_image_applicant_layout"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_width="50dp"
-                android:layout_height="50dp">
-
+                app:layout_constraintTop_toTopOf="parent">
 
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:background="@android:color/transparent"
-
                     android:layout_width="match_parent"
+
                     android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
                     android:src="@drawable/ic_profile_1"
                     app:civ_border_color="@color/skyblue"
-                    app:civ_border_width="2dp"
-                    />
+                    app:civ_border_width="2dp" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:padding="2dp"
+                    android:id="@+id/profile_image_applicant"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/profile_image_applicant"
+                    android:padding="2dp"
                     app:civ_border_color="@color/white"
-                    app:civ_border_width="2dp"
-                    />
+                    app:civ_border_width="2dp" />
             </RelativeLayout>
 
             <TextView
@@ -255,6 +266,7 @@
                 android:text="Applicant Name"
                 android:textColor="@color/black"
                 android:textSize="12sp"
+                android:visibility="gone"
                 app:layout_constraintStart_toEndOf="@+id/profile_image_applicant_layout"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -268,6 +280,7 @@
                 android:text="Today at 12:30"
                 android:textColor="@color/gray_1"
                 android:textSize="10sp"
+                android:visibility="gone"
                 app:layout_constraintStart_toEndOf="@+id/profile_image_applicant_layout"
                 app:layout_constraintTop_toBottomOf="@+id/tv_name_applicant" />
 
@@ -279,6 +292,7 @@
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="20dp"
                 android:src="@drawable/ic_file"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/profile_image_applicant_layout" />
 
@@ -291,6 +305,7 @@
                 android:text="View CV"
                 android:textColor="@color/black"
                 android:textSize="12sp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/img_file"
                 app:layout_constraintStart_toEndOf="@+id/img_file"
                 app:layout_constraintTop_toTopOf="@+id/img_file"></TextView>
@@ -309,6 +324,7 @@
                 android:text="Message"
                 android:textColor="@color/light_green"
                 android:textSize="7sp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_view_cv"
                 app:layout_constraintEnd_toStartOf="@+id/tv_hide"
                 app:layout_constraintTop_toTopOf="@+id/tv_view_cv" />
@@ -325,6 +341,7 @@
                 android:text="hide"
                 android:textColor="@color/unselected_option"
                 android:textSize="7sp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_view_cv"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tv_view_cv"
@@ -346,10 +363,11 @@
 
             <TextView
                 android:id="@+id/tv_description"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginEnd="@dimen/spacing_medium"
                 android:layout_marginBottom="20dp"
                 android:fontFamily="@font/nunitosansregular"
                 android:hint="Description"
@@ -363,8 +381,61 @@
             </TextView>
 
 
-
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView_2"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
+            android:elevation="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_cover_letter">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@color/white"
+                android:elevation="@dimen/spacing_large">
+
+
+                <TextView
+                    android:id="@+id/tv_download_cv"
+                    android:layout_width="102dp"
+                    android:layout_height="28dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:background="@drawable/rounded_button_border_blue"
+                    android:fontFamily="@font/nunitosansregular"
+                    android:gravity="center"
+                    android:text="Download CV"
+                    android:textColor="@color/skyblue"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_cvname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:fontFamily="@font/nunitosansregular"
+                    android:text="file.cv"
+                    android:textColor="#54565A"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"></TextView>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

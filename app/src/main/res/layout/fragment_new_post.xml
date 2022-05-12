@@ -13,33 +13,77 @@
         android:background="@color/colorwhite"
         tools:context=".view.ui.fragments.NewPostFragment">
 
-        <RelativeLayout
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:id="@+id/profile_layout"
+
+        <LinearLayout
+            android:id="@+id/layout_header"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:gravity="start|center"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <ImageView
+                android:id="@+id/img_backarrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:src="@drawable/ic_arrow_left" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/nunitosansbold"
+                android:gravity="start"
+                android:text="@string/back"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/view13"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#1D000000"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_header" />
+
+        <RelativeLayout
+            android:id="@+id/profile_layout"
             android:layout_width="53dp"
-            android:layout_height="53dp">
+            android:layout_height="53dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view13">
 
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:background="@android:color/transparent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@android:color/transparent"
                 android:src="@drawable/white_chatbg"
                 app:civ_border_color="@color/skyblue"
-                app:civ_border_width="2dp"/>
+                app:civ_border_width="2dp" />
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:padding="2dp"
+                android:id="@+id/profile_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/profile_image"
+                android:padding="2dp"
                 android:src="@drawable/no_thumbnail"
                 app:civ_border_color="@color/white"
-                app:civ_border_width="2dp"
-                />
+                app:civ_border_width="2dp" />
         </RelativeLayout>
 
         <TextView
@@ -48,11 +92,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
             android:text="Ed Hunter"
             android:textSize="18dp"
+            app:layout_constraintBottom_toBottomOf="@+id/profile_layout"
             app:layout_constraintStart_toEndOf="@+id/profile_layout"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/profile_layout" />
 
         <TextView
             android:id="@+id/tv_designation"
@@ -60,6 +104,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/profile_layout"
             app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
@@ -70,22 +115,39 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:textColor="#EF8080"
+            android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/tv_designation"
             app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+
+        <ImageView
+            android:id="@+id/img_add_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/ic_add_post"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/profile_layout" />
+
 
         <EditText
             android:id="@+id/edt_content"
             style="@style/TextStyle"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:background="@null"
+            android:layout_marginEnd="20dp"
             android:elevation="2dp"
+            android:layout_marginStart="20dp"
             android:gravity="top|left"
+            android:justificationMode="inter_word"
             android:hint="Type something..."
             android:inputType="textMultiLine"
-            android:padding="10dp"
-            android:textSize="13sp"
+            android:padding="8dp"
+            android:textSize="18sp"
+            android:imeOptions="actionDone"
+            android:fontFamily="@font/nunitosansregular"
+            android:textColor="@color/gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profile_layout" />
@@ -94,6 +156,7 @@
             android:id="@+id/browse"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/post">
 
 
@@ -102,10 +165,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:drawableLeft="@drawable/gallery"
-                android:gravity="left"
-                android:drawablePadding="10dp"
                 android:layout_weight="1"
+                android:drawableLeft="@drawable/gallery"
+                android:drawablePadding="10dp"
+                android:gravity="left"
                 android:padding="10dp"
                 android:text="Gallery"
                 android:textColor="@color/light_black"
@@ -122,14 +185,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:drawableLeft="@drawable/camera"
                 android:layout_weight="1"
-                android:gravity="left"
+                android:drawableLeft="@drawable/camera"
                 android:drawablePadding="10dp"
-                android:paddingTop="14dp"
-                android:paddingBottom="12dp"
+                android:gravity="left"
                 android:paddingLeft="10dp"
+                android:paddingTop="14dp"
                 android:paddingRight="10dp"
+                android:paddingBottom="12dp"
                 android:text="Capture Image"
                 android:textColor="@color/light_black"
                 android:textSize="12sp"
@@ -146,9 +209,9 @@
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/ic_baseline_ondemand_video_24"
+                android:drawablePadding="10dp"
                 android:gravity="left"
                 android:padding="10dp"
-                android:drawablePadding="10dp"
 
                 android:text="Video"
 
@@ -163,20 +226,21 @@
 
         <TextView
             android:id="@+id/post"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_bg"
-            android:gravity="center|center_vertical"
-            android:paddingLeft="30dp"
-            android:paddingTop="15dp"
-            android:paddingRight="30dp"
-            android:paddingBottom="15dp"
-            android:text="Create Post"
-            android:textColor="@color/colorwhite"
-            android:textSize="12sp"
+            style="@style/TextStyle.Title"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/button_gradient_1"
+            android:drawablePadding="10dp"
+            android:gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="10dp"
+            android:text="Post"
+            android:textColor="@color/white"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -241,6 +305,76 @@
                 app:layout_constraintVertical_bias="1.0" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/attachment"
+            android:layout_width="0dp"
+            android:layout_height="160dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/layout_border"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/browse"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edt_content">
+
+            <ImageView
+                android:id="@+id/attachment_preview"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:background="@color/white"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <WebView
+                android:id="@+id/loadimage"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:background="@color/white"
+                android:elevation="2dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:id="@+id/tv_filename"
+                    style="@style/TextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="TextView"
+                    android:textFontWeight="700" />
+
+                <ImageView
+                    android:id="@+id/imageView10"
+                    android:layout_width="16dp"
+                    android:layout_height="18dp"
+                    app:srcCompat="@drawable/business" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <TextView
             android:id="@+id/tv_address"
             style="@style/TextStyle"
@@ -249,8 +383,20 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="2dp"
             android:text="TextView"
+            android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/profile_layout"
             app:layout_constraintTop_toBottomOf="@+id/tv_designation" />
+
+        <ImageView
+            android:id="@+id/img_removeAttachment"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="25dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/attachment"
+            app:srcCompat="@drawable/ic_image_cross" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

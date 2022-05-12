@@ -1,5 +1,6 @@
 package com.hypernym.evaconnect.view.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.GestureDetector;
@@ -10,8 +11,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnDoubleTapClickListner;
@@ -46,21 +49,22 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
 
     public class TextTypeViewHolder extends RecyclerView.ViewHolder {
+        @Nullable
         @BindView(R.id.tv_viewcomments)
         TextView tv_viewcomments;
-
+        @Nullable
         @BindView(R.id.tv_likecount)
         TextView tv_likecount;
 
         @BindView(R.id.tv_comcount)
         TextView tv_comcount;
-
+        @Nullable
         @BindView(R.id.img_like)
         ImageView img_like;
-
+        @Nullable
         @BindView(R.id.img_comment)
         ImageView img_comment;
-
+        @Nullable
         @BindView(R.id.img_share)
         ImageView img_share;
 
@@ -157,41 +161,59 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                 }
             });
 
-            tv_connect.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mClickListener.onConnectClick(v,getAdapterPosition());
-                }
-            });
+            tv_connect.setOnClickListener(v -> mClickListener.onConnectClick(v, getAdapterPosition()));
 
         }
     }
 
     public class EventTypeViewHolder extends RecyclerView.ViewHolder {
+        @Nullable
         @BindView(R.id.tv_viewcomments)
         TextView tv_viewcomments;
-
+        @Nullable
         @BindView(R.id.tv_likecount)
         TextView tv_likecount;
-
+        @Nullable
         @BindView(R.id.tv_comcount)
         TextView tv_comcount;
 
+        @Nullable
+        @BindView(R.id.tv_address)
+        TextView tv_address;
+
+        @Nullable
+        @BindView(R.id.tv_date)
+        TextView tv_date;
+
+        @Nullable
         @BindView(R.id.img_like)
         ImageView img_like;
-
+        @Nullable
         @BindView(R.id.like_click)
         LinearLayout like_click;
 
-
+        @Nullable
         @BindView(R.id.img_comment)
         ImageView img_comment;
-
+        @Nullable
         @BindView(R.id.comment_click)
         LinearLayout comment_click;
 
+
         @BindView(R.id.img_share)
         ImageView img_share;
+
+        @BindView(R.id.tv_interested)
+        TextView tv_interested;
+
+
+        @BindView(R.id.tv_detail)
+        TextView tv_detail;
+
+
+        @BindView(R.id.tv_created_time)
+        TextView tv_created_time;
+
 
         @BindView(R.id.share_click)
         LinearLayout share_click;
@@ -268,44 +290,44 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                 }
             });
 
+
         }
 
 
     }
 
     public class JobTypeViewHolder extends RecyclerView.ViewHolder {
+        @Nullable
         @BindView(R.id.tv_viewcomments)
         TextView tv_viewcomments;
-
+        @Nullable
         @BindView(R.id.tv_likecount)
         TextView tv_likecount;
-
+        @Nullable
         @BindView(R.id.tv_comcount)
         TextView tv_comcount;
 
         @BindView(R.id.tv_location)
         TextView tv_location;
 
+        @Nullable
         @BindView(R.id.img_like)
         ImageView img_like;
-
+        @Nullable
         @BindView(R.id.img_comment)
         ImageView img_comment;
-
+        @Nullable
         @BindView(R.id.comment_click)
         LinearLayout comment_click;
 
         @BindView(R.id.share_click)
         LinearLayout share_click;
-
+        @Nullable
         @BindView(R.id.like_click)
         LinearLayout like_click;
 
-
         @BindView(R.id.img_share)
         ImageView img_share;
-
-
 
         @BindView(R.id.tv_name)
         TextView tv_name;
@@ -393,15 +415,16 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
     }
 
     public class ImageTypeViewHolder extends RecyclerView.ViewHolder {
+        @Nullable
         @BindView(R.id.tv_viewcomments)
         TextView tv_viewcomments;
-
+        @Nullable
         @BindView(R.id.tv_likecount)
         TextView tv_likecount;
-
+        @Nullable
         @BindView(R.id.tv_comcount)
         TextView tv_comcount;
-
+        @Nullable
         @BindView(R.id.tv_createddateTime)
         TextView tv_createdDateTime;
 
@@ -423,9 +446,10 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.tv_connections)
         TextView tv_connections;
 
+        @Nullable
         @BindView(R.id.img_like)
         ImageView img_like;
-
+        @Nullable
         @BindView(R.id.img_comment)
         ImageView img_comment;
 
@@ -453,7 +477,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
         @BindView(R.id.share_click)
         LinearLayout share_click;
-
+        @Nullable
         @BindView(R.id.like_click)
         LinearLayout like_click;
 
@@ -524,12 +548,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                 }
             });
 
-            tv_connect.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mClickListener.onConnectClick(v,getAdapterPosition());
-                }
-            });
+            tv_connect.setOnClickListener(v -> mClickListener.onConnectClick(v, getAdapterPosition()));
 
         }
 
@@ -537,12 +556,15 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
     }
 
     public class VideoTypeViewHolder extends RecyclerView.ViewHolder {
+        @Nullable
         @BindView(R.id.tv_viewcomments)
         TextView tv_viewcomments;
 
+        @Nullable
         @BindView(R.id.tv_likecount)
         TextView tv_likecount;
 
+        @Nullable
         @BindView(R.id.tv_comcount)
         TextView tv_comcount;
 
@@ -567,9 +589,11 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.tv_connections)
         TextView tv_connections;
 
+        @Nullable
         @BindView(R.id.img_like)
         ImageView img_like;
 
+        @Nullable
         @BindView(R.id.img_comment)
         ImageView img_comment;
 
@@ -594,6 +618,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.tv_company)
         TextView tv_company;
 
+        @Nullable
         @BindView(R.id.tv_connect)
         TextView tv_connect;
 
@@ -658,29 +683,29 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                 }
             });
 
-            tv_connect.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mClickListener.onConnectClick(v,getAdapterPosition());
-                }
-            });
+            tv_connect.setOnClickListener(v -> mClickListener.onConnectClick(v, getAdapterPosition()));
 
         }
     }
 
     public class LinkTypeViewHolder extends RecyclerView.ViewHolder {
+        @Nullable
         @BindView(R.id.tv_viewcomments)
         TextView tv_viewcomments;
 
+        @Nullable
         @BindView(R.id.tv_likecount)
         TextView tv_likecount;
 
+        @Nullable
         @BindView(R.id.tv_comcount)
         TextView tv_comcount;
 
+        @Nullable
         @BindView(R.id.img_like)
         ImageView img_like;
 
+        @Nullable
         @BindView(R.id.img_comment)
         ImageView img_comment;
 
@@ -720,6 +745,8 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.share_click)
         LinearLayout share_click;
 
+
+        @Nullable
         @BindView(R.id.like_click)
         LinearLayout like_click;
 
@@ -728,7 +755,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
         @BindView(R.id.tv_company)
         TextView tv_company;
-
+        @Nullable
         @BindView(R.id.tv_connect)
         TextView tv_connect;
 
@@ -792,12 +819,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                 }
             });
 
-            tv_connect.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mClickListener.onConnectClick(v,getAdapterPosition());
-                }
-            });
+            tv_connect.setOnClickListener(v -> mClickListener.onConnectClick(v, getAdapterPosition()));
 
         }
 
@@ -805,18 +827,20 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
 
     public class NewsTypeViewHolder extends RecyclerView.ViewHolder {
+        @Nullable
         @BindView(R.id.tv_viewcomments)
         TextView tv_viewcomments;
-
+        @Nullable
         @BindView(R.id.tv_likecount)
         TextView tv_likecount;
-
+        @Nullable
         @BindView(R.id.tv_comcount)
         TextView tv_comcount;
 
+        @Nullable
         @BindView(R.id.img_like)
         ImageView img_like;
-
+        @Nullable
         @BindView(R.id.img_comment)
         ImageView img_comment;
 
@@ -851,18 +875,23 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.tv_url)
         TextView tv_url;
 
+
+        @BindView(R.id.tv_share_counter)
+        TextView tv_share_counter;
+
+
         @BindView(R.id.tv_newstitle)
         TextView tv_newstitle;
 
         @BindView(R.id.tv_visit)
         TextView tv_visit;
-
+        @Nullable
         @BindView(R.id.comment_click)
         LinearLayout comment_click;
 
         @BindView(R.id.share_click)
         LinearLayout share_click;
-
+        @Nullable
         @BindView(R.id.like_click)
         LinearLayout like_click;
 
@@ -1002,7 +1031,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         Post object = posts.get(position);
         if (object != null && object.getType() != null) {
             switch (object.getPost_type()) {
@@ -1041,10 +1070,10 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         ((TextTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
                     ((TextTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name() );
-                    if(!posts.get(position).getUser().getType().equalsIgnoreCase("company"))
-                    {
-                        ((TextTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation() +" at");
-                    }
+//                    if(!posts.get(position).getUser().getType().equalsIgnoreCase("company") && posts.get(position).getUser().getDesignation()!=null && !posts.get(position).getUser().getDesignation().isEmpty())
+//                    {
+//                        ((TextTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation() +" at");
+//                    }
 
                     if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
                         ((TextTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
@@ -1111,7 +1140,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         ((ImageTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
                     ((ImageTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name() );
-                    ((ImageTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation() +" at ");
+                    if (posts.get(position).getUser().getDesignation()!=null && !posts.get(position).getUser().getDesignation().isEmpty()) {
+                        ((ImageTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation() +" at ");
+                    }
 
                     if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
                         ((ImageTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
@@ -1133,17 +1164,28 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     }
                     break;
                 case AppConstants.EVENT_TYPE:
+
                     if (String.valueOf(posts.get(position).getComment_count()).equals("0")) {
                         ((EventTypeViewHolder) holder).tv_viewcomments.setVisibility(View.GONE);
                     }
                     ((EventTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((EventTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
 
-                    if (posts.get(position).getIs_event_like() != null && posts.get(position).getIs_event_like() > 0) {
+
+                    ((EventTypeViewHolder) holder).tv_address.setText(String.valueOf(posts.get(position).getAddress()));
+                    ((EventTypeViewHolder) holder).tv_date.setText(DateUtils.eventDate(posts.get(position).getStart_date(), posts.get(position).getEnd_date()));
+
+                    ((EventTypeViewHolder) holder).tv_created_time.setText(DateUtils.getFormattedDateDMY(object.getStart_date()) + " - " + DateUtils.getFormattedDateDMY(object.getEnd_date()) + " | " + DateUtils.getTimeUTC(object.getStart_time()) + " - " + DateUtils.getTimeUTC(object.getEnd_time()));
+                    ((EventTypeViewHolder) holder).tv_interested.setVisibility(View.GONE);
+
+
+
+
+                    /*                    if (posts.get(position).getIs_event_like() != null && posts.get(position).getIs_event_like() > 0) {
                         ((EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.like_selected));
                     } else {
                         ((EventTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
-                    }
+                    }*/
                     if (posts.get(position).getEvent_image().size() > 0) {
                         AppUtils.setGlideImageUrl(mContext, ((EventTypeViewHolder) holder).profile_image, posts.get(position).getEvent_image().get(0));
                         AppUtils.setGlideVideoThumbnail(mContext, ((EventTypeViewHolder) holder).post_image, posts.get(position).getEvent_image().get(0));
@@ -1247,7 +1289,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     }
                     AppUtils.setGlideVideoThumbnail(mContext, ((VideoTypeViewHolder) holder).img_video, posts.get(position).getPost_video());
                     ((VideoTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name());
-                    ((VideoTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation()+" at ");
+                    if (posts.get(position).getUser().getDesignation()!=null && !posts.get(position).getUser().getDesignation().isEmpty()) {
+                        ((VideoTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation()+" at ");
+                    }
 
                     if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
                         ((VideoTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
@@ -1284,13 +1328,13 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         AppUtils.setGlideVideoThumbnail(((LinkTypeViewHolder) holder).img_link.getContext(), ((LinkTypeViewHolder) holder).img_link, posts.get(position).getLink_thumbnail());
 
                     } else {
-                        // ((LinkTypeViewHolder) holder).img_link.setBackground(null);
-                        // ((LinkTypeViewHolder) holder).img_link.setVisibility(View.GONE);
-                        // Glide.with(((LinkTypeViewHolder) holder).img_link.getContext()).clear(((LinkTypeViewHolder) holder).img_link);
-                        // ((LinkTypeViewHolder) holder).tv_content.setText(posts.get(position).getContent());
+                         ((LinkTypeViewHolder) holder).img_link.setBackground(null);
+                         ((LinkTypeViewHolder) holder).img_link.setVisibility(View.GONE);
+                         Glide.with(((LinkTypeViewHolder) holder).img_link.getContext()).clear(((LinkTypeViewHolder) holder).img_link);
+                         ((LinkTypeViewHolder) holder).tv_content.setText(posts.get(position).getContent());
                     }
                     AppUtils.makeTextViewResizable(((LinkTypeViewHolder) holder).tv_content, 3, posts.get(position).getContent());
-                    // ((LinkTypeViewHolder) holder).tv_content.setText(posts.get(position).getContent());
+                    // ((LinkTypeV       iewHolder) holder).tv_content.setText(posts.get(position).getContent());
                     ((LinkTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
                     if (posts.get(position).getIs_post_like() != null && posts.get(position).getIs_post_like() > 0) {
                         ((LinkTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.like_selected));
@@ -1316,7 +1360,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         ((LinkTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
                     ((LinkTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name() );
-                    ((LinkTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation()+" at ");
+                    if (posts.get(position).getUser().getDesignation()!=null && !posts.get(position).getUser().getDesignation().isEmpty()) {
+                        ((LinkTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation()+" at ");
+                    }
 
                     if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
                         ((LinkTypeViewHolder) holder).tv_connect.setVisibility(View.GONE);
@@ -1344,6 +1390,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     ((NewsTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((NewsTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
                     ((NewsTypeViewHolder) holder).tv_createdDateTime.setText(DateUtils.getFormattedDateTime(posts.get(position).getCreated_datetime()));
+                    ((NewsTypeViewHolder) holder).tv_share_counter.setText((String.valueOf(posts.get(position).getShare_count())));
 
 
                    // AppUtils.makeTextViewResizable(((NewsTypeViewHolder) holder).tv_content, 3, posts.get(position).getContent());
@@ -1369,7 +1416,12 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     ((NewsTypeViewHolder) holder).channelname.setText(posts.get(position).getNews_source().getName());
                     ((NewsTypeViewHolder) holder).tv_newstitle.setText(posts.get(position).getTitle());
                     AppUtils.setGlideImage(mContext, ((NewsTypeViewHolder) holder).profile_image, posts.get(position).getNews_source().getImage());
-                    AppUtils.setGlideUrlThumbnail(mContext, ((NewsTypeViewHolder) holder).img_link, posts.get(position).getImage());
+                    if(!posts.get(position).getImage().equals("http://67.205.178.219:8000/media/public/no_image.png")) {
+                        AppUtils.setGlideUrlThumbnail(mContext, ((NewsTypeViewHolder) holder).img_link, posts.get(position).getImage());
+                    }else{
+                        ((NewsTypeViewHolder) holder).img_link.setVisibility(View.GONE);
+                    }
+
                     if (position == 0) {
                         ((NewsTypeViewHolder) holder).top_image.setVisibility(View.GONE);
                     } else {

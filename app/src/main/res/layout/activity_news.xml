@@ -46,7 +46,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:src="@drawable/ic_close"
-                android:tint="@color/black" />
+                app:tint="@color/black" />
 
         </LinearLayout>
 
@@ -102,12 +102,12 @@
 
         <TextView
             android:gravity="center"
-            android:id="@+id/textView4"
+            android:id="@+id/ed_code"
             style="@style/TextStyle.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:visibility="visible"
+            android:visibility="gone"
             android:text="Please select before proceeding"
             android:textColor="@color/skyblue"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -117,12 +117,12 @@
 
         <Button
             android:id="@+id/btn_next"
-            style="@style/Button_selected_light_blue"
+            style="@style/Button_selected_red"
             android:layout_width="250dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
-            android:text="Next"
-            android:visibility="gone"
+            android:text="Finish"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

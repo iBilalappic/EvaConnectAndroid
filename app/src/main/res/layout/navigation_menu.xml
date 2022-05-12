@@ -8,19 +8,28 @@
     android:elevation="4dp"
     android:orientation="vertical">
 
+    <ImageView
+        android:id="@+id/image_search"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="right|end"
+        android:padding="10dp"
+        android:src="@drawable/ic_search"
+        app:layout_constraintBottom_toBottomOf="@id/img_close"
+        app:layout_constraintEnd_toStartOf="@+id/img_close"
+        app:layout_constraintTop_toTopOf="@id/img_close"
+        app:tint="@color/black" />
 
     <ImageView
         android:id="@+id/img_close"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_gravity="right|end"
         android:src="@drawable/ic_close"
-        android:tint="@color/black"
-
+        android:padding="6dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/black" />
 
 
     <RelativeLayout
@@ -47,14 +56,13 @@
             />
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:padding="2dp"
+            android:id="@+id/profile_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/profile_image"
+            android:padding="2dp"
             android:src="@drawable/no_thumbnail"
             app:civ_border_color="@color/white"
-            app:civ_border_width="2dp"
-            />
+            app:civ_border_width="2dp" />
     </RelativeLayout>
 
 
@@ -80,7 +88,7 @@
     </TextView>
 
     <LinearLayout
-        android:id="@+id/layout1"
+        android:id="@+id/lay_designation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -126,7 +134,6 @@
             android:id="@+id/tv_company"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/spacing_small"
             android:ellipsize="end"
             android:fontFamily="@font/nunitosansbold"
             android:gravity="center|start"
@@ -150,7 +157,7 @@
         android:fontFamily="@font/nunitosansbold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout1" />
+        app:layout_constraintTop_toBottomOf="@+id/lay_designation" />
 
     <View
         android:id="@+id/view0"
@@ -274,7 +281,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         android:gravity="center_vertical"
         android:padding="10dp"
@@ -304,13 +310,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
+
         android:layout_marginEnd="20dp"
         android:gravity="center_vertical"
         android:padding="10dp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calendar">
+        app:layout_constraintTop_toBottomOf="@+id/settings">
 
         <TextView
             style="@style/TextStyle.Black"
@@ -328,15 +335,44 @@
             android:src="@drawable/job_listing" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/settings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendar">
+
+        <TextView
+            style="@style/TextStyle.Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/nunitosansbold"
+            android:id="@+id/tv_settings"
+            android:text="@string/settings" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|end"
+            android:src="@drawable/settings" />
+    </LinearLayout>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:layout_marginStart="30dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/nunitosansbold"
         android:text="@string/app_version"
         android:textColor="@color/gray"
         android:textSize="12sp"
-        android:fontFamily="@font/nunitosansbold"
         app:layout_constraintBottom_toTopOf="@+id/tv_logout"
         app:layout_constraintStart_toStartOf="parent" />
 

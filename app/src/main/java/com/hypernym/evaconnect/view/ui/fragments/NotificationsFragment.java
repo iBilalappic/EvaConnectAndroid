@@ -1,6 +1,8 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 
+import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,8 +39,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_START;
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -51,6 +51,7 @@ public class NotificationsFragment extends BaseFragment implements Notifications
     SwipeRefreshLayout swipeRefreshLayout;
 
     NotificationsAdapter notificationsAdapter;
+    Post post = new Post();
     private List<Post> notifications = new ArrayList<>();
     private HomeViewModel homeViewModel;
     private ConnectionViewModel connectionViewModel;
@@ -71,31 +72,30 @@ public class NotificationsFragment extends BaseFragment implements Notifications
         View view = inflater.inflate(R.layout.fragment_notifications, container, false);
         ButterKnife.bind(this, view);
         setPageTitle(getString(R.string.notifications));
-        homeViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(HomeViewModel.class);
-        connectionViewModel=ViewModelProviders.of(this,new CustomViewModelFactory(getActivity().getApplication(),getActivity())).get(ConnectionViewModel.class);
+        homeViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(HomeViewModel.class);
+        connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
         swipeRefreshLayout.setOnRefreshListener(this);
         initRecyclerView();
         showDialog();
         getAllNotifications();
         readAllNotifications();
+        Log.d("notification_fragment", "Notification Fragment");
+
         return view;
     }
     private void readAllNotifications() {
         BaseActivity.setNotificationCount(0);
-        setPageTitle("Notifications");
-        if(NetworkUtils.isNetworkConnected(getContext()))
-        {
-            homeViewModel.notificationMarkAsRead( LoginUtils.getLoggedinUser().getId()).observe(this, new Observer<BaseModel<List<Post>>>() {
-                @Override
-                public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                    if(listBaseModel !=null && !listBaseModel.isError() && listBaseModel.getData().size() >0) {
 
-                    }
+        if (NetworkUtils.isNetworkConnected(getContext())) {
+            homeViewModel.notificationMarkAsRead(LoginUtils.getLoggedinUser().getId()).observe(getViewLifecycleOwner(), listBaseModel -> {
+                if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0) {
+                    Log.d("notification_fragment", "Size of notification :" + listBaseModel.getData().size());
                 }
             });
-        }
-        else
-        {
+        } else {
+            Log.d("notification_fragment", "Error");
+
+
             networkErrorDialog();
         }
     }
@@ -103,27 +103,24 @@ public class NotificationsFragment extends BaseFragment implements Notifications
     private void getAllNotifications() {
         // notifications.clear();
 
-        homeViewModel.getAllNotifications(AppConstants.TOTAL_PAGES,currentPage).observe(this, new Observer<BaseModel<List<Post>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() >0 && listBaseModel.getData().get(0) != null) {
-                    //  myLikesModelList.clear();
-                    notifications.addAll(listBaseModel.getData());
-                    notificationsAdapter.notifyDataSetChanged();
-                    swipeRefreshLayout.setRefreshing(false);
-                    notificationsAdapter.removeLoading();
-                    isLoading = false;
-                    //hideDialog();
-                } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
-                    isLastPage = true;
-                    notificationsAdapter.removeLoading();
-                    isLoading = false;
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
+        homeViewModel.getAllNotifications(AppConstants.TOTAL_PAGES, currentPage).observe(getViewLifecycleOwner(), listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() > 0 && listBaseModel.getData().get(0) != null) {
+                //  myLikesModelList.clear();
+                notifications.addAll(listBaseModel.getData());
+                notificationsAdapter.notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
+//                notificationsAdapter.removeLoading();
+                isLoading = false;
+                //hideDialog();
+            } else if (listBaseModel != null && !listBaseModel.isError() && listBaseModel.getData().size() == 0) {
+                isLastPage = true;
+//                notificationsAdapter.removeLoading();
+                isLoading = false;
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
+            swipeRefreshLayout.setRefreshing(false);
         });
     }
 
@@ -190,6 +187,13 @@ public class NotificationsFragment extends BaseFragment implements Notifications
             MeetingDetailFragment meetingDetailFragment = new MeetingDetailFragment();
             Bundle bundle = new Bundle();
             bundle.putInt("id", notifications.get(position).getObject_id());
+            meetingDetailFragment.setArguments(bundle);
+            loadFragment(R.id.framelayout, meetingDetailFragment, getContext(), true);
+        }
+        else if (notifications.get(position).getObject_type().equals("connection")) {
+            PersonProfileFragment meetingDetailFragment = new PersonProfileFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("user", notifications.get(position).getUser());
             meetingDetailFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, meetingDetailFragment, getContext(), true);
         }

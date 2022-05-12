@@ -1,18 +1,18 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
 
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,42 +21,32 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.textfield.TextInputEditText;
 import com.hypernym.evaconnect.R;
-import com.hypernym.evaconnect.constants.AppConstants;
-import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
-import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.utils.Constants;
 import com.hypernym.evaconnect.utils.ImageFilePathUtil;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
-import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
-import okhttp3.MediaType;
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EditProfileFragment extends BaseFragment implements Validator.ValidationListener {
-    @NotEmpty
+public class EditProfileFragment extends BaseFragment implements View.OnClickListener, Validator.ValidationListener {
+  /*  @NotEmpty
     @BindView(R.id.edt_location)
     EditText edt_location;
 
@@ -106,11 +96,39 @@ public class EditProfileFragment extends BaseFragment implements Validator.Valid
     TextView lbl_title;
 
     @BindView(R.id.img_view2)
-    View img_view2;
+    View img_view2;*/
+
+    @BindView(R.id.ly_change_profile_picture)
+    LinearLayout ly_change_profile_picture;
+
+    @BindView(R.id.ly_edit_job_title)
+    LinearLayout ly_edit_job_title;
+
+    @BindView(R.id.ly_edit_bio)
+    LinearLayout ly_edit_bio;
+
+    @BindView(R.id.ly_change_password)
+    LinearLayout ly_change_password;
+
+    @BindView(R.id.ly_edit_location)
+    LinearLayout ly_edit_location;
+
+    @BindView(R.id.img_backarrow)
+    ImageView img_backarrow;
+
+    @BindView(R.id.tv_change_profile)
+    TextView tv_change_profile;
+
+    @BindView(R.id.tv_bio)
+    TextView tv_bio;
+
+
+    @BindView(R.id.view15)
+    View view15;
 
 
     private UserViewModel userViewModel;
-
+    Bundle bundle = new Bundle();
 
     private static final int REQUEST_PHOTO_GALLERY = 4;
     private static final int CAMERAA = 1;
@@ -121,6 +139,7 @@ public class EditProfileFragment extends BaseFragment implements Validator.Valid
     private MultipartBody.Part partImage;
 
     User user = new User();
+    User userData = new User();
     private Validator validator;
 
     public EditProfileFragment() {
@@ -136,139 +155,50 @@ public class EditProfileFragment extends BaseFragment implements Validator.Valid
         ButterKnife.bind(this, view);
         validator = new Validator(this);
         validator.setValidationListener(this);
-
+        ly_change_profile_picture.setOnClickListener(this);
+        ly_edit_job_title.setOnClickListener(this);
+        ly_edit_bio.setOnClickListener(this);
+        ly_change_password.setOnClickListener(this);
+        ly_edit_location.setOnClickListener(this);
+        img_backarrow.setOnClickListener(this);
         user = LoginUtils.getUser();
         SettingUserProfile(user);
 
-        btn_save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                validator.validate();
-            }
-        });
-
-        img_edit.setOnClickListener(new OnOneOffClickListener() {
-            @Override
-            public void onSingleClick(View v) {
-                openPictureDialog();
-
-            }
-        });
-        img_backarrow.setOnClickListener(new OnOneOffClickListener() {
-            @Override
-            public void onSingleClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
-        tv_text_manage.setOnClickListener(new OnOneOffClickListener() {
-            @Override
-            public void onSingleClick(View v) {
-                SettingsFragment settingsFragment = new SettingsFragment();
-                loadFragment(R.id.framelayout, settingsFragment, getContext(), true);
-            }
-        });
-
+        if (user.getType().equalsIgnoreCase("company")) {
+            tv_change_profile.setText("Change Company Logo");
+            tv_bio.setText("Edit Company Bio");
+            ly_edit_job_title.setVisibility(View.GONE);
+            view15.setVisibility(View.GONE);
+        } else {
+            tv_change_profile.setText("Change your profile picture");
+            tv_bio.setText("Edit Bio");
+            ly_edit_job_title.setVisibility(View.VISIBLE);
+            view15.setVisibility(View.VISIBLE);
+        }
         return view;
     }
 
     private void SettingUserProfile(User user) {
-        userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(UserViewModel.class);
+        userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication())).get(UserViewModel.class);
         GetUserDetails();
-    }
-
-
-    @Override
-    public void onValidationSucceeded() {
-           UpdateProfileUser();
-    }
-
-    private void UpdateProfileUser() {
-        showDialog();
-        userViewModel.profile_update(
-                user.getId(),
-                edt_designation.getText().toString(),
-                edt_company.getText().toString(),
-                edt_firstname.getText().toString(),partImage).observe(this, new Observer<BaseModel<List<Object>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Object>> listBaseModel) {
-                if (!listBaseModel.isError()) {
-                   tv_updated.setVisibility(View.VISIBLE);
-                   initHandler();
-                   GetUserDetails();
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
-            }
-        });
-    }
-
-    private void initHandler() {
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                tv_updated.setVisibility(View.GONE);
-            }
-        }, 3000);
     }
 
     private void GetUserDetails() {
         showDialog();
-        userViewModel.getuser_details(user.getId()
-        ).observe(this, new Observer<BaseModel<List<User>>>() {
-            @Override
-            public void onChanged(BaseModel<List<User>> listBaseModel)
-            {
-                if (listBaseModel.getData() != null && !listBaseModel.isError())
-                {
-                    if (!TextUtils.isEmpty(listBaseModel.getData().get(0).getUser_image()))
-                    {
-                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getUser_image());
-                    }
-//                    else if (listBaseModel.getData().get(0).getIs_facebook() == 1 && !TextUtils.isEmpty(listBaseModel.getData().get(0).getFacebook_image_url())) {
-//                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getFacebook_image_url());
-//                    }
-//                    else {
-//                        AppUtils.setGlideImage(getContext(), cv_profile_image, listBaseModel.getData().get(0).getUser_image());
-//                    }
-
-                    tv_location.setText(listBaseModel.getData().get(0).getCountry() + "," + listBaseModel.getData().get(0).getCity());
-                    edt_location.setText(listBaseModel.getData().get(0).getCountry() + "," + listBaseModel.getData().get(0).getCity());
-                    edt_firstname.setText(listBaseModel.getData().get(0).getFirst_name());
-                    if(listBaseModel.getData().get(0).getSector().equalsIgnoreCase("Other"))
-                    {
-                        edt_sector.setText(listBaseModel.getData().get(0).getOther_sector());
-                    }
-                    else
-                    {
-                        edt_sector.setText(listBaseModel.getData().get(0).getSector());
-                    }
-
-                    if(listBaseModel.getData().get(0).getType().equalsIgnoreCase("company"))
-                    {
-                        lbl_title.setVisibility(View.GONE);
-                        edt_designation.setVisibility(View.GONE);
-                        img_view2.setVisibility(View.GONE);
-                    }
-                    else
-                    {
-                        edt_designation.setText(listBaseModel.getData().get(0).getDesignation());
-                        lbl_title.setVisibility(View.VISIBLE);
-                        edt_designation.setVisibility(View.VISIBLE);
-                        img_view2.setVisibility(View.VISIBLE);
-                    }
-
-
-                    edt_company.setText(listBaseModel.getData().get(0).getCompany_name());
-                    tv_name.setText(listBaseModel.getData().get(0).getFirst_name());
-                    LoginUtils.saveUser(listBaseModel.getData().get(0));
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
+        userViewModel.getuser_details(user.getId() ,false).observe(getViewLifecycleOwner(), listBaseModel -> {
+            if (listBaseModel.getData() != null && !listBaseModel.isError()) {
+                userData = listBaseModel.getData().get(0);
+                LoginUtils.saveUser(listBaseModel.getData().get(0));
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
+    }
+
+    @Override
+    public void onValidationSucceeded() {
+       //    UpdateProfileUser();
     }
 
     @Override
@@ -298,7 +228,7 @@ public class EditProfileFragment extends BaseFragment implements Validator.Valid
 
                 if (result != null && result.getUri()!=null)
                 {
-                    setImage(result.getUri());
+                    //setImage(result.getUri());
                 }
 
             }
@@ -326,7 +256,7 @@ public class EditProfileFragment extends BaseFragment implements Validator.Valid
                         else{
                             //Do not add getActivity instead of getContext().
                             CropImage.activity(galleryImageUri)
-                                    .start(getContext(), this);
+                                    .start(requireContext(), this);
                         }
                     }
                     catch (Exception e){
@@ -350,7 +280,7 @@ public class EditProfileFragment extends BaseFragment implements Validator.Valid
 
                     //Do not add getActivity instead of getContext().
                     CropImage.activity(SelectedImageUri)
-                            .start(getContext(), this);
+                            .start(requireContext(), this);
                 }
                 catch (Exception e){
                     e.printStackTrace();
@@ -359,58 +289,56 @@ public class EditProfileFragment extends BaseFragment implements Validator.Valid
         }
     }
 
-    private void setImage(Uri uri)
-    {
-        String updatedImage = ImageFilePathUtil.getPath(getActivity(), uri);
+    @Override
+    public void onClick(View v) {
 
-        if (!TextUtils.isEmpty(updatedImage) || updatedImage != null)
-        {
-            File file = new File(updatedImage);
-            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+        switch (v.getId()) {
+            case R.id.ly_change_profile_picture:
+                EditProfilePictureFragment editProfilePictureFragment = new EditProfilePictureFragment();
+                loadFragment(R.id.framelayout, editProfilePictureFragment, getContext(), true);
+                break;
 
-            globalImagePath = file.getAbsolutePath();
-
-            if (file.length() / AppConstants.ONE_THOUSAND_AND_TWENTY_FOUR > AppConstants.IMAGE_SIZE_IN_KB) {
-                networkResponseDialog(getString(R.string.error), getString(R.string.err_image_size_large));
-                return;
-            }
-
-            if (!TextUtils.isEmpty(globalImagePath) || globalImagePath != null) {
-
-                Glide.with(this).load(loadFromFile(globalImagePath))
-                        .apply(new RequestOptions())
-                        .into(cv_profile_image);
-
-                Bitmap orignal = loadFromFile(globalImagePath);
-                File filenew = new File(globalImagePath);
-                try {
-                    FileOutputStream out = new FileOutputStream(filenew);
-                    orignal.compress(Bitmap.CompressFormat.JPEG, 50, out);
-                    out.flush();
-                    out.close();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
+            case R.id.ly_edit_job_title:
+                EditProfileJobTitleFragment editProfileJobTitleFragment = new EditProfileJobTitleFragment();
+                if (userData!=null) {
+                    bundle.putSerializable(Constants.USER, userData);
+                } else {
+                    bundle.putSerializable(Constants.USER, user);
                 }
+                loadFragment_bundle(R.id.framelayout, editProfileJobTitleFragment, getContext(), true,bundle);
+                break;
 
-                partImage = MultipartBody.Part.createFormData("user_image", file.getName(), reqFile);
-            }
-            else {
-                networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
-            }
-        }
-        else {
-            networkResponseDialog(getString(R.string.error), getString(R.string.err_internal_supported));
-        }
-    }
+            case R.id.ly_edit_bio:
+                EditProfileBioFragment editProfileBioFragment = new EditProfileBioFragment();
+                if (userData!=null) {
+                    bundle.putSerializable(Constants.USER, userData);
+                } else {
+                    bundle.putSerializable(Constants.USER, user);
+                }
+                loadFragment_bundle(R.id.framelayout, editProfileBioFragment, getContext(), true,bundle);
+                break;
 
-    private void galleryAddPics() {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        mCurrentPhotoPath=getCurrentPhotoPath();
-        File f = new File(mCurrentPhotoPath);
-        file_name = f;
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
-        getActivity().sendBroadcast(mediaScanIntent);
+            case R.id.ly_change_password:
+                EditProfileChangePasswordFragment editProfileChangePasswordFragment = new EditProfileChangePasswordFragment();
+                loadFragment_bundle(R.id.framelayout, editProfileChangePasswordFragment, getContext(), true,bundle);
+                break;
+
+            case R.id.ly_edit_location:
+                LanguageFragment editProfileLocationFragment = new LanguageFragment(userData);
+                if (userData!=null) {
+                    bundle.putSerializable(Constants.USER, userData);
+                } else {
+                    bundle.putSerializable(Constants.USER, user);
+                }
+                loadFragment_bundle(R.id.framelayout, editProfileLocationFragment, getContext(), true,bundle);
+                break;
+
+            case R.id.img_backarrow:
+                getActivity().onBackPressed();
+                break;
+
+
+        }
+
     }
 }

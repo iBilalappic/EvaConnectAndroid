@@ -1,12 +1,22 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
+import static android.content.Context.CLIPBOARD_SERVICE;
+
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,6 +35,7 @@ import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.CompanyJobAdAdapter;
 import com.hypernym.evaconnect.view.adapters.JobAdAdapter;
+import com.hypernym.evaconnect.view.bottomsheets.BottomsheetShareSelection;
 import com.hypernym.evaconnect.view.dialogs.ShareDialog;
 import com.hypernym.evaconnect.viewmodel.JobListViewModel;
 
@@ -58,6 +69,7 @@ public class JobListingFragment extends BaseFragment implements View.OnClickList
     private CompanyJobAdAdapter companyJobAdAdapter;
     private LinearLayoutManager CompanylinearLayoutManager;
     private List<CompanyJobAdModel> companyJobAdModelList = new ArrayList<>();
+    int item_position;
 
     public JobListingFragment() {
         // Required empty public constructor
@@ -106,7 +118,7 @@ public class JobListingFragment extends BaseFragment implements View.OnClickList
     }
 
     private void GetJobAd() {
-        jobListViewModel.getjobAd(user).observe(this, new Observer<BaseModel<List<JobAd>>>() {
+        jobListViewModel.getjobAd(user).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<JobAd>>>() {
             @Override
             public void onChanged(BaseModel<List<JobAd>> getnetworkconnection) {
                 if (getnetworkconnection != null && !getnetworkconnection.isError()) {
@@ -125,7 +137,7 @@ public class JobListingFragment extends BaseFragment implements View.OnClickList
     }
 
     private void GetCompanyJobAd() {
-        jobListViewModel.getcompanyAd(user).observe(this, new Observer<BaseModel<List<CompanyJobAdModel>>>() {
+        jobListViewModel.getcompanyAd(user).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<CompanyJobAdModel>>>() {
             @Override
             public void onChanged(BaseModel<List<CompanyJobAdModel>> getnetworkconnection) {
                 if (getnetworkconnection != null && !getnetworkconnection.isError()) {
@@ -196,12 +208,15 @@ public class JobListingFragment extends BaseFragment implements View.OnClickList
                 loadFragment(R.id.framelayout, createJobFragment, getContext(), true);
                 break;
             case R.id.img_share:
-                ShareDialog shareDialog;
-                Bundle bundle_share = new Bundle();
-                bundle_share.putSerializable("JobData",jobAdList.get(position));
-                bundle_share.putString(Constants.FRAGMENT_NAME,"JOB_FRAGMENT");
-                shareDialog = new ShareDialog(getContext(),bundle_share);
-                shareDialog.show();
+//                ShareDialog shareDialog;
+//                Bundle bundle_share = new Bundle();
+//                bundle_share.putSerializable("JobData",jobAdList.get(position));
+//                bundle_share.putString(Constants.FRAGMENT_NAME,"JOB_FRAGMENT");
+//                shareDialog = new ShareDialog(getContext(),bundle_share);
+//                shareDialog.show();
+                item_position=position;
+                BottomsheetShareSelection bottomSheetPictureSelection = new BottomsheetShareSelection(new YourDialogFragmentDismissHandler());
+                bottomSheetPictureSelection.show(getActivity().getSupportFragmentManager(), bottomSheetPictureSelection.getTag());
                 break;
 
 //            case R.id.comment_click:
@@ -254,4 +269,46 @@ public class JobListingFragment extends BaseFragment implements View.OnClickList
             networkErrorDialog();
         }
     }
+
+
+    protected class YourDialogFragmentDismissHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 102) {
+                Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
+                whatsappIntent.setType("text/plain");
+                whatsappIntent.setPackage("com.whatsapp");
+                whatsappIntent.putExtra(Intent.EXTRA_TEXT, "https://www.evaintmedia.com/" + jobAdList.get(item_position).getType() + "/" + jobAdList.get(item_position).getId());
+                try {
+                    getContext().startActivity(whatsappIntent);
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(requireContext(), "Whatsapp have not been installed.", Toast.LENGTH_SHORT).show();
+                }
+            }
+            else if(msg.what==100){
+                ShareConnectionFragment shareConnectionFragment = new ShareConnectionFragment();
+                FragmentTransaction transaction = ((AppCompatActivity) requireActivity()).getSupportFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+                transaction.replace(R.id.framelayout, shareConnectionFragment);
+                Bundle bundle = new Bundle();
+                {
+                    bundle.putInt(Constants.DATA, jobAdList.get(item_position).getId());
+                    bundle.putString(Constants.TYPE,  jobAdList.get(item_position).getType());
+                }
+                shareConnectionFragment.setArguments(bundle);
+                if (true) {
+                    transaction.addToBackStack(null);
+                }
+                transaction.commit();
+            }else if(msg.what==103){
+                ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(CLIPBOARD_SERVICE);
+                ClipData clip;
+                clip = ClipData.newPlainText("label", "https://www.evaintmedia.com/" + jobAdList.get(item_position).getType() + "/" + jobAdList.get(item_position).getId());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(requireContext(), "link copied", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 }

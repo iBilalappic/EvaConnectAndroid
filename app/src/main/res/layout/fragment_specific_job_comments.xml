@@ -371,7 +371,7 @@
 
                     <LinearLayout
 
-                        android:id="@+id/layout1"
+                        android:id="@+id/lay_designation"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_marginStart="16dp"
@@ -492,7 +492,7 @@
                         android:background="@color/lighter_gray"
                         android:elevation="1dp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/layout1" />
+                        app:layout_constraintTop_toBottomOf="@id/lay_designation" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
