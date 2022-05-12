@@ -228,8 +228,8 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
         {
             GraphRequest request = GraphRequest.newMeRequest(accessToken, (object, response) -> {
                 try{
-                    /*String first_name = object.getString(AppConstants.FIRST_NAME);
-                    String last_name = object.getString(AppConstants.LAST_NAME);*/
+                    String first_name = object.getString(AppConstants.FIRST_NAME);
+                    String last_name = object.getString(AppConstants.LAST_NAME);
                     String email = object.getString(AppConstants.EMAIL);
                     String id = object.getString(AppConstants.ID);
                     String facebook_photo = AppConstants.FACEBOOK_PIC_BASE_URL + id + AppConstants.FACEBOOK_PIC_URL;
