@@ -385,7 +385,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
             public void onDateSet(DatePicker arg0, int arg1, int arg2, int arg3) {
 
                 edit_date.setText(String.valueOf(arg3));
-                edit_month.setText(String.valueOf(arg2));
+                edit_month.setText(String.valueOf(arg2+1));
                 edit_year.setText(String.valueOf(arg1));
 
                 // arg1 = year
