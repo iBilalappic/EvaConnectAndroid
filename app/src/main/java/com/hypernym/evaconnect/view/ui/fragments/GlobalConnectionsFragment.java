@@ -214,12 +214,14 @@ public class GlobalConnectionsFragment extends BaseFragment implements OptionsAd
 //                        connectionList.clear();
 //                        connectionsAdapter.notifyDataSetChanged();
 //                    }
-                Log.d("list", "getConnectionByFilter: "+connectedList);
+
                 connectedList.clear();
                 connectedList.addAll(listBaseModel.getData());
                 connectionsAdapter.hSetList(connectedList);
+                Log.d("list", "getConnectionByFilter: "+connectedList.size());
+                connectionsAdapter.notifyDataSetChanged();
 //                    if (connectionList.size() > 0) {
-                rc_connections.setVisibility(View.GONE);
+                rc_connections.setVisibility(View.VISIBLE);
                 empty.setVisibility(View.GONE);
                 //  }
 //                    isLoading = false;
