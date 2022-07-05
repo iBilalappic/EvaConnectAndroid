@@ -383,7 +383,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
         myDateListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker arg0, int arg1, int arg2, int arg3) {
-                Log.d("Date", "i am call ");
+
                 edit_date.setText(String.valueOf(arg3));
                 edit_month.setText(String.valueOf(arg2));
                 edit_year.setText(String.valueOf(arg1));
@@ -626,7 +626,6 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
 
     private void hSetCountry() {
         showDialog();
-        Log.d("countryCode", "hSetCountry: "+hCountyCodeFromLocation);
         viewModel.hGetAllCities(hCountyCodeFromLocation).observe(this, response -> {
 
             if (response != null) {
