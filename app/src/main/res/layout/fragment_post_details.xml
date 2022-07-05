@@ -630,11 +630,11 @@
 
     <View
         android:id="@+id/view5"
-        android:layout_width="337dp"
+        android:layout_width="0dp"
         android:layout_height="1dp"
         android:background="@drawable/ic_blue_red"
         app:layout_constraintBottom_toTopOf="@+id/edt_comment"
-
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent" />
 

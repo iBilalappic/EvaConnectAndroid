@@ -147,6 +147,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account_3);
         ButterKnife.bind(this);
+
         tv_already_account.setOnClickListener(this);
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         init();
@@ -159,6 +160,10 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
                 hSetDefaultCountry();
 
             }
+            else{
+                hideDialog();
+            }
+
         } else {
             hideDialog();
             Toast.makeText(getBaseContext(), "Check Your Internet Connection", Toast.LENGTH_LONG).show();
@@ -166,12 +171,21 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
     }
 
     private boolean isLocationEnabled() {
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        if ((ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) ){
             return true;
-        } else {
+        }
+        else{
             Toast.makeText(this, "Turn ON your location ", Toast.LENGTH_LONG).show();
             return false;
+
         }
+//        if (
+//        locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)&& locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+//
+//        } else {
+//
+//        }
     }
 
 
@@ -425,8 +439,11 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
     @Override
     protected void onResume() {
         super.onResume();
+        if(isLocationEnabled()){
+            startLocationUpdates();
+        }
 
-        startLocationUpdates();
+
     }
 
     @Override
