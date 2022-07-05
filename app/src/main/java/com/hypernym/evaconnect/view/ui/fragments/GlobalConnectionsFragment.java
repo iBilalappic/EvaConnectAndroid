@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -101,6 +102,8 @@ public class GlobalConnectionsFragment extends BaseFragment implements OptionsAd
         View view = inflater.inflate(R.layout.fragment_global_connected, container, false);
         ButterKnife.bind(this, view);
 
+        Log.d("ahsan", "Fragment loading: ");
+
         connectionViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication(), getActivity())).get(ConnectionViewModel.class);
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(getActivity().getApplication())).get(UserViewModel.class);
         user = LoginUtils.getLoggedinUser();
@@ -127,6 +130,7 @@ public class GlobalConnectionsFragment extends BaseFragment implements OptionsAd
                 loadFragment(R.id.framelayout, recommendedAllUserFragment, getContext(), true);
             }
         });
+
 
         return view;
     }
@@ -197,7 +201,8 @@ public class GlobalConnectionsFragment extends BaseFragment implements OptionsAd
         if (edt_search.getText().toString().length() > 0)
             userData.setFirst_name(edt_search.getText().toString());
         Log.e("type", mtype);
-        //   connectedList.clear();
+        Log.d("userData", "getConnectionByFilter: "+userData);
+        //   connectedList.calear();
 
 
         connectionViewModel.getConnected(userData, AppConstants.TOTAL_PAGES, currentPage).observe(getViewLifecycleOwner(), listBaseModel -> {
@@ -209,6 +214,7 @@ public class GlobalConnectionsFragment extends BaseFragment implements OptionsAd
 //                        connectionList.clear();
 //                        connectionsAdapter.notifyDataSetChanged();
 //                    }
+                Log.d("list", "getConnectionByFilter: "+connectedList);
                 connectedList.clear();
                 connectedList.addAll(listBaseModel.getData());
                 connectionsAdapter.hSetList(connectedList);

@@ -151,19 +151,24 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
 
         if (NetworkUtils.isNetworkConnected(this)) {
             showDialog();
-            isLocationEnabled();
+
+
+            if(!isLocationEnabled()) {
+                hSetDefaultCountry();
+
+            }
         } else {
             hideDialog();
             Toast.makeText(getBaseContext(), "Check Your Internet Connection", Toast.LENGTH_LONG).show();
         }
     }
 
-    private void isLocationEnabled() {
+    private boolean isLocationEnabled() {
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            return;
+            return true;
         } else {
             Toast.makeText(this, "Turn ON your location ", Toast.LENGTH_LONG).show();
-            hSetDefaultCountry();
+            return false;
         }
     }
 
@@ -181,10 +186,13 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
                 @Override
                 public void onChanged(List<City> response) {
 
+
                     spinCities.setSelection(0);
 
                     if (response != null) {
-                        for (int i = 0; i < response.size(); i++) {
+
+                        Log.d("cities", "onChanged: "+response);
+                     for (int i = 0; i < response.size(); i++) {
                             hCitiesList.add(response.get(i).name);
                         }
                         hideDialog();
@@ -349,6 +357,8 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
 
         edit_date.setOnClickListener(v -> {
             // TODO Auto-generated method stub
+
+
             new DatePickerDialog(CreateAccount_3_Activity.this, R.style.DialogTheme, date, myCalendar
                     .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                     myCalendar.get(Calendar.DAY_OF_MONTH)).show();
@@ -377,6 +387,8 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
         edit_year.setText(result[2]);
         updateLabel();
     }
+
+
 
     private void updateLabel() {
 
@@ -571,10 +583,12 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
 
                     hCountyCodeFromLocation = countryCode;
 
+
+
                     hSetCountry();
 
                     addresses.get(0).getAdminArea();
-                    Log.d("address", address);
+
                     String[] splitArray = address.split(",");
                     String new_text = splitArray[3];
                     String street = splitArray[0];
@@ -593,6 +607,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
 
     private void hSetCountry() {
         showDialog();
+        Log.d("countryCode", "hSetCountry: "+hCountyCodeFromLocation);
         viewModel.hGetAllCities(hCountyCodeFromLocation).observe(this, response -> {
 
             if (response != null) {
@@ -600,6 +615,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
                     hCitiesList.add(response.get(i).name);
                     Log.d("test123", response.get(i).name);
                 }
+                hSetCitySpinner();
 
                 hideDialog();
             } else {
@@ -684,6 +700,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
     }
 
     private void hSetCitySpinner() {
+        Log.d("citiesSpinner", "hSetCitySpinner: "+hCitiesList.size());
         ArrayAdapter<String> hCitiesAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, hCitiesList);
         hCitiesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

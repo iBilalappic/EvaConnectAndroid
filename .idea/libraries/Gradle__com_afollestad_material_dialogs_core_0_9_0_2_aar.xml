@@ -7,6 +7,9 @@
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/66a226d48f9ada38b4ba842edc2c7281/transformed/jetified-core-0.9.0.2/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/66a226d48f9ada38b4ba842edc2c7281/transformed/jetified-core-0.9.0.2/AndroidManifest.xml" />
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/66a226d48f9ada38b4ba842edc2c7281/transformed/jetified-core-0.9.0.2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/1687cd6f4606798ecf207a2a4515c4c3/transformed/jetified-core-0.9.0.2/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/1687cd6f4606798ecf207a2a4515c4c3/transformed/jetified-core-0.9.0.2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/1687cd6f4606798ecf207a2a4515c4c3/transformed/jetified-core-0.9.0.2/res" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.jdks/caches/modules-2/files-2.1/com.afollestad.material-dialogs/core/0.9.0.2/fee70eb46ba44bee6085eb7cd2f13df9d89e90e1/core-0.9.0.2-javadoc.jar!/" />
