@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -130,6 +131,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
     public static int counter = 0;
     private LocationRequest mLocationRequest;
     private LocationManager locationManager;
+    DatePickerDialog.OnDateSetListener myDateListener;
 
     DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
         // TODO Auto-generated method stub
@@ -359,24 +361,38 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
             // TODO Auto-generated method stub
 
 
-            new DatePickerDialog(CreateAccount_3_Activity.this, R.style.DialogTheme, date, myCalendar
+            new DatePickerDialog(CreateAccount_3_Activity.this, R.style.DialogTheme, myDateListener, myCalendar
                     .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                     myCalendar.get(Calendar.DAY_OF_MONTH)).show();
         });
 
         edit_month.setOnClickListener(v -> {
             // TODO Auto-generated method stub
-            new DatePickerDialog(CreateAccount_3_Activity.this, R.style.DialogTheme, date, myCalendar
+            new DatePickerDialog(CreateAccount_3_Activity.this, R.style.DialogTheme, myDateListener, myCalendar
                     .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                     myCalendar.get(Calendar.DAY_OF_MONTH)).show();
         });
 
         edit_year.setOnClickListener(v -> {
-            // TODO Auto-generated method stub
-            new DatePickerDialog(CreateAccount_3_Activity.this, R.style.DialogTheme, date, myCalendar
+            new DatePickerDialog(CreateAccount_3_Activity.this, R.style.DialogTheme, myDateListener, myCalendar
                     .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                     myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+
         });
+        // Added by AliRaza on 07-05-22//
+        myDateListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker arg0, int arg1, int arg2, int arg3) {
+                Log.d("Date", "i am call ");
+                edit_date.setText(String.valueOf(arg3));
+                edit_month.setText(String.valueOf(arg2));
+                edit_year.setText(String.valueOf(arg1));
+
+                // arg1 = year
+                // arg2 = month
+                // arg3 = day
+            }
+        };
     }
 
     private void hSetCurrentDateTime() {
@@ -387,6 +403,9 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
         edit_year.setText(result[2]);
         updateLabel();
     }
+
+
+
 
 
 
