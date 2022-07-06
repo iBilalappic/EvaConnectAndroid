@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -913,7 +914,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
     }
 
     @Override
-    public void onLikeClick(View view, int position, TextView likeCount) {
+    public void onLikeClick(View view, int position, TextView likeCount, ProgressBar like_pb) {
 
     }
 
