@@ -152,6 +152,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
             like_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
+                    Log.d("ali", "like clicked ");
                     posts.get(getAdapterPosition()).setLikeLoading(true);
                     notifyItemChanged(getAdapterPosition());
                     mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
@@ -330,6 +331,9 @@ public class PostAdapter  extends RecyclerView.Adapter {
 
         @BindView(R.id.layout)
         LinearLayout layout;
+
+        @BindView(R.id.like_pb)
+        ProgressBar like_pb;
 
 
 
@@ -512,6 +516,9 @@ public class PostAdapter  extends RecyclerView.Adapter {
 
         @BindView(R.id.img_more)
         ImageView img_more;
+
+        @BindView(R.id.like_pb)
+        ProgressBar like_pb;
 
 
         public VideoTypeViewHolder(View itemView) {
@@ -698,6 +705,9 @@ public class PostAdapter  extends RecyclerView.Adapter {
 
         @BindView(R.id.img_more)
         ImageView img_more;
+
+        @BindView(R.id.like_pb)
+        ProgressBar like_pb;
 
         public LinkTypeViewHolder(View itemView) {
             super(itemView);
@@ -957,11 +967,11 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     if (object.isLikeLoading()) {
 
 
-                        ((PostAdapter.TextTypeViewHolder) holder).like_pb.setVisibility(View.VISIBLE);
+                        ((PostAdapter.ImageTypeViewHolder) holder).like_pb.setVisibility(View.VISIBLE);
                     } else {
 
 
-                        ((PostAdapter.TextTypeViewHolder) holder).like_pb.setVisibility(View.GONE);
+                        ((PostAdapter.ImageTypeViewHolder) holder).like_pb.setVisibility(View.GONE);
 
                     }
 
@@ -1133,11 +1143,11 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     if (object.isLikeLoading()) {
 
 
-                        ((PostAdapter.TextTypeViewHolder) holder).like_pb.setVisibility(View.VISIBLE);
+                        ((PostAdapter.ImageTypeViewHolder) holder).like_pb.setVisibility(View.VISIBLE);
                     } else {
 
 
-                        ((PostAdapter.TextTypeViewHolder) holder).like_pb.setVisibility(View.GONE);
+                        ((PostAdapter.ImageTypeViewHolder) holder).like_pb.setVisibility(View.GONE);
 
                     }
                     ((PostAdapter.ImageTypeViewHolder) holder).imageSlider.setVisibility(View.GONE);
@@ -1272,11 +1282,11 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     if (object.isLikeLoading()) {
 
 
-                        ((PostAdapter.TextTypeViewHolder) holder).like_pb.setVisibility(View.VISIBLE);
+                        ((PostAdapter.VideoTypeViewHolder) holder).like_pb.setVisibility(View.VISIBLE);
                     } else {
 
 
-                        ((PostAdapter.TextTypeViewHolder) holder).like_pb.setVisibility(View.GONE);
+                        ((PostAdapter.VideoTypeViewHolder) holder).like_pb.setVisibility(View.GONE);
 
                     }
                     if (String.valueOf(posts.get(position).getComment_count()).equals("0")) {
@@ -1360,11 +1370,11 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     if (object.isLikeLoading()) {
 
 
-                        ((PostAdapter.TextTypeViewHolder) holder).like_pb.setVisibility(View.VISIBLE);
+                        ((PostAdapter.LinkTypeViewHolder) holder).like_pb.setVisibility(View.VISIBLE);
                     } else {
 
 
-                        ((PostAdapter.TextTypeViewHolder) holder).like_pb.setVisibility(View.GONE);
+                        ((PostAdapter.LinkTypeViewHolder) holder).like_pb.setVisibility(View.GONE);
 
                     }
                     if (String.valueOf(posts.get(position).getComment_count()).equals("0")) {
