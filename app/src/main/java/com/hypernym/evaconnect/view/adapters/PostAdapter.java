@@ -890,6 +890,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         Post object = posts.get(position);
+        Log.d("posts", "onBindViewHolder: "+posts.size());
         if (object != null && object.getType() != null) {
             switch (object.getPost_type()) {
                 case AppConstants.TEXT_TYPE:

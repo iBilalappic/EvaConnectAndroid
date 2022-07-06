@@ -46,6 +46,8 @@ public class GlobalSearchTabfragment extends BaseFragment implements View.OnClic
         edt_search = (EditText) view.findViewById(R.id.edt_search);
         tabs = view.findViewById(R.id.tabLayout2);
         setupViewPager(viewPager);
+
+        Log.d("alioo", "i am call" );
         // Set Tabs inside Toolbar
 
 

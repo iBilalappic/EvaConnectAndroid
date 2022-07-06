@@ -380,9 +380,22 @@ public class GlobalConnectionsFragment extends BaseFragment implements OptionsAd
 
                     try {
                         ConnectionModel user = connectedList.get(position);
+                        User us = LoginUtils.getLoggedinUser();
                         PersonProfileFragment personProfileFragment = new PersonProfileFragment();
                         Bundle bundle2 = new Bundle();
-                        bundle2.putInt("user_id", user.id);
+                        bundle2.putInt("user_id",  (int) (long) user.receiver.getId() );
+                        if(user.sender != null && user.receiver != null){
+                            if (us.getId().equals(user.receiverId)) {
+                                bundle2.putInt("user_id", user.senderId);
+
+                            }
+                            else {
+                                bundle2.putInt("user_id",  user.receiverId );
+                            }
+
+
+                        }
+
                         Log.d("connection", "onItemClick: user " + user.receiverId);
                         bundle2.putParcelable("connected_user", user);
                         Log.d("connection", "onItemClick: " + GsonUtils.toJson(user));
@@ -452,7 +465,7 @@ public class GlobalConnectionsFragment extends BaseFragment implements OptionsAd
                 isSearchFlag = true;
                 connectionList.clear();
                 connectionsAdapter.notifyDataSetChanged();
-                getConnectedFilter(true);
+//                getConnectedFilter(true);
             } else {
                 connectionList.clear();
                 connectionsAdapter.notifyDataSetChanged();
