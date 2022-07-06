@@ -80,6 +80,7 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
     String filter = "event";
     String keyword;
     int totalsize=0;
+    private int firstTime;
 
 
     public GlobalEventFragment() {
@@ -172,6 +173,12 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
                 if (currentPage == PAGE_START) {
                     posts.clear();
                     homePostsAdapter.notifyDataSetChanged();
+                }
+                if(firstTime<2){
+                    rc_home.setVisibility(View.GONE);
+                }
+                else{
+                    rc_home.setVisibility(View.VISIBLE);
                 }
                 totalsize = 0;
 
@@ -623,6 +630,7 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
 
     @Subscribe
     public void onEvent(String mtitle) {
+        firstTime++;
         Log.d("TAG", "onEvent: " + mtitle);
 
         if (mtitle.equals("")) {

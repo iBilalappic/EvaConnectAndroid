@@ -530,6 +530,9 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
                 edit_Location.getText().toString(),
                 edit_jobtitle.getText().toString(),
                 edit_jobpostion.getText().toString(), JobType, JobDuration).observe(this, getnetworkconnection -> {
+
+
+
             if (getnetworkconnection != null && !getnetworkconnection.isError()) {
                 jobSuccess_dialog = new JobSuccess_dialog(requireActivity(), getContext());
                 jobSuccess_dialog.show();
