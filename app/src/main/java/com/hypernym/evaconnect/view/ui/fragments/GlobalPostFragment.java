@@ -658,7 +658,7 @@ public class GlobalPostFragment extends BaseFragment implements View.OnClickList
                 isSearchFlag = true;
                 posts.clear();
                 homePostsAdapter.notifyDataSetChanged();
-                callPostsApi();
+//                callPostsApi();
             } else {
                 posts.clear();
                 homePostsAdapter.notifyDataSetChanged();
@@ -724,7 +724,7 @@ public class GlobalPostFragment extends BaseFragment implements View.OnClickList
         } else {
 
             search_key = mtitle;
-            callPostsApi();
+//            callPostsApi();
         }
     }
 

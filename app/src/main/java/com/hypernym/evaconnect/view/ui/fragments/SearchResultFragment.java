@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -391,8 +392,9 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     }
 
     @Override
-    public void onLikeClick(View view, int position, TextView likeCount) {
+    public void onLikeClick(View view, int position, TextView likeCount, ProgressBar pb) {
         Post post = posts.get(position);
+        pb.setVisibility(View.VISIBLE);
         User user = LoginUtils.getLoggedinUser();
         post.setPost_id(post.getId());
         post.setCreated_by_id(user.getId());
@@ -425,7 +427,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         Log.d("Listing status", post.getAction() + " count" + post.getIs_post_like());
         if (NetworkUtils.isNetworkConnected(getContext())) {
 
-            likePost(post, position);
+            likePost(post, position,pb);
         } else {
             networkErrorDialog();
         }
@@ -549,14 +551,16 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         });
     }
 
-    private void likePost(Post post, int position) {
+    private void likePost(Post post, int position, ProgressBar pb) {
         postViewModel.likePost(post).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError()) {
                     homePostsAdapter.notifyItemChanged(position);
+                    pb.setVisibility(View.GONE);
                 } else {
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                    pb.setVisibility(View.GONE);
                 }
                 hideDialog();
             }

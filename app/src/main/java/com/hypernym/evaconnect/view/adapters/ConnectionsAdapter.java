@@ -2,6 +2,7 @@ package com.hypernym.evaconnect.view.adapters;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,11 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
     @Override
     public void onBindViewHolder(@NonNull ConnectionsAdapter.ViewHolder holder, int position) {
         User user = LoginUtils.getLoggedinUser();
+
+
+        Log.d("ahsan", "onBindViewHolder: " + originalConnections.get(position).firstName);
+        Log.d("ahsan", "onBindViewHolder: " + user.first_name );
+
         if (connections.get(position).sender != null && connections.get(position).receiver != null) {
             if (user.getId().equals(connections.get(position).senderId)) {
                 if (!TextUtils.isEmpty(connections.get(position).receiver.getUserImage())) {
@@ -252,18 +258,13 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
                         onItemClickListener.onItemClick(v, originalConnections.indexOf(connections.get(getAdapterPosition())));
                     break;
                 case R.id.tv_decline:
-                    if (onItemClickListener != null) {
-                        onItemClickListener.onItemClick(v, originalConnections.indexOf(connections.get(getAdapterPosition())));
-                    }
-                    break;
 
                 case R.id.ly_main:
                     if (onItemClickListener != null) {
                         onItemClickListener.onItemClick(v, originalConnections.indexOf(connections.get(getAdapterPosition())));
                     }
-
-
                     break;
+
 
             }
 

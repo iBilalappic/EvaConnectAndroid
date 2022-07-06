@@ -371,13 +371,19 @@ public class GlobalConnectionsFragment extends BaseFragment implements OptionsAd
 
                 case R.id.ly_main:
 
+//                    PersonProfileFragment personDetailFragment = new PersonProfileFragment();
+//                    Bundle bundle = new Bundle();
+//                    bundle.putSerializable("PostData", posts.get(position));
+//                    personDetailFragment.setArguments(bundle);
+//                    loadFragment(R.id.framelayout, personDetailFragment, getContext(), true);
+
 
                     try {
                         ConnectionModel user = connectedList.get(position);
                         PersonProfileFragment personProfileFragment = new PersonProfileFragment();
                         Bundle bundle2 = new Bundle();
                         bundle2.putInt("user_id", user.id);
-                        Log.d("connection", "onItemClick: user " + user.id);
+                        Log.d("connection", "onItemClick: user " + user.receiverId);
                         bundle2.putParcelable("connected_user", user);
                         Log.d("connection", "onItemClick: " + GsonUtils.toJson(user));
                         loadFragment_bundle(R.id.framelayout, personProfileFragment, getContext(), true, bundle2);

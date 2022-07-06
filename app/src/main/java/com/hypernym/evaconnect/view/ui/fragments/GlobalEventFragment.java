@@ -131,7 +131,7 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
                 currentPage = AppConstants.TOTAL_PAGES + currentPage;
                 if (posts.size() >= 9) {
                     if (NetworkUtils.isNetworkConnected(getContext())) {
-                        callPostsApi();
+//                        callPostsApi();
                     } else {
                         networkErrorDialog();
                     }
@@ -575,7 +575,7 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
                 isSearchFlag = true;
                 posts.clear();
                 homePostsAdapter.notifyDataSetChanged();
-                callPostsApi();
+//                callPostsApi();
             } else {
                 posts.clear();
                 homePostsAdapter.notifyDataSetChanged();
@@ -639,7 +639,7 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
             rc_home.setVisibility(View.VISIBLE);
 
             search_key = mtitle;
-            callPostsApi();
+//            callPostsApi();
         }
 
     }

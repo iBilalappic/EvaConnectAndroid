@@ -24,9 +24,22 @@ public class Post implements Serializable {
     private int rss_news_id;
     private Integer receiver_id;
     private int modified_by_id;
+    private boolean isLikeLoading = false;
 
     public String getIs_attending() {
         return is_attending;
+    }
+
+    public boolean isLikeLoading() {
+        return isLikeLoading;
+    }
+
+    public void setLikeLoading(boolean likeLoading) {
+        isLikeLoading = likeLoading;
+    }
+
+    public void setAttendees(Integer attendees) {
+        this.attendees = attendees;
     }
 
     public void setIs_attending(String is_attending) {
@@ -34,6 +47,7 @@ public class Post implements Serializable {
     }
 
     private String is_attending;
+
     public int getShare_count() {
         return share_count;
     }
@@ -76,7 +90,6 @@ public class Post implements Serializable {
     }
 
     private String notes;
-
 
 
     public String getStart_date() {
@@ -176,7 +189,6 @@ public class Post implements Serializable {
     private String image;
 
     private MultipartBody.Part document;
-
 
 
     public String getContent() {
@@ -540,7 +552,6 @@ public class Post implements Serializable {
     public void setAddress(String address) {
         this.address = address;
     }
-
 
 
     public Integer getConnection_id() {

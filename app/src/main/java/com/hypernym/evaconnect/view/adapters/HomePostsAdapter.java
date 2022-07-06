@@ -3,12 +3,14 @@ package com.hypernym.evaconnect.view.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -107,19 +109,27 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.like_click)
         LinearLayout like_click;
 
+        @BindView(R.id.like_pb)
+        ProgressBar like_pb;
+
         public TextTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             tv_viewcomments.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
+
                     mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
             like_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
+                    Log.d("ahsan", "Like clicked for text view");
+
+                    posts.get(getAdapterPosition()).setLikeLoading(true);
+                    notifyItemChanged(getAdapterPosition());
+                    mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount, like_pb);
                 }
             });
             comment_click.setOnClickListener(new OnOneOffClickListener() {
@@ -243,7 +253,6 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         TextView post_detail;
 
 
-
         public EventTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -268,6 +277,10 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             like_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
+                    Log.d("ahsan", "Like clicked for text view");
+
+                    posts.get(getAdapterPosition()).setLikeLoading(true);
+                    notifyItemChanged(getAdapterPosition());
                     mClickListener.onEventLikeClick(v, getAdapterPosition(), tv_likecount);
                 }
             });
@@ -280,7 +293,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             share_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                     mClickListener.onShareClick(v, getAdapterPosition());
+                    mClickListener.onShareClick(v, getAdapterPosition());
                 }
             });
             tv_comcount.setOnClickListener(new OnOneOffClickListener() {
@@ -356,6 +369,10 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             like_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
+                    Log.d("ahsan", "Like clicked for text view");
+
+                    posts.get(getAdapterPosition()).setLikeLoading(true);
+                    notifyItemChanged(getAdapterPosition());
                     mClickListener.onJobLikeClick(v, getAdapterPosition(), tv_likecount);
                 }
             });
@@ -368,7 +385,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             share_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                     mClickListener.onShareClick(v, getAdapterPosition());
+                    mClickListener.onShareClick(v, getAdapterPosition());
                 }
             });
             tv_comcount.setOnClickListener(new OnOneOffClickListener() {
@@ -481,6 +498,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.like_click)
         LinearLayout like_click;
 
+        @BindView(R.id.like_pb)
+        ProgressBar like_pb;
+
 
         public ImageTypeViewHolder(View itemView) {
             super(itemView);
@@ -496,7 +516,11 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             like_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
+                    Log.d("ahsan", "Like clicked for text view");
+
+                    posts.get(getAdapterPosition()).setLikeLoading(true);
+                    notifyItemChanged(getAdapterPosition());
+                    mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount, like_pb);
                 }
             });
             comment_click.setOnClickListener(new OnOneOffClickListener() {
@@ -514,6 +538,8 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             tv_comcount.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
+                    Log.d("ahsan", "Like clicked for text view");
+
                     mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
@@ -544,7 +570,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
                 @Override
                 public void onDoubleClick(View v) {
-                    mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
+                    mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount, like_pb);
                 }
             });
 
@@ -622,6 +648,8 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.tv_connect)
         TextView tv_connect;
 
+        @BindView(R.id.like_pb)
+        ProgressBar like_pb;
 
 
         public VideoTypeViewHolder(View itemView) {
@@ -636,12 +664,18 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             like_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
+                    Log.d("ahsan", "Like clicked for text view");
+
+                    posts.get(getAdapterPosition()).setLikeLoading(true);
+                    notifyItemChanged(getAdapterPosition());
+                    mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount, like_pb);
                 }
             });
             comment_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
+                    Log.d("ahsan", "Like clicked for text view");
+
                     mClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
@@ -760,6 +794,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
         TextView tv_connect;
 
 
+        @BindView(R.id.like_pb)
+        ProgressBar like_pb;
+
         public LinkTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -772,7 +809,11 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             like_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount);
+                    Log.d("ahsan", "Like clicked for text view");
+
+                    posts.get(getAdapterPosition()).setLikeLoading(true);
+                    notifyItemChanged(getAdapterPosition());
+                    mClickListener.onLikeClick(v, getAdapterPosition(), tv_likecount, like_pb);
                 }
             });
             comment_click.setOnClickListener(new OnOneOffClickListener() {
@@ -802,7 +843,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             link.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    mClickListener.onURLClick(v, getAdapterPosition(),"link");
+                    mClickListener.onURLClick(v, getAdapterPosition(), "link");
                 }
             });
             profile_image.setOnClickListener(new OnOneOffClickListener() {
@@ -908,6 +949,10 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             like_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
+                    Log.d("ahsan", "Like clicked for text view");
+
+                    posts.get(getAdapterPosition()).setLikeLoading(true);
+                    notifyItemChanged(getAdapterPosition());
                     mClickListener.onNewsLikeClick(v, getAdapterPosition(), tv_likecount);
                 }
             });
@@ -947,7 +992,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
             tv_visit.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    mClickListener.onURLClick(v, getAdapterPosition(),"news");
+                    mClickListener.onURLClick(v, getAdapterPosition(), "news");
                 }
             });
 
@@ -1034,11 +1079,16 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         Post object = posts.get(position);
         if (object != null && object.getType() != null) {
+
+
             switch (object.getPost_type()) {
                 case AppConstants.TEXT_TYPE:
                     if (String.valueOf(posts.get(position).getComment_count()).equals("0")) {
                         ((TextTypeViewHolder) holder).tv_viewcomments.setVisibility(View.GONE);
                     }
+
+
+
                     ((TextTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((TextTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
                     ((TextTypeViewHolder) holder).tv_createdDateTime.setText(DateUtils.getFormattedDateTime(posts.get(position).getCreated_datetime()));
@@ -1069,7 +1119,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     } else {
                         ((TextTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
-                    ((TextTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name() );
+                    ((TextTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name());
 //                    if(!posts.get(position).getUser().getType().equalsIgnoreCase("company") && posts.get(position).getUser().getDesignation()!=null && !posts.get(position).getUser().getDesignation().isEmpty())
 //                    {
 //                        ((TextTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation() +" at");
@@ -1139,9 +1189,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     } else {
                         ((ImageTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
-                    ((ImageTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name() );
-                    if (posts.get(position).getUser().getDesignation()!=null && !posts.get(position).getUser().getDesignation().isEmpty()) {
-                        ((ImageTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation() +" at ");
+                    ((ImageTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name());
+                    if (posts.get(position).getUser().getDesignation() != null && !posts.get(position).getUser().getDesignation().isEmpty()) {
+                        ((ImageTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation() + " at ");
                     }
 
                     if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
@@ -1223,8 +1273,8 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     DecimalFormat myFormatter = new DecimalFormat("############");
 
                     ((JobTypeViewHolder) holder).tv_location.setText(posts.get(position).getJob_sector()
-                            +" | "+ posts.get(position).getLocation()+" | "+"£ "+myFormatter.format(posts.get((position)).getSalary())+" PA");
-                  //  ((JobTypeViewHolder) holder).tv_salary.setText("£ " + myFormatter.format(posts.get(position).getSalary()) + " pa");
+                            + " | " + posts.get(position).getLocation() + " | " + "£ " + myFormatter.format(posts.get((position)).getSalary()) + " PA");
+                    //  ((JobTypeViewHolder) holder).tv_salary.setText("£ " + myFormatter.format(posts.get(position).getSalary()) + " pa");
                     if (position == 0) {
                         ((JobTypeViewHolder) holder).top_image.setVisibility(View.GONE);
                     } else {
@@ -1234,12 +1284,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         ((JobTypeViewHolder) holder).tv_apply.setVisibility(View.GONE);
                     } else {
                         ((JobTypeViewHolder) holder).tv_apply.setVisibility(View.VISIBLE);
-                        if(posts.get(position).getIs_applied()==1)
-                        {
+                        if (posts.get(position).getIs_applied() == 1) {
                             ((JobTypeViewHolder) holder).tv_apply.setText("Applied");
-                        }
-                        else
-                        {
+                        } else {
                             ((JobTypeViewHolder) holder).tv_apply.setText("Apply");
                             ((JobTypeViewHolder) holder).tv_apply.setOnClickListener(new OnOneOffClickListener() {
                                 @Override
@@ -1249,7 +1296,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                                 }
                             });
                         }
-                       // ((JobTypeViewHolder) holder).tv_apply.setText(posts.get(position).);
+                        // ((JobTypeViewHolder) holder).tv_apply.setText(posts.get(position).);
                     }
 
 
@@ -1269,7 +1316,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         ((VideoTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }
 
-                    if ( !TextUtils.isEmpty(posts.get(position).getUser().getUser_image())) {
+                    if (!TextUtils.isEmpty(posts.get(position).getUser().getUser_image())) {
                         AppUtils.setGlideImage(mContext, ((VideoTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
                     }
 //                    else if (posts.get(position).getUser().getIs_facebook() == 1 && !TextUtils.isEmpty(posts.get(position).getUser().getFacebook_image_url())){
@@ -1289,8 +1336,8 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     }
                     AppUtils.setGlideVideoThumbnail(mContext, ((VideoTypeViewHolder) holder).img_video, posts.get(position).getPost_video());
                     ((VideoTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name());
-                    if (posts.get(position).getUser().getDesignation()!=null && !posts.get(position).getUser().getDesignation().isEmpty()) {
-                        ((VideoTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation()+" at ");
+                    if (posts.get(position).getUser().getDesignation() != null && !posts.get(position).getUser().getDesignation().isEmpty()) {
+                        ((VideoTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation() + " at ");
                     }
 
                     if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
@@ -1328,10 +1375,10 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                         AppUtils.setGlideVideoThumbnail(((LinkTypeViewHolder) holder).img_link.getContext(), ((LinkTypeViewHolder) holder).img_link, posts.get(position).getLink_thumbnail());
 
                     } else {
-                         ((LinkTypeViewHolder) holder).img_link.setBackground(null);
-                         ((LinkTypeViewHolder) holder).img_link.setVisibility(View.GONE);
-                         Glide.with(((LinkTypeViewHolder) holder).img_link.getContext()).clear(((LinkTypeViewHolder) holder).img_link);
-                         ((LinkTypeViewHolder) holder).tv_content.setText(posts.get(position).getContent());
+                        ((LinkTypeViewHolder) holder).img_link.setBackground(null);
+                        ((LinkTypeViewHolder) holder).img_link.setVisibility(View.GONE);
+                        Glide.with(((LinkTypeViewHolder) holder).img_link.getContext()).clear(((LinkTypeViewHolder) holder).img_link);
+                        ((LinkTypeViewHolder) holder).tv_content.setText(posts.get(position).getContent());
                     }
                     AppUtils.makeTextViewResizable(((LinkTypeViewHolder) holder).tv_content, 3, posts.get(position).getContent());
                     // ((LinkTypeV       iewHolder) holder).tv_content.setText(posts.get(position).getContent());
@@ -1359,9 +1406,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     } else {
                         ((LinkTypeViewHolder) holder).top_image.setVisibility(View.VISIBLE);
                     }
-                    ((LinkTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name() );
-                    if (posts.get(position).getUser().getDesignation()!=null && !posts.get(position).getUser().getDesignation().isEmpty()) {
-                        ((LinkTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation()+" at ");
+                    ((LinkTypeViewHolder) holder).tv_company.setText(posts.get(position).getUser().getCompany_name());
+                    if (posts.get(position).getUser().getDesignation() != null && !posts.get(position).getUser().getDesignation().isEmpty()) {
+                        ((LinkTypeViewHolder) holder).tv_designation.setText(posts.get(position).getUser().getDesignation() + " at ");
                     }
 
                     if (posts.get(position).getUser().getId().equals(LoginUtils.getLoggedinUser().getId())) {
@@ -1393,7 +1440,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     ((NewsTypeViewHolder) holder).tv_share_counter.setText((String.valueOf(posts.get(position).getShare_count())));
 
 
-                   // AppUtils.makeTextViewResizable(((NewsTypeViewHolder) holder).tv_content, 3, posts.get(position).getContent());
+                    // AppUtils.makeTextViewResizable(((NewsTypeViewHolder) holder).tv_content, 3, posts.get(position).getContent());
                     // ((LinkTypeViewHolder) holder).tv_content.setText(posts.get(position).getContent());
                     ((NewsTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
                     if (posts.get(position).getIs_news_like() != null && posts.get(position).getIs_news_like() > 0) {
@@ -1416,9 +1463,9 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
                     ((NewsTypeViewHolder) holder).channelname.setText(posts.get(position).getNews_source().getName());
                     ((NewsTypeViewHolder) holder).tv_newstitle.setText(posts.get(position).getTitle());
                     AppUtils.setGlideImage(mContext, ((NewsTypeViewHolder) holder).profile_image, posts.get(position).getNews_source().getImage());
-                    if(!posts.get(position).getImage().equals("http://67.205.178.219:8000/media/public/no_image.png")) {
+                    if (!posts.get(position).getImage().equals("http://67.205.178.219:8000/media/public/no_image.png")) {
                         AppUtils.setGlideUrlThumbnail(mContext, ((NewsTypeViewHolder) holder).img_link, posts.get(position).getImage());
-                    }else{
+                    } else {
                         ((NewsTypeViewHolder) holder).img_link.setVisibility(View.GONE);
                     }
 
@@ -1443,7 +1490,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
     public interface ItemClickListener {
         void onItemClick(View view, int position);
 
-        void onLikeClick(View view, int position, TextView likeCount);
+        void onLikeClick(View view, int position, TextView likeCount, ProgressBar pb);
 
         void onNewsLikeClick(View view, int position, TextView likeCount);
 
@@ -1455,7 +1502,7 @@ public class HomePostsAdapter extends RecyclerView.Adapter {
 
         void onVideoClick(View view, int position);
 
-        void onURLClick(View view, int position,String type);
+        void onURLClick(View view, int position, String type);
 
         void onProfileClick(View view, int position);
 

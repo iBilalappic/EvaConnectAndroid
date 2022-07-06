@@ -97,10 +97,10 @@ public class ConnectionModel implements Serializable,Parcelable {
     public Integer sector;
     @SerializedName("is_connected")
     @Expose
-    public  String isConnected;
+    public  String isConnected = "";
     @SerializedName("is_receiver")
     @Expose
-    public Boolean isReceiver;
+    public Boolean isReceiver = false;
     @SerializedName("connection_id")
     @Expose
     public  Integer connectionId;
