@@ -166,7 +166,7 @@ public class HomeActivity extends BaseActivity {
         ButterKnife.bind(this);
         home_selector.setImageResource(R.drawable.bottomline);
         createUserOnFirebase();
-
+//        setToolbarSearchVisibilityVisible();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
 
@@ -486,6 +486,16 @@ public class HomeActivity extends BaseActivity {
                     userRefByID.child("name").setValue(LoginUtils.getLoggedinUser().getEmail());
                     userRefByID.child("fcm-token").setValue(token);
                 });
+
+    }
+
+    public void setToolbarSearchVisibilityVisible(){
+        findViewById(R.id.toolbarSearch).setVisibility(View.VISIBLE);
+
+    }
+
+    public void setToolbarSearchVisibilityGone(){
+        findViewById(R.id.toolbarSearch).setVisibility(View.GONE);
 
     }
 

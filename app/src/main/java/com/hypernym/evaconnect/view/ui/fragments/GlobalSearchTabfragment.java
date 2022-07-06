@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +19,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.utils.LoginUtils;
+import com.hypernym.evaconnect.view.ui.activities.HomeActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,8 +52,12 @@ public class GlobalSearchTabfragment extends BaseFragment implements View.OnClic
         tabs.setupWithViewPager(viewPager);
         edt_search.addTextChangedListener(new GlobalSearchTabfragment.TextWatcher());
 
+        ((HomeActivity)getActivity()).setToolbarSearchVisibilityGone();
+
 
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

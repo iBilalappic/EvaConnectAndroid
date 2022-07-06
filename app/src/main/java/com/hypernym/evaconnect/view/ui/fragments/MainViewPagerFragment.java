@@ -19,6 +19,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.utils.LoginUtils;
+import com.hypernym.evaconnect.view.ui.activities.HomeActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,6 +45,7 @@ public class MainViewPagerFragment extends BaseFragment implements FloatingActio
         View view = inflater.inflate(R.layout.fragment_viewpager, container, false);
         ButterKnife.bind(this,view);
         hideBackButton();
+        ((HomeActivity)getActivity()).setToolbarSearchVisibilityVisible();
         sectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
         mViewPager = view.findViewById(R.id.container);
         mViewPager.setAdapter(sectionsPagerAdapter);
