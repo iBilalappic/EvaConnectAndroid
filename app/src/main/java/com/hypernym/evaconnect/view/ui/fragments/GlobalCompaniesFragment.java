@@ -295,7 +295,7 @@ public class GlobalCompaniesFragment extends BaseFragment implements OptionsAdap
 
                     } catch (Exception e) {
 
-                        Log.d("connection", "onItemClick: " + position);
+                        Log.d("ex", "onItemClick: " + e.toString());
 
                     }
 

@@ -372,6 +372,15 @@
                         android:textSize="12sp" />
 
 
+                    <ProgressBar
+                        android:visibility="gone"
+                        android:id="@+id/like_pb"
+                        android:layout_gravity="center"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"/>
+
+
+
                     <View
                         android:layout_width="1dp"
                         android:layout_height="30dp"

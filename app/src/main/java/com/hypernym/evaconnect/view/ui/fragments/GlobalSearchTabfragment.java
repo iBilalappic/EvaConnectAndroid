@@ -2,10 +2,12 @@ package com.hypernym.evaconnect.view.ui.fragments;
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -49,6 +51,7 @@ public class GlobalSearchTabfragment extends BaseFragment implements View.OnClic
 
         tabs.setupWithViewPager(viewPager);
         edt_search.addTextChangedListener(new GlobalSearchTabfragment.TextWatcher());
+
 
     }
 
@@ -141,9 +144,8 @@ public class GlobalSearchTabfragment extends BaseFragment implements View.OnClic
         @Override
         public void afterTextChanged(Editable s) {
             //  currentPage = PAGE_START;
-                mEventBus.post(s.toString());
-
-
+            Log.d("ahsan", "afterTextChanged: " + s.toString());
+            mEventBus.post(s.toString());
         }
 
     }

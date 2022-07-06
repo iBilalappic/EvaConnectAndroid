@@ -238,8 +238,10 @@ public class PostFragment extends BaseFragment implements View.OnClickListener, 
             @Override
             public void onChanged(BaseModel<List<Post>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError()) {
+                    post.setLikeLoading(false);
                     postAdapter.notifyItemChanged(position);
                 } else {
+                    post.setLikeLoading(false);
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
                 hideDialog();

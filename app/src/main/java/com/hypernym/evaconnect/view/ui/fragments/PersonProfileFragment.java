@@ -529,7 +529,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
 
         Log.d("profile", "getUserDetails: " + id);
 
-
+//213
         userViewModel.getuser_details(id, true).observe(getViewLifecycleOwner(), listBaseModel -> {
             if (listBaseModel.getData() != null && !listBaseModel.isError()) {
                 if (!TextUtils.isEmpty(listBaseModel.getData().get(0).getUser_image())) {
@@ -600,6 +600,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                     view0.setVisibility(View.GONE);
 
                     if (connected_user != null) {
+                        Log.d("isReceiver", "getUserDetails: "+connected_user.isReceiver);
 
                         String status = AppUtils.getConnectionStatus(getContext(), connected_user.isConnected, connected_user.isReceiver);
                         if (status.equals(AppConstants.DELETED)) {

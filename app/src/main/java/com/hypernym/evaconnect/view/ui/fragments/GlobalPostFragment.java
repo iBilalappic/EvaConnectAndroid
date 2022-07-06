@@ -652,6 +652,7 @@ public class GlobalPostFragment extends BaseFragment implements View.OnClickList
 
         @Override
         public void afterTextChanged(Editable s) {
+
             currentPage = PAGE_START;
             if (s.length() > 0) {
                 isSearchFlag = true;
@@ -723,7 +724,7 @@ public class GlobalPostFragment extends BaseFragment implements View.OnClickList
         } else {
 
             search_key = mtitle;
-            callPostsApi();
+          callPostsApi();
         }
     }
 

@@ -270,7 +270,6 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
 //                    }
                 connectedList.clear();
 
-
                 connectedList.addAll(listBaseModel.getData());
                 Log.d("TAG", "getConnectedFilter: " + connectedList.size());
 

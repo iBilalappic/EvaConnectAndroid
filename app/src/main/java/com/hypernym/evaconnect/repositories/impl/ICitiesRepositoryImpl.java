@@ -25,7 +25,7 @@ public class ICitiesRepositoryImpl implements ICityRepository {
         citiesMutableLiveData = new MutableLiveData<>();
 
         AppApi service = RestClientForCities.getRetrofitInstance().create(AppApi.class);
-        Log.d("test123", "Calling Cities API");
+        Log.d("test123", "Calling Cities API :"+countyCode);
 
 
         service.get_all_cities(countyCode).enqueue(new Callback<List<City>>() {

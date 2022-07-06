@@ -61,7 +61,7 @@ public class CreateJobRepository implements ICreateJobAdRepository {
 
             @Override
             public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
-                Log.d("jobs", "onResponse: fail");
+                Log.d("jobs", "onResponse: fail"+t.toString());
 
                 MessageMutableLiveData.setValue(null);
             }

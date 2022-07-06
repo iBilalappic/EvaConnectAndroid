@@ -113,10 +113,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:ellipsize="end"
+                android:fontFamily="@font/nunitosansbold"
                 android:maxLines="1"
                 android:textColor="@color/black"
                 android:textSize="18sp"
-                android:fontFamily="@font/nunitosansbold"
                 app:layout_constraintBottom_toBottomOf="@+id/profile_layout"
                 app:layout_constraintStart_toStartOf="@+id/tv_connections"
                 app:layout_constraintTop_toTopOf="@+id/profile_layout" />
@@ -185,9 +185,9 @@
                         android:id="@+id/linearlayout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
+                        android:orientation="vertical"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
@@ -241,11 +241,12 @@
                                 android:id="@+id/img_play"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
+                                android:layout_gravity="center"
                                 android:elevation="4dp"
                                 android:visibility="visible"
-                                android:layout_gravity="center"
                                 app:srcCompat="@drawable/play" />
                         </androidx.cardview.widget.CardView>
+
                         <TextView
                             android:id="@+id/link"
                             style="@style/TextStyle"
@@ -254,8 +255,8 @@
                             android:background="@color/lighter_gray"
                             android:padding="10dp"
                             android:text="TextView"
-                            android:visibility="gone"
                             android:textSize="18sp"
+                            android:visibility="gone"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/cv" />
@@ -640,16 +641,17 @@
     <EditText
         android:id="@+id/edt_comment"
         style="@style/EditText.Comments"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
+        android:layout_width="337dp"
+        android:layout_height="57dp"
         android:background="@color/white"
         android:hint="@string/tap_here_to_comment"
-        android:inputType="textPersonName"
+        android:inputType="textMultiLine"
+        android:maxLines="40"
         android:text=""
         android:textColor="@color/black"
         android:textColorHint="@color/gray_1"
-        app:layout_constraintBottom_toTopOf="@+id/layout_editcomment"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_addcomment"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 

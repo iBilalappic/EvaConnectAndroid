@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -130,6 +131,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
     public static int counter = 0;
     private LocationRequest mLocationRequest;
     private LocationManager locationManager;
+    DatePickerDialog.OnDateSetListener myDateListener;
 
     DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
         // TODO Auto-generated method stub
@@ -145,26 +147,45 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account_3);
         ButterKnife.bind(this);
+
         tv_already_account.setOnClickListener(this);
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         init();
 
         if (NetworkUtils.isNetworkConnected(this)) {
             showDialog();
-            isLocationEnabled();
+
+
+            if(!isLocationEnabled()) {
+                hSetDefaultCountry();
+
+            }
+            else{
+                hideDialog();
+            }
+
         } else {
             hideDialog();
             Toast.makeText(getBaseContext(), "Check Your Internet Connection", Toast.LENGTH_LONG).show();
         }
     }
 
-    private void isLocationEnabled() {
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            return;
-        } else {
-            Toast.makeText(this, "Turn ON your location ", Toast.LENGTH_LONG).show();
-            hSetDefaultCountry();
+    private boolean isLocationEnabled() {
+        if ((ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) ){
+            return true;
         }
+        else{
+            Toast.makeText(this, "Turn ON your location ", Toast.LENGTH_LONG).show();
+            return false;
+
+        }
+//        if (
+//        locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)&& locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+//
+//        } else {
+//
+//        }
     }
 
 
@@ -181,10 +202,13 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
                 @Override
                 public void onChanged(List<City> response) {
 
+
                     spinCities.setSelection(0);
 
                     if (response != null) {
-                        for (int i = 0; i < response.size(); i++) {
+
+                        Log.d("cities", "onChanged: "+response);
+                     for (int i = 0; i < response.size(); i++) {
                             hCitiesList.add(response.get(i).name);
                         }
                         hideDialog();
@@ -349,24 +373,40 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
 
         edit_date.setOnClickListener(v -> {
             // TODO Auto-generated method stub
-            new DatePickerDialog(CreateAccount_3_Activity.this, R.style.DialogTheme, date, myCalendar
+
+
+            new DatePickerDialog(CreateAccount_3_Activity.this, R.style.DialogTheme, myDateListener, myCalendar
                     .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                     myCalendar.get(Calendar.DAY_OF_MONTH)).show();
         });
 
         edit_month.setOnClickListener(v -> {
             // TODO Auto-generated method stub
-            new DatePickerDialog(CreateAccount_3_Activity.this, R.style.DialogTheme, date, myCalendar
+            new DatePickerDialog(CreateAccount_3_Activity.this, R.style.DialogTheme, myDateListener, myCalendar
                     .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                     myCalendar.get(Calendar.DAY_OF_MONTH)).show();
         });
 
         edit_year.setOnClickListener(v -> {
-            // TODO Auto-generated method stub
-            new DatePickerDialog(CreateAccount_3_Activity.this, R.style.DialogTheme, date, myCalendar
+            new DatePickerDialog(CreateAccount_3_Activity.this, R.style.DialogTheme, myDateListener, myCalendar
                     .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                     myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+
         });
+        // Added by AliRaza on 07-05-22//
+        myDateListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker arg0, int arg1, int arg2, int arg3) {
+
+                edit_date.setText(String.valueOf(arg3));
+                edit_month.setText(String.valueOf(arg2+1));
+                edit_year.setText(String.valueOf(arg1));
+
+                // arg1 = year
+                // arg2 = month
+                // arg3 = day
+            }
+        };
     }
 
     private void hSetCurrentDateTime() {
@@ -377,6 +417,11 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
         edit_year.setText(result[2]);
         updateLabel();
     }
+
+
+
+
+
 
     private void updateLabel() {
 
@@ -394,8 +439,11 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
     @Override
     protected void onResume() {
         super.onResume();
+        if(isLocationEnabled()){
+            startLocationUpdates();
+        }
 
-        startLocationUpdates();
+
     }
 
     @Override
@@ -571,10 +619,12 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
 
                     hCountyCodeFromLocation = countryCode;
 
+
+
                     hSetCountry();
 
                     addresses.get(0).getAdminArea();
-                    Log.d("address", address);
+
                     String[] splitArray = address.split(",");
                     String new_text = splitArray[3];
                     String street = splitArray[0];
@@ -600,6 +650,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
                     hCitiesList.add(response.get(i).name);
                     Log.d("test123", response.get(i).name);
                 }
+                hSetCitySpinner();
 
                 hideDialog();
             } else {
@@ -684,6 +735,7 @@ public class CreateAccount_3_Activity extends BaseActivity implements Validator.
     }
 
     private void hSetCitySpinner() {
+        Log.d("citiesSpinner", "hSetCitySpinner: "+hCitiesList.size());
         ArrayAdapter<String> hCitiesAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, hCitiesList);
         hCitiesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

@@ -20,19 +20,17 @@ import java.util.List;
 
 public class ConnectionViewModel extends AndroidViewModel {
 
-    private IConnectionRespository iConnectionRepository =new ConnectionRepository();
+    private IConnectionRespository iConnectionRepository = new ConnectionRepository();
 
     public ConnectionViewModel(@NonNull Application application) {
         super(application);
     }
 
-    public LiveData<BaseModel<List<Connection>>> connect(Connection connection)
-    {
+    public LiveData<BaseModel<List<Connection>>> connect(Connection connection) {
         return iConnectionRepository.connect(connection);
     }
 
-    public LiveData<BaseModel<List<Object>>> block(Connection connection)
-    {
+    public LiveData<BaseModel<List<Object>>> block(Connection connection) {
         return iConnectionRepository.block(connection);
     }
 
@@ -53,12 +51,13 @@ public class ConnectionViewModel extends AndroidViewModel {
     }
 
 
-    public LiveData<BaseModel<List<ConnectionModel>>> getCompanies(User user, int total, int current ,String filter) {
-        return iConnectionRepository.getCompanies(user, total, current , filter);
+    public LiveData<BaseModel<List<ConnectionModel>>> getCompanies(User user, int total, int current, String filter) {
+        return iConnectionRepository.getCompanies(user, total, current, filter);
     }
 
 
     public LiveData<BaseModel<List<ConnectionModel>>> getConnectedFilter(User user) {
+
         return iConnectionRepository.getConnectedFilter(user);
     }
 

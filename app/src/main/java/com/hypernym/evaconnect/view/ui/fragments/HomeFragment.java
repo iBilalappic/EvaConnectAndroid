@@ -9,7 +9,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -215,17 +217,14 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
 
     @Override
     public void onItemClick(View view, int position) {
-        if(!posts.get(position).getType().equalsIgnoreCase("news"))
-        {
+        if (!posts.get(position).getType().equalsIgnoreCase("news")) {
             PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
             Bundle bundle = new Bundle();
             bundle.putInt("post", posts.get(position).getId());
             Log.d("TAAAGNOTIFY", "" + posts.get(position).getId());
             postDetailsFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, postDetailsFragment, getContext(), true);
-        }
-        else
-        {
+        } else {
             NewsDetailsFragment postDetailsFragment = new NewsDetailsFragment();
             Bundle bundle = new Bundle();
             bundle.putInt("post", posts.get(position).getId());
@@ -237,9 +236,11 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     }
 
     @Override
-    public void onLikeClick(View view, int position, TextView likeCount) {
-        //showDialog();
+    public void onLikeClick(View view, int position, TextView likeCount, ProgressBar pb) {
         Post post = posts.get(position);
+
+        homePostsAdapter.notifyItemChanged(position);
+
         User user = LoginUtils.getLoggedinUser();
         post.setPost_id(post.getId());
         post.setCreated_by_id(user.getId());
@@ -381,16 +382,22 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     }
 
     private void likePost(Post post, int position) {
-        postViewModel.likePost(post).observe(this, new Observer<BaseModel<List<Post>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Post>> listBaseModel) {
-                if (listBaseModel != null && !listBaseModel.isError()) {
-                    homePostsAdapter.notifyItemChanged(position);
-                } else {
-                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                }
-                hideDialog();
+        post.setLikeLoading(true);
+
+        Toast.makeText(requireContext(), "like context", Toast.LENGTH_SHORT).show();
+        Log.d("ahsan", "onLikeClick: like click");
+
+        postViewModel.likePost(post).observe(this, listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError()) {
+//                    homePostsAdapter.not(position);
+
+
+
+                homePostsAdapter.notifyDataSetChanged();
+            } else {
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
+            hideDialog();
         });
     }
 
@@ -425,7 +432,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
 
         TextView text = (TextView) view;
         if (NetworkUtils.isNetworkConnected(getContext())) {
-            if(text.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_ACCEPT)){
+            if (text.getText().toString().equalsIgnoreCase(AppConstants.REQUEST_ACCEPT)) {
                 Connection connection = new Connection();
                 User user = LoginUtils.getLoggedinUser();
                 connection.setStatus(AppConstants.ACTIVE);
@@ -433,8 +440,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
                 connection.setModified_by_id(user.getId());
                 connection.setModified_datetime(DateUtils.GetCurrentdatetime());
                 callDeclineConnectApi(connection);
-            }
-            else {
+            } else {
                 callConnectApi(text, position);
             }
 
@@ -450,17 +456,14 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
     }
 
     @Override
-    public void onURLClick(View view, int position,String type) {
-        if(type.equalsIgnoreCase("news"))
-        {
+    public void onURLClick(View view, int position, String type) {
+        if (type.equalsIgnoreCase("news")) {
             LoadUrlFragment loadUrlFragment = new LoadUrlFragment();
             Bundle bundle = new Bundle();
             bundle.putString("url", posts.get(position).getLink());
             loadUrlFragment.setArguments(bundle);
             loadFragment(R.id.framelayout, loadUrlFragment, getContext(), true);
-        }
-        else
-        {
+        } else {
             LoadUrlFragment loadUrlFragment = new LoadUrlFragment();
             Bundle bundle = new Bundle();
             bundle.putString("url", posts.get(position).getContent());
@@ -472,8 +475,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
 
     @Override
     public void onProfileClick(View view, int position) {
-        if(!posts.get(position).getType().equalsIgnoreCase("news"))
-        {
+        if (!posts.get(position).getType().equalsIgnoreCase("news")) {
             PersonProfileFragment personDetailFragment = new PersonProfileFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("PostData", posts.get(position));
@@ -605,7 +607,7 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
         ).observe(this, new Observer<BaseModel<List<User>>>() {
             @Override
             public void onChanged(BaseModel<List<User>> listBaseModel) {
-                if (listBaseModel!=null && listBaseModel.getData() != null && !listBaseModel.isError()) {
+                if (listBaseModel != null && listBaseModel.getData() != null && !listBaseModel.isError()) {
                     swipeRefresh.setRefreshing(false);
                     LoginUtils.saveUser(listBaseModel.getData().get(0));
                 } else {
@@ -615,7 +617,6 @@ public class HomeFragment extends BaseFragment implements HomePostsAdapter.ItemC
             }
         });
     }
-
 
 
     private void callDeclineConnectApi(Connection connection) {
