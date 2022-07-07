@@ -311,6 +311,7 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
             Drawable leftCompoundDrawable = compoundDrawables[0];
             if (leftCompoundDrawable==null) {
              //   textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
+
                 showInterestedApiCall(position,"Going");
             } else {
              //   textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
@@ -342,6 +343,8 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
 //        showDialog();
         eventViewModel.showInterestEvent(posts.get(position).getId(), LoginUtils.getUser().getId(), "active", attendee_Status).observe(this, listBaseModel -> {
             if (!listBaseModel.isError()) {
+                posts.get(position).setLikeLoading(false);
+                postAdapter.notifyItemChanged(position);
 
                 callPostsApi();
             } else {
