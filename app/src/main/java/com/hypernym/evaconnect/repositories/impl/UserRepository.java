@@ -478,10 +478,8 @@ public class UserRepository implements IUserRespository {
     @Override
     public LiveData<BaseModel<List<Object>>> updateUserLocation(Integer id, User userData) {
 
-/*
-        RestClient.get().appApi().hUpdateUserLocation(LoginUtils.getLoggedinUser().getId(), LoginUtils.getLoggedinUser().getId(), userData, DateUtils.GetCurrentdatetime()
 
-        ).enqueue(new Callback<BaseModel<List<Object>>>() {
+        RestClient.get().appApi().hUpdateUserLocation(LoginUtils.getLoggedinUser().getId(), userData, DateUtils.GetCurrentdatetime()).enqueue(new Callback<BaseModel<List<Object>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
                 if (response.body() != null) {
@@ -494,7 +492,7 @@ public class UserRepository implements IUserRespository {
                 updateUserLocationMutableLiveData.setValue(null);
                 t.printStackTrace();
             }
-        });*/
+        });
 
         return updateUserLocationMutableLiveData;
     }
