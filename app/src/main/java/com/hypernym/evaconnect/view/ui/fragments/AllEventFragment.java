@@ -73,6 +73,7 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
     private boolean isLastPage = false;
     private boolean isLoading = false;
     int item_position;
+
     public AllEventFragment() {
     }
 
@@ -286,6 +287,12 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     public void onProfileClick(View view, int position) {
+        PersonProfileFragment personDetailFragment = new PersonProfileFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("PostData", posts.get(position));
+        personDetailFragment.setArguments(bundle);
+        loadFragment(R.id.framelayout, personDetailFragment, getContext(), true);
+
 
     }
 
@@ -332,7 +339,7 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
 
     private void showInterestedApiCall(int position, String attendee_Status) {
 
-        showDialog();
+//        showDialog();
         eventViewModel.showInterestEvent(posts.get(position).getId(), LoginUtils.getUser().getId(), "active", attendee_Status).observe(this, listBaseModel -> {
             if (!listBaseModel.isError()) {
 
@@ -439,7 +446,7 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
     private void callPostsApi() {
         User user = LoginUtils.getLoggedinUser();
 
-        showDialog();
+//        showDialog();
 
         if (user.getType().equalsIgnoreCase("user")) {
             user.setFilter("all");

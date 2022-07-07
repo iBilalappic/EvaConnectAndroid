@@ -123,8 +123,8 @@ public interface AppApi {
                                               @Part("salary") int salary,
                                               @Part("created_by_id") int created_by_id,
                                               @Part("published_date") RequestBody published_date,
-                                              @Part("job_type ") RequestBody job_type ,@Part("active_hours ") int active_hours,
-                                              @Part MultipartBody.Part job_image,@Part("job_nature ") RequestBody job_nature);
+                                              @Part("job_type ") RequestBody job_type, @Part("active_hours ") int active_hours,
+                                              @Part MultipartBody.Part job_image, @Part("job_nature ") RequestBody job_nature);
 
     @Multipart
     @PATCH(APIConstants.UPDATE_JOB_AD)
@@ -139,12 +139,12 @@ public interface AppApi {
             @Part("salary") int salary,
             @Part("modified_by_id") int modified_by_id,
             @Part("modified_datetime") RequestBody modified_datetime,
-            @Part("job_type ") RequestBody job_type ,
+            @Part("job_type ") RequestBody job_type,
             @Part("active_hours ") int active_hours,
             @Part MultipartBody.Part job_image);
 
     @POST(APIConstants.GET_JOB_AD_BY_ID)
-    Call<BaseModel<List<SpecficJobAd>>> GetJobAd_ID(@Path("job_id") int job_id,@Body HashMap<String, Object> body);
+    Call<BaseModel<List<SpecficJobAd>>> GetJobAd_ID(@Path("job_id") int job_id, @Body HashMap<String, Object> body);
 
 
     @Multipart
@@ -173,7 +173,7 @@ public interface AppApi {
 
     @PATCH(APIConstants.EDIT_JOB_COMMENTS)
         // Call<BaseModel<List<Object>>> setLikeJob();
-    Call<BaseModel<List<Comment>>> editJobComment(@Body Comment body,@Path("id") int id);
+    Call<BaseModel<List<Comment>>> editJobComment(@Body Comment body, @Path("id") int id);
 
 
     @POST(APIConstants.APPLY_INTERVIEW)
@@ -215,7 +215,7 @@ public interface AppApi {
     Call<BaseModel<List<Comment>>> addComment(@Body Comment comment);
 
     @PATCH(APIConstants.EDIT_COMMENT)
-    Call<BaseModel<List<Comment>>> editComment(@Body Comment comment,@Path("id") int id);
+    Call<BaseModel<List<Comment>>> editComment(@Body Comment comment, @Path("id") int id);
 
     @DELETE(APIConstants.EDIT_COMMENT)
     Call<BaseModel<List<Comment>>> deleteComment(@Path("id") int id);
@@ -242,37 +242,37 @@ public interface AppApi {
     Call<BaseModel<List<Connection>>> updateConnection(@Body Connection connection, @Path("id") int id);
 
     @POST(APIConstants.GET_ALL_CONNECTIONS)
-    Call<BaseModel<List<User>>> getAllConnections(@Body User user,@Query("limit") int limit, @Query("offset") int offset);
+    Call<BaseModel<List<User>>> getAllConnections(@Body User user, @Query("limit") int limit, @Query("offset") int offset);
 
     @GET(APIConstants.GET_ALL_PENDING)
     Call<BaseModel<List<GetPendingData>>> getAllPending(/*@Body User user, @Query("limit") int limit, @Query("offset") int offset*/);
 
     @POST(APIConstants.GET_CONNECTION_BY_FILTER_OLD)
-    Call<BaseModel<List<User>>> getConnectionByFilter(@Body User user,@Query("limit") int limit, @Query("offset") int offset);
+    Call<BaseModel<List<User>>> getConnectionByFilter(@Body User user, @Query("limit") int limit, @Query("offset") int offset);
 
     @POST(APIConstants.GET_CONNECTION_BY_FILTER)
         //  Call<BaseModel<List<User>>> getConnectionByFilter(@Body User user,@Query("limit") int limit, @Query("offset") int offset);
     Call<BaseModel<List<ConnectionModel>>> getConnected(@Body HashMap<String, Object> body);
 
     @GET(APIConstants.GET_CONNECTED_BY_FILTER)
-    Call<BaseModel<List<ConnectionModel>>> getConnectedByFilter(@Query("first_name") String first_name,@Query("last_name") String last_name
-            ,@Query("filter") String filter,@Query("user_id") int user_id);
+    Call<BaseModel<List<ConnectionModel>>> getConnectedByFilter(@Query("first_name") String first_name, @Query("last_name") String last_name
+            , @Query("filter") String filter, @Query("user_id") int user_id);
 
     @GET(APIConstants.GET_CONNECTED_BY_FILTER)
-    Call<BaseModel<List<GetPendingData>>> getPendingByFilter(@Query("first_name") String first_name,@Query("last_name") String last_name
-            ,@Query("filter") String filter,@Query("user_id") int user_id);
+    Call<BaseModel<List<GetPendingData>>> getPendingByFilter(@Query("first_name") String first_name, @Query("last_name") String last_name
+            , @Query("filter") String filter, @Query("user_id") int user_id);
 
     @POST(APIConstants.SEND_NOTIFICATION)
     Call<Object> postPackets(@Body Notification_onesignal data);
 
     @POST(APIConstants.GET_ALL_NOTIFICATIONS)
-    Call<BaseModel<List<Post>>> getAllNotifications(@Body Object user,@Query("limit") int limit, @Query("offset") int offset);
+    Call<BaseModel<List<Post>>> getAllNotifications(@Body Object user, @Query("limit") int limit, @Query("offset") int offset);
 
    /* @POST(APIConstants.GET_ALL_MYACTIVITY)
     Call<BaseModel<List<Post>>> getAllMyActivity(@Body Object user*//*,@Query("limit") int limit, @Query("offset") int offset*//*);*/
 
     @POST(APIConstants.GET_ALL_MYACTIVITY)
-    Call<BaseModel<List<MyActivitiesModel>>> getAllMyActivity(@Body Object user ,@Query("limit") int limit, @Query("offset") int offset);
+    Call<BaseModel<List<MyActivitiesModel>>> getAllMyActivity(@Body Object user, @Query("limit") int limit, @Query("offset") int offset);
 
     @POST(APIConstants.GET_ALL_NOTIFICATIONS)
     Call<BaseModel<List<Post>>> getAllUnreadNotifications(@Body Object user);
@@ -285,8 +285,8 @@ public interface AppApi {
 
     @POST(APIConstants.EMAIL_VERIFICATION_CODE)
     @FormUrlEncoded
-    Call<BaseModel<List<Object>>> getEmailVerificationCode(@Field("email")String email,
-                                                           @Field("verification_code")int verification_code);
+    Call<BaseModel<List<Object>>> getEmailVerificationCode(@Field("email") String email,
+                                                           @Field("verification_code") int verification_code);
 
     @POST(APIConstants.RESET_PASSWORD)
     Call<BaseModel<List<Object>>> getResetPassword(@Body Object object);
@@ -320,7 +320,7 @@ public interface AppApi {
     Call<BaseModel<List<GetEventInterestedUsers>>> getEventInterested(@Query("event_id") int event_id);
 
     @PATCH(APIConstants.UPDATE_MEETING)
-    Call<BaseModel<List<Meeting>>> updateMeeting(@Body Meeting meeting,@Path("id") int id);
+    Call<BaseModel<List<Meeting>>> updateMeeting(@Body Meeting meeting, @Path("id") int id);
 
     @PATCH(APIConstants.UPDATE_MEETING_ATTENDENCE)
     Call<BaseModel<List<Meeting>>> updateMeetingAttendence(@Body Meeting meeting);
@@ -335,7 +335,7 @@ public interface AppApi {
     Call<BaseModel<List<Comment>>> addEventComment(@Body Comment comment);
 
     @PATCH(APIConstants.EDIT_EVENT_COMMENT)
-    Call<BaseModel<List<Comment>>> editEventComment(@Body Comment comment,@Path("id") int id);
+    Call<BaseModel<List<Comment>>> editEventComment(@Body Comment comment, @Path("id") int id);
 
     @POST(APIConstants.ADD_EVENT_ATTENDANCE)
     Call<BaseModel<List<Event>>> addEventAttendance(@Body Event eventAttendees);
@@ -362,7 +362,7 @@ public interface AppApi {
     Call<BaseModel<List<CalendarModel>>> createNote(@Body CalendarModel calendarModel);
 
     @PATCH(APIConstants.DECLINE_APPLICATION)
-    Call<BaseModel<List<AppliedApplicants>>> declineApplication(@Path("job_application_id") int job_id,@Body AppliedApplicants applicants);
+    Call<BaseModel<List<AppliedApplicants>>> declineApplication(@Path("job_application_id") int job_id, @Body AppliedApplicants applicants);
 
     @DELETE(APIConstants.REMOVE_USER)
     Call<BaseModel<List<Object>>> remove_user(@Path("id") int id);
@@ -371,8 +371,8 @@ public interface AppApi {
     Call<BaseModel<List<Object>>> block_user(@Body HashMap<String, Object> body);
 
     @GET(APIConstants.GET_CONNECTED_BY_FILTER)
-    Call<BaseModel<List<GetBlockedData>>> getBlockedByFilter(@Query("first_name") String first_name,@Query("last_name") String last_name
-            ,@Query("filter") String filter,@Query("user_id") int user_id);
+    Call<BaseModel<List<GetBlockedData>>> getBlockedByFilter(@Query("first_name") String first_name, @Query("last_name") String last_name
+            , @Query("filter") String filter, @Query("user_id") int user_id);
 
     @Multipart
     @PATCH(APIConstants.PROFILE_UPDATE)
@@ -415,7 +415,7 @@ public interface AppApi {
     @POST(APIConstants.POST_FILTER)
     Call<BaseModel<List<Post>>> getPostFilter(@Body HashMap<String, Object> body, @Query("limit") int limit, @Query("offset") int offset);
 
-    @PATCH(APIConstants.USER_EDIT+"{user_id}/")
+    @PATCH(APIConstants.USER_EDIT + "{user_id}/")
     Call<BaseModel<List<Object>>> Edit_Profile(@Path(value = "user_id") int user_id,
                                                @Body Object user);
 
@@ -429,7 +429,8 @@ public interface AppApi {
     Call<BaseModel<List<Post>>> getNews(@Body User user, @Query("limit") int limit, @Query("offset") int offset);
 
     @POST(APIConstants.GET_MEETING_DETAILS)
-    Call<BaseModel<List<Event>>> getMeetingDetails(@Body HashMap<String,Integer> user);
+    Call<BaseModel<List<Event>>> getMeetingDetails(@Body HashMap<String, Integer> user);
+
     @GET(APIConstants.DECLINE_APPLICATION)
     Call<BaseModel<List<AppliedApplicants>>> getApplicant(@Path("job_application_id") int job_id);
 
@@ -446,17 +447,17 @@ public interface AppApi {
     Call<BaseModel<List<Object>>> share_connection_post(@Body ShareConnection shareConnection);
 
     @POST(APIConstants.GET_CONNECTION_BY_RECOMMENDED_USER)
-    Call<BaseModel<List<User>>> getConnectionByRecommendedUser(@Body User user,@Query("limit") int limit, @Query("offset") int offset);
+    Call<BaseModel<List<User>>> getConnectionByRecommendedUser(@Body User user, @Query("limit") int limit, @Query("offset") int offset);
 
     @Multipart
     @POST(APIConstants.CHAT_IMAGE)
     Call<BaseModel<ChatAttachment>> uploadAttachment(@Part("created_by_id") int user_id,
-                                                           @Part("status") RequestBody status ,
-                                                           @Part List<MultipartBody.Part> Chat_image);
+                                                     @Part("status") RequestBody status,
+                                                     @Part List<MultipartBody.Part> Chat_image);
 
     @Multipart
     @PATCH(APIConstants.UPDATE_EVENT)
-    Call<BaseModel<List<Event>>> updateEvent(@Path("id") int id,@Part("user_id") int user_id,
+    Call<BaseModel<List<Event>>> updateEvent(@Path("id") int id, @Part("user_id") int user_id,
                                              @Part("created_by_id") int created_by_id,
                                              @Part("content") RequestBody content,
                                              @Part("status") RequestBody status,
@@ -480,7 +481,7 @@ public interface AppApi {
     Call<BaseModel<List<Comment>>> addNewsComment(@Body Comment comment);
 
     @PATCH(APIConstants.EDIT_NEWS_COMMENT)
-    Call<BaseModel<List<Comment>>> editNewsComment(@Body Comment comment,@Path("id") int id);
+    Call<BaseModel<List<Comment>>> editNewsComment(@Body Comment comment, @Path("id") int id);
 
     @POST(APIConstants.LIKE_NEWS)
     Call<BaseModel<List<Post>>> likeNews(@Body Post post);
@@ -492,7 +493,7 @@ public interface AppApi {
     Call<BaseModel<List<String>>> getJobType();
 
     @PATCH(APIConstants.USER_ONLINE)
-    Call<BaseModel<List<User>>> userOnline(@Path("id") int id,@Body HashMap<String,Object> user);
+    Call<BaseModel<List<User>>> userOnline(@Path("id") int id, @Body HashMap<String, Object> user);
 
     @GET(APIConstants.USER_STATS)
     Call<BaseModel<List<Stats>>> getUserStats(@Path("id") int id);
@@ -555,17 +556,16 @@ public interface AppApi {
 
     @GET(APIConstants.GET_CONNECTED_BY_STATUS)
     Call<BaseModel<List<IsBlocked>>> hGetBlockedUserInfo(@Query("user_id") int user_id, @Query("target_user_key") int target_user);
-    
-    
-/*
+
 
     @PATCH(APIConstants.GET_USER_DETAILS)
     Call<BaseModel<List<Object>>> hUpdateUserLocation(
             @Path("id") int id,
             @Body User user,
-            @Path()
-            );
-*/
+            @Path("id") String date
+    );
+
+
 
 
 }

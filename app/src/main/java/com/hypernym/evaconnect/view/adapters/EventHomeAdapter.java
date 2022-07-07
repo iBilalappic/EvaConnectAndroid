@@ -196,6 +196,14 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
                 }
             });
 
+            // Added by AliRaza
+            profile_image.setOnClickListener(new OnOneOffClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                      mClickListener.onProfileClick(v, getAdapterPosition());
+                }
+            });
+
         }
 
 
@@ -382,6 +390,7 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
         void onEventLikeClick(View view, int position, TextView likeCount);
 
         void onEditClick(View view, int position);
+
         void onDeleteClick(View view, int position);
 
 

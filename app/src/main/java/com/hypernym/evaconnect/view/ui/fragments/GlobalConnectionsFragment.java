@@ -134,8 +134,6 @@ public class GlobalConnectionsFragment extends BaseFragment implements OptionsAd
         });
 
 
-
-
         return view;
     }
 
@@ -278,21 +276,19 @@ public class GlobalConnectionsFragment extends BaseFragment implements OptionsAd
         userData.setFilter("active");
 
 //        if(firstTime>1){
-            if(isSearch){
-                userData.setFirst_name(search_key);
-                userData.setLast_name("");
-
-
-            }
-//        }
-        else{
-            if (edt_search.getText().toString().length() > 0){
-            userData.setFirst_name(edt_search.getText().toString());
+        if (isSearch) {
+            userData.setFirst_name(search_key);
             userData.setLast_name("");
-        }
-        }
 
 
+        }
+//        }
+        else {
+            if (edt_search.getText().toString().length() > 0) {
+                userData.setFirst_name(edt_search.getText().toString());
+                userData.setLast_name("");
+            }
+        }
 
 
         //   connectedList.clear();
@@ -311,12 +307,11 @@ public class GlobalConnectionsFragment extends BaseFragment implements OptionsAd
                 connectionsAdapter.notifyDataSetChanged();
 //                    if (connectionList.size() > 0) {
 
-                if(firstTime<2){
+                if (firstTime < 2) {
 
                     rc_connections.setVisibility(View.GONE);
                     empty.setVisibility(View.VISIBLE);
-                }
-                else{
+                } else {
 
                     rc_connections.setVisibility(View.VISIBLE);
                     empty.setVisibility(View.GONE);
@@ -380,9 +375,21 @@ public class GlobalConnectionsFragment extends BaseFragment implements OptionsAd
 
                     try {
                         ConnectionModel user = connectedList.get(position);
+                        User us = LoginUtils.getLoggedinUser();
                         PersonProfileFragment personProfileFragment = new PersonProfileFragment();
                         Bundle bundle2 = new Bundle();
-                        bundle2.putInt("user_id", user.id);
+                        bundle2.putInt("user_id", (int) (long) user.receiver.getId());
+                        if (user.sender != null && user.receiver != null) {
+                            if (us.getId().equals(user.receiverId)) {
+                                bundle2.putInt("user_id", user.senderId);
+
+                            } else {
+                                bundle2.putInt("user_id", user.receiverId);
+                            }
+
+
+                        }
+
                         Log.d("connection", "onItemClick: user " + user.receiverId);
                         bundle2.putParcelable("connected_user", user);
                         Log.d("connection", "onItemClick: " + GsonUtils.toJson(user));
@@ -446,13 +453,12 @@ public class GlobalConnectionsFragment extends BaseFragment implements OptionsAd
         public void afterTextChanged(Editable s) {
             Log.d("acc", "called ");
 
-
             currentPage = PAGE_START;
             if (s.length() > 0) {
                 isSearchFlag = true;
                 connectionList.clear();
                 connectionsAdapter.notifyDataSetChanged();
-                getConnectedFilter(true);
+//                getConnectedFilter(true);
             } else {
                 connectionList.clear();
                 connectionsAdapter.notifyDataSetChanged();
@@ -513,18 +519,17 @@ public class GlobalConnectionsFragment extends BaseFragment implements OptionsAd
     private void hFilterList(String s) {
         if (!s.equals("")) {
             hSearchList.clear();
-            for(int i =0;i<connectedList.size();i++){
-                ConnectionModel user  =  connectedList.get(i);
+            for (int i = 0; i < connectedList.size(); i++) {
+                ConnectionModel user = connectedList.get(i);
                 if (user.firstName.equalsIgnoreCase(s)) {
                     hSearchList.add(user);
                 }
             }
 
 
-
             rc_connections.setVisibility(View.VISIBLE);
             empty.setVisibility(View.GONE);
-            if(hSearchList.size()==0){
+            if (hSearchList.size() == 0) {
                 hSearchList.addAll(connectedList);
             }
             connectionsAdapter.hSetList(hSearchList);

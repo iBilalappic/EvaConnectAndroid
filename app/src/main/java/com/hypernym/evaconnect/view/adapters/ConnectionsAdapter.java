@@ -31,6 +31,7 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
     private ConnectionsAdapter.OnItemClickListener onItemClickListener;
     int count = 0;
     private boolean isLoaderVisible = false;
+    private static long Id;
 
     public ConnectionsAdapter(Context context, List<ConnectionModel> connectionList, ConnectionsAdapter.OnItemClickListener onItemClickListener) {
         this.context = context;
@@ -51,8 +52,6 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
         User user = LoginUtils.getLoggedinUser();
 
 
-        Log.d("ahsan", "onBindViewHolder: " + originalConnections.get(position).firstName);
-        Log.d("ahsan", "onBindViewHolder: " + user.first_name );
 
         if (connections.get(position).sender != null && connections.get(position).receiver != null) {
             if (user.getId().equals(connections.get(position).senderId)) {
@@ -61,6 +60,7 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
                 }
                 if (connections.get(position).receiver.getFirstName() != null) {
                     holder.tv_name.setText(connections.get(position).receiver.getFirstName());
+                    Id = connections.get(position).receiver.getId();
                 }
                 if (connections.get(position).receiver.getDesignation() != null && !connections.get(position).receiver.getDesignation().isEmpty()) {
                     holder.tv_designation.setText(connections.get(position).receiver.getDesignation());
@@ -111,6 +111,7 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
             if (!TextUtils.isEmpty(connections.get(position).userImage)) {
                 AppUtils.setGlideImage(context, holder.profile_image, connections.get(position).userImage);
             }
+            Id = connections.get(position).id;
             if (connections.get(position).firstName != null) {
                 holder.tv_name.setText(connections.get(position).firstName + " ");
 
@@ -207,6 +208,9 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
 //
 //        }
 
+
+
+
     }
 
     @Override
@@ -261,6 +265,7 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
 
                 case R.id.ly_main:
                     if (onItemClickListener != null) {
+
                         onItemClickListener.onItemClick(v, originalConnections.indexOf(connections.get(getAdapterPosition())));
                     }
                     break;

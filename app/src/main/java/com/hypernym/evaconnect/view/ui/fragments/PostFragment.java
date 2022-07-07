@@ -8,11 +8,13 @@ import android.content.ClipboardManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -169,6 +171,7 @@ public class PostFragment extends BaseFragment implements View.OnClickListener, 
         } else {
             networkErrorDialog();
         }
+
     }
 
     @Override
@@ -192,7 +195,8 @@ public class PostFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     @Override
-    public void onLikeClick(View view, int position, TextView likeCount) {
+    public void onLikeClick(View view, int position, TextView likeCount, ProgressBar pb) {
+
         Post post = posts.get(position);
         User user = LoginUtils.getLoggedinUser();
         post.setPost_id(post.getId());
@@ -226,25 +230,32 @@ public class PostFragment extends BaseFragment implements View.OnClickListener, 
         Log.d("Listing status", post.getAction() + " count" + post.getIs_post_like());
         if (NetworkUtils.isNetworkConnected(getContext())) {
 
-            likePost(post, position);
+            likePost(post, position,pb);
         } else {
             networkErrorDialog();
         }
 
     }
 
-    private void likePost(Post post, int position) {
+    private void likePost(Post post, int position, ProgressBar pb) {
         postViewModel.likePost(post).observe(this, new Observer<BaseModel<List<Post>>>() {
             @Override
             public void onChanged(BaseModel<List<Post>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError()) {
+                    Log.d("like", "Api is succesfully called");
                     post.setLikeLoading(false);
                     postAdapter.notifyItemChanged(position);
+
+
+
                 } else {
+                    Log.d("like", "like network call has some issue");
                     post.setLikeLoading(false);
+                    postAdapter.notifyItemChanged(position);
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
                 hideDialog();
+//                pb.setVisibility(View.GONE);
             }
         });
     }

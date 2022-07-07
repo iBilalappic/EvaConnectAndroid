@@ -393,8 +393,7 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
         showDialog();
         viewModel.hUpdateUserLocationData(userData.getId(), userData).observe(requireActivity(), object -> {
             hideDialog();
-            Toast.makeText(requireActivity(), "Location UPDATED Successfully.", Toast.LENGTH_SHORT).show();
-            /*requireActivity().onBackPressed();*/
+            requireActivity().onBackPressed();
         });
     }
 

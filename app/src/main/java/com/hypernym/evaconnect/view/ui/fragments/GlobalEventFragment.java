@@ -574,7 +574,7 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
             if (s.length() > 0) {
                 isSearchFlag = true;
                 posts.clear();
-                homePostsAdapter.notifyDataSetChanged();
+//                homePostsAdapter.notifyDataSetChanged();
                 callPostsApi();
             } else {
                 posts.clear();
@@ -639,7 +639,7 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
             rc_home.setVisibility(View.VISIBLE);
 
             search_key = mtitle;
-//            callPostsApi();
+            callPostsApi();
         }
 
     }
