@@ -5,6 +5,7 @@ import static com.hypernym.evaconnect.listeners.PaginationScrollListener.PAGE_ST
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -82,6 +84,7 @@ public class GlobalPostFragment extends BaseFragment implements View.OnClickList
     String filter = "post";
     String keyword;
     int totalsize=0;
+    private InputMethodManager imm;
 
 
     public GlobalPostFragment() {
@@ -177,6 +180,11 @@ public class GlobalPostFragment extends BaseFragment implements View.OnClickList
                 if (currentPage == PAGE_START) {
                     posts.clear();
                     homePostsAdapter.notifyDataSetChanged();
+
+
+                    imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                    imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);
                 }
                 totalsize = 0;
 
@@ -202,6 +210,9 @@ public class GlobalPostFragment extends BaseFragment implements View.OnClickList
                 }
                 posts.addAll(dashboardBaseModel.getData());
                 homePostsAdapter.notifyDataSetChanged();
+                imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);
                 //  homePostsAdapter.removeLoading();
                 totalsize=totalsize+posts.size();
                 isLoading = false;
@@ -210,6 +221,9 @@ public class GlobalPostFragment extends BaseFragment implements View.OnClickList
                 totalsize=0;
                 // homePostsAdapter.removeLoading();
                 homePostsAdapter.notifyDataSetChanged();
+                imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);
                 isLoading = false;
             } else {
                 networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
@@ -661,8 +675,8 @@ public class GlobalPostFragment extends BaseFragment implements View.OnClickList
             if (s.length() > 0) {
                 isSearchFlag = true;
                 posts.clear();
-                homePostsAdapter.notifyDataSetChanged();
                 callPostsApi();
+                homePostsAdapter.notifyDataSetChanged();
             } else {
                 posts.clear();
                 homePostsAdapter.notifyDataSetChanged();

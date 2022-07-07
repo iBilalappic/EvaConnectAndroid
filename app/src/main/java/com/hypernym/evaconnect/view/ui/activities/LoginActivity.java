@@ -148,9 +148,9 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
             @Override
             public void onSingleClick(View v) {
                 value = "signup";
-               // validator.validate();
+                // validator.validate();
                 Intent intent = new Intent(getBaseContext(), CreateAccount_1_Activity.class);
-              //  intent.putExtra("Email", edt_email.getText().toString());
+                //  intent.putExtra("Email", edt_email.getText().toString());
                 startActivity(intent);
             }
         });
@@ -171,7 +171,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
 
 
         });
-        findViewById(R.id.rootview).setOnTouchListener((View v , @SuppressLint("ClickableViewAccessibility") MotionEvent event) -> {
+        findViewById(R.id.rootview).setOnTouchListener((View v, @SuppressLint("ClickableViewAccessibility") MotionEvent event) -> {
             InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
             //Find the currently focused view, so we can grab the correct window token from it.
             View view = getCurrentFocus();
@@ -198,8 +198,9 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     private void initFacebookLogin() {
         facebookCallbackManager = CallbackManager.Factory.create();
         btn_facebook.setPermissions(Arrays.asList(AppConstants.EMAIL, AppConstants.PUBLIC_PROFILE));
-       /* btn_facebook.setCompoundDrawablesRelativeWithIntrinsicBounds(getResources().getDrawable(R.drawable.com_facebook_button_icon), null, null, null);
-        */btn_facebook.setLoginBehavior(LoginBehavior.WEB_ONLY);
+        /* btn_facebook.setCompoundDrawablesRelativeWithIntrinsicBounds(getResources().getDrawable(R.drawable.com_facebook_button_icon), null, null, null);
+         */
+        btn_facebook.setLoginBehavior(LoginBehavior.WEB_ONLY);
 
         btn_facebook.registerCallback(facebookCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -224,10 +225,9 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     }
 
     private void requestUserProfile(AccessToken accessToken) {
-        if (accessToken!=null)
-        {
+        if (accessToken != null) {
             GraphRequest request = GraphRequest.newMeRequest(accessToken, (object, response) -> {
-                try{
+                try {
                     String first_name = object.getString(AppConstants.FIRST_NAME);
                     String last_name = object.getString(AppConstants.LAST_NAME);
                     String email = object.getString(AppConstants.EMAIL);
@@ -244,7 +244,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
 
 //                                   image_path=ImageFilePathUtil.saveImage(resource);
 
-                                    checkUserExist(email, facebook_photo,ImageFilePathUtil.SaveImage(resource,"Profile.png"));
+                                    checkUserExist(email, facebook_photo, ImageFilePathUtil.SaveImage(resource, "Profile.png"));
                                 }
                             });
 
@@ -262,13 +262,11 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
 //                            });
 
 
-
                     // check whether user already exists or not
 
-                }
-                catch(JSONException exc){
+                } catch (JSONException exc) {
                     exc.printStackTrace();
-                    Log.e(TAG, "exc: "+ exc.getMessage());
+                    Log.e(TAG, "exc: " + exc.getMessage());
                 }
             });
             Bundle parameters = new Bundle();
@@ -278,16 +276,12 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
         }
     }
 
-    private void checkUserExist(String email, String facebook_photo,String path)
-    {
-        if (NetworkUtils.isNetworkConnected(LoginActivity.this))
-        {
+    private void checkUserExist(String email, String facebook_photo, String path) {
+        if (NetworkUtils.isNetworkConnected(LoginActivity.this)) {
             userViewModel.isEmailExist_linkedin(email).observe(this, listBaseModel -> {
-                if (listBaseModel != null && !listBaseModel.isError())
-                {
+                if (listBaseModel != null && !listBaseModel.isError()) {
                     JustLoginApiCall(email);
-                }
-                else {
+                } else {
                     Intent intent = new Intent(LoginActivity.this, CreateAccount_1_Activity.class);
                     intent.putExtra("Email", email);
                     intent.putExtra("Photo", facebook_photo);
@@ -300,7 +294,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     }
 
     private void JustLoginApiCall(String email) {
-        userViewModel.facebookLogin(email,Constants.FACEBOOK_TYPE).observe(this, listBaseModel -> {
+        userViewModel.facebookLogin(email, Constants.FACEBOOK_TYPE).observe(this, listBaseModel -> {
             LoginUtils.userLoggedIn();
             User userData = listBaseModel.getData().get(0);
             userData.setUser_id(userData.getId());
@@ -391,19 +385,19 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
                 saveCredential();
                 hideDialog();
 
-                if(userData.getStatus()!=null&&userData.getStatus().equalsIgnoreCase("active")){
+                if (userData.getStatus() != null && userData.getStatus().equalsIgnoreCase("active")) {
                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     // set the new task and clear flags
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
-                }else{
+                } else {
                     simpleDialog = new SimpleDialog(LoginActivity.this, "Warning", "Please verify yourself", "Cancel", "Verify", new OnOneOffClickListener() {
                         @Override
                         public void onSingleClick(View v) {
                             switch (v.getId()) {
                                 case R.id.button_positive:
 
-                                   callVerifyEmail(userData);
+                                    callVerifyEmail(userData);
                                     break;
                                 case R.id.button_negative:
                                     break;
@@ -431,15 +425,14 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
             Intent intent = new Intent(LoginActivity.this, EnterCodeActivity.class);
             intent.putExtra("Email", userdata.getEmail());
             intent.putExtra("user_type", userdata.getType());
-            intent.putExtra(Constants.ACTIVITY_NAME,"");
+            intent.putExtra(Constants.ACTIVITY_NAME, "");
 
             startActivity(intent);
         });
 
     }
 
-    public void createUserOnFirebase()
-    {
+    public void createUserOnFirebase() {
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
@@ -458,6 +451,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
                 });
 
     }
+
     @Override
     public void onValidationFailed(List<ValidationError> errors) {
         for (ValidationError error : errors) {

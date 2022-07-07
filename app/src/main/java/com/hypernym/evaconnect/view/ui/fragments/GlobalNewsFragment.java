@@ -662,7 +662,7 @@ public class GlobalNewsFragment extends BaseFragment implements View.OnClickList
             if (s.length() > 0) {
                 isSearchFlag = true;
                 posts.clear();
-                homePostsAdapter.notifyDataSetChanged();
+//                homePostsAdapter.notifyDataSetChanged();
                 callPostsApi();
             } else {
                 posts.clear();
