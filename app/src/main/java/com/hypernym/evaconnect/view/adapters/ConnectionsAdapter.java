@@ -208,8 +208,7 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
 //
 //        }
 
-        Log.d("ahsan", "onBindViewHolder: "+"id:"+Id + connections.get(position).sender.getFirstName() + " " + connections.get(position).sender.getLastName());
-        Log.d("ahsan", "onBindViewHolder: "+"id:"+Id + connections.get(position).receiver.getFirstName() );
+
 
 
     }

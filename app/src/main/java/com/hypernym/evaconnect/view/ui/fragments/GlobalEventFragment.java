@@ -639,7 +639,7 @@ public class GlobalEventFragment extends BaseFragment implements View.OnClickLis
             rc_home.setVisibility(View.VISIBLE);
 
             search_key = mtitle;
-//            callPostsApi();
+            callPostsApi();
         }
 
     }

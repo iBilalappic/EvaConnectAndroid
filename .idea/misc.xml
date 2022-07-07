@@ -9,9 +9,11 @@
         <entry key="..\:/hypernym/app/src/main/res/layout/activity_home.xml" value="0.18854166666666666" />
         <entry key="..\:/hypernym/app/src/main/res/layout/fragment_connections.xml" value="0.17074275362318841" />
         <entry key="..\:/hypernym/app/src/main/res/layout/fragment_connections_tab.xml" value="0.17074275362318841" />
+        <entry key="..\:/hypernym/app/src/main/res/layout/fragment_event.xml" value="0.14322916666666666" />
         <entry key="..\:/hypernym/app/src/main/res/layout/fragment_global_connected.xml" value="0.18854166666666666" />
         <entry key="..\:/hypernym/app/src/main/res/layout/fragment_global_search_post.xml" value="0.18385416666666668" />
         <entry key="..\:/hypernym/app/src/main/res/layout/fragment_home.xml" value="0.18854166666666666" />
+        <entry key="..\:/hypernym/app/src/main/res/layout/fragment_language.xml" value="0.15081521739130435" />
         <entry key="..\:/hypernym/app/src/main/res/layout/fragment_post_details.xml" value="0.33" />
         <entry key="..\:/hypernym/app/src/main/res/layout/fragment_search_result.xml" value="0.18385416666666668" />
         <entry key="..\:/hypernym/app/src/main/res/layout/item_comment.xml" value="0.15760869565217392" />

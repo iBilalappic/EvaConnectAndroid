@@ -421,7 +421,7 @@ public class ConnectionsFragment extends BaseFragment implements OptionsAdapter.
         if (!s.equals("")) {
             hSearchList.clear();
             for (ConnectionModel user : connectedList) {
-                if (user.firstName.toLowerCase(Locale.getDefault()).contains(s)) {
+                if (user.firstName.trim().toLowerCase(Locale.getDefault()).contains(s.toString().toLowerCase(Locale.ROOT))) {
                     hSearchList.add(user);
                 }
             }
