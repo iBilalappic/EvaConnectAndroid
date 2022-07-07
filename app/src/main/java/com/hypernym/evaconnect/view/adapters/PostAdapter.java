@@ -160,7 +160,6 @@ public class PostAdapter  extends RecyclerView.Adapter {
             like_click.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    Log.d("ali", "like clicked "+posts.get(getAdapterPosition()).isLikeLoading());
 
                     posts.get(getAdapterPosition()).setLikeLoading(true);
                     notifyItemChanged(getAdapterPosition());

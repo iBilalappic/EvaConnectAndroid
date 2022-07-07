@@ -196,6 +196,7 @@ public class PostFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void onLikeClick(View view, int position, TextView likeCount, ProgressBar pb) {
+
         Post post = posts.get(position);
         User user = LoginUtils.getLoggedinUser();
         post.setPost_id(post.getId());
@@ -241,28 +242,16 @@ public class PostFragment extends BaseFragment implements View.OnClickListener, 
             @Override
             public void onChanged(BaseModel<List<Post>> listBaseModel) {
                 if (listBaseModel != null && !listBaseModel.isError()) {
-                    new Handler().postDelayed(new Runnable() {
+                    Log.d("like", "Api is succesfully called");
+                    post.setLikeLoading(false);
+                    postAdapter.notifyItemChanged(position);
 
-                        @Override
-                        public void run() {
-                            post.setLikeLoading(false);
-                            postAdapter.notifyItemChanged(position);
-                        }
-
-                    }, 3000);
 
 
                 } else {
-                    new Handler().postDelayed(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            post.setLikeLoading(false);
-                            postAdapter.notifyItemChanged(position);
-                        }
-
-                    }, 3000);
+                    Log.d("like", "like network call has some issue");
                     post.setLikeLoading(false);
+                    postAdapter.notifyItemChanged(position);
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }
                 hideDialog();

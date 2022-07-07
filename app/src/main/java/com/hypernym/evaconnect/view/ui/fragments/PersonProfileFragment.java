@@ -915,7 +915,58 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
 
     @Override
     public void onLikeClick(View view, int position, TextView likeCount, ProgressBar like_pb) {
+        Post post = posts.get(position);
+        User user = LoginUtils.getLoggedinUser();
+        post.setPost_id(post.getId());
+        post.setCreated_by_id(user.getId());
+        if (post.getIs_post_like() == null || post.getIs_post_like() < 1) {
+            post.setAction(AppConstants.LIKE);
+            if (post.getIs_post_like() == null) {
+                post.setIs_post_like(1);
+                if (post.getLike_count() == null)
+                    post.setLike_count(0);
+                else
+                    post.setLike_count(post.getLike_count() + 1);
+            } else {
+                post.setIs_post_like(post.getIs_post_like() + 1);
+                if (post.getLike_count() == null)
+                    post.setLike_count(0);
+                else
+                    post.setLike_count(post.getLike_count() + 1);
+            }
+        } else {
+            post.setAction(AppConstants.UNLIKE);
+            if (post.getIs_post_like() > 0) {
+                post.setIs_post_like(post.getIs_post_like() - 1);
+                post.setLike_count(post.getLike_count() - 1);
+            } else {
+                post.setIs_post_like(0);
+                post.setLike_count(0);
+            }
 
+        }
+        Log.d("Listing status", post.getAction() + " count" + post.getIs_post_like());
+        if (NetworkUtils.isNetworkConnected(getContext())) {
+
+            likePost(post, position);
+        } else {
+            networkErrorDialog();
+        }
+
+
+    }
+
+    private void likePost(Post post, int position) {
+        postViewModel.likePost(post).observe(this, listBaseModel -> {
+            if (listBaseModel != null && !listBaseModel.isError()) {
+                post.setLikeLoading(false);
+                postAdapter.notifyItemChanged(position);
+            } else {
+                post.setLikeLoading(false);
+                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+            }
+            hideDialog();
+        });
     }
 
     @Override

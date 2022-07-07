@@ -290,6 +290,7 @@ public class GlobalPostFragment extends BaseFragment implements View.OnClickList
 
     @Override
     public void onLikeClick(View view, int position, TextView likeCount, ProgressBar like_pb) {
+        Log.d("like", "like call from GlobalPostFragment ");
         Post post = posts.get(position);
         User user = LoginUtils.getLoggedinUser();
         post.setPost_id(post.getId());
