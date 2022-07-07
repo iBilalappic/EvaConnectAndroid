@@ -141,7 +141,7 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
             tv_interested.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    Log.d("allevent", "onSingleClick: from adapter");
+
                     mClickListener.onEventItemClick(v, getAdapterPosition());
                 }
             });
@@ -292,15 +292,18 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
     @SuppressLint({"SetTextI18n", "ResourceType"})
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+        Log.d("api", "adapter is called: ");
         Post object = posts.get(position);
         if (object != null && object.getType() != null) {
             switch (object.getPost_type()) {
 
                 case AppConstants.EVENT_TYPE:
+                    Log.d("api", "adapter is inside eventType: ");
                     if (String.valueOf(posts.get(position).getComment_count()).equals("0")) {
                         ((EventHomeAdapter.EventTypeViewHolder) holder).tv_viewcomments.setVisibility(View.GONE);
                     }
                     if(posts.get(position).isLikeLoading()){
+                        Log.d("api", "value: "+posts.get(position).isLikeLoading());
                         ((EventTypeViewHolder) holder).like_pb.setVisibility(View.VISIBLE);
                         ((EventTypeViewHolder) holder).tv_attending.setVisibility(View.GONE);
 

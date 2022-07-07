@@ -346,8 +346,11 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
                 posts.get(position).setLikeLoading(false);
                 postAdapter.notifyItemChanged(position);
 
+
+
                 callPostsApi();
             } else {
+
                 networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
 
@@ -459,11 +462,12 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
 
 
         eventViewModel.getEvent(user, AppConstants.TOTAL_PAGES, currentPage).observe(this, dashboardBaseModel -> {
-
+            Log.d("api", "i am call: ");
             // postAdapter.clear();
 
 
             if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() > 0 && dashboardBaseModel.getData().get(0) != null) {
+                Log.d("api", "true: ");
                 if (dashboardBaseModel.getData().size() == 0 && currentPage == AppConstants.TOTAL_PAGES) {
                     rc_event.setVisibility(View.GONE);
                     tv_empty.setVisibility(View.VISIBLE);
@@ -487,8 +491,10 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
             } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
                 isLastPage = true;
 //                postAdapter.removeLoading();
+                Log.d("api", "false: ");
                 isLoading = false;
             } else {
+                Log.d("aliis", "i am call: "+dashboardBaseModel.isError() );
                 networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
 
