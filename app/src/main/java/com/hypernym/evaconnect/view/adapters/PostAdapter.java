@@ -925,6 +925,7 @@ public class PostAdapter  extends RecyclerView.Adapter {
                         ((TextTypeViewHolder) holder).tv_like.setText("Liked");
                         ((PostAdapter.TextTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.like_selected));
                     } else {
+                        ((TextTypeViewHolder) holder).tv_like.setText("Like");
                         ((PostAdapter.TextTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
                     }
                     if (!TextUtils.isEmpty(posts.get(position).getUser().getUser_image())) {
