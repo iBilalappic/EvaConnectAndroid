@@ -442,8 +442,10 @@ public class GlobalPostFragment extends BaseFragment implements View.OnClickList
     private void likePost(Post post, int position) {
         postViewModel.likePost(post).observe(this, listBaseModel -> {
             if (listBaseModel != null && !listBaseModel.isError()) {
+                post.setLikeLoading(false);
                 homePostsAdapter.notifyItemChanged(position);
             } else {
+                post.setLikeLoading(false);
                 networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
             hideDialog();
