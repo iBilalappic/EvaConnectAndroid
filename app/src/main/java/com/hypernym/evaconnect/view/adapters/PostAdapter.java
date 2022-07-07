@@ -994,16 +994,23 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     break;
                 case AppConstants.IMAGE_TYPE:
 
-                    if (object.isLikeLoading()) {
 
+                    if (object.isLikeLoading()) {
+                        Log.d("ali", "onBindViewHolder: "+object.isLikeLoading());
 
                         ((PostAdapter.ImageTypeViewHolder) holder).like_pb.setVisibility(View.VISIBLE);
-                    } else {
-
-
-                        ((PostAdapter.ImageTypeViewHolder) holder).like_pb.setVisibility(View.GONE);
+                        ((PostAdapter.ImageTypeViewHolder) holder).img_like.setVisibility(View.GONE);
+                        ((PostAdapter.ImageTypeViewHolder) holder).tv_like.setVisibility(View.GONE);
 
                     }
+                    else{
+                        Log.d("ali", "onBindViewHolder: "+object.isLikeLoading());
+                        ((PostAdapter.ImageTypeViewHolder) holder).img_like.setVisibility(View.VISIBLE);
+                        ((PostAdapter.ImageTypeViewHolder) holder).tv_like.setVisibility(View.VISIBLE);
+                        ((PostAdapter.ImageTypeViewHolder) holder).like_pb.setVisibility(View.GONE);
+                    }
+
+
 
                     if (String.valueOf(posts.get(position).getComment_count()).equals("0")) {
                         ((PostAdapter.ImageTypeViewHolder) holder).tv_viewcomments.setVisibility(View.GONE);
@@ -1029,8 +1036,10 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     ((PostAdapter.ImageTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
                     if (posts.get(position).getIs_post_like() != null && posts.get(position).getIs_post_like() > 0) {
                         ((PostAdapter.ImageTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.like_selected));
+                        ((ImageTypeViewHolder) holder).tv_like.setText("Liked");
                     } else {
                         ((PostAdapter.ImageTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
+                        ((ImageTypeViewHolder) holder).tv_like.setText("Like");
                     }
 
                     if (!TextUtils.isEmpty(posts.get(position).getUser().getUser_image())) {
@@ -1171,15 +1180,20 @@ public class PostAdapter  extends RecyclerView.Adapter {
                 case AppConstants.DOCUMENT_TYPE:
 
                     if (object.isLikeLoading()) {
-
+                        Log.d("ali", "onBindViewHolder: "+object.isLikeLoading());
 
                         ((PostAdapter.ImageTypeViewHolder) holder).like_pb.setVisibility(View.VISIBLE);
-                    } else {
-
-
-                        ((PostAdapter.ImageTypeViewHolder) holder).like_pb.setVisibility(View.GONE);
+                        ((PostAdapter.ImageTypeViewHolder) holder).img_like.setVisibility(View.GONE);
+                        ((PostAdapter.ImageTypeViewHolder) holder).tv_like.setVisibility(View.GONE);
 
                     }
+                    else{
+                        Log.d("ali", "onBindViewHolder: "+object.isLikeLoading());
+                        ((PostAdapter.ImageTypeViewHolder) holder).img_like.setVisibility(View.VISIBLE);
+                        ((PostAdapter.ImageTypeViewHolder) holder).tv_like.setVisibility(View.VISIBLE);
+                        ((PostAdapter.ImageTypeViewHolder) holder).like_pb.setVisibility(View.GONE);
+                    }
+
                     ((PostAdapter.ImageTypeViewHolder) holder).imageSlider.setVisibility(View.GONE);
 
                     if (String.valueOf(posts.get(position).getComment_count()).equals("0")) {
@@ -1194,8 +1208,10 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     ((PostAdapter.ImageTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
                     if (posts.get(position).getIs_post_like() != null && posts.get(position).getIs_post_like() > 0) {
                         ((PostAdapter.ImageTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.like_selected));
+                        ((ImageTypeViewHolder) holder).tv_like.setText("Liked");
                     } else {
                         ((PostAdapter.ImageTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
+                        ((ImageTypeViewHolder) holder).tv_like.setText("Like");
                     }
 
                     if (!TextUtils.isEmpty(posts.get(position).getUser().getUser_image())) {
@@ -1310,14 +1326,18 @@ public class PostAdapter  extends RecyclerView.Adapter {
                 case AppConstants.VIDEO_TYPE:
 
                     if (object.isLikeLoading()) {
-
+                        Log.d("ali", "onBindViewHolder: "+object.isLikeLoading());
 
                         ((PostAdapter.VideoTypeViewHolder) holder).like_pb.setVisibility(View.VISIBLE);
-                    } else {
+                        ((PostAdapter.VideoTypeViewHolder) holder).img_like.setVisibility(View.GONE);
+                        ((PostAdapter.VideoTypeViewHolder) holder).tv_like.setVisibility(View.GONE);
 
-
+                    }
+                    else{
+                        Log.d("ali", "onBindViewHolder: "+object.isLikeLoading());
+                        ((PostAdapter.VideoTypeViewHolder) holder).img_like.setVisibility(View.VISIBLE);
+                        ((PostAdapter.VideoTypeViewHolder) holder).tv_like.setVisibility(View.VISIBLE);
                         ((PostAdapter.VideoTypeViewHolder) holder).like_pb.setVisibility(View.GONE);
-
                     }
                     if (String.valueOf(posts.get(position).getComment_count()).equals("0")) {
                         ((PostAdapter.VideoTypeViewHolder) holder).tv_viewcomments.setVisibility(View.GONE);
@@ -1330,8 +1350,10 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     ((PostAdapter.VideoTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
                     if (posts.get(position).getIs_post_like() != null && posts.get(position).getIs_post_like() > 0) {
                         ((PostAdapter.VideoTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.like_selected));
+                        ((VideoTypeViewHolder) holder).tv_like.setText("Liked");
                     } else {
                         ((PostAdapter.VideoTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
+                        ((VideoTypeViewHolder) holder).tv_like.setText("Like");
                     }
 
                     if (!TextUtils.isEmpty(posts.get(position).getUser().getUser_image())) {
@@ -1398,14 +1420,18 @@ public class PostAdapter  extends RecyclerView.Adapter {
                 case AppConstants.LINK_POST:
 
                     if (object.isLikeLoading()) {
-
+                        Log.d("ali", "onBindViewHolder: "+object.isLikeLoading());
 
                         ((PostAdapter.LinkTypeViewHolder) holder).like_pb.setVisibility(View.VISIBLE);
-                    } else {
+                        ((PostAdapter.LinkTypeViewHolder) holder).img_like.setVisibility(View.GONE);
+                        ((PostAdapter.LinkTypeViewHolder) holder).tv_like.setVisibility(View.GONE);
 
-
+                    }
+                    else{
+                        Log.d("ali", "onBindViewHolder: "+object.isLikeLoading());
+                        ((PostAdapter.LinkTypeViewHolder) holder).img_like.setVisibility(View.VISIBLE);
+                        ((PostAdapter.LinkTypeViewHolder) holder).tv_like.setVisibility(View.VISIBLE);
                         ((PostAdapter.LinkTypeViewHolder) holder).like_pb.setVisibility(View.GONE);
-
                     }
                     if (String.valueOf(posts.get(position).getComment_count()).equals("0")) {
                         ((PostAdapter.LinkTypeViewHolder) holder).tv_viewcomments.setVisibility(View.GONE);
@@ -1436,8 +1462,10 @@ public class PostAdapter  extends RecyclerView.Adapter {
                     ((PostAdapter.LinkTypeViewHolder) holder).tv_minago.setText(DateUtils.getTimeAgo(posts.get(position).getCreated_datetime()));
                     if (posts.get(position).getIs_post_like() != null && posts.get(position).getIs_post_like() > 0) {
                         ((PostAdapter.LinkTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.like_selected));
+                        ((LinkTypeViewHolder) holder).tv_like.setText("Liked");
                     } else {
                         ((PostAdapter.LinkTypeViewHolder) holder).img_like.setBackground(mContext.getDrawable(R.drawable.ic_like));
+                        ((LinkTypeViewHolder) holder).tv_like.setText("Like");
                     }
                     if (!TextUtils.isEmpty(posts.get(position).getUser().getUser_image())) {
                         AppUtils.setGlideImage(mContext, ((PostAdapter.LinkTypeViewHolder) holder).profile_image, posts.get(position).getUser().getUser_image());
