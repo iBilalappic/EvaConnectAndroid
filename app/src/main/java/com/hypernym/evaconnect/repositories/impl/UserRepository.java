@@ -483,6 +483,7 @@ public class UserRepository implements IUserRespository {
             @Override
             public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
                 if (response.body() != null) {
+                    Log.d("app", "success");
                     updateUserLocationMutableLiveData.setValue(response.body());
                 }
             }
@@ -490,6 +491,7 @@ public class UserRepository implements IUserRespository {
             @Override
             public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
                 updateUserLocationMutableLiveData.setValue(null);
+                Log.d("app", "fait"+t.toString());
                 t.printStackTrace();
             }
         });

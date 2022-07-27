@@ -562,7 +562,7 @@ public interface AppApi {
     Call<BaseModel<List<Object>>> hUpdateUserLocation(
             @Path("id") int id,
             @Body User user,
-            @Path("id") String date
+            @Path("date") String date
     );
 
 

@@ -152,6 +152,8 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
         user = LoginUtils.getUser();
         init();
 
+        Log.d("city", "onViewCreated: "+user.getCity());
+
         if (NetworkUtils.isNetworkConnected(requireContext())) {
             showDialog();
             buildGoogleApiClient();
@@ -392,6 +394,7 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
         userData.setId(LoginUtils.getUser().getId());
         showDialog();
         viewModel.hUpdateUserLocationData(userData.getId(), userData).observe(requireActivity(), object -> {
+
             hideDialog();
             requireActivity().onBackPressed();
         });

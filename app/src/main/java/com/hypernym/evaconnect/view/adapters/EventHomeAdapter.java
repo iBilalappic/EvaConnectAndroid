@@ -303,7 +303,7 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
                     ((EventHomeAdapter.EventTypeViewHolder) holder).tv_created_time.setText(DateUtils.getFormattedDateDMY(object.getStart_date()) + " - " + DateUtils.getFormattedDateDMY(object.getEnd_date()) + " | " + DateUtils.getTimeUTC(object.getStart_time()) + " - " + DateUtils.getTimeUTC(object.getEnd_time()));
 
                     if (posts.get(position).getIs_attending() != null) {
-                        if (posts.get(position).getIs_attending().equalsIgnoreCase("Going")) {
+                        if (posts.get(position).getIs_attending().equalsIgnoreCase("Goig")) {
                             Drawable[] compoundDrawables = ((EventTypeViewHolder) holder).tv_attending.getCompoundDrawables();
                             Drawable leftCompoundDrawable = compoundDrawables[0];
                             if (leftCompoundDrawable == null) {
