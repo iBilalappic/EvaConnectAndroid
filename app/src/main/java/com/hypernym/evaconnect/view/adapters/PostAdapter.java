@@ -850,6 +850,8 @@ public class PostAdapter  extends RecyclerView.Adapter {
             case AppConstants.LINK_POST:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_link, parent, false);
                 return new PostAdapter.LinkTypeViewHolder(view);
+
+
         }
         return null;
     }

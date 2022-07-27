@@ -246,6 +246,8 @@ public class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsAdapter.
         @BindView(R.id.ly_main)
         LinearLayout ly_main;
 
+
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

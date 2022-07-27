@@ -8,7 +8,6 @@ import android.content.ClipboardManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -504,6 +503,13 @@ public class PostFragment extends BaseFragment implements View.OnClickListener, 
                 clip = ClipData.newPlainText("label", "https://www.evaintmedia.com/" + posts.get(item_position).getType() + "/" + posts.get(item_position).getId());
                 clipboard.setPrimaryClip(clip);
                 Toast.makeText(requireContext(), "link copied", Toast.LENGTH_SHORT).show();
+            } else if (msg.what == 101) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, posts.get(item_position).getContent());
+                sendIntent.setType("text/plain");
+                Intent shareIntent = Intent.createChooser(sendIntent, null);
+                startActivity(shareIntent);
             }
         }
     }

@@ -36,7 +36,6 @@ import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.CompanyJobAdAdapter;
 import com.hypernym.evaconnect.view.adapters.JobAdAdapter;
 import com.hypernym.evaconnect.view.bottomsheets.BottomsheetShareSelection;
-import com.hypernym.evaconnect.view.dialogs.ShareDialog;
 import com.hypernym.evaconnect.viewmodel.JobListViewModel;
 
 import java.util.ArrayList;
@@ -301,12 +300,19 @@ public class JobListingFragment extends BaseFragment implements View.OnClickList
                     transaction.addToBackStack(null);
                 }
                 transaction.commit();
-            }else if(msg.what==103){
+            }else if (msg.what == 103) {
                 ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(CLIPBOARD_SERVICE);
                 ClipData clip;
                 clip = ClipData.newPlainText("label", "https://www.evaintmedia.com/" + jobAdList.get(item_position).getType() + "/" + jobAdList.get(item_position).getId());
                 clipboard.setPrimaryClip(clip);
                 Toast.makeText(requireContext(), "link copied", Toast.LENGTH_SHORT).show();
+            } else if (msg.what == 101) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, jobAdList.get(item_position).getContent());
+                sendIntent.setType("text/plain");
+                Intent shareIntent = Intent.createChooser(sendIntent, null);
+                startActivity(shareIntent);
             }
         }
     }

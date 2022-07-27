@@ -799,19 +799,26 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 Bundle bundle = new Bundle();
                 {
                     bundle.putInt(Constants.DATA, posts.get(item_position).getId());
-                    bundle.putString(Constants.TYPE,  posts.get(item_position).getType());
+                    bundle.putString(Constants.TYPE, posts.get(item_position).getType());
                 }
                 shareConnectionFragment.setArguments(bundle);
                 if (true) {
                     transaction.addToBackStack(null);
                 }
                 transaction.commit();
-            }else if(msg.what==103){
+            } else if (msg.what == 103) {
                 ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(CLIPBOARD_SERVICE);
                 ClipData clip;
                 clip = ClipData.newPlainText("label", "https://www.evaintmedia.com/" + posts.get(item_position).getType() + "/" + posts.get(item_position).getId());
                 clipboard.setPrimaryClip(clip);
                 Toast.makeText(requireContext(), "link copied", Toast.LENGTH_SHORT).show();
+            } else if (msg.what == 101) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, posts.get(item_position).getContent());
+                sendIntent.setType("text/plain");
+                Intent shareIntent = Intent.createChooser(sendIntent, null);
+                startActivity(shareIntent);
             }
         }
     }

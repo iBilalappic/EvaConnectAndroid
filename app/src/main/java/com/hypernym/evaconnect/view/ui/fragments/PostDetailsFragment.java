@@ -615,6 +615,13 @@ public class PostDetailsFragment extends BaseFragment implements Validator.Valid
                 clip = ClipData.newPlainText("label", "https://www.evaintmedia.com/" + post.getType() + "/" + post.getId());
                 clipboard.setPrimaryClip(clip);
                 Toast.makeText(requireContext(), "link copied", Toast.LENGTH_SHORT).show();
+            }else if (msg.what == 101) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, post.getContent());
+                sendIntent.setType("text/plain");
+                Intent shareIntent = Intent.createChooser(sendIntent, null);
+                startActivity(shareIntent);
             }
         }
     }

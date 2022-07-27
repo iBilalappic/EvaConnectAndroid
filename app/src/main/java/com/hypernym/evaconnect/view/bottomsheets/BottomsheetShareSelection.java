@@ -1,6 +1,7 @@
 package com.hypernym.evaconnect.view.bottomsheets;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -63,7 +64,7 @@ public class BottomsheetShareSelection extends BottomSheetDialogFragment impleme
                 break;
             case R.id.share_with_other:
                 handleDismissal.sendEmptyMessage(101);
-                dismiss();
+
                 break;
             case R.id.share_with_whatsapp:
                 handleDismissal.sendEmptyMessage(102);

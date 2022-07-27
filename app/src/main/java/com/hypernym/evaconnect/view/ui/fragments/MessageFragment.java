@@ -158,115 +158,121 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
             user.child(LoginUtils.getLoggedinUser().getId().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.getValue() != null && dataSnapshot.hasChild("chats")) {
-                        for (DataSnapshot childSnapshot: dataSnapshot.child("chats").getChildren()) {
-                            NetworkConnection networkConnection=new NetworkConnection();
-                            String key=childSnapshot.getKey();
-                            DatabaseReference chats = databaseReference.child(AppConstants.FIREASE_CHAT_ENDPOINT);
-                            chats.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    if (dataSnapshot.getValue() != null) {
-                                        String otherMember=null;
-                                        DataSnapshot members=dataSnapshot.child("members");
-                                        for (DataSnapshot member : members.getChildren()) {
-                                            if(!member.getKey().equalsIgnoreCase(LoginUtils.getLoggedinUser().getId().toString())) {
-                                                otherMember=member.getKey();
-                                                networkConnection.setName(member.getValue().toString());
-                                            }
-                                        }
-                                        DataSnapshot lastMessage = dataSnapshot.child("lastMessage");
-                                        if (lastMessage.child("images").getValue() != null) {
-                                            networkConnection.setMessage("image");
-                                        }
-                                        else
-                                        {
-                                            networkConnection.setMessage(lastMessage.child("message").getValue().toString());
-                                        }
-                                        networkConnection.setSenderId(Integer.parseInt(lastMessage.child("senderID").getValue().toString()));
-                                        networkConnection.setCreatedDatetime(lastMessage.child("timestamp").getValue().toString());
-                                        networkConnection.setChatID(key);
-                                        networkConnection.setReceiverId(Integer.parseInt(otherMember));
-                                        DatabaseReference user = databaseReference.child(AppConstants.FIREASE_USER_ENDPOINT);
-                                        user.child(otherMember).addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                                if (dataSnapshot.getValue() != null) {
 
-                                                    networkConnection.setUserImage(dataSnapshot.child("imageName").getValue().toString());
-                                                    user.child(LoginUtils.getLoggedinUser().getId().toString()).child("chats").addListenerForSingleValueEvent(new ValueEventListener() {
-                                                        @Override
-                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                            if (dataSnapshot.getValue() != null) {
-                                                                if(dataSnapshot.child(key).hasChild("unread"))
-                                                                {
-                                                                    networkConnection.setUnread((Boolean)dataSnapshot.child(key).child("unread").getValue());
-
-                                                                }
-                                                                if(dataSnapshot.child(key).hasChild("unread_count"))
-                                                                {
-                                                                    networkConnection.setMessageCount(Integer.parseInt(dataSnapshot.child(key).child("unread_count").getValue().toString()));
-
-                                                                }
-                                                                messageAdapter.notifyDataSetChanged();
-                                                            }
-
-                                                        }
-
-                                                        @Override
-                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                                        }
-                                                    });
-
-                                                    if (networkConnection.getChatID() != null) {
-                                                        networkConnectionList.add(networkConnection);
-                                                        //   setupRecyclerview();
-                                                        Collections.sort(networkConnectionList, new DateTimeComparator());
-                                                        Collections.reverse(networkConnectionList);
-                                                        messageAdapter.notifyDataSetChanged();
-                                                        swipeRefresh.setRefreshing(false);
-                                                        if(networkConnectionList.size()==0)
-                                                        {
-                                                            no_messages.setVisibility(View.VISIBLE);
-                                                        }
-                                                        else
-                                                        {
-                                                            no_messages.setVisibility(View.GONE);
-                                                        }
-
-                                                    }
-
+                    try {
+                        if (dataSnapshot.getValue() != null && dataSnapshot.hasChild("chats")) {
+                            for (DataSnapshot childSnapshot : dataSnapshot.child("chats").getChildren()) {
+                                NetworkConnection networkConnection = new NetworkConnection();
+                                String key = childSnapshot.getKey();
+                                DatabaseReference chats = databaseReference.child(AppConstants.FIREASE_CHAT_ENDPOINT);
+                                chats.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.getValue() != null) {
+                                            String otherMember = null;
+                                            DataSnapshot members = dataSnapshot.child("members");
+                                            for (DataSnapshot member : members.getChildren()) {
+                                                if (!member.getKey().equalsIgnoreCase(LoginUtils.getLoggedinUser().getId().toString())) {
+                                                    otherMember = member.getKey();
+                                                    networkConnection.setName(member.getValue().toString());
                                                 }
                                             }
 
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            DataSnapshot lastMessage = dataSnapshot.child("lastMessage");
+                                            if (lastMessage.child("images").getValue() != null) {
+                                                networkConnection.setMessage("image");
+                                            } else {
+                                                networkConnection.setMessage(lastMessage.child("message").getValue().toString());
+                                            }
+                                            networkConnection.setSenderId(Integer.parseInt(lastMessage.child("senderID").getValue().toString()));
+                                            networkConnection.setCreatedDatetime(lastMessage.child("timestamp").getValue().toString());
+                                            networkConnection.setChatID(key);
+
+
+                                            int[] ids = new int[0];
+                                            if (otherMember != null) {
+                                                networkConnection.setReceiverId(Integer.parseInt(otherMember));
+                                                DatabaseReference user = databaseReference.child(AppConstants.FIREASE_USER_ENDPOINT);
+                                                user.child(otherMember).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                                        if (dataSnapshot.getValue() != null) {
+
+                                                            networkConnection.setUserImage(dataSnapshot.child("imageName").getValue().toString());
+                                                            user.child(LoginUtils.getLoggedinUser().getId().toString()).child("chats").addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                @Override
+                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                    if (dataSnapshot.getValue() != null) {
+                                                                        if (dataSnapshot.child(key).hasChild("unread")) {
+                                                                            networkConnection.setUnread((Boolean) dataSnapshot.child(key).child("unread").getValue());
+
+                                                                        }
+                                                                        if (dataSnapshot.child(key).hasChild("unread_count")) {
+                                                                            networkConnection.setMessageCount(Integer.parseInt(dataSnapshot.child(key).child("unread_count").getValue().toString()));
+
+                                                                        }
+                                                                        messageAdapter.notifyDataSetChanged();
+                                                                    }
+
+                                                                }
+
+                                                                @Override
+                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                }
+                                                            });
+
+                                                            if (networkConnection.getChatID() != null) {
+                                                                networkConnectionList.add(networkConnection);
+                                                                //   setupRecyclerview();
+                                                                Collections.sort(networkConnectionList, new DateTimeComparator());
+                                                                Collections.reverse(networkConnectionList);
+                                                                messageAdapter.notifyDataSetChanged();
+                                                                swipeRefresh.setRefreshing(false);
+                                                                if (networkConnectionList.size() == 0) {
+                                                                    no_messages.setVisibility(View.VISIBLE);
+                                                                } else {
+                                                                    no_messages.setVisibility(View.GONE);
+                                                                }
+
+                                                            }
+
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
 
                                             }
-                                        });
 
-                                        hideDialog();
 
-                                    } else {
-                                        swipeRefresh.setRefreshing(false);
+                                            hideDialog();
+
+                                        } else {
+                                            swipeRefresh.setRefreshing(false);
+                                        }
+
                                     }
 
-                                }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    }
+                                });
+                            }
 
-                                }
-                            });
+
+                        } else {
+                            hideDialog();
+                            swipeRefresh.setRefreshing(false);
                         }
 
-
-                    }
-                    else
-                    {
-                        hideDialog();
-                        swipeRefresh.setRefreshing(false);
+                    } catch (Exception e) {
+                        e.getMessage();
                     }
                 }
 

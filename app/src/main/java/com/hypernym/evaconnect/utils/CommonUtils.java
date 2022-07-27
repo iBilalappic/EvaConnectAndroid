@@ -19,6 +19,7 @@ package com.hypernym.evaconnect.utils;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -80,4 +81,6 @@ public final class CommonUtils {
         progressDialog.setCanceledOnTouchOutside(false);
         return progressDialog;
     }
+
+
 }

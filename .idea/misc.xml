@@ -3,31 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/hypernym/app/src/main/res/layout/activity_create_account_1.xml" value="0.18" />
-        <entry key="..\:/hypernym/app/src/main/res/layout/activity_create_account_2.xml" value="0.1" />
-        <entry key="..\:/hypernym/app/src/main/res/layout/activity_create_account_3.xml" value="0.25" />
-        <entry key="..\:/hypernym/app/src/main/res/layout/activity_home.xml" value="0.18854166666666666" />
-        <entry key="..\:/hypernym/app/src/main/res/layout/event_type.xml" value="0.30625" />
-        <entry key="..\:/hypernym/app/src/main/res/layout/fragment_connections.xml" value="0.17074275362318841" />
-        <entry key="..\:/hypernym/app/src/main/res/layout/fragment_connections_tab.xml" value="0.17074275362318841" />
-        <entry key="..\:/hypernym/app/src/main/res/layout/fragment_event.xml" value="0.14322916666666666" />
-        <entry key="..\:/hypernym/app/src/main/res/layout/fragment_global_connected.xml" value="0.18854166666666666" />
-        <entry key="..\:/hypernym/app/src/main/res/layout/fragment_global_search_post.xml" value="0.18385416666666668" />
-        <entry key="..\:/hypernym/app/src/main/res/layout/fragment_home.xml" value="0.18854166666666666" />
-        <entry key="..\:/hypernym/app/src/main/res/layout/fragment_language.xml" value="0.15081521739130435" />
-        <entry key="..\:/hypernym/app/src/main/res/layout/fragment_post_details.xml" value="0.33" />
-        <entry key="..\:/hypernym/app/src/main/res/layout/fragment_search_result.xml" value="0.18385416666666668" />
-        <entry key="..\:/hypernym/app/src/main/res/layout/item_comment.xml" value="0.15760869565217392" />
-        <entry key="..\:/hypernym/app/src/main/res/layout/item_connection.xml" value="0.15081521739130435" />
-        <entry key="..\:/hypernym/app/src/main/res/layout/item_link.xml" value="0.1634963768115942" />
-        <entry key="..\:/hypernym/app/src/main/res/layout/item_loading.xml" value="0.1634963768115942" />
-        <entry key="..\:/hypernym/app/src/main/res/layout/item_post.xml" value="0.33" />
-        <entry key="..\:/hypernym/app/src/main/res/layout/item_video.xml" value="0.1634963768115942" />
-        <entry key="..\:/hypernym/app/src/main/res/layout/job_type.xml" value="0.15572916666666667" />
-        <entry key="..\:/hypernym/app/src/main/res/layout/text_type.xml" value="0.67" />
-        <entry key="..\:/hypernym/app/src/main/res/layout/toolbar.xml" value="0.18854166666666666" />
+        <entry key="..\:/Users/AHSAN/AndroidStudioProjects/eva-android/app/src/main/res/layout/event_type.xml" value="0.15677083333333333" />
+        <entry key="..\:/Users/AHSAN/AndroidStudioProjects/eva-android/app/src/main/res/layout/fragment_connections.xml" value="0.15677083333333333" />
+        <entry key="..\:/Users/AHSAN/AndroidStudioProjects/eva-android/app/src/main/res/layout/fragment_connections_tab.xml" value="0.2911025145067698" />
+        <entry key="..\:/Users/AHSAN/AndroidStudioProjects/eva-android/app/src/main/res/layout/fragment_new_post.xml" value="0.3737166324435318" />
+        <entry key="..\:/Users/AHSAN/AndroidStudioProjects/eva-android/app/src/main/res/layout/fragment_person_detail.xml" value="0.4466666666666667" />
+        <entry key="..\:/Users/AHSAN/AndroidStudioProjects/eva-android/app/src/main/res/layout/fragment_person_profile.xml" value="0.15677083333333333" />
+        <entry key="..\:/Users/AHSAN/AndroidStudioProjects/eva-android/app/src/main/res/layout/fragment_post.xml" value="0.1" />
+        <entry key="..\:/Users/AHSAN/AndroidStudioProjects/eva-android/app/src/main/res/layout/item_connection.xml" value="0.15677083333333333" />
+        <entry key="..\:/Users/AHSAN/AndroidStudioProjects/eva-android/app/src/main/res/layout/item_post.xml" value="0.15677083333333333" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
 </project>

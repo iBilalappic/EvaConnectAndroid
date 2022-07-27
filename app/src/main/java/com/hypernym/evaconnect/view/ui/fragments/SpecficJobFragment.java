@@ -386,19 +386,26 @@ public class SpecficJobFragment extends BaseFragment implements MyLikeAdapter.On
                 Bundle bundle = new Bundle();
                 {
                     bundle.putInt(Constants.DATA, specficJobAd.getId());
-                    bundle.putString(Constants.TYPE,  specficJobAd.getType());
+                    bundle.putString(Constants.TYPE, specficJobAd.getType());
                 }
                 shareConnectionFragment.setArguments(bundle);
                 if (true) {
                     transaction.addToBackStack(null);
                 }
                 transaction.commit();
-            }else if(msg.what==103){
+            } else if (msg.what == 103) {
                 ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(CLIPBOARD_SERVICE);
                 ClipData clip;
                 clip = ClipData.newPlainText("label", "https://www.evaintmedia.com/" + specficJobAd.getType() + "/" + specficJobAd.getId());
                 clipboard.setPrimaryClip(clip);
                 Toast.makeText(requireContext(), "link copied", Toast.LENGTH_SHORT).show();
+            } else if (msg.what == 101) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, specficJobAd.getContent());
+                sendIntent.setType("text/plain");
+                Intent shareIntent = Intent.createChooser(sendIntent, null);
+                startActivity(shareIntent);
             }
         }
     }
