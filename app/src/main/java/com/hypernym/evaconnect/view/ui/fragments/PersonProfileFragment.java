@@ -38,6 +38,7 @@ import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.PostAdapter;
+import com.hypernym.evaconnect.view.bottomsheets.BottomsheetShareSelection;
 import com.hypernym.evaconnect.view.dialogs.SimpleDialog;
 import com.hypernym.evaconnect.viewmodel.ConnectionViewModel;
 import com.hypernym.evaconnect.viewmodel.PostViewModel;
@@ -971,6 +972,11 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
 
     @Override
     public void onShareClick(View view, int position) {
+
+        item_position = position;
+        BottomsheetShareSelection bottomSheetPictureSelection = new BottomsheetShareSelection(new YourDialogFragmentDismissHandler());
+        bottomSheetPictureSelection.show(getActivity().getSupportFragmentManager(), bottomSheetPictureSelection.getTag());
+
 
     }
 
