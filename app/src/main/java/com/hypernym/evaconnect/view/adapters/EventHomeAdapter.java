@@ -13,6 +13,7 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -129,6 +130,10 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
         @BindView(R.id.tv_created_time)
         TextView tv_created_time;
 
+        @BindView(R.id.like_pb)
+        ProgressBar like_pb;
+
+
 
         public EventTypeViewHolder(View itemView) {
             super(itemView);
@@ -136,7 +141,7 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
             tv_interested.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    Log.d("allevent", "onSingleClick: from adapter");
+
                     mClickListener.onEventItemClick(v, getAdapterPosition());
                 }
             });
@@ -162,6 +167,9 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
             tv_attending.setOnClickListener(new OnOneOffClickListener() {
                 @Override
                 public void onSingleClick(View v) {
+                    posts.get(getAdapterPosition()).setLikeLoading(true);
+                   notifyItemChanged(getAdapterPosition());
+
                     mClickListener.onEventItemClick(v, getAdapterPosition());
                 }
             });
@@ -281,16 +289,28 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
             return null;
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "ResourceType"})
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+        Log.d("api", "adapter is called: ");
         Post object = posts.get(position);
         if (object != null && object.getType() != null) {
             switch (object.getPost_type()) {
 
                 case AppConstants.EVENT_TYPE:
+                    Log.d("api", "adapter is inside eventType: ");
                     if (String.valueOf(posts.get(position).getComment_count()).equals("0")) {
                         ((EventHomeAdapter.EventTypeViewHolder) holder).tv_viewcomments.setVisibility(View.GONE);
+                    }
+                    if(posts.get(position).isLikeLoading()){
+                        Log.d("api", "value: "+posts.get(position).isLikeLoading());
+                        ((EventTypeViewHolder) holder).like_pb.setVisibility(View.VISIBLE);
+                        ((EventTypeViewHolder) holder).tv_attending.setVisibility(View.GONE);
+
+                    }
+                    else{
+                        ((EventTypeViewHolder) holder).like_pb.setVisibility(View.GONE);
+                        ((EventTypeViewHolder) holder).tv_attending.setVisibility(View.VISIBLE);
                     }
                     ((EventHomeAdapter.EventTypeViewHolder) holder).tv_comcount.setText(String.valueOf(posts.get(position).getComment_count()));
                     ((EventHomeAdapter.EventTypeViewHolder) holder).tv_likecount.setText(String.valueOf(posts.get(position).getLike_count()));
@@ -307,6 +327,8 @@ public class EventHomeAdapter extends RecyclerView.Adapter {
                             Drawable[] compoundDrawables = ((EventTypeViewHolder) holder).tv_attending.getCompoundDrawables();
                             Drawable leftCompoundDrawable = compoundDrawables[0];
                             if (leftCompoundDrawable == null) {
+
+
                                 ((EventTypeViewHolder) holder).tv_attending.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
                             }
                         } else {
