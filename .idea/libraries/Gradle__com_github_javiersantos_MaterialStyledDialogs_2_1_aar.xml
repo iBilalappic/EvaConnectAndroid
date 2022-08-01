@@ -10,13 +10,13 @@
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/99434d1315bd9f20717af41ade7b57d2/transformed/jetified-MaterialStyledDialogs-2.1/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/99434d1315bd9f20717af41ade7b57d2/transformed/jetified-MaterialStyledDialogs-2.1/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/99434d1315bd9f20717af41ade7b57d2/transformed/jetified-MaterialStyledDialogs-2.1/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/aa2fa31c50354ab9faf9ae7366bc70c6/transformed/jetified-MaterialStyledDialogs-2.1/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/aa2fa31c50354ab9faf9ae7366bc70c6/transformed/jetified-MaterialStyledDialogs-2.1/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/aa2fa31c50354ab9faf9ae7366bc70c6/transformed/jetified-MaterialStyledDialogs-2.1/AndroidManifest.xml" />
+      <root url="jar://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/transforms-3/a365b8f15aef3c7da82263e9c5f48a10/transformed/jetified-MaterialStyledDialogs-2.1/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/transforms-3/a365b8f15aef3c7da82263e9c5f48a10/transformed/jetified-MaterialStyledDialogs-2.1/res" />
+      <root url="file://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/transforms-3/a365b8f15aef3c7da82263e9c5f48a10/transformed/jetified-MaterialStyledDialogs-2.1/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.javiersantos/MaterialStyledDialogs/2.1/e72a7d3e1232b671938009639b29c4cab1607b47/MaterialStyledDialogs-2.1-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/modules-2/files-2.1/com.github.javiersantos/MaterialStyledDialogs/2.1/e72a7d3e1232b671938009639b29c4cab1607b47/MaterialStyledDialogs-2.1-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

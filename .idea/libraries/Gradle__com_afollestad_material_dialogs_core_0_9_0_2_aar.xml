@@ -10,15 +10,15 @@
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/889d9266b36594930fa5ef83ee09005a/transformed/jetified-core-0.9.0.2/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/889d9266b36594930fa5ef83ee09005a/transformed/jetified-core-0.9.0.2/AndroidManifest.xml" />
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/889d9266b36594930fa5ef83ee09005a/transformed/jetified-core-0.9.0.2/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/77e01700bf4655ccf0096218990c62df/transformed/jetified-core-0.9.0.2/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/77e01700bf4655ccf0096218990c62df/transformed/jetified-core-0.9.0.2/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/77e01700bf4655ccf0096218990c62df/transformed/jetified-core-0.9.0.2/jars/classes.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/transforms-3/2a23ceae4f6c5a8037e7a08ac08eb354/transformed/jetified-core-0.9.0.2/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/transforms-3/2a23ceae4f6c5a8037e7a08ac08eb354/transformed/jetified-core-0.9.0.2/res" />
+      <root url="file://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/transforms-3/2a23ceae4f6c5a8037e7a08ac08eb354/transformed/jetified-core-0.9.0.2/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.afollestad.material-dialogs/core/0.9.0.2/fee70eb46ba44bee6085eb7cd2f13df9d89e90e1/core-0.9.0.2-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/modules-2/files-2.1/com.afollestad.material-dialogs/core/0.9.0.2/fee70eb46ba44bee6085eb7cd2f13df9d89e90e1/core-0.9.0.2-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.afollestad.material-dialogs/core/0.9.0.2/977b96d0b7df79d130d7e003112e357ae980ebf0/core-0.9.0.2-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/modules-2/files-2.1/com.afollestad.material-dialogs/core/0.9.0.2/977b96d0b7df79d130d7e003112e357ae980ebf0/core-0.9.0.2-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

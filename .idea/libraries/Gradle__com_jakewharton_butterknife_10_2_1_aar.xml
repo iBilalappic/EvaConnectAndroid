@@ -3,15 +3,16 @@
     <CLASSES>
       <root url="file://$USER_HOME$/.jdks/caches/transforms-3/bb2652ea3311de0ddb2a2e8f1a367143/transformed/jetified-butterknife-10.2.1/res" />
       <root url="file://$USER_HOME$/.jdks/caches/transforms-3/c84ccf824432143909e27ec075acb307/transformed/jetified-butterknife-10.2.1/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/bb2652ea3311de0ddb2a2e8f1a367143/transformed/jetified-butterknife-10.2.1/AndroidManifest.xml" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/bb2652ea3311de0ddb2a2e8f1a367143/transformed/jetified-butterknife-10.2.1/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/bb2652ea3311de0ddb2a2e8f1a367143/transformed/jetified-butterknife-10.2.1/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/transforms-3/bb2652ea3311de0ddb2a2e8f1a367143/transformed/jetified-butterknife-10.2.1/AndroidManifest.xml" />
+      <root url="file://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/transforms-3/bb2652ea3311de0ddb2a2e8f1a367143/transformed/jetified-butterknife-10.2.1/res" />
+      <root url="jar://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/transforms-3/bb2652ea3311de0ddb2a2e8f1a367143/transformed/jetified-butterknife-10.2.1/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jakewharton/butterknife/10.2.1/278a88aebaaffa10d31b6ab1d3bab197ef6f7c87/butterknife-10.2.1-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/modules-2/files-2.1/com.jakewharton/butterknife/10.2.1/278a88aebaaffa10d31b6ab1d3bab197ef6f7c87/butterknife-10.2.1-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jakewharton/butterknife/10.2.1/d34b448c9d7e5c2e483c062340e58fdc3cbad98f/butterknife-10.2.1-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/modules-2/files-2.1/com.jakewharton/butterknife/10.2.1/d34b448c9d7e5c2e483c062340e58fdc3cbad98f/butterknife-10.2.1-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
