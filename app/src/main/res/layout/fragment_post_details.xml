@@ -513,6 +513,8 @@
                                 android:fontFamily="@font/nunitosansregular"
                                 android:gravity="center_vertical"
                                 android:text="Comment"
+                                android:maxLines="1"
+                                android:maxEms="10"
                                 android:textColor="@color/gray_1"
                                 android:textSize="12sp" />
 

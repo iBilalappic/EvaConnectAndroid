@@ -360,6 +360,8 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/nunitosansregular"
                             android:text="Comment"
+                            android:maxEms="10"
+                            android:maxLines="1"
                             android:textColor="@color/gray_1" />
 
 

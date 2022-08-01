@@ -10,7 +10,7 @@ import com.hypernym.evaconnect.models.AccountCheck;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.GetBlockedData;
 import com.hypernym.evaconnect.models.IsBlocked;
-import com.hypernym.evaconnect.models.NotificationSettingsRootModel;
+import com.hypernym.evaconnect.models.NotificationsSettingsModelNew;
 import com.hypernym.evaconnect.models.Stats;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.IUserRespository;
@@ -40,10 +40,11 @@ public class UserRepository implements IUserRespository {
     private MutableLiveData<BaseModel<List<GetBlockedData>>> getBlockedUsers = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> resetPasswordMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> deleteUserMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<BaseModel<List<Object>>> userNotificationSettings = new MutableLiveData<>();
+    private MutableLiveData<NotificationsSettingsModelNew> userNotificationSettings = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> updateUserLocationMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> verifyEmailMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<IsBlocked>>> blockedUserLiveData = new MutableLiveData<>();
+    private MutableLiveData<BaseModel<List<Object>>> notificationsLiveData = new MutableLiveData<>();
 
 
     @Override
@@ -522,17 +523,17 @@ public class UserRepository implements IUserRespository {
     }
 
     @Override
-    public LiveData<BaseModel<List<Object>>> hGetNotificationSettings(int user_id) {
+    public LiveData<NotificationsSettingsModelNew> hGetNotificationSettings(int user_id) {
 
-        RestClient.get().appApi().hGetNotificationSettings(user_id).enqueue(new Callback<BaseModel<List<Object>>>() {
+        RestClient.get().appApi().hGetNotificationSettings(user_id).enqueue(new Callback<NotificationsSettingsModelNew>() {
             @Override
-            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+            public void onResponse(Call<NotificationsSettingsModelNew> call, Response<NotificationsSettingsModelNew> response) {
 
                 userNotificationSettings.setValue(response.body());
             }
 
             @Override
-            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+            public void onFailure(Call<NotificationsSettingsModelNew> call, Throwable t) {
                 userNotificationSettings.setValue(null);
 
             }
@@ -542,22 +543,26 @@ public class UserRepository implements IUserRespository {
     }
 
     @Override
-    public LiveData<BaseModel<List<Object>>> hPostUserSettingData(NotificationSettingsRootModel notificationSettingsModel) {
+    public LiveData<BaseModel<List<Object>>> hPostUserSettingData(NotificationsSettingsModelNew notificationSettingsModel) {
         RestClient.get().appApi().hPostSettingsDataToSerever(notificationSettingsModel).enqueue(new Callback<BaseModel<List<Object>>>() {
 
             @Override
             public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
 
+                notificationsLiveData.postValue(response.body());
 
             }
 
             @Override
             public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
 
+                notificationsLiveData.postValue(null);
+
             }
+
         });
 
-        return null;
+        return notificationsLiveData;
     }
 
     @Override

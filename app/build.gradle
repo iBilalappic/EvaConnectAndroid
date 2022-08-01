@@ -6,6 +6,9 @@ buildscript {
         classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.12.8, 0.99.99]'
     }
 }
+
+
+
 apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
 repositories {
     maven { url 'https://maven.google.com' }
@@ -179,3 +182,4 @@ dependencies {
 }
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
+apply plugin: 'org.jetbrains.kotlin.android'

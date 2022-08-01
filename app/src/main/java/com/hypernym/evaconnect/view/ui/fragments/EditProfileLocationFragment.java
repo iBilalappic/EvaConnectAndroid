@@ -38,7 +38,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.gms.location.LocationCallback;
@@ -50,7 +49,6 @@ import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.model.LatLng;
 import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
-import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
 import com.hypernym.evaconnect.utils.Constants;
@@ -235,15 +233,7 @@ public class EditProfileLocationFragment extends BaseFragment implements Validat
             Log.v("USER", userData.toString());
         }
 
-        if (userData.getType().equals("user")) {
-            layout_date.setVisibility(View.GONE);
-            tv_dob.setVisibility(View.GONE);
-            title.setText("Date of Birth / Location");
-        } else {
-            layout_date.setVisibility(View.GONE);
-            tv_dob.setVisibility(View.GONE);
-            title.setText("Location");
-        }
+        hUserType();
 
         validator = new Validator(this);
         validator.setValidationListener(this);
@@ -378,6 +368,18 @@ public class EditProfileLocationFragment extends BaseFragment implements Validat
                     .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                     myCalendar.get(Calendar.DAY_OF_MONTH)).show();
         });
+    }
+
+    private void hUserType() {
+        if (userData.getType().equals("user")) {
+            layout_date.setVisibility(View.GONE);
+            tv_dob.setVisibility(View.GONE);
+            title.setText(R.string.edit_location);
+        } else {
+            layout_date.setVisibility(View.GONE);
+            tv_dob.setVisibility(View.GONE);
+            title.setText(R.string.edit_location);
+        }
     }
 
     private void update() {

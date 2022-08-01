@@ -204,11 +204,11 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
         if (user.getType().equalsIgnoreCase("user")) {
             layout_date.setVisibility(View.GONE);
             tv_dob.setVisibility(View.GONE);
-            title.setText("Date of Birth / Location");
+            title.setText(R.string.edit_location);
         } else {
             layout_date.setVisibility(View.GONE);
             tv_dob.setVisibility(View.GONE);
-            title.setText("Location");
+            title.setText(R.string.edit_location);
         }
 
         validator = new Validator(this);

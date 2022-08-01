@@ -545,6 +545,8 @@
                         android:fontFamily="@font/nunitosansregular"
                         android:gravity="center_vertical"
                         android:text="Comment"
+                        android:maxEms="10"
+                        android:maxLines="1"
                         android:textColor="@color/gray_1"
                         android:textSize="12sp" />
 

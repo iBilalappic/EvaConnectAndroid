@@ -51,7 +51,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 public class BaseFragment extends Fragment {
     private CustomProgressBar customProgressBar = new CustomProgressBar();
@@ -167,6 +166,9 @@ public class BaseFragment extends Fragment {
                 simpleDialog.dismiss();
             }
         });
+
+
+
         simpleDialog.show();
     }
 

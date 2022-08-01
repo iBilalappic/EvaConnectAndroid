@@ -16,14 +16,11 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.hypernym.evaconnect.R;
-import com.hypernym.evaconnect.constants.AppConstants;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.BaseModel;
-import com.hypernym.evaconnect.models.NotificationSettingsModel;
-import com.hypernym.evaconnect.models.NotificationSettingsRootModel;
+import com.hypernym.evaconnect.models.NotificationsSettingsModelNew;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
-import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import com.mobsandgeeks.saripaar.Validator;
@@ -41,55 +38,55 @@ public class PushNotificationsFragment extends BaseFragment implements View.OnCl
 
 
     @BindView(R.id.switch_push)
-    Switch switch_push;
+    Switch switch_message;
 
 
     @BindView(R.id.switch_push1)
-    Switch switch_push1;
+    Switch switch_post_comment;
 
 
     @BindView(R.id.switch_push2)
-    Switch switch_push2;
+    Switch switch_post_like;
 
 
     @BindView(R.id.switch_push3)
-    Switch switch_push3;
+    Switch switch_connection_request;
 
 
     @BindView(R.id.switch_push4)
-    Switch switch_push4;
+    Switch switch_new_connections;
 
 
     @BindView(R.id.switch_push5)
-    Switch switch_push5;
+    Switch switch_profile_view;
 
 
     @BindView(R.id.switch_push6)
-    Switch switch_push6;
+    Switch switch_suggested_connections;
 
 
     @BindView(R.id.switch_push7)
-    Switch switch_push7;
+    Switch switch_news_events;
 
 
     @BindView(R.id.switch_push8)
-    Switch switch_push8;
+    Switch switch_job_post;
 
 
     @BindView(R.id.switch_push9)
-    Switch btn_submit9;
+    Switch btn_news_update;
 
 
     @BindView(R.id.switch_push10)
-    Switch btn_submit10;
+    Switch btn_company_post_update;
 
 
     @BindView(R.id.switch_push11)
-    Switch btn_submit11;
+    Switch btn_calender_reminder;
 
 
     @BindView(R.id.switch_push12)
-    Switch btn_submit12;
+    Switch btn_meeting_reminder;
 
 
     @BindView(R.id.btn_submit)
@@ -100,6 +97,8 @@ public class PushNotificationsFragment extends BaseFragment implements View.OnCl
 
 
     User user = new User();
+    private NotificationsSettingsModelNew notificationsSettingsModelNew;
+
     private Validator validator;
     private UserViewModel userViewModel;
 
@@ -120,11 +119,10 @@ public class PushNotificationsFragment extends BaseFragment implements View.OnCl
         View view = inflater.inflate(R.layout.fragment_push_notification, container, false);
         ButterKnife.bind(this, view);
         img_backarrow.setOnClickListener(this);
-        switch_push.setOnClickListener(this);
+//        switch_push.setOnClickListener(this);
         userViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(UserViewModel.class);
 
         hInitView();
-
 
         hInitClickListener();
         user = LoginUtils.getUser();
@@ -137,15 +135,40 @@ public class PushNotificationsFragment extends BaseFragment implements View.OnCl
 
     private void hCallNotificationAPI() {
 
-        userViewModel.hGetNotificationSettings(LoginUtils.getUser().getId()).observe(requireActivity(), new Observer<BaseModel<List<Object>>>() {
-            @Override
-            public void onChanged(BaseModel<List<Object>> listBaseModel) {
-                if (listBaseModel.getData() != null) {
-                    Log.d("notification_check", "GET Request");
+        userViewModel.hGetNotificationSettings(LoginUtils.getUser().getId()).observe(requireActivity(), listBaseModel -> {
+            if (listBaseModel.getData() != null) {
+                Log.d("notification_check", "GET Request");
 
-                }
+                notificationsSettingsModelNew = listBaseModel;
+
+                hPrePopulateNotifications(listBaseModel);
+
             }
         });
+    }
+
+    private void hPrePopulateNotifications(NotificationsSettingsModelNew hNotificationSettingModel) {
+
+
+//        notificationsSettingsModelNew = new NotificationsSettingsModelNew(hNotificationSettingModel);
+        switch_message.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getMessage() != 0);
+        switch_connection_request.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getConnectionRequests() != 0);
+        switch_suggested_connections.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getSuggestedConnections() != 0);
+
+
+
+      /*  switch_suggested_connections.setChecked(hNotificationsSetting.getSuggestedConnections() != 0);
+        switch_suggested_connections.setChecked(hNotificationsSetting.getSuggestedConnections() != 0);
+        switch_suggested_connections.setChecked(hNotificationsSetting.getSuggestedConnections() != 0);
+        switch_suggested_connections.setChecked(hNotificationsSetting.getSuggestedConnections() != 0);
+        switch_suggested_connections.setChecked(hNotificationsSetting.getSuggestedConnections() != 0);
+        switch_suggested_connections.setChecked(hNotificationsSetting.getSuggestedConnections() != 0);
+        switch_suggested_connections.setChecked(hNotificationsSetting.getSuggestedConnections() != 0);
+        switch_suggested_connections.setChecked(hNotificationsSetting.getSuggestedConnections() != 0);
+        switch_suggested_connections.setChecked(hNotificationsSetting.getSuggestedConnections() != 0);
+        switch_suggested_connections.setChecked(hNotificationsSetting.getSuggestedConnections() != 0);*/
+
+
     }
 
     private void hInitClickListener() {
@@ -156,13 +179,12 @@ public class PushNotificationsFragment extends BaseFragment implements View.OnCl
                 btn_submit.setOnClickListener(new OnOneOffClickListener() {
                     @Override
                     public void onSingleClick(View v) {
-                        NotificationSettingsModel notificationSettingsModel = new NotificationSettingsModel();
+                        NotificationsSettingsModelNew notificationSettingsModel = new NotificationsSettingsModelNew();
 
                         hPopulateSettingModel(notificationSettingsModel);
 
-                        NotificationSettingsRootModel notificationSettingsModelRoot = new NotificationSettingsRootModel(LoginUtils.getUser().getStatus(), LoginUtils.getLoggedinUser().getId(), DateUtils.GetCurrentdatetime(), LoginUtils.getLoggedinUser().getUser_id(), AppConstants.OS, notificationSettingsModel);
 
-                        hPostSettingData(notificationSettingsModelRoot);
+                        hPostSettingData(notificationSettingsModel);
 
                     }
                 });
@@ -172,15 +194,35 @@ public class PushNotificationsFragment extends BaseFragment implements View.OnCl
 
     }
 
-    private void hPostSettingData(NotificationSettingsRootModel notificationSettingsModel) {
+    private void hPostSettingData(NotificationsSettingsModelNew notificationSettingsModel) {
+        showDialog();
 
-        userViewModel.hPostUserSettingsData(notificationSettingsModel);
+        userViewModel.hPostUserSettingsData(notificationSettingsModel).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<Object>>>() {
+            @Override
+            public void onChanged(BaseModel<List<Object>> listBaseModel) {
+
+                if (listBaseModel != null && !listBaseModel.isError()) {
+
+                    hideDialog();
+
+                    onBackPressed();
+
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+
+                }
+            }
+        });
+
+        hideDialog();
+
 
     }
 
-    private void hPopulateSettingModel(NotificationSettingsModel notificationSettingsModel) {
+    private void hPopulateSettingModel(NotificationsSettingsModelNew notificationSettingsModel) {
 
-        if (switch_push.isSelected()) {
+
+      /*  if (switch_push.isSelected()) {
             notificationSettingsModel.setNew_events(1);
         } else {
             notificationSettingsModel.setNew_events(0);
@@ -222,7 +264,7 @@ public class PushNotificationsFragment extends BaseFragment implements View.OnCl
         }
 
 
-        if (switch_push6.isSelected()) {
+        if (switch_suggection_connections.isSelected()) {
             notificationSettingsModel.setPost_comments(1);
         } else {
             notificationSettingsModel.setPost_comments(0);
@@ -258,7 +300,7 @@ public class PushNotificationsFragment extends BaseFragment implements View.OnCl
             notificationSettingsModel.setConnection_requests(1);
         } else {
             notificationSettingsModel.setConnection_requests(0);
-        }
+        }*/
 
     }
 
@@ -279,9 +321,9 @@ public class PushNotificationsFragment extends BaseFragment implements View.OnCl
                 //  tv_name.setText(listBaseModel.getData().get(0).getFirst_name());
                 notification_check = listBaseModel.getData().get(0).getIs_notifications();
                 if (notification_check == 1) {
-                    switch_push.setChecked(true);
+                    switch_message.setChecked(true);
                 } else {
-                    switch_push.setChecked(false);
+                    switch_message.setChecked(false);
                 }
 
                 LoginUtils.saveUser(listBaseModel.getData().get(0));

@@ -435,6 +435,8 @@
                                 android:layout_width="0dp"
                                 android:layout_height="30dp"
                                 android:layout_weight="1"
+                                android:maxLines="1"
+                                android:maxEms="10"
                                 android:fontFamily="@font/nunitosansregular"
                                 android:gravity="center_vertical"
                                 android:text="Comment"

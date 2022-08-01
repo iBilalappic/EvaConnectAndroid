@@ -24,8 +24,8 @@ import com.hypernym.evaconnect.models.MyLikesModel;
 import com.hypernym.evaconnect.models.NetworkConnection;
 import com.hypernym.evaconnect.models.NewSources;
 import com.hypernym.evaconnect.models.NotesData;
-import com.hypernym.evaconnect.models.NotificationSettingsRootModel;
 import com.hypernym.evaconnect.models.Notification_onesignal;
+import com.hypernym.evaconnect.models.NotificationsSettingsModelNew;
 import com.hypernym.evaconnect.models.Post;
 import com.hypernym.evaconnect.models.SaveEventData;
 import com.hypernym.evaconnect.models.SavedJobData;
@@ -540,11 +540,11 @@ public interface AppApi {
 
 
     @GET(APIConstants.PUSH_NOTI_SETTINGS)
-    Call<BaseModel<List<Object>>> hGetNotificationSettings(@Query("user_id") int user_id);
+    Call<NotificationsSettingsModelNew> hGetNotificationSettings(@Query("user_id") int user_id);
 
 
     @POST(APIConstants.PUSH_NOTI_SETTINGS)
-    Call<BaseModel<List<Object>>> hPostSettingsDataToSerever(@Body NotificationSettingsRootModel notificationSettingsModel);
+    Call<BaseModel<List<Object>>> hPostSettingsDataToSerever(@Body NotificationsSettingsModelNew notificationSettingsModel);
 
     @POST(APIConstants.GET_ALL_MYACTIVITY)
     Call<BaseModel<List<MyActivitiesModel>>> hGetAllMyActivity(@Body Object user);

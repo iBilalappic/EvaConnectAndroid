@@ -10,9 +10,9 @@
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/889d9266b36594930fa5ef83ee09005a/transformed/jetified-core-0.9.0.2/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/889d9266b36594930fa5ef83ee09005a/transformed/jetified-core-0.9.0.2/AndroidManifest.xml" />
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/889d9266b36594930fa5ef83ee09005a/transformed/jetified-core-0.9.0.2/jars/classes.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/transforms-3/2a23ceae4f6c5a8037e7a08ac08eb354/transformed/jetified-core-0.9.0.2/jars/classes.jar!/" />
-      <root url="file://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/transforms-3/2a23ceae4f6c5a8037e7a08ac08eb354/transformed/jetified-core-0.9.0.2/res" />
-      <root url="file://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/transforms-3/2a23ceae4f6c5a8037e7a08ac08eb354/transformed/jetified-core-0.9.0.2/AndroidManifest.xml" />
+      <root url="file://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/transforms-3/8eabd574df4858c7d7378c06878175b6/transformed/jetified-core-0.9.0.2/res" />
+      <root url="file://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/transforms-3/8eabd574df4858c7d7378c06878175b6/transformed/jetified-core-0.9.0.2/AndroidManifest.xml" />
+      <root url="jar://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/transforms-3/8eabd574df4858c7d7378c06878175b6/transformed/jetified-core-0.9.0.2/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/modules-2/files-2.1/com.afollestad.material-dialogs/core/0.9.0.2/fee70eb46ba44bee6085eb7cd2f13df9d89e90e1/core-0.9.0.2-javadoc.jar!/" />

@@ -10,9 +10,9 @@
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/99434d1315bd9f20717af41ade7b57d2/transformed/jetified-MaterialStyledDialogs-2.1/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/99434d1315bd9f20717af41ade7b57d2/transformed/jetified-MaterialStyledDialogs-2.1/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/99434d1315bd9f20717af41ade7b57d2/transformed/jetified-MaterialStyledDialogs-2.1/AndroidManifest.xml" />
-      <root url="jar://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/transforms-3/a365b8f15aef3c7da82263e9c5f48a10/transformed/jetified-MaterialStyledDialogs-2.1/jars/classes.jar!/" />
-      <root url="file://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/transforms-3/a365b8f15aef3c7da82263e9c5f48a10/transformed/jetified-MaterialStyledDialogs-2.1/res" />
-      <root url="file://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/transforms-3/a365b8f15aef3c7da82263e9c5f48a10/transformed/jetified-MaterialStyledDialogs-2.1/AndroidManifest.xml" />
+      <root url="file://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/transforms-3/b32f7f7ee5d7145a1c87fd7a988e8a3e/transformed/jetified-MaterialStyledDialogs-2.1/res" />
+      <root url="file://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/transforms-3/b32f7f7ee5d7145a1c87fd7a988e8a3e/transformed/jetified-MaterialStyledDialogs-2.1/AndroidManifest.xml" />
+      <root url="jar://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/transforms-3/b32f7f7ee5d7145a1c87fd7a988e8a3e/transformed/jetified-MaterialStyledDialogs-2.1/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
