@@ -21,6 +21,8 @@ import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.NotificationsSettingsModelNew;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
+import com.hypernym.evaconnect.utils.AppUtils;
+import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import com.mobsandgeeks.saripaar.Validator;
@@ -137,7 +139,7 @@ public class PushNotificationsFragment extends BaseFragment implements View.OnCl
 
         userViewModel.hGetNotificationSettings(LoginUtils.getUser().getId()).observe(requireActivity(), listBaseModel -> {
             if (listBaseModel.getData() != null) {
-                Log.d("notification_check", "GET Request");
+                Log.d("notification_check", "GET Request"+ GsonUtils.getGson().toJson(listBaseModel));
 
                 notificationsSettingsModelNew = listBaseModel;
 
@@ -150,23 +152,32 @@ public class PushNotificationsFragment extends BaseFragment implements View.OnCl
     private void hPrePopulateNotifications(NotificationsSettingsModelNew hNotificationSettingModel) {
 
 
+        User user=LoginUtils.getLoggedinUser();
+        if (user.getType().equalsIgnoreCase("company")) {
+            switch_news_events.setVisibility(View.GONE);
+            btn_news_update.setVisibility(View.GONE);
+            switch_job_post.setVisibility(View.GONE);
+
+        }else{
+            switch_news_events.setVisibility(View.VISIBLE);
+            btn_news_update.setVisibility(View.VISIBLE);
+            switch_job_post.setVisibility(View.VISIBLE);
+        }
+
 //        notificationsSettingsModelNew = new NotificationsSettingsModelNew(hNotificationSettingModel);
         switch_message.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getMessage() != 0);
+        switch_post_like.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getPostLikes() != 0);
+        switch_post_comment.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getPostComments() != 0);
         switch_connection_request.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getConnectionRequests() != 0);
+//        switch_new_connections.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().get() != 0);
+        switch_profile_view.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getProfileViews() != 0);
         switch_suggested_connections.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getSuggestedConnections() != 0);
 
 
+        btn_company_post_update.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getPostComments() != 0);
+        btn_calender_reminder.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getCalendarReminder() != 0);
+        btn_meeting_reminder.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getMeetingReminders() != 0);
 
-      /*  switch_suggested_connections.setChecked(hNotificationsSetting.getSuggestedConnections() != 0);
-        switch_suggested_connections.setChecked(hNotificationsSetting.getSuggestedConnections() != 0);
-        switch_suggested_connections.setChecked(hNotificationsSetting.getSuggestedConnections() != 0);
-        switch_suggested_connections.setChecked(hNotificationsSetting.getSuggestedConnections() != 0);
-        switch_suggested_connections.setChecked(hNotificationsSetting.getSuggestedConnections() != 0);
-        switch_suggested_connections.setChecked(hNotificationsSetting.getSuggestedConnections() != 0);
-        switch_suggested_connections.setChecked(hNotificationsSetting.getSuggestedConnections() != 0);
-        switch_suggested_connections.setChecked(hNotificationsSetting.getSuggestedConnections() != 0);
-        switch_suggested_connections.setChecked(hNotificationsSetting.getSuggestedConnections() != 0);
-        switch_suggested_connections.setChecked(hNotificationsSetting.getSuggestedConnections() != 0);*/
 
 
     }

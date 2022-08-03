@@ -42,6 +42,7 @@ import com.hypernym.evaconnect.R;
 import com.hypernym.evaconnect.listeners.OnOneOffClickListener;
 import com.hypernym.evaconnect.models.User;
 import com.hypernym.evaconnect.repositories.CustomViewModelFactory;
+import com.hypernym.evaconnect.utils.DateUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.utils.NetworkUtils;
 import com.hypernym.evaconnect.view.adapters.MySpinnerAdapter;
@@ -152,7 +153,8 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
         user = LoginUtils.getUser();
         init();
 
-        Log.d("city", "onViewCreated: "+user.getCity());
+
+
 
         if (NetworkUtils.isNetworkConnected(requireContext())) {
             showDialog();
@@ -185,6 +187,7 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
         // Inflate the layout for this fragment
         locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
         viewModel = ViewModelProviders.of(this, new CustomViewModelFactory(requireActivity().getApplication(), getActivity())).get(LocationViewModel.class);
+        Log.d("date", "onValidationSucceeded: ");
         return inflater.inflate(R.layout.fragment_language, container, false);
     }
 
@@ -375,7 +378,7 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
     @Override
     public void onResume() {
         super.onResume();
-
+        Log.d("datessss", "onViewCreated: "+ DateUtils.GetCurrentdatetime());
         Log.d("fragmentlanguage", "onResume: ");
         buildGoogleApiClient();
 
@@ -387,13 +390,22 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
         String country = ed_country.getText().toString();
         String language = edit_language.getSelectedItem().toString();
         String city = spinCities.getSelectedItem().toString();
+        User user = new User();
+        user.setModified_by_id(LoginUtils.getUser().getId());
+        user.setCountry(country);
+        user.setLanguage(language);
+        user.setCity(city);
 
-        userData.setCountry(country);
-        userData.setLanguage(language);
-        userData.setCity(city);
-        userData.setId(LoginUtils.getUser().getId());
+//        userData.setCountry(country);
+//        userData.setLanguage(language);
+//        userData.setCity(city);
+//        userData.setId(LoginUtils.getUser().getId());
+//        userData.setUser_image(LoginUtils.getUser().getUser_image());
+//        user.setModified_by_id(LoginUtils.getUser().getId());
+//        userData.setWork_aviation(LoginUtils.getUser().getUser_image());
         showDialog();
-        viewModel.hUpdateUserLocationData(userData.getId(), userData).observe(requireActivity(), object -> {
+
+        viewModel.hUpdateUserLocationData(userData.getId(), user,DateUtils.GetCurrentdatetime()).observe(requireActivity(), object -> {
 
             hideDialog();
             requireActivity().onBackPressed();
@@ -488,7 +500,7 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
 
                     ed_country.setText(country);
 
-                    Toast.makeText(requireContext(), hCountyCodeFromLocation, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(requireContext(), hCountyCodeFromLocation, Toast.LENGTH_SHORT).show();
 
                     hideDialog();
 
@@ -508,7 +520,7 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
         if (NetworkUtils.isNetworkConnected(requireContext())) {
             viewModel.hGetAllCities(hCountyCodeFromLocation).observe(requireActivity(), response -> {
 
-                spinCities.setSelection(0);
+//                spinCities.setSelection(0);
 
                 if (response != null) {
                     for (int i = 0; i < response.size(); i++) {
@@ -517,6 +529,15 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
                     hideDialog();
 
                     hSetCitySpinner();
+
+                    if(user!=null){
+                        for(int i =0;i<hCitiesList.size();i++){
+                            if(user.getCity().equalsIgnoreCase(hCitiesList.get(i))){
+                                spinCities.setSelection(i);
+                            }
+
+                        }
+                    }
 
                 } else {
                     Toast.makeText(requireContext(), "Some thing went wrong...", Toast.LENGTH_LONG).show();
@@ -620,6 +641,7 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int position, long id) {
                 city = hCitiesList.get(position);
+                Log.d("cities", "onItemSelected: "+position);
                 spinCities.setSelection(position);
             }
 

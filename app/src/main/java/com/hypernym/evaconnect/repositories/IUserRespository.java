@@ -52,7 +52,7 @@ public interface IUserRespository {
 
     LiveData<BaseModel<List<Object>>> deleteUser(Integer id);
 
-    LiveData<BaseModel<List<Object>>> updateUserLocation(Integer id, User userData);
+    LiveData<BaseModel<List<Object>>> updateUserLocation(Integer id, User userData,String date);
 
     LiveData<BaseModel<List<Object>>> verify_email(String email);
 

@@ -30,7 +30,7 @@ public class LocationViewModel extends AndroidViewModel {
         return iCitiesRepository.hGetAllCities(countyCode);
     }
 
-    public LiveData<BaseModel<List<Object>>> hUpdateUserLocationData(Integer user_id, User userData) {
-        return userRepository.updateUserLocation(user_id, userData);
+    public LiveData<BaseModel<List<Object>>> hUpdateUserLocationData(Integer user_id, User userData,String date) {
+        return userRepository.updateUserLocation(user_id, userData,date);
     }
 }

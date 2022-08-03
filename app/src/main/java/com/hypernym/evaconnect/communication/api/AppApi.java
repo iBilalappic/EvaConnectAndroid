@@ -561,8 +561,8 @@ public interface AppApi {
     @PATCH(APIConstants.GET_USER_DETAILS)
     Call<BaseModel<List<Object>>> hUpdateUserLocation(
             @Path("id") int id,
-            @Body User user,
-            @Path("date") String date
+            @Body User user
+//            @Path("date") String date
     );
 
 

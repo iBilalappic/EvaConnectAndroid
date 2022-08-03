@@ -40,6 +40,8 @@ public class User implements Serializable, Parcelable {
     private String last_online_datetime;
     private String other_sector;
     private String company_url;
+    private Integer modified_by_id;
+
 
     public String getSearch_key() {
         return search_key;
@@ -432,5 +434,13 @@ public class User implements Serializable, Parcelable {
 
     public void setLanguage(String language) {
         this.language = language;
+    }
+
+    public Integer getModified_by_id() {
+        return modified_by_id;
+    }
+
+    public void setModified_by_id(Integer modified_by_id) {
+        this.modified_by_id = modified_by_id;
     }
 }

@@ -477,10 +477,10 @@ public class UserRepository implements IUserRespository {
     }
 
     @Override
-    public LiveData<BaseModel<List<Object>>> updateUserLocation(Integer id, User userData) {
+    public LiveData<BaseModel<List<Object>>> updateUserLocation(Integer id, User userData,String date) {
+        Log.d("aas", "success"+date);
 
-
-        RestClient.get().appApi().hUpdateUserLocation(LoginUtils.getLoggedinUser().getId(), userData, DateUtils.GetCurrentdatetime()).enqueue(new Callback<BaseModel<List<Object>>>() {
+        RestClient.get().appApi().hUpdateUserLocation(LoginUtils.getLoggedinUser().getId(), userData).enqueue(new Callback<BaseModel<List<Object>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
                 if (response.body() != null) {
