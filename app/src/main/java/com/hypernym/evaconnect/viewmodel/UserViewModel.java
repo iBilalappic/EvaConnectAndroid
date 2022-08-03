@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import com.hypernym.evaconnect.models.AccountCheck;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.IsBlocked;
+import com.hypernym.evaconnect.models.NnotificationModel;
 import com.hypernym.evaconnect.models.NotificationsSettingsModelNew;
 import com.hypernym.evaconnect.models.Stats;
 import com.hypernym.evaconnect.models.User;
@@ -111,7 +112,7 @@ public class UserViewModel extends AndroidViewModel {
         return iUserRespository.hGetNotificationSettings(id);
     }
 
-    public LiveData<BaseModel<List<Object>>> hPostUserSettingsData(NotificationsSettingsModelNew notificationSettingsModel) {
+    public LiveData<BaseModel<List<Object>>> hPostUserSettingsData(NnotificationModel notificationSettingsModel) {
 
         return iUserRespository.hPostUserSettingData(notificationSettingsModel);
     }

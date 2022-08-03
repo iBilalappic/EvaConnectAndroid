@@ -10,6 +10,7 @@ import com.hypernym.evaconnect.models.AccountCheck;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.GetBlockedData;
 import com.hypernym.evaconnect.models.IsBlocked;
+import com.hypernym.evaconnect.models.NnotificationModel;
 import com.hypernym.evaconnect.models.NotificationsSettingsModelNew;
 import com.hypernym.evaconnect.models.Stats;
 import com.hypernym.evaconnect.models.User;
@@ -543,7 +544,7 @@ public class UserRepository implements IUserRespository {
     }
 
     @Override
-    public LiveData<BaseModel<List<Object>>> hPostUserSettingData(NotificationsSettingsModelNew notificationSettingsModel) {
+    public LiveData<BaseModel<List<Object>>> hPostUserSettingData(NnotificationModel notificationSettingsModel) {
         RestClient.get().appApi().hPostSettingsDataToSerever(notificationSettingsModel).enqueue(new Callback<BaseModel<List<Object>>>() {
 
             @Override

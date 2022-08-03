@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import com.hypernym.evaconnect.models.AccountCheck;
 import com.hypernym.evaconnect.models.BaseModel;
 import com.hypernym.evaconnect.models.IsBlocked;
+import com.hypernym.evaconnect.models.NnotificationModel;
 import com.hypernym.evaconnect.models.NotificationSettingsRootModel;
 import com.hypernym.evaconnect.models.NotificationsSettingsModelNew;
 import com.hypernym.evaconnect.models.Stats;
@@ -58,7 +59,7 @@ public interface IUserRespository {
 
     LiveData<NotificationsSettingsModelNew> hGetNotificationSettings(int id);
 
-    LiveData<BaseModel<List<Object>>> hPostUserSettingData(NotificationsSettingsModelNew notificationSettingsModel);
+    LiveData<BaseModel<List<Object>>> hPostUserSettingData(NnotificationModel notificationSettingsModel);
 
     LiveData<BaseModel<List<IsBlocked>>> hCheckBlockedOrNOt(int hMyID, int hID);
 }

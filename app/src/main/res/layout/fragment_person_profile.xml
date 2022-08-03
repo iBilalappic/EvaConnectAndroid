@@ -138,7 +138,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/nunitosansbold"
-                android:text="London,United kingdom"
+                android:text=""
                 android:textColor="@color/gray"
 
                 android:textSize="12sp"

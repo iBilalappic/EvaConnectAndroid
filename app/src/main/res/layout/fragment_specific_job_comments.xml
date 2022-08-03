@@ -431,14 +431,15 @@
                                 android:layout_marginEnd="@dimen/spacing_medium"
                                 android:layout_weight="0"
                                 android:background="@drawable/ic_comment" />
+
                             <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="30dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
                                 android:layout_weight="1"
-                                android:maxLines="1"
-                                android:maxEms="10"
                                 android:fontFamily="@font/nunitosansregular"
                                 android:gravity="center_vertical"
+                                android:maxEms="10"
+                                android:maxLines="1"
                                 android:text="Comment"
                                 android:textColor="@color/gray_1" />
 

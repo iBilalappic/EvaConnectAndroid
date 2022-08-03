@@ -230,9 +230,12 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                     tv_profession.setText(post.getUser().getCompany_name());
                 }
 
+                Log.d("user", "init: "+GsonUtils.getGson().toJson(user));
 //            tv_location.setText(post.getUser().getCountry() + "," + post.getUser().getCity());
-//            tv_company.setText(post.getUser().getSector() + " | " + post.getUser().getCompany_name());
+            tv_company.setText(post.getUser().getCity() + " | " + post.getUser().getCountry());
                 tv_connections_count.setText(String.valueOf(post.getUser().getTotal_connection()));
+
+
 
 //            if(post.getUser().getIs_notifications()>0)
 //            {
@@ -469,6 +472,7 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                     }
                 }
             });
+            tv_company.setText(LoginUtils.getUser().getCity() + " , " + LoginUtils.getUser().getCountry());
         }
 
 
