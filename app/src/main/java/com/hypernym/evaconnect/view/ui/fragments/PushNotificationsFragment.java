@@ -1,5 +1,7 @@
 package com.hypernym.evaconnect.view.ui.fragments;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +34,8 @@ import com.hypernym.evaconnect.utils.GsonUtils;
 import com.hypernym.evaconnect.utils.LoginUtils;
 import com.hypernym.evaconnect.viewmodel.UserViewModel;
 import com.mobsandgeeks.saripaar.Validator;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +66,10 @@ public class PushNotificationsFragment extends BaseFragment implements View.OnCl
     Switch switch_connection_request;
 
 
+    @BindView(R.id.lbl_txt3)
+    TextView tvConnectionRequest;
+
+
     @BindView(R.id.switch_push4)
     Switch switch_new_connections;
 
@@ -72,9 +81,17 @@ public class PushNotificationsFragment extends BaseFragment implements View.OnCl
     @BindView(R.id.switch_push6)
     Switch switch_suggested_connections;
 
+    @BindView(R.id.lbl_txt6)
+    TextView tvSuggestedConnection;
+
+
+
 
     @BindView(R.id.switch_push7)
     Switch switch_news_events;
+
+    @BindView(R.id.lbl_txt7)
+    TextView tvNewsEvent;
 
 
     @BindView(R.id.switch_push8)
@@ -106,9 +123,20 @@ public class PushNotificationsFragment extends BaseFragment implements View.OnCl
     @BindView(R.id.linearLayout12)
     LinearLayout lytMeetingReminder;
 
+    @BindView(R.id.linearLayout8)
+    LinearLayout lytNewJobPost;
+
+    @BindView(R.id.linearLayout9)
+    LinearLayout lytNewsUpdate;
+
+
+
 
     @BindView(R.id.btn_submit)
     TextView btn_submit;
+
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
 
   /*  @BindView(R.id.profile_image)
     CircleImageView cv_profile_image;*/
@@ -171,43 +199,63 @@ public class PushNotificationsFragment extends BaseFragment implements View.OnCl
         User user=LoginUtils.getLoggedinUser();
         if (user.getType().equalsIgnoreCase("company")) {
             lytCompanyPostUpdates.setVisibility(View.GONE);
-            lytCalenderReminder.setVisibility(View.GONE);
-            lytMeetingReminder.setVisibility(View.GONE);
+
+            lytNewJobPost.setVisibility(View.GONE);
+            lytNewsUpdate.setVisibility(View.GONE);
+
+            tvConnectionRequest.setText("New Follower");
+            tvSuggestedConnection.setText("Event Interest");
+            tvNewsEvent.setText("Job Applicants");
+
+            switch_message.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getMessage() != 0);
+            switch_post_comment.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getPostComments() != 0);
+            switch_post_like.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getPostLikes() != 0);
+
+            switch_profile_view.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getProfileViews() != 0);
+
+
+            switch_newjob_post.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getNewJobPost() != 0);
+            btn_news_update.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getNewsUpdate() != 0);
+            btn_company_post_update.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getPostComments() != 0);
+            btn_calender_reminder.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getCalendarReminder() != 0);
+            btn_meeting_reminder.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getMeetingReminders() != 0);
+
+            switch_suggested_connections.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getEventInterest() != 0);
+            switch_news_events.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getJobApplicants() != 0);
+            switch_connection_request.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getConnectionRequests() != 0);
 
         }else{
-            lytCompanyPostUpdates.setVisibility(View.VISIBLE);
-            lytCalenderReminder.setVisibility(View.VISIBLE);
-            lytMeetingReminder.setVisibility(View.VISIBLE);
+            switch_message.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getMessage() != 0);
+            switch_post_comment.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getPostComments() != 0);
+            switch_post_like.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getPostLikes() != 0);
+            switch_connection_request.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getConnectionRequests() != 0);
+            switch_profile_view.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getProfileViews() != 0);
+            switch_suggested_connections.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getSuggestedConnections() != 0);
+            switch_news_events.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getNewEvents() != 0);
+            switch_newjob_post.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getNewJobPost() != 0);
+            btn_news_update.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getNewsUpdate() != 0);
+            btn_company_post_update.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getPostUpdates() != 0);
+            btn_calender_reminder.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getCalendarReminder() != 0);
+            btn_meeting_reminder.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getMeetingReminders() != 0);
+
         }
 
-//        notificationsSettingsModelNew = new NotificationsSettingsModelNew(hNotificationSettingModel);
-        switch_message.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getMessage() != 0);
-        switch_post_comment.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getPostComments() != 0);
-        switch_post_like.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getPostLikes() != 0);
-        switch_connection_request.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getConnectionRequests() != 0);
-        switch_profile_view.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getProfileViews() != 0);
-        switch_suggested_connections.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getSuggestedConnections() != 0);
-        switch_news_events.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getNewEvents() != 0);
-        switch_newjob_post.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getNewJobPost() != 0);
-        btn_news_update.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getNewsUpdate() != 0);
-        btn_company_post_update.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getPostComments() != 0);
-        btn_calender_reminder.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getCalendarReminder() != 0);
-        btn_meeting_reminder.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getMeetingReminders() != 0);
 
+//        notificationsSettingsModelNew = new NotificationsSettingsModelNew(hNotificationSettingModel);
 
 
     }
 
     private void hInitClickListener() {
 
-        btn_submit.setOnClickListener(new OnOneOffClickListener() {
-            @Override
-            public void onSingleClick(View v) {
+
                 btn_submit.setOnClickListener(new OnOneOffClickListener() {
                     @Override
                     public void onSingleClick(View v) {
+
+                        User user=LoginUtils.getLoggedinUser();
+
                         showDialog();
-                        NotificationsSettingsModelNew notificationSettingsModel = new NotificationsSettingsModelNew();
 
 
                         NnotificationModel data = new NnotificationModel();
@@ -218,78 +266,85 @@ public class PushNotificationsFragment extends BaseFragment implements View.OnCl
                        data.setUser_id(LoginUtils.getUser().getId());
                         NotificationDataClass notifications = new NotificationDataClass();
 
-//                        hPopulateSettingModel(notificationSettingsModel);
-                        if(switch_message.isChecked()){
+                        if (user.getType().equalsIgnoreCase("company")) {
 
-                            notifications.setMessage(1);
-                        }
-                        else{
-                            notifications.setMessage(0);
-                        }
+                            //                        hPopulateSettingModel(notificationSettingsModel);
+                            if(switch_message.isChecked()){
 
-                        if(switch_post_comment.isChecked()){
-                            notifications.setPostComments(1);
-                        }
-                        else{
-                            notifications.setPostComments(0);
-                        }
+                                notifications.setMessage(1);
+                            }
+                            else{
+                                notifications.setMessage(0);
+                            }
 
-                        if(switch_post_like.isChecked()){
-                            notifications.setPostLikes(1);
-                        }
-                        else{
-                            notifications.setPostLikes(0);
-                        }
+                            if(switch_post_comment.isChecked()){
+                                notifications.setPostComments(1);
+                            }
+                            else{
+                                notifications.setPostComments(0);
+                            }
 
-                        if(switch_connection_request.isChecked()){
-                            notifications.setConnectionRequests(1);
-                        }
-                        else{
-                            notifications.setConnectionRequests(0);
-                        }
+                            if(switch_post_like.isChecked()){
+                                notifications.setPostLikes(1);
+                            }
+                            else{
+                                notifications.setPostLikes(0);
+                            }
 
-                        if(switch_connection_request.isChecked()){
-                            notifications.setConnectionRequests(1);
-                        }
-                        else{
-                            notifications.setConnectionRequests(0);
-                        }
+                            if(switch_connection_request.isChecked()){
+                                notifications.setConnectionRequests(1);
+                            }
+                            else{
+                                notifications.setConnectionRequests(0);
+                            }
+
+                            if(switch_connection_request.isChecked()){
+                                notifications.setConnectionRequests(1);
+                            }
+                            else{
+                                notifications.setConnectionRequests(0);
+                            }
 
 
-                        if(switch_profile_view.isChecked()){
-                            notifications.setProfileViews(1);
-                        }
-                        else{
-                            notifications.setProfileViews(0);
-                        }
+                            if(switch_profile_view.isChecked()){
+                                notifications.setProfileViews(1);
+                            }
+                            else{
+                                notifications.setProfileViews(0);
+                            }
 
-                        if(switch_suggested_connections.isChecked()){
-                            notifications.setSuggestedConnections(1);
-                        }
-                        else{
-                            notifications.setSuggestedConnections(0);
-                        }
 
-                        if(switch_news_events.isChecked()){
-                            notifications.setNewEvents(1);
-                        }
-                        else{
-                            notifications.setNewEvents(0);
-                        }
 
-                        if(switch_newjob_post.isChecked()){
-                            notifications.setNewJobPost(1);
-                        }
-                        else{
-                            notifications.setNewJobPost(0);
-                        }
+                            if(switch_suggested_connections.isChecked()){
+                                notifications.setEventRequest(1);
+                            }
+                            else{
+                                notifications.setEventRequest(0);
+                            }
 
-                        if(btn_news_update.isChecked()){
-                            notifications.setNewsUpdate(1);
-                        }
-                        else{
-                            notifications.setNewsUpdate(0);
-                        }
+
+
+                            if(switch_news_events.isChecked()){
+                                notifications.setJobApplicants(1);
+                            }
+                            else{
+                                notifications.setJobApplicants(0);
+                            }
+
+
+//                            if(switch_newjob_post.isChecked()){
+//                                notifications.setNewJobPost(1);
+//                            }
+//                            else{
+//                                notifications.setNewJobPost(0);
+//                            }
+//
+//                            if(btn_news_update.isChecked()){
+//                                notifications.setNewsUpdate(1);
+//                            }
+//                            else{
+//                                notifications.setNewsUpdate(0);
+//                            }
 
 //                        if(btn_company_post_update.isChecked()){
 //                            notificationSettingsModel.getData().get(0).getNotifications().setConnectionRequests(1);
@@ -299,22 +354,123 @@ public class PushNotificationsFragment extends BaseFragment implements View.OnCl
 //                        }
 
 
-                        if(btn_calender_reminder.isChecked()){
-                            notifications.setCalendarReminder(1);
+                            if(btn_calender_reminder.isChecked()){
+                                notifications.setCalendarReminder(1);
+                            }
+                            else{
+                                notifications.setCalendarReminder(0);
+                            }
+
+                            if(btn_meeting_reminder.isChecked()){
+                                notifications.setMeetingReminders(1);
+                            }
+                            else{
+                                notifications.setMeetingReminders(0);
+                            }
+
+                            data.setNotifications(notifications);
+
+
                         }
                         else{
-                            notifications.setCalendarReminder(0);
-                        }
 
-                        if(btn_meeting_reminder.isChecked()){
-                            notifications.setMeetingReminders(1);
+                            if(switch_message.isChecked()){
+
+                                notifications.setMessage(1);
+                            }
+                            else{
+                                notifications.setMessage(0);
+                            }
+
+                            if(switch_post_comment.isChecked()){
+                                notifications.setPostComments(1);
+                            }
+                            else{
+                                notifications.setPostComments(0);
+                            }
+
+                            if(switch_post_like.isChecked()){
+                                notifications.setPostLikes(1);
+                            }
+                            else{
+                                notifications.setPostLikes(0);
+                            }
+
+                            if(switch_connection_request.isChecked()){
+                                notifications.setConnectionRequests(1);
+                            }
+                            else{
+                                notifications.setConnectionRequests(0);
+                            }
+
+
+
+
+                            if(switch_profile_view.isChecked()){
+                                notifications.setProfileViews(1);
+                            }
+                            else{
+                                notifications.setProfileViews(0);
+                            }
+
+
+
+                            if(switch_suggested_connections.isChecked()){
+                                notifications.setSuggestedConnections(1);
+                            }
+                            else{
+                                notifications.setSuggestedConnections(0);
+                            }
+
+
+
+                            if(switch_news_events.isChecked()){
+                                notifications.setNewEvents(1);
+                            }
+                            else{
+                                notifications.setNewEvents(0);
+                            }
+
+
+                            if(switch_newjob_post.isChecked()){
+                                notifications.setNewJobPost(1);
+                            }
+                            else{
+                                notifications.setNewJobPost(0);
+                            }
+
+                            if(btn_news_update.isChecked()){
+                                notifications.setNewsUpdate(1);
+                            }
+                            else{
+                                notifications.setNewsUpdate(0);
+                            }
+
+                        if(btn_company_post_update.isChecked()){
+                            notifications.setPostUpdates(1);
                         }
                         else{
-                            notifications.setMeetingReminders(0);
+                            notifications.setPostUpdates(0);
                         }
 
-                        data.setNotifications(notifications);
 
+                            if(btn_calender_reminder.isChecked()){
+                                notifications.setCalendarReminder(1);
+                            }
+                            else{
+                                notifications.setCalendarReminder(0);
+                            }
+
+                            if(btn_meeting_reminder.isChecked()){
+                                notifications.setMeetingReminders(1);
+                            }
+                            else{
+                                notifications.setMeetingReminders(0);
+                            }
+
+                            data.setNotifications(notifications);
+
+                        }
 
 
 
@@ -323,37 +479,35 @@ public class PushNotificationsFragment extends BaseFragment implements View.OnCl
 
                     }
                 });
-            }
-        });
+
 
 
     }
 
     private void hPostSettingData(NnotificationModel notificationSettingsModel) {
+//        btn_submit.setVisibility(View.GONE);
+//        progressBar.setVisibility(View.VISIBLE);
 //        showDialog();
 
-        userViewModel.hPostUserSettingsData(notificationSettingsModel).observe(getViewLifecycleOwner(), new Observer<BaseModel<List<Object>>>() {
+
+        userViewModel.hPostUserSettingsData(notificationSettingsModel).observe(getViewLifecycleOwner(), new Observer<NnotificationModel>() {
             @Override
-            public void onChanged(BaseModel<List<Object>> listBaseModel) {
+            public void onChanged(NnotificationModel listBaseModel) {
 
-                hideDialog();
 
-                onBackPressed();
+                if (listBaseModel != null) {
+                    Toast.makeText(getActivity(), "Successfully Updated!!", Toast.LENGTH_SHORT).show();
+                    getActivity().onBackPressed();
 
-//                if (listBaseModel != null && !listBaseModel.isError()) {
-//
-//                    hideDialog();
-//
-//                    onBackPressed();
-//
-//                } else {
-//                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-//
-//                }
+
+                } else {
+                    networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+
+                }
             }
         });
 
-        hideDialog();
+//        hideDialog();
 
 
     }

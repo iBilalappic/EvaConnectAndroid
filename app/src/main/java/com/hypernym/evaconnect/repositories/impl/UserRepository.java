@@ -45,7 +45,7 @@ public class UserRepository implements IUserRespository {
     private MutableLiveData<BaseModel<List<Object>>> updateUserLocationMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<Object>>> verifyEmailMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BaseModel<List<IsBlocked>>> blockedUserLiveData = new MutableLiveData<>();
-    private MutableLiveData<BaseModel<List<Object>>> notificationsLiveData = new MutableLiveData<>();
+    private MutableLiveData<NnotificationModel> notificationsLiveData = new MutableLiveData<>();
 
 
     @Override
@@ -544,18 +544,18 @@ public class UserRepository implements IUserRespository {
     }
 
     @Override
-    public LiveData<BaseModel<List<Object>>> hPostUserSettingData(NnotificationModel notificationSettingsModel) {
-        RestClient.get().appApi().hPostSettingsDataToSerever(notificationSettingsModel).enqueue(new Callback<BaseModel<List<Object>>>() {
+    public LiveData<NnotificationModel> hPostUserSettingData(NnotificationModel notificationSettingsModel) {
+        RestClient.get().appApi().hPostSettingsDataToSerever(notificationSettingsModel).enqueue(new Callback<NnotificationModel>() {
 
             @Override
-            public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
+            public void onResponse(Call<NnotificationModel> call, Response<NnotificationModel> response) {
 
                 notificationsLiveData.postValue(response.body());
 
             }
 
             @Override
-            public void onFailure(Call<BaseModel<List<Object>>> call, Throwable t) {
+            public void onFailure(Call<NnotificationModel> call, Throwable t) {
 
                 notificationsLiveData.postValue(null);
 

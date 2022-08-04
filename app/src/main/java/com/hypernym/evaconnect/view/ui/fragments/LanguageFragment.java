@@ -353,6 +353,13 @@ public class LanguageFragment extends BaseFragment implements Validator.Validati
             }
             break;
 
+            case "Urdu": {
+                Log.d("language_spinner", user.getLanguage() + " Case");
+
+                edit_language.setSelection(8);
+            }
+            break;
+
 
         }
 

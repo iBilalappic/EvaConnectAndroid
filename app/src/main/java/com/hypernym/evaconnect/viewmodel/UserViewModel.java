@@ -112,7 +112,7 @@ public class UserViewModel extends AndroidViewModel {
         return iUserRespository.hGetNotificationSettings(id);
     }
 
-    public LiveData<BaseModel<List<Object>>> hPostUserSettingsData(NnotificationModel notificationSettingsModel) {
+    public LiveData<NnotificationModel> hPostUserSettingsData(NnotificationModel notificationSettingsModel) {
 
         return iUserRespository.hPostUserSettingData(notificationSettingsModel);
     }

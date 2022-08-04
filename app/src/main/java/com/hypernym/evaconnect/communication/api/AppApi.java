@@ -545,7 +545,7 @@ public interface AppApi {
 
 
     @POST(APIConstants.PUSH_NOTI_SETTINGS)
-    Call<BaseModel<List<Object>>> hPostSettingsDataToSerever(@Body NnotificationModel notificationSettingsModel);
+    Call<NnotificationModel> hPostSettingsDataToSerever(@Body NnotificationModel notificationSettingsModel);
 
     @POST(APIConstants.GET_ALL_MYACTIVITY)
     Call<BaseModel<List<MyActivitiesModel>>> hGetAllMyActivity(@Body Object user);

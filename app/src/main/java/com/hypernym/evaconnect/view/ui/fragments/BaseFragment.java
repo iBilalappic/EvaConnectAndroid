@@ -80,13 +80,13 @@ public class BaseFragment extends Fragment {
     public boolean onBackPressed() {
 
 //        requireActivity().findViewById(R.id.seprator_line).setVisibility(View.VISIBLE);
-//        if (requireActivity().getSupportFragmentManager().getBackStackEntryCount() > 1) {
-//            Fragment f = requireActivity().getSupportFragmentManager().findFragmentById(R.id.frameLayout);
-//            if (f instanceof MainViewPagerFragment || f instanceof ActivityFragment) {
-//                // Do something
-//                requireActivity().findViewById(R.id.seprator_line).setVisibility(View.GONE);
-//            }
-//        }
+        if (requireActivity().getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            Fragment f = requireActivity().getSupportFragmentManager().findFragmentById(R.id.frameLayout);
+            if (f instanceof MainViewPagerFragment || f instanceof ActivityFragment) {
+                // Do something
+                requireActivity().findViewById(R.id.seprator_line).setVisibility(View.GONE);
+            }
+        }
 
         return false;
     }

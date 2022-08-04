@@ -59,7 +59,7 @@ public interface IUserRespository {
 
     LiveData<NotificationsSettingsModelNew> hGetNotificationSettings(int id);
 
-    LiveData<BaseModel<List<Object>>> hPostUserSettingData(NnotificationModel notificationSettingsModel);
+    LiveData<NnotificationModel> hPostUserSettingData(NnotificationModel notificationSettingsModel);
 
     LiveData<BaseModel<List<IsBlocked>>> hCheckBlockedOrNOt(int hMyID, int hID);
 }

@@ -26,5 +26,10 @@ data class NotificationDataClass(
         var profileViews: Int = 0, // 1
         @SerializedName("suggested_connections")
         var suggestedConnections: Int = 0, // 1
+        @SerializedName("event_interests")
+        var eventRequest: Int = 0, // 1
+
+        @SerializedName("job_applicants")
+        var jobApplicants: Int = 0, // 1
 
 )
