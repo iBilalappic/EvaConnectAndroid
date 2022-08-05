@@ -5,6 +5,7 @@
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/a48a397fcc9a43aa2cabeb1b1d6cc79b/transformed/jetified-library-1.1.7/annotations.zip!/" />
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/ab3a6177617f576d784a3fecb497696e/transformed/jetified-library-1.1.7/annotations.zip!/" />
       <root url="jar://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/transforms-3/efb81333698b5b6f5587f437e9975a0f/transformed/jetified-library-1.1.7/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/15b492e9f6afa17874dc47f5b97d1462/transformed/jetified-library-1.1.7/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/95b3e159b4f00d93cb9f08f70e41e818/transformed/jetified-library-1.1.7/jars/classes.jar!/" />
@@ -19,12 +20,17 @@
       <root url="jar://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/transforms-3/efb81333698b5b6f5587f437e9975a0f/transformed/jetified-library-1.1.7/jars/classes.jar!/" />
       <root url="file://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/transforms-3/efb81333698b5b6f5587f437e9975a0f/transformed/jetified-library-1.1.7/AndroidManifest.xml" />
       <root url="file://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/transforms-3/efb81333698b5b6f5587f437e9975a0f/transformed/jetified-library-1.1.7/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/15b492e9f6afa17874dc47f5b97d1462/transformed/jetified-library-1.1.7/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/15b492e9f6afa17874dc47f5b97d1462/transformed/jetified-library-1.1.7/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/15b492e9f6afa17874dc47f5b97d1462/transformed/jetified-library-1.1.7/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/modules-2/files-2.1/me.zhanghai.android.materialprogressbar/library/1.1.7/8c0868ffd1b0d3d22297eb26aaf7bd8e5c35410c/library-1.1.7-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/me.zhanghai.android.materialprogressbar/library/1.1.7/8c0868ffd1b0d3d22297eb26aaf7bd8e5c35410c/library-1.1.7-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
       <root url="jar://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/modules-2/files-2.1/me.zhanghai.android.materialprogressbar/library/1.1.7/5c8b4ffc0795143999933697805c7e7aead41e47/library-1.1.7-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/me.zhanghai.android.materialprogressbar/library/1.1.7/5c8b4ffc0795143999933697805c7e7aead41e47/library-1.1.7-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

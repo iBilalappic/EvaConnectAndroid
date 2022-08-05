@@ -112,6 +112,7 @@ public interface AppApi {
     @PATCH(APIConstants.EDIT_POST)
     Call<BaseModel<List<Post>>> deletePost(@Body Post post, @Path("id") int id);
 
+
     @Multipart
     @POST(APIConstants.ADD_JOB_AD)
     Call<BaseModel<List<Object>>> createJobAd(@Part("user_id") int user_id,

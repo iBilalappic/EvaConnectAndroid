@@ -4,12 +4,17 @@
       <root url="file://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/transforms-3/6ae837900767adb7dd91b99e38356004/transformed/jetified-powermenu-2.1.2/res" />
       <root url="file://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/transforms-3/6ae837900767adb7dd91b99e38356004/transformed/jetified-powermenu-2.1.2/AndroidManifest.xml" />
       <root url="jar://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/transforms-3/6ae837900767adb7dd91b99e38356004/transformed/jetified-powermenu-2.1.2/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/6ae837900767adb7dd91b99e38356004/transformed/jetified-powermenu-2.1.2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/6ae837900767adb7dd91b99e38356004/transformed/jetified-powermenu-2.1.2/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/6ae837900767adb7dd91b99e38356004/transformed/jetified-powermenu-2.1.2/res" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/modules-2/files-2.1/com.github.skydoves/powermenu/2.1.2/10b1544502fda82a56cf4c90131d365629040822/powermenu-2.1.2-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.skydoves/powermenu/2.1.2/10b1544502fda82a56cf4c90131d365629040822/powermenu-2.1.2-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
       <root url="jar://$PROJECT_DIR$/../TranslatedAppNew/.gradle/caches/modules-2/files-2.1/com.github.skydoves/powermenu/2.1.2/bd91c1fd8d25cc4fb081a14b485ce29344b16095/powermenu-2.1.2-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.skydoves/powermenu/2.1.2/bd91c1fd8d25cc4fb081a14b485ce29344b16095/powermenu-2.1.2-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

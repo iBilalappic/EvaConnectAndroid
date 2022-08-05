@@ -531,8 +531,15 @@ public final class AppUtils {
     }
 
 
-//    public static Uri getURLForResource (int resourceId) {
-//        //use BuildConfig.APPLICATION_ID instead of R.class.getPackage().getName() if both are not same
+    public static Uri getURLForResource (int resourceId,Context context) {
+        //use BuildConfig.APPLICATION_ID instead of R.class.getPackage().getName() if both are not same
 //        return Uri.parse("android.resource://"+R.class.getPackage().getName()+"/" +resourceId);
-//    }
+
+        Uri imageUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE
+                + "://" + context.getResources().getResourcePackageName(resourceId)
+                + '/' + context.getResources().getResourceTypeName(resourceId)
+                + '/' + context.getResources().getResourceEntryName(resourceId) );
+        return imageUri;
+    }
+
 }

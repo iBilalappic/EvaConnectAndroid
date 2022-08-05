@@ -2,12 +2,18 @@ package com.hypernym.evaconnect.view.ui.fragments;
 
 import static android.app.Activity.RESULT_OK;
 
+import static com.hypernym.evaconnect.view.ui.fragments.ApplicationFormFragment.createFileFromStream;
+
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
+import android.provider.OpenableColumns;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -158,18 +164,19 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
         img_backarrow.setOnClickListener(this);
 
         init();
-      //  showBackButton();
-//        try{
-//           // Uri uri=AppUtils.getUriToResource(getContext(),R.drawable.ic_user_profile);
-//            Uri imageUrl = getURLForResource(R.drawable.ic_user_profile);
-//            file_name = new File(imageUrl.getPath());
-//            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file_name);
-//            partImage = MultipartBody.Part.createFormData("job_image", file_name.getName(), reqFile);
-//        }catch (Exception ex){
-//            ex.printStackTrace();
-//            Log.d("TAG", "onCreateView: "+ex);
-//        }
-
+//        showBackButton();
+        try{
+//            Uri uri=AppUtils.getUriToResource(getContext(),R.drawable.ic_user_profile);
+            Uri imageUrl = AppUtils.getURLForResource(R.drawable.ic_user_profile,getContext());
+//            file_name = getFile(getActivity(),imageUrl);
+            file_name = new File(imageUrl.getPath());
+            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file_name);
+            partImage = MultipartBody.Part.createFormData("job_image", file_name.getName(), reqFile);
+        }catch (Exception ex){
+            ex.printStackTrace();
+            Log.d("partImage", "onCreateView: "+ex);
+        }
+        Log.d("partImage", "CreateJobAd: "+partImage.toString());
         return view;
     }
 
@@ -225,7 +232,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
                 Environment.DIRECTORY_PICTURES);
 
             file_name=new File(path,"job_image.jpg");
-            InputStream inputStream = getResources().openRawResource(R.drawable.no_thumbnail);
+            @SuppressLint("ResourceType") InputStream inputStream = getResources().openRawResource(R.drawable.no_thumbnail);
             OutputStream out=new FileOutputStream(file_name);
             byte buf[]=new byte[1024];
             int len;
@@ -517,6 +524,7 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
         });
     }
 
+
     private void CreateJobAd() {
         showDialog();
         User user = LoginUtils.getLoggedinUser();
@@ -530,19 +538,23 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
                 edit_Location.getText().toString(),
                 edit_jobtitle.getText().toString(),
                 edit_jobpostion.getText().toString(), JobType, JobDuration).observe(this, getnetworkconnection -> {
+                    if(getnetworkconnection==null){
+                        if (getnetworkconnection != null && !getnetworkconnection.isError()) {
+                            jobSuccess_dialog = new JobSuccess_dialog(requireActivity(), getContext());
+                            jobSuccess_dialog.show();
+                            hideDialog();
+                        } else if (getnetworkconnection.isError()) {
+                            networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
+                        }
+                    }
+                    else{
+                        hideDialog();
+                        if (simpleDialog != null && !simpleDialog.isShowing())
+                            simpleDialog.show();
+                    }
 
 
 
-            if (getnetworkconnection != null && !getnetworkconnection.isError()) {
-                jobSuccess_dialog = new JobSuccess_dialog(requireActivity(), getContext());
-                jobSuccess_dialog.show();
-                hideDialog();
-            } else if (getnetworkconnection.isError()) {
-                networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-            }
-            hideDialog();
-            if (simpleDialog != null && !simpleDialog.isShowing())
-                simpleDialog.show();
         });
 
     }
@@ -674,5 +686,27 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
                 Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    public static File getFile(Context context, Uri uri) throws IOException {
+        File destinationFilename = new File(context.getFilesDir().getPath() + File.separatorChar + queryName(context, uri));
+        try (InputStream ins = context.getContentResolver().openInputStream(uri)) {
+            createFileFromStream(ins, destinationFilename);
+        } catch (Exception ex) {
+            Log.e("Save File", ex.getMessage());
+            ex.printStackTrace();
+        }
+        return destinationFilename;
+    }
+
+    private static String queryName(Context context, Uri uri) {
+        Cursor returnCursor =
+                context.getContentResolver().query(uri, null, null, null, null);
+        assert returnCursor != null;
+        int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+        returnCursor.moveToFirst();
+        String name = returnCursor.getString(nameIndex);
+        returnCursor.close();
+        return name;
     }
 }

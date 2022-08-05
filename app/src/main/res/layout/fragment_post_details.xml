@@ -443,9 +443,9 @@
 
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="32dp"
+                        android:layout_marginStart="22dp"
                         android:layout_marginTop="1dp"
-                        android:layout_marginEnd="32dp"
+                        android:layout_marginEnd="22dp"
                         android:baselineAligned="false"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -512,9 +512,9 @@
                                 android:layout_weight="1"
                                 android:fontFamily="@font/nunitosansregular"
                                 android:gravity="center_vertical"
-                                android:text="Comment"
-                                android:maxLines="1"
                                 android:maxEms="10"
+                                android:maxLines="1"
+                                android:text="Comment"
                                 android:textColor="@color/gray_1"
                                 android:textSize="12sp" />
 
