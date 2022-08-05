@@ -5,11 +5,15 @@ import static android.app.Activity.RESULT_OK;
 import static com.hypernym.evaconnect.view.ui.fragments.ApplicationFormFragment.createFileFromStream;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
@@ -28,6 +32,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
@@ -144,6 +150,11 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
     private List<String> mSpinnerJobDuration = new ArrayList<>();
     String JobSector, JobType,JobDuration;
 
+    private static final int MY_PERMISSION_REQUEST_CODE = 1001;
+
+    private static final String[] PERMISSIONS = {android.Manifest.permission.READ_EXTERNAL_STORAGE,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
     private CompanyJobAdModel companyJobAdModel = new CompanyJobAdModel();
     ArrayAdapter<String> arraySectorAdapter, arrayJobDurationAdapter, arrayTypeAdapter;
     @Override
@@ -165,20 +176,79 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
 
         init();
 //        showBackButton();
-        try{
-//            Uri uri=AppUtils.getUriToResource(getContext(),R.drawable.ic_user_profile);
-            Uri imageUrl = AppUtils.getURLForResource(R.drawable.ic_user_profile,getContext());
-//            file_name = getFile(getActivity(),imageUrl);
-            file_name = new File(imageUrl.getPath());
-            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file_name);
-            partImage = MultipartBody.Part.createFormData("job_image", file_name.getName(), reqFile);
-        }catch (Exception ex){
-            ex.printStackTrace();
-            Log.d("partImage", "onCreateView: "+ex);
-        }
-        Log.d("partImage", "CreateJobAd: "+partImage.toString());
+//        try{
+////            Uri uri=AppUtils.getUriToResource(getContext(),R.drawable.ic_user_profile);
+//            Uri imageUrl = AppUtils.getURLForResource(R.mipmap.ic_launcher,getContext());
+//            Uri uri = Uri.parse(String.valueOf(imageUrl));
+////            file_name = getFile(getActivity(),imageUrl);
+//            file_name = new File(uri.getPath());
+//            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file_name);
+//            partImage = MultipartBody.Part.createFormData("job_image", file_name.getName(), reqFile);
+//        }catch (Exception ex){
+//            ex.printStackTrace();
+//            Log.d("partImage", "onCreateView: "+ex);
+//        }
+//        Log.d("partImage", "CreateJobAd: "+partImage.toString());
         return view;
     }
+    private void requestPermission() {
+
+        ActivityCompat.requestPermissions(getActivity(),
+                new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
+                MY_PERMISSION_REQUEST_CODE);
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getActivity(), "Permission Granted", Toast.LENGTH_SHORT).show();
+
+                    // main logic
+                } else {
+                    Toast.makeText(getActivity(), "Permission Denied", Toast.LENGTH_SHORT).show();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                                != PackageManager.PERMISSION_GRANTED) {
+                            showMessageOKCancel("You need to allow access permissions",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                                requestPermission();
+                                            }
+                                        }
+                                    });
+                        }
+                    }
+                }
+                break;
+        }
+    }
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(getActivity())
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
+    }
+
+    private static boolean hasPermissions(Context context, String... permissions) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
+
 
     @SuppressLint("SetTextI18n")
     private void init() {
@@ -526,38 +596,50 @@ public class CreateJobFragment extends BaseFragment implements View.OnClickListe
 
 
     private void CreateJobAd() {
-        showDialog();
+
         User user = LoginUtils.getLoggedinUser();
         // edit_jobtitle.setText(edit_jobpostion.getText().toString() + " for " + edit_companyName.getText().toString());
 
-
-        createJobAdViewModel.createJobAd(user, partImage, JobSector,
-                Integer.parseInt(edit_amount.getText().toString()),
-                edit_companyName.getText().toString(),
-                edit_jobdescription.getText().toString(),
-                edit_Location.getText().toString(),
-                edit_jobtitle.getText().toString(),
-                edit_jobpostion.getText().toString(), JobType, JobDuration).observe(this, getnetworkconnection -> {
-                    if(getnetworkconnection==null){
-                        if (getnetworkconnection != null && !getnetworkconnection.isError()) {
-                            jobSuccess_dialog = new JobSuccess_dialog(requireActivity(), getContext());
-                            jobSuccess_dialog.show();
-                            hideDialog();
-                        } else if (getnetworkconnection.isError()) {
-                            networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
-                        }
-                    }
-                    else{
+        if(hasPermissions(getContext(),PERMISSIONS)||edit_jobpostion.getText().equals(null)){
+            showDialog();
+            createJobAdViewModel.createJobAd(user, partImage, JobSector,
+                    Integer.parseInt(edit_amount.getText().toString()),
+                    edit_companyName.getText().toString(),
+                    edit_jobdescription.getText().toString(),
+                    edit_Location.getText().toString(),
+                    edit_jobtitle.getText().toString(),
+                    edit_jobpostion.getText().toString(), JobType, JobDuration).observe(this, getnetworkconnection -> {
+                if(getnetworkconnection!=null){
+                    if (getnetworkconnection != null && !getnetworkconnection.isError()) {
+                        jobSuccess_dialog = new JobSuccess_dialog(requireActivity(), getContext());
+                        jobSuccess_dialog.show();
                         hideDialog();
-                        if (simpleDialog != null && !simpleDialog.isShowing())
-                            simpleDialog.show();
+                    } else if (getnetworkconnection.isError()) {
+                        networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                     }
+                }
+                else{
+                    hideDialog();
+                    if (simpleDialog != null && !simpleDialog.isShowing())
+                        simpleDialog.show();
+                }
 
 
 
-        });
+            });
+
+        }
+        else{
+            Toast.makeText(getContext(), "some issue", Toast.LENGTH_SHORT).show();
+//            requestPermission();
+        }
+
+
+
 
     }
+
+
 
 
     @Override

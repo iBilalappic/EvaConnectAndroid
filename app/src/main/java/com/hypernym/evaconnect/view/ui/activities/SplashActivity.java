@@ -3,6 +3,7 @@ package com.hypernym.evaconnect.view.ui.activities;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -38,17 +39,18 @@ public class SplashActivity extends BaseActivity {
     }
     public boolean Checkpermission() {
 
+        int ExternalWrite = ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE);
         int ExternalReadResult = ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE);
         int CameraResult = ContextCompat.checkSelfPermission(this, CAMERA);
         int locationResult = ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION);
-        return          ExternalReadResult == PackageManager.PERMISSION_GRANTED &&
+        return        ExternalWrite == PackageManager.PERMISSION_GRANTED &&  ExternalReadResult == PackageManager.PERMISSION_GRANTED &&
                 CameraResult == PackageManager.PERMISSION_GRANTED &&
                 locationResult== PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestpermission() {
         ActivityCompat.requestPermissions(this, new String[]
-                {
+                {WRITE_EXTERNAL_STORAGE,
                         READ_EXTERNAL_STORAGE,
                         CAMERA,
                         ACCESS_FINE_LOCATION

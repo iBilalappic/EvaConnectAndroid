@@ -47,7 +47,8 @@ public class CreateJobRepository implements ICreateJobAdRepository {
                 RequestBody.create(MediaType.parse("text/plain"), DateUtils.GetCurrentdate()),
                 RequestBody.create(MediaType.parse("text/plain"), jobtype),Integer.parseInt(jobduration),
                 partImage,
-                RequestBody.create(MediaType.parse("text/plain"),companyName)).enqueue(new Callback<BaseModel<List<Object>>>() {
+                RequestBody.create(MediaType.parse("text/plain"),companyName)
+        ).enqueue(new Callback<BaseModel<List<Object>>>() {
             @Override
             public void onResponse(Call<BaseModel<List<Object>>> call, Response<BaseModel<List<Object>>> response) {
                 if (response.isSuccessful() && !response.body().isError())
