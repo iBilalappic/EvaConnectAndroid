@@ -523,6 +523,10 @@ public class PersonProfileFragment extends BaseFragment implements View.OnClickL
                 return isLoading;
             }
         });
+
+        // Added by Ali Raza
+
+        tv_bio.setText(LoginUtils.getLoggedinUser().getBio_data());
     }
 
 

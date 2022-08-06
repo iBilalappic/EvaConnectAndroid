@@ -75,8 +75,9 @@
             android:fontFamily="@font/nunitosansbold"
             android:maxLines="1"
             android:text="Networth And Vibe"
+            android:maxEms="10"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="13sp"
             app:layout_constraintStart_toEndOf="@+id/profile_layout"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -90,7 +91,7 @@
             android:maxLines="2"
             android:text="London"
             android:textColor="@color/black"
-            android:textSize="11sp"
+            android:textSize="12sp"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="@+id/tv_name"
             app:layout_constraintStart_toStartOf="@+id/tv_name"

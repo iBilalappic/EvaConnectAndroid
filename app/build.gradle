@@ -23,8 +23,8 @@ android {
         applicationId "com.hypernym.evaconnect"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 2
-        versionName "1.2"
+        versionCode 4
+        versionName "1.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [onesignal_app_id               : '44bb428a-54f5-4155-bea3-c0ac2d0b3c1a',
                                 onesignal_google_project_number: 'REMOTE'
