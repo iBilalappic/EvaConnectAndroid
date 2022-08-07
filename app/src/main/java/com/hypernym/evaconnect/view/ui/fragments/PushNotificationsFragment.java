@@ -197,48 +197,54 @@ public class PushNotificationsFragment extends BaseFragment implements View.OnCl
 
 
         User user=LoginUtils.getLoggedinUser();
-        if (user.getType().equalsIgnoreCase("company")) {
-            lytCompanyPostUpdates.setVisibility(View.GONE);
 
-            lytNewJobPost.setVisibility(View.GONE);
-            lytNewsUpdate.setVisibility(View.GONE);
+        if(hNotificationSettingModel.getData().size()>0){
+            if (user.getType().equalsIgnoreCase("company")) {
 
-            tvConnectionRequest.setText("New Follower");
-            tvSuggestedConnection.setText("Event Interest");
-            tvNewsEvent.setText("Job Applicants");
+                lytCompanyPostUpdates.setVisibility(View.GONE);
 
-            switch_message.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getMessage() != 0);
-            switch_post_comment.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getPostComments() != 0);
-            switch_post_like.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getPostLikes() != 0);
+                lytNewJobPost.setVisibility(View.GONE);
+                lytNewsUpdate.setVisibility(View.GONE);
 
-            switch_profile_view.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getProfileViews() != 0);
+                tvConnectionRequest.setText("New Follower");
+                tvSuggestedConnection.setText("Event Interest");
+                tvNewsEvent.setText("Job Applicants");
+
+                switch_message.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getMessage() != 0);
+                switch_post_comment.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getPostComments() != 0);
+                switch_post_like.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getPostLikes() != 0);
+
+                switch_profile_view.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getProfileViews() != 0);
 
 
-            switch_newjob_post.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getNewJobPost() != 0);
-            btn_news_update.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getNewsUpdate() != 0);
-            btn_company_post_update.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getPostComments() != 0);
-            btn_calender_reminder.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getCalendarReminder() != 0);
-            btn_meeting_reminder.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getMeetingReminders() != 0);
+                switch_newjob_post.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getNewJobPost() != 0);
+                btn_news_update.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getNewsUpdate() != 0);
+                btn_company_post_update.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getPostComments() != 0);
+                btn_calender_reminder.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getCalendarReminder() != 0);
+                btn_meeting_reminder.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getMeetingReminders() != 0);
 
-            switch_suggested_connections.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getEventInterest() != 0);
-            switch_news_events.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getJobApplicants() != 0);
-            switch_connection_request.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getConnectionRequests() != 0);
+                switch_suggested_connections.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getEventInterest() != 0);
+                switch_news_events.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getJobApplicants() != 0);
+                switch_connection_request.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getConnectionRequests() != 0);
 
-        }else{
-            switch_message.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getMessage() != 0);
-            switch_post_comment.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getPostComments() != 0);
-            switch_post_like.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getPostLikes() != 0);
-            switch_connection_request.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getConnectionRequests() != 0);
-            switch_profile_view.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getProfileViews() != 0);
-            switch_suggested_connections.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getSuggestedConnections() != 0);
-            switch_news_events.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getNewEvents() != 0);
-            switch_newjob_post.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getNewJobPost() != 0);
-            btn_news_update.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getNewsUpdate() != 0);
-            btn_company_post_update.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getPostUpdates() != 0);
-            btn_calender_reminder.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getCalendarReminder() != 0);
-            btn_meeting_reminder.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getMeetingReminders() != 0);
+            }else{
+                switch_message.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getMessage() != 0);
+                switch_post_comment.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getPostComments() != 0);
+                switch_post_like.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getPostLikes() != 0);
+                switch_connection_request.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getConnectionRequests() != 0);
+                switch_profile_view.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getProfileViews() != 0);
+                switch_suggested_connections.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getSuggestedConnections() != 0);
+                switch_news_events.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getNewEvents() != 0);
+                switch_newjob_post.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getNewJobPost() != 0);
+                btn_news_update.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getNewsUpdate() != 0);
+                btn_company_post_update.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getPostUpdates() != 0);
+                btn_calender_reminder.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getCalendarReminder() != 0);
+                btn_meeting_reminder.setChecked(hNotificationSettingModel.getData().get(0).getNotifications().getMeetingReminders() != 0);
 
+            }
         }
+
+
 
 
 //        notificationsSettingsModelNew = new NotificationsSettingsModelNew(hNotificationSettingModel);
