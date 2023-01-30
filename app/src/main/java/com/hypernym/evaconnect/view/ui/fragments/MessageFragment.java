@@ -253,6 +253,7 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                                             hideDialog();
 
                                         } else {
+                                            hideDialog();
                                             swipeRefresh.setRefreshing(false);
                                         }
 
@@ -272,13 +273,14 @@ public class MessageFragment extends BaseFragment implements OnItemClickListener
                         }
 
                     } catch (Exception e) {
+                        hideDialog();
                         e.getMessage();
                     }
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                    hideDialog();
                 }
             });
 

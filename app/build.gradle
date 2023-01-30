@@ -52,9 +52,13 @@ android {
         }
 
         stagging {
+            minifyEnabled false
+            debuggable true
+            shrinkResources false
             initWith debug
 //            applicationIdSuffix ".debug/Stagging"
-            buildConfigField "String", 'BASE_SERVER_URL', '"http:/67.205.178.219:8000/eva/"'
+           // buildConfigField "String", 'BASE_SERVER_URL', '"http:/67.205.178.219:8000/eva/"'
+            buildConfigField "String", 'BASE_SERVER_URL', '"https://eva-be-stag.appservices.hypernymbiz.com/eva/"'
         }
         production {
             initWith debug

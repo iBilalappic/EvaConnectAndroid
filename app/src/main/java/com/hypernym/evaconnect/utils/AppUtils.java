@@ -116,7 +116,7 @@ public final class AppUtils {
         Glide.with(context) //1
                 .load(url)
                 .placeholder(R.mipmap.ic_default)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .apply(RequestOptions.circleCropTransform())
                 .into(imageView);
     }

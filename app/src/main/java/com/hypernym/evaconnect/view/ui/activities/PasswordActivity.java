@@ -349,7 +349,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
     public void callSignupApi() {
 //        showDialog();
 
-        if (partImage != null) {
+   //     if (partImage != null) {
             Log.d("sign_up", "callSignupApi: " + partImage);
 
 
@@ -386,11 +386,12 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
                     }
                 }
             });
-        } else {
-            Log.d("sign_up", "part image is null :" + partImage);
         }
+//        else {
+//            Log.d("sign_up", "part image is null :" + partImage);
+//        }
 
-    }
+ //   }
 
     private void callLoginApi() {
         showDialog();

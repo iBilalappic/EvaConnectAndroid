@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/StudioProjects.eva-android.evaConnect.iml" filepath="$PROJECT_DIR$/.idea/modules/StudioProjects.eva-android.evaConnect.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/StudioProjects.eva-android.evaConnect.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/StudioProjects.eva-android.evaConnect.app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/StudioProjects.eva-android.evaConnect.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/StudioProjects.eva-android.evaConnect.app.androidTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/StudioProjects.eva-android.evaConnect.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/StudioProjects.eva-android.evaConnect.app.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/StudioProjects.eva-android.evaConnect.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/StudioProjects.eva-android.evaConnect.app.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/evaConnect.iml" filepath="$PROJECT_DIR$/.idea/modules/evaConnect.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/evaConnect.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/evaConnect.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/evaConnect.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/evaConnect.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/evaConnect.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/evaConnect.app.unitTest.iml" />
     </modules>
   </component>
 </project>
