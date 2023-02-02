@@ -449,7 +449,9 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener, 
 //                    postAdapter.removeLoading();
                     swipeRefresh.setRefreshing(false);
                     isLoading = false;
+                    hideDialog();
                 } else {
+                    hideDialog();
                     swipeRefresh.setRefreshing(false);
                     networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
                 }

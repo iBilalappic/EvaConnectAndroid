@@ -491,10 +491,10 @@ public class AllEventFragment extends BaseFragment implements View.OnClickListen
             } else if (dashboardBaseModel != null && !dashboardBaseModel.isError() && dashboardBaseModel.getData().size() == 0) {
                 isLastPage = true;
 //                postAdapter.removeLoading();
-                Log.d("api", "false: ");
+//                Log.d("api", "false: ");
                 isLoading = false;
             } else {
-                Log.d("aliis", "i am call: "+dashboardBaseModel.isError() );
+//                Log.d("aliis", "i am call: "+dashboardBaseModel.isError() );
                 networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
 

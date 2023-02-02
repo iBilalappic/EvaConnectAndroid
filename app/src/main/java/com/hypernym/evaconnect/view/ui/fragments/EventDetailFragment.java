@@ -368,7 +368,12 @@ public class EventDetailFragment extends BaseFragment implements Validator.Valid
             if (!listBaseModel.isError()) {
                 getEventStatus(event_id, LoginUtils.getLoggedinUser().getId());
                 hideDialog();
-            } else {
+            }else if(listBaseModel.isError()){
+                hideDialog();
+                networkResponseDialog(getString(R.string.error), listBaseModel.getMessage());
+            }
+            else {
+                hideDialog();
                 networkResponseDialog(getString(R.string.error), getString(R.string.err_unknown));
             }
 
